@@ -698,9 +698,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html">
+      <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html" xml:space="preserve">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target/>
+        <target state="translated">Вашият доклад ще бъде изпратен до модераторите на <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> и ще бъде препратен към източника на видеото (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1178,9 +1178,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
+      <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html" xml:space="preserve">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target/>
+        <target state="translated">Можете да взаимодействате с това чрез всеки екземпляр на fediverse, поддържащ ActivityPub.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Например с Mastodon или Pleroma можете да въведете текущия URL адрес в полето за търсене и да взаимодействате с него там. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1194,9 +1194,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5975923297757530070" datatype="html">
+      <trans-unit id="5975923297757530070" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </source>
-        <target/>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Правилата за сензитивно съдържание<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>могад да се променят от потребителите<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1262,9 +1262,9 @@
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1502595455339510144" datatype="html">
+      <trans-unit id="1502595455339510144" datatype="html" xml:space="preserve">
         <source>Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target/>
+        <target state="translated">Неограничен <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> на ден)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1478,9 +1478,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html">
+      <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html" xml:space="preserve">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target/>
+        <target state="translated">Използвайки <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Не показвай<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> или <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Замъгли<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, се изисква потвърждение за да се гледа видеото. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">6</context>
@@ -1658,9 +1658,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="79dacac459775e2cf163bce6c3f05ed814f82ba2" datatype="html">
+      <trans-unit id="79dacac459775e2cf163bce6c3f05ed814f82ba2" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">В момента тази инстанция не позволява регистрация, но можете да намерите инстанция, която дава възможност да се регистрирате за акаунт и да качвате вашите видеоклипове там. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Намерере вашата измежду съществуващите тук:<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1850,25 +1850,25 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2501430660070156325" datatype="html">
+      <trans-unit id="2501430660070156325" datatype="html" xml:space="preserve">
         <source>Confirmed password</source>
-        <target/>
+        <target state="translated">Потвърдена парола</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8547184468496530386" datatype="html">
+      <trans-unit id="8547184468496530386" datatype="html" xml:space="preserve">
         <source>Reset my password</source>
-        <target/>
+        <target state="translated">Промяна на парола</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7804724824750282316" datatype="html">
+      <trans-unit id="7804724824750282316" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1886,41 +1886,41 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc" datatype="html">
+      <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc" datatype="html" xml:space="preserve">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target/>
+        <target state="translated">за <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5340005218109333045" datatype="html">
+      <trans-unit id="5340005218109333045" datatype="html" xml:space="preserve">
         <source>Filters <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target/>
+        <target state="translated">Филтри <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2236371857137398396" datatype="html">
+      <trans-unit id="2236371857137398396" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target/>
+        <target state="translated">Няма открити резултати</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5500467336262464724" datatype="html">
+      <trans-unit id="5500467336262464724" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> последователи</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1516969129397662377" datatype="html">
+      <trans-unit id="1516969129397662377" datatype="html" xml:space="preserve">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target/>
+        <target state="translated">Добре дошъл в PeerTube, скъпи администратор!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
