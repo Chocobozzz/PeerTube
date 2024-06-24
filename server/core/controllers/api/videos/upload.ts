@@ -1,5 +1,5 @@
 import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
-import { HttpStatusCode, ThumbnailType, VideoCreate } from '@peertube/peertube-models'
+import { ThumbnailType, VideoCreate } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
