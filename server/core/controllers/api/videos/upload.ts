@@ -17,6 +17,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  setReqTimeout,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
   videosAddResumableValidator
@@ -40,6 +41,7 @@ const reqVideoFileAddResumable = createReqFiles(
 uploadRouter.post('/upload',
   openapiOperationDoc({ operationId: 'uploadLegacy' }),
   authenticate,
+  setReqTimeout(1000 * 60 * 10), // Uploading the video could be long
   reqVideoFileAdd,
   asyncMiddleware(videosAddLegacyValidator),
   asyncRetryTransactionMiddleware(addVideoLegacy)
@@ -74,17 +76,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function addVideoLegacy (req: express.Request, res: express.Response) {
-  // Uploading the video could be long
-  // Set timeout to 10 minutes, as Express's default is 2 minutes
-  req.setTimeout(1000 * 60 * 10, () => {
-    logger.error('Video upload has timed out.')
-    return res.fail({
-      status: HttpStatusCode.REQUEST_TIMEOUT_408,
-      message: 'Video upload has timed out.'
-    })
-  })
-
-  const videoPhysicalFile = req.files['videofile'][0]
+    const videoPhysicalFile = req.files['videofile'][0]
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
