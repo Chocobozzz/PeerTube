@@ -306,7 +306,12 @@ export class PeerTubePlayer {
         return
       }
 
-      logger.info('Fast forwarding HLS to recover from an error.')
+      logger.info('Fast forwarding HLS to recover from an error.', {
+        err,
+        videoShortUUID: this.currentLoadOptions.videoShortUUID,
+        currentTime: this.player.currentTime(),
+        resolution: this.player.videoHeight()
+      })
 
       this.videojsDecodeErrors++
 
