@@ -118,7 +118,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: expre
     user: res.locals.oauth
       ? res.locals.oauth.token.User
       : undefined
-  }, 'filter:api.search.videos.local.list.params')
+  }, 'filter:api.search.videos.local.list.params', { req, res })
 
   const resultList = await Hooks.wrapPromiseFun(
     VideoModel.searchAndPopulateAccountAndServer.bind(VideoModel),
