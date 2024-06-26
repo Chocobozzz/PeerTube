@@ -251,7 +251,7 @@ export class Video implements VideoServerModel {
   }
 
   hasSeeAllVideosRight (user: AuthUser) {
-    return user && user.hasRight(UserRight.SEE_ALL_VIDEOS)
+    return user?.hasRight(UserRight.SEE_ALL_VIDEOS)
   }
 
   isOwnerOrHasSeeAllVideosRight (user: AuthUser) {
@@ -278,8 +278,7 @@ export class Video implements VideoServerModel {
   }
 
   canRunForcedTranscoding (user: AuthUser) {
-    return this.isLocal &&
-      user && user.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
+    return this.isLocal && user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
   }
 
   hasHLS () {
