@@ -47,7 +47,7 @@ import { cpus } from 'os'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 850
+const LAST_MIGRATION_VERSION = 860
 
 // ---------------------------------------------------------------------------
 
@@ -213,7 +213,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'notify': 1,
   'federate-video': 1,
   'create-user-export': 1,
-  'import-user-archive': 1
+  'import-user-archive': 1,
+  'plugin-manage': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -241,7 +242,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'notify': 5,
   'federate-video': 3,
   'create-user-export': 1,
-  'import-user-archive': 1
+  'import-user-archive': 1,
+  'plugin-manage': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -270,7 +272,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'notify': 60000 * 5, // 5 minutes
   'federate-video': 60000 * 5, // 5 minutes,
   'create-user-export': 60000 * 60 * 24, // 24 hours
-  'import-user-archive': 60000 * 60 * 24 // 24 hours
+  'import-user-archive': 60000 * 60 * 24, // 24 hours
+  'plugin-manage': 60000 * 10 // 10 minutes
 }
 const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {

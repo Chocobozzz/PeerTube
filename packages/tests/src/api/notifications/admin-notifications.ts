@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@peertube/peertube-models'
-import { cleanupTests, PeerTubeServer } from '@peertube/peertube-server-commands'
+import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { MockJoinPeerTubeVersions } from '@tests/shared/mock-servers/mock-joinpeertube-versions.js'
 import { CheckerBaseParams, prepareNotificationsTest, checkNewPeerTubeVersion, checkNewPluginVersion } from '@tests/shared/notifications.js'
@@ -55,6 +55,7 @@ describe('Test admin notifications', function () {
 
     await server.plugins.install({ npmName: 'peertube-plugin-hello-world' })
     await server.plugins.install({ npmName: 'peertube-theme-background-red' })
+    await waitJobs(server)
 
     sqlCommand = new SQLCommand(server)
   })

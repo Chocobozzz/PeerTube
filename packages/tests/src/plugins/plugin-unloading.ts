@@ -7,7 +7,8 @@ import {
   makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { HttpStatusCode } from '@peertube/peertube-models'
 
@@ -23,6 +24,7 @@ describe('Test plugins module unloading', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
+    await waitJobs(server)
   })
 
   it('Should return a numeric value', async function () {
@@ -48,6 +50,7 @@ describe('Test plugins module unloading', function () {
 
   it('Should uninstall the plugin and free the route', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-test-unloading' })
+    await waitJobs(server)
 
     await makeGetRequest({
       url: server.url,
@@ -58,6 +61,7 @@ describe('Test plugins module unloading', function () {
 
   it('Should return a different numeric value', async function () {
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-unloading') })
+    await waitJobs(server)
 
     const res = await makeGetRequest({
       url: server.url,

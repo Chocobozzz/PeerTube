@@ -8,4 +8,8 @@
 my-edit-button,
 my-button {
   @include margin-right(10px);
+
+  &[disabled=true] {
+    opacity: 0.6;
+  }
 }

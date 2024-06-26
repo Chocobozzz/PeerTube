@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 import { ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 import { Injectable } from '@angular/core'
 import { LiveVideoEventPayload, LiveVideoEventType, UserNotification as UserNotificationServer } from '@peertube/peertube-models'
@@ -12,6 +12,7 @@ export class PeerTubeSocket {
   private io: (uri: string, opts?: Partial<ManagerOptions & SocketOptions>) => Socket
 
   private notificationSubject = new Subject<{ type: NotificationEvent, notification?: UserNotificationServer }>()
+  private notificationObs: Observable<{ type: NotificationEvent, notification?: UserNotificationServer }>
   private liveVideosSubject = new Subject<{ type: LiveVideoEventType, payload: LiveVideoEventPayload }>()
 
   private notificationSocket: Socket
@@ -24,7 +25,11 @@ export class PeerTubeSocket {
   async getMyNotificationsSocket () {
     await this.initNotificationSocket()
 
-    return this.notificationSubject.asObservable()
+    if (!this.notificationObs) {
+      this.notificationObs = this.notificationSubject.asObservable()
+    }
+
+    return this.notificationObs
   }
 
   getLiveVideosObservable () {

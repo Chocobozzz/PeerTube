@@ -44,6 +44,9 @@ describe('Test plugin filter hooks', function () {
 
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })
+
+    await waitJobs(servers[0])
+
     {
       ({ uuid: videoPlaylistUUID } = await servers[0].playlists.create({
         attributes: {

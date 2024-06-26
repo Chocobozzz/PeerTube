@@ -12,7 +12,8 @@ import {
   makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { testHelloWorldRegisteredSettings } from '@tests/shared/plugins.js'
@@ -96,6 +97,7 @@ describe('Test plugins', function () {
 
     await command.install({ npmName: 'peertube-plugin-hello-world' })
     await command.install({ npmName: 'peertube-theme-background-red' })
+    await waitJobs(server)
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
@@ -274,6 +276,7 @@ describe('Test plugins', function () {
 
       {
         await command.update({ npmName: `peertube-${type}-${name}` })
+        await waitJobs(server)
 
         const plugin = await getPluginFromAPI()
         expect(plugin.version).to.equal(oldVersion)
@@ -291,6 +294,7 @@ describe('Test plugins', function () {
 
   it('Should uninstall the plugin', async function () {
     await command.uninstall({ npmName: 'peertube-plugin-hello-world' })
+    await waitJobs(server)
 
     const body = await command.list({ pluginType: PluginType.PLUGIN })
     expect(body.total).to.equal(0)
@@ -310,6 +314,7 @@ describe('Test plugins', function () {
 
   it('Should uninstall the theme', async function () {
     await command.uninstall({ npmName: 'peertube-theme-background-red' })
+    await waitJobs(server)
   })
 
   it('Should have updated the configuration', async function () {
@@ -342,6 +347,7 @@ describe('Test plugins', function () {
       path: PluginsCommand.getPluginTestPath('-broken'),
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
+    await waitJobs(server)
 
     await check()
 
@@ -360,6 +366,7 @@ describe('Test plugins', function () {
     }
 
     await command.install({ path: PluginsCommand.getPluginTestPath('-native') })
+    await waitJobs(server)
 
     await makeGetRequest({
       url: server.url,

@@ -31,6 +31,7 @@ describe('Test plugin action hooks', function () {
     await setDefaultVideoChannel(servers)
 
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
+    await waitJobs(servers[0])
 
     await killallServers([ servers[0] ])
 

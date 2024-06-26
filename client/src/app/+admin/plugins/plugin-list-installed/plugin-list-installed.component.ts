@@ -1,11 +1,11 @@
-import { Subject } from 'rxjs'
-import { Component, OnInit } from '@angular/core'
+import { Subject, Subscription, filter } from 'rxjs'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PeerTubeSocket } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { compareSemVer } from '@peertube/peertube-core-utils'
-import { PeerTubePlugin, PluginType, PluginType_Type } from '@peertube/peertube-models'
+import { PeerTubePlugin, PluginManagePayload, PluginType, PluginType_Type, UserNotificationType } from '@peertube/peertube-models'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
@@ -13,6 +13,8 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
 import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
 import { NgIf, NgFor } from '@angular/common'
 import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
+import { JobService } from '@app/+admin/system'
+import { logger } from '@root-helpers/logger'
 
 @Component({
   selector: 'my-plugin-list-installed',
@@ -30,7 +32,7 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
     DeleteButtonComponent
   ]
 })
-export class PluginListInstalledComponent implements OnInit {
+export class PluginListInstalledComponent implements OnInit, OnDestroy {
   pluginType: PluginType_Type
 
   pagination: ComponentPagination = {
@@ -41,10 +43,12 @@ export class PluginListInstalledComponent implements OnInit {
   sort = 'name'
 
   plugins: PeerTubePlugin[] = []
-  updating: { [name: string]: boolean } = {}
-  uninstalling: { [name: string]: boolean } = {}
+  toBeUpdated: { [name: string]: boolean } = {}
+  toBeUninstalled: { [name: string]: boolean } = {}
 
   onDataSubject = new Subject<any[]>()
+
+  private notificationSub: Subscription
 
   constructor (
     private pluginService: PluginService,
@@ -52,7 +56,9 @@ export class PluginListInstalledComponent implements OnInit {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private jobService: JobService,
+    private peertubeSocket: PeerTubeSocket
   ) {
   }
 
@@ -63,6 +69,43 @@ export class PluginListInstalledComponent implements OnInit {
       this.router.navigate([], { queryParams, replaceUrl: true })
     }
 
+    this.jobService.listUnfinishedJobs({
+      jobType: 'plugin-manage',
+      pagination: {
+        count: 10,
+        start: 0
+      },
+      sort: {
+        field: 'createdAt',
+        order: -1
+      }
+    }).subscribe({
+      next: resultList => {
+        const jobs = resultList.data
+
+        jobs.forEach((job) => {
+          let payload: PluginManagePayload
+
+          try {
+            payload = JSON.parse(job.data)
+          } catch (err) {}
+
+          if (payload.action === 'update') {
+            this.toBeUpdated[payload.npmName] = true
+          }
+
+          if (payload.action === 'uninstall') {
+            this.toBeUninstalled[payload.npmName] = true
+          }
+        })
+      },
+
+      error: err => {
+        logger.error('Could not fetch status of installed plugins.', { err })
+        this.notifier.error($localize`Could not fetch status of installed plugins.`)
+      }
+    })
+
     this.route.queryParams.subscribe(query => {
       if (!query['pluginType']) return
 
@@ -70,6 +113,12 @@ export class PluginListInstalledComponent implements OnInit {
 
       this.reloadPlugins()
     })
+
+    this.subscribeToNotifications()
+  }
+
+  ngOnDestroy () {
+    if (this.notificationSub) this.notificationSub.unsubscribe()
   }
 
   reloadPlugins () {
@@ -117,12 +166,12 @@ export class PluginListInstalledComponent implements OnInit {
     return $localize`Update to ${plugin.latestVersion}`
   }
 
-  isUpdating (plugin: PeerTubePlugin) {
-    return !!this.updating[this.getPluginKey(plugin)]
+  willUpdate (plugin: PeerTubePlugin) {
+    return !!this.toBeUpdated[this.getPluginKey(plugin)]
   }
 
-  isUninstalling (plugin: PeerTubePlugin) {
-    return !!this.uninstalling[this.getPluginKey(plugin)]
+  willUninstall (plugin: PeerTubePlugin) {
+    return !!this.toBeUninstalled[this.getPluginKey(plugin)]
   }
 
   isTheme (plugin: PeerTubePlugin) {
@@ -131,7 +180,7 @@ export class PluginListInstalledComponent implements OnInit {
 
   async uninstall (plugin: PeerTubePlugin) {
     const pluginKey = this.getPluginKey(plugin)
-    if (this.uninstalling[pluginKey]) return
+    if (this.toBeUninstalled[pluginKey]) return
 
     const res = await this.confirmService.confirm(
       $localize`Do you really want to uninstall ${plugin.name}?`,
@@ -139,29 +188,24 @@ export class PluginListInstalledComponent implements OnInit {
     )
     if (res === false) return
 
-    this.uninstalling[pluginKey] = true
+    this.toBeUninstalled[pluginKey] = true
 
     this.pluginApiService.uninstall(plugin.name, plugin.type)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`${plugin.name} uninstalled.`)
-
-          this.plugins = this.plugins.filter(p => p.name !== plugin.name)
-          this.pagination.totalItems--
-
-          this.uninstalling[pluginKey] = false
+          this.notifier.success($localize`${plugin.name} will be uninstalled.`)
         },
 
         error: err => {
           this.notifier.error(err.message)
-          this.uninstalling[pluginKey] = false
+          this.toBeUninstalled[pluginKey] = false
         }
       })
   }
 
   async update (plugin: PeerTubePlugin) {
     const pluginKey = this.getPluginKey(plugin)
-    if (this.updating[pluginKey]) return
+    if (this.toBeUpdated[pluginKey]) return
 
     if (this.isMajorUpgrade(plugin)) {
       const res = await this.confirmService.confirm(
@@ -173,22 +217,18 @@ export class PluginListInstalledComponent implements OnInit {
       if (res === false) return
     }
 
-    this.updating[pluginKey] = true
+    this.toBeUpdated[pluginKey] = true
 
     this.pluginApiService.update(plugin.name, plugin.type)
         .pipe()
         .subscribe({
           next: res => {
-            this.updating[pluginKey] = false
-
-            this.notifier.success($localize`${plugin.name} updated.`)
-
-            Object.assign(plugin, res)
+            this.notifier.success($localize`${plugin.name} will be updated.`)
           },
 
           error: err => {
             this.notifier.error(err.message)
-            this.updating[pluginKey] = false
+            this.toBeUpdated[pluginKey] = false
           }
         })
   }
@@ -201,8 +241,36 @@ export class PluginListInstalledComponent implements OnInit {
     return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
   }
 
-  private getPluginKey (plugin: PeerTubePlugin) {
-    return plugin.name + plugin.type
+  private async subscribeToNotifications () {
+    const obs = await this.peertubeSocket.getMyNotificationsSocket()
+
+    this.notificationSub = obs
+      .pipe(
+        filter(d => d.notification?.type === UserNotificationType.PLUGIN_MANAGE_FINISHED)
+      ).subscribe(data => {
+        const pluginName = data.notification.plugin?.name
+
+        if (pluginName) {
+          const npmName = this.getPluginKey(data.notification.plugin)
+
+          if (this.toBeUninstalled[npmName]) {
+            this.toBeUninstalled[npmName] = false
+
+            if (!data.notification.hasOperationFailed) {
+              this.plugins = this.plugins.filter(p => p.name !== pluginName)
+            }
+          }
+
+          if (this.toBeUpdated[npmName]) {
+            this.toBeUpdated[npmName] = false
+            this.reloadPlugins()
+          }
+        }
+      })
+  }
+
+  private getPluginKey (plugin: Pick<PeerTubePlugin, 'name' | 'type'>) {
+    return this.pluginService.nameToNpmName(plugin.name, plugin.type)
   }
 
   private isMajorUpgrade (plugin: PeerTubePlugin) {

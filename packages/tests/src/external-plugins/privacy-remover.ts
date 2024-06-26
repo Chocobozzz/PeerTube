@@ -24,6 +24,7 @@ describe('Official plugin Privacy Remover', function () {
     await servers[0].plugins.install({
       npmName: 'peertube-plugin-privacy-remover'
     })
+    await waitJobs(servers[0])
 
     await doubleFollow(servers[0], servers[1])
   })

@@ -20,25 +20,37 @@ export class JobService {
   ) {}
 
   listJobs (options: {
-    jobState?: JobStateClient
+    jobStates?: JobStateClient[]
     jobType: JobTypeClient
     pagination: RestPagination
     sort: SortMeta
   }): Observable<ResultList<Job>> {
-    const { jobState, jobType, pagination, sort } = options
+    const { jobStates, jobType, pagination, sort } = options
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (jobType !== 'all') params = params.append('jobType', jobType)
+    if (jobStates) params = params.append('states', jobStates.join(','))
 
-    return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + `/${jobState || ''}`, { params })
+    return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL, { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'processedOn', 'finishedOn' ], 'precise')),
                  map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData.bind(this))),
                  map(res => this.restExtractor.applyToResultListData(res, this.buildUniqId.bind(this))),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  listUnfinishedJobs (options: {
+    jobType: JobTypeClient
+    pagination: RestPagination
+    sort: SortMeta
+  }): Observable<ResultList<Job>> {
+    return this.listJobs({
+      ...options,
+      jobStates: [ 'active', 'waiting', 'delayed', 'paused' ]
+    })
   }
 
   private prettyPrintData (obj: Job) {

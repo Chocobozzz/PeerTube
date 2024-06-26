@@ -9,7 +9,8 @@ import {
   makePostBodyRequest,
   makePutBodyRequest,
   PeerTubeServer,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test server plugins API validators', function () {
@@ -42,14 +43,16 @@ describe('Test server plugins API validators', function () {
     userAccessToken = await server.login.getAccessToken(user)
 
     {
-      const res = await server.plugins.install({ npmName: npmPlugin })
-      const plugin = res.body as PeerTubePlugin
+      await server.plugins.install({ npmName: npmPlugin })
+      await waitJobs(server)
+      const plugin = await server.plugins.get({ npmName: npmPlugin })
       npmVersion = plugin.version
     }
 
     {
-      const res = await server.plugins.install({ npmName: themePlugin })
-      const plugin = res.body as PeerTubePlugin
+      await server.plugins.install({ npmName: themePlugin })
+      await waitJobs(server)
+      const plugin = await server.plugins.get({ npmName: themePlugin }) as PeerTubePlugin
       themeVersion = plugin.version
     }
   })

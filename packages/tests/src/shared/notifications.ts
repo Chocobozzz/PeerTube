@@ -54,7 +54,8 @@ function getAllNotificationsSettings (): UserNotificationSetting {
     autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoStudioEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    pluginManageFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 }
 

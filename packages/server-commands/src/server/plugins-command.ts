@@ -170,7 +170,7 @@ export class PluginsCommand extends AbstractCommand {
       path: apiPath,
       fields: { npmName, path, pluginVersion },
       implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.OK_200
+      defaultExpectedStatus: HttpStatusCode.CREATED_201
     })
   }
 
@@ -187,7 +187,7 @@ export class PluginsCommand extends AbstractCommand {
       path: apiPath,
       fields: { npmName, path },
       implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.OK_200
+      defaultExpectedStatus: HttpStatusCode.CREATED_201
     })
   }
 
@@ -203,7 +203,7 @@ export class PluginsCommand extends AbstractCommand {
       path: apiPath,
       fields: { npmName },
       implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+      defaultExpectedStatus: HttpStatusCode.CREATED_201
     })
   }
 

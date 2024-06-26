@@ -41,6 +41,7 @@ describe('Test plugin helpers', function () {
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-four') })
+    await waitJobs(servers[0])
   })
 
   describe('Logger', function () {

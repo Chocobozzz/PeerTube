@@ -75,6 +75,7 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "UserNotificationModel"."id",
       "UserNotificationModel"."type",
       "UserNotificationModel"."read",
+      "UserNotificationModel"."hasOperationFailed",
       "UserNotificationModel"."createdAt",
       "UserNotificationModel"."updatedAt",
       "Video"."id" AS "Video.id",

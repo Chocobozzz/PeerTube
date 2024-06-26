@@ -29,6 +29,7 @@ import {
   ManageVideoTorrentPayload,
   MoveStoragePayload,
   NotifyPayload,
+  PluginManagePayload,
   RefreshPayload,
   TranscodingJobBuilderPayload,
   VideoChannelImportPayload,
@@ -75,6 +76,7 @@ import { processVideosViewsStats } from './handlers/video-views-stats.js'
 import { onMoveToFileSystemFailure, processMoveToFileSystem } from './handlers/move-to-file-system.js'
 import { processCreateUserExport } from './handlers/create-user-export.js'
 import { processImportUserArchive } from './handlers/import-user-archive.js'
+import { processPluginManage } from './handlers/plugin-manage.js'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -104,7 +106,8 @@ export type CreateJobArgument =
   { type: 'federate-video', payload: FederateVideoPayload } |
   { type: 'create-user-export', payload: CreateUserExportPayload } |
   { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload } |
-  { type: 'import-user-archive', payload: ImportUserArchivePayload }
+  { type: 'import-user-archive', payload: ImportUserArchivePayload } |
+  { type: 'plugin-manage', payload: PluginManagePayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -129,6 +132,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'move-to-object-storage': processMoveToObjectStorage,
   'move-to-file-system': processMoveToFileSystem,
   'notify': processNotify,
+  'plugin-manage': processPluginManage,
   'video-channel-import': processVideoChannelImport,
   'video-file-import': processVideoFileImport,
   'video-import': processVideoImport,
@@ -164,6 +168,7 @@ const jobTypes: JobType[] = [
   'move-to-object-storage',
   'move-to-file-system',
   'notify',
+  'plugin-manage',
   'transcoding-job-builder',
   'video-channel-import',
   'video-file-import',
@@ -413,15 +418,15 @@ class JobQueue {
   // ---------------------------------------------------------------------------
 
   async listForApi (options: {
-    state?: JobState
+    states: JobState[]
     start: number
     count: number
     asc?: boolean
     jobType: JobType
   }): Promise<Job[]> {
-    const { state, start, count, asc, jobType } = options
+    const { states, start, count, asc, jobType } = options
 
-    const states = this.buildStateFilter(state)
+    const totalStates = this.buildStateFilter(states)
     const filteredJobTypes = this.buildTypeFilter(jobType)
 
     let results: Job[] = []
@@ -434,7 +439,7 @@ class JobQueue {
         continue
       }
 
-      let jobs = await queue.getJobs(states, 0, start + count, asc)
+      let jobs = await queue.getJobs(totalStates, 0, start + count, asc)
 
       // FIXME: we have sometimes undefined values https://github.com/taskforcesh/bullmq/issues/248
       jobs = jobs.filter(j => !!j)
@@ -454,8 +459,8 @@ class JobQueue {
     return results.slice(start, start + count)
   }
 
-  async count (state: JobState, jobType?: JobType): Promise<number> {
-    const states = this.buildStateFilter(state)
+  async count (states: JobState[], jobType?: JobType): Promise<number> {
+    const totalStates = this.buildStateFilter(states)
     const filteredJobTypes = this.buildTypeFilter(jobType)
 
     let total = 0
@@ -469,7 +474,7 @@ class JobQueue {
 
       const counts = await queue.getJobCounts()
 
-      for (const s of states) {
+      for (const s of totalStates) {
         total += counts[s]
       }
     }
@@ -477,18 +482,18 @@ class JobQueue {
     return total
   }
 
-  private buildStateFilter (state?: JobState) {
-    if (!state) return Array.from(jobStates)
+  private buildStateFilter (states: JobState[]) {
+    if (states.length === 0) return Array.from(jobStates)
 
-    const states = [ state ]
+    const totalStates = states
 
     // Include parent and prioritized if filtering on waiting
-    if (state === 'waiting') {
-      states.push('waiting-children')
-      states.push('prioritized')
+    if (states.includes('waiting')) {
+      totalStates.push('waiting-children')
+      totalStates.push('prioritized')
     }
 
-    return states
+    return totalStates
   }
 
   private buildTypeFilter (jobType?: JobType) {

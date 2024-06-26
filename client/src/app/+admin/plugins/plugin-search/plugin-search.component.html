@@ -1,9 +1,5 @@
 <my-plugin-navigation [pluginType]="pluginType"></my-plugin-navigation>
 
-<div class="alert pt-alert-primary" i18n *ngIf="pluginInstalled">
-  To load your new installed plugins or themes, refresh the page.
-</div>
-
 <div class="result-and-search">
   <ng-container *ngIf="!search">
     <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
@@ -51,8 +47,9 @@
 
         <my-button
           *ngIf="plugin.installed === false" (click)="install(plugin)"
-          [loading]="isInstalling(plugin)" label="Install" [responsiveLabel]="true"
-          icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
+          label="Install" [responsiveLabel]="true"
+          [loading]="willInstall(plugin)"
+          icon="cloud-download" [attr.disabled]="willInstall(plugin)"
         ></my-button>
       </div>
 

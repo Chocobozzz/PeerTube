@@ -61,6 +61,7 @@ export class JobsComponent extends RestTable implements OnInit {
     'move-to-file-system',
     'move-to-object-storage',
     'notify',
+    'plugin-manage',
     'transcoding-job-builder',
     'video-channel-import',
     'video-file-import',
@@ -154,7 +155,7 @@ export class JobsComponent extends RestTable implements OnInit {
 
     this.jobsService
       .listJobs({
-        jobState,
+        jobStates: [ jobState ],
         jobType: this.jobType,
         pagination: this.pagination,
         sort: this.sort

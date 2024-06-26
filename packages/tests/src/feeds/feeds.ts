@@ -112,6 +112,7 @@ describe('Test syndication feeds', () => {
     await waitJobs([ ...servers, serverHLSOnly ])
 
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-podcast-custom-tags') })
+    await waitJobs(servers[0])
   })
 
   describe('All feed', function () {
@@ -792,6 +793,7 @@ describe('Test syndication feeds', () => {
 
   after(async function () {
     await servers[0].plugins.uninstall({ npmName: 'peertube-plugin-test-podcast-custom-tags' })
+    await waitJobs(servers[0])
 
     await cleanupTests([ ...servers, serverHLSOnly ])
   })

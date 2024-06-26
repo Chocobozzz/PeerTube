@@ -11,7 +11,8 @@ import {
   makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test plugin storage', function () {
@@ -24,6 +25,7 @@ describe('Test plugin storage', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })
+    await waitJobs(server)
   })
 
   describe('DB storage', function () {
@@ -76,6 +78,7 @@ describe('Test plugin storage', function () {
 
     it('Should still have the file after an uninstallation', async function () {
       await server.plugins.uninstall({ npmName: 'peertube-plugin-test-six' })
+      await waitJobs(server)
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')
@@ -83,6 +86,7 @@ describe('Test plugin storage', function () {
 
     it('Should still have the file after the reinstallation', async function () {
       await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-six') })
+      await waitJobs(server)
 
       const content = await getFileContent()
       expect(content).to.equal('Prince Ali')

@@ -6,7 +6,8 @@ import {
   createSingleServer,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test plugin settings', function () {
@@ -24,6 +25,7 @@ describe('Test plugin settings', function () {
     await command.install({
       path: PluginsCommand.getPluginTestPath()
     })
+    await waitJobs(server)
   })
 
   it('Should not have duplicate settings', async function () {

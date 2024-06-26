@@ -105,6 +105,7 @@ describe('Test transcoding plugins', function () {
 
     before(async function () {
       await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-transcoding-one') })
+      await waitJobs(server)
     })
 
     it('Should have the appropriate available profiles', async function () {
@@ -219,6 +220,7 @@ describe('Test transcoding plugins', function () {
         this.timeout(240000)
 
         await server.plugins.uninstall({ npmName: 'peertube-plugin-test-transcoding-one' })
+        await waitJobs(server)
 
         const config = await server.config.getConfig()
 
@@ -238,6 +240,7 @@ describe('Test transcoding plugins', function () {
 
     before(async function () {
       await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-transcoding-two') })
+      await waitJobs(server)
 
       await updateConf(server, 'test-vod-profile', 'test-live-profile')
     })

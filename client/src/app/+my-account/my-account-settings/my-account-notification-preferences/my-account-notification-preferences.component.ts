@@ -49,7 +49,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
       newPeerTubeVersion: $localize`A new PeerTube version is available`,
       newPluginVersion: $localize`One of your plugin/theme has a new available version`,
-      myVideoStudioEditionFinished: $localize`Video studio edition has finished`
+      myVideoStudioEditionFinished: $localize`Video studio edition has finished`,
+      pluginManageFinished: $localize`Plugin or theme has been installed, updated or uninstalled`
     }
     this.notificationSettingGroups = [
       {
@@ -89,7 +90,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'newInstanceFollower',
           'autoInstanceFollowing',
           'newPeerTubeVersion',
-          'newPluginVersion'
+          'newPluginVersion',
+          'pluginManageFinished'
         ]
       }
     ]

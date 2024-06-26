@@ -1,7 +1,7 @@
 import express from 'express'
 import { Server } from 'http'
 import { join } from 'path'
-import { buildLogger } from '@server/helpers/logger.js'
+import { buildLogger, logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -254,6 +254,7 @@ function buildSocketHelpers () {
   return {
     sendNotification: (userId: number, notification: UserNotificationModelForApi) => {
       PeerTubeSocket.Instance.sendNotification(userId, notification)
+        .catch(err => logger.error('Failed to send notification on behalf of plugin.', { err }))
     },
     sendVideoLiveNewState: (video: MVideo) => {
       PeerTubeSocket.Instance.sendVideoLiveNewState(video)
