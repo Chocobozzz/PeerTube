@@ -245,21 +245,5 @@
     "tsc-watch": "^6.0.0",
     "tsx": "^4.7.1",
     "typescript": "~5.5.2"
-  },
-  "bundlewatch": {
-    "files": [
-      {
-        "path": "client/dist/en-US/*.js",
-        "maxSize": "1mb"
-      },
-      {
-        "path": "client/dist/standalone/videos/video-embed.bundle.js",
-        "maxSize": "1mb"
-      },
-      {
-        "path": "client/dist/standalone/videos/video-embed.css",
-        "maxSize": "1mb"
-      }
-    ]
   }
 }
