@@ -97,6 +97,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     if (!isArray(o.chapters)) o.chapters = []
 
     o.tags = o.tags.filter(t => isVideoTagValid(t))
+
     o.captions = o.captions.filter(c => isVideoCaptionLanguageValid(c.language))
     o.chapters = o.chapters.filter(c => isVideoChapterTimecodeValid(c.timecode) && isVideoChapterTitleValid(c.title))
 
@@ -269,7 +270,12 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
       if (!await this.isFileValidOrLog(absoluteFilePath, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)) continue
 
-      await createLocalCaption({ video, language: captionImport.language, path: absoluteFilePath })
+      await createLocalCaption({
+        video,
+        language: captionImport.language,
+        path: absoluteFilePath,
+        automaticallyGenerated: captionImport.automaticallyGenerated === true
+      })
 
       captionPaths.push(absoluteFilePath)
     }

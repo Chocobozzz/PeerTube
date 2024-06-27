@@ -1886,7 +1886,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       if (isArray(videoAP.VideoCaptions)) return videoAP.VideoCaptions
 
       return this.$get('VideoCaptions', {
-        attributes: [ 'filename', 'language', 'fileUrl' ],
+        attributes: [ 'filename', 'language', 'fileUrl', 'automaticallyGenerated' ],
         transaction
       }) as Promise<MVideoCaptionLanguageUrl[]>
     }

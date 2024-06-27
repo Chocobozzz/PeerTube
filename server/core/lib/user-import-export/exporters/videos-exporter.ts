@@ -198,6 +198,7 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
       updatedAt: c.updatedAt.toISOString(),
       language: c.language,
       filename: c.filename,
+      automaticallyGenerated: c.automaticallyGenerated,
       fileUrl: c.getFileUrl(video)
     }))
   }

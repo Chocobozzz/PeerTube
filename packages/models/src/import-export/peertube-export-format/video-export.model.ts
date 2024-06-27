@@ -73,6 +73,7 @@ export interface VideoExportJSON {
       language: string
       filename: string
       fileUrl: string
+      automaticallyGenerated: boolean
     }[]
 
     chapters: {

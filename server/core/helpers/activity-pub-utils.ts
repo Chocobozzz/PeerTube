@@ -73,6 +73,7 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     category: 'sc:category',
     licence: 'sc:license',
     subtitleLanguage: 'sc:subtitleLanguage',
+    automaticallyGenerated: 'pt:automaticallyGenerated',
     sensitive: 'as:sensitive',
     language: 'sc:inLanguage',
     identifier: 'sc:identifier',

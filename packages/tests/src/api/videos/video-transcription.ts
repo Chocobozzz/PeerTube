@@ -13,7 +13,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
-import { checkCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
+import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
 
 describe('Test video transcription', function () {
   let servers: PeerTubeServer[]
@@ -48,7 +48,7 @@ describe('Test video transcription', function () {
     await waitJobs(servers)
     await checkLanguage(servers, uuid, 'en')
 
-    await checkCaption(servers, uuid)
+    await checkAutoCaption(servers, uuid)
   })
 
   it('Should run transcription on upload by default', async function () {
@@ -57,7 +57,7 @@ describe('Test video transcription', function () {
     const uuid = await uploadForTranscription(servers[0])
 
     await waitJobs(servers)
-    await checkCaption(servers, uuid)
+    await checkAutoCaption(servers, uuid)
     await checkLanguage(servers, uuid, 'en')
   })
 
@@ -73,7 +73,7 @@ describe('Test video transcription', function () {
     })
 
     await waitJobs(servers)
-    await checkCaption(servers, video.uuid)
+    await checkAutoCaption(servers, video.uuid)
     await checkLanguage(servers, video.uuid, 'en')
   })
 
@@ -96,7 +96,7 @@ describe('Test video transcription', function () {
 
     await servers[0].live.waitUntilReplacedByReplay({ videoId: video.id })
     await waitJobs(servers)
-    await checkCaption(servers, video.uuid, 'WEBVTT\n\n00:')
+    await checkAutoCaption(servers, video.uuid, 'WEBVTT\n\n00:')
     await checkLanguage(servers, video.uuid, 'en')
 
     await servers[0].config.enableLive({ allowReplay: false })

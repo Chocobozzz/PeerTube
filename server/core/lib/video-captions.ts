@@ -25,13 +25,15 @@ export async function createLocalCaption (options: {
   video: MVideo
   path: string
   language: string
+  automaticallyGenerated: boolean
 }) {
-  const { language, path, video } = options
+  const { language, path, video, automaticallyGenerated } = options
 
   const videoCaption = new VideoCaptionModel({
     videoId: video.id,
     filename: VideoCaptionModel.generateCaptionName(language),
-    language
+    language,
+    automaticallyGenerated
   }) as MVideoCaption
 
   await moveAndProcessCaptionFile({ path }, videoCaption)
@@ -148,7 +150,8 @@ export async function onTranscriptionEnded (options: {
   const caption = await createLocalCaption({
     video,
     language,
-    path: vttPath
+    path: vttPath,
+    automaticallyGenerated: true
   })
 
   await sequelizeTypescript.transaction(async t => {

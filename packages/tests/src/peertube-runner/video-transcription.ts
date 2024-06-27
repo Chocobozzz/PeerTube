@@ -13,7 +13,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkPeerTubeRunnerCacheIsEmpty } from '@tests/shared/directories.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
-import { checkCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
+import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
 
 describe('Test transcription in peertube-runner program', function () {
   let servers: PeerTubeServer[] = []
@@ -46,7 +46,7 @@ describe('Test transcription in peertube-runner program', function () {
       const uuid = await uploadForTranscription(servers[0])
       await waitJobs(servers, { runnerJobs: true })
 
-      await checkCaption(servers, uuid)
+      await checkAutoCaption(servers, uuid)
       await checkLanguage(servers, uuid, 'en')
     })
 

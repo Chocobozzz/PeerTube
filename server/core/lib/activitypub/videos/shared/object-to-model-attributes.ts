@@ -155,6 +155,7 @@ export function getCaptionAttributesFromObject (video: MVideoId, videoObject: Vi
     videoId: video.id,
     filename: VideoCaptionModel.generateCaptionName(c.identifier),
     language: c.identifier,
+    automaticallyGenerated: c.automaticallyGenerated === true,
     fileUrl: c.url
   }))
 }

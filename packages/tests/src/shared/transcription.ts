@@ -28,7 +28,7 @@ export function getCustomModelPath (modelName: CustomModelName) {
 
 // ---------------------------------------------------------------------------
 
-export async function checkCaption (servers: PeerTubeServer[], uuid: string, captionContains = 'WEBVTT\n\n00:00.000 --> 00:') {
+export async function checkAutoCaption (servers: PeerTubeServer[], uuid: string, captionContains = 'WEBVTT\n\n00:00.000 --> 00:') {
   for (const server of servers) {
     const body = await server.captions.list({ videoId: uuid })
     expect(body.total).to.equal(1)
@@ -37,6 +37,7 @@ export async function checkCaption (servers: PeerTubeServer[], uuid: string, cap
     const caption = body.data[0]
     expect(caption.language.id).to.equal('en')
     expect(caption.language.label).to.equal('English')
+    expect(caption.automaticallyGenerated).to.be.true
 
     {
       await testCaptionFile(server.url, caption.captionPath, captionContains)

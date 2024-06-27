@@ -317,7 +317,12 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
         continue
       }
 
-      await createLocalCaption({ language: subtitle.language, path: subtitle.path, video })
+      await createLocalCaption({
+        language: subtitle.language,
+        path: subtitle.path,
+        video,
+        automaticallyGenerated: false
+      })
 
       logger.info('Added %s youtube-dl subtitle', subtitle.path)
     }

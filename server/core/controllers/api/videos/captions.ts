@@ -81,7 +81,12 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
 
   const captionLanguage = req.params.captionLanguage
 
-  const videoCaption = await createLocalCaption({ video, language: captionLanguage, path: videoCaptionPhysicalFile.path })
+  const videoCaption = await createLocalCaption({
+    video,
+    language: captionLanguage,
+    path: videoCaptionPhysicalFile.path,
+    automaticallyGenerated: false
+  })
 
   await sequelizeTypescript.transaction(async t => {
     await federateVideoIfNeeded(video, false, t)

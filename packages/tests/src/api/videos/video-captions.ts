@@ -72,12 +72,14 @@ describe('Test video captions', function () {
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
       expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-ar.vtt$'))
+      expect(caption1.automaticallyGenerated).to.be.false
       await testCaptionFile(server.url, caption1.captionPath, 'Subtitle good 1.')
 
       const caption2 = body.data[1]
       expect(caption2.language.id).to.equal('zh')
       expect(caption2.language.label).to.equal('Chinese')
       expect(caption2.captionPath).to.match(new RegExp('^/lazy-static/video-captions/' + uuidRegex + '-zh.vtt$'))
+      expect(caption1.automaticallyGenerated).to.be.false
       await testCaptionFile(server.url, caption2.captionPath, 'Subtitle good 2.')
     }
   })

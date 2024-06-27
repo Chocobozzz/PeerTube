@@ -1,3 +1,12 @@
+import { VideoCaption, VideoCaptionObject } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
+import {
+  MVideo,
+  MVideoCaption,
+  MVideoCaptionFormattable,
+  MVideoCaptionLanguageUrl,
+  MVideoCaptionVideo
+} from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Op, OrderItem, Transaction } from 'sequelize'
@@ -13,15 +22,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ActivityIdentifierObject, VideoCaption } from '@peertube/peertube-models'
-import {
-  MVideo,
-  MVideoCaption,
-  MVideoCaptionFormattable,
-  MVideoCaptionLanguageUrl,
-  MVideoCaptionVideo
-} from '@server/types/models/index.js'
-import { buildUUID } from '@peertube/peertube-node-utils'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -80,6 +80,10 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   fileUrl: string
+
+  @AllowNull(false)
+  @Column
+  automaticallyGenerated: boolean
 
   @ForeignKey(() => VideoModel)
   @Column
@@ -228,15 +232,17 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
         id: this.language,
         label: VideoCaptionModel.getLanguageLabel(this.language)
       },
+      automaticallyGenerated: this.automaticallyGenerated,
       captionPath: this.getCaptionStaticPath(),
       updatedAt: this.updatedAt.toISOString()
     }
   }
 
-  toActivityPubObject (this: MVideoCaptionLanguageUrl, video: MVideo): ActivityIdentifierObject {
+  toActivityPubObject (this: MVideoCaptionLanguageUrl, video: MVideo): VideoCaptionObject {
     return {
       identifier: this.language,
       name: VideoCaptionModel.getLanguageLabel(this.language),
+      automaticallyGenerated: this.automaticallyGenerated,
       url: this.getFileUrl(video)
     }
   }

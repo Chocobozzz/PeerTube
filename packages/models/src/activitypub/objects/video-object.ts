@@ -6,6 +6,7 @@ import {
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects.js'
+import { VideoCaptionObject } from './video-caption-object.js'
 import { VideoChapterObject } from './video-chapters-object.js'
 
 export interface VideoObject {
@@ -18,7 +19,7 @@ export interface VideoObject {
   category: ActivityIdentifierObject
   licence: ActivityIdentifierObject
   language: ActivityIdentifierObject
-  subtitleLanguage: ActivityIdentifierObject[]
+  subtitleLanguage: VideoCaptionObject[]
 
   views: number
 
