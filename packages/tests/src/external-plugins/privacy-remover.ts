@@ -56,6 +56,15 @@ describe('Official plugin Privacy Remover', function () {
       const video = await servers[0].videos.find({ name: 'remote public' })
       expect(video).to.not.exist
     })
+
+    it('Should not have public privacy after a server restart', async function () {
+      await servers[0].kill()
+      await servers[0].run()
+
+      const privacies = await servers[0].videos.getPrivacies()
+
+      expect(privacies[VideoPrivacy.PUBLIC]).to.not.exist
+    })
   })
 
   describe('When enabling public privacy', function () {
