@@ -3,6 +3,7 @@ import { execaNode } from 'execa'
 import { join } from 'path'
 import { root } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
+import { RunnerJobType } from '../../../models/src/runners/runner-job-type.type.js'
 
 export class PeerTubeRunnerProcess {
   private app?: ChildProcess
@@ -12,12 +13,18 @@ export class PeerTubeRunnerProcess {
   }
 
   runServer (options: {
+    jobType?: RunnerJobType
     hideLogs?: boolean // default true
   } = {}) {
-    const { hideLogs = true } = options
+    const { jobType, hideLogs = true } = options
 
     return new Promise<void>((res, rej) => {
       const args = [ 'server', '--verbose', ...this.buildIdArg() ]
+
+      if (jobType) {
+        args.push('--enable-job')
+        args.push(jobType)
+      }
 
       const forkOptions: ForkOptions = {
         detached: false,
@@ -26,6 +33,10 @@ export class PeerTubeRunnerProcess {
       }
 
       this.app = fork(this.getRunnerPath(), args, forkOptions)
+
+      this.app.stderr.on('data', data => {
+        console.error(data.toString())
+      })
 
       this.app.stdout.on('data', data => {
         const str = data.toString() as string

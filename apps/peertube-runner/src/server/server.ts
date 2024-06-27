@@ -3,13 +3,13 @@ import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { io, Socket } from 'socket.io-client'
 import { pick, shuffle, wait } from '@peertube/peertube-core-utils'
-import { PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
+import { PeerTubeProblemDocument, RunnerJobType, ServerErrorCode } from '@peertube/peertube-models'
 import { PeerTubeServer as PeerTubeServerCommand } from '@peertube/peertube-server-commands'
 import { ConfigManager } from '../shared/index.js'
 import { IPCServer } from '../shared/ipc/index.js'
 import { logger } from '../shared/logger.js'
 import { JobWithToken, processJob } from './process/index.js'
-import { isJobSupported } from './shared/index.js'
+import { getSupportedJobsList, isJobSupported } from './shared/index.js'
 
 type PeerTubeServer = PeerTubeServerCommand & {
   runnerToken: string
@@ -18,8 +18,6 @@ type PeerTubeServer = PeerTubeServerCommand & {
 }
 
 export class RunnerServer {
-  private static instance: RunnerServer
-
   private servers: PeerTubeServer[] = []
   private processingJobs: { job: JobWithToken, server: PeerTubeServer }[] = []
 
@@ -30,10 +28,16 @@ export class RunnerServer {
 
   private readonly sockets = new Map<PeerTubeServer, Socket>()
 
-  private constructor () {}
+  constructor (private readonly enabledJobs?: Set<RunnerJobType>) {}
 
   async run () {
     logger.info('Running PeerTube runner in server mode')
+
+    const enabledJobsArray = this.enabledJobs
+      ? Array.from(this.enabledJobs)
+      : getSupportedJobsList()
+
+    logger.info('Supported and enabled job types: ' + enabledJobsArray.join(', '))
 
     await ConfigManager.Instance.load()
 
@@ -235,7 +239,7 @@ export class RunnerServer {
 
     const { availableJobs } = await server.runnerJobs.request({ runnerToken: server.runnerToken })
 
-    const filtered = availableJobs.filter(j => isJobSupported(j))
+    const filtered = availableJobs.filter(j => isJobSupported(j, this.enabledJobs))
 
     if (filtered.length === 0) {
       logger.debug(`No job available on ${server.url} for runner ${server.runnerName}`)
@@ -314,9 +318,5 @@ export class RunnerServer {
     }
 
     process.exit()
-  }
-
-  static get Instance () {
-    return this.instance || (this.instance = new this())
   }
 }

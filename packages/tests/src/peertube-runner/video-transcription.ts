@@ -14,6 +14,7 @@ import {
 import { checkPeerTubeRunnerCacheIsEmpty } from '@tests/shared/directories.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
 import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
+import { expect } from 'chai'
 
 describe('Test transcription in peertube-runner program', function () {
   let servers: PeerTubeServer[] = []
@@ -34,7 +35,7 @@ describe('Test transcription in peertube-runner program', function () {
     const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
 
     peertubeRunner = new PeerTubeRunnerProcess(servers[0])
-    await peertubeRunner.runServer()
+    await peertubeRunner.runServer({ jobType: 'video-transcription' })
     await peertubeRunner.registerPeerTubeInstance({ registrationToken, runnerName: 'runner' })
   })
 
@@ -65,6 +66,32 @@ describe('Test transcription in peertube-runner program', function () {
 
         continueWhile = !data.some(j => j.type === 'video-transcription')
       }
+
+      await checkNoCaption(servers, uuid)
+      await checkLanguage(servers, uuid, null)
+    })
+  })
+
+  describe('When transcription is not enabled in runner', function () {
+
+    before(async function () {
+      await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'runner' })
+      peertubeRunner.kill()
+      await wait(500)
+
+      const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
+      await peertubeRunner.runServer({ jobType: 'live-rtmp-hls-transcoding' })
+      await peertubeRunner.registerPeerTubeInstance({ registrationToken, runnerName: 'runner' })
+    })
+
+    it('Should not run transcription', async function () {
+      this.timeout(60000)
+
+      const uuid = await uploadForTranscription(servers[0])
+      await wait(2000)
+
+      const { data } = await servers[0].runnerJobs.list({ stateOneOf: [ RunnerJobState.PENDING ] })
+      expect(data.some(j => j.type === 'video-transcription')).to.be.true
 
       await checkNoCaption(servers, uuid)
       await checkLanguage(servers, uuid, null)

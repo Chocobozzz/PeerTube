@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 import { Command, InvalidArgumentError } from '@commander-js/extra-typings'
+import { RunnerJobType } from '@peertube/peertube-models'
 import { listRegistered, registerRunner, unregisterRunner } from './register/index.js'
 import { RunnerServer } from './server/index.js'
+import { getSupportedJobsList } from './server/shared/supported-job.js'
 import { ConfigManager, logger } from './shared/index.js'
 
 const program = new Command()
@@ -25,9 +27,29 @@ const program = new Command()
 
 program.command('server')
   .description('Run in server mode, to execute remote jobs of registered PeerTube instances')
-  .action(async () => {
+  .option(
+    '--enable-job <type>',
+    'Enable this job type (multiple --enable-job options can be specified). ' +
+    'By default all supported jobs are enabled). ' +
+    'Supported job types: ' + getSupportedJobsList().join(', '),
+    (value: RunnerJobType, previous: RunnerJobType[]) => [ ...previous, value ],
+    []
+  )
+  .action(async options => {
     try {
-      await RunnerServer.Instance.run()
+      let enabledJobs: Set<RunnerJobType>
+
+      if (options.enableJob) {
+        for (const jobType of options.enableJob) {
+          if (getSupportedJobsList().includes(jobType) !== true) {
+            throw new InvalidArgumentError(`${jobType} is not a supported job`)
+          }
+
+          enabledJobs = new Set(options.enableJob)
+        }
+      }
+
+      await new RunnerServer(enabledJobs).run()
     } catch (err) {
       logger.error(err, 'Cannot run PeerTube runner as server mode')
       process.exit(-1)

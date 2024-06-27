@@ -36,12 +36,15 @@ const supportedMatrix: { [ id in RunnerJobType ]: (payload: RunnerJobPayload) =>
   }
 }
 
-export function isJobSupported (job: {
-  type: RunnerJobType
-  payload: RunnerJobPayload
-}) {
+export function isJobSupported (job: { type: RunnerJobType, payload: RunnerJobPayload }, enabledJobs?: Set<RunnerJobType>) {
+  if (enabledJobs && !enabledJobs.has(job.type)) return false
+
   const fn = supportedMatrix[job.type]
   if (!fn) return false
 
   return fn(job.payload as any)
+}
+
+export function getSupportedJobsList () {
+  return Object.keys(supportedMatrix)
 }
