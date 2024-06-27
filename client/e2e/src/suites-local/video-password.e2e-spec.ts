@@ -1,10 +1,10 @@
 import { LoginPage } from '../po/login.po'
-import { SignupPage } from '../po/signup.po'
+import { MyAccountPage } from '../po/my-account.po'
 import { PlayerPage } from '../po/player.po'
+import { SignupPage } from '../po/signup.po'
 import { VideoUploadPage } from '../po/video-upload.po'
 import { VideoWatchPage } from '../po/video-watch.po'
 import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
-import { MyAccountPage } from '../po/my-account.po'
 
 describe('Password protected videos', () => {
   let videoUploadPage: VideoUploadPage
@@ -142,9 +142,10 @@ describe('Password protected videos', () => {
     it('Should watch the playlist', async () => {
       await myAccountPage.clickOnPlaylist(playlistName)
       await myAccountPage.playPlaylist()
-      playlistUrl = await browser.getUrl()
 
       await videoWatchPage.waitUntilVideoName(publicVideoName1, 40 * 1000)
+      playlistUrl = await browser.getUrl()
+
       await videoWatchPage.waitUntilVideoName(passwordProtectedVideoName, 40 * 1000)
       await videoWatchPage.waitUntilVideoName(publicVideoName2, 40 * 1000)
     })

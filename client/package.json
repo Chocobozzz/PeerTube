@@ -113,6 +113,7 @@
     "stylelint": "^16.2.1",
     "stylelint-config-sass-guidelines": "^11.0.0",
     "tinykeys": "^2.1.0",
+    "ts-node": "^10.9.2",
     "tslib": "^2.4.0",
     "typescript": "~5.4.5",
     "video.js": "^7.19.2",

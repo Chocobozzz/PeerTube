@@ -132,6 +132,7 @@ export class VideoFilters {
 
   clone () {
     const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
+    cloned.setNSFWPolicy(this.defaultNSFWPolicy)
 
     cloned.load(this.toUrlObject())
 

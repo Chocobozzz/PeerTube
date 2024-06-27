@@ -65,7 +65,7 @@ function buildConfig (suiteFile: string = undefined) {
       defaults: {
         publish: {
           download_enabled: false,
-          comments_enabled: false,
+          comments_policy: 2,
           privacy: 2,
           licence: 4
         },

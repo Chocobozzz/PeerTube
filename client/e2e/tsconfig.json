@@ -5,7 +5,7 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "ES2015",
     "typeRoots": [
       "../node_modules/@types",
       "../node_modules"
@@ -16,6 +16,9 @@
       "@wdio/mocha-framework",
       "expect-webdriverio"
     ]
+  },
+  "ts-node": {
+    "files": true
   },
   "include": [
     "src/**/*.ts",

@@ -11,6 +11,7 @@ export default defineConfig(() => {
       outDir: resolve(__dirname, 'build'),
       emptyOutDir: true,
       minify: 'esbuild',
+      target: [ 'firefox78', 'ios12' ],
       lib: {
         name: 'PeerTubePlayer',
         fileName: () => `player.min.js`,

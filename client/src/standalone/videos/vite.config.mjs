@@ -34,6 +34,8 @@ export default defineConfig(() => {
       outDir: resolve(root, 'dist', 'standalone', 'videos'),
       emptyOutDir: true,
 
+      target: [ 'firefox78', 'ios12' ],
+
       rollupOptions: {
         input: {
           embed: resolve(root, 'src', 'standalone', 'videos', 'embed.html'),
