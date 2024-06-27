@@ -1,0 +1,8 @@
+extends ../common/greetings
+
+block title
+  | Failed to #{action} #{pluginType} #{pluginName}
+
+block content
+  p
+    | PeerTube failed to #{action} #{pluginType} #{pluginName}. To find more information about the issue you can visit #[a(href=jobsUrl) the PeerTube admin interface].

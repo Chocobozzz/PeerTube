@@ -4,18 +4,6 @@
 import { Module } from 'module'
 import { extname } from 'path'
 
-function decachePlugin (require: NodeRequire, libraryPath: string) {
-  const moduleName = find(require, libraryPath)
-
-  if (!moduleName) return
-
-  searchCache(require, moduleName, function (mod) {
-    delete require.cache[mod.id]
-
-    removeCachedPath(mod.path)
-  })
-}
-
 function decacheModule (require: NodeRequire, name: string) {
   const moduleName = find(require, name)
 
@@ -31,8 +19,7 @@ function decacheModule (require: NodeRequire, name: string) {
 // ---------------------------------------------------------------------------
 
 export {
-  decacheModule,
-  decachePlugin
+  decacheModule
 }
 
 // ---------------------------------------------------------------------------

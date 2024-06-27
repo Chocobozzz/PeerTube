@@ -260,6 +260,12 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
   })
   UserRegistration: Awaited<UserRegistrationModel>
 
+  @AllowNull(false)
+  @Default(false)
+  @Is('HasOperationFailed', value => throwIfNotValid(value, isBooleanValid, 'hasOperationFailed'))
+  @Column
+  hasOperationFailed: boolean
+
   static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
     const where = { userId }
 
@@ -445,6 +451,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       id: this.id,
       type: this.type,
       read: this.read,
+      hasOperationFailed: this.hasOperationFailed,
       video,
       videoImport,
       comment,

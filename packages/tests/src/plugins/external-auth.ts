@@ -9,7 +9,8 @@ import {
   decodeQueryString,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 async function loginExternal (options: {
@@ -71,6 +72,8 @@ describe('Test external auth plugins', function () {
     for (const suffix of [ 'one', 'two', 'three' ]) {
       await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-external-auth-' + suffix) })
     }
+
+    await waitJobs(server)
   })
 
   it('Should display the correct configuration', async function () {
@@ -327,6 +330,7 @@ describe('Test external auth plugins', function () {
 
   it('Should uninstall the plugin one and do not login Cyan', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-test-external-auth-one' })
+    await waitJobs(server)
 
     await loginExternal({
       server,

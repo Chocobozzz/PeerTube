@@ -36,7 +36,9 @@ export const UserNotificationType = {
 
   NEW_USER_REGISTRATION_REQUEST: 20,
 
-  NEW_LIVE_FROM_SUBSCRIPTION: 21
+  NEW_LIVE_FROM_SUBSCRIPTION: 21,
+
+  PLUGIN_MANAGE_FINISHED: 22
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]
@@ -67,6 +69,7 @@ export interface UserNotification {
   id: number
   type: UserNotificationType_Type
   read: boolean
+  hasOperationFailed: boolean
 
   video?: VideoInfo & {
     channel: ActorInfo

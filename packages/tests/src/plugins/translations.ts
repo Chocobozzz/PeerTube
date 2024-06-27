@@ -6,7 +6,8 @@ import {
   createSingleServer,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test plugin translations', function () {
@@ -23,6 +24,7 @@ describe('Test plugin translations', function () {
 
     await command.install({ path: PluginsCommand.getPluginTestPath() })
     await command.install({ path: PluginsCommand.getPluginTestPath('-filter-translations') })
+    await waitJobs(server)
   })
 
   it('Should not have translations for locale pt', async function () {
@@ -56,6 +58,7 @@ describe('Test plugin translations', function () {
 
   it('Should remove the plugin and remove the locales', async function () {
     await command.uninstall({ npmName: 'peertube-plugin-test-filter-translations' })
+    await waitJobs(server)
 
     {
       const body = await command.getTranslations({ locale: 'fr-FR' })

@@ -181,6 +181,15 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
   @Column
   myVideoStudioEditionFinished: UserNotificationSettingValueType
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingPluginManageFinished',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'pluginManageFinished')
+  )
+  @Column
+  pluginManageFinished: UserNotificationSettingValueType
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -233,7 +242,8 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
       abuseStateChange: this.abuseStateChange,
       newPeerTubeVersion: this.newPeerTubeVersion,
       myVideoStudioEditionFinished: this.myVideoStudioEditionFinished,
-      newPluginVersion: this.newPluginVersion
+      newPluginVersion: this.newPluginVersion,
+      pluginManageFinished: this.pluginManageFinished
     }
   }
 }

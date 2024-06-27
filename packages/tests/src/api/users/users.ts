@@ -6,7 +6,8 @@ import { AbuseState, HttpStatusCode, UserAdminFlag, UserRole, VideoPlaylistType 
 import {
   cleanupTests,
   createSingleServer, PeerTubeServer,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test users', function () {
@@ -34,6 +35,7 @@ describe('Test users', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ npmName: 'peertube-theme-background-red' })
+    await waitJobs(server)
   })
 
   describe('Creating a user', function () {

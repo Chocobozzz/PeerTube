@@ -29,3 +29,7 @@
 .alert {
   margin-top: 15px;
 }
+
+my-button[disabled=true] {
+  opacity: 0.6;
+}

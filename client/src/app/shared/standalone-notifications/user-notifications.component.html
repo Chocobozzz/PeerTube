@@ -239,6 +239,24 @@
         }
       </ng-container>
 
+      <ng-container *ngSwitchCase="22"> <!-- UserNotificationType.MANGE_PLUGIN_FINISHED -->
+        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+
+        <div *ngIf="!notification.hasOperationFailed" class="message" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.pluginUrl" [queryParams]="notification.pluginQueryParams">
+            <span *ngIf="notification.plugin">The plugin/theme {{ notification.plugin.name }}</span>
+            <span *ngIf="!notification.plugin">A plugin/theme</span>
+          </a> has been installed, updated or uninstalled.
+        </div>
+
+        <div *ngIf="notification.hasOperationFailed" class="message" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.pluginUrl" [queryParams]="notification.pluginQueryParams">
+            <span *ngIf="notification.plugin">The plugin/theme {{ notification.plugin.name }}</span>
+            <span *ngIf="!notification.plugin">A plugin/theme</span>
+          </a> has failed to be installed, updated or uninstalled.
+        </div>
+      </ng-container>
+
       <ng-container *ngSwitchDefault>
         <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 

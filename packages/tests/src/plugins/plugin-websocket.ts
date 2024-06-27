@@ -6,7 +6,8 @@ import {
   createSingleServer,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 function buildWebSocket (server: PeerTubeServer, path: string) {
@@ -42,6 +43,7 @@ describe('Test plugin websocket', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-websocket') })
+    await waitJobs(server)
   })
 
   it('Should not connect to the websocket without the appropriate path', async function () {

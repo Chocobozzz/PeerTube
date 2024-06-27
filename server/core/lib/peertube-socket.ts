@@ -8,6 +8,7 @@ import { UserNotificationModelForApi } from '@server/types/models/user/index.js'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@peertube/peertube-models'
 import { logger } from '../helpers/logger.js'
 import { authenticateRunnerSocket, authenticateSocket } from '../middlewares/index.js'
+import { PluginModel } from '@server/models/server/plugin.js'
 
 class PeerTubeSocket {
 
@@ -76,11 +77,15 @@ class PeerTubeSocket {
       })
   }
 
-  sendNotification (userId: number, notification: UserNotificationModelForApi) {
+  async sendNotification (userId: number, notification: UserNotificationModelForApi) {
     const sockets = this.userNotificationSockets[userId]
     if (!sockets) return
 
     logger.debug('Sending user notification to user %d.', userId)
+
+    await notification.reload({
+      include: [ PluginModel ]
+    })
 
     const notificationMessage = notification.toFormattedJSON()
     for (const socket of sockets) {

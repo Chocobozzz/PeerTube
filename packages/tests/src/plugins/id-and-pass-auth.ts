@@ -8,7 +8,8 @@ import {
   createSingleServer,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test id and pass auth plugins', function () {
@@ -30,6 +31,7 @@ describe('Test id and pass auth plugins', function () {
     for (const suffix of [ 'one', 'two', 'three' ]) {
       await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-id-pass-auth-' + suffix) })
     }
+    await waitJobs(server)
   })
 
   it('Should display the correct configuration', async function () {
@@ -213,6 +215,7 @@ describe('Test id and pass auth plugins', function () {
 
   it('Should uninstall the plugin one and do not login existing Crash', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-test-id-pass-auth-one' })
+    await waitJobs(server)
 
     await server.login.login({
       user: { username: 'crash', password: 'crash password' },

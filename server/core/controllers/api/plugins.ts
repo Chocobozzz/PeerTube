@@ -33,6 +33,8 @@ import {
   RegisteredServerSettings,
   UserRight
 } from '@peertube/peertube-models'
+import { CreateJobArgument, JobQueue } from '@server/lib/job-queue/job-queue.js'
+import { basename } from 'path'
 
 const pluginRouter = express.Router()
 
@@ -144,45 +146,74 @@ function getPlugin (req: express.Request, res: express.Response) {
 
 async function installPlugin (req: express.Request, res: express.Response) {
   const body: InstallOrUpdatePlugin = req.body
-
-  const fromDisk = !!body.path
-  const toInstall = body.npmName || body.path
+  const npmName = body.npmName ?? basename(body.path)
 
   const pluginVersion = body.pluginVersion && body.npmName
     ? body.pluginVersion
     : undefined
+  const options = {
+    type: 'plugin-manage',
+    payload: {
+      action: 'install',
+      npmName,
+      path: body.path,
+      version: pluginVersion,
+      userId: res.locals.oauth.token.user.id
+    }
+  } as CreateJobArgument
 
   try {
-    const plugin = await PluginManager.Instance.install({ toInstall, version: pluginVersion, fromDisk })
+    await JobQueue.Instance.createJob(options)
 
-    return res.json(plugin.toFormattedJSON())
+    return res.status(HttpStatusCode.CREATED_201).end()
   } catch (err) {
-    logger.warn('Cannot install plugin %s.', toInstall, { err })
-    return res.fail({ message: 'Cannot install plugin ' + toInstall })
+    logger.error('Cannot create plugin-install job.', { err, options })
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
   }
 }
 
 async function updatePlugin (req: express.Request, res: express.Response) {
   const body: InstallOrUpdatePlugin = req.body
+  const npmName = body.npmName ?? basename(body.path)
 
-  const fromDisk = !!body.path
-  const toUpdate = body.npmName || body.path
+  const options = {
+    type: 'plugin-manage',
+    payload: {
+      action: 'update',
+      npmName,
+      path: body.path,
+      userId: res.locals.oauth.token.user.id
+    }
+  } as CreateJobArgument
+
   try {
-    const plugin = await PluginManager.Instance.update(toUpdate, fromDisk)
+    await JobQueue.Instance.createJob(options)
 
-    return res.json(plugin.toFormattedJSON())
+    return res.status(HttpStatusCode.CREATED_201).end()
   } catch (err) {
-    logger.warn('Cannot update plugin %s.', toUpdate, { err })
-    return res.fail({ message: 'Cannot update plugin ' + toUpdate })
+    logger.error('Cannot create plugin-install job.', { err, options })
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
   }
 }
 
 async function uninstallPlugin (req: express.Request, res: express.Response) {
   const body: ManagePlugin = req.body
 
-  await PluginManager.Instance.uninstall({ npmName: body.npmName })
+  try {
+    await JobQueue.Instance.createJob({
+      type: 'plugin-manage',
+      payload: {
+        action: 'uninstall',
+        npmName: body.npmName,
+        userId: res.locals.oauth.token.user.id
+      }
+    })
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+    return res.status(HttpStatusCode.CREATED_201).end()
+  } catch (err) {
+    logger.error('Cannot create plugin-uninstall job for %s.', body.npmName, { err })
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
+  }
 }
 
 function getPublicPluginSettings (req: express.Request, res: express.Response) {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { HttpStatusCode } from '@peertube/peertube-models'
 
 describe('Official plugin auth-ldap', function () {
@@ -16,6 +16,7 @@ describe('Official plugin auth-ldap', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ npmName: 'peertube-plugin-auth-ldap' })
+    await waitJobs(server)
   })
 
   it('Should not login with without LDAP settings', async function () {
@@ -104,6 +105,7 @@ describe('Official plugin auth-ldap', function () {
 
   it('Should not login if the plugin is uninstalled', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-auth-ldap' })
+    await waitJobs(server)
 
     await server.login.login({
       user: { username: 'fry@planetexpress.com', password: 'fry' },

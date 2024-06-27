@@ -10,7 +10,8 @@ import {
   killallServers,
   makeGetRequest,
   PeerTubeServer,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { MockBlocklist } from '../shared/mock-servers/index.js'
 
@@ -29,6 +30,7 @@ describe('Official plugin auto-mute', function () {
     for (const server of servers) {
       await server.plugins.install({ npmName: 'peertube-plugin-auto-mute' })
     }
+    await waitJobs(servers)
 
     blocklistServer = new MockBlocklist()
     port = await blocklistServer.initialize()

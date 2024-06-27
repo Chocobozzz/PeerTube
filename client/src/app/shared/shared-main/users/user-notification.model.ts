@@ -20,6 +20,7 @@ export class UserNotification implements UserNotificationServer {
   id: number
   type: UserNotificationType_Type
   read: boolean
+  hasOperationFailed: boolean
 
   video?: VideoInfo & {
     channel: ActorInfo & { avatarUrl?: string }
@@ -119,10 +120,13 @@ export class UserNotification implements UserNotificationServer {
   pluginUrl?: string
   pluginQueryParams?: { [id: string]: string } = {}
 
+  jobUrl?: string
+
   constructor (hash: UserNotificationServer, user: AuthUser) {
     this.id = hash.id
     this.type = hash.type
     this.read = hash.read
+    this.hasOperationFailed = hash.hasOperationFailed
 
     // We assume that some fields exist
     // To prevent a notification popup crash in case of bug, wrap it inside a try/catch
@@ -248,6 +252,15 @@ export class UserNotification implements UserNotificationServer {
         case UserNotificationType.NEW_PLUGIN_VERSION:
           this.pluginUrl = `/admin/plugins/list-installed`
           this.pluginQueryParams.pluginType = this.plugin.type + ''
+          break
+
+        case UserNotificationType.PLUGIN_MANAGE_FINISHED:
+          this.pluginUrl = '/admin/plugins/list-installed'
+          this.jobUrl = '/admin/system/jobs'
+
+          if (this.plugin) {
+            this.pluginQueryParams.pluginType = this.plugin.type + ''
+          }
           break
 
         case UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED:

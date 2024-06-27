@@ -7,7 +7,8 @@ import {
   makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 
@@ -21,6 +22,7 @@ describe('Test plugin altering video constants', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-video-constants') })
+    await waitJobs(server)
   })
 
   it('Should have updated languages', async function () {
@@ -93,6 +95,7 @@ describe('Test plugin altering video constants', function () {
 
   it('Should uninstall the plugin and reset languages, categories, licences and privacies', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-test-video-constants' })
+    await waitJobs(server)
 
     {
       const languages = await server.videos.getLanguages()
@@ -145,6 +148,7 @@ describe('Test plugin altering video constants', function () {
 
   it('Should be able to reset categories', async function () {
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-video-constants') })
+    await waitJobs(server)
 
     {
       const categories = await server.videos.getCategories()

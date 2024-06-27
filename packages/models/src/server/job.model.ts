@@ -22,6 +22,7 @@ export type JobType =
   | 'move-to-object-storage'
   | 'move-to-file-system'
   | 'notify'
+  | 'plugin-manage'
   | 'video-channel-import'
   | 'video-file-import'
   | 'video-import'
@@ -86,6 +87,18 @@ export type RefreshPayload = {
 }
 
 export type EmailPayload = SendEmailOptions
+
+export type PluginManagePayload = {
+  action: 'install' | 'update'
+  npmName: string
+  path?: string
+  version?: string
+  userId: number
+} | {
+  action: 'uninstall'
+  npmName: string
+  userId: number
+}
 
 export type VideoFileImportPayload = {
   videoUUID: string

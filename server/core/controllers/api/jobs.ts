@@ -32,7 +32,7 @@ jobsRouter.post('/resume',
   resumeJobQueue
 )
 
-jobsRouter.get('/:state?',
+jobsRouter.get('/',
   openapiOperationDoc({ operationId: 'getJobs' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
@@ -65,31 +65,31 @@ function resumeJobQueue (req: express.Request, res: express.Response) {
 }
 
 async function listJobs (req: express.Request, res: express.Response) {
-  const state = req.params.state as JobState
+  const states = (req.query.states || '').split(',').filter(s => !!s) as JobState[]
   const asc = req.query.sort === 'createdAt'
   const jobType = req.query.jobType
 
   const jobs = await JobQueue.Instance.listForApi({
-    state,
+    states,
     start: req.query.start,
     count: req.query.count,
     asc,
     jobType
   })
-  const total = await JobQueue.Instance.count(state, jobType)
+  const total = await JobQueue.Instance.count(states, jobType)
 
   const result: ResultList<Job> = {
     total,
-    data: await Promise.all(jobs.map(j => formatJob(j, state)))
+    data: await Promise.all(jobs.map(j => formatJob(j)))
   }
 
   return res.json(result)
 }
 
-async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
+async function formatJob (job: BullJob): Promise<Job> {
   return {
     id: job.id,
-    state: state || await job.getState(),
+    state: await job.getState(),
     type: job.queueName as JobType,
     data: job.data,
     parent: job.parent

@@ -335,7 +335,7 @@ async function startApplication () {
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 
-  PluginManager.Instance.init(server)
+  await PluginManager.Instance.init(server)
   // Before PeerTubeSocket init
   PluginManager.Instance.registerWebSocketRouter()
 

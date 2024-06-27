@@ -8,7 +8,8 @@ import {
   makePostBodyRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { HttpStatusCode } from '@peertube/peertube-models'
 
@@ -26,6 +27,7 @@ describe('Test plugin helpers', function () {
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-five') })
+    await waitJobs(server)
   })
 
   it('Should answer "pong"', async function () {
@@ -100,6 +102,7 @@ describe('Test plugin helpers', function () {
 
   it('Should remove the plugin and remove the routes', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-test-five' })
+    await waitJobs(server)
 
     for (const path of basePaths) {
       await makeGetRequest({

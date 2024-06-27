@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, booleanAttribute } from '@angular/core'
 import { ButtonComponent } from './button.component'
 
 @Component({
@@ -7,6 +7,7 @@ import { ButtonComponent } from './button.component'
     <my-button
       icon="delete" className="grey-button"
       [disabled]="disabled" [label]="label" [title]="title"
+      [loading]="loading"
       [responsiveLabel]="responsiveLabel"
     ></my-button>
   `,
@@ -18,6 +19,7 @@ export class DeleteButtonComponent implements OnInit {
   @Input() title: string
   @Input() responsiveLabel = false
   @Input() disabled: boolean
+  @Input({ transform: booleanAttribute }) loading = false
 
   ngOnInit () {
     if (this.label === undefined && !this.title) {

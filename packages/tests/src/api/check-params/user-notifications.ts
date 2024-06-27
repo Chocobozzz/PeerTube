@@ -171,7 +171,8 @@ describe('Test user notifications API validators', function () {
       abuseStateChange: UserNotificationSettingValue.WEB,
       newPeerTubeVersion: UserNotificationSettingValue.WEB,
       myVideoStudioEditionFinished: UserNotificationSettingValue.WEB,
-      newPluginVersion: UserNotificationSettingValue.WEB
+      newPluginVersion: UserNotificationSettingValue.WEB,
+      pluginManageFinished: UserNotificationSettingValue.WEB
     }
 
     it('Should fail with missing fields', async function () {

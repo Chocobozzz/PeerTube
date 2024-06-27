@@ -1,10 +1,10 @@
-import { Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
+import { Subject, Subscription } from 'rxjs'
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
-import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PeerTubeSocket, PluginService } from '@app/core'
+import { PeerTubePluginIndex, PluginManagePayload, PluginType, PluginType_Type, UserNotificationType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
@@ -14,6 +14,7 @@ import { AutofocusDirective } from '../../../shared/shared-main/angular/autofocu
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { NgIf, NgFor } from '@angular/common'
 import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
+import { JobService } from '@app/+admin/system'
 
 @Component({
   selector: 'my-plugin-search',
@@ -32,7 +33,7 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
     ButtonComponent
   ]
 })
-export class PluginSearchComponent implements OnInit {
+export class PluginSearchComponent implements OnInit, OnDestroy {
   pluginType: PluginType_Type
 
   pagination: ComponentPagination = {
@@ -46,12 +47,13 @@ export class PluginSearchComponent implements OnInit {
   isSearching = false
 
   plugins: PeerTubePluginIndex[] = []
-  installing: { [name: string]: boolean } = {}
+  toBeInstalled: { [name: string]: boolean } = {}
   pluginInstalled = false
 
   onDataSubject = new Subject<any[]>()
 
   private searchSubject = new Subject<string>()
+  private notificationSub: Subscription
 
   constructor (
     private pluginService: PluginService,
@@ -59,7 +61,9 @@ export class PluginSearchComponent implements OnInit {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private jobService: JobService,
+    private peertubeSocket: PeerTubeSocket
   ) {
   }
 
@@ -69,6 +73,39 @@ export class PluginSearchComponent implements OnInit {
 
       this.router.navigate([], { queryParams })
     }
+
+    this.jobService.listUnfinishedJobs({
+      jobType: 'plugin-manage',
+      pagination: {
+        count: 10,
+        start: 0
+      },
+      sort: {
+        field: 'createdAt',
+        order: -1
+      }
+    }).subscribe({
+      next: resultList => {
+        const jobs = resultList.data
+
+        jobs.forEach((job) => {
+          let payload: PluginManagePayload
+
+          try {
+            payload = JSON.parse(job.data)
+          } catch (err) {}
+
+          if (payload.action === 'install') {
+            this.toBeInstalled[payload.npmName] = true
+          }
+        })
+      },
+
+      error: err => {
+        logger.error('Could not fetch status of installed plugins.', { err })
+        this.notifier.error($localize`Could not fetch status of installed plugins.`)
+      }
+    })
 
     this.route.queryParams.subscribe(query => {
       if (!query['pluginType']) return
@@ -85,6 +122,12 @@ export class PluginSearchComponent implements OnInit {
           distinctUntilChanged()
         )
         .subscribe(search => this.router.navigate([], { queryParams: { search }, queryParamsHandling: 'merge' }))
+
+    this.subscribeToNotifications()
+  }
+
+  ngOnDestroy () {
+    if (this.notificationSub) this.notificationSub.unsubscribe()
   }
 
   onSearchChange (event: Event) {
@@ -131,8 +174,8 @@ export class PluginSearchComponent implements OnInit {
     this.loadMorePlugins()
   }
 
-  isInstalling (plugin: PeerTubePluginIndex) {
-    return !!this.installing[plugin.npmName]
+  willInstall (plugin: PeerTubePluginIndex) {
+    return !!this.toBeInstalled[plugin.npmName]
   }
 
   getShowRouterLink (plugin: PeerTubePluginIndex) {
@@ -144,7 +187,7 @@ export class PluginSearchComponent implements OnInit {
   }
 
   async install (plugin: PeerTubePluginIndex) {
-    if (this.installing[plugin.npmName]) return
+    if (this.toBeInstalled[plugin.npmName]) return
 
     const res = await this.confirmService.confirm(
       $localize`Please only install plugins or themes you trust, since they can execute any code on your instance.`,
@@ -152,24 +195,46 @@ export class PluginSearchComponent implements OnInit {
     )
     if (res === false) return
 
-    this.installing[plugin.npmName] = true
+    this.toBeInstalled[plugin.npmName] = true
 
     this.pluginApiService.install(plugin.npmName)
         .subscribe({
           next: () => {
-            this.installing[plugin.npmName] = false
-            this.pluginInstalled = true
-
-            this.notifier.success($localize`${plugin.name} installed.`)
-
-            plugin.installed = true
+            this.notifier.success($localize`${plugin.name} will be installed.`)
           },
 
           error: err => {
-            this.installing[plugin.npmName] = false
+            this.toBeInstalled[plugin.npmName] = false
 
             this.notifier.error(err.message)
           }
         })
+  }
+
+  private async subscribeToNotifications () {
+    const obs = await this.peertubeSocket.getMyNotificationsSocket()
+
+    this.notificationSub = obs
+      .pipe(
+        filter(d => d.notification?.type === UserNotificationType.PLUGIN_MANAGE_FINISHED)
+      ).subscribe(data => {
+        const pluginName = data.notification.plugin?.name
+
+        if (pluginName) {
+          const npmName = this.pluginService.nameToNpmName(data.notification.plugin.name, data.notification.plugin.type)
+
+          if (this.toBeInstalled[npmName]) {
+            this.toBeInstalled[npmName] = false
+
+            if (!data.notification.hasOperationFailed) {
+              const plugin = this.plugins.find(p => p.name === pluginName)
+
+              if (plugin) {
+                plugin.installed = true
+              }
+            }
+          }
+        }
+      })
   }
 }

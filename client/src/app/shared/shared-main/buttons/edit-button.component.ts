@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, booleanAttribute } from '@angular/core'
 import { ButtonComponent } from './button.component'
 
 @Component({
   selector: 'my-edit-button',
   template: `
     <my-button
-      icon="edit" [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
+      icon="edit" [disabled]="disabled" [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
       [ptRouterLink]="ptRouterLink"
     ></my-button>
   `,
@@ -13,6 +13,7 @@ import { ButtonComponent } from './button.component'
   imports: [ ButtonComponent ]
 })
 export class EditButtonComponent implements OnInit {
+  @Input({ transform: booleanAttribute }) disabled = false
   @Input() label: string
   @Input() title: string
   @Input() ptRouterLink: string[] | string = []

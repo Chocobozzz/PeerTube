@@ -7,7 +7,8 @@ import {
   makeHTMLRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 
 describe('Test plugins HTML injection', function () {
@@ -39,6 +40,7 @@ describe('Test plugins HTML injection', function () {
     this.timeout(30000)
 
     await command.install({ npmName: 'peertube-plugin-hello-world' })
+    await waitJobs(server)
   })
 
   it('Should have the correct global css', async function () {
@@ -55,6 +57,7 @@ describe('Test plugins HTML injection', function () {
 
   it('Should have an empty global css on uninstall', async function () {
     await command.uninstall({ npmName: 'peertube-plugin-hello-world' })
+    await waitJobs(server)
 
     {
       const text = await command.getCSS()

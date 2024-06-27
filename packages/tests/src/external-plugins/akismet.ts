@@ -24,6 +24,7 @@ describe('Official plugin Akismet', function () {
     await servers[0].plugins.install({
       npmName: 'peertube-plugin-akismet'
     })
+    await waitJobs(servers[0])
 
     if (!process.env.AKISMET_KEY) throw new Error('Missing AKISMET_KEY from env')
 
