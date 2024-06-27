@@ -225,7 +225,7 @@
   $color: color.adjust($color: #c54130, $lightness: 10%);
   $text: #fff6f5;
 
-  @include button-focus(scale-color($color, $alpha: -95%));
+  @include button-focus(color.scale($color, $alpha: -95%));
 
   background-color: $color;
   color: $text;

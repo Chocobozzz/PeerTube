@@ -1,5 +1,6 @@
 @use 'sass:math';
 @use 'sass:color';
+@use 'sass:map';
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -154,8 +155,8 @@ $variables: (
 
 // SASS type check our CSS variables
 @function pvar($variable) {
-  @if map-has-key($variables, $variable) {
-    @return map-get($variables, $variable);
+  @if map.has-key($variables, $variable) {
+    @return map.get($variables, $variable);
   } @else {
     @error 'ERROR: Variable #{$variable} does not exist';
   }
@@ -182,5 +183,5 @@ $zindex: (
 );
 
 @function z($label) {
-  @return map-get($zindex, $label);
+  @return map.get($zindex, $label);
 }

@@ -161,7 +161,7 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "i18nMissingTranslation": "ignore",
             "localize": true,
@@ -171,7 +171,8 @@
             "index": "src/index.html",
             "tsConfig": "tsconfig.json",
             "polyfills": [
-              "src/polyfills.ts"
+              "src/polyfills.ts",
+              "@angular/localize/init"
             ],
             "baseHref": "/",
             "stylePreprocessorOptions": {
@@ -285,15 +286,12 @@
           }
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "proxyConfig": "proxy.config.json",
             "buildTarget": "PeerTube:build"
           },
           "configurations": {
-            "production": {
-              "buildTarget": "PeerTube:build:production"
-            },
             "hmr": {
               "buildTarget": "PeerTube:build:hmr"
             },
@@ -303,10 +301,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
-          "options": {
-            "buildTarget": "PeerTube:build"
-          }
+          "builder": "@angular-devkit/build-angular:extract-i18n"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",

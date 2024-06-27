@@ -20,5 +20,3 @@ else
     "$clientCommand" \
     "$serverCommand"
 fi
-
-

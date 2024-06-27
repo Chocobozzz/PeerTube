@@ -33,6 +33,7 @@
   ],
   "typings": "*.d.ts",
   "devDependencies": {
+    "@angular-devkit/build-angular": "^18.0.6",
     "@angular-eslint/builder": "^18.0.1",
     "@angular-eslint/eslint-plugin": "^18.0.1",
     "@angular-eslint/eslint-plugin-template": "^18.0.1",
