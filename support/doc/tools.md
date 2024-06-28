@@ -549,7 +549,7 @@ docker compose exec -u peertube peertube npm run create-generate-storyboard-job 
 
 :::
 
-### Prune filesystem storage
+### Prune filesystem/object storage
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
 To delete these files (a confirmation will be demanded first):
