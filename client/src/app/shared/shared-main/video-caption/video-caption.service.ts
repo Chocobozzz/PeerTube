@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { peertubeTranslate, sortBy } from '@peertube/peertube-core-utils'
-import { ResultList, VideoCaption } from '@peertube/peertube-models'
-import { Observable, from, of } from 'rxjs'
+import { PeerTubeProblemDocument, ResultList, ServerErrorCode, VideoCaption } from '@peertube/peertube-models'
+import { Observable, from, of, throwError } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { VideoPasswordService } from '../video/video-password.service'
@@ -78,8 +78,35 @@ export class VideoCaptionService {
   generateCaption (videoIds: (number | string)[]) {
     return from(videoIds)
       .pipe(
-        concatMap(videoId => this.authHttp.post(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/generate`, {})),
+        concatMap(videoId => {
+          return this.authHttp.post(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/generate`, {})
+            .pipe(
+              map(() => 'success' as 'success'),
+              catchError(err => {
+                const error: PeerTubeProblemDocument = err.error
+
+                if (error?.code === ServerErrorCode.VIDEO_ALREADY_HAS_CAPTIONS) {
+                  return of('already-has-captions' as 'already-has-captions')
+                }
+
+                if (error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCRIBED) {
+                  return of('already-being-transcribed' as 'already-being-transcribed')
+                }
+
+                return throwError(() => err)
+              })
+            )
+        }),
         toArray(),
+        map(data => {
+          return data.reduce((p, c) => {
+            if (c === 'success') p.success += 1
+            if (c === 'already-has-captions') p.alreadyHasCaptions += 1
+            if (c === 'already-being-transcribed') p.alreadyBeingTranscribed += 1
+
+            return p
+          }, { success: 0, alreadyHasCaptions: 0, alreadyBeingTranscribed: 0 })
+        }),
         catchError(err => this.restExtractor.handleError(err))
       )
   }

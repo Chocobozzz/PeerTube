@@ -56,6 +56,7 @@ export const ServerErrorCode = {
 
   VIDEO_ALREADY_BEING_TRANSCODED: 'video_already_being_transcoded',
   VIDEO_ALREADY_BEING_TRANSCRIBED: 'video_already_being_transcribed',
+  VIDEO_ALREADY_HAS_CAPTIONS: 'video_already_has_captions',
 
   MAX_USER_VIDEO_QUOTA_EXCEEDED_FOR_USER_EXPORT: 'max_user_video_quota_exceeded_for_user_export'
 } as const

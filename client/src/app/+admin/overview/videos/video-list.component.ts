@@ -419,8 +419,36 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   private generateCaption (videos: Video[]) {
     this.videoCaptionService.generateCaption(videos.map(v => v.id))
       .subscribe({
-        next: () => {
-          this.notifier.success($localize`Transcription jobs created.`)
+        next: result => {
+          const messages: string[] = []
+
+          if (result.success) {
+            this.notifier.success(
+              formatICU(
+                $localize`{count, plural, =1 {1 transcription job created.} other {{count} transcription jobs created.}}`,
+                { count: result.success }
+              )
+            )
+          }
+
+          if (result.alreadyHasCaptions) {
+            this.notifier.info(
+              formatICU(
+                $localize`{count, plural, =1 {1 video already has captions.} other {{count} videos already have captions.}}`,
+                { count: result.alreadyHasCaptions }
+              )
+            )
+          }
+
+          if (result.alreadyBeingTranscribed) {
+            this.notifier.info(
+              formatICU(
+                // eslint-disable-next-line max-len
+                $localize`{count, plural, =1 {1 video is already being transcribed.} other {{count} videos are already being transcribed.}}`,
+                { count: result.alreadyBeingTranscribed }
+              )
+            )
+          }
         },
 
         error: err => this.notifier.error(err.message)

@@ -83,6 +83,7 @@ export const generateVideoCaptionValidator = [
     if (captions.length !== 0) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
+        type: ServerErrorCode.VIDEO_ALREADY_HAS_CAPTIONS,
         message: 'This video already has captions'
       })
     }
