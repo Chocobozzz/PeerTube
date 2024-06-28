@@ -420,8 +420,6 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     this.videoCaptionService.generateCaption(videos.map(v => v.id))
       .subscribe({
         next: result => {
-          const messages: string[] = []
-
           if (result.success) {
             this.notifier.success(
               formatICU(
