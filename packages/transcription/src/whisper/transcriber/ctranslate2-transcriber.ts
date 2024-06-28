@@ -20,7 +20,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
   }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = $({ verbose: process.env.NODE_ENV !== 'production', env: this.getExecEnv() })
+    const $$ = $({ env: this.getExecEnv() })
 
     if (model.path) {
       assert(await lstat(model.path).then(stats => stats.isDirectory()), 'Model path must be a path to a directory.')
@@ -56,7 +56,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
   }
 
   async install (directory: string) {
-    const $$ = $({ verbose: true })
+    const $$ = $({ verbose: 'full' })
 
     await $$`pip3 install -U -t ${directory} whisper-ctranslate2==${this.engine.version}`
   }
