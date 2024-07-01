@@ -6,6 +6,7 @@ on:
       - 'master'
   schedule:
     - cron: '0 3 * * *'
+  workflow_call:
 
 jobs:
   generate-matrix:
