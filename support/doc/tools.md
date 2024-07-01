@@ -119,7 +119,7 @@ peertube-cli redundancy remove --video 823
 
 ## PeerTube runner
 
-PeerTube >= 5.2 supports VOD or Live transcoding by a remote PeerTube runner.
+PeerTube supports VOD/Live transcoding and VOD transcription (PeerTube >= 6.2) by a remote PeerTube runner.
 
 ### Runner installation
 
@@ -129,6 +129,12 @@ Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
 node --version # Should be >= 16.x
 ffprobe -version # Should be >= 4.3
 ffmpeg -version # Should be >= 4.3
+```
+
+If you want to use video transcription:
+
+```bash
+pip install whisper-ctranslate2 # or pipx install whisper-ctranslate2 depending on your distribution
 ```
 
 Then install the CLI:
@@ -149,7 +155,7 @@ peertube-runner [commands] --id instance-2
 peertube-runner [commands] --id instance-3
 ```
 
-You can change the runner configuration (jobs concurrency, ffmpeg threads/nice etc) by editing `~/.config/peertube-runner-nodejs/[id]/config.toml`.
+You can change the runner configuration (jobs concurrency, ffmpeg threads/nice, whisper engines/models, etc.) by editing `~/.config/peertube-runner-nodejs/[id]/config.toml`.
 
 ### Run the server
 
