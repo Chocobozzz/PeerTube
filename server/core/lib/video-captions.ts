@@ -123,6 +123,9 @@ export async function generateSubtitle (options: {
   } finally {
     if (outputPath) await remove(outputPath)
 
+    VideoJobInfoModel.decrease(options.video.uuid, 'pendingTranscription')
+      .catch(err => logger.error('Cannot decrease pendingTranscription job count', { err, ...lTags(options.video.uuid) }))
+
     inputFileMutexReleaser()
   }
 }
@@ -134,8 +137,6 @@ export async function onTranscriptionEnded (options: {
   lTags?: (string | number)[]
 }) {
   const { video, language, vttPath, lTags: customLTags = [] } = options
-
-  await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscription')
 
   if (!isVideoCaptionLanguageValid(language)) {
     logger.warn(`Invalid transcription language for video ${video.uuid}`, this.lTags(video.uuid))
