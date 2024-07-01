@@ -1,8 +1,10 @@
 FROM node:18-bookworm-slim
 
+ARG ALREADY_BUILT=0
+
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg python3 ca-certificates gnupg gosu build-essential curl git \
+ && apt install -y --no-install-recommends openssl ffmpeg python3 python3-pip ca-certificates gnupg gosu build-essential curl git \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
@@ -17,12 +19,16 @@ WORKDIR /app
 USER peertube
 
 # Install manually client dependencies to apply our network timeout option
-RUN cd client && yarn install --pure-lockfile --network-timeout 1200000 && cd ../ \
+RUN if [ "${ALREADY_BUILT}" = 0 ]; then \
+    cd client && yarn install --pure-lockfile --network-timeout 1200000 && cd ../ \
     && yarn install --pure-lockfile --network-timeout 1200000 \
-    && npm run build \
-    && rm -r ./node_modules ./client/node_modules ./client/.angular \
-    && yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
-    && yarn cache clean
+    && npm run build; \
+  else \
+    echo "Do not build application inside Docker because of ALREADY_BUILT build argument"; \
+  fi; \
+  rm -rf ./node_modules ./client/node_modules ./client/.angular \
+  && yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
+  && yarn cache clean
 
 USER root
 

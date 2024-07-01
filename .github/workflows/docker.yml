@@ -24,9 +24,9 @@ jobs:
           # FIXME: https://github.com/actions/checkout/issues/290
           git fetch --force --tags
 
-          one="{ \"file\": \"./support/docker/production/Dockerfile.bookworm\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bookworm\" }"
-          two="{ \"file\": \"./support/docker/production/Dockerfile.bookworm\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bookworm,chocobozzz/peertube:$(git describe --abbrev=0)-bookworm\" }"
-          three="{ \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\" }"
+          one="{ \"build-peertube\": true, \"file\": \"./support/docker/production/Dockerfile.bookworm\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bookworm\" }"
+          two="{ \"build-peertube\": true, \"file\": \"./support/docker/production/Dockerfile.bookworm\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bookworm,chocobozzz/peertube:$(git describe --abbrev=0)-bookworm\" }"
+          three="{ \"build-peertube\": false, \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\" }"
 
           matrix="[$one,$two,$three]"
           echo "matrix={\"include\":$matrix}" >> $GITHUB_OUTPUT
@@ -44,29 +44,40 @@ jobs:
 
     steps:
       -
+        name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.ref }}
+
+      - uses: './.github/actions/reusable-prepare-peertube-build'
+        if: ${{ matrix.build-peertube }}
+        with:
+          node-version: '18.x'
+
+      - name: Build
+        if: ${{ matrix.build-peertube }}
+        run: npm run build
+
+      -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
       -
         name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       -
-        name: Checkout develop
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ matrix.ref }}
-      -
         name: Docker build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: '.'
           platforms: linux/amd64,linux/arm64
           push: true
           file: ${{ matrix.file }}
           tags: ${{ matrix.tags }}
+          build-args: ALREADY_BUILT=1
