@@ -74,6 +74,13 @@ export const generateVideoCaptionValidator = [
       })
     }
 
+    if (video.isLive) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot run transcription job on a live'
+      })
+    }
+
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return

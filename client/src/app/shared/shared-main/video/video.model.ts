@@ -244,10 +244,6 @@ export class Video implements VideoServerModel {
       this.isUpdatableBy(user)
   }
 
-  canGenerateTranscription (user: AuthUser, transcriptionEnabled: boolean) {
-    return transcriptionEnabled && this.isLocal && user.hasRight(UserRight.UPDATE_ANY_VIDEO)
-  }
-
   // ---------------------------------------------------------------------------
 
   isOwner (user: AuthUser) {
@@ -278,12 +274,14 @@ export class Video implements VideoServerModel {
   }
 
   canRunTranscoding (user: AuthUser) {
-    return this.canRunForcedTranscoding(user)
+    return this.isLocal && !this.isLive && user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
   }
 
-  canRunForcedTranscoding (user: AuthUser) {
-    return this.isLocal && user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
+  canGenerateTranscription (user: AuthUser, transcriptionEnabled: boolean) {
+    return transcriptionEnabled && this.isLocal && !this.isLive && user.hasRight(UserRight.UPDATE_ANY_VIDEO)
   }
+
+  // ---------------------------------------------------------------------------
 
   hasHLS () {
     return this.streamingPlaylists?.some(p => p.type === VideoStreamingPlaylistType.HLS)

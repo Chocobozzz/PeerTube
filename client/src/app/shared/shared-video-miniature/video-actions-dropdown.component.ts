@@ -234,8 +234,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.canRemoveFiles(this.user)
   }
 
-  canRunForcedTranscoding () {
-    return this.video.canRunForcedTranscoding(this.user)
+  canRunTranscoding () {
+    return this.video.canRunTranscoding(this.user)
   }
 
   /* Action handlers */
@@ -462,13 +462,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Run HLS transcoding`,
           handler: ({ video }) => this.runTranscoding(video, 'hls'),
-          isDisplayed: () => this.displayOptions.transcoding && this.canRunForcedTranscoding(),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
           iconName: 'cog'
         },
         {
           label: $localize`Run Web Video transcoding`,
           handler: ({ video }) => this.runTranscoding(video, 'web-video'),
-          isDisplayed: () => this.displayOptions.transcoding && this.canRunForcedTranscoding(),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
           iconName: 'cog'
         },
         {

@@ -31,6 +31,13 @@ const createTranscodingValidator = [
       })
     }
 
+    if (video.isLive) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot run transcoding job on a live'
+      })
+    }
+
     if (CONFIG.TRANSCODING.ENABLED !== true) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
