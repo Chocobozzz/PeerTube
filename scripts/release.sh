@@ -88,6 +88,7 @@ find dist/ packages/core-utils/dist/ \
                           "$directory_name/packages/ffmpeg/dist/" "$directory_name/packages/ffmpeg/package.json" \
                           "$directory_name/packages/node-utils/dist/" "$directory_name/packages/node-utils/package.json" \
                           "$directory_name/packages/models/dist/" "$directory_name/packages/models/package.json" \
+                          "$directory_name/packages/transcription/dist/" "$directory_name/packages/transcription/package.json" \
                           "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
                           "$directory_name/client/package.json" "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \
