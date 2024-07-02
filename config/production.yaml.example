@@ -31,9 +31,9 @@ rates_limit:
     window: 5 minutes
     max: 3
   receive_client_log:
-    # 10 attempts in 10 min
-    window: 10 minutes
-    max: 10
+    # 1 attempt every 2 seconds
+    window: 1 minute
+    max: 30
   plugins:
     # 500 attempts in 10 seconds (we also serve plugin static files)
     window: 10 seconds
