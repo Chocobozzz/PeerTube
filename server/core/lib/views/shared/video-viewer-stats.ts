@@ -65,7 +65,10 @@ export class VideoViewerStats {
     let stats: LocalViewerStats = await this.getLocalVideoViewer({ sessionId, videoId: video.id })
 
     if (stats && stats.watchSections.length >= MAX_LOCAL_VIEWER_WATCH_SECTIONS) {
-      logger.warn('Too much watch section to store for a viewer, skipping this one', { currentTime, viewEvent, ...lTags(video.uuid) })
+      logger.warn(
+        'Too much watch section to store for a viewer, skipping this one',
+        { sessionId, currentTime, viewEvent, ...lTags(video.uuid) }
+      )
       return
     }
 

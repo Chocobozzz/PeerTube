@@ -298,12 +298,9 @@ class PeerTubePlugin extends Plugin {
 
     let lastCurrentTime = startTime
     let lastViewEvent: VideoViewEvent
-    let ended = false // player.ended() is too "slow", so handle ended manually
+    let ended = false // player.ended() is too "slow", so store ended state manually
 
-    if (this.videoViewInterval) clearInterval(this.videoViewInterval)
-    if (this.videoViewOnPlayHandler) this.player.off('play', this.videoViewOnPlayHandler)
-    if (this.videoViewOnSeekedHandler) this.player.off('seeked', this.videoViewOnSeekedHandler)
-    if (this.videoViewOnEndedHandler) this.player.off('ended', this.videoViewOnEndedHandler)
+    this.disableUserViewing()
 
     this.videoViewOnPlayHandler = () => {
       debugLogger('Notify user is watching on play: ' + startTime)
@@ -318,7 +315,14 @@ class PeerTubePlugin extends Plugin {
         return
       }
 
-      const diff = Math.floor(this.player.currentTime()) - lastCurrentTime
+      const currentTime = Math.floor(this.player.currentTime())
+      if (currentTime === 0 && this.player.loop()) {
+        debugLogger('Disabling viewing notification after first video loop.')
+        this.disableUserViewing()
+        return
+      }
+
+      const diff = currentTime - lastCurrentTime
 
       // Don't take into account small forwards
       if (diff > 0 && diff < 3) return
@@ -364,6 +368,28 @@ class PeerTubePlugin extends Plugin {
 
       lastViewEvent = undefined
     }, this.options.videoViewIntervalMs)
+  }
+
+  private disableUserViewing () {
+    if (this.videoViewInterval) {
+      clearInterval(this.videoViewInterval)
+      this.videoViewInterval = undefined
+    }
+
+    if (this.videoViewOnPlayHandler) {
+      this.player.off('play', this.videoViewOnPlayHandler)
+      this.videoViewOnPlayHandler = undefined
+    }
+
+    if (this.videoViewOnSeekedHandler) {
+      this.player.off('seeked', this.videoViewOnSeekedHandler)
+      this.videoViewOnSeekedHandler = undefined
+    }
+
+    if (this.videoViewOnEndedHandler) {
+      this.player.off('ended', this.videoViewOnEndedHandler)
+      this.videoViewOnEndedHandler = undefined
+    }
   }
 
   private notifyUserIsWatching (currentTime: number, viewEvent: VideoViewEvent) {
