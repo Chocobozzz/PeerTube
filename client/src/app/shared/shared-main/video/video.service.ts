@@ -334,10 +334,9 @@ export class VideoService {
   runTranscoding (options: {
     videos: Video[]
     type: 'hls' | 'web-video'
-    askForForceTranscodingIfNeeded: boolean
     forceTranscoding?: boolean
   }): Observable<any> {
-    const { videos, type, askForForceTranscodingIfNeeded, forceTranscoding } = options
+    const { videos, type, forceTranscoding } = options
 
     const body: VideoTranscodingCreate = { transcodingType: type, forceTranscoding }
 
@@ -347,7 +346,7 @@ export class VideoService {
           return this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + video.uuid + '/transcoding', body)
             .pipe(
               catchError(err => {
-                if (askForForceTranscodingIfNeeded && err.error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED) {
+                if (err.error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED && !forceTranscoding) {
                   const message = $localize`PeerTube considers video "${video.name}" is already being transcoded.` +
                     // eslint-disable-next-line max-len
                     $localize` If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.` +
@@ -361,7 +360,6 @@ export class VideoService {
                         return this.runTranscoding({
                           videos: [ video ],
                           type,
-                          askForForceTranscodingIfNeeded: false,
                           forceTranscoding: true
                         })
                       })

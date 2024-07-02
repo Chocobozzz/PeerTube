@@ -342,7 +342,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   runTranscoding (video: Video, type: 'hls' | 'web-video') {
-    this.videoService.runTranscoding({ videos: [ video ], type, askForForceTranscodingIfNeeded: true })
+    this.videoService.runTranscoding({ videos: [ video ], type })
       .subscribe({
         next: () => {
           this.notifier.success($localize`Transcoding job created for "${video.name}".`)
@@ -356,8 +356,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
   generateCaption (video: Video) {
     this.videoCaptionService.generateCaption([ video.id ])
       .subscribe({
-        next: () => {
-          this.notifier.success($localize`Transcription job created for "${video.name}".`)
+        next: result => {
+          if (result.success) this.notifier.success($localize`Transcription job created for "${video.name}".`)
+          else if (result.alreadyBeingTranscribed) this.notifier.info($localize`This video is already being transcribed.`)
+          else if (result.alreadyHasCaptions) this.notifier.info($localize`This video already has captions.`)
         },
 
         error: err => this.notifier.error(err.message)
