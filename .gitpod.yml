@@ -17,4 +17,4 @@ tasks:
   init: >
     psql -h localhost -d postgres --file=support/docker/gitpod/setup_postgres.sql &&
     yarn install --pure-lockfile
-  command: npm run dev
+  command: npm run build:server && npm run dev
