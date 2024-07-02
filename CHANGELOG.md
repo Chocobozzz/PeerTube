@@ -1,5 +1,84 @@
 # Changelog
 
+## v6.2.0-rc.1
+
+### IMPORTANT NOTES
+
+  * Added `pip3` as required [PeerTube dependency](https://docs.joinpeertube.org/support/doc/dependencies) to support automatic transcription. You must install it on your system
+
+### Maintenance
+
+  * Check for latest plugin versions every 4 hours (instead of 12 hours). We recommend admins to update their current configuration to apply this change for faster plugin new version notifications
+  * Add a configuration to configure video thumbnail/preview sizes [#6423](https://github.com/Chocobozzz/PeerTube/pull/6423)
+  * Support for removing non-existent objects from object storage in [prune-storage script](https://docs.joinpeertube.org/maintain/tools)
+  * Support for moving original video files to object storage/filesystem in [create-move-video-storage-job script](https://docs.joinpeertube.org/maintain/tools#move-video-files-from-filesystem-to-object-storage)
+  * Add [house-keeping script](https://docs.joinpeertube.org/maintain/tools#cleanup-remote-files) to recover disk space by removing remote files (thumbnails, avatars...)
+  * Add `max_request_attempts` object storage configuration (required by some S3 providers such as Blackblaze) [#6418](https://github.com/Chocobozzz/PeerTube/pull/6418)
+
+### Docker
+
+  * Add missing Docker env to configure object storage (user exports and original video files)
+
+### Plugins/Themes/Embed API
+
+  * Add ability to register the same setting multiple times to replace the old one [#6357](https://github.com/Chocobozzz/PeerTube/pull/6357) & [1bfb791e0](https://github.com/Chocobozzz/PeerTube/commit/1bfb791e0539df54d1d007683719dcb883870e1d)
+  * Add `getUser()` client helper [#6358](https://github.com/Chocobozzz/PeerTube/pull/6358)
+  * Detect internal link in plugin page to avoid reloading entire application when not needed
+
+### Features
+
+  * :tada: Add automatic transcription of videos to generate subtitles :tada: [#6303](https://github.com/Chocobozzz/PeerTube/pull/6303)
+    * Uses Whisper engines and models to create the subtitle and guess the video language
+    * Has to be enabled by admins in the configuration web interface: PeerTube will automatically download and install Whisper binaries/models
+    * Transcription can also be performed by PeerTube runners, as it can consume a lot of CPU
+    * Transcription generation can also be run manually by administrators
+  * :tada: Improve comment moderation :tada: [#6399](https://github.com/Chocobozzz/PeerTube/pull/6399)
+    * Introduce a new video comment policy that requires comments to be approved first
+    * Video owners have a dedicated page to list, view and take action on comments made on their videos
+  * :tada: Implement auto-tagging on comments and videos for admins and on comments for video owners :tada: [#6399](https://github.com/Chocobozzz/PeerTube/pull/6399)
+    * Comments and videos can be automatically tagged using PeerTube rules ("contains a link" for example) or watched word lists
+    * These tags can be used to automatically filter videos and comments
+    * Video owners can select auto tags that require comments to be approved first
+  * Add the ability to select the thumbnail directly from the video [#6424](https://github.com/Chocobozzz/PeerTube/pull/6424)
+  * Allow admins to force bulk transcoding
+  * Faster "Mark as read" user notification REST API endpoint when having many notifications in database
+  * Improve `Video` ActivityPub compatibility by relaxing PeerTube checks and allowing remote object to not have some fields that were required by PeerTube (missing P2P information for example)
+  * Highlight current lives on pages that list videos ("Recently Added", "Trending", "Account videos", "Channel videos" etc.)
+
+### Bug fixes
+
+  * Fix embed API on iOS
+  * Fix RTL layout inconsistencies
+  * Fix big user export file size
+  * Fix concurrent live streams serialization issue
+  * Fix instance slowness when geoip download fails [#6402](https://github.com/Chocobozzz/PeerTube/pull/6402)
+  * Don't count deleted comments in instance stats
+  * Handle videos with FPS < 1
+  * Don't display stats button of remote videos
+  * Fix recommendation loop for anonymous users
+  * Handle 410 HTTP response code for AP objects
+  * Fix major plugin version detection when major number has two digits
+  * Accessibility:
+    * Fix focus visibility box
+    * Fix feed popover title state
+    * Fix video filter pastille accessibility
+    * Fix radio button focus
+    * Fix search typeahead information not read by screen readers
+    * Fix player "Back" button label
+    * Fix player settings menu keyboard navigation
+    * Fix "Update your settings" keyboard navigation and improve accessibility
+    * Fix checkbox description relationship
+    * Fix green color contrast
+    * Correctly label the boolean icon in instance features table
+    * Remove unneeded information in "Policy for sensitive videos" select
+    * Fix left menu list items list hierarchy
+  * Fix HLS audio desync on some videos
+  * Playlist components in custom markup can use a short UUID
+  * Support `Service` Activity Pub actors that should fix some federation issues with Mastodon
+  * Fix downloading protected videos in admin
+  * Increase legacy upload request timeout
+
+
 ## v6.1.0
 
 ### IMPORTANT NOTES
