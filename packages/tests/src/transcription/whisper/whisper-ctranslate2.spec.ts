@@ -7,12 +7,12 @@ import {
   TranscriptionModel
 } from '@peertube/peertube-transcription'
 import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'
+import { createConsoleLogger } from '@tests/shared/common.js'
 import { downloadCustomModelsIfNeeded, getCustomModelPath } from '@tests/shared/transcription.js'
 import { config, expect } from 'chai'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { createLogger } from 'winston'
 
 config.truncateThreshold = 0
 
@@ -32,7 +32,7 @@ describe('Whisper CTranslate2 transcriber', function () {
       languageDetection: true,
       version: '0.4.4'
     },
-    logger: createLogger()
+    logger: createConsoleLogger()
   })
 
   const model = new TranscriptionModel('tiny')
@@ -156,7 +156,7 @@ describe('Whisper CTranslate2 transcriber', function () {
         supportedModelFormats: [ 'PyTorch' ],
         version: '0.4.4'
       },
-      logger: createLogger()
+      logger: createConsoleLogger()
     })
     const openaiTranscript = await openaiTranscriber.transcribe({
       ...transcribeArgs,

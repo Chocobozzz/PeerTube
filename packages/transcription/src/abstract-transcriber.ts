@@ -1,5 +1,6 @@
 import { SimpleLogger } from '@peertube/peertube-models'
 import { buildSUUID, SUUID } from '@peertube/peertube-node-utils'
+import { $ } from 'execa'
 import { PerformanceObserver } from 'node:perf_hooks'
 import { join } from 'path'
 import { TranscriptFile, TranscriptFormat } from './transcript-file.js'
@@ -73,6 +74,26 @@ export abstract class AbstractTranscriber {
     if (this.binDirectory) return join(this.binDirectory, this.engine.command)
 
     return this.engine.command
+  }
+
+  protected getExec (env?: { [ id: string ]: string }) {
+    const logLevels = {
+      command: 'debug',
+      output: 'debug',
+      ipc: 'debug',
+      error: 'error',
+      duration: 'debug'
+    }
+
+    return $({
+      verbose: (_verboseLine, { message, ...verboseObject }) => {
+        const level = logLevels[verboseObject.type]
+
+        this.logger[level](message, verboseObject)
+      },
+
+      env
+    })
   }
 
   abstract transcribe (options: TranscribeArgs): Promise<TranscriptFile>

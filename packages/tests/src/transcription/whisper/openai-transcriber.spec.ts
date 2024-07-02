@@ -7,12 +7,12 @@ import {
   WhisperBuiltinModel
 } from '@peertube/peertube-transcription'
 import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'
+import { createConsoleLogger } from '@tests/shared/common.js'
 import { downloadCustomModelsIfNeeded, getCustomModelPath } from '@tests/shared/transcription.js'
 import { config, expect } from 'chai'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { createLogger } from 'winston'
 
 config.truncateThreshold = 0
 
@@ -38,7 +38,7 @@ describe('Open AI Whisper transcriber', function () {
       languageDetection: true,
       version: ''
     },
-    logger: createLogger()
+    logger: createConsoleLogger()
   })
   const model = new TranscriptionModel('tiny')
 

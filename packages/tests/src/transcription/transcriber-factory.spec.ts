@@ -1,5 +1,5 @@
 import { TranscriptionEngineName, transcriberFactory } from '@peertube/peertube-transcription'
-import { createLogger } from 'winston'
+import { createConsoleLogger } from '@tests/shared/common.js'
 
 describe('Transcriber factory', function () {
   const transcribers: TranscriptionEngineName[] = [ 'openai-whisper', 'whisper-ctranslate2' ]
@@ -8,9 +8,8 @@ describe('Transcriber factory', function () {
 
     for (const transcriberName of transcribers) {
       it(`Should be able to create a(n) ${transcriberName} transcriber`, function () {
-        transcriberFactory.createFromEngineName({ engineName: transcriberName, logger: createLogger() })
+        transcriberFactory.createFromEngineName({ engineName: transcriberName, logger: createConsoleLogger() })
       })
     }
-
   })
 })

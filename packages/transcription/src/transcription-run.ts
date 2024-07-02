@@ -1,12 +1,11 @@
 import { SimpleLogger } from '@peertube/peertube-models'
 import { buildSUUID, SUUID } from '@peertube/peertube-node-utils'
-import { createLogger } from 'winston'
 
 export class TranscriptionRun {
   uuid: SUUID
   logger: SimpleLogger
 
-  constructor (logger: SimpleLogger = createLogger(), uuid: SUUID = buildSUUID()) {
+  constructor (logger: SimpleLogger, uuid: SUUID = buildSUUID()) {
     this.uuid = uuid
     this.logger = logger
   }

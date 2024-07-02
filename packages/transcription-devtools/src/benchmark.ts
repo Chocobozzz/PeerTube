@@ -99,7 +99,7 @@ void (async () => {
 
     const transcriber = transcriberFactory.createFromEngineName({
       engineName: transcriberName,
-      logger: createLogger(),
+      logger: createLogger({ transports: [ new transports.Console() ] }),
       binDirectory: join(pipDirectory, 'bin')
     })
 

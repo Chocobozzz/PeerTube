@@ -1,5 +1,4 @@
 import { buildSUUID } from '@peertube/peertube-node-utils'
-import { $ } from 'execa'
 import assert from 'node:assert'
 import { lstat } from 'node:fs/promises'
 import { TranscribeArgs } from '../../abstract-transcriber.js'
@@ -20,7 +19,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
   }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = $({ env: this.getExecEnv() })
+    const $$ = this.getExec(this.getExecEnv())
 
     if (model.path) {
       assert(await lstat(model.path).then(stats => stats.isDirectory()), 'Model path must be a path to a directory.')
@@ -56,7 +55,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
   }
 
   async install (directory: string) {
-    const $$ = $({ verbose: 'full' })
+    const $$ = this.getExec()
 
     await $$`pip3 install -U -t ${directory} whisper-ctranslate2==${this.engine.version}`
   }

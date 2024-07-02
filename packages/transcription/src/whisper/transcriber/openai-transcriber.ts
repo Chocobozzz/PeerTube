@@ -1,5 +1,4 @@
 import { buildSUUID } from '@peertube/peertube-node-utils'
-import { $ } from 'execa'
 import { readJSON } from 'fs-extra/esm'
 import { parse } from 'node:path'
 import { join, resolve } from 'path'
@@ -18,7 +17,8 @@ export class OpenaiTranscriber extends AbstractTranscriber {
   }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = $({ env: this.getExecEnv() })
+    const $$ = this.getExec(this.getExecEnv())
+
     const languageArgs = language ? [ '--language', language ] : []
 
     this.createRun(runId)
@@ -64,7 +64,7 @@ export class OpenaiTranscriber extends AbstractTranscriber {
   // ---------------------------------------------------------------------------
 
   async install (directory: string) {
-    const $$ = $({ verbose: 'full' })
+    const $$ = this.getExec()
 
     await $$`pip3 install -U -t ${[ directory ]} openai-whisper==${this.engine.version}`
   }
