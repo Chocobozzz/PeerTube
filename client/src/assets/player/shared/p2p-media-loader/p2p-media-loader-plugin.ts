@@ -1,9 +1,9 @@
+import { Events, Segment } from '@peertube/p2p-media-loader-core'
+import { Engine, initHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
+import { addQueryParams } from '@peertube/peertube-core-utils'
+import { logger } from '@root-helpers/logger'
 import Hlsjs from 'hls.js'
 import videojs from 'video.js'
-import { Events, Segment } from '@peertube/p2p-media-loader-core'
-import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
-import { logger } from '@root-helpers/logger'
-import { addQueryParams } from '@peertube/peertube-core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
 
@@ -61,8 +61,6 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.hlsjs = hlsjs
     })
 
-    initVideoJsContribHlsJsPlayer(player)
-
     player.src({
       type: options.type,
       src: options.src
@@ -112,7 +110,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   private initializePlugin () {
-    initHlsJsPlayer(this.hlsjs)
+    initHlsJsPlayer(this.player, this.hlsjs)
 
     this.p2pEngine = this.options.loader.getEngine()
 
