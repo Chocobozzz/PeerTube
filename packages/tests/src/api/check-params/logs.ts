@@ -135,7 +135,7 @@ describe('Test logs API validators', function () {
     })
 
     it('Should fail with an invalid meta', async function () {
-      await server.logs.createLogClient({ payload: { ...base, meta: 's'.repeat(10000) }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, meta: 's'.repeat(20000) }, expectedStatus })
     })
 
     it('Should succeed with the correct params', async function () {
@@ -145,7 +145,7 @@ describe('Test logs API validators', function () {
     it('Should rate limit log creation', async function () {
       let fail = false
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 100; i++) {
         try {
           await server.logs.createLogClient({ token: null, payload: base })
         } catch {
