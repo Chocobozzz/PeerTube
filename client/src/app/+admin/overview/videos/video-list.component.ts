@@ -417,7 +417,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   }
 
   private generateCaption (videos: Video[]) {
-    this.videoCaptionService.generateCaption(videos.map(v => v.id))
+    this.videoCaptionService.generateCaption({ videos })
       .subscribe({
         next: result => {
           if (result.success) {

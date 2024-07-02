@@ -354,7 +354,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   generateCaption (video: Video) {
-    this.videoCaptionService.generateCaption([ video.id ])
+    this.videoCaptionService.generateCaption({ videos: [ video ] })
       .subscribe({
         next: result => {
           if (result.success) this.notifier.success($localize`Transcription job created for "${video.name}".`)
