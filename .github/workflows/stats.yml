@@ -24,6 +24,9 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Build
+        run: npm run build -- --analyze-bundle
+
       - name: PeerTube code stats
         if: github.event_name != 'pull_request'
         run: |
