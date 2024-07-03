@@ -6,6 +6,7 @@ import {
   EncoderProfile,
   SimpleLogger
 } from '@peertube/peertube-models'
+import { MutexInterface } from 'async-mutex'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 
 export interface FFmpegCommandWrapperOptions {
@@ -82,7 +83,7 @@ export class FFmpegCommandWrapper {
     this.command = undefined
   }
 
-  buildCommand (input: string) {
+  buildCommand (input: string, inputFileMutexReleaser?: MutexInterface.Releaser) {
     if (this.command) throw new Error('Command is already built')
 
     // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
@@ -94,6 +95,12 @@ export class FFmpegCommandWrapper {
     if (this.threads > 0) {
       // If we don't set any threads ffmpeg will chose automatically
       this.command.outputOption('-threads ' + this.threads)
+    }
+
+    if (inputFileMutexReleaser) {
+      this.command.on('start', () => {
+        setTimeout(() => inputFileMutexReleaser(), 1000)
+      })
     }
 
     return this.command

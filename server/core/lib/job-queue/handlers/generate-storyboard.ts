@@ -81,6 +81,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       await ffmpeg.generateStoryboardFromVideo({
         destination,
         path: videoPath,
+        inputFileMutexReleaser,
         sprites: {
           size: {
             height: spriteHeight,

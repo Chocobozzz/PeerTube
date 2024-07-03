@@ -1,3 +1,4 @@
+import { MutexInterface } from 'async-mutex'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { getVideoStreamDuration } from './ffprobe.js'
@@ -99,6 +100,9 @@ export class FFmpegImage {
   async generateStoryboardFromVideo (options: {
     path: string
     destination: string
+
+    // Will be released after the ffmpeg started
+    inputFileMutexReleaser: MutexInterface.Releaser
 
     sprites: {
       size: {

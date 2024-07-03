@@ -88,18 +88,10 @@ export class FFmpegVOD {
 
     this.commandWrapper.debugLog('Will run transcode.', { options })
 
-    const command = this.commandWrapper.buildCommand(options.inputPath)
+    this.commandWrapper.buildCommand(options.inputPath, options.inputFileMutexReleaser)
       .output(options.outputPath)
 
     await builders[options.type](options)
-
-    command.on('start', () => {
-      setTimeout(() => {
-        if (options.inputFileMutexReleaser) {
-          options.inputFileMutexReleaser()
-        }
-      }, 1000)
-    })
 
     await this.commandWrapper.runCommand()
 
