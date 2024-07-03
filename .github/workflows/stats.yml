@@ -37,7 +37,7 @@ jobs:
       - name: PeerTube client stats
         if: github.event_name != 'pull_request'
         run: |
-          npm run client:build-stats > client-build-stats.json
+          npm run -s client:build-stats > client-build-stats.json
 
       - name: PeerTube client lighthouse report
         if: github.event_name != 'pull_request'
