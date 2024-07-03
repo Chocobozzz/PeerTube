@@ -35,6 +35,8 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
       ...modelArgs,
       '--word_timestamps',
       'True',
+      '--vad_filter',
+      'true',
       '--output_format',
       'all',
       '--output_dir',
