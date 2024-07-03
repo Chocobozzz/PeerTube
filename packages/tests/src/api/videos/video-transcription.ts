@@ -14,6 +14,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
+import { join } from 'path'
 
 describe('Test video transcription', function () {
   let servers: PeerTubeServer[]
@@ -89,14 +90,18 @@ describe('Test video transcription', function () {
       privacy: VideoPrivacy.PUBLIC
     })
 
-    const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
+    const ffmpegCommand = sendRTMPStream({
+      rtmpBaseUrl: live.rtmpUrl,
+      streamKey: live.streamKey,
+      fixtureName: join('transcription', 'videos', 'the_last_man_on_earth.mp4')
+    })
     await servers[0].live.waitUntilPublished({ videoId: video.id })
 
     await stopFfmpeg(ffmpegCommand)
 
     await servers[0].live.waitUntilReplacedByReplay({ videoId: video.id })
     await waitJobs(servers)
-    await checkAutoCaption(servers, video.uuid, 'WEBVTT\n\n00:')
+    await checkAutoCaption(servers, video.uuid, new RegExp('^WEBVTT\\n\\n00:\\d{2}.\\d{3} --> 00:'))
     await checkLanguage(servers, video.uuid, 'en')
 
     await servers[0].config.enableLive({ allowReplay: false })
