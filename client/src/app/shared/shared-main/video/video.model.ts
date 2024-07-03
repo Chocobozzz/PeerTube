@@ -273,12 +273,32 @@ export class Video implements VideoServerModel {
       this.hasWebVideos()
   }
 
+  // ---------------------------------------------------------------------------
+
   canRunTranscoding (user: AuthUser) {
-    return this.isLocal && !this.isLive && user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
+    return this.isLocal &&
+    !this.isLive &&
+    user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
+    this.state?.id &&
+    !this.transcodingAndTranscriptionIncompatibleStates().has(this.state.id)
   }
 
   canGenerateTranscription (user: AuthUser, transcriptionEnabled: boolean) {
-    return transcriptionEnabled && this.isLocal && !this.isLive && user.hasRight(UserRight.UPDATE_ANY_VIDEO)
+    return transcriptionEnabled &&
+      this.isLocal &&
+      !this.isLive &&
+      user.hasRight(UserRight.UPDATE_ANY_VIDEO) &&
+      this.state?.id &&
+      !this.transcodingAndTranscriptionIncompatibleStates().has(this.state.id)
+  }
+
+  private transcodingAndTranscriptionIncompatibleStates () {
+    return new Set<VideoStateType>([
+      VideoState.TO_IMPORT,
+      VideoState.TO_EDIT,
+      VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
+      VideoState.TO_MOVE_TO_FILE_SYSTEM
+    ])
   }
 
   // ---------------------------------------------------------------------------

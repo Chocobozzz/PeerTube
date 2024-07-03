@@ -1,11 +1,12 @@
-import express from 'express'
-import { body } from 'express-validator'
+import { HttpStatusCode, ServerErrorCode, VideoTranscodingCreate } from '@peertube/peertube-models'
 import { isBooleanValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isValidCreateTranscodingType } from '@server/helpers/custom-validators/video-transcoding.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
-import { HttpStatusCode, ServerErrorCode, VideoTranscodingCreate } from '@peertube/peertube-models'
+import express from 'express'
+import { body } from 'express-validator'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
+import { checkVideoCanBeTranscribedOrTranscripted } from './shared/video-validators.js'
 
 const createTranscodingValidator = [
   isValidVideoIdParam('videoId'),
@@ -24,19 +25,7 @@ const createTranscodingValidator = [
 
     const video = res.locals.videoAll
 
-    if (video.remote) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot run transcoding job on a remote video'
-      })
-    }
-
-    if (video.isLive) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot run transcoding job on a live'
-      })
-    }
+    if (!checkVideoCanBeTranscribedOrTranscripted(video, res)) return
 
     if (CONFIG.TRANSCODING.ENABLED !== true) {
       return res.fail({

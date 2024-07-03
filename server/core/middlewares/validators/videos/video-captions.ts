@@ -17,6 +17,7 @@ import {
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
+import { checkVideoCanBeTranscribedOrTranscripted } from './shared/video-validators.js'
 
 export const addVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
@@ -67,19 +68,7 @@ export const generateVideoCaptionValidator = [
 
     const video = res.locals.videoAll
 
-    if (video.remote) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot run transcription job on a remote video'
-      })
-    }
-
-    if (video.isLive) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot run transcription job on a live'
-      })
-    }
+    if (!checkVideoCanBeTranscribedOrTranscripted(video, res)) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User

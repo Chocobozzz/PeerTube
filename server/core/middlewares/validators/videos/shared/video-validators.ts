@@ -1,11 +1,11 @@
-import express from 'express'
 import { HttpStatusCode, ServerErrorCode, ServerFilterHookName, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { isVideoFileMimeTypeValid, isVideoFileSizeValid } from '@server/helpers/custom-validators/videos.js'
 import { logger } from '@server/helpers/logger.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, VIDEO_STATES } from '@server/initializers/constants.js'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserAccountId, MVideo } from '@server/types/models/index.js'
+import express from 'express'
 import { checkUserQuota } from '../../shared/index.js'
 
 export async function commonVideoFileChecks (options: {
@@ -98,6 +98,40 @@ export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response)
       message: 'Video state is not compatible with edition'
     })
 
+    return false
+  }
+
+  return true
+}
+
+export function checkVideoCanBeTranscribedOrTranscripted (video: MVideo, res: express.Response) {
+  if (video.remote) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: 'Cannot run this task on a remote video'
+    })
+    return false
+  }
+
+  if (video.isLive) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: 'Cannot run this task on a live'
+    })
+    return false
+  }
+
+  const incompatibleStates = new Set<VideoStateType>([
+    VideoState.TO_IMPORT,
+    VideoState.TO_EDIT,
+    VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
+    VideoState.TO_MOVE_TO_FILE_SYSTEM
+  ])
+  if (incompatibleStates.has(video.state)) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: `Cannot run this task on a video with "${VIDEO_STATES[video.state]}" state`
+    })
     return false
   }
 
