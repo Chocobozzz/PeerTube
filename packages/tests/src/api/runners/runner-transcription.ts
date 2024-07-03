@@ -36,6 +36,7 @@ describe('Test runner transcription', function () {
 
   async function upload () {
     const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video', language: undefined } })
+    await waitJobs(servers)
 
     const { availableJobs } = await servers[0].runnerJobs.request({ runnerToken })
     expect(availableJobs).to.have.lengthOf(1)
@@ -101,6 +102,23 @@ describe('Test runner transcription', function () {
       expect(total).to.equal(0)
       expect(data).to.have.lengthOf(0)
     }
+  })
+
+  it('Should error a transcription job and decrease the job count', async function () {
+    this.timeout(60000)
+
+    const { job, uuid } = await upload()
+    await servers[0].runnerJobs.error({ runnerToken, jobUUID: job.uuid, jobToken: job.jobToken, message: 'Error' })
+
+    for (let i = 0; i < 4; i++) {
+      const { job: { jobToken } } = await servers[0].runnerJobs.accept({ runnerToken, jobUUID: job.uuid })
+
+      await servers[0].runnerJobs.error({ runnerToken, jobUUID: job.uuid, jobToken, message: 'Error' })
+    }
+
+    await waitJobs(servers)
+
+    await servers[0].captions.runGenerate({ videoId: uuid })
   })
 
   after(async function () {

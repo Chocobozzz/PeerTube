@@ -139,7 +139,7 @@ export async function onTranscriptionEnded (options: {
   const { video, language, vttPath, lTags: customLTags = [] } = options
 
   if (!isVideoCaptionLanguageValid(language)) {
-    logger.warn(`Invalid transcription language for video ${video.uuid}`, this.lTags(video.uuid))
+    logger.warn(`Invalid transcription language for video ${video.uuid}`, lTags(video.uuid))
     return
   }
 

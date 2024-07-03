@@ -75,8 +75,6 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
       priority: JOB_PRIORITY.TRANSCODING
     })
 
-    await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingTranscription')
-
     return job
   }
 
