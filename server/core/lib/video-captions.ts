@@ -18,6 +18,7 @@ import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
+import { MutexInterface } from 'async-mutex'
 
 const lTags = loggerTagsFactory('video-caption')
 
@@ -68,14 +69,15 @@ let transcriber: AbstractTranscriber
 export async function generateSubtitle (options: {
   video: MVideoUUID
 }) {
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
-
   const outputPath = join(CONFIG.STORAGE.TMP_DIR, 'transcription', buildSUUID())
-  await ensureDir(outputPath)
 
-  const binDirectory = join(DIRECTORIES.LOCAL_PIP_DIRECTORY, 'bin')
+  let inputFileMutexReleaser: MutexInterface.Releaser
 
   try {
+    await ensureDir(outputPath)
+
+    const binDirectory = join(DIRECTORIES.LOCAL_PIP_DIRECTORY, 'bin')
+
     // Lazy load the transcriber
     if (!transcriber) {
       transcriber = transcriberFactory.createFromEngineName({
@@ -91,6 +93,8 @@ export async function generateSubtitle (options: {
       }
     }
 
+    inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
+
     const video = await VideoModel.loadFull(options.video.uuid)
     const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
 
@@ -103,6 +107,9 @@ export async function generateSubtitle (options: {
 
         return
       }
+
+      // Release input file mutex now we are going to run the command
+      setTimeout(() => inputFileMutexReleaser(), 1000)
 
       logger.info(`Running transcription for ${video.uuid} in ${outputPath}`, lTags(video.uuid))
 
@@ -122,11 +129,10 @@ export async function generateSubtitle (options: {
     })
   } finally {
     if (outputPath) await remove(outputPath)
+    if (inputFileMutexReleaser) inputFileMutexReleaser()
 
     VideoJobInfoModel.decrease(options.video.uuid, 'pendingTranscription')
       .catch(err => logger.error('Cannot decrease pendingTranscription job count', { err, ...lTags(options.video.uuid) }))
-
-    inputFileMutexReleaser()
   }
 }
 
