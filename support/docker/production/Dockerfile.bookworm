@@ -27,7 +27,7 @@ RUN if [ "${ALREADY_BUILT}" = 0 ]; then \
     echo "Do not build application inside Docker because of ALREADY_BUILT build argument"; \
   fi; \
   rm -rf ./node_modules ./client/node_modules ./client/.angular \
-  && yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
+  && NOCLIENT=1 yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
   && yarn cache clean
 
 USER root
