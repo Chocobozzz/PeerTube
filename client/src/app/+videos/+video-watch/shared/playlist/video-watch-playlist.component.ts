@@ -8,7 +8,7 @@ import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { VideoPlaylistElementMiniatureComponent } from '../../../../shared/shared-video-playlist/video-playlist-element-miniature.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { InfiniteScrollerDirective } from '../../../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../../../shared/shared-main/angular/infinite-scroller.component'
 import { NgIf, NgClass, NgFor } from '@angular/common'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
@@ -19,7 +19,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
   templateUrl: './video-watch-playlist.component.html',
   styleUrls: [ './video-watch-playlist.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
 })
 export class VideoWatchPlaylistComponent {
   static SESSION_STORAGE_LOOP_PLAYLIST = 'loop_playlist'

@@ -26,7 +26,7 @@
 
 <div class="no-results" i18n *ngIf="this.pagination.totalItems === 0">No channel found.</div>
 
-<div class="video-channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
+<my-infinite-scroller class="video-channels" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
     <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
 
@@ -67,4 +67,4 @@
       </div>
     </div>
   </div>
-</div>
+</my-infinite-scroller>

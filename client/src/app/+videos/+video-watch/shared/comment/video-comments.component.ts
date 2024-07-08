@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnIni
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, User, hasMoreItems } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { InfiniteScrollerComponent } from '../../../../shared/shared-main/angular/infinite-scroller.component'
 import { Syndication } from '@app/shared/shared-main/feeds/syndication.model'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoCommentThreadTree } from '@app/shared/shared-video-comment/video-comment-thread-tree.model'
@@ -11,7 +12,6 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import { Subject, Subscription } from 'rxjs'
-import { InfiniteScrollerDirective } from '../../../../shared/shared-main/angular/infinite-scroller.directive'
 import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { LoaderComponent } from '../../../../shared/shared-main/loaders/loader.component'
 import { VideoCommentAddComponent } from './video-comment-add.component'
@@ -31,7 +31,7 @@ import { VideoCommentComponent } from './video-comment.component'
     NgbDropdownItem,
     NgIf,
     VideoCommentAddComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     VideoCommentComponent,
     NgFor,
     LoaderComponent

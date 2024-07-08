@@ -7,7 +7,7 @@ import { ResultList, VideosExistInPlaylists, VideoSortField } from '@peertube/pe
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../shared-main/angular/infinite-scroller.component'
 import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
 import { Video } from '../shared-main/video/video.model'
 import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
@@ -19,7 +19,7 @@ export type SelectionType = { [ id: number ]: boolean }
   templateUrl: './videos-selection.component.html',
   styleUrls: [ './videos-selection.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
 })
 export class VideosSelectionComponent implements AfterContentInit {
   @Input() videosContainedInPlaylists: VideosExistInPlaylists

@@ -6,7 +6,7 @@ import { VideoPlaylistType } from '@peertube/peertube-models'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { RouterLink } from '@angular/router'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
@@ -25,7 +25,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
     ChannelsSetupMessageComponent,
     AdvancedInputFilterComponent,
     RouterLink,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     VideoPlaylistMiniatureComponent,
     DeleteButtonComponent,

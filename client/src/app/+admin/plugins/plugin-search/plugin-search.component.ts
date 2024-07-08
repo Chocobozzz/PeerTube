@@ -9,7 +9,7 @@ import { logger } from '@root-helpers/logger'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
 import { PluginCardComponent } from '../shared/plugin-card.component'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../../shared/shared-main/angular/infinite-scroller.component'
 import { AutofocusDirective } from '../../../shared/shared-main/angular/autofocus.directive'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { NgIf, NgFor } from '@angular/common'
@@ -25,7 +25,7 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
     NgIf,
     GlobalIconComponent,
     AutofocusDirective,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     PluginCardComponent,
     EditButtonComponent,

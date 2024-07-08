@@ -15,7 +15,7 @@
   </a>
 </div>
 
-<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<my-infinite-scroller class="video-playlists" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
     <my-video-playlist-miniature
       [playlist]="playlist" [toManage]="true" [displayChannel]="true"
@@ -28,4 +28,4 @@
       <my-edit-button label [ptRouterLink]="[ 'update', playlist.shortUUID ]"></my-edit-button>
     </div>
   </div>
-</div>
+</my-infinite-scroller>

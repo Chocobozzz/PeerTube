@@ -58,6 +58,7 @@
     "src/polyfills.ts"
   ],
   "include": [
+    "./.eslintrc.js",
     "src/polyfills.ts",
     "src/main*.ts",
     "src/**/*.d.ts",

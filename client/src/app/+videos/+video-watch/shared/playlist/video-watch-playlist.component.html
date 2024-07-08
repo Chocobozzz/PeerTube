@@ -1,6 +1,6 @@
-<div
+<my-infinite-scroller
   *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)" class="playlist"
-  myInfiniteScroller [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
+  [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
 >
   <div class="playlist-info">
     <div class="playlist-display-name">
@@ -44,4 +44,4 @@
       [touchScreenEditButton]="true"
     ></my-video-playlist-element-miniature>
   </div>
-</div>
+</my-infinite-scroller>

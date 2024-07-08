@@ -1,0 +1,7 @@
+<my-load-more *ngIf="!isLoading && hasLoadedFirstPage === false" (isVisible)="onLoadPrevious()">
+    Previous
+</my-load-more>
+<ng-content></ng-content>
+<my-load-more *ngIf="!isLoading && hasMore" (isVisible)="onLoadMore()">
+    Next
+</my-load-more>

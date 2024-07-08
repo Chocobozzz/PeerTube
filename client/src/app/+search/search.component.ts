@@ -14,7 +14,7 @@ import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.
 import { SearchFiltersComponent } from './search-filters.component'
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
-import { InfiniteScrollerDirective } from '../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../shared/shared-main/angular/infinite-scroller.component'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
@@ -27,7 +27,7 @@ import { SearchService } from '@app/shared/shared-search/search.service'
   templateUrl: './search.component.html',
   standalone: true,
   imports: [
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgIf,
     NgbCollapse,
     SearchFiltersComponent,

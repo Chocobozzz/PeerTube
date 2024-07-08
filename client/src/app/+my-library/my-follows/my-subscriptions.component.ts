@@ -4,7 +4,7 @@ import { ComponentPagination, Notifier } from '@app/core'
 import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { NgIf, NgFor } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
@@ -19,7 +19,7 @@ import { UserSubscriptionService } from '@app/shared/shared-user-subscription/us
     GlobalIconComponent,
     NgIf,
     AdvancedInputFilterComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     ActorAvatarComponent,
     RouterLink,

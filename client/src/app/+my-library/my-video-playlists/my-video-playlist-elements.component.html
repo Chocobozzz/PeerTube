@@ -33,8 +33,8 @@
       </div>
     </div>
 
-    <div
-      class="videos" myInfiniteScroller (nearOfBottom)="onNearOfBottom()"
+    <my-infinite-scroller
+      class="videos" (nearOfBottom)="onNearOfBottom()"
       cdkDropList (cdkDropListDropped)="drop($event)" [dataObservable]="onDataSubject.asObservable()"
     >
       <div class="video" *ngFor="let playlistElement of playlistElements; trackBy: trackByFn" cdkDrag [cdkDragStartDelay]="getDragStartDelay()">
@@ -44,7 +44,7 @@
         >
         </my-video-playlist-element-miniature>
       </div>
-    </div>
+    </my-infinite-scroller>
   </div>
 </div>
 
