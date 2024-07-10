@@ -204,7 +204,8 @@ export class RegisterHelpers {
   private buildRegisterSetting () {
     return (options: RegisterServerSettingOptions) => {
       this.settings = [
-        ...this.settings.filter((s) => s.name !== options.name),
+        ...this.settings.filter(s => !s.name || s.name !== options.name),
+
         options
       ]
     }

@@ -31,7 +31,8 @@ describe('Test plugin settings', function () {
       npmName: 'peertube-plugin-test'
     })
 
-    expect(registeredSettings.length).to.equal(1)
+    expect(registeredSettings.length).to.equal(3)
+    expect(registeredSettings.map(r => r.label)).to.have.members([ 'Unique setting', 'Unnamed 1', 'Unnamed 2' ])
   })
 
   it('Should return the latest registered settings', async function () {

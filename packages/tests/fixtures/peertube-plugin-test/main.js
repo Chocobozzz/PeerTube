@@ -19,6 +19,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       ]
     })
 
+    registerSetting({
+      label: 'Unnamed 1',
+      type: 'input'
+    })
+
+    registerSetting({
+      label: 'Unnamed 2',
+      type: 'input'
+    })
+
     const actionHooks = [
       'action:application.listening',
       'action:notifier.notification.created',
