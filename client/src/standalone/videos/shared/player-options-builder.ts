@@ -425,6 +425,7 @@ export class PlayerOptionsBuilder {
       return data.map((c: VideoCaption) => ({
         label: peertubeTranslate(c.language.label, translations),
         language: c.language.id,
+        automaticallyGenerated: c.automaticallyGenerated,
         src: window.location.origin + c.captionPath
       }))
     }

@@ -98,6 +98,7 @@ type VideoJSCaption = {
   label: string
   language: string
   src: string
+  automaticallyGenerated: boolean
 }
 
 type VideoJSStoryboard = {

@@ -348,6 +348,14 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
+  getCaptionLabel (caption: VideoCaptionWithPathEdit) {
+    if (caption.automaticallyGenerated) {
+      return $localize`${caption.language.label} (auto-generated)`
+    }
+
+    return caption.language.label
+  }
+
   getExistingCaptions () {
     return this.videoCaptions
                .filter(c => c.action !== 'REMOVE')

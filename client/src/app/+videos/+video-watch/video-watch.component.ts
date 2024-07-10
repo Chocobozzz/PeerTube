@@ -768,6 +768,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const playerCaptions = videoCaptions.map(c => ({
       label: c.language.label,
       language: c.language.id,
+      automaticallyGenerated: c.automaticallyGenerated,
       src: environment.apiUrl + c.captionPath
     }))
 

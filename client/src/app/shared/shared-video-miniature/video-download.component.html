@@ -26,7 +26,11 @@
       <div ngbNav #subtitleNav="ngbNav" class="nav-tabs" [activeId]="subtitleLanguageId" (activeIdChange)="onSubtitleIdChange($event)">
 
         <ng-container *ngFor="let caption of getCaptions()" [ngbNavItem]="caption.language.id">
-          <a ngbNavLink i18n>{{ caption.language.label }}</a>
+          <a ngbNavLink>
+            {{ caption.language.label }}
+
+            <ng-container *ngIf="caption.automaticallyGenerated" i18n>(auto-generated)</ng-container>
+          </a>
 
           <ng-template ngbNavContent>
             <div class="nav-content">
@@ -53,8 +57,8 @@
         </ng-template>
 
         <ng-container *ngIf="originalVideoFile" ngbNavItem="original">
-          <a ngbNavLink i18n>
-            <ng-container>Original file</ng-container>
+          <a ngbNavLink>
+            <ng-container i18n>Original file</ng-container>
 
             <my-global-icon ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
           </a>

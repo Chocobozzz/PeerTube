@@ -4,6 +4,8 @@ export interface VideoCaptionEdit {
     label?: string
   }
 
+  automaticallyGenerated?: boolean
+
   action?: 'CREATE' | 'REMOVE' | 'UPDATE'
   captionfile?: any
   updatedAt?: string

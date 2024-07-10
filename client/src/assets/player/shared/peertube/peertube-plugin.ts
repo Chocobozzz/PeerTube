@@ -506,7 +506,11 @@ class PeerTubePlugin extends Plugin {
     for (const caption of this.options.videoCaptions()) {
       this.player.addRemoteTextTrack({
         kind: 'captions',
-        label: caption.label,
+
+        label: caption.automaticallyGenerated
+          ? this.player.localize('{1} (auto-generated)', [ caption.label ])
+          : caption.label,
+
         language: caption.language,
         id: caption.language,
         src: caption.src,
