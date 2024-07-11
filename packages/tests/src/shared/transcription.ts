@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { makeGetRequest, PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
 import { downloadFile, unzip } from '@peertube/peertube-transcription-devtools'
@@ -8,7 +9,6 @@ import { ensureDir, pathExists } from 'fs-extra/esm'
 import { join } from 'path'
 import { testCaptionFile } from './captions.js'
 import { FIXTURE_URLS } from './fixture-urls.js'
-import { HttpStatusCode } from '../../../models/src/http/http-status-codes.js'
 
 type CustomModelName = 'tiny.pt' | 'faster-whisper-tiny'
 
