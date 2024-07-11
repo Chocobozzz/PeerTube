@@ -142,6 +142,11 @@ async function createTorrentAndSetInfoHashFromPath (
 async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
+  if (!videoFile.torrentFilename) {
+    logger.error(`Video file ${videoFile.filename} of video ${video.uuid} doesn't have a torrent file, skipping torrent metadata update`)
+    return
+  }
+
   const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
 
   if (!await pathExists(oldTorrentPath)) {
