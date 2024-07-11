@@ -13,7 +13,8 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
-import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
+import { checkAutoCaption, checkLanguage, checkNoCaption, getCaptionContent, uploadForTranscription } from '@tests/shared/transcription.js'
+import { expect } from 'chai'
 import { join } from 'path'
 
 describe('Test video transcription', function () {
@@ -28,7 +29,8 @@ describe('Test video transcription', function () {
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
 
-    await waitJobs(servers)
+    await servers[0].config.enableTranscription()
+
     await waitJobs(servers)
   })
 
@@ -137,11 +139,65 @@ describe('Test video transcription', function () {
   it('Should not run a transcription if the video does not contain audio', async function () {
     this.timeout(120000)
 
-    const uuid = await uploadForTranscription(servers[0], { generateTranscription: false })
+    const uuid = await uploadForTranscription(servers[0], { fixture: 'video_short_no_audio.mp4' })
 
     await waitJobs(servers)
     await checkNoCaption(servers, uuid)
     await checkLanguage(servers, uuid, null)
+  })
+
+  it('Should run transcription after a video edition', async function () {
+    this.timeout(120000)
+
+    await servers[0].config.enableMinimumTranscoding()
+    await servers[0].config.enableStudio()
+
+    const uuid = await uploadForTranscription(servers[0])
+    await waitJobs(servers)
+
+    await checkAutoCaption(servers, uuid)
+    const oldContent = await getCaptionContent(servers[0], uuid, 'en')
+
+    await servers[0].videoStudio.createEditionTasks({
+      videoId: uuid,
+      tasks: [
+        {
+          name: 'cut' as 'cut',
+          options: { start: 1 }
+        }
+      ]
+    })
+
+    await waitJobs(servers)
+    await checkAutoCaption(servers, uuid)
+
+    const newContent = await getCaptionContent(servers[0], uuid, 'en')
+    expect(oldContent).to.not.equal(newContent)
+  })
+
+  it('Should not run transcription after video edition if the subtitle has not been auto generated', async function () {
+    this.timeout(120000)
+
+    const uuid = await uploadForTranscription(servers[0], { language: 'en' })
+    await waitJobs(servers)
+
+    await servers[0].captions.add({ language: 'en', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+    const oldContent = await getCaptionContent(servers[0], uuid, 'en')
+
+    await servers[0].videoStudio.createEditionTasks({
+      videoId: uuid,
+      tasks: [
+        {
+          name: 'cut' as 'cut',
+          options: { start: 1 }
+        }
+      ]
+    })
+
+    await waitJobs(servers)
+
+    const newContent = await getCaptionContent(servers[0], uuid, 'en')
+    expect(oldContent).to.equal(newContent)
   })
 
   after(async function () {

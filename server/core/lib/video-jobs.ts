@@ -109,7 +109,7 @@ export async function addVideoJobsAfterCreation (options: {
 
   await JobQueue.Instance.createSequentialJobFlow(...jobs)
 
-  if (generateTranscription === true && CONFIG.VIDEO_TRANSCRIPTION.ENABLED === true) {
+  if (generateTranscription === true) {
     await createTranscriptionTaskIfNeeded(video)
   }
 }

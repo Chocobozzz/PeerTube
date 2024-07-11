@@ -11,6 +11,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoCaption, MVideoFullLight, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
+import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
@@ -18,7 +19,6 @@ import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { MutexInterface } from 'async-mutex'
 
 const lTags = loggerTagsFactory('video-caption')
 

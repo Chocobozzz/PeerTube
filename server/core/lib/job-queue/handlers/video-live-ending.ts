@@ -1,7 +1,6 @@
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@server/helpers/core-utils.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
@@ -177,10 +176,7 @@ async function saveReplayToExternalVideo (options: {
   }
 
   await createStoryboardJob(replayVideo)
-
-  if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED === true) {
-    await createTranscriptionTaskIfNeeded(replayVideo)
-  }
+  await createTranscriptionTaskIfNeeded(replayVideo)
 
   await moveToNextState({ video: replayVideo, isNewVideo: true })
 }
@@ -251,10 +247,7 @@ async function replaceLiveByReplay (options: {
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })
 
   await createStoryboardJob(videoWithFiles)
-
-  if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED === true) {
-    await createTranscriptionTaskIfNeeded(videoWithFiles)
-  }
+  await createTranscriptionTaskIfNeeded(videoWithFiles)
 }
 
 async function assignReplayFilesToVideo (options: {

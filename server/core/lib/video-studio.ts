@@ -1,18 +1,20 @@
-import { move, remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
+import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MUser, MVideo, MVideoFile, MVideoFullLight, MVideoWithAllFiles } from '@server/types/models/index.js'
-import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
+import { move, remove } from 'fs-extra/esm'
+import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
+import { createTranscriptionTaskIfNeeded } from './video-captions.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
-import { VideoPathManager } from './video-path-manager.js'
 import { buildStoryboardJobIfNeeded } from './video-jobs.js'
-import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { VideoPathManager } from './video-path-manager.js'
 
 const lTags = loggerTagsFactory('video-studio')
 
@@ -108,7 +110,7 @@ export async function onVideoStudioEnded (options: {
   video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
   await video.save()
 
-  return JobQueue.Instance.createSequentialJobFlow(
+  await JobQueue.Instance.createSequentialJobFlow(
     buildStoryboardJobIfNeeded({ video, federate: false }),
 
     {
@@ -129,6 +131,14 @@ export async function onVideoStudioEnded (options: {
       }
     }
   )
+
+  if (video.language && CONFIG.VIDEO_TRANSCRIPTION.ENABLED) {
+    const caption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, video.language)
+
+    if (caption?.automaticallyGenerated) {
+      await createTranscriptionTaskIfNeeded(video)
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------

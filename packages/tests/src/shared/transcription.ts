@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import { PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
+import { makeGetRequest, PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
 import { downloadFile, unzip } from '@peertube/peertube-transcription-devtools'
 import { expect } from 'chai'
 import { ensureDir, pathExists } from 'fs-extra/esm'
 import { join } from 'path'
 import { testCaptionFile } from './captions.js'
 import { FIXTURE_URLS } from './fixture-urls.js'
+import { HttpStatusCode } from '../../../models/src/http/http-status-codes.js'
 
 type CustomModelName = 'tiny.pt' | 'faster-whisper-tiny'
 
@@ -55,6 +56,16 @@ export async function checkNoCaption (servers: PeerTubeServer[], uuid: string) {
     expect(body.total).to.equal(0)
     expect(body.data).to.have.lengthOf(0)
   }
+}
+
+export async function getCaptionContent (server: PeerTubeServer, videoId: string, language: string) {
+  const { data } = await server.captions.list({ videoId })
+
+  const caption = data.find(c => c.language.id === language)
+
+  const { text } = await makeGetRequest({ url: server.url, path: caption.captionPath, expectedStatus: HttpStatusCode.OK_200 })
+
+  return text
 }
 
 // ---------------------------------------------------------------------------
