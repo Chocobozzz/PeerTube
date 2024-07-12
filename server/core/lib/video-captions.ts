@@ -154,6 +154,16 @@ export async function onTranscriptionEnded (options: {
     await video.save()
   }
 
+  const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
+  if (existing && !existing.automaticallyGenerated) {
+    logger.info(
+      // eslint-disable-next-line max-len
+      `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`,
+      lTags(video.uuid)
+    )
+    return
+  }
+
   const caption = await createLocalCaption({
     video,
     language,

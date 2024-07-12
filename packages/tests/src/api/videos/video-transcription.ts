@@ -146,6 +146,22 @@ describe('Test video transcription', function () {
     await checkLanguage(servers, uuid, null)
   })
 
+  it('Should not replace an existing caption', async function () {
+    const uuid = await uploadForTranscription(servers[0])
+
+    await servers[0].captions.add({
+      language: 'en',
+      videoId: uuid,
+      fixture: 'subtitle-good1.vtt'
+    })
+
+    const contentBefore = await getCaptionContent(servers[0], uuid, 'en')
+    await waitJobs(servers)
+    const contentAter = await getCaptionContent(servers[0], uuid, 'en')
+
+    expect(contentBefore).to.equal(contentAter)
+  })
+
   it('Should run transcription after a video edition', async function () {
     this.timeout(120000)
 
