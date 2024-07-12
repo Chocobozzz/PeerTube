@@ -46,7 +46,7 @@ export class PeerTubeEmbedApi {
 
     channel.bind('play', (txn, params) => {
       const p = this.player.play()
-      if (p) return
+      if (!p) return
 
       p.catch((err: Error) => {
         console.error('Cannot play the video', err)
