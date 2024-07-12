@@ -19,7 +19,7 @@ import { VideoCaption, VideoFile, VideoFileMetadata, VideoSource } from '@peertu
 import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { mapValues } from 'lodash-es'
-import { firstValueFrom, of, throwError } from 'rxjs'
+import { firstValueFrom, of } from 'rxjs'
 import { catchError, tap } from 'rxjs/operators'
 import { InputTextComponent } from '../shared-forms/input-text.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
