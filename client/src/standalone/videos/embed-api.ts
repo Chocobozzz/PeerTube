@@ -44,7 +44,15 @@ export class PeerTubeEmbedApi {
 
     channel.bind('setVideoPassword', (txn, value) => this.embed.setVideoPasswordByAPI(value))
 
-    channel.bind('play', (txn, params) => this.player.play())
+    channel.bind('play', (txn, params) => {
+      const p = this.player.play()
+      if (p) return
+
+      p.catch((err: Error) => {
+        console.error('Cannot play the video', err)
+      })
+    })
+
     channel.bind('pause', (txn, params) => this.player.pause())
     channel.bind('seek', (txn, time) => this.player.currentTime(time))
 
