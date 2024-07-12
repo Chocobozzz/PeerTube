@@ -19,8 +19,8 @@ import { VideoCaption, VideoFile, VideoFileMetadata, VideoSource } from '@peertu
 import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { mapValues } from 'lodash-es'
-import { firstValueFrom, of } from 'rxjs'
-import { tap } from 'rxjs/operators'
+import { firstValueFrom, of, throwError } from 'rxjs'
+import { catchError, tap } from 'rxjs/operators'
 import { InputTextComponent } from '../shared-forms/input-text.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { BytesPipe } from '../shared-main/angular/bytes.pipe'
@@ -161,12 +161,17 @@ export class VideoDownloadComponent {
   }
 
   private getOriginalVideoFileObs () {
-    if (!this.authService.isLoggedIn()) return of(undefined)
-    const user = this.authService.getUser()
+    if (!this.video.isLocal || !this.authService.isLoggedIn()) return of(undefined)
 
+    const user = this.authService.getUser()
     if (!this.video.isOwnerOrHasSeeAllVideosRight(user)) return of(undefined)
 
     return this.videoService.getSource(this.video.id)
+      .pipe(catchError(err => {
+        console.error('Cannot get source file', err)
+
+        return of(undefined)
+      }))
   }
 
   // ---------------------------------------------------------------------------
