@@ -523,9 +523,9 @@
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="906167214730624194" datatype="html">
+      <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Немає переглядів} =1 {1 перегляд} few {<x id="views"/> перегляди} many {<x id="views"/> переглядів} other {<x id="views"/> перегляд}}</target>
+        <target state="translated">{views, plural, =0 {Немає переглядів} one {<x id="views"/> перегляд} few {<x id="views"/> перегляди} other {<x id="views"/> переглядів}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">315</context>
@@ -11466,7 +11466,7 @@
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Немає переглядів} =1 {1 перегляд} few {<x id="INTERPOLATION"/> перегляди} many {<x id="INTERPOLATION"/> переглядів} other {<x id="INTERPOLATION"/> перегляд}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Немає переглядів} one {<x id="INTERPOLATION"/> перегляд} few {<x id="INTERPOLATION"/> перегляди} other {<x id="INTERPOLATION"/> переглядів}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">49</context>
