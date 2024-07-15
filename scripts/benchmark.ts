@@ -1,14 +1,15 @@
-import autocannon, { printResult } from 'autocannon'
-import { program } from 'commander'
-import { writeJson } from 'fs-extra/esm'
 import { Video, VideoPrivacy } from '@peertube/peertube-models'
 import {
-  createMultipleServers,
+  createSingleServer,
   doubleFollow,
   killallServers,
   PeerTubeServer,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
+import autocannon, { printResult } from 'autocannon'
+import { program } from 'commander'
+import { writeJson } from 'fs-extra/esm'
 
 let servers: PeerTubeServer[]
 // First server
@@ -239,7 +240,7 @@ function runBenchmark (options: {
 }
 
 async function prepare () {
-  servers = await createMultipleServers(3, {
+  const config = {
     rates_limit: {
       api: {
         max: 5_000_000
@@ -272,7 +273,13 @@ async function prepare () {
         max: 5_000_000
       }
     }
-  }, { nodeArgs: [ '--inspect' ] })
+  }
+
+  servers = await Promise.all([
+    createSingleServer(1, config, { nodeArgs: [ '--inspect' ] }),
+    createSingleServer(2, config),
+    createSingleServer(3, config)
+  ])
   server = servers[0]
 
   await setAccessTokensToServers(servers)
@@ -320,4 +327,6 @@ async function prepare () {
       fixture: 'subtitle-good2.vtt'
     })
   }
+
+  await waitJobs(servers)
 }
