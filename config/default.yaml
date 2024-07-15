@@ -729,7 +729,7 @@ video_transcription:
   engine_path: null
 
   # Choose engine model for local transcription
-  # Available for 'openai-whisper' and 'whisper-ctranslate2': 'tiny', 'base', 'small', 'medium' or 'large-v3'
+  # Available for 'openai-whisper' and 'whisper-ctranslate2': 'tiny', 'base', 'small', 'medium', 'large-v2' or 'large-v3'
   model: 'small'
 
   # Or specify the model path:
