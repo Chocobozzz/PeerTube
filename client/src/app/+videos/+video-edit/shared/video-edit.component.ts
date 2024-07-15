@@ -430,6 +430,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     return this.serverConfig.videoTranscription.enabled
   }
 
+  hasCaptions () {
+    return this.getExistingCaptions().length !== 0
+  }
+
   // ---------------------------------------------------------------------------
 
   resetField (name: string) {

@@ -173,7 +173,7 @@
 
       <ng-template ngbNavContent>
         <div class="captions">
-          <div class="alert pt-alert-primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled()" i18n>
+          <div class="alert pt-alert-primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()" i18n>
             A subtitle will be automatically generated from your video.
           </div>
 
