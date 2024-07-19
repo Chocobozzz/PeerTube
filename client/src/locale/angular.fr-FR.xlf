@@ -21816,9 +21816,9 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6176155005688410697" datatype="html">
+      <trans-unit id="6176155005688410697" datatype="html" xml:space="preserve">
         <source>This week's videos</source>
-        <target state="new">This week's videos</target>
+        <target state="translated">Les vidéos de la semaine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">174</context>
