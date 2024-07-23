@@ -113,8 +113,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
       expect(session.endDate).to.exist
       expect(session.saveReplay).to.be.true
 
-      const videoLiveDetails = await servers[0].videos.get({ id: video.uuid })
-      const replay = await findExternalSavedVideo(servers[0], videoLiveDetails)
+      const replay = await findExternalSavedVideo(servers[0], video.uuid)
 
       for (const server of servers) {
         const video = await server.videos.get({ id: replay.uuid })

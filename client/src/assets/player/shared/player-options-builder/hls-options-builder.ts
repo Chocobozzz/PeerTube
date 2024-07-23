@@ -4,7 +4,13 @@ import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
-import { P2PMediaLoader, P2PMediaLoaderPluginOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions } from '../../types'
+import {
+  HLSLoaderClass,
+  HLSPluginOptions,
+  P2PMediaLoaderPluginOptions,
+  PeerTubePlayerContructorOptions,
+  PeerTubePlayerLoadOptions
+} from '../../types'
 import { getRtcConfig, isSameOrigin } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from '../p2p-media-loader/segment-url-builder'
@@ -47,7 +53,7 @@ export class HLSOptionsBuilder {
       'filter:internal.player.p2p-media-loader.options.result',
       this.getP2PMediaLoaderOptions({ redundancyUrlManager, segmentValidator })
     )
-    const loader = new Engine(p2pMediaLoaderConfig).createLoaderClass() as unknown as P2PMediaLoader
+    const loaderBuilder = () => new Engine(p2pMediaLoaderConfig).createLoaderClass() as unknown as HLSLoaderClass
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
       requiresUserAuth: this.options.requiresUserAuth,
@@ -58,19 +64,22 @@ export class HLSOptionsBuilder {
       redundancyUrlManager,
       type: 'application/x-mpegURL',
       src: this.options.hls.playlistUrl,
-      segmentValidator,
-      loader
+      segmentValidator
     }
 
     const hlsjs = {
-      hlsjsConfig: this.getHLSJSOptions(loader),
+      hlsjsConfig: this.getHLSJSOptions(loaderBuilder),
 
-      levelLabelHandler: (level: { height: number, width: number }) => {
+      levelLabelHandler: (level: { height: number, width: number }, player: videojs.VideoJsPlayer) => {
         const resolution = Math.min(level.height || 0, level.width || 0)
 
         const file = this.options.hls.videoFiles.find(f => f.resolution.id === resolution)
         // We don't have files for live videos
-        if (!file) return level.height
+        if (!file) {
+          if (resolution === 0) return player.localize('Audio only')
+
+          return level.height + 'p'
+        }
 
         let label = file.resolution.label
         if (file.fps >= 50) label += file.fps
@@ -185,7 +194,7 @@ export class HLSOptionsBuilder {
 
   // ---------------------------------------------------------------------------
 
-  private getHLSJSOptions (loader: P2PMediaLoader) {
+  private getHLSJSOptions (loaderBuilder: () => HLSLoaderClass): HLSPluginOptions {
     const specificLiveOrVODOptions = this.options.isLive
       ? this.getHLSLiveOptions()
       : this.getHLSVODOptions()
@@ -194,7 +203,7 @@ export class HLSOptionsBuilder {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
 
-      loader,
+      loaderBuilder,
 
       ...specificLiveOrVODOptions
     }

@@ -29,7 +29,7 @@ async function waitJobs (
 
     // Check if each server has pending request
     for (const server of servers) {
-      if (process.env.DEBUG) console.log('Checking ' + server.url)
+      if (process.env.DEBUG) console.log(`${new Date().toISOString()} - Checking ${server.url}`)
 
       for (const state of states) {
 
@@ -45,7 +45,7 @@ async function waitJobs (
               pendingRequests = true
 
               if (process.env.DEBUG) {
-                console.log(jobs)
+                console.log(`${new Date().toISOString()}`, jobs)
               }
             }
           })
@@ -59,7 +59,7 @@ async function waitJobs (
             pendingRequests = true
 
             if (process.env.DEBUG) {
-              console.log('AP messages waiting: ' + obj.activityPubMessagesWaiting)
+              console.log(`${new Date().toISOString()} - AP messages waiting: ${obj.activityPubMessagesWaiting}`)
             }
           }
         })
@@ -73,7 +73,7 @@ async function waitJobs (
                 pendingRequests = true
 
                 if (process.env.DEBUG) {
-                  console.log(job)
+                  console.log(`${new Date().toISOString()}`, job)
                 }
               }
             }

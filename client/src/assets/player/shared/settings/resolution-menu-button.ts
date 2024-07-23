@@ -42,7 +42,7 @@ class ResolutionMenuButton extends MenuButton {
 
     for (const r of resolutions) {
       const label = r.label === '0p'
-        ? this.player().localize('Audio-only')
+        ? this.player().localize('Audio only')
         : r.label
 
       const component = new ResolutionMenuItem(

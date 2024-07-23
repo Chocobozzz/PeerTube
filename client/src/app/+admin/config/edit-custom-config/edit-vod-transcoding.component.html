@@ -115,7 +115,25 @@
                           <p>If you also enabled Web Videos support, it will multiply videos storage by 2</p>
                         </ng-container>
                       </ng-template>
+
+                      <ng-container ngProjectAs="extra">
+
+                        <div class="form-group" [ngClass]="getHLSDisabledClass()">
+                          <my-peertube-checkbox
+                            inputName="transcodingHlsSplitAudioAndVideo" formControlName="splitAudioAndVideo"
+                            i18n-labelText labelText="Split audio and video streams"
+                          >
+                            <ng-template ptTemplate="help">
+                              <ng-container i18n>Store the audio stream in a separate file from the video.</ng-container> <br />
+                              <ng-container i18n>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</ng-container> <br />
+                              <ng-container i18n>It also saves disk space by not duplicating the audio stream in each resolution file</ng-container>
+                            </ng-template>
+                        </my-peertube-checkbox>
+                        </div>
+
+                      </ng-container>
                     </my-peertube-checkbox>
+
                   </div>
                 </ng-container>
 
@@ -123,16 +141,6 @@
                   <div class="mb-2 fw-bold" i18n>Resolutions to generate</div>
 
                   <div class="ms-2 d-flex flex-column">
-                    <my-peertube-checkbox
-                      inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
-                      i18n-labelText labelText="Always transcode original resolution"
-                    >
-                    </my-peertube-checkbox>
-
-                    <span class="mt-3 mb-2 small muted" i18n>
-                      The original file resolution will be the default target if no option is selected.
-                    </span>
-
                     <ng-container formGroupName="resolutions">
                       <div class="form-group" *ngFor="let resolution of resolutions">
                         <my-peertube-checkbox
@@ -145,6 +153,15 @@
                         </my-peertube-checkbox>
                       </div>
                     </ng-container>
+
+                    <my-peertube-checkbox
+                      inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
+                      i18n-labelText labelText="Also transcode original resolution"
+                    >
+                      <ng-container i18n ngProjectAs="description">
+                        Even if it's above your maximum enabled resolution
+                      </ng-container>
+                    </my-peertube-checkbox>
                   </div>
                 </div>
               </div>

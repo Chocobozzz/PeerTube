@@ -4,9 +4,10 @@ import {
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
   getVideoStreamFPS,
-  hasAudioStream
+  hasAudioStream,
+  hasVideoStream
 } from '@peertube/peertube-ffmpeg'
-import { LiveVideoError, LiveVideoErrorType, VideoState } from '@peertube/peertube-models'
+import { LiveVideoError, LiveVideoErrorType, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
@@ -286,12 +287,23 @@ class LiveManager {
     const now = Date.now()
     const probe = await ffprobePromise(inputLocalUrl)
 
-    const [ { resolution, ratio }, fps, bitrate, hasAudio ] = await Promise.all([
+    const [ { resolution, ratio }, fps, bitrate, hasAudio, hasVideo ] = await Promise.all([
       getVideoStreamDimensionsInfo(inputLocalUrl, probe),
       getVideoStreamFPS(inputLocalUrl, probe),
       getVideoStreamBitrate(inputLocalUrl, probe),
-      hasAudioStream(inputLocalUrl, probe)
+      hasAudioStream(inputLocalUrl, probe),
+      hasVideoStream(inputLocalUrl, probe)
     ])
+
+    if (!hasAudio && !hasVideo) {
+      logger.warn(
+        'Not audio and video streams were found for video %s. Refusing stream %s.',
+        video.uuid, streamKey, lTags(sessionId, video.uuid)
+      )
+
+      this.videoSessions.delete(video.uuid)
+      return this.abortSession(sessionId)
+    }
 
     logger.info(
       '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
@@ -303,6 +315,16 @@ class LiveManager {
       'filter:transcoding.auto.resolutions-to-transcode.result',
       { video }
     )
+
+    if (!hasAudio && allResolutions.length === 1 && allResolutions[0] === VideoResolution.H_NOVIDEO) {
+      logger.warn(
+        'Cannot stream live to audio only because no video stream is available for video %s. Refusing stream %s.',
+        video.uuid, streamKey, lTags(sessionId, video.uuid)
+      )
+
+      this.videoSessions.delete(video.uuid)
+      return this.abortSession(sessionId)
+    }
 
     logger.info(
       'Handling live video of original resolution %d.', resolution,
@@ -322,6 +344,7 @@ class LiveManager {
       ratio,
       allResolutions,
       hasAudio,
+      hasVideo,
       probe
     })
   }
@@ -340,11 +363,14 @@ class LiveManager {
     ratio: number
     allResolutions: number[]
     hasAudio: boolean
+    hasVideo: boolean
     probe: FfprobeData
   }) {
-    const { sessionId, videoLive, user, ratio } = options
+    const { sessionId, videoLive, user, ratio, allResolutions } = options
     const videoUUID = videoLive.Video.uuid
     const localLTags = lTags(sessionId, videoUUID)
+
+    const audioOnlyOutput = allResolutions.every(r => r === VideoResolution.H_NOVIDEO)
 
     const liveSession = await this.saveStartingSession(videoLive)
 
@@ -356,10 +382,10 @@ class LiveManager {
       videoLive,
       user,
 
-      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio', 'probe' ])
+      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio', 'hasVideo', 'probe' ])
     })
 
-    muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, localLTags }))
+    muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, audioOnlyOutput, localLTags }))
 
     muxingSession.on('bad-socket-health', ({ videoUUID }) => {
       logger.error(
@@ -421,10 +447,11 @@ class LiveManager {
 
   private async publishAndFederateLive (options: {
     live: MVideoLiveVideo
+    audioOnlyOutput: boolean
     ratio: number
     localLTags: { tags: (string | number)[] }
   }) {
-    const { live, ratio, localLTags } = options
+    const { live, ratio, audioOnlyOutput, localLTags } = options
 
     const videoId = live.videoId
 
@@ -435,7 +462,10 @@ class LiveManager {
 
       video.state = VideoState.PUBLISHED
       video.publishedAt = new Date()
-      video.aspectRatio = ratio
+      video.aspectRatio = audioOnlyOutput
+        ? 0
+        : ratio
+
       await video.save()
 
       live.Video = video
@@ -546,15 +576,23 @@ class LiveManager {
   }
 
   private buildAllResolutionsToTranscode (originResolution: number, hasAudio: boolean) {
+    if (!CONFIG.LIVE.TRANSCODING.ENABLED) return [ originResolution ]
+
     const includeInput = CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
 
-    const resolutionsEnabled = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? computeResolutionsToTranscode({ input: originResolution, type: 'live', includeInput, strictLower: false, hasAudio })
-      : []
+    const resolutionsEnabled = computeResolutionsToTranscode({
+      input: originResolution,
+      type: 'live',
+      includeInput,
+      strictLower: false,
+      hasAudio
+    })
 
-    if (resolutionsEnabled.length === 0) {
-      return [ originResolution ]
+    if (hasAudio && resolutionsEnabled.length !== 0 && !resolutionsEnabled.includes(VideoResolution.H_NOVIDEO)) {
+      resolutionsEnabled.push(VideoResolution.H_NOVIDEO)
     }
+
+    if (resolutionsEnabled.length === 0) return [ originResolution ]
 
     return resolutionsEnabled
   }

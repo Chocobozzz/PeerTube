@@ -204,7 +204,7 @@ describe('Test video sources API validator', function () {
       await makeRawRequest({ url: source.fileDownloadUrl, token: user3, expectedStatus: HttpStatusCode.OK_200 })
     })
 
-    it('Should succeed with a valid header token', async function () {
+    it('Should succeed with a valid query token', async function () {
       await makeRawRequest({ url: source.fileDownloadUrl, query: { videoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
     })
   })

@@ -11,19 +11,20 @@ import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding.js'
 import { removeAllWebVideoFiles } from '@server/lib/video-file.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
-import { MVideo } from '@server/types/models/index.js'
+import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingAudioInputFileUrl, generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
-  video: MVideo
+  video: MVideoWithFile
   isNewVideo: boolean
   deleteWebVideoFiles: boolean
   resolution: number
   fps: number
   priority: number
+  separatedAudio: boolean
   dependsOnRunnerJob?: MRunnerJob
 }
 
@@ -31,17 +32,24 @@ type CreateOptions = {
 export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODHLSTranscodingSuccess> {
 
   async create (options: CreateOptions) {
-    const { video, resolution, fps, dependsOnRunnerJob, priority } = options
+    const { video, resolution, fps, dependsOnRunnerJob, separatedAudio, priority } = options
 
     const jobUUID = buildUUID()
 
+    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
     const payload: RunnerJobVODHLSTranscodingPayload = {
       input: {
-        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid)
+        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
+
+        separatedAudioFileUrl: separatedAudioFile
+          ? [ generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid) ]
+          : []
       },
       output: {
         resolution,
-        fps
+        fps,
+        separatedAudio
       }
     }
 

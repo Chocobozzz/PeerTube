@@ -47,7 +47,7 @@ import { cpus } from 'os'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 860
+const LAST_MIGRATION_VERSION = 865
 
 // ---------------------------------------------------------------------------
 
@@ -214,7 +214,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'federate-video': 1,
   'create-user-export': 1,
   'import-user-archive': 1,
-  'video-transcription': 1
+  'video-transcription': 2
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -327,6 +327,7 @@ const AP_CLEANER = {
 const REQUEST_TIMEOUTS = {
   DEFAULT: 7000, // 7 seconds
   FILE: 30000, // 30 seconds
+  VIDEO_FILE: 60000, // 1 minute
   REDUNDANCY: JOB_TTL['video-redundancy']
 }
 
@@ -873,9 +874,10 @@ const STATIC_PATHS = {
     PRIVATE_HLS: '/static/streaming-playlists/hls/private/'
   }
 }
-const STATIC_DOWNLOAD_PATHS = {
+const DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
-  VIDEOS: '/download/videos/',
+  GENERATE_VIDEO: '/download/videos/generate/',
+  WEB_VIDEOS: '/download/web-videos/',
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/',
   USER_EXPORTS: '/download/user-exports/',
   ORIGINAL_VIDEO_FILE: '/download/original-video-files/'
@@ -1337,7 +1339,7 @@ export {
   OVERVIEWS,
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,
-  STATIC_DOWNLOAD_PATHS,
+  DOWNLOAD_PATHS,
   MIMETYPES,
   CRAWL_REQUEST_CONCURRENCY,
   DEFAULT_AUDIO_RESOLUTION,

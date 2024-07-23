@@ -1,5 +1,4 @@
-import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, minBy, pick, wait } from '@peertube/peertube-core-utils'
-import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream } from '@peertube/peertube-ffmpeg'
+import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, pick, sortBy, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   ResultList,
@@ -8,6 +7,8 @@ import {
   Video,
   VideoDetails,
   VideoFile,
+  VideoFileStream,
+  VideoFileStreamType,
   VideoInclude,
   VideoIncludeType,
   VideoObject,
@@ -73,7 +74,7 @@ import {
   isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos.js'
-import { logger } from '../../helpers/logger.js'
+import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteVideo } from '../../lib/activitypub/send/index.js'
@@ -161,6 +162,8 @@ import { VideoShareModel } from './video-share.js'
 import { VideoSourceModel } from './video-source.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoTagModel } from './video-tag.js'
+
+const lTags = loggerTagsFactory('video')
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -1735,8 +1738,43 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return this.VideoChannel.Account.Actor.Server?.isBlocked() || this.VideoChannel.Account.isBlocked()
   }
 
-  getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], property: 'resolution') => MVideoFile) {
-    const files = this.getAllFiles()
+  // ---------------------------------------------------------------------------
+
+  getMaxQualityAudioAndVideoFiles <T extends MVideoWithFile> (this: T) {
+    const videoFile = this.getMaxQualityFile(VideoFileStream.VIDEO)
+    if (!videoFile) return { videoFile: undefined }
+
+    // File also has audio, we can return it
+    if (videoFile.hasAudio()) return { videoFile }
+
+    const separatedAudioFile = this.getMaxQualityFile(VideoFileStream.AUDIO)
+    if (!separatedAudioFile) return { videoFile }
+
+    return { videoFile, separatedAudioFile }
+  }
+
+  getMaxQualityFile<T extends MVideoWithFile> (
+    this: T,
+    streamFilter: VideoFileStreamType
+  ): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
+    return this.getQualityFileBy(streamFilter, maxBy)
+  }
+
+  getMaxQualityBytes <T extends MVideoWithFile> (this: T) {
+    const { videoFile, separatedAudioFile } = this.getMaxQualityAudioAndVideoFiles()
+
+    let size = videoFile.size
+    if (separatedAudioFile) size += separatedAudioFile.size
+
+    return size
+  }
+
+  getQualityFileBy<T extends MVideoWithFile> (
+    this: T,
+    streamFilter: VideoFileStreamType,
+    fun: (files: MVideoFile[], property: 'resolution') => MVideoFile
+  ) {
+    const files = this.getAllFiles().filter(f => f.streams & streamFilter)
     const file = fun(files, 'resolution')
     if (!file) return undefined
 
@@ -1753,26 +1791,39 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     throw new Error('File is not associated to a video of a playlist')
   }
 
-  getMaxQualityFile<T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
-    return this.getQualityFileBy(maxBy)
+  // ---------------------------------------------------------------------------
+
+  getMaxFPS () {
+    return this.getMaxQualityFile(VideoFileStream.VIDEO).fps
   }
 
-  getMinQualityFile<T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
-    return this.getQualityFileBy(minBy)
+  getMaxResolution () {
+    return this.getMaxQualityFile(VideoFileStream.VIDEO).resolution
   }
 
-  getWebVideoFile<T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
+  hasAudio () {
+    return !!this.getMaxQualityFile(VideoFileStream.AUDIO)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  getWebVideoFileMinResolution<T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
-    const file = this.VideoFiles.find(f => f.resolution === resolution)
-    if (!file) return undefined
+    for (const file of sortBy(this.VideoFiles, 'resolution')) {
+      if (file.resolution < resolution) continue
 
-    return Object.assign(file, { Video: this })
+      return Object.assign(file, { Video: this })
+    }
+
+    return undefined
   }
 
   hasWebVideoFiles () {
     return Array.isArray(this.VideoFiles) === true && this.VideoFiles.length !== 0
   }
+
+  // ---------------------------------------------------------------------------
 
   async addAndSaveThumbnail (thumbnail: MThumbnail, transaction?: Transaction) {
     thumbnail.videoId = this.id
@@ -1787,21 +1838,21 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  hasMiniature () {
+  hasMiniature (this: MVideoThumbnail) {
     return !!this.getMiniature()
   }
 
-  getMiniature () {
+  getMiniature (this: MVideoThumbnail) {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
   }
 
-  hasPreview () {
+  hasPreview (this: MVideoThumbnail) {
     return !!this.getPreview()
   }
 
-  getPreview () {
+  getPreview (this: MVideoThumbnail) {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
@@ -1930,27 +1981,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return files
   }
 
-  probeMaxQualityFile () {
-    const file = this.getMaxQualityFile()
-    const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
-
-    return VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(videoOrPlaylist), async originalFilePath => {
-      const probe = await ffprobePromise(originalFilePath)
-
-      const { audioStream } = await getAudioStream(originalFilePath, probe)
-      const hasAudio = await hasAudioStream(originalFilePath, probe)
-      const fps = await getVideoStreamFPS(originalFilePath, probe)
-
-      return {
-        audioStream,
-        hasAudio,
-        fps,
-
-        ...await getVideoStreamDimensionsInfo(originalFilePath, probe)
-      }
-    })
-  }
-
   getDescriptionAPIPath () {
     return `/api/${API_VERSION}/videos/${this.uuid}/description`
   }
@@ -1977,6 +2007,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
                                        .concat(toAdd)
   }
 
+  // ---------------------------------------------------------------------------
+
   removeWebVideoFile (videoFile: MVideoFile, isRedundancy = false) {
     const filePath = isRedundancy
       ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
@@ -1988,6 +2020,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
       promises.push(removeWebVideoObjectStorage(videoFile))
     }
+
+    logger.debug(`Removing files associated to web video ${videoFile.filename}`, { videoFile, isRedundancy, ...lTags(this.uuid) })
 
     return Promise.all(promises)
   }
@@ -2029,6 +2063,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         await removeHLSObjectStorage(streamingPlaylist.withVideo(this))
       }
     }
+
+    logger.debug(
+      `Removing files associated to streaming playlist of video ${this.url}`,
+      { streamingPlaylist, isRedundancy, ...lTags(this.uuid) }
+    )
   }
 
   async removeStreamingPlaylistVideoFile (streamingPlaylist: MStreamingPlaylist, videoFile: MVideoFile) {
@@ -2043,6 +2082,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), videoFile.filename)
       await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), resolutionFilename)
     }
+
+    logger.debug(
+      `Removing files associated to streaming playlist video file ${videoFile.filename}`,
+      { streamingPlaylist, ...lTags(this.uuid) }
+    )
   }
 
   async removeStreamingPlaylistFile (streamingPlaylist: MStreamingPlaylist, filename: string) {
@@ -2052,6 +2096,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
       await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), filename)
     }
+
+    logger.debug(`Removing streaming playlist file ${filename}`, lTags(this.uuid))
   }
 
   async removeOriginalFile (videoSource: MVideoSource) {
@@ -2063,7 +2109,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     if (videoSource.storage === FileStorage.OBJECT_STORAGE) {
       await removeOriginalFileObjectStorage(videoSource)
     }
+
+    logger.debug(`Removing original video file ${videoSource.keptOriginalFilename}`, lTags(this.uuid))
   }
+
+  // ---------------------------------------------------------------------------
 
   isOutdated () {
     if (this.isOwned()) return false

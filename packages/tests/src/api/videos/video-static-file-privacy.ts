@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { getAllFiles, wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, LiveVideo, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, HttpStatusCodeType, LiveVideo, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -18,6 +17,7 @@ import {
 import { expectStartWith } from '@tests/shared/checks.js'
 import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
 import { magnetUriDecode, parseTorrentVideo } from '@tests/shared/webtorrent.js'
+import { expect } from 'chai'
 
 describe('Test video static file privacy', function () {
   let server: PeerTubeServer
@@ -531,7 +531,7 @@ describe('Test video static file privacy', function () {
           server,
           videoUUID: permanentLiveId,
           videoFileToken,
-          resolutions: [ 720 ],
+          resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ],
           isLive: true
         })
       }
@@ -554,8 +554,7 @@ describe('Test video static file privacy', function () {
       await server.live.waitUntilWaiting({ videoId: permanentLiveId })
       await waitJobs([ server ])
 
-      const live = await server.videos.getWithToken({ id: permanentLiveId })
-      const replayFromList = await findExternalSavedVideo(server, live)
+      const replayFromList = await findExternalSavedVideo(server, permanentLiveId)
       const replay = await server.videos.getWithToken({ id: replayFromList.id })
 
       await checkReplay(replay)

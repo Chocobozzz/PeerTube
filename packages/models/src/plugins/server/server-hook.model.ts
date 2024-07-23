@@ -106,6 +106,7 @@ export const serverFilterHookObject = {
 
   // Filter result used to check if video/torrent download is allowed
   'filter:api.download.video.allowed.result': true,
+  'filter:api.download.generated-video.allowed.result': true,
   'filter:api.download.torrent.allowed.result': true,
 
   // Filter result to check if the embed is allowed for a particular request

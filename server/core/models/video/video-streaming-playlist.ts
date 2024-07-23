@@ -1,16 +1,18 @@
 import {
   FileStorage,
+  VideoResolution,
   VideoStreamingPlaylistType,
   type FileStorageType,
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
+import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
-import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models/index.js'
+import { MStreamingPlaylist, MStreamingPlaylistFiles, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models/index.js'
 import memoizee from 'memoizee'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
@@ -146,6 +148,8 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     for (let i = 0; i < files.length; i++) {
       hashes.push(sha1(`${P2P_MEDIA_LOADER_PEER_VERSION}${playlistUrl}+V${i}`))
     }
+
+    logger.debug('Assigned P2P Media Loader info hashes', { playlistUrl, hashes })
 
     return hashes
   }
@@ -291,6 +295,26 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   }
 
   // ---------------------------------------------------------------------------
+
+  hasAudioAndVideoSplitted (this: MStreamingPlaylistFiles) {
+    // We need at least 2 files to have audio and video splitted
+    if (this.VideoFiles.length === 1) return false
+
+    let hasAudio = false
+    let hasVideo = false
+
+    for (const file of this.VideoFiles) {
+      // File contains both streams: audio and video is not splitted
+      if (file.hasAudio() && file.hasVideo()) return false
+
+      if (file.resolution === VideoResolution.H_NOVIDEO) hasAudio = true
+      else if (file.hasVideo()) hasVideo = true
+
+      if (hasVideo && hasAudio) return true
+    }
+
+    return false
+  }
 
   getStringType () {
     if (this.type === VideoStreamingPlaylistType.HLS) return 'hls'

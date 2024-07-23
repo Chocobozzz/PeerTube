@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { basename } from 'path'
 import {
   HttpStatusCode,
   HttpStatusCodeType,
@@ -12,7 +11,6 @@ import {
   VideoPrivacy,
   VideoStudioTaskIntro
 } from '@peertube/peertube-models'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import {
   cleanupTests,
   createSingleServer,
@@ -25,6 +23,8 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { basename } from 'path'
 
 const badUUID = '910ec12a-d9e6-458b-a274-0abb655f9464'
 
@@ -66,7 +66,7 @@ describe('Test managing runners', function () {
     registrationToken = data[0].registrationToken
     registrationTokenId = data[0].id
 
-    await server.config.enableTranscoding({ hls: true, webVideo: true })
+    await server.config.enableTranscoding({ hls: true, webVideo: true, resolutions: 'min' })
     await server.config.enableStudio()
     await server.config.enableRemoteTranscoding()
     await server.config.enableRemoteStudio()
@@ -452,7 +452,7 @@ describe('Test managing runners', function () {
         const { uuid } = await server.videos.quickUpload({ name: 'video studio' })
         videoStudioUUID = uuid
 
-        await server.config.enableTranscoding({ hls: true, webVideo: true })
+        await server.config.enableTranscoding({ hls: true, webVideo: true, resolutions: 'min' })
         await server.config.enableStudio()
 
         await server.videoStudio.createEditionTasks({

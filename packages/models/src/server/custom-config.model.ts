@@ -2,6 +2,7 @@ import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { BroadcastMessageLevel } from './broadcast-message-level.type.js'
 
 export type ConfigResolutions = {
+  '0p': boolean
   '144p': boolean
   '240p': boolean
   '360p': boolean
@@ -133,7 +134,7 @@ export interface CustomConfig {
 
     profile: string
 
-    resolutions: ConfigResolutions & { '0p': boolean }
+    resolutions: ConfigResolutions
 
     alwaysTranscodeOriginalResolution: boolean
 
@@ -143,6 +144,7 @@ export interface CustomConfig {
 
     hls: {
       enabled: boolean
+      splitAudioAndVideo: boolean
     }
   }
 

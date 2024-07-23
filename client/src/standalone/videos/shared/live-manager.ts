@@ -1,7 +1,8 @@
-import { Socket } from 'socket.io-client'
 import { LiveVideoEventPayload, VideoDetails, VideoState, VideoStateType } from '@peertube/peertube-models'
+import { Socket } from 'socket.io-client'
 import { PlayerHTML } from './player-html'
 import { Translations } from './translations'
+import { getBackendUrl } from './url'
 
 export class LiveManager {
   private liveSocket: Socket
@@ -22,7 +23,7 @@ export class LiveManager {
 
     if (!this.liveSocket) {
       const io = (await import('socket.io-client')).io
-      this.liveSocket = io(window.location.origin + '/live-videos')
+      this.liveSocket = io(getBackendUrl() + '/live-videos')
     }
 
     const listener = (payload: LiveVideoEventPayload) => {

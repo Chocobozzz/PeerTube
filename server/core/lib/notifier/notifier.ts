@@ -329,11 +329,11 @@ class Notifier {
   private isEmailEnabled (user: MUser, value: UserNotificationSettingValueType) {
     if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION === true && user.emailVerified === false) return false
 
-    return value & UserNotificationSettingValue.EMAIL
+    return (value & UserNotificationSettingValue.EMAIL) === UserNotificationSettingValue.EMAIL
   }
 
   private isWebNotificationEnabled (value: UserNotificationSettingValueType) {
-    return value & UserNotificationSettingValue.WEB
+    return (value & UserNotificationSettingValue.WEB) === UserNotificationSettingValue.WEB
   }
 
   private async sendNotifications <T> (models: (new (payload: T) => AbstractNotification<T>)[], payload: T) {

@@ -3,7 +3,7 @@ import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import {
   JWT_TOKEN_USER_EXPORT_FILE_LIFETIME,
-  STATIC_DOWNLOAD_PATHS,
+  DOWNLOAD_PATHS,
   USER_EXPORT_FILE_PREFIX,
   USER_EXPORT_STATES,
   WEBSERVER
@@ -203,7 +203,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
   getFileDownloadUrl () {
     if (this.state !== UserExportState.COMPLETED) return null
 
-    return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.USER_EXPORTS, this.filename) + '?jwt=' + this.generateJWT()
+    return WEBSERVER.URL + join(DOWNLOAD_PATHS.USER_EXPORTS, this.filename) + '?jwt=' + this.generateJWT()
   }
 
   // ---------------------------------------------------------------------------

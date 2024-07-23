@@ -56,7 +56,9 @@ class PeerTubeResolutionsPlugin extends Plugin {
 
     if (this.currentSelection?.id === id && this.autoResolutionChosenId === autoResolutionChosenId) return
 
-    this.autoResolutionChosenId = autoResolutionChosenId
+    if (autoResolutionChosenId !== undefined) {
+      this.autoResolutionChosenId = autoResolutionChosenId
+    }
 
     for (const r of this.resolutions) {
       r.selected = r.id === id

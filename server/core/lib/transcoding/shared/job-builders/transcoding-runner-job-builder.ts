@@ -1,19 +1,11 @@
-import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream, isAudioFile } from '@peertube/peertube-ffmpeg'
-import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { DEFAULT_AUDIO_RESOLUTION, VIDEO_TRANSCODING_FPS } from '@server/initializers/constants.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
 import {
   VODAudioMergeTranscodingJobHandler,
   VODHLSTranscodingJobHandler,
   VODWebVideoTranscodingJobHandler
-} from '@server/lib/runners/index.js'
-import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { MUserId, MVideoFile, MVideoFullLight, MVideoWithFileThumbnail } from '@server/types/models/index.js'
-import { MRunnerJob } from '@server/types/models/runners/index.js'
+} from '@server/lib/runners/job-handlers/index.js'
+import { MUserId, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MRunnerJob } from '@server/types/models/runners/runner-job.js'
 import { getTranscodingJobPriority } from '../../transcoding-priority.js'
-import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions.js'
 import { AbstractJobBuilder } from './abstract-job-builder.js'
 
 /**
@@ -22,185 +14,150 @@ import { AbstractJobBuilder } from './abstract-job-builder.js'
  *
  */
 
-const lTags = loggerTagsFactory('transcoding')
+type Payload = {
+  Builder: new () => VODHLSTranscodingJobHandler
+  options: Omit<Parameters<VODHLSTranscodingJobHandler['create']>[0], 'priority'>
+} | {
+  Builder: new () => VODAudioMergeTranscodingJobHandler
+  options: Omit<Parameters<VODAudioMergeTranscodingJobHandler['create']>[0], 'priority'>
+} |
+{
+  Builder: new () => VODWebVideoTranscodingJobHandler
+  options: Omit<Parameters<VODWebVideoTranscodingJobHandler['create']>[0], 'priority'>
+}
 
-export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
+// eslint-disable-next-line max-len
+export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
 
-  async createOptimizeOrMergeAudioJobs (options: {
-    video: MVideoFullLight
-    videoFile: MVideoFile
-    isNewVideo: boolean
-    user: MUserId
-    videoFileAlreadyLocked: boolean
-  }) {
-    const { video, videoFile, isNewVideo, user, videoFileAlreadyLocked } = options
+  protected async createJobs (options: {
+    video: MVideo
+    parent: Payload
+    children: Payload[][] // Array of sequential jobs to create that depend on parent job
+    user: MUserId | null
+  }): Promise<void> {
+    const { parent, children, user } = options
 
-    const mutexReleaser = videoFileAlreadyLocked
-      ? () => {}
-      : await VideoPathManager.Instance.lockFiles(video.uuid)
+    const parentJob = await this.createJob({ payload: parent, user })
 
-    try {
-      await video.reload()
-      await videoFile.reload()
+    for (const parallelPayloads of children) {
+      let lastJob = parentJob
 
-      await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), async videoFilePath => {
-        const probe = await ffprobePromise(videoFilePath)
-
-        const { resolution } = await getVideoStreamDimensionsInfo(videoFilePath, probe)
-        const hasAudio = await hasAudioStream(videoFilePath, probe)
-        const inputFPS = videoFile.isAudio()
-          ? VIDEO_TRANSCODING_FPS.AUDIO_MERGE // The first transcoding job will transcode to this FPS value
-          : await getVideoStreamFPS(videoFilePath, probe)
-
-        const isAudioInput = await isAudioFile(videoFilePath, probe)
-        const maxResolution = isAudioInput
-          ? DEFAULT_AUDIO_RESOLUTION
-          : buildOriginalFileResolution(resolution)
-
-        const fps = computeOutputFPS({ inputFPS, resolution: maxResolution })
-        const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
-
-        const jobPayload = { video, resolution: maxResolution, fps, isNewVideo, priority, deleteInputFileId: videoFile.id }
-
-        const mainRunnerJob = videoFile.isAudio()
-          ? await new VODAudioMergeTranscodingJobHandler().create(jobPayload)
-          : await new VODWebVideoTranscodingJobHandler().create(jobPayload)
-
-        if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
-          await new VODHLSTranscodingJobHandler().create({
-            video,
-            deleteWebVideoFiles: CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED === false,
-            resolution: maxResolution,
-            fps,
-            isNewVideo,
-            dependsOnRunnerJob: mainRunnerJob,
-            priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
-          })
-        }
-
-        await this.buildLowerResolutionJobPayloads({
-          video,
-          inputVideoResolution: maxResolution,
-          inputVideoFPS: inputFPS,
-          hasAudio,
-          isNewVideo,
-          mainRunnerJob,
+      for (const parallelPayload of parallelPayloads) {
+        lastJob = await this.createJob({
+          payload: parallelPayload,
+          dependsOnRunnerJob: lastJob,
           user
         })
-      })
-    } finally {
-      mutexReleaser()
+      }
+
+      lastJob = undefined
     }
+  }
+
+  private async createJob (options: {
+    payload: Payload
+    user: MUserId | null
+    dependsOnRunnerJob?: MRunnerJob
+  }) {
+    const { dependsOnRunnerJob, payload, user } = options
+
+    const builder = new payload.Builder()
+
+    return builder.create({
+      ...(payload.options as any), // FIXME: typings
+
+      dependsOnRunnerJob,
+      priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
+    })
   }
 
   // ---------------------------------------------------------------------------
 
-  async createTranscodingJobs (options: {
-    transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
+  protected buildHLSJobPayload (options: {
     video: MVideoFullLight
-    resolutions: number[]
+    resolution: number
+    fps: number
     isNewVideo: boolean
-    user: MUserId | null
-  }) {
-    const { video, transcodingType, resolutions, isNewVideo, user } = options
+    separatedAudio: boolean
+    deleteWebVideoFiles?: boolean // default false
+    copyCodecs?: boolean // default false
+  }): Payload {
+    const { video, resolution, fps, isNewVideo, separatedAudio, deleteWebVideoFiles = false } = options
 
-    const maxResolution = Math.max(...resolutions)
-    const { fps: inputFPS } = await video.probeMaxQualityFile()
-    const maxFPS = computeOutputFPS({ inputFPS, resolution: maxResolution })
-    const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
+    return {
+      Builder: VODHLSTranscodingJobHandler,
 
-    const childrenResolutions = resolutions.filter(r => r !== maxResolution)
-
-    logger.info('Manually creating transcoding jobs for %s.', transcodingType, { childrenResolutions, maxResolution })
-
-    const jobPayload = { video, resolution: maxResolution, fps: maxFPS, isNewVideo, priority, deleteInputFileId: null }
-
-    // Process the last resolution before the other ones to prevent concurrency issue
-    // Because low resolutions use the biggest one as ffmpeg input
-    const mainJob = transcodingType === 'hls'
-      // eslint-disable-next-line max-len
-      ? await new VODHLSTranscodingJobHandler().create({ ...jobPayload, deleteWebVideoFiles: false })
-      : await new VODWebVideoTranscodingJobHandler().create(jobPayload)
-
-    for (const resolution of childrenResolutions) {
-      const dependsOnRunnerJob = mainJob
-      const fps = computeOutputFPS({ inputFPS, resolution })
-
-      if (transcodingType === 'hls') {
-        await new VODHLSTranscodingJobHandler().create({
-          video,
-          resolution,
-          fps,
-          isNewVideo,
-          deleteWebVideoFiles: false,
-          dependsOnRunnerJob,
-          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
-        })
-        continue
+      options: {
+        video,
+        resolution,
+        fps,
+        isNewVideo,
+        separatedAudio,
+        deleteWebVideoFiles
       }
-
-      if (transcodingType === 'webtorrent' || transcodingType === 'web-video') {
-        await new VODWebVideoTranscodingJobHandler().create({
-          video,
-          resolution,
-          fps,
-          isNewVideo,
-          dependsOnRunnerJob,
-          deleteInputFileId: null,
-          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
-        })
-        continue
-      }
-
-      throw new Error('Unknown transcoding type')
     }
   }
 
-  private async buildLowerResolutionJobPayloads (options: {
-    mainRunnerJob: MRunnerJob
-    video: MVideoWithFileThumbnail
-    inputVideoResolution: number
-    inputVideoFPS: number
-    hasAudio: boolean
+  protected buildWebVideoJobPayload (options: {
+    video: MVideoFullLight
+    resolution: number
+    fps: number
     isNewVideo: boolean
-    user: MUserId
-  }) {
-    const { video, inputVideoResolution, inputVideoFPS, isNewVideo, hasAudio, mainRunnerJob, user } = options
+  }): Payload {
+    const { video, resolution, fps, isNewVideo } = options
 
-    // Create transcoding jobs if there are enabled resolutions
-    const resolutionsEnabled = await Hooks.wrapObject(
-      computeResolutionsToTranscode({ input: inputVideoResolution, type: 'vod', includeInput: false, strictLower: true, hasAudio }),
-      'filter:transcoding.auto.resolutions-to-transcode.result',
-      options
-    )
+    return {
+      Builder: VODWebVideoTranscodingJobHandler,
 
-    logger.debug('Lower resolutions build for %s.', video.uuid, { resolutionsEnabled, ...lTags(video.uuid) })
-
-    for (const resolution of resolutionsEnabled) {
-      const fps = computeOutputFPS({ inputFPS: inputVideoFPS, resolution })
-
-      if (CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED) {
-        await new VODWebVideoTranscodingJobHandler().create({
-          video,
-          resolution,
-          fps,
-          isNewVideo,
-          dependsOnRunnerJob: mainRunnerJob,
-          deleteInputFileId: null,
-          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
-        })
+      options: {
+        video,
+        resolution,
+        fps,
+        isNewVideo,
+        deleteInputFileId: null
       }
+    }
+  }
 
-      if (CONFIG.TRANSCODING.HLS.ENABLED) {
-        await new VODHLSTranscodingJobHandler().create({
-          video,
-          resolution,
-          fps,
-          isNewVideo,
-          deleteWebVideoFiles: false,
-          dependsOnRunnerJob: mainRunnerJob,
-          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
-        })
+  protected buildMergeAudioPayload (options: {
+    video: MVideoFullLight
+    inputFile: MVideoFile
+    isNewVideo: boolean
+    fps: number
+    resolution: number
+  }): Payload {
+    const { video, isNewVideo, inputFile, resolution, fps } = options
+
+    return {
+      Builder: VODAudioMergeTranscodingJobHandler,
+      options: {
+        video,
+        resolution,
+        fps,
+        isNewVideo,
+        deleteInputFileId: inputFile.id
+      }
+    }
+  }
+
+  protected buildOptimizePayload (options: {
+    video: MVideoFullLight
+    inputFile: MVideoFile
+    quickTranscode: boolean
+    isNewVideo: boolean
+    fps: number
+    resolution: number
+  }): Payload {
+    const { video, isNewVideo, inputFile, fps, resolution } = options
+
+    return {
+      Builder: VODWebVideoTranscodingJobHandler,
+      options: {
+        video,
+        resolution,
+        fps,
+        isNewVideo,
+        deleteInputFileId: inputFile.id
       }
     }
   }

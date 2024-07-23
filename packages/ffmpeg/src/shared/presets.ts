@@ -7,7 +7,8 @@ import { addDefaultEncoderGlobalParams, addDefaultEncoderParams, applyEncoderOpt
 export async function presetVOD (options: {
   commandWrapper: FFmpegCommandWrapper
 
-  input: string
+  videoInputPath: string
+  separatedAudioInputPath?: string
 
   canCopyAudio: boolean
   canCopyVideo: boolean
@@ -15,9 +16,16 @@ export async function presetVOD (options: {
   resolution: number
   fps: number
 
+  videoStreamOnly: boolean
+
   scaleFilterValue?: string
 }) {
-  const { commandWrapper, input, resolution, fps, scaleFilterValue } = options
+  const { commandWrapper, videoInputPath, separatedAudioInputPath, resolution, fps, videoStreamOnly, scaleFilterValue } = options
+
+  if (videoStreamOnly && !resolution) {
+    throw new Error('Cannot generate video stream only without valid resolution')
+  }
+
   const command = commandWrapper.getCommand()
 
   command.format('mp4')
@@ -25,27 +33,40 @@ export async function presetVOD (options: {
 
   addDefaultEncoderGlobalParams(command)
 
-  const probe = await ffprobePromise(input)
+  const videoProbe = await ffprobePromise(videoInputPath)
+  const audioProbe = separatedAudioInputPath
+    ? await ffprobePromise(separatedAudioInputPath)
+    : videoProbe
 
   // Audio encoder
-  const bitrate = await getVideoStreamBitrate(input, probe)
-  const videoStreamDimensions = await getVideoStreamDimensionsInfo(input, probe)
+  const bitrate = await getVideoStreamBitrate(videoInputPath, videoProbe)
+  const videoStreamDimensions = await getVideoStreamDimensionsInfo(videoInputPath, videoProbe)
 
   let streamsToProcess: StreamType[] = [ 'audio', 'video' ]
 
-  if (!await hasAudioStream(input, probe)) {
+  if (videoStreamOnly || !await hasAudioStream(separatedAudioInputPath || videoInputPath, audioProbe)) {
     command.noAudio()
     streamsToProcess = [ 'video' ]
+  } else if (!resolution) {
+    command.noVideo()
+    streamsToProcess = [ 'audio' ]
   }
 
   for (const streamType of streamsToProcess) {
+    const input = streamType === 'video'
+      ? videoInputPath
+      : separatedAudioInputPath || videoInputPath
+
     const builderResult = await commandWrapper.getEncoderBuilderResult({
       ...pick(options, [ 'canCopyAudio', 'canCopyVideo' ]),
 
       input,
+      inputProbe: streamType === 'video'
+        ? videoProbe
+        : audioProbe,
+
       inputBitrate: bitrate,
       inputRatio: videoStreamDimensions?.ratio || 0,
-      inputProbe: probe,
 
       resolution,
       fps,
@@ -79,16 +100,17 @@ export async function presetVOD (options: {
   }
 }
 
-export function presetCopy (commandWrapper: FFmpegCommandWrapper) {
-  commandWrapper.getCommand()
-    .format('mp4')
-    .videoCodec('copy')
-    .audioCodec('copy')
-}
+export function presetCopy (commandWrapper: FFmpegCommandWrapper, options: {
+  withAudio?: boolean // default true
+  withVideo?: boolean // default true
+} = {}) {
+  const command = commandWrapper.getCommand()
 
-export function presetOnlyAudio (commandWrapper: FFmpegCommandWrapper) {
-  commandWrapper.getCommand()
-    .format('mp4')
-    .audioCodec('copy')
-    .noVideo()
+  command.format('mp4')
+
+  if (options.withAudio === false) command.noAudio()
+  else command.audioCodec('copy')
+
+  if (options.withVideo === false) command.noVideo()
+  else command.videoCodec('copy')
 }

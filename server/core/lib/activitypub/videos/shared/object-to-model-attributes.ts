@@ -7,13 +7,17 @@ import {
   ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
+  VideoFileFormatFlag,
+  VideoFileStream,
   VideoObject,
   VideoPrivacy,
+  VideoResolution,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos.js'
-import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { getExtFromMimetype } from '@server/helpers/video.js'
@@ -23,7 +27,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MChannelId, MStreamingPlaylistVideo, MVideo, MVideoId, isStreamingPlaylist } from '@server/types/models/index.js'
+import { MChannelId, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId, isStreamingPlaylist } from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
@@ -48,6 +52,8 @@ export function getTagsFromObject (videoObject: VideoObject) {
     .map(t => t.name)
 }
 
+// ---------------------------------------------------------------------------
+
 export function getFileAttributesFromUrl (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   urls: (ActivityTagObject | ActivityUrlObject)[]
@@ -67,20 +73,21 @@ export function getFileAttributesFromUrl (
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
     const resolution = fileUrl.height
-    const videoId = isStreamingPlaylist(videoOrPlaylist) ? null : videoOrPlaylist.id
 
-    const videoStreamingPlaylistId = isStreamingPlaylist(videoOrPlaylist)
-      ? videoOrPlaylist.id
-      : null
+    const [ videoId, videoStreamingPlaylistId ] = isStreamingPlaylist(videoOrPlaylist)
+      ? [ null, videoOrPlaylist.id ]
+      : [ videoOrPlaylist.id, null ]
 
     const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, urls, fileUrl })
 
-    const attribute = {
+    const attribute: Partial<AttributesOnly<MVideoFile>> = {
       extname,
       resolution,
 
       size: fileUrl.size,
-      fps: fileUrl.fps || -1,
+      fps: exists(fileUrl.fps) && fileUrl.fps >= 0
+        ? fileUrl.fps
+        : -1,
 
       metadataUrl: metadata?.href,
 
@@ -95,6 +102,9 @@ export function getFileAttributesFromUrl (
       torrentFilename,
       torrentUrl,
 
+      formatFlags: buildFileFormatFlags(fileUrl, isStreamingPlaylist(videoOrPlaylist)),
+      streams: buildFileStreams(fileUrl, resolution),
+
       // This is a video file owned by a video or by a streaming playlist
       videoId,
       videoStreamingPlaylistId
@@ -105,6 +115,49 @@ export function getFileAttributesFromUrl (
 
   return attributes
 }
+
+function buildFileFormatFlags (fileUrl: ActivityVideoUrlObject, isStreamingPlaylist: boolean) {
+  const attachment = fileUrl.attachment || []
+
+  const formatHints = attachment.filter(a => a.type === 'PropertyValue' && a.name === 'peertube_format_flag')
+  if (formatHints.length === 0) {
+    return isStreamingPlaylist
+      ? VideoFileFormatFlag.FRAGMENTED
+      : VideoFileFormatFlag.WEB_VIDEO
+  }
+
+  let formatFlags = VideoFileFormatFlag.NONE
+
+  for (const hint of formatHints) {
+    if (hint.value === 'fragmented') formatFlags |= VideoFileFormatFlag.FRAGMENTED
+    else if (hint.value === 'web-video') formatFlags |= VideoFileFormatFlag.WEB_VIDEO
+  }
+
+  return formatFlags
+}
+
+function buildFileStreams (fileUrl: ActivityVideoUrlObject, resolution: number) {
+  const attachment = fileUrl.attachment || []
+
+  const formatHints = attachment.filter(a => a.type === 'PropertyValue' && a.name === 'ffprobe_codec_type')
+
+  if (formatHints.length === 0) {
+    if (resolution === VideoResolution.H_NOVIDEO) return VideoFileStream.AUDIO
+
+    return VideoFileStream.VIDEO | VideoFileStream.AUDIO
+  }
+
+  let streams = VideoFileStream.NONE
+
+  for (const hint of formatHints) {
+    if (hint.value === 'audio') streams |= VideoFileStream.AUDIO
+    else if (hint.value === 'video') streams |= VideoFileStream.VIDEO
+  }
+
+  return streams
+}
+
+// ---------------------------------------------------------------------------
 
 export function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u))

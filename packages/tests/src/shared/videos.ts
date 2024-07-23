@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { uuidRegex } from '@peertube/peertube-core-utils'
+import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   HttpStatusCode,
   HttpStatusCodeType,
@@ -11,7 +12,7 @@ import {
   VideoPrivacy,
   VideoResolution
 } from '@peertube/peertube-models'
-import { buildAbsoluteFixturePath, getFileSize, getFilenameFromUrl, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { buildAbsoluteFixturePath, buildUUID, getFileSize, getFilenameFromUrl, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { PeerTubeServer, VideoEdit, getRedirectionUrl, makeRawRequest, waitJobs } from '@peertube/peertube-server-commands'
 import {
   VIDEO_CATEGORIES,
@@ -21,8 +22,9 @@ import {
   loadLanguages
 } from '@peertube/peertube-server/core/initializers/constants.js'
 import { expect } from 'chai'
-import { pathExists } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
+import { ensureDir, pathExists, remove } from 'fs-extra/esm'
+import { readdir, writeFile } from 'fs/promises'
+import { tmpdir } from 'os'
 import { basename, join } from 'path'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
 import { completeCheckHlsPlaylist } from './streaming-playlists.js'
@@ -79,7 +81,7 @@ export async function completeWebVideoFilesCheck (options: {
         expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/static/web-videos/${privatePath}${nameReg}${extension}`))
       }
 
-      expect(file.fileDownloadUrl).to.match(new RegExp(`${originServer.url}/download/videos/${nameReg}${extension}`))
+      expect(file.fileDownloadUrl).to.match(new RegExp(`${originServer.url}/download/web-videos/${nameReg}${extension}`))
     }
 
     {
@@ -106,8 +108,12 @@ export async function completeWebVideoFilesCheck (options: {
 
     if (file.resolution.id === VideoResolution.H_NOVIDEO) {
       expect(file.resolution.label).to.equal('Audio')
+      expect(file.hasAudio).to.be.true
+      expect(file.hasVideo).to.be.false
     } else {
       expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
+      expect(file.hasAudio).to.be.true
+      expect(file.hasVideo).to.be.true
     }
 
     if (attributeFile.width !== undefined) expect(file.width).to.equal(attributeFile.width)
@@ -415,4 +421,17 @@ export async function checkSourceFile (options: {
   expect(body).to.have.lengthOf(fixtureFileSize)
 
   return source
+}
+
+export async function probeResBody (body: Buffer) {
+  const basePath = join(tmpdir(), 'peertube-test', 'ffprobe')
+  const videoPath = join(basePath, buildUUID())
+
+  await ensureDir(basePath)
+  await writeFile(videoPath, body)
+
+  const probe = await ffprobePromise(videoPath)
+  await remove(videoPath)
+
+  return probe
 }

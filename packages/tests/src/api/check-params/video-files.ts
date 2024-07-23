@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getAllFiles } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserRole, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, UserRole, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -73,8 +73,13 @@ describe('Test videos files', function () {
     let remoteHLSFileId: number
     let remoteWebVideoFileId: number
 
+    let splittedHLSId: string
+    let hlsWithAudioId: string
+
     before(async function () {
       this.timeout(300_000)
+
+      const resolutions = [ VideoResolution.H_NOVIDEO, VideoResolution.H_144P, VideoResolution.H_240P ]
 
       {
         const { uuid } = await servers[1].videos.quickUpload({ name: 'remote video' })
@@ -87,7 +92,7 @@ describe('Test videos files', function () {
       }
 
       {
-        await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, resolutions })
 
         {
           const { uuid } = await servers[0].videos.quickUpload({ name: 'both 1' })
@@ -103,22 +108,43 @@ describe('Test videos files', function () {
           const { uuid } = await servers[0].videos.quickUpload({ name: 'both 2' })
           validId2 = uuid
         }
+
+        await waitJobs(servers)
       }
 
-      await waitJobs(servers)
-
       {
-        await servers[0].config.enableTranscoding({ hls: true, webVideo: false })
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: false, resolutions })
         const { uuid } = await servers[0].videos.quickUpload({ name: 'hls' })
         hlsId = uuid
+
+        await waitJobs(servers)
       }
 
-      await waitJobs(servers)
-
       {
-        await servers[0].config.enableTranscoding({ webVideo: true, hls: false })
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: false, resolutions })
         const { uuid } = await servers[0].videos.quickUpload({ name: 'web-video' })
         webVideoId = uuid
+
+        await waitJobs(servers)
+      }
+
+      {
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: true, splitAudioAndVideo: true, resolutions })
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'splitted-audio-video' })
+        splittedHLSId = uuid
+
+        await waitJobs(servers)
+      }
+
+      {
+        await servers[0].config.enableTranscoding({
+          webVideo: true,
+          hls: true,
+          splitAudioAndVideo: false,
+          resolutions
+        })
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'web-video' })
+        hlsWithAudioId = uuid
       }
 
       await waitJobs(servers)
@@ -168,9 +194,6 @@ describe('Test videos files', function () {
     })
 
     it('Should not delete files if the files are not available', async function () {
-      await servers[0].videos.removeHLSPlaylist({ videoId: hlsId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-      await servers[0].videos.removeAllWebVideoFiles({ videoId: webVideoId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-
       await servers[0].videos.removeHLSFile({ videoId: hlsId, fileId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       await servers[0].videos.removeWebVideoFile({ videoId: webVideoId, fileId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
@@ -186,6 +209,40 @@ describe('Test videos files', function () {
 
       await servers[0].videos.removeHLSPlaylist({ videoId: validId1 })
       await servers[0].videos.removeAllWebVideoFiles({ videoId: validId2 })
+    })
+
+    it('Should not delete audio if audio and video is splitted', async function () {
+      const video = await servers[0].videos.get({ id: splittedHLSId })
+      const audio = getHLS(video).files.find(f => f.resolution.id === VideoResolution.H_NOVIDEO)
+
+      await servers[0].videos.removeHLSFile({ videoId: splittedHLSId, fileId: audio.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should be able to delete audio if audio is the latest resolution', async function () {
+      const video = await servers[0].videos.get({ id: splittedHLSId })
+      const audio = getHLS(video).files.find(f => f.resolution.id === VideoResolution.H_NOVIDEO)
+
+      for (const file of getHLS(video).files) {
+        if (file.resolution.id === VideoResolution.H_NOVIDEO) continue
+
+        await servers[0].videos.removeHLSFile({ videoId: splittedHLSId, fileId: file.id })
+      }
+
+      await servers[0].videos.removeHLSFile({ videoId: splittedHLSId, fileId: audio.id })
+    })
+
+    it('Should be able to delete audio of web video', async function () {
+      const video = await servers[0].videos.get({ id: splittedHLSId })
+      const audio = video.files.find(f => f.resolution.id === VideoResolution.H_NOVIDEO)
+
+      await servers[0].videos.removeWebVideoFile({ videoId: splittedHLSId, fileId: audio.id })
+    })
+
+    it('Should be able to delete audio if audio and video are not splitted', async function () {
+      const video = await servers[0].videos.get({ id: hlsWithAudioId })
+      const audio = getHLS(video).files.find(f => f.resolution.id === VideoResolution.H_NOVIDEO)
+
+      await servers[0].videos.removeHLSFile({ videoId: hlsWithAudioId, fileId: audio.id })
     })
   })
 

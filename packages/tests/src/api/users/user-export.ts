@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
+import { hasAudioStream, hasVideoStream } from '@peertube/peertube-ffmpeg'
 import {
   AccountExportJSON, ActivityPubActor,
   ActivityPubOrderedCollection,
@@ -45,6 +46,7 @@ import {
   parseAPOutbox,
   parseZIPJSONFile,
   prepareImportExportTests,
+  probeZIPFile,
   regenerateExport
 } from '@tests/shared/import-export.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
@@ -264,7 +266,7 @@ function runTest (withObjectStorage: boolean) {
       expect(outbox.id).to.equal('outbox.json')
       expect(outbox.type).to.equal('OrderedCollection')
 
-      // 3 videos and 2 comments
+      // 4 videos and 2 comments
       expect(outbox.totalItems).to.equal(6)
       expect(outbox.orderedItems).to.have.lengthOf(6)
 
@@ -751,6 +753,53 @@ function runTest (withObjectStorage: boolean) {
       expect(video.attachment).to.have.lengthOf(1)
       expect(video.attachment[0].url).to.equal('../files/videos/video-files/' + externalVideo.uuid + '.mp4')
       await checkFileExistsInZIP(zip, video.attachment[0].url, '/activity-pub')
+
+      const probe = await probeZIPFile(zip, video.attachment[0].url, '/activity-pub')
+
+      expect(await hasAudioStream('', probe)).to.be.true
+      expect(await hasVideoStream('', probe)).to.be.true
+    }
+  })
+
+  it('Should export videos on instance with HLS only and audio separated', async function () {
+    this.timeout(120000)
+
+    await remoteServer.config.enableMinimumTranscoding({ hls: true, webVideo: false, splitAudioAndVideo: true, keepOriginal: false })
+
+    const videoName = 'hls and audio separated'
+    await remoteServer.videos.quickUpload({ name: videoName })
+    await waitJobs([ remoteServer ])
+
+    await regenerateExport({ server: remoteServer, userId: remoteRootId, withVideoFiles: true })
+
+    const zip = await downloadZIP(remoteServer, remoteRootId)
+    let videoUUID: string
+
+    {
+      const json = await parseZIPJSONFile<VideoExportJSON>(zip, 'peertube/videos.json')
+
+      expect(json.videos).to.have.lengthOf(2)
+      const video = json.videos.find(v => v.name === videoName)
+
+      expect(video.files).to.have.lengthOf(0)
+      expect(video.streamingPlaylists).to.have.lengthOf(1)
+      expect(video.streamingPlaylists[0].files).to.have.lengthOf(3)
+
+      videoUUID = video.uuid
+    }
+
+    {
+      const outbox = await parseAPOutbox(zip)
+      const { object: video } = findVideoObjectInOutbox(outbox, videoName)
+
+      expect(video.attachment).to.have.lengthOf(1)
+      expect(video.attachment[0].url).to.equal('../files/videos/video-files/' + videoUUID + '.mp4')
+      await checkFileExistsInZIP(zip, video.attachment[0].url, '/activity-pub')
+
+      const probe = await probeZIPFile(zip, video.attachment[0].url, '/activity-pub')
+
+      expect(await hasAudioStream('', probe)).to.be.true
+      expect(await hasVideoStream('', probe)).to.be.true
     }
   })
 

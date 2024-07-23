@@ -26,7 +26,7 @@ export class VideoPlaylistsExporter extends AbstractUserExporter <VideoPlaylists
 
         staticFiles.push({
           archivePath: this.getArchiveThumbnailPath(playlist, thumbnail),
-          createrReadStream: () => Promise.resolve(createReadStream(thumbnail.getPath()))
+          readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getPath()))
         })
 
         archiveFiles.thumbnail = join(this.relativeStaticDirPath, this.getArchiveThumbnailPath(playlist, thumbnail))

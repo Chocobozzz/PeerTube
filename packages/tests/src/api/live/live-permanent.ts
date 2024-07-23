@@ -61,7 +61,7 @@ describe('Permanent live', function () {
           maxDuration: -1,
           transcoding: {
             enabled: true,
-            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+            resolutions: ConfigCommand.getConfigResolutions(true)
           }
         }
       }
@@ -152,7 +152,7 @@ describe('Permanent live', function () {
           maxDuration: -1,
           transcoding: {
             enabled: true,
-            resolutions: ConfigCommand.getCustomConfigResolutions(false)
+            resolutions: ConfigCommand.getConfigResolutions(false)
           }
         }
       }
@@ -167,8 +167,8 @@ describe('Permanent live', function () {
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
 
     const count = await servers[0].live.countPlaylists({ videoUUID })
-    // master playlist and 720p playlist
-    expect(count).to.equal(2)
+    // master playlist, 720p playlist and audio only playlist
+    expect(count).to.equal(3)
 
     await stopFfmpeg(ffmpegCommand)
   })

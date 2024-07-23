@@ -1,6 +1,7 @@
 export * from './audio-only.js'
 export * from './create-transcoding.js'
 export * from './hls.js'
+export * from './split-audio-and-video.js'
 export * from './transcoder.js'
 export * from './update-while-transcoding.js'
 export * from './video-studio.js'

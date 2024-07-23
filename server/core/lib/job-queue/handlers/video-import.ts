@@ -129,7 +129,7 @@ type ProcessFileOptions = {
 }
 async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
   let tmpVideoPath: string
-  let videoFile: VideoFileModel
+  let videoFile: MVideoFile
 
   try {
     // Download video from youtubeDL
@@ -163,7 +163,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       videoImport,
       video: videoImport.Video,
       videoFilePath: tmpVideoPath,
-      videoFile,
+      videoFile: videoFile as VideoFileModel,
       user: videoImport.User
     }
     const acceptedResult = await Hooks.wrapFun(isPostImportVideoAccepted, acceptParameters, hookName)

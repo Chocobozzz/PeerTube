@@ -1,19 +1,20 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { VideoResolution } from '@peertube/peertube-models'
 import { MutexInterface } from 'async-mutex'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { readFile, writeFile } from 'fs/promises'
 import { dirname } from 'path'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { ffprobePromise, getVideoStreamDimensionsInfo } from './ffprobe.js'
-import { presetCopy, presetOnlyAudio, presetVOD } from './shared/presets.js'
+import { presetCopy, presetVOD } from './shared/presets.js'
 
 export type TranscodeVODOptionsType = 'hls' | 'hls-from-ts' | 'quick-transcode' | 'video' | 'merge-audio'
 
 export interface BaseTranscodeVODOptions {
   type: TranscodeVODOptionsType
 
-  inputPath: string
+  videoInputPath: string
+  separatedAudioInputPath?: string
+
   outputPath: string
 
   // Will be released after the ffmpeg started
@@ -28,6 +29,7 @@ export interface HLSTranscodeOptions extends BaseTranscodeVODOptions {
   type: 'hls'
 
   copyCodecs: boolean
+  separatedAudio: boolean
 
   hlsPlaylist: {
     videoFilename: string
@@ -83,12 +85,14 @@ export class FFmpegVOD {
       'hls': this.buildHLSVODCommand.bind(this),
       'hls-from-ts': this.buildHLSVODFromTSCommand.bind(this),
       'merge-audio': this.buildAudioMergeCommand.bind(this),
-      'video': this.buildWebVideoCommand.bind(this)
+      'video': this.buildVODCommand.bind(this)
     }
 
     this.commandWrapper.debugLog('Will run transcode.', { options })
 
-    this.commandWrapper.buildCommand(options.inputPath, options.inputFileMutexReleaser)
+    const inputPaths = [ options.videoInputPath, options.separatedAudioInputPath ].filter(e => !!e)
+
+    this.commandWrapper.buildCommand(inputPaths, options.inputFileMutexReleaser)
       .output(options.outputPath)
 
     await builders[options.type](options)
@@ -104,19 +108,26 @@ export class FFmpegVOD {
     return this.ended
   }
 
-  private async buildWebVideoCommand (options: TranscodeVODOptions & { canCopyAudio?: boolean, canCopyVideo?: boolean }) {
-    const { resolution, fps, inputPath, canCopyAudio = true, canCopyVideo = true } = options
-
-    if (resolution === VideoResolution.H_NOVIDEO) {
-      presetOnlyAudio(this.commandWrapper)
-      return
-    }
+  private async buildVODCommand (options: TranscodeVODOptions & {
+    videoStreamOnly?: boolean
+    canCopyAudio?: boolean
+    canCopyVideo?: boolean
+  }) {
+    const {
+      resolution,
+      fps,
+      videoInputPath,
+      separatedAudioInputPath,
+      videoStreamOnly = false,
+      canCopyAudio = true,
+      canCopyVideo = true
+    } = options
 
     let scaleFilterValue: string
 
-    if (resolution !== undefined) {
-      const probe = await ffprobePromise(inputPath)
-      const videoStreamInfo = await getVideoStreamDimensionsInfo(inputPath, probe)
+    if (resolution) {
+      const probe = await ffprobePromise(videoInputPath)
+      const videoStreamInfo = await getVideoStreamDimensionsInfo(videoInputPath, probe)
 
       scaleFilterValue = videoStreamInfo?.isPortraitMode === true
         ? `w=${resolution}:h=-2`
@@ -127,7 +138,11 @@ export class FFmpegVOD {
       commandWrapper: this.commandWrapper,
 
       resolution,
-      input: inputPath,
+      videoStreamOnly,
+
+      videoInputPath,
+      separatedAudioInputPath,
+
       canCopyAudio,
       canCopyVideo,
       fps,
@@ -157,9 +172,10 @@ export class FFmpegVOD {
       ...pick(options, [ 'resolution' ]),
 
       commandWrapper: this.commandWrapper,
-      input: options.audioPath,
+      videoInputPath: options.audioPath,
       canCopyAudio: true,
       canCopyVideo: true,
+      videoStreamOnly: false,
       fps: options.fps,
       scaleFilterValue: this.getMergeAudioScaleFilterValue()
     })
@@ -186,13 +202,16 @@ export class FFmpegVOD {
     const videoPath = this.getHLSVideoPath(options)
 
     if (options.copyCodecs) {
-      presetCopy(this.commandWrapper)
-    } else if (options.resolution === VideoResolution.H_NOVIDEO) {
-      presetOnlyAudio(this.commandWrapper)
+      presetCopy(this.commandWrapper, {
+        withAudio: !options.separatedAudio || !options.resolution,
+        withVideo: !options.separatedAudio || !!options.resolution
+      })
     } else {
-      // If we cannot copy codecs, we do not copy them at all to prevent issues like audio desync
-      // See for example https://github.com/Chocobozzz/PeerTube/issues/6438
-      await this.buildWebVideoCommand({ ...options, canCopyAudio: false, canCopyVideo: false })
+      await this.buildVODCommand({
+        ...options,
+
+        videoStreamOnly: options.separatedAudio && !!options.resolution
+      })
     }
 
     this.addCommonHLSVODCommandOptions(command, videoPath)

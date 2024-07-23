@@ -1,11 +1,8 @@
 import { KeyValuePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, Inject, Input, LOCALE_ID, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { AuthService, HooksService } from '@app/core'
 import {
   NgbCollapse,
-  NgbModal,
-  NgbModalRef,
   NgbNav,
   NgbNavContent,
   NgbNavItem,
@@ -15,34 +12,32 @@ import {
   NgbTooltip
 } from '@ng-bootstrap/ng-bootstrap'
 import { objectKeysTyped, pick } from '@peertube/peertube-core-utils'
-import { VideoCaption, VideoFile, VideoFileMetadata, VideoSource } from '@peertube/peertube-models'
+import { VideoFile, VideoFileMetadata, VideoSource } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { mapValues } from 'lodash-es'
-import { firstValueFrom, of } from 'rxjs'
-import { catchError, tap } from 'rxjs/operators'
-import { InputTextComponent } from '../shared-forms/input-text.component'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { BytesPipe } from '../shared-main/angular/bytes.pipe'
-import { NumberFormatterPipe } from '../shared-main/angular/number-formatter.pipe'
-import { VideoDetails } from '../shared-main/video/video-details.model'
-import { VideoFileTokenService } from '../shared-main/video/video-file-token.service'
-import { VideoService } from '../shared-main/video/video.service'
+import { firstValueFrom } from 'rxjs'
+import { tap } from 'rxjs/operators'
+import { InputTextComponent } from '../../shared-forms/input-text.component'
+import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { BytesPipe } from '../../shared-main/angular/bytes.pipe'
+import { NumberFormatterPipe } from '../../shared-main/angular/number-formatter.pipe'
+import { VideoDetails } from '../../shared-main/video/video-details.model'
+import { VideoService } from '../../shared-main/video/video.service'
 
-type DownloadType = 'video' | 'subtitles'
 type FileMetadata = { [key: string]: { label: string, value: string | number } }
 
 @Component({
-  selector: 'my-video-download',
-  templateUrl: './video-download.component.html',
-  styleUrls: [ './video-download.component.scss' ],
+  selector: 'my-video-files-download',
+  templateUrl: './video-files-download.component.html',
+  styleUrls: [ './video-files-download.component.scss' ],
   standalone: true,
   imports: [
     NgIf,
     FormsModule,
     GlobalIconComponent,
-    NgbNav,
     NgFor,
+    NgbNav,
     NgbNavItem,
     NgbNavLink,
     NgbNavLinkBase,
@@ -56,15 +51,16 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
     NgClass
   ]
 })
-export class VideoDownloadComponent {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+export class VideoFilesDownloadComponent implements OnInit {
+  @Input({ required: true }) video: VideoDetails
+  @Input() originalVideoFile: VideoSource
+  @Input() videoFileToken: string
 
-  @Input() videoPassword: string
+  @Output() downloaded = new EventEmitter<void>()
 
   downloadType: 'direct' | 'torrent' = 'direct'
 
-  resolutionId: number | 'original' = -1
-  subtitleLanguageId: string
+  activeResolutionId: number | 'original' = -1
 
   videoFileMetadataFormat: FileMetadata
   videoFileMetadataVideoStream: FileMetadata | undefined
@@ -72,133 +68,50 @@ export class VideoDownloadComponent {
 
   isAdvancedCustomizationCollapsed = true
 
-  type: DownloadType = 'video'
-
-  videoFileToken: string
-
-  originalVideoFile: VideoSource
-
-  loaded = false
-
-  private activeModal: NgbModalRef
-
   private bytesPipe: BytesPipe
   private numbersPipe: NumberFormatterPipe
 
-  private video: VideoDetails
-  private videoCaptions: VideoCaption[]
-
   constructor (
     @Inject(LOCALE_ID) private localeId: string,
-    private modalService: NgbModal,
-    private authService: AuthService,
-    private videoService: VideoService,
-    private videoFileTokenService: VideoFileTokenService,
-    private hooks: HooksService
+    private videoService: VideoService
   ) {
     this.bytesPipe = new BytesPipe()
     this.numbersPipe = new NumberFormatterPipe(this.localeId)
   }
 
-  get typeText () {
-    return this.type === 'video'
-      ? $localize`video`
-      : $localize`subtitles`
-  }
-
-  getVideoFiles () {
-    if (!this.video) return []
-
-    return this.video.getFiles()
-  }
-
-  getCaptions () {
-    if (!this.videoCaptions) return []
-
-    return this.videoCaptions
-  }
-
-  show (video: VideoDetails, videoCaptions?: VideoCaption[]) {
-    this.loaded = false
-
-    this.videoFileToken = undefined
-    this.originalVideoFile = undefined
-
-    this.video = video
-    this.videoCaptions = videoCaptions
-
-    this.activeModal = this.modalService.open(this.modal, { centered: true })
+  ngOnInit () {
 
     if (this.hasFiles()) {
       this.onResolutionIdChange(this.getVideoFiles()[0].resolution.id)
     }
-
-    if (this.hasCaptions()) {
-      this.subtitleLanguageId = this.videoCaptions[0].language.id
-    }
-
-    this.getOriginalVideoFileObs()
-      .subscribe(source => {
-        if (source?.fileDownloadUrl) {
-          this.originalVideoFile = source
-        }
-
-        if (this.originalVideoFile || this.isConfidentialVideo()) {
-          this.videoFileTokenService.getVideoFileToken({ videoUUID: this.video.uuid, videoPassword: this.videoPassword })
-            .subscribe(({ token }) => {
-              this.videoFileToken = token
-
-              this.loaded = true
-            })
-        } else {
-          this.loaded = true
-        }
-      })
-
-    this.activeModal.shown.subscribe(() => {
-      this.hooks.runAction('action:modal.video-download.shown', 'common')
-    })
   }
 
-  private getOriginalVideoFileObs () {
-    if (!this.video.isLocal || !this.authService.isLoggedIn()) return of(undefined)
+  getVideoFiles () {
+    if (!this.video) return []
+    if (this.video.files.length !== 0) return this.video.files
 
-    const user = this.authService.getUser()
-    if (!this.video.isOwnerOrHasSeeAllVideosRight(user)) return of(undefined)
+    const hls = this.video.getHlsPlaylist()
+    if (hls) return hls.files
 
-    return this.videoService.getSource(this.video.id)
-      .pipe(catchError(err => {
-        console.error('Cannot get source file', err)
-
-        return of(undefined)
-      }))
+    return []
   }
 
   // ---------------------------------------------------------------------------
 
-  onClose () {
-    this.video = undefined
-    this.videoCaptions = undefined
-  }
-
   download () {
-    window.location.assign(this.getLink())
+    window.location.assign(this.getVideoFileLink())
 
-    this.activeModal.close()
+    this.downloaded.emit()
   }
 
-  getLink () {
-    return this.type === 'subtitles' && this.videoCaptions
-      ? this.getCaptionLink()
-      : this.getVideoFileLink()
-  }
+  // ---------------------------------------------------------------------------
 
   async onResolutionIdChange (resolutionId: number | 'original') {
-    this.resolutionId = resolutionId
+    this.activeResolutionId = resolutionId
 
     let metadata: VideoFileMetadata
 
-    if (this.resolutionId === 'original') {
+    if (this.activeResolutionId === 'original') {
       metadata = this.originalVideoFile.metadata
     } else {
       const videoFile = this.getVideoFile()
@@ -218,22 +131,20 @@ export class VideoDownloadComponent {
     this.videoFileMetadataAudioStream = this.getMetadataStream(metadata.streams, 'audio')
   }
 
-  onSubtitleIdChange (subtitleId: string) {
-    this.subtitleLanguageId = subtitleId
-  }
+  // ---------------------------------------------------------------------------
 
   hasFiles () {
     return this.getVideoFiles().length !== 0
   }
 
   getVideoFile () {
-    if (this.resolutionId === 'original') return undefined
+    if (this.activeResolutionId === 'original') return undefined
 
     const file = this.getVideoFiles()
-      .find(f => f.resolution.id === this.resolutionId)
+      .find(f => f.resolution.id === this.activeResolutionId)
 
     if (!file) {
-      logger.error(`Could not find file with resolution ${this.resolutionId}`)
+      logger.error(`Could not find file with resolution ${this.activeResolutionId}`)
       return undefined
     }
 
@@ -241,11 +152,11 @@ export class VideoDownloadComponent {
   }
 
   getVideoFileLink () {
-    const suffix = this.resolutionId === 'original' || this.isConfidentialVideo()
+    const suffix = this.activeResolutionId === 'original' || this.isConfidentialVideo()
       ? '?videoFileToken=' + this.videoFileToken
       : ''
 
-    if (this.resolutionId === 'original') {
+    if (this.activeResolutionId === 'original') {
       return this.originalVideoFile.fileDownloadUrl + suffix
     }
 
@@ -261,36 +172,13 @@ export class VideoDownloadComponent {
     }
   }
 
-  hasCaptions () {
-    return this.getCaptions().length !== 0
-  }
-
-  getCaption () {
-    const caption = this.getCaptions()
-      .find(c => c.language.id === this.subtitleLanguageId)
-
-    if (!caption) {
-      logger.error(`Cannot find caption ${this.subtitleLanguageId}`)
-      return undefined
-    }
-
-    return caption
-  }
-
-  getCaptionLink () {
-    const caption = this.getCaption()
-    if (!caption) return ''
-
-    return window.location.origin + caption.captionPath
-  }
+  // ---------------------------------------------------------------------------
 
   isConfidentialVideo () {
-    return this.resolutionId === 'original' || videoRequiresFileToken(this.video)
+    return this.activeResolutionId === 'original' || videoRequiresFileToken(this.video)
   }
 
-  switchToType (type: DownloadType) {
-    this.type = type
-  }
+  // ---------------------------------------------------------------------------
 
   hasMetadata () {
     return !!this.videoFileMetadataFormat

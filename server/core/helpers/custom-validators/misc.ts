@@ -4,18 +4,18 @@ import { sep } from 'path'
 import validator from 'validator'
 import { isShortUUID, shortToUUID } from '@peertube/peertube-node-utils'
 
-function exists (value: any) {
+export function exists (value: any) {
   return value !== undefined && value !== null
 }
 
-function isSafePath (p: string) {
+export function isSafePath (p: string) {
   return exists(p) &&
     (p + '').split(sep).every(part => {
       return [ '..' ].includes(part) === false
     })
 }
 
-function isSafeFilename (filename: string, extension?: string) {
+export function isSafeFilename (filename: string, extension?: string) {
   const regex = extension
     ? new RegExp(`^[a-z0-9-]+\\.${extension}$`)
     : new RegExp(`^[a-z0-9-]+\\.[a-z0-9]{1,8}$`)
@@ -23,57 +23,68 @@ function isSafeFilename (filename: string, extension?: string) {
   return typeof filename === 'string' && !!filename.match(regex)
 }
 
-function isSafePeerTubeFilenameWithoutExtension (filename: string) {
+export function isSafePeerTubeFilenameWithoutExtension (filename: string) {
   return filename.match(/^[a-z0-9-]+$/)
 }
 
-function isArray (value: any): value is any[] {
+// ---------------------------------------------------------------------------
+
+export function isArray (value: any): value is any[] {
   return Array.isArray(value)
 }
 
-function isNotEmptyIntArray (value: any) {
+export function isNotEmptyIntArray (value: any) {
   return Array.isArray(value) && value.every(v => validator.default.isInt('' + v)) && value.length !== 0
 }
 
-function isNotEmptyStringArray (value: any) {
+export function isNotEmptyStringArray (value: any) {
   return Array.isArray(value) && value.every(v => typeof v === 'string' && v.length !== 0) && value.length !== 0
 }
 
-function isArrayOf (value: any, validator: (value: any) => boolean) {
+export function hasArrayLength (value: unknown[], options: { min?: number, max?: number }) {
+  if (options.min !== undefined && value.length < options.min) return false
+  if (options.max !== undefined && value.length > options.max) return false
+
+  return true
+}
+
+export function isArrayOf (value: any, validator: (value: any) => boolean) {
   return isArray(value) && value.every(v => validator(v))
 }
 
-function isDateValid (value: string) {
+// ---------------------------------------------------------------------------
+
+export function isDateValid (value: string) {
   return exists(value) && validator.default.isISO8601(value)
 }
 
-function isIdValid (value: string) {
+export function isIdValid (value: string) {
   return exists(value) && validator.default.isInt('' + value)
 }
 
-function isUUIDValid (value: string) {
+export function isUUIDValid (value: string) {
   return exists(value) && validator.default.isUUID('' + value, 4)
 }
 
-function areUUIDsValid (values: string[]) {
+export function areUUIDsValid (values: string[]) {
   return isArray(values) && values.every(v => isUUIDValid(v))
 }
 
-function isIdOrUUIDValid (value: string) {
+export function isIdOrUUIDValid (value: string) {
   return isIdValid(value) || isUUIDValid(value)
 }
 
-function isBooleanValid (value: any) {
+export function isBooleanValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.default.isBoolean(value))
 }
 
-function isIntOrNull (value: any) {
+export function isIntOrNull (value: any) {
   return value === null || validator.default.isInt('' + value)
 }
 
 // ---------------------------------------------------------------------------
 
-function isFileValid (options: {
+export function isFileValid (options: {
   files: UploadFilesForCheck
 
   maxSize: number | null
@@ -108,13 +119,13 @@ function isFileValid (options: {
   return checkMimetypeRegex(file.mimetype, mimeTypeRegex)
 }
 
-function checkMimetypeRegex (fileMimeType: string, mimeTypeRegex: string) {
+export function checkMimetypeRegex (fileMimeType: string, mimeTypeRegex: string) {
   return new RegExp(`^${mimeTypeRegex}$`, 'i').test(fileMimeType)
 }
 
 // ---------------------------------------------------------------------------
 
-function toCompleteUUID (value: string) {
+export function toCompleteUUID (value: string) {
   if (isShortUUID(value)) {
     try {
       return shortToUUID(value)
@@ -126,11 +137,11 @@ function toCompleteUUID (value: string) {
   return value
 }
 
-function toCompleteUUIDs (values: string[]) {
+export function toCompleteUUIDs (values: string[]) {
   return values.map(v => toCompleteUUID(v))
 }
 
-function toIntOrNull (value: string) {
+export function toIntOrNull (value: string) {
   const v = toValueOrNull(value)
 
   if (v === null || v === undefined) return v
@@ -139,7 +150,7 @@ function toIntOrNull (value: string) {
   return validator.default.toInt('' + v)
 }
 
-function toBooleanOrNull (value: any) {
+export function toBooleanOrNull (value: any) {
   const v = toValueOrNull(value)
 
   if (v === null || v === undefined) return v
@@ -148,43 +159,15 @@ function toBooleanOrNull (value: any) {
   return validator.default.toBoolean('' + v)
 }
 
-function toValueOrNull (value: string) {
+export function toValueOrNull (value: string) {
   if (value === 'null') return null
 
   return value
 }
 
-function toIntArray (value: any) {
+export function toIntArray (value: any) {
   if (!value) return []
   if (isArray(value) === false) return [ validator.default.toInt(value) ]
 
   return value.map(v => validator.default.toInt(v))
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  exists,
-  isArrayOf,
-  isNotEmptyIntArray,
-  isArray,
-  isIntOrNull,
-  isIdValid,
-  isSafePath,
-  isNotEmptyStringArray,
-  isUUIDValid,
-  toCompleteUUIDs,
-  toCompleteUUID,
-  isIdOrUUIDValid,
-  isDateValid,
-  toValueOrNull,
-  toBooleanOrNull,
-  isBooleanValid,
-  toIntOrNull,
-  areUUIDsValid,
-  toIntArray,
-  isFileValid,
-  isSafePeerTubeFilenameWithoutExtension,
-  isSafeFilename,
-  checkMimetypeRegex
 }

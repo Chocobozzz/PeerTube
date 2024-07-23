@@ -83,6 +83,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.transcoding.webVideos.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
+  expect(data.transcoding.hls.splitAudioAndVideo).to.be.false
   expect(data.transcoding.originalFile.keep).to.be.false
 
   expect(data.live.enabled).to.be.false
@@ -95,6 +96,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.remoteRunners.enabled).to.be.false
   expect(data.live.transcoding.threads).to.equal(2)
   expect(data.live.transcoding.profile).to.equal('default')
+  expect(data.live.transcoding.resolutions['0p']).to.be.false
   expect(data.live.transcoding.resolutions['144p']).to.be.false
   expect(data.live.transcoding.resolutions['240p']).to.be.false
   expect(data.live.transcoding.resolutions['360p']).to.be.false
@@ -257,7 +259,8 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         enabled: true
       },
       hls: {
-        enabled: false
+        enabled: false,
+        splitAudioAndVideo: true
       }
     },
     live: {
@@ -277,6 +280,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         threads: 4,
         profile: 'live_profile',
         resolutions: {
+          '0p': true,
           '144p': true,
           '240p': true,
           '360p': true,

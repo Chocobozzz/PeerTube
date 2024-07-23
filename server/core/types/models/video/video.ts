@@ -66,8 +66,7 @@ export type MVideoIdThumbnail =
   Use<'Thumbnails', MThumbnail[]>
 
 export type MVideoWithFileThumbnail =
-  MVideo &
-  Use<'VideoFiles', MVideoFile[]> &
+  MVideoWithFile &
   Use<'Thumbnails', MThumbnail[]>
 
 export type MVideoThumbnailBlacklist =

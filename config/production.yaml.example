@@ -54,6 +54,11 @@ rates_limit:
     # 500 attempts in 10 seconds (to not break crawlers)
     window: 10 seconds
     max: 500
+  download_generate_video: # A light FFmpeg process is used to generate videos (to merge audio and video streams for example)
+    # 5 attempts in 5 seconds
+    window: 5 seconds
+    max: 5
+
 
 oauth2:
   token_lifetime:
@@ -598,7 +603,7 @@ transcoding:
   profile: 'default'
 
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
-    0p: false # audio-only (creates mp4 without video stream, always created when enabled)
+    0p: false # audio-only (creates mp4 without video stream)
     144p: false
     240p: false
     360p: false
@@ -625,6 +630,11 @@ transcoding:
   # If you also enabled the web videos format, it will multiply videos storage by 2
   hls:
     enabled: true
+
+    # Store the audio stream in a separate file from the video
+    # This option adds the ability for the HLS player to propose the "Audio only" quality to users
+    # It also saves disk space by not duplicating the audio stream in each resolution file
+    split_audio_and_video: false
 
 live:
   enabled: false
@@ -703,6 +713,7 @@ live:
     profile: 'default'
 
     resolutions:
+      0p: false # Audio only
       144p: false
       240p: false
       360p: false

@@ -222,6 +222,10 @@ const CONFIG = {
     CLIENT: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.client.window')),
       MAX: config.get<number>('rates_limit.client.max')
+    },
+    DOWNLOAD_GENERATE_VIDEO: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.download_generate_video.window')),
+      MAX: config.get<number>('rates_limit.download_generate_video.max')
     }
   },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
@@ -445,7 +449,8 @@ const CONFIG = {
       get '2160p' () { return config.get<boolean>('transcoding.resolutions.2160p') }
     },
     HLS: {
-      get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') }
+      get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') },
+      get SPLIT_AUDIO_AND_VIDEO () { return config.get<boolean>('transcoding.hls.split_audio_and_video') }
     },
     WEB_VIDEOS: {
       get ENABLED () { return config.get<boolean>('transcoding.web_videos.enabled') }
@@ -491,6 +496,7 @@ const CONFIG = {
       get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('live.transcoding.always_transcode_original_resolution') },
 
       RESOLUTIONS: {
+        get '0p' () { return config.get<boolean>('live.transcoding.resolutions.0p') },
         get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },
         get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },
         get '360p' () { return config.get<boolean>('live.transcoding.resolutions.360p') },

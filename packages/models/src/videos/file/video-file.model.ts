@@ -22,4 +22,7 @@ export interface VideoFile {
   metadataUrl?: string
 
   magnetUri: string | null
+
+  hasAudio: boolean
+  hasVideo: boolean
 }

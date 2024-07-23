@@ -119,13 +119,17 @@ describe('Test runner live transcoding', function () {
       expect(job.type).to.equal('live-rtmp-hls-transcoding')
       expect(job.payload.input.rtmpUrl).to.exist
 
-      expect(job.payload.output.toTranscode).to.have.lengthOf(5)
+      expect(job.payload.output.toTranscode).to.have.lengthOf(6)
 
       for (const { resolution, fps } of job.payload.output.toTranscode) {
-        expect([ 720, 480, 360, 240, 144 ]).to.contain(resolution)
+        expect([ 720, 480, 360, 240, 144, 0 ]).to.contain(resolution)
 
-        expect(fps).to.be.above(25)
-        expect(fps).to.be.below(70)
+        if (resolution === 0) {
+          expect(fps).to.equal(0)
+        } else {
+          expect(fps).to.be.above(25)
+          expect(fps).to.be.below(70)
+        }
       }
     })
 

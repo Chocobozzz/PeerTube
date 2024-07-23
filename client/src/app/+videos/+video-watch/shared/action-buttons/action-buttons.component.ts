@@ -13,7 +13,7 @@ import { VideoRateComponent } from './video-rate.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoShareComponent } from '@app/shared/shared-share-modal/video-share.component'
 import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
-import { VideoDownloadComponent } from '@app/shared/shared-video-miniature/video-download.component'
+import { VideoDownloadComponent } from '@app/shared/shared-video-miniature/download/video-download.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 
 @Component({

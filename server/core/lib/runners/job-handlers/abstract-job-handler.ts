@@ -77,7 +77,7 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
   }): Promise<MRunnerJob> {
     const { priority, dependsOnRunnerJob } = options
 
-    logger.debug('Creating runner job', { options, ...this.lTags(options.type) })
+    logger.debug('Creating runner job', { options, dependsOnRunnerJob, ...this.lTags(options.type) })
 
     const runnerJob = new RunnerJobModel({
       ...pick(options, [ 'type', 'payload', 'privatePayload' ]),

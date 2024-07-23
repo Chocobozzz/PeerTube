@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
+import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -23,6 +22,7 @@ import { expectStartWith } from '@tests/shared/checks.js'
 import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { MockObjectStorageProxy } from '@tests/shared/mock-servers/mock-object-storage.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 async function createLive (server: PeerTubeServer, permanent: boolean) {
   const attributes: LiveVideoCreate = {
@@ -118,7 +118,7 @@ describe('Object storage for lives', function () {
     let videoUUID: string
 
     before(async function () {
-      await servers[0].config.enableLive({ transcoding: false })
+      await servers[0].config.enableLive({ transcoding: false, allowReplay: true })
 
       videoUUID = await createLive(servers[0], false)
     })
@@ -157,10 +157,10 @@ describe('Object storage for lives', function () {
   })
 
   describe('With live transcoding', function () {
-    const resolutions = [ 720, 480, 360, 240, 144 ]
+    const resolutions = [ VideoResolution.H_720P, VideoResolution.H_240P ]
 
     before(async function () {
-      await servers[0].config.enableLive({ transcoding: true })
+      await servers[0].config.enableLive({ transcoding: true, resolutions })
     })
 
     describe('Normal replay', function () {
@@ -195,7 +195,8 @@ describe('Object storage for lives', function () {
         await waitUntilLiveReplacedByReplayOnAllServers(servers, videoUUIDNonPermanent)
         await waitJobs(servers)
 
-        await checkFilesExist({ servers, videoUUID: videoUUIDNonPermanent, numberOfFiles: 5, objectStorage })
+        const numberOfFiles = resolutions.length + 1 // +1 for the HLS audio file
+        await checkFilesExist({ servers, videoUUID: videoUUIDNonPermanent, numberOfFiles, objectStorage })
       })
 
       it('Should have cleaned up live files from object storage', async function () {
@@ -235,10 +236,10 @@ describe('Object storage for lives', function () {
         await waitUntilLiveWaitingOnAllServers(servers, videoUUIDPermanent)
         await waitJobs(servers)
 
-        const videoLiveDetails = await servers[0].videos.get({ id: videoUUIDPermanent })
-        const replay = await findExternalSavedVideo(servers[0], videoLiveDetails)
+        const replay = await findExternalSavedVideo(servers[0], videoUUIDPermanent)
 
-        await checkFilesExist({ servers, videoUUID: replay.uuid, numberOfFiles: 5, objectStorage })
+        const numberOfFiles = resolutions.length + 1 // +1 for the HLS audio file
+        await checkFilesExist({ servers, videoUUID: replay.uuid, numberOfFiles, objectStorage })
       })
 
       it('Should have cleaned up live files from object storage', async function () {

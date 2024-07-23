@@ -146,7 +146,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 
     await regenerateMiniaturesIfNeeded(video, res.locals.ffprobe)
     await video.VideoChannel.setAsUpdated()
-    await addVideoJobsAfterUpload(video, video.getMaxQualityFile())
+    await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
 
     logger.info('Replaced video file of video %s with uuid %s.', video.name, video.uuid, lTags(video.uuid))
 

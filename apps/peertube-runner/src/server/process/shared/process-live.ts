@@ -1,9 +1,11 @@
-import { FSWatcher, watch } from 'chokidar'
-import { FfmpegCommand } from 'fluent-ffmpeg'
-import { ensureDir, remove } from 'fs-extra/esm'
-import { basename, join } from 'path'
 import { wait } from '@peertube/peertube-core-utils'
-import { ffprobePromise, getVideoStreamBitrate, getVideoStreamDimensionsInfo, hasAudioStream } from '@peertube/peertube-ffmpeg'
+import {
+  ffprobePromise,
+  getVideoStreamBitrate,
+  getVideoStreamDimensionsInfo,
+  hasAudioStream,
+  hasVideoStream
+} from '@peertube/peertube-ffmpeg'
 import {
   LiveRTMPHLSTranscodingSuccess,
   LiveRTMPHLSTranscodingUpdatePayload,
@@ -12,6 +14,10 @@ import {
   ServerErrorCode
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { FSWatcher, watch } from 'chokidar'
+import { FfmpegCommand } from 'fluent-ffmpeg'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { basename, join } from 'path'
 import { ConfigManager } from '../../../shared/config-manager.js'
 import { logger } from '../../../shared/index.js'
 import { buildFFmpegLive, ProcessOptions } from './common.js'
@@ -51,6 +57,7 @@ export class ProcessLiveRTMPHLSTranscoding {
         logger.info({ probe }, `Probed ${payload.input.rtmpUrl}`)
 
         const hasAudio = await hasAudioStream(payload.input.rtmpUrl, probe)
+        const hasVideo = await hasVideoStream(payload.input.rtmpUrl, probe)
         const bitrate = await getVideoStreamBitrate(payload.input.rtmpUrl, probe)
         const { ratio } = await getVideoStreamDimensionsInfo(payload.input.rtmpUrl, probe)
 
@@ -103,11 +110,13 @@ export class ProcessLiveRTMPHLSTranscoding {
           segmentDuration: payload.output.segmentDuration,
 
           toTranscode: payload.output.toTranscode,
+          splitAudioAndVideo: true,
 
           bitrate,
           ratio,
 
           hasAudio,
+          hasVideo,
           probe
         })
 

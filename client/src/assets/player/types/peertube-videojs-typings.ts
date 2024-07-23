@@ -1,8 +1,10 @@
-import { HlsConfig, Level } from 'hls.js'
-import videojs from 'video.js'
 import { Engine } from '@peertube/p2p-media-loader-hlsjs'
 import { VideoChapter, VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
+import type { HlsConfig, Level, Loader, LoaderContext } from 'hls.js'
+import videojs from 'video.js'
 import { BezelsPlugin } from '../shared/bezels/bezels-plugin'
+import { ContextMenuPlugin } from '../shared/context-menu'
+import { ChaptersPlugin } from '../shared/control-bar/chapters-plugin'
 import { StoryboardPlugin } from '../shared/control-bar/storyboard-plugin'
 import { PeerTubeDockPlugin, PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { HotkeysOptions, PeerTubeHotkeysPlugin } from '../shared/hotkeys/peertube-hotkeys-plugin'
@@ -10,6 +12,7 @@ import { PeerTubeMobilePlugin } from '../shared/mobile/peertube-mobile-plugin'
 import { Html5Hlsjs } from '../shared/p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from '../shared/p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from '../shared/p2p-media-loader/redundancy-url-manager'
+import { SegmentValidator } from '../shared/p2p-media-loader/segment-validator'
 import { PeerTubePlugin } from '../shared/peertube/peertube-plugin'
 import { PlaylistPlugin } from '../shared/playlist/playlist-plugin'
 import { PeerTubeResolutionsPlugin } from '../shared/resolutions/peertube-resolutions-plugin'
@@ -18,9 +21,6 @@ import { StatsForNerdsPlugin } from '../shared/stats/stats-plugin'
 import { UpNextPlugin } from '../shared/upnext/upnext-plugin'
 import { WebVideoPlugin } from '../shared/web-video/web-video-plugin'
 import { PlayerMode } from './peertube-player-options'
-import { SegmentValidator } from '../shared/p2p-media-loader/segment-validator'
-import { ChaptersPlugin } from '../shared/control-bar/chapters-plugin'
-import { ContextMenuPlugin } from '../shared/context-menu'
 
 declare module 'video.js' {
 
@@ -79,10 +79,10 @@ export interface VideoJSTechHLS extends videojs.Tech {
 export interface HlsjsConfigHandlerOptions {
   hlsjsConfig?: HlsConfig
 
-  levelLabelHandler?: (level: Level) => string
+  levelLabelHandler?: (level: Level, player: videojs.Player) => string
 }
 
-type PeerTubeResolution = {
+export type PeerTubeResolution = {
   id: number
 
   height?: number
@@ -94,21 +94,21 @@ type PeerTubeResolution = {
   selectCallback: () => void
 }
 
-type VideoJSCaption = {
+export type VideoJSCaption = {
   label: string
   language: string
   src: string
   automaticallyGenerated: boolean
 }
 
-type VideoJSStoryboard = {
+export type VideoJSStoryboard = {
   url: string
   width: number
   height: number
   interval: number
 }
 
-type PeerTubePluginOptions = {
+export type PeerTubePluginOptions = {
   autoPlayerRatio: {
     cssRatioVariable: string
     cssPlayerPortraitModeVariable: string
@@ -136,14 +136,14 @@ type PeerTubePluginOptions = {
   poster: () => string
 }
 
-type MetricsPluginOptions = {
+export type MetricsPluginOptions = {
   mode: () => PlayerMode
   metricsUrl: () => string
   metricsInterval: () => number
   videoUUID: () => string
 }
 
-type ContextMenuPluginOptions = {
+export type ContextMenuPluginOptions = {
   content: () => {
     icon?: string
     label: string
@@ -151,23 +151,23 @@ type ContextMenuPluginOptions = {
   }[]
 }
 
-type ContextMenuItemOptions = {
+export type ContextMenuItemOptions = {
   listener: (e: videojs.EventTarget.Event) => void
   label: string
 }
 
-type StoryboardOptions = {
+export type StoryboardOptions = {
   url: string
   width: number
   height: number
   interval: number
 }
 
-type ChaptersOptions = {
+export type ChaptersOptions = {
   chapters: VideoChapter[]
 }
 
-type PlaylistPluginOptions = {
+export type PlaylistPluginOptions = {
   elements: VideoPlaylistElement[]
 
   playlist: VideoPlaylist
@@ -177,7 +177,7 @@ type PlaylistPluginOptions = {
   onItemClicked: (element: VideoPlaylistElement) => void
 }
 
-type UpNextPluginOptions = {
+export type UpNextPluginOptions = {
   timeout: number
 
   next: () => void
@@ -186,33 +186,40 @@ type UpNextPluginOptions = {
   isSuspended: () => boolean
 }
 
-type ProgressBarMarkerComponentOptions = {
+export type ProgressBarMarkerComponentOptions = {
   timecode: number
 }
 
-type NextPreviousVideoButtonOptions = {
+export type NextPreviousVideoButtonOptions = {
   type: 'next' | 'previous'
   handler?: () => void
   isDisplayed: () => boolean
   isDisabled: () => boolean
 }
 
-type PeerTubeLinkButtonOptions = {
+export type PeerTubeLinkButtonOptions = {
   isDisplayed: () => boolean
   shortUUID: () => string
   instanceName: string
 }
 
-type TheaterButtonOptions = {
+export type TheaterButtonOptions = {
   isDisplayed: () => boolean
 }
 
-type WebVideoPluginOptions = {
+export type WebVideoPluginOptions = {
   videoFiles: VideoFile[]
   videoFileToken: () => string
 }
 
-type P2PMediaLoaderPluginOptions = {
+export type HLSLoaderClass = {
+  new (confg: HlsConfig): Loader<LoaderContext>
+
+  getEngine(): Engine
+}
+export type HLSPluginOptions = Partial<HlsConfig & { cueHandler: any, loaderBuilder: () => HLSLoaderClass }>
+
+export type P2PMediaLoaderPluginOptions = {
   redundancyUrlManager: RedundancyUrlManager | null
   segmentValidator: SegmentValidator | null
 
@@ -220,8 +227,6 @@ type P2PMediaLoaderPluginOptions = {
   src: string
 
   p2pEnabled: boolean
-
-  loader: P2PMediaLoader
 
   requiresUserAuth: boolean
   videoFileToken: () => string
@@ -233,7 +238,7 @@ export type P2PMediaLoader = {
   destroy: () => void
 }
 
-type VideoJSPluginOptions = {
+export type VideoJSPluginOptions = {
   playlist?: PlaylistPluginOptions
 
   peertube: PeerTubePluginOptions
@@ -244,7 +249,7 @@ type VideoJSPluginOptions = {
   p2pMediaLoader?: P2PMediaLoaderPluginOptions
 }
 
-type LoadedQualityData = {
+export type LoadedQualityData = {
   qualitySwitchCallback: (resolutionId: number, type: 'video') => void
   qualityData: {
     video: {
@@ -255,17 +260,17 @@ type LoadedQualityData = {
   }
 }
 
-type ResolutionUpdateData = {
+export type ResolutionUpdateData = {
   auto: boolean
   resolutionId: number
   id?: number
 }
 
-type AutoResolutionUpdateData = {
+export type AutoResolutionUpdateData = {
   possible: boolean
 }
 
-type PlayerNetworkInfo = {
+export type PlayerNetworkInfo = {
   source: 'web-video' | 'p2p-media-loader'
 
   http: {
@@ -288,34 +293,8 @@ type PlayerNetworkInfo = {
   bandwidthEstimate?: number
 }
 
-type PlaylistItemOptions = {
+export type PlaylistItemOptions = {
   element: VideoPlaylistElement
 
   onClicked: () => void
-}
-
-export {
-  PlayerNetworkInfo,
-  TheaterButtonOptions,
-  VideoJSStoryboard,
-  PlaylistItemOptions,
-  NextPreviousVideoButtonOptions,
-  ResolutionUpdateData,
-  AutoResolutionUpdateData,
-  ProgressBarMarkerComponentOptions,
-  PlaylistPluginOptions,
-  MetricsPluginOptions,
-  VideoJSCaption,
-  PeerTubePluginOptions,
-  WebVideoPluginOptions,
-  P2PMediaLoaderPluginOptions,
-  ContextMenuItemOptions,
-  PeerTubeResolution,
-  VideoJSPluginOptions,
-  ContextMenuPluginOptions,
-  UpNextPluginOptions,
-  LoadedQualityData,
-  StoryboardOptions,
-  ChaptersOptions,
-  PeerTubeLinkButtonOptions
 }

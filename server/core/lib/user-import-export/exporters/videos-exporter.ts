@@ -6,6 +6,7 @@ import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 import { getHLSFileReadStream, getOriginalFileReadStream, getWebVideoFileReadStream } from '@server/lib/object-storage/videos.js'
+import { muxToMergeVideoFiles } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -16,7 +17,8 @@ import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
   MStreamingPlaylistFiles,
-  MThumbnail, MVideo, MVideoAP, MVideoCaption,
+  MThumbnail,
+  MVideo, MVideoAP, MVideoCaption,
   MVideoCaptionLanguageUrl,
   MVideoChapter,
   MVideoFile,
@@ -27,7 +29,7 @@ import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
 import { createReadStream } from 'fs'
 import { extname, join } from 'path'
-import { Readable } from 'stream'
+import { PassThrough, Readable } from 'stream'
 import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
 
 export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
@@ -89,13 +91,13 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     // Then fetch more attributes for AP serialization
     const videoAP = await video.lightAPToFullAP(undefined)
 
-    const { relativePathsFromJSON, staticFiles } = await this.exportVideoFiles({ video, captions })
+    const { relativePathsFromJSON, staticFiles, exportedVideoFileOrSource } = await this.exportVideoFiles({ video, captions })
 
     return {
       json: this.exportVideoJSON({ video, captions, live, passwords, source, chapters, archiveFiles: relativePathsFromJSON }),
       staticFiles,
       relativePathsFromJSON,
-      activityPubOutbox: await this.exportVideoAP(videoAP, chapters)
+      activityPubOutbox: await this.exportVideoAP(videoAP, chapters, exportedVideoFileOrSource)
     }
   }
 
@@ -250,8 +252,11 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
   // ---------------------------------------------------------------------------
 
-  private async exportVideoAP (video: MVideoAP, chapters: MVideoChapter[]): Promise<ActivityCreate<VideoObject>> {
-    const videoFile = video.getMaxQualityFile()
+  private async exportVideoAP (
+    video: MVideoAP,
+    chapters: MVideoChapter[],
+    exportedVideoFileOrSource: MVideoFile | MVideoSource
+  ): Promise<ActivityCreate<VideoObject>> {
     const icon = video.getPreview()
 
     const audience = getAudience(video.VideoChannel.Account.Actor, video.privacy === VideoPrivacy.PUBLIC)
@@ -274,13 +279,19 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
       hasParts: buildChaptersAPHasPart(video, chapters),
 
-      attachment: this.options.withVideoFiles && videoFile
+      attachment: this.options.withVideoFiles && exportedVideoFileOrSource
         ? [
           {
             type: 'Video' as 'Video',
-            url: join(this.options.relativeStaticDirPath, this.getArchiveVideoFilePath(video, videoFile)),
+            url: join(this.options.relativeStaticDirPath, this.getArchiveVideoFilePath(video, exportedVideoFileOrSource)),
 
-            ...pick(videoFile.toActivityPubObject(video), [ 'mediaType', 'height', 'size', 'fps' ])
+            // FIXME: typings
+            ...pick((exportedVideoFileOrSource as MVideoFile & MVideoSource).toActivityPubObject(video), [
+              'mediaType',
+              'height',
+              'size',
+              'fps'
+            ])
           }
         ]
         : undefined
@@ -298,6 +309,9 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     const { video, captions } = options
 
     const staticFiles: ExportResult<VideoExportJSON>['staticFiles'] = []
+
+    let exportedVideoFileOrSource: MVideoFile | MVideoSource
+
     const relativePathsFromJSON = {
       videoFile: null as string,
       thumbnail: null as string,
@@ -305,32 +319,32 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     }
 
     if (this.options.withVideoFiles) {
-      const source = await VideoSourceModel.loadLatest(video.id)
-      const maxQualityFile = video.getMaxQualityFile()
+      const { source, videoFile, separatedAudioFile } = await this.getArchiveVideo(video)
 
-      // Prefer using original file if possible
-      const file = source?.keptOriginalFilename
-        ? source
-        : maxQualityFile
-
-      if (file) {
-        const videoPath = this.getArchiveVideoFilePath(video, file)
+      if (source || videoFile || separatedAudioFile) {
+        const videoPath = this.getArchiveVideoFilePath(video, source || videoFile || separatedAudioFile)
 
         staticFiles.push({
           archivePath: videoPath,
-          createrReadStream: () => file === source
+
+          // Prefer using original file if possible
+          readStreamFactory: () => source?.keptOriginalFilename
             ? this.generateVideoSourceReadStream(source)
-            : this.generateVideoFileReadStream(video, maxQualityFile)
+            : this.generateVideoFileReadStream({ video, videoFile, separatedAudioFile })
         })
 
         relativePathsFromJSON.videoFile = join(this.relativeStaticDirPath, videoPath)
+
+        exportedVideoFileOrSource = source?.keptOriginalFilename
+          ? source
+          : videoFile || separatedAudioFile
       }
     }
 
     for (const caption of captions) {
       staticFiles.push({
         archivePath: this.getArchiveCaptionFilePath(video, caption),
-        createrReadStream: () => Promise.resolve(createReadStream(caption.getFSPath()))
+        readStreamFactory: () => Promise.resolve(createReadStream(caption.getFSPath()))
       })
 
       relativePathsFromJSON.captions[caption.language] = join(this.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, caption))
@@ -340,13 +354,13 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     if (thumbnail) {
       staticFiles.push({
         archivePath: this.getArchiveThumbnailFilePath(video, thumbnail),
-        createrReadStream: () => Promise.resolve(createReadStream(thumbnail.getPath()))
+        readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getPath()))
       })
 
       relativePathsFromJSON.thumbnail = join(this.relativeStaticDirPath, this.getArchiveThumbnailFilePath(video, thumbnail))
     }
 
-    return { staticFiles, relativePathsFromJSON }
+    return { staticFiles, relativePathsFromJSON, exportedVideoFileOrSource }
   }
 
   private async generateVideoSourceReadStream (source: MVideoSource): Promise<Readable> {
@@ -359,7 +373,22 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     return stream
   }
 
-  private async generateVideoFileReadStream (video: MVideoFullLight, videoFile: MVideoFile): Promise<Readable> {
+  private async generateVideoFileReadStream (options: {
+    videoFile: MVideoFile
+    separatedAudioFile: MVideoFile
+    video: MVideoFullLight
+  }): Promise<Readable> {
+    const { video, videoFile, separatedAudioFile } = options
+
+    if (separatedAudioFile) {
+      const stream = new PassThrough()
+
+      muxToMergeVideoFiles({ video, videoFiles: [ videoFile, separatedAudioFile ], output: stream })
+        .catch(err => logger.error('Cannot mux video files', { err }))
+
+      return Promise.resolve(stream)
+    }
+
     if (videoFile.storage === FileStorage.FILE_SYSTEM) {
       return createReadStream(VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile))
     }
@@ -371,8 +400,18 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     return stream
   }
 
-  private getArchiveVideoFilePath (video: MVideo, file: { filename?: string, keptOriginalFilename?: string }) {
-    return join('video-files', video.uuid + extname(file.filename || file.keptOriginalFilename))
+  private async getArchiveVideo (video: MVideoFullLight) {
+    const source = await VideoSourceModel.loadLatest(video.id)
+
+    const { videoFile, separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
+    if (source?.keptOriginalFilename) return { source }
+
+    return { videoFile, separatedAudioFile }
+  }
+
+  private getArchiveVideoFilePath (video: MVideo, file: { keptOriginalFilename?: string, filename?: string }) {
+    return join('video-files', video.uuid + extname(file.keptOriginalFilename || file.filename))
   }
 
   private getArchiveCaptionFilePath (video: MVideo, caption: MVideoCaptionLanguageUrl) {

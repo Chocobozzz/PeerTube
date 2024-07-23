@@ -289,6 +289,8 @@ tags:
     description: Video statistics
   - name: Video Feeds
     description: Server syndication feeds of videos
+  - name: Video Download
+    description: Download video files
   - name: Search
     description: |
       The search helps to find _videos_ or _channels_ from within the instance and beyond.
@@ -318,6 +320,9 @@ x-tagGroups:
   - name: Static endpoints
     tags:
       - Static Video Files
+  - name: Download
+    tags:
+      - Video Download
   - name: Feeds
     tags:
       - Video Feeds
@@ -449,6 +454,32 @@ paths:
         '404':
           description: not found
 
+  '/download/videos/generate/:videoId':
+    get:
+      tags:
+        - Video Download
+      summary: Download video file
+      description: Generate a mp4 container that contains at most 1 video stream and at most 1 audio stream.
+        Mainly used to merge the HLS audio only video file and the HLS video only resolution file.
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          description: The video id
+          schema:
+            $ref: '#/components/schemas/Video/properties/id'
+        - name: videoFileIds
+          in: query
+          required: true
+          description: streams of video files to mux in the output
+          schema:
+            type: array
+            items:
+              type: integer
+        - $ref: '#/components/parameters/videoFileToken'
+      responses:
+        '200':
+          description: successful operation
 
   '/feeds/video-comments.{format}':
     get:
@@ -9541,6 +9572,8 @@ components:
               description: HLS specific settings
               properties:
                 enabled:
+                  type: boolean
+                splitAudioAndVideo:
                   type: boolean
         import:
           type: object

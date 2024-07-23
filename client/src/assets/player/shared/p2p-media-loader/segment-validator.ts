@@ -3,6 +3,9 @@ import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
 import { removeQueryParams } from '@peertube/peertube-core-utils'
 import { isSameOrigin } from '../common'
+import debug from 'debug'
+
+const debugLogger = debug('peertube:player:segment-validator')
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
 
@@ -66,6 +69,8 @@ export class SegmentValidator {
     if (hashShouldBe === undefined) {
       throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
     }
+
+    debugLogger(`Validating ${filename} range ${segment.range}`)
 
     const calculatedSha = await this.sha256Hex(segment.data)
     if (calculatedSha !== hashShouldBe) {

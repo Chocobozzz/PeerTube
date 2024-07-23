@@ -1,4 +1,10 @@
-import { Job } from 'bullmq'
+import {
+  HLSTranscodingPayload,
+  MergeAudioTranscodingPayload,
+  NewWebVideoResolutionTranscodingPayload,
+  OptimizeTranscodingPayload,
+  VideoTranscodingPayload
+} from '@peertube/peertube-models'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
 import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebVideoResolution } from '@server/lib/transcoding/web-transcoding.js'
@@ -8,13 +14,7 @@ import { moveToFailedTranscodingState } from '@server/lib/video-state.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MUser, MUserId, MVideoFullLight } from '@server/types/models/index.js'
-import {
-  HLSTranscodingPayload,
-  MergeAudioTranscodingPayload,
-  NewWebVideoResolutionTranscodingPayload,
-  OptimizeTranscodingPayload,
-  VideoTranscodingPayload
-} from '@peertube/peertube-models'
+import { Job } from 'bullmq'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 
@@ -87,7 +87,7 @@ async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTransco
 async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
-  await optimizeOriginalVideofile({ video, inputVideoFile: video.getMaxQualityFile(), quickTranscode: payload.quickTranscode, job })
+  await optimizeOriginalVideofile({ video, quickTranscode: payload.quickTranscode, job })
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
@@ -103,7 +103,7 @@ async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoRes
 
   logger.info('Web Video transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
 }
 
 // ---------------------------------------------------------------------------
@@ -117,20 +117,24 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
   try {
     video = await VideoModel.loadFull(videoArg.uuid)
 
-    const videoFileInput = payload.copyCodecs
-      ? video.getWebVideoFile(payload.resolution)
-      : video.getMaxQualityFile()
+    const { videoFile, separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
 
-    const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
+    const videoFileInputs = payload.copyCodecs
+      ? [ video.getWebVideoFileMinResolution(payload.resolution) ]
+      : [ videoFile, separatedAudioFile ].filter(v => !!v)
 
-    await VideoPathManager.Instance.makeAvailableVideoFile(videoFileInput.withVideoOrPlaylist(videoOrStreamingPlaylist), videoInputPath => {
+    await VideoPathManager.Instance.makeAvailableVideoFiles(videoFileInputs, ([ videoPath, separatedAudioPath ]) => {
       return generateHlsPlaylistResolution({
         video,
-        videoInputPath,
+
+        videoInputPath: videoPath,
+        separatedAudioInputPath: separatedAudioPath,
+
         inputFileMutexReleaser,
         resolution: payload.resolution,
         fps: payload.fps,
         copyCodecs: payload.copyCodecs,
+        separatedAudio: payload.separatedAudio,
         job
       })
     })
@@ -146,5 +150,5 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
     await removeAllWebVideoFiles(video)
   }
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
 }

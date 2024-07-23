@@ -1,4 +1,13 @@
-import { ActivityVideoUrlObject, FileStorage, VideoResolution, type FileStorageType } from '@peertube/peertube-models'
+import {
+  ActivityVideoUrlObject,
+  FileStorage,
+  type FileStorageType,
+  VideoFileFormatFlag,
+  type VideoFileFormatFlagType,
+  VideoFileStream,
+  type VideoFileStreamType,
+  VideoResolution
+} from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -39,10 +48,10 @@ import {
   isVideoFileSizeValid
 } from '../../helpers/custom-validators/videos.js'
 import {
+  DOWNLOAD_PATHS,
   LAZY_STATIC_PATHS,
   MEMOIZE_LENGTH,
   MEMOIZE_TTL,
-  STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   WEBSERVER
 } from '../../initializers/constants.js'
@@ -194,6 +203,14 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @Is('VideoFileFPS', value => throwIfNotValid(value, isVideoFPSResolutionValid, 'fps'))
   @Column
   fps: number
+
+  @AllowNull(false)
+  @Column
+  formatFlags: VideoFileFormatFlagType
+
+  @AllowNull(false)
+  @Column
+  streams: VideoFileStreamType
 
   @AllowNull(true)
   @Column(DataType.JSONB)
@@ -503,6 +520,8 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return extractVideo(this.getVideoOrStreamingPlaylist())
   }
 
+  // ---------------------------------------------------------------------------
+
   isAudio () {
     return this.resolution === VideoResolution.H_NOVIDEO
   }
@@ -513,6 +532,14 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   isHLS () {
     return !!this.videoStreamingPlaylistId
+  }
+
+  hasAudio () {
+    return (this.streams & VideoFileStream.AUDIO) === VideoFileStream.AUDIO
+  }
+
+  hasVideo () {
+    return (this.streams & VideoFileStream.VIDEO) === VideoFileStream.VIDEO
   }
 
   // ---------------------------------------------------------------------------
@@ -583,8 +610,8 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   getFileDownloadUrl (video: MVideoWithHost) {
     const path = this.isHLS()
-      ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
-      : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
+      ? join(DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
+      : join(DOWNLOAD_PATHS.WEB_VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
 
     if (video.isOwned()) return WEBSERVER.URL + path
 
@@ -614,7 +641,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   getTorrentDownloadUrl () {
     if (!this.torrentFilename) return null
 
-    return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.TORRENTS, this.torrentFilename)
+    return WEBSERVER.URL + join(DOWNLOAD_PATHS.TORRENTS, this.torrentFilename)
   }
 
   removeTorrent () {
@@ -645,6 +672,40 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   toActivityPubObject (this: MVideoFile, video: MVideo): ActivityVideoUrlObject {
     const mimeType = getVideoFileMimeType(this.extname, false)
 
+    const attachment: ActivityVideoUrlObject['attachment'] = []
+
+    if (this.hasAudio()) {
+      attachment.push({
+        type: 'PropertyValue',
+        name: 'ffprobe_codec_type',
+        value: 'audio'
+      })
+    }
+
+    if (this.hasVideo()) {
+      attachment.push({
+        type: 'PropertyValue',
+        name: 'ffprobe_codec_type',
+        value: 'video'
+      })
+    }
+
+    if (this.formatFlags & VideoFileFormatFlag.FRAGMENTED) {
+      attachment.push({
+        type: 'PropertyValue',
+        name: 'peertube_format_flag',
+        value: 'fragmented'
+      })
+    }
+
+    if (this.formatFlags & VideoFileFormatFlag.WEB_VIDEO) {
+      attachment.push({
+        type: 'PropertyValue',
+        name: 'peertube_format_flag',
+        value: 'web-video'
+      })
+    }
+
     return {
       type: 'Link',
       mediaType: mimeType as ActivityVideoUrlObject['mediaType'],
@@ -652,7 +713,8 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       height: this.height || this.resolution,
       width: this.width,
       size: this.size,
-      fps: this.fps
+      fps: this.fps,
+      attachment
     }
   }
 }

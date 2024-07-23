@@ -15,6 +15,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkVideoDuration, expectStartWith } from '@tests/shared/checks.js'
 import { checkPersistentTmpIsEmpty } from '@tests/shared/directories.js'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 
 describe('Test video studio', function () {
   let servers: PeerTubeServer[] = []
@@ -275,16 +276,7 @@ describe('Test video studio', function () {
   describe('HLS only studio edition', function () {
 
     before(async function () {
-      // Disable Web Videos
-      await servers[0].config.updateExistingConfig({
-        newConfig: {
-          transcoding: {
-            webVideos: {
-              enabled: false
-            }
-          }
-        }
-      })
+      await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true })
     })
 
     it('Should run a complex task on HLS only video', async function () {
@@ -298,6 +290,31 @@ describe('Test video studio', function () {
         expect(video.files).to.have.lengthOf(0)
 
         await checkVideoDuration(server, videoUUID, 9)
+
+        await completeCheckHlsPlaylist({ servers, videoUUID, hlsOnly: true, resolutions: [ 720, 240 ] })
+      }
+    })
+  })
+
+  describe('HLS with splitted audio studio edition', function () {
+
+    before(async function () {
+      await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true, splitAudioAndVideo: true })
+    })
+
+    it('Should run a complex task on HLS only video', async function () {
+      this.timeout(240_000)
+      await renewVideo()
+
+      await createTasks(VideoStudioCommand.getComplexTask())
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: videoUUID })
+        expect(video.files).to.have.lengthOf(0)
+
+        await checkVideoDuration(server, videoUUID, 9)
+
+        await completeCheckHlsPlaylist({ servers, videoUUID, hlsOnly: true, splittedAudio: true, resolutions: [ 720, 240 ] })
       }
     })
   })

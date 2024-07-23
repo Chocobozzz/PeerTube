@@ -1,10 +1,10 @@
-import express from 'express'
-import { param } from 'express-validator'
+import { HttpStatusCode, UserRight, VideoChangeOwnershipAccept, VideoChangeOwnershipStatus, VideoState } from '@peertube/peertube-models'
 import { isIdValid } from '@server/helpers/custom-validators/misc.js'
 import { checkUserCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { MVideoWithAllFiles } from '@server/types/models/index.js'
-import { HttpStatusCode, UserRight, VideoChangeOwnershipAccept, VideoChangeOwnershipStatus, VideoState } from '@peertube/peertube-models'
+import express from 'express'
+import { param } from 'express-validator'
 import {
   areValidationErrors,
   checkUserCanManageVideo,
@@ -15,7 +15,7 @@ import {
   isValidVideoIdParam
 } from '../shared/index.js'
 
-const videosChangeOwnershipValidator = [
+export const videosChangeOwnershipValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -36,7 +36,7 @@ const videosChangeOwnershipValidator = [
   }
 ]
 
-const videosTerminateChangeOwnershipValidator = [
+export const videosTerminateChangeOwnershipValidator = [
   param('id')
     .custom(isIdValid),
 
@@ -61,7 +61,7 @@ const videosTerminateChangeOwnershipValidator = [
   }
 ]
 
-const videosAcceptChangeOwnershipValidator = [
+export const videosAcceptChangeOwnershipValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body = req.body as VideoChangeOwnershipAccept
     if (!await doesVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
@@ -76,12 +76,8 @@ const videosAcceptChangeOwnershipValidator = [
   }
 ]
 
-export {
-  videosChangeOwnershipValidator,
-  videosTerminateChangeOwnershipValidator,
-  videosAcceptChangeOwnershipValidator
-}
-
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 async function checkCanAccept (video: MVideoWithAllFiles, res: express.Response): Promise<boolean> {
@@ -101,7 +97,7 @@ async function checkCanAccept (video: MVideoWithAllFiles, res: express.Response)
 
   const user = res.locals.oauth.token.User
 
-  if (!await checkUserQuota(user, video.getMaxQualityFile().size, res)) return false
+  if (!await checkUserQuota(user, video.getMaxQualityBytes(), res)) return false
 
   return true
 }

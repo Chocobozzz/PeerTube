@@ -14,6 +14,18 @@ export interface ActivityIconObject {
   height: number | null
 }
 
+// ---------------------------------------------------------------------------
+
+export type ActivityVideoUrlObjectAttachment = {
+  type: 'PropertyValue'
+  name: 'ffprobe_codec_type'
+  value: 'video' | 'audio'
+} | {
+  type: 'PropertyValue'
+  name: 'peertube_format_flag'
+  value: 'web-video' | 'fragmented'
+}
+
 export type ActivityVideoUrlObject = {
   type: 'Link'
   mediaType: 'video/mp4' | 'video/webm' | 'video/ogg' | 'audio/mp4'
@@ -22,7 +34,11 @@ export type ActivityVideoUrlObject = {
   width: number | null
   size: number
   fps: number
+
+  attachment: ActivityVideoUrlObjectAttachment[]
 }
+
+// ---------------------------------------------------------------------------
 
 export type ActivityPlaylistSegmentHashesObject = {
   type: 'Link'

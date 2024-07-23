@@ -347,7 +347,8 @@ function customConfig (): CustomConfig {
         enabled: CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
       },
       hls: {
-        enabled: CONFIG.TRANSCODING.HLS.ENABLED
+        enabled: CONFIG.TRANSCODING.HLS.ENABLED,
+        splitAudioAndVideo: CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO
       }
     },
     live: {
@@ -367,6 +368,7 @@ function customConfig (): CustomConfig {
         threads: CONFIG.LIVE.TRANSCODING.THREADS,
         profile: CONFIG.LIVE.TRANSCODING.PROFILE,
         resolutions: {
+          '0p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['0p'],
           '144p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['144p'],
           '240p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['240p'],
           '360p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['360p'],

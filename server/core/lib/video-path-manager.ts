@@ -1,5 +1,6 @@
 import { FileStorage } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -9,7 +10,8 @@ import {
   MVideo,
   MVideoFile,
   MVideoFileStreamingPlaylistVideo,
-  MVideoFileVideo
+  MVideoFileVideo,
+  MVideoWithFile
 } from '@server/types/models/index.js'
 import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
@@ -18,7 +20,9 @@ import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storag
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
 
-type MakeAvailableCB <T> = (path: string) => Promise<T> | T
+type MakeAvailableCB <T> = (path: string) => Awaitable<T>
+type MakeAvailableMultipleCB <T> = (paths: string[]) => Awaitable<T>
+type MakeAvailableCreateMethod = { method: () => Awaitable<string>, clean: boolean }
 
 const lTags = loggerTagsFactory('video-path-manager')
 
@@ -66,68 +70,113 @@ class VideoPathManager {
     return join(DIRECTORIES.ORIGINAL_VIDEOS, filename)
   }
 
-  async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
-    if (videoFile.storage === FileStorage.FILE_SYSTEM) {
-      return this.makeAvailableFactory(
-        () => this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile),
-        false,
-        cb
-      )
+  // ---------------------------------------------------------------------------
+
+  async makeAvailableVideoFiles <T> (videoFiles: (MVideoFileVideo | MVideoFileStreamingPlaylistVideo)[], cb: MakeAvailableMultipleCB<T>) {
+    const createMethods: MakeAvailableCreateMethod[] = []
+
+    for (const videoFile of videoFiles) {
+      if (videoFile.storage === FileStorage.FILE_SYSTEM) {
+        createMethods.push({
+          method: () => this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile),
+          clean: false
+        })
+
+        continue
+      }
+
+      const destination = this.buildTMPDestination(videoFile.filename)
+
+      if (videoFile.isHLS()) {
+        const playlist = (videoFile as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
+
+        createMethods.push({
+          method: () => makeHLSFileAvailable(playlist, videoFile.filename, destination),
+          clean: true
+        })
+      } else {
+        createMethods.push({
+          method: () => makeWebVideoFileAvailable(videoFile.filename, destination),
+          clean: true
+        })
+      }
     }
 
-    const destination = this.buildTMPDestination(videoFile.filename)
-
-    if (videoFile.isHLS()) {
-      const playlist = (videoFile as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
-
-      return this.makeAvailableFactory(
-        () => makeHLSFileAvailable(playlist, videoFile.filename, destination),
-        true,
-        cb
-      )
-    }
-
-    return this.makeAvailableFactory(
-      () => makeWebVideoFileAvailable(videoFile.filename, destination),
-      true,
-      cb
-    )
+    return this.makeAvailableFactory({ createMethods, cbContext: cb })
   }
+
+  async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
+    return this.makeAvailableVideoFiles([ videoFile ], paths => cb(paths[0]))
+  }
+
+  async makeAvailableMaxQualityFiles <T> (
+    video: MVideoWithFile,
+    cb: (options: { videoPath: string, separatedAudioPath: string }) => Awaitable<T>
+  ) {
+    const { videoFile, separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
+    const files = [ videoFile ]
+    if (separatedAudioFile) files.push(separatedAudioFile)
+
+    return this.makeAvailableVideoFiles(files, ([ videoPath, separatedAudioPath ]) => {
+      return cb({ videoPath, separatedAudioPath })
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   async makeAvailableResolutionPlaylistFile <T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     const filename = getHlsResolutionPlaylistFilename(videoFile.filename)
 
     if (videoFile.storage === FileStorage.FILE_SYSTEM) {
-      return this.makeAvailableFactory(
-        () => join(getHLSDirectory(videoFile.getVideo()), filename),
-        false,
-        cb
-      )
+      return this.makeAvailableFactory({
+        createMethods: [
+          {
+            method: () => join(getHLSDirectory(videoFile.getVideo()), filename),
+            clean: false
+          }
+        ],
+        cbContext: paths => cb(paths[0])
+      })
     }
 
     const playlist = videoFile.VideoStreamingPlaylist
-    return this.makeAvailableFactory(
-      () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
-      true,
-      cb
-    )
+    return this.makeAvailableFactory({
+      createMethods: [
+        {
+          method: () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
+          clean: true
+        }
+      ],
+      cbContext: paths => cb(paths[0])
+    })
   }
 
   async makeAvailablePlaylistFile <T> (playlist: MStreamingPlaylistVideo, filename: string, cb: MakeAvailableCB<T>) {
     if (playlist.storage === FileStorage.FILE_SYSTEM) {
-      return this.makeAvailableFactory(
-        () => join(getHLSDirectory(playlist.Video), filename),
-        false,
-        cb
-      )
+      return this.makeAvailableFactory({
+        createMethods: [
+          {
+            method: () => join(getHLSDirectory(playlist.Video), filename),
+            clean: false
+          }
+        ],
+        cbContext: paths => cb(paths[0])
+      })
     }
 
-    return this.makeAvailableFactory(
-      () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
-      true,
-      cb
-    )
+    return this.makeAvailableFactory({
+      createMethods: [
+        {
+          method: () => makeHLSFileAvailable(playlist, filename, this.buildTMPDestination(filename)),
+          clean: true
+        }
+      ],
+      cbContext: paths => cb(paths[0])
+    })
   }
+
+  // ---------------------------------------------------------------------------
 
   async lockFiles (videoUUID: string) {
     if (!this.videoFileMutexStore.has(videoUUID)) {
@@ -150,26 +199,50 @@ class VideoPathManager {
     logger.debug('Released lockfiles of %s.', videoUUID, lTags(videoUUID))
   }
 
-  private async makeAvailableFactory <T> (method: () => Promise<string> | string, clean: boolean, cb: MakeAvailableCB<T>) {
+  private async makeAvailableFactory <T> (options: {
+    createMethods: MakeAvailableCreateMethod[]
+    cbContext: MakeAvailableMultipleCB<T>
+  }) {
+    const { cbContext, createMethods } = options
+
     let result: T
 
-    const destination = await method()
+    const created: { destination: string, clean: boolean }[] = []
+
+    const cleanup = async () => {
+      for (const { destination, clean } of created) {
+        if (!destination || !clean) continue
+
+        try {
+          await remove(destination)
+        } catch (err) {
+          logger.error('Cannot remove ' + destination, { err })
+        }
+      }
+    }
+
+    for (const { method, clean } of createMethods) {
+      created.push({
+        destination: await method(),
+        clean
+      })
+    }
 
     try {
-      result = await cb(destination)
+      result = await cbContext(created.map(c => c.destination))
     } catch (err) {
-      if (destination && clean) await remove(destination)
+      await cleanup()
+
       throw err
     }
 
-    if (clean) await remove(destination)
+    await cleanup()
 
     return result
   }
 
-  private buildTMPDestination (filename: string) {
+  buildTMPDestination (filename: string) {
     return join(CONFIG.STORAGE.TMP_DIR, buildUUID() + extname(filename))
-
   }
 
   static get Instance () {

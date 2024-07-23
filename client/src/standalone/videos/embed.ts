@@ -24,7 +24,8 @@ import {
   PlaylistFetcher,
   PlaylistTracker,
   Translations,
-  VideoFetcher
+  VideoFetcher,
+  getBackendUrl
 } from './shared'
 import { PlayerHTML } from './shared/player-html'
 
@@ -58,7 +59,7 @@ export class PeerTubeEmbed {
   private requiresPassword: boolean
 
   constructor (videoWrapperId: string) {
-    logger.registerServerSending(window.location.origin)
+    logger.registerServerSending(getBackendUrl())
 
     this.http = new AuthHTTP()
 
@@ -73,7 +74,9 @@ export class PeerTubeEmbed {
     try {
       this.config = JSON.parse((window as any)['PeerTubeServerConfig'])
     } catch (err) {
-      logger.error('Cannot parse HTML config.', err)
+      if (!(import.meta as any).env.DEV) {
+        logger.error('Cannot parse HTML config.', err)
+      }
     }
   }
 
@@ -90,12 +93,12 @@ export class PeerTubeEmbed {
   // ---------------------------------------------------------------------------
 
   async init () {
-    this.translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
+    this.translationsPromise = TranslationsManager.getServerTranslations(getBackendUrl(), navigator.language)
     this.PeerTubePlayerManagerModulePromise = import('../../assets/player/peertube-player')
 
     // Issue when we parsed config from HTML, fallback to API
     if (!this.config) {
-      this.config = await this.http.fetch('/api/v1/config', { optionalAuth: false })
+      this.config = await this.http.fetch(getBackendUrl() + '/api/v1/config', { optionalAuth: false })
         .then(res => res.json())
     }
 
@@ -265,7 +268,7 @@ export class PeerTubeEmbed {
 
     // If already played, we are in a playlist so we don't want to display the poster between videos
     if (!this.alreadyPlayed) {
-      this.peertubePlayer.setPoster(window.location.origin + video.previewPath)
+      this.peertubePlayer.setPoster(getBackendUrl() + video.previewPath)
     }
 
     const playlist = this.playlistTracker
@@ -351,6 +354,16 @@ export class PeerTubeEmbed {
   // ---------------------------------------------------------------------------
 
   private getResourceId () {
+    const search = window.location.search
+
+    if (search.startsWith('?videoId=')) {
+      return search.replace(/^\?videoId=/, '')
+    }
+
+    if (search.startsWith('?videoPlaylistId=')) {
+      return search.replace(/^\?videoPlaylistId=/, '')
+    }
+
     const urlParts = window.location.pathname.split('/')
     return urlParts[urlParts.length - 1]
   }

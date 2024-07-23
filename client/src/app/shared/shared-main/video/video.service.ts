@@ -16,6 +16,7 @@ import {
   VideoChannel as VideoChannelServerModel,
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
+  VideoFile,
   VideoFileMetadata,
   VideoIncludeType,
   VideoPrivacy,
@@ -54,6 +55,7 @@ export type CommonVideoParams = {
 
 @Injectable()
 export class VideoService {
+  static BASE_VIDEO_DOWNLOAD_URL = environment.originServerUrl + '/download/videos/generate'
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
@@ -384,6 +386,22 @@ export class VideoService {
                  map(res => res.description),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  // ---------------------------------------------------------------------------
+
+  generateDownloadUrl (options: {
+    video: Video
+    files: VideoFile[]
+  }) {
+    const { video, files } = options
+
+    if (files.length === 0) throw new Error('Cannot generate download URL without files')
+
+    let url = `${VideoService.BASE_VIDEO_DOWNLOAD_URL}/${video.uuid}?`
+    url += files.map(f => 'videoFileIds=' + f.id).join('&')
+
+    return url
   }
 
   // ---------------------------------------------------------------------------
