@@ -68,10 +68,20 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function saveInTransactionWithRetries <T extends Pick<Model, 'save'>> (model: T) {
+function saveInTransactionWithRetries <T extends Pick<Model, 'save' | 'changed'>> (model: T) {
+  const changedKeys = model.changed()
+  if (!changedKeys) throw new Error('No changed keys found')
+
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async transaction => {
-      await model.save({ transaction })
+      try {
+        await model.save({ transaction })
+      } catch {
+        // Reinit changed keys
+        for (const key of changedKeys) {
+          model.changed(key as keyof Model, true)
+        }
+      }
     })
   })
 }
