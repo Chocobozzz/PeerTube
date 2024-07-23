@@ -1,10 +1,10 @@
-import { FfmpegCommand } from 'fluent-ffmpeg'
+import { FFmpegLive } from '@peertube/peertube-ffmpeg'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
-import { FFmpegLive } from '@peertube/peertube-ffmpeg'
+import { FfmpegCommand } from 'fluent-ffmpeg'
 import { getLiveSegmentTime } from '../../live-utils.js'
 import { AbstractTranscodingWrapper } from './abstract-transcoding-wrapper.js'
 
@@ -32,7 +32,10 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
         ratio: this.ratio,
         probe: this.probe,
 
-        hasAudio: this.hasAudio
+        hasAudio: this.hasAudio,
+        hasVideo: this.hasVideo,
+
+        splitAudioAndVideo: true
       })
       : this.buildFFmpegLive().getLiveMuxingCommand({
         inputUrl: this.inputLocalUrl,

@@ -17,7 +17,7 @@ export interface PeerTubeRequestError extends Error {
   requestHeaders?: any
 }
 
-type PeerTubeRequestOptions = {
+export type PeerTubeRequestOptions = {
   timeout?: number
   activityPub?: boolean
   bodyKBLimit?: number // 1MB
@@ -35,7 +35,7 @@ type PeerTubeRequestOptions = {
   followRedirect?: boolean
 } & Pick<OptionsInit, 'headers' | 'json' | 'method' | 'searchParams'>
 
-const peertubeGot = got.extend({
+export const peertubeGot = got.extend({
   ...getAgent(),
 
   headers: {
@@ -116,25 +116,21 @@ const peertubeGot = got.extend({
   }
 })
 
-function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
+export function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options) as OptionsOfTextResponseBody
 
   return peertubeGot(url, gotOptions)
     .catch(err => { throw buildRequestError(err) })
 }
 
-function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions = {}) {
+export function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions(options)
 
   return peertubeGot<T>(url, { ...gotOptions, responseType: 'json' })
     .catch(err => { throw buildRequestError(err) })
 }
 
-async function doRequestAndSaveToFile (
-  url: string,
-  destPath: string,
-  options: PeerTubeRequestOptions = {}
-) {
+export async function doRequestAndSaveToFile (url: string, destPath: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.FILE })
 
   const outFile = createWriteStream(destPath)
@@ -152,7 +148,13 @@ async function doRequestAndSaveToFile (
   }
 }
 
-function getAgent () {
+export function generateRequestStream (url: string, options: PeerTubeRequestOptions = {}) {
+  const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT })
+
+  return peertubeGot.stream(url, { ...gotOptions, isStream: true })
+}
+
+export function getAgent () {
   if (!isProxyEnabled()) return {}
 
   const proxy = getProxy()
@@ -176,27 +178,16 @@ function getAgent () {
   }
 }
 
-function getUserAgent () {
+export function getUserAgent () {
   return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
-function isBinaryResponse (result: Response<any>) {
+export function isBinaryResponse (result: Response<any>) {
   return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  type PeerTubeRequestOptions,
-
-  doRequest,
-  doJSONRequest,
-  doRequestAndSaveToFile,
-  isBinaryResponse,
-  getAgent,
-  peertubeGot
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBody {

@@ -22,7 +22,7 @@ import { VideoBlockComponent } from '../shared-moderation/video-block.component'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
 import { LiveStreamInformationComponent } from '../shared-video-live/live-stream-information.component'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist/video-add-to-playlist.component'
-import { VideoDownloadComponent } from './video-download.component'
+import { VideoDownloadComponent } from './download/video-download.component'
 
 export type VideoActionsDisplayType = {
   playlist?: boolean

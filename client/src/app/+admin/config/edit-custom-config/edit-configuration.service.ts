@@ -11,12 +11,13 @@ export type ResolutionOption = {
 @Injectable()
 export class EditConfigurationService {
 
-  getVODResolutions () {
+  getTranscodingResolutions () {
     return [
       {
         id: '0p',
         label: $localize`Audio-only`,
-        description: $localize`A <code>.mp4</code> that keeps the original audio track, with no video`
+        // eslint-disable-next-line max-len
+        description: $localize`"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users`
       },
       {
         id: '144p',
@@ -53,12 +54,12 @@ export class EditConfigurationService {
     ]
   }
 
-  getLiveResolutions () {
-    return this.getVODResolutions().filter(r => r.id !== '0p')
-  }
-
   isTranscodingEnabled (form: FormGroup) {
     return form.value['transcoding']['enabled'] === true
+  }
+
+  isHLSEnabled (form: FormGroup) {
+    return form.value['transcoding']['hls']['enabled'] === true
   }
 
   isRemoteRunnerVODEnabled (form: FormGroup) {

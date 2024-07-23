@@ -368,6 +368,8 @@ class JobQueue {
   createSequentialJobFlow (...jobs: ((CreateJobArgument & CreateJobOptions) | undefined)[]) {
     let lastJob: FlowJob
 
+    logger.debug('Creating jobs in local job queue', { jobs })
+
     for (const job of jobs) {
       if (!job) continue
 

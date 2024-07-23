@@ -135,11 +135,11 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
 
   for (const codec of canEncode) {
     if (codecs[codec] === undefined) {
-      throw new Error('Unknown codec ' + codec + ' in FFmpeg.')
+      throw new Error(`Codec ${codec} not found in FFmpeg.`)
     }
 
     if (codecs[codec].canEncode !== true) {
-      throw new Error('Unavailable encode codec ' + codec + ' in FFmpeg')
+      throw new Error(`Unavailable encode codec ${codec} in FFmpeg`)
     }
   }
 }

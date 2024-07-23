@@ -28,9 +28,6 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "hls.js": [
-        "node_modules/hls.js/dist/hls.light"
-      ],
       "video.js": [
         "node_modules/video.js/core"
       ],

@@ -1,15 +1,24 @@
-import { expect } from 'chai'
-import { readFile } from 'fs/promises'
-import { basename, join } from 'path'
-import type { Instance, Torrent } from 'webtorrent'
 import { VideoFile } from '@peertube/peertube-models'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
+import { readFile } from 'fs/promises'
 import type { Instance as MagnetUriInstance } from 'magnet-uri'
-
-let webtorrent: Instance
+import { basename, join } from 'path'
+import type { Torrent } from 'webtorrent'
+import WebTorrent from 'webtorrent'
 
 export async function checkWebTorrentWorks (magnetUri: string, pathMatch?: RegExp) {
-  const torrent = await webtorrentAdd(magnetUri, true)
+  let res: { webtorrent: WebTorrent.Instance, torrent: WebTorrent.Torrent }
+
+  try {
+    res = await webtorrentAdd(magnetUri)
+  } catch (err) {
+    console.error(err)
+    res = await webtorrentAdd(magnetUri)
+  }
+
+  const webtorrent = res.webtorrent
+  const torrent = res.torrent
 
   expect(torrent.files).to.be.an('array')
   expect(torrent.files.length).to.equal(1)
@@ -18,6 +27,9 @@ export async function checkWebTorrentWorks (magnetUri: string, pathMatch?: RegEx
   if (pathMatch) {
     expect(torrent.files[0].path).match(pathMatch)
   }
+
+  torrent.destroy()
+  webtorrent.destroy()
 }
 
 export async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile) {
@@ -41,16 +53,26 @@ export async function magnetUriEncode (data: MagnetUriInstance) {
 // Private
 // ---------------------------------------------------------------------------
 
-async function webtorrentAdd (torrentId: string, refreshWebTorrent = false) {
+async function webtorrentAdd (torrentId: string) {
   const WebTorrent = (await import('webtorrent')).default
 
-  if (webtorrent && refreshWebTorrent) webtorrent.destroy()
-  if (!webtorrent || refreshWebTorrent) webtorrent = new WebTorrent()
+  const webtorrent = new WebTorrent()
 
   webtorrent.on('error', err => console.error('Error in webtorrent', err))
 
-  return new Promise<Torrent>(res => {
-    const torrent = webtorrent.add(torrentId, res)
+  return new Promise<{ torrent: Torrent, webtorrent: typeof webtorrent }>((res, rej) => {
+    const timeout = setTimeout(() => {
+      torrent.destroy()
+      webtorrent.destroy()
+
+      rej(new Error('Timeout to download WebTorrent file ' + torrentId))
+    }, 5000)
+
+    const torrent = webtorrent.add(torrentId, t => {
+      clearTimeout(timeout)
+
+      return res({ torrent: t, webtorrent })
+    })
 
     torrent.on('error', err => console.error('Error in webtorrent torrent', err))
     torrent.on('warning', warn => {

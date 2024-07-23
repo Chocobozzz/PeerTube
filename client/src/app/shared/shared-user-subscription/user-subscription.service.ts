@@ -179,17 +179,17 @@ export class UserSubscriptionService {
   }
 
   doesSubscriptionExist (nameWithHost: string) {
-    debugLogger('Running subscription check for %d.', nameWithHost)
+    debugLogger('Running subscription check for ' + nameWithHost)
 
     if (nameWithHost in this.myAccountSubscriptionCache) {
-      debugLogger('Found cache for %d.', nameWithHost)
+      debugLogger('Found cache for ' + nameWithHost)
 
       return of(this.myAccountSubscriptionCache[nameWithHost])
     }
 
     this.existsSubject.next(nameWithHost)
 
-    debugLogger('Fetching from network for %d.', nameWithHost)
+    debugLogger('Fetching from network for ' + nameWithHost)
     return this.existsObservable.pipe(
       filter(existsResult => existsResult[nameWithHost] !== undefined),
       map(existsResult => existsResult[nameWithHost]),

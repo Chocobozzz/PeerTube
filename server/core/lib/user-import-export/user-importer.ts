@@ -73,7 +73,7 @@ export class UserImporter {
       importModel.resultSummary = resultSummary
       await saveInTransactionWithRetries(importModel)
     } catch (err) {
-      logger.error('Cannot import user archive', { toto: 'coucou', err, ...lTags() })
+      logger.error('Cannot import user archive', { err, ...lTags() })
 
       try {
         importModel.state = UserImportState.ERRORED

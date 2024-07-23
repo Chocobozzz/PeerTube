@@ -51,6 +51,20 @@ describe('Test transcription in peertube-runner program', function () {
       await checkLanguage(servers, uuid, 'en')
     })
 
+    it('Should run transcription on HLS with audio separated', async function () {
+      await servers[0].config.enableMinimumTranscoding({ hls: true, webVideo: false, splitAudioAndVideo: true })
+
+      const uuid = await uploadForTranscription(servers[0], { generateTranscription: false })
+      await waitJobs(servers)
+      await checkLanguage(servers, uuid, null)
+
+      await servers[0].captions.runGenerate({ videoId: uuid })
+      await waitJobs(servers, { runnerJobs: true })
+
+      await checkAutoCaption(servers, uuid)
+      await checkLanguage(servers, uuid, 'en')
+    })
+
     it('Should not run transcription on video without audio stream', async function () {
       this.timeout(360000)
 
@@ -88,6 +102,7 @@ describe('Test transcription in peertube-runner program', function () {
       this.timeout(60000)
 
       const uuid = await uploadForTranscription(servers[0])
+      await waitJobs(servers)
       await wait(2000)
 
       const { data } = await servers[0].runnerJobs.list({ stateOneOf: [ RunnerJobState.PENDING ] })

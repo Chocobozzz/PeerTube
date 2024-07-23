@@ -1,4 +1,4 @@
-import { pick, promisify0 } from '@peertube/peertube-core-utils'
+import { arrayify, pick, promisify0 } from '@peertube/peertube-core-utils'
 import {
   AvailableEncoders,
   EncoderOptionsBuilder,
@@ -8,6 +8,7 @@ import {
 } from '@peertube/peertube-models'
 import { MutexInterface } from 'async-mutex'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
+import { Readable } from 'node:stream'
 
 export interface FFmpegCommandWrapperOptions {
   availableEncoders?: AvailableEncoders
@@ -83,14 +84,18 @@ export class FFmpegCommandWrapper {
     this.command = undefined
   }
 
-  buildCommand (input: string, inputFileMutexReleaser?: MutexInterface.Releaser) {
+  buildCommand (inputs: (string | Readable)[] | string | Readable, inputFileMutexReleaser?: MutexInterface.Releaser) {
     if (this.command) throw new Error('Command is already built')
 
     // We set cwd explicitly because ffmpeg appears to create temporary files when trancoding which fails in read-only file systems
-    this.command = ffmpeg(input, {
+    this.command = ffmpeg({
       niceness: this.niceness,
       cwd: this.tmpDirectory
     })
+
+    for (const input of arrayify(inputs)) {
+      this.command.input(input)
+    }
 
     if (this.threads > 0) {
       // If we don't set any threads ffmpeg will chose automatically
@@ -117,7 +122,10 @@ export class FFmpegCommandWrapper {
       this.command.on('start', cmdline => { shellCommand = cmdline })
 
       this.command.on('error', (err, stdout, stderr) => {
-        if (silent !== true) this.logger.error('Error in ffmpeg.', { stdout, stderr, shellCommand, ...this.lTags })
+        if (silent !== true) this.logger.error('Error in ffmpeg.', { err, stdout, stderr, shellCommand, ...this.lTags })
+
+        err.stdout = stdout
+        err.stderr = stderr
 
         if (this.onError) this.onError(err)
 

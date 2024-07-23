@@ -51,52 +51,61 @@ describe('Test audio only video transcoding', function () {
     await doubleFollow(servers[0], servers[1])
   })
 
-  it('Should upload a video and transcode it', async function () {
-    this.timeout(120000)
+  for (const concurrency of [ 1, 2 ]) {
+    describe(`With transcoding concurrency ${concurrency}`, function () {
 
-    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'audio only' } })
-    videoUUID = uuid
+      before(async function () {
+        await servers[0].config.setTranscodingConcurrency(concurrency)
+      })
 
-    await waitJobs(servers)
+      it('Should upload a video and transcode it', async function () {
+        this.timeout(120000)
 
-    for (const server of servers) {
-      const video = await server.videos.get({ id: videoUUID })
-      expect(video.streamingPlaylists).to.have.lengthOf(1)
+        const { uuid } = await servers[0].videos.upload({ attributes: { name: 'audio only' } })
+        videoUUID = uuid
 
-      for (const files of [ video.files, video.streamingPlaylists[0].files ]) {
-        expect(files).to.have.lengthOf(3)
-        expect(files[0].resolution.id).to.equal(720)
-        expect(files[1].resolution.id).to.equal(240)
-        expect(files[2].resolution.id).to.equal(0)
-      }
+        await waitJobs(servers)
 
-      if (server.serverNumber === 1) {
-        webVideoAudioFileUrl = video.files[2].fileUrl
-        fragmentedAudioFileUrl = video.streamingPlaylists[0].files[2].fileUrl
-      }
-    }
-  })
+        for (const server of servers) {
+          const video = await server.videos.get({ id: videoUUID })
+          expect(video.streamingPlaylists).to.have.lengthOf(1)
 
-  it('0p transcoded video should not have video', async function () {
-    const paths = [
-      servers[0].servers.buildWebVideoFilePath(webVideoAudioFileUrl),
-      servers[0].servers.buildFragmentedFilePath(videoUUID, fragmentedAudioFileUrl)
-    ]
+          for (const files of [ video.files, video.streamingPlaylists[0].files ]) {
+            expect(files).to.have.lengthOf(3)
+            expect(files[0].resolution.id).to.equal(720)
+            expect(files[1].resolution.id).to.equal(240)
+            expect(files[2].resolution.id).to.equal(0)
+          }
 
-    for (const path of paths) {
-      const { audioStream } = await getAudioStream(path)
-      expect(audioStream['codec_name']).to.be.equal('aac')
-      expect(audioStream['bit_rate']).to.be.at.most(384 * 8000)
+          if (server.serverNumber === 1) {
+            webVideoAudioFileUrl = video.files[2].fileUrl
+            fragmentedAudioFileUrl = video.streamingPlaylists[0].files[2].fileUrl
+          }
+        }
+      })
 
-      const size = await getVideoStreamDimensionsInfo(path)
+      it('0p transcoded video should not have video', async function () {
+        const paths = [
+          servers[0].servers.buildWebVideoFilePath(webVideoAudioFileUrl),
+          servers[0].servers.buildFragmentedFilePath(videoUUID, fragmentedAudioFileUrl)
+        ]
 
-      expect(size.height).to.equal(0)
-      expect(size.width).to.equal(0)
-      expect(size.isPortraitMode).to.be.false
-      expect(size.ratio).to.equal(0)
-      expect(size.resolution).to.equal(0)
-    }
-  })
+        for (const path of paths) {
+          const { audioStream } = await getAudioStream(path)
+          expect(audioStream['codec_name']).to.be.equal('aac')
+          expect(audioStream['bit_rate']).to.be.at.most(384 * 8000)
+
+          const size = await getVideoStreamDimensionsInfo(path)
+
+          expect(size.height).to.equal(0)
+          expect(size.width).to.equal(0)
+          expect(size.isPortraitMode).to.be.false
+          expect(size.ratio).to.equal(0)
+          expect(size.resolution).to.equal(0)
+        }
+      })
+    })
+  }
 
   after(async function () {
     await cleanupTests(servers)

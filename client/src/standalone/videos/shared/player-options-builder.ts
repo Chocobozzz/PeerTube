@@ -27,6 +27,7 @@ import { PlayerHTML } from './player-html'
 import { PlaylistTracker } from './playlist-tracker'
 import { Translations } from './translations'
 import { VideoFetcher } from './video-fetcher'
+import { getBackendUrl } from './url'
 
 export class PlayerOptionsBuilder {
   private autoplay: boolean
@@ -190,7 +191,7 @@ export class PlayerOptionsBuilder {
       videoViewIntervalMs: serverConfig.views.videos.watchingInterval.anonymous,
 
       metricsUrl: serverConfig.openTelemetry.metrics.enabled
-        ? window.location.origin + '/api/v1/metrics/playback'
+        ? getBackendUrl() + '/api/v1/metrics/playback'
         : null,
       metricsInterval: serverConfig.openTelemetry.metrics.playbackStatsInterval,
 
@@ -204,7 +205,7 @@ export class PlayerOptionsBuilder {
 
       theaterButton: false,
 
-      serverUrl: window.location.origin,
+      serverUrl: getBackendUrl(),
       language: navigator.language,
 
       pluginsManager: this.peertubePlugin.getPluginsManager(),
@@ -292,9 +293,9 @@ export class PlayerOptionsBuilder {
       duration: video.duration,
       videoRatio: video.aspectRatio,
 
-      poster: window.location.origin + video.previewPath,
+      poster: getBackendUrl() + video.previewPath,
 
-      embedUrl: window.location.origin + video.embedPath,
+      embedUrl: getBackendUrl() + video.embedPath,
       embedTitle: video.name,
 
       requiresUserAuth: videoRequiresUserAuth(video),
@@ -333,7 +334,7 @@ export class PlayerOptionsBuilder {
     if (!storyboards || storyboards.length === 0) return undefined
 
     return {
-      url: window.location.origin + storyboards[0].storyboardPath,
+      url: getBackendUrl() + storyboards[0].storyboardPath,
       height: storyboards[0].spriteHeight,
       width: storyboards[0].spriteWidth,
       interval: storyboards[0].spriteDuration
@@ -426,7 +427,7 @@ export class PlayerOptionsBuilder {
         label: peertubeTranslate(c.language.label, translations),
         language: c.language.id,
         automaticallyGenerated: c.automaticallyGenerated,
-        src: window.location.origin + c.captionPath
+        src: getBackendUrl() + c.captionPath
       }))
     }
 

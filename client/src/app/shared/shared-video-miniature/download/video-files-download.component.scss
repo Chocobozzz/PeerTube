@@ -1,17 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.nav-content {
-  margin-top: 30px;
-}
-
-my-global-icon[iconName=shield] {
-  @include margin-left(10px);
-
-  width: 16px;
-  margin-top: -3px;
-}
-
 .advanced-filters-button {
   display: flex;
   justify-content: center;
@@ -22,28 +11,6 @@ my-global-icon[iconName=shield] {
 
   .nav-tabs {
     margin-top: 10x;
-  }
-}
-
-.peertube-select-container.title-select {
-  @include peertube-select-container(auto);
-
-  display: inline-block;
-  margin-left: 10px;
-  vertical-align: top;
-}
-
-#dropdown-download-type {
-  cursor: pointer;
-}
-
-.download-type {
-  margin-top: 20px;
-
-  .peertube-radio-container {
-    @include margin-right(30px);
-
-    display: inline-block;
   }
 }
 
@@ -67,5 +34,15 @@ my-global-icon[iconName=shield] {
     display: inline-block;
     color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
+  }
+}
+
+.download-type {
+  margin-top: 20px;
+
+  .peertube-radio-container {
+    @include margin-right(30px);
+
+    display: inline-block;
   }
 }

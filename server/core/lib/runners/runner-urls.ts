@@ -4,6 +4,10 @@ export function generateRunnerTranscodingVideoInputFileUrl (jobUUID: string, vid
   return WEBSERVER.URL + '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID + '/max-quality'
 }
 
+export function generateRunnerTranscodingAudioInputFileUrl (jobUUID: string, videoUUID: string) {
+  return WEBSERVER.URL + '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID + '/max-quality/audio'
+}
+
 export function generateRunnerTranscodingVideoPreviewFileUrl (jobUUID: string, videoUUID: string) {
   return WEBSERVER.URL + '/api/v1/runners/jobs/' + jobUUID + '/files/videos/' + videoUUID + '/previews/max-quality'
 }

@@ -1,0 +1,24 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeNavId">
+
+  <li *ngFor="let caption of getCaptions()" [ngbNavItem]="caption.language.id">
+    <button ngbNavLink>
+      {{ caption.language.label }}
+
+      <ng-container *ngIf="caption.automaticallyGenerated" i18n>(auto-generated)</ng-container>
+    </button>
+
+    <ng-template ngbNavContent>
+      <div class="nav-content">
+        <my-input-text [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getCaptionLink()"></my-input-text>
+      </div>
+    </ng-template>
+  </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+<div class="modal-footer inputs">
+  <ng-content select="cancel-button"></ng-content>
+
+  <input type="submit" i18n-value value="Download" class="peertube-button orange-button" (click)="download()" />
+</div>

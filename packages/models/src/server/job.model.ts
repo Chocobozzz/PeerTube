@@ -147,6 +147,7 @@ export type ManageVideoTorrentPayload =
 
 interface BaseTranscodingPayload {
   videoUUID: string
+  hasChildren?: boolean
   isNewVideo?: boolean
 }
 
@@ -155,6 +156,8 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   resolution: number
   fps: number
   copyCodecs: boolean
+
+  separatedAudio: boolean
 
   deleteWebVideoFiles: boolean
 }
@@ -170,16 +173,12 @@ export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
 
   resolution: number
   fps: number
-
-  hasChildren: boolean
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
   type: 'optimize-to-web-video'
 
   quickTranscode: boolean
-
-  hasChildren: boolean
 }
 
 export type VideoTranscodingPayload =

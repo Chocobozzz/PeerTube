@@ -216,6 +216,22 @@ describe('Test video transcription', function () {
     expect(oldContent).to.equal(newContent)
   })
 
+  it('Should run transcription with HLS only and audio splitted', async function () {
+    this.timeout(360000)
+
+    await servers[0].config.enableMinimumTranscoding({ hls: true, webVideo: false, splitAudioAndVideo: true })
+
+    const uuid = await uploadForTranscription(servers[0], { generateTranscription: false })
+    await waitJobs(servers)
+    await checkLanguage(servers, uuid, null)
+
+    await servers[0].captions.runGenerate({ videoId: uuid })
+    await waitJobs(servers)
+
+    await checkAutoCaption(servers, uuid)
+    await checkLanguage(servers, uuid, 'en')
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

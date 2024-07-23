@@ -1,7 +1,19 @@
+import { MutexInterface } from 'async-mutex'
 import { FilterSpecification } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
-import { presetVOD } from './shared/presets.js'
 import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS, hasAudioStream } from './ffprobe.js'
+import { presetVOD } from './shared/presets.js'
+
+type BaseStudioOptions = {
+  videoInputPath: string
+  separatedAudioInputPath?: string
+
+  outputPath: string
+
+  // Will be released after the ffmpeg started
+  // To prevent a bug where the input file does not exist anymore when running ffmpeg
+  inputFileMutexReleaser?: MutexInterface.Releaser
+}
 
 export class FFmpegEdition {
   private readonly commandWrapper: FFmpegCommandWrapper
@@ -10,25 +22,27 @@ export class FFmpegEdition {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
 
-  async cutVideo (options: {
-    inputPath: string
-    outputPath: string
+  async cutVideo (options: BaseStudioOptions & {
     start?: number
     end?: number
   }) {
-    const { inputPath, outputPath } = options
+    const { videoInputPath, separatedAudioInputPath, outputPath, inputFileMutexReleaser } = options
 
-    const mainProbe = await ffprobePromise(inputPath)
-    const fps = await getVideoStreamFPS(inputPath, mainProbe)
-    const { resolution } = await getVideoStreamDimensionsInfo(inputPath, mainProbe)
+    const mainProbe = await ffprobePromise(videoInputPath)
+    const fps = await getVideoStreamFPS(videoInputPath, mainProbe)
+    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, mainProbe)
 
-    const command = this.commandWrapper.buildCommand(inputPath)
+    const command = this.commandWrapper.buildCommand(this.buildInputs(options), inputFileMutexReleaser)
       .output(outputPath)
 
     await presetVOD({
       commandWrapper: this.commandWrapper,
-      input: inputPath,
+
+      videoInputPath,
+      separatedAudioInputPath,
+
       resolution,
+      videoStreamOnly: false,
       fps,
       canCopyAudio: false,
       canCopyVideo: false
@@ -45,10 +59,8 @@ export class FFmpegEdition {
     await this.commandWrapper.runCommand()
   }
 
-  async addWatermark (options: {
-    inputPath: string
+  async addWatermark (options: BaseStudioOptions & {
     watermarkPath: string
-    outputPath: string
 
     videoFilters: {
       watermarkSizeRatio: number
@@ -56,21 +68,23 @@ export class FFmpegEdition {
       verticalMarginRatio: number
     }
   }) {
-    const { watermarkPath, inputPath, outputPath, videoFilters } = options
+    const { watermarkPath, videoInputPath, separatedAudioInputPath, outputPath, videoFilters, inputFileMutexReleaser } = options
 
-    const videoProbe = await ffprobePromise(inputPath)
-    const fps = await getVideoStreamFPS(inputPath, videoProbe)
-    const { resolution } = await getVideoStreamDimensionsInfo(inputPath, videoProbe)
+    const videoProbe = await ffprobePromise(videoInputPath)
+    const fps = await getVideoStreamFPS(videoInputPath, videoProbe)
+    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, videoProbe)
 
-    const command = this.commandWrapper.buildCommand(inputPath)
+    const command = this.commandWrapper.buildCommand([ ...this.buildInputs(options), watermarkPath ], inputFileMutexReleaser)
       .output(outputPath)
-
-    command.input(watermarkPath)
 
     await presetVOD({
       commandWrapper: this.commandWrapper,
-      input: inputPath,
+
+      videoInputPath,
+      separatedAudioInputPath,
+
       resolution,
+      videoStreamOnly: false,
       fps,
       canCopyAudio: true,
       canCopyVideo: false
@@ -103,26 +117,23 @@ export class FFmpegEdition {
     await this.commandWrapper.runCommand()
   }
 
-  async addIntroOutro (options: {
-    inputPath: string
+  async addIntroOutro (options: BaseStudioOptions & {
     introOutroPath: string
-    outputPath: string
+
     type: 'intro' | 'outro'
   }) {
-    const { introOutroPath, inputPath, outputPath, type } = options
+    const { introOutroPath, videoInputPath, separatedAudioInputPath, outputPath, type, inputFileMutexReleaser } = options
 
-    const mainProbe = await ffprobePromise(inputPath)
-    const fps = await getVideoStreamFPS(inputPath, mainProbe)
-    const { resolution } = await getVideoStreamDimensionsInfo(inputPath, mainProbe)
-    const mainHasAudio = await hasAudioStream(inputPath, mainProbe)
+    const mainProbe = await ffprobePromise(videoInputPath)
+    const fps = await getVideoStreamFPS(videoInputPath, mainProbe)
+    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, mainProbe)
+    const mainHasAudio = await hasAudioStream(separatedAudioInputPath || videoInputPath, mainProbe)
 
     const introOutroProbe = await ffprobePromise(introOutroPath)
     const introOutroHasAudio = await hasAudioStream(introOutroPath, introOutroProbe)
 
-    const command = this.commandWrapper.buildCommand(inputPath)
+    const command = this.commandWrapper.buildCommand([ ...this.buildInputs(options), introOutroPath ], inputFileMutexReleaser)
       .output(outputPath)
-
-    command.input(introOutroPath)
 
     if (!introOutroHasAudio && mainHasAudio) {
       const duration = await getVideoStreamDuration(introOutroPath, introOutroProbe)
@@ -134,8 +145,12 @@ export class FFmpegEdition {
 
     await presetVOD({
       commandWrapper: this.commandWrapper,
-      input: inputPath,
+
+      videoInputPath,
+      separatedAudioInputPath,
+
       resolution,
+      videoStreamOnly: false,
       fps,
       canCopyAudio: false,
       canCopyVideo: false
@@ -235,5 +250,12 @@ export class FFmpegEdition {
     command.complexFilter(complexFilter)
 
     await this.commandWrapper.runCommand()
+  }
+
+  private buildInputs (options: {
+    videoInputPath: string
+    separatedAudioInputPath?: string
+  }) {
+    return [ options.videoInputPath, options.separatedAudioInputPath ].filter(i => !!i)
   }
 }

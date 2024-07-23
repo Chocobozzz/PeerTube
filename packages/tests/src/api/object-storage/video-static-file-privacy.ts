@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areScalewayObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -300,7 +300,7 @@ describe('Object storage for video static file privacy', function () {
         server,
         videoUUID: privateVideoUUID,
         videoFileToken,
-        resolutions: [ 240, 720 ],
+        resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ],
         isLive: false
       })
     })
@@ -491,7 +491,7 @@ describe('Object storage for video static file privacy', function () {
         server,
         videoUUID: permanentLiveId,
         videoFileToken,
-        resolutions: [ 720 ],
+        resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ],
         isLive: true
       })
 
@@ -513,8 +513,7 @@ describe('Object storage for video static file privacy', function () {
       await server.live.waitUntilWaiting({ videoId: permanentLiveId })
       await waitJobs([ server ])
 
-      const live = await server.videos.getWithToken({ id: permanentLiveId })
-      const replayFromList = await findExternalSavedVideo(server, live)
+      const replayFromList = await findExternalSavedVideo(server, permanentLiveId)
       const replay = await server.videos.getWithToken({ id: replayFromList.id })
 
       await checkReplay(replay)

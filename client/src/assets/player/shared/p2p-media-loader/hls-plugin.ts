@@ -1,17 +1,13 @@
 // Thanks https://github.com/streamroot/videojs-hlsjs-plugin
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
-import Hlsjs, { ErrorData, HlsConfig, Level, LevelSwitchingData, ManifestParsedData } from 'hls.js'
-import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
-import { HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../../types'
+import Hlsjs, { ErrorData, Level, LevelSwitchingData, ManifestParsedData } from 'hls.js'
+import videojs from 'video.js'
+import { HLSPluginOptions, HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../../types'
 
 type ErrorCounts = {
   [ type: string ]: number
-}
-
-type Metadata = {
-  levels: Level[]
 }
 
 // ---------------------------------------------------------------------------
@@ -126,10 +122,10 @@ export class Html5Hlsjs {
   private maxNetworkErrorRecovery = 5
 
   private hls: Hlsjs
-  private hlsjsConfig: Partial<HlsConfig & { cueHandler: any }> = null
+  private hlsjsConfig: HLSPluginOptions = null
 
   private _duration: number = null
-  private metadata: Metadata = null
+  private metadata: ManifestParsedData = null
   private isLive: boolean = null
   private dvrDuration: number = null
   private edgeMargin: number = null
@@ -138,6 +134,8 @@ export class Html5Hlsjs {
     play: null,
     error: null
   }
+
+  private audioMode = false
 
   constructor (vjs: typeof videojs, source: videojs.Tech.SourceObject, tech: videojs.Tech) {
     this.vjs = vjs
@@ -206,50 +204,14 @@ export class Html5Hlsjs {
     return this.vjs.createTimeRanges()
   }
 
-  // See comment for `initialize` method.
   dispose () {
     this.videoElement.removeEventListener('play', this.handlers.play)
     this.videoElement.removeEventListener('error', this.handlers.error)
 
-    // FIXME: https://github.com/video-dev/hls.js/issues/4092
-    const untypedHLS = this.hls as any
-    untypedHLS.log = untypedHLS.warn = () => {
-      // empty
-    }
-
     this.hls.destroy()
   }
 
-  static addHook (type: string, callback: HookFn) {
-    Html5Hlsjs.hooks[type] = this.hooks[type] || []
-    Html5Hlsjs.hooks[type].push(callback)
-  }
-
-  static removeHook (type: string, callback: HookFn) {
-    if (Html5Hlsjs.hooks[type] === undefined) return false
-
-    const index = Html5Hlsjs.hooks[type].indexOf(callback)
-    if (index === -1) return false
-
-    Html5Hlsjs.hooks[type].splice(index, 1)
-
-    return true
-  }
-
-  static removeAllHooks () {
-    Html5Hlsjs.hooks = {}
-  }
-
-  private _executeHooksFor (type: string) {
-    if (Html5Hlsjs.hooks[type] === undefined) {
-      return
-    }
-
-    // ES3 and IE < 9
-    for (let i = 0; i < Html5Hlsjs.hooks[type].length; i++) {
-      Html5Hlsjs.hooks[type][i](this.player, this.hls)
-    }
-  }
+  // ---------------------------------------------------------------------------
 
   private _getHumanErrorMsg (error: { message: string, code?: number }) {
     switch (error.code) {
@@ -265,11 +227,14 @@ export class Html5Hlsjs {
     }
 
     this.hls.destroy()
+
     logger.info('bubbling error up to VIDEOJS')
+
     this.tech.error = () => ({
       ...error,
       message: this._getHumanErrorMsg(error)
     })
+
     this.tech.trigger('error')
   }
 
@@ -335,16 +300,18 @@ export class Html5Hlsjs {
     }
   }
 
+  // ---------------------------------------------------------------------------
+
   private buildLevelLabel (level: Level) {
     if (this.player.srOptions_.levelLabelHandler) {
-      return this.player.srOptions_.levelLabelHandler(level as any)
+      return this.player.srOptions_.levelLabelHandler(level, this.player)
     }
 
     if (level.height) return level.height + 'p'
     if (level.width) return Math.round(level.width * 9 / 16) + 'p'
     if (level.bitrate) return (level.bitrate / 1000) + 'kbps'
 
-    return '0'
+    return this.player.localize('Audio only')
   }
 
   private _removeQuality (index: number) {
@@ -367,35 +334,51 @@ export class Html5Hlsjs {
         label: this.buildLevelLabel(level),
         selected: level.id === this.hls.manualLevel,
 
-        selectCallback: () => {
-          this.hls.currentLevel = index
-        }
+        selectCallback: () => this.manuallySelectVideoLevel(index)
       })
     })
+
+    // Add a manually injected "Audio only" quality that will reloads hls.js
+    const videoResolutions = resolutions.filter(r => r.height !== 0)
+    if (videoResolutions.length !== 0 && this.getSeparateAudioTrack()) {
+      const audioTrackUrl = this.getSeparateAudioTrack()
+
+      resolutions.push({
+        id: -2, // -1 is for "Auto quality"
+        label: this.player.localize('Audio only'),
+        selected: false,
+        selectCallback: () => {
+          if (this.audioMode) return
+          this.audioMode = true
+
+          this.updateToAudioOrVideo(audioTrackUrl)
+        }
+      })
+    }
 
     resolutions.push({
       id: -1,
       label: this.player.localize('Auto'),
       selected: true,
-      selectCallback: () => this.hls.currentLevel = -1
+      selectCallback: () => this.manuallySelectVideoLevel(-1)
     })
 
     this.player.peertubeResolutions().add(resolutions)
   }
 
+  private manuallySelectVideoLevel (index: number) {
+    if (this.audioMode) {
+      this.audioMode = false
+      this.updateToAudioOrVideo(this.source.src, index)
+      return
+    }
+
+    this.hls.currentLevel = index
+  }
+
   private _startLoad () {
     this.hls.startLoad(-1)
     this.videoElement.removeEventListener('play', this.handlers.play)
-  }
-
-  private _oneLevelObjClone (obj: { [ id: string ]: any }) {
-    const result: { [id: string]: any } = {}
-    const objKeys = Object.keys(obj)
-    for (let i = 0; i < objKeys.length; i++) {
-      result[objKeys[i]] = obj[objKeys[i]]
-    }
-
-    return result
   }
 
   private _onMetaData (_event: any, data: ManifestParsedData) {
@@ -404,13 +387,8 @@ export class Html5Hlsjs {
     this._notifyVideoQualities()
   }
 
-  private _initHlsjs () {
-    const techOptions = this.tech.options_ as HlsjsConfigHandlerOptions
-    const srOptions_ = this.player.srOptions_
-
-    const hlsjsConfigRef = srOptions_?.hlsjsConfig || techOptions.hlsjsConfig
-    // Hls.js will write to the reference thus change the object for later streams
-    this.hlsjsConfig = hlsjsConfigRef ? this._oneLevelObjClone(hlsjsConfigRef) : {}
+  private initialize () {
+    this.buildBaseConfig()
 
     if ([ '', 'auto' ].includes(this.videoElement.preload) && !this.videoElement.autoplay && this.hlsjsConfig.autoStartLoad === undefined) {
       this.hlsjsConfig.autoStartLoad = false
@@ -423,9 +401,10 @@ export class Html5Hlsjs {
       this.videoElement.addEventListener('play', this.handlers.play)
     }
 
-    this.hls = new Hlsjs(this.hlsjsConfig)
+    const loader = this.hlsjsConfig.loaderBuilder()
+    this.hls = new Hlsjs({ ...this.hlsjsConfig, loader })
 
-    this._executeHooksFor('beforeinitialize')
+    this.player.trigger('hlsjs-initialized', { hlsjs: this.hls, engine: loader.getEngine() })
 
     this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
     this.hls.on(Hlsjs.Events.MANIFEST_PARSED, (event, data) => this._onMetaData(event, data))
@@ -446,30 +425,83 @@ export class Html5Hlsjs {
       if (this.isLive) this.maxNetworkErrorRecovery = 30
     })
 
+    this.registerLevelEventSwitch()
+
     this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
       // Emit custom 'loadedmetadata' event for parity with `videojs-contrib-hls`
       // Ref: https://github.com/videojs/videojs-contrib-hls#loadedmetadata
       this.tech.trigger('loadedmetadata')
     })
 
-    this.hls.on(Hlsjs.Events.LEVEL_SWITCHING, (_e, data: LevelSwitchingData) => {
-      const resolutionId = this.hls.autoLevelEnabled
-        ? -1
-        : data.level
-
-      const autoResolutionChosenId = this.hls.autoLevelEnabled
-        ? data.level
-        : -1
-
-      this.player.peertubeResolutions().select({ id: resolutionId, autoResolutionChosenId, fireCallback: false })
-    })
-
     this.hls.attachMedia(this.videoElement)
-
     this.hls.loadSource(this.source.src)
   }
 
-  private initialize () {
-    this._initHlsjs()
+  private updateToAudioOrVideo (newSource: string, startLevel?: number) {
+    this.player.addClass('vjs-updating-resolution')
+
+    const currentTime = this.player.currentTime()
+
+    this.dispose()
+
+    this.buildBaseConfig()
+    this.hlsjsConfig.autoStartLoad = true
+    this.player.autoplay('play')
+
+    const loader = this.hlsjsConfig.loaderBuilder()
+    this.hls = new Hlsjs({
+      ...this.hlsjsConfig,
+      loader,
+      startPosition: this.duration() === Infinity
+        ? undefined
+        : currentTime,
+      startLevel
+    })
+
+    this.player.trigger('hlsjs-initialized', { hlsjs: this.hls, engine: loader.getEngine() })
+
+    this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
+    this.registerLevelEventSwitch()
+
+    this.hls.attachMedia(this.videoElement)
+    this.hls.loadSource(newSource)
+
+    this.player.one('canplay', () => {
+      this.player.removeClass('vjs-updating-resolution')
+    })
+  }
+
+  private registerLevelEventSwitch () {
+    this.hls.on(Hlsjs.Events.LEVEL_SWITCHING, (_e, data: LevelSwitchingData) => {
+      let resolutionId = data.level
+      let autoResolutionChosenId = -1
+
+      if (this.audioMode) {
+        resolutionId = -2
+      } else if (this.hls.autoLevelEnabled) {
+        resolutionId = -1
+        autoResolutionChosenId = data.level
+      }
+
+      this.player.peertubeResolutions().select({ id: resolutionId, autoResolutionChosenId, fireCallback: false })
+    })
+  }
+
+  private buildBaseConfig () {
+    const techOptions = this.tech.options_ as HlsjsConfigHandlerOptions
+    const srOptions_ = this.player.srOptions_
+
+    const hlsjsConfigRef = srOptions_?.hlsjsConfig || techOptions.hlsjsConfig
+
+    // Hls.js will write to the reference thus change the object for later streams
+    this.hlsjsConfig = hlsjsConfigRef
+      ? { ...hlsjsConfigRef }
+      : {}
+  }
+
+  private getSeparateAudioTrack () {
+    if (this.metadata.audioTracks.length === 0) return undefined
+
+    return this.metadata.audioTracks[0].url
   }
 }

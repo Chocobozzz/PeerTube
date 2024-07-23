@@ -1,5 +1,10 @@
+import { ThumbnailType, ThumbnailType_Type, VideoFileStream } from '@peertube/peertube-models'
+import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import Bluebird from 'bluebird'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { remove } from 'fs-extra/esm'
 import { join } from 'path'
-import { ThumbnailType, ThumbnailType_Type } from '@peertube/peertube-models'
 import { generateImageFilename } from '../helpers/image-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants.js'
@@ -9,17 +14,12 @@ import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { VideoPathManager } from './video-path-manager.js'
 import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process.js'
-import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { remove } from 'fs-extra/esm'
-import { FfprobeData } from 'fluent-ffmpeg'
-import Bluebird from 'bluebird'
 
 const lTags = loggerTagsFactory('thumbnail')
 
 type ImageSize = { height?: number, width?: number }
 
-function updateLocalPlaylistMiniatureFromExisting (options: {
+export function updateLocalPlaylistMiniatureFromExisting (options: {
   inputPath: string
   playlist: MVideoPlaylistThumbnail
   automaticallyGenerated: boolean
@@ -46,7 +46,7 @@ function updateLocalPlaylistMiniatureFromExisting (options: {
   })
 }
 
-function updateRemotePlaylistMiniatureFromUrl (options: {
+export function updateRemotePlaylistMiniatureFromUrl (options: {
   downloadUrl: string
   playlist: MVideoPlaylistThumbnail
   size?: ImageSize
@@ -67,7 +67,9 @@ function updateRemotePlaylistMiniatureFromUrl (options: {
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
 }
 
-function updateLocalVideoMiniatureFromExisting (options: {
+// ---------------------------------------------------------------------------
+
+export function updateLocalVideoMiniatureFromExisting (options: {
   inputPath: string
   video: MVideoThumbnail
   type: ThumbnailType_Type
@@ -96,7 +98,7 @@ function updateLocalVideoMiniatureFromExisting (options: {
 }
 
 // Returns thumbnail models sorted by their size (height) in descendent order (biggest first)
-function generateLocalVideoMiniature (options: {
+export function generateLocalVideoMiniature (options: {
   video: MVideoThumbnail
   videoFile: MVideoFile
   types: ThumbnailType_Type[]
@@ -163,7 +165,7 @@ function generateLocalVideoMiniature (options: {
 
 // ---------------------------------------------------------------------------
 
-function updateLocalVideoMiniatureFromUrl (options: {
+export function updateLocalVideoMiniatureFromUrl (options: {
   downloadUrl: string
   video: MVideoThumbnail
   type: ThumbnailType_Type
@@ -195,7 +197,7 @@ function updateLocalVideoMiniatureFromUrl (options: {
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
 }
 
-function updateRemoteVideoThumbnail (options: {
+export function updateRemoteVideoThumbnail (options: {
   fileUrl: string
   video: MVideoThumbnail
   type: ThumbnailType_Type
@@ -223,7 +225,7 @@ function updateRemoteVideoThumbnail (options: {
 
 // ---------------------------------------------------------------------------
 
-async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe: FfprobeData) {
+export async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe: FfprobeData) {
   const thumbnailsToGenerate: ThumbnailType_Type[] = []
 
   if (video.getMiniature().automaticallyGenerated === true) {
@@ -236,7 +238,7 @@ async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe:
 
   const models = await generateLocalVideoMiniature({
     video,
-    videoFile: video.getMaxQualityFile(),
+    videoFile: video.getMaxQualityFile(VideoFileStream.VIDEO) || video.getMaxQualityFile(VideoFileStream.AUDIO),
     ffprobe,
     types: thumbnailsToGenerate
   })
@@ -244,18 +246,6 @@ async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe:
   for (const model of models) {
     await video.addAndSaveThumbnail(model)
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  generateLocalVideoMiniature,
-  regenerateMiniaturesIfNeeded,
-  updateLocalVideoMiniatureFromUrl,
-  updateLocalVideoMiniatureFromExisting,
-  updateRemoteVideoThumbnail,
-  updateRemotePlaylistMiniatureFromUrl,
-  updateLocalPlaylistMiniatureFromExisting
 }
 
 // ---------------------------------------------------------------------------

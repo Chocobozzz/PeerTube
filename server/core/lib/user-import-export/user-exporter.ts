@@ -114,7 +114,7 @@ export class UserExporter {
 
     return new Promise<void>(async (res, rej) => {
       this.archive.on('warning', err => {
-        logger.warn('Warning to archive a file in ' + exportModel.filename, { err })
+        logger.warn('Warning to archive a file in ' + exportModel.filename, { ...lTags(), err })
       })
 
       this.archive.on('error', err => {
@@ -127,7 +127,7 @@ export class UserExporter {
         for (const { exporter, jsonFilename } of this.buildExporters(exportModel, user)) {
           const { json, staticFiles, activityPub, activityPubOutbox } = await exporter.export()
 
-          logger.debug('Adding JSON file ' + jsonFilename + ' in archive ' + exportModel.filename)
+          logger.debug(`Adding JSON file ${jsonFilename} in archive ${exportModel.filename}`, lTags())
           this.appendJSON(json, join('peertube', jsonFilename))
 
           if (activityPub) {
@@ -144,12 +144,12 @@ export class UserExporter {
           for (const file of staticFiles) {
             const archivePath = join('files', parse(jsonFilename).name, file.archivePath)
 
-            logger.debug(`Adding static file ${archivePath} in archive`)
+            logger.debug(`Adding static file ${archivePath} in archive`, lTags())
 
             try {
-              await this.addToArchiveAndWait(await file.createrReadStream(), archivePath)
+              await this.addToArchiveAndWait(await file.readStreamFactory(), archivePath)
             } catch (err) {
-              logger.error(`Cannot add ${archivePath} in archive`, { err })
+              logger.error(`Cannot add ${archivePath} in archive`, { err, ...lTags() })
             }
           }
         }
@@ -287,9 +287,13 @@ export class UserExporter {
 
       this.archive.on('entry', entryListener)
 
+      logger.error('Adding stream ' + archivePath)
+
       // Prevent sending a stream that has an error on open resulting in a stucked archiving process
       stream.once('readable', () => {
         if (errored) return
+
+        logger.error('Readable stream ' + archivePath)
 
         this.archive.append(stream, { name: archivePath })
       })

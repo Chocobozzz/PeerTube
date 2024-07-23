@@ -1,7 +1,6 @@
-import omit from 'lodash-es/omit'
-import { forkJoin } from 'rxjs'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { Notifier } from '@app/core'
@@ -28,18 +27,19 @@ import {
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
+import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, CustomPage, HTMLServerConfig } from '@peertube/peertube-models'
-import { EditConfigurationService } from './edit-configuration.service'
+import omit from 'lodash-es/omit'
+import { forkJoin } from 'rxjs'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { EditAdvancedConfigurationComponent } from './edit-advanced-configuration.component'
+import { EditBasicConfigurationComponent } from './edit-basic-configuration.component'
+import { EditConfigurationService } from './edit-configuration.service'
+import { EditHomepageComponent } from './edit-homepage.component'
+import { EditInstanceInformationComponent } from './edit-instance-information.component'
 import { EditLiveConfigurationComponent } from './edit-live-configuration.component'
 import { EditVODTranscodingComponent } from './edit-vod-transcoding.component'
-import { EditBasicConfigurationComponent } from './edit-basic-configuration.component'
-import { EditInstanceInformationComponent } from './edit-instance-information.component'
-import { EditHomepageComponent } from './edit-homepage.component'
-import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgFor } from '@angular/common'
-import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
 
 type ComponentCustomConfig = CustomConfig & {
   instanceCustomHomepage: CustomPage
@@ -230,7 +230,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           keep: null
         },
         hls: {
-          enabled: null
+          enabled: null,
+          splitAudioAndVideo: null
         },
         webVideos: {
           enabled: null
@@ -341,12 +342,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       }
     }
 
-    for (const resolution of this.editConfigurationService.getVODResolutions()) {
+    for (const resolution of this.editConfigurationService.getTranscodingResolutions()) {
       defaultValues.transcoding.resolutions[resolution.id] = 'false'
       formGroupData.transcoding.resolutions[resolution.id] = null
-    }
 
-    for (const resolution of this.editConfigurationService.getLiveResolutions()) {
       defaultValues.live.transcoding.resolutions[resolution.id] = 'false'
       formGroupData.live.transcoding.resolutions[resolution.id] = null
     }

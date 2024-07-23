@@ -15,6 +15,7 @@ import {
 import { expectStartWith, checkVideoDuration } from '@tests/shared/checks.js'
 import { checkPeerTubeRunnerCacheIsEmpty } from '@tests/shared/directories.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 
 describe('Test studio transcoding in peertube-runner program', function () {
   let servers: PeerTubeServer[] = []
@@ -56,6 +57,33 @@ describe('Test studio transcoding in peertube-runner program', function () {
         }
 
         await checkVideoDuration(server, uuid, 9)
+      }
+    })
+
+    it('Should run a complex task on HLS only video with audio splitted', async function () {
+      this.timeout(240_000)
+
+      await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true, splitAudioAndVideo: true })
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'mp4', fixture: 'video_short.mp4' })
+      await waitJobs(servers)
+
+      await servers[0].videoStudio.createEditionTasks({ videoId: uuid, tasks: VideoStudioCommand.getComplexTask() })
+      await waitJobs(servers, { runnerJobs: true })
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        expect(video.files).to.have.lengthOf(0)
+
+        await checkVideoDuration(server, uuid, 9)
+
+        await completeCheckHlsPlaylist({
+          servers,
+          videoUUID: uuid,
+          hlsOnly: true,
+          splittedAudio: true,
+          resolutions: [ 720, 240 ],
+          objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl()
+        })
       }
     })
   }

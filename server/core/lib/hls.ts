@@ -1,6 +1,6 @@
-import { uniqify, uuidRegex } from '@peertube/peertube-core-utils'
-import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
-import { FileStorage } from '@peertube/peertube-models'
+import { sortBy, uniqify, uuidRegex } from '@peertube/peertube-core-utils'
+import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
+import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models/index.js'
 import { ensureDir, move, outputJSON, remove } from 'fs-extra/esm'
@@ -23,7 +23,7 @@ import { VideoPathManager } from './video-path-manager.js'
 
 const lTags = loggerTagsFactory('hls')
 
-async function updateStreamingPlaylistsInfohashesIfNeeded () {
+export async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
 
   // Use separate SQL queries, because we could have many videos to update
@@ -39,7 +39,7 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
   }
 }
 
-async function updatePlaylistAfterFileChange (video: MVideo, playlist: MStreamingPlaylist) {
+export async function updateM3U8AndShaPlaylist (video: MVideo, playlist: MStreamingPlaylist) {
   try {
     let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist)
     playlistWithFiles = await updateSha256VODSegments(video, playlist)
@@ -60,35 +60,61 @@ async function updatePlaylistAfterFileChange (video: MVideo, playlist: MStreamin
 // Avoid concurrency issues when updating streaming playlist files
 const playlistFilesQueue = new PQueue({ concurrency: 1 })
 
-function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
+export function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
   return playlistFilesQueue.add(async () => {
     const playlist = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlistArg.id)
 
-    const masterPlaylists: string[] = [ '#EXTM3U', '#EXT-X-VERSION:3' ]
+    const extMedia: string[] = []
+    const extStreamInfo: string[] = []
+    let separatedAudioCodec: string
 
-    for (const file of playlist.VideoFiles) {
+    const splitAudioAndVideo = playlist.hasAudioAndVideoSplitted()
+
+    // Sort to have the audio resolution first (if it exists)
+    for (const file of sortBy(playlist.VideoFiles, 'resolution')) {
       const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
 
       await VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(playlist), async videoFilePath => {
-        const size = await getVideoStreamDimensionsInfo(videoFilePath)
+        const probe = await ffprobePromise(videoFilePath)
+
+        if (splitAudioAndVideo && file.resolution === VideoResolution.H_NOVIDEO) {
+          separatedAudioCodec = await getAudioStreamCodec(videoFilePath, probe)
+        }
+
+        const size = await getVideoStreamDimensionsInfo(videoFilePath, probe)
 
         const bandwidth = 'BANDWIDTH=' + video.getBandwidthBits(file)
-        const resolution = `RESOLUTION=${size?.width || 0}x${size?.height || 0}`
+        const resolution = file.resolution === VideoResolution.H_NOVIDEO
+          ? ''
+          : `,RESOLUTION=${size?.width || 0}x${size?.height || 0}`
 
-        let line = `#EXT-X-STREAM-INF:${bandwidth},${resolution}`
+        let line = `#EXT-X-STREAM-INF:${bandwidth}${resolution}`
         if (file.fps) line += ',FRAME-RATE=' + file.fps
 
         const codecs = await Promise.all([
-          getVideoStreamCodec(videoFilePath),
-          getAudioStreamCodec(videoFilePath)
+          getVideoStreamCodec(videoFilePath, probe),
+          separatedAudioCodec || getAudioStreamCodec(videoFilePath, probe)
         ])
 
         line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
 
-        masterPlaylists.push(line)
-        masterPlaylists.push(playlistFilename)
+        if (splitAudioAndVideo) {
+          line += `,AUDIO="audio"`
+        }
+
+        // Don't include audio only resolution as a regular "video" resolution
+        // Some player may use it automatically and so the user would not have a video stream
+        // But if it's the only resolution we can treat it as a regular stream
+        if (resolution || playlist.VideoFiles.length === 1) {
+          extStreamInfo.push(line)
+          extStreamInfo.push(playlistFilename)
+        } else if (splitAudioAndVideo) {
+          extMedia.push(`#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="Audio",AUTOSELECT=YES,DEFAULT=YES,URI="${playlistFilename}"`)
+        }
       })
     }
+
+    const masterPlaylists = [ '#EXTM3U', '#EXT-X-VERSION:3', '', ...extMedia, '', ...extStreamInfo ]
 
     if (playlist.playlistFilename) {
       await video.removeStreamingPlaylistFile(playlist, playlist.playlistFilename)
@@ -111,7 +137,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
 // ---------------------------------------------------------------------------
 
-function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
+export function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
   return playlistFilesQueue.add(async () => {
     const json: { [filename: string]: { [range: string]: string } } = {}
 
@@ -162,12 +188,12 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
 
 // ---------------------------------------------------------------------------
 
-async function buildSha256Segment (segmentPath: string) {
+export async function buildSha256Segment (segmentPath: string) {
   const buf = await readFile(segmentPath)
   return sha256(buf)
 }
 
-function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number, bodyKBLimit: number) {
+export function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number, bodyKBLimit: number) {
   let timer
   let remainingBodyKBLimit = bodyKBLimit
 
@@ -240,7 +266,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
 // ---------------------------------------------------------------------------
 
-async function renameVideoFileInPlaylist (playlistPath: string, newVideoFilename: string) {
+export async function renameVideoFileInPlaylist (playlistPath: string, newVideoFilename: string) {
   const content = await readFile(playlistPath, 'utf8')
 
   const newContent = content.replace(new RegExp(`${uuidRegex}-\\d+-fragmented.mp4`, 'g'), newVideoFilename)
@@ -250,23 +276,12 @@ async function renameVideoFileInPlaylist (playlistPath: string, newVideoFilename
 
 // ---------------------------------------------------------------------------
 
-function injectQueryToPlaylistUrls (content: string, queryString: string) {
+export function injectQueryToPlaylistUrls (content: string, queryString: string) {
   return content.replace(/\.(m3u8|ts|mp4)/gm, '.$1?' + queryString)
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  updateMasterHLSPlaylist,
-  updateSha256VODSegments,
-  buildSha256Segment,
-  downloadPlaylistSegments,
-  updateStreamingPlaylistsInfohashesIfNeeded,
-  updatePlaylistAfterFileChange,
-  injectQueryToPlaylistUrls,
-  renameVideoFileInPlaylist
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function getRangesFromPlaylist (playlistContent: string) {

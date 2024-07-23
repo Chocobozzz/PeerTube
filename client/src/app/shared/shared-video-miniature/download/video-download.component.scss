@@ -1,0 +1,40 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.modal-body ::ng-deep {
+
+  .nav-content {
+    margin-top: 30px;
+  }
+
+  my-global-icon[iconName=shield] {
+    @include margin-left(10px);
+
+    width: 16px;
+    position: relative;
+    top: -2px;
+  }
+
+  .modal-footer {
+    padding-inline-end: 0;
+    margin-top: 1rem;
+
+    > *:last-child {
+      margin-inline-end: 0;
+    }
+  }
+}
+
+.peertube-select-container.title-select {
+  @include peertube-select-container(auto);
+
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: top;
+}
+
+#dropdown-download-type {
+  cursor: pointer;
+}
+
+

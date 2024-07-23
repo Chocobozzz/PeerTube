@@ -4,6 +4,7 @@ import { PluginInfo, PluginsManager } from '../../../root-helpers'
 import { RegisterClientHelpers } from '../../../types'
 import { AuthHTTP } from './auth-http'
 import { Translations } from './translations'
+import { getBackendUrl } from './url'
 
 export class PeerTubePlugin {
 
@@ -83,6 +84,6 @@ export class PeerTubePlugin {
   }
 
   private getPluginUrl () {
-    return window.location.origin + '/api/v1/plugins'
+    return getBackendUrl() + '/api/v1/plugins'
   }
 }

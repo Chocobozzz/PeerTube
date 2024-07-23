@@ -14,15 +14,19 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
-import { MVideo } from '@server/types/models/index.js'
+import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
-import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
+import {
+  generateRunnerEditionTranscodingVideoInputFileUrl,
+  generateRunnerTranscodingAudioInputFileUrl,
+  generateRunnerTranscodingVideoInputFileUrl
+} from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
-  video: MVideo
+  video: MVideoWithFile
   tasks: VideoStudioTaskPayload[]
   priority: number
 }
@@ -34,9 +38,15 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
     const { video, priority, tasks } = options
 
     const jobUUID = buildUUID()
+    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
     const payload: RunnerJobStudioTranscodingPayload = {
       input: {
-        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid)
+        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid),
+
+        separatedAudioFileUrl: separatedAudioFile
+          ? [ generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid) ]
+          : []
       },
       tasks: tasks.map(t => {
         if (isVideoStudioTaskIntro(t) || isVideoStudioTaskOutro(t)) {

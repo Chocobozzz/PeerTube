@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { getAllFiles, getMaxTheoreticalBitrate, getMinTheoreticalBitrate, omit } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoFileMetadata, VideoState } from '@peertube/peertube-models'
-import { canDoQuickTranscode } from '@peertube/peertube-server/core/lib/transcoding/transcoding-quick-transcode.js'
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   ffprobePromise,
   getAudioStream,
@@ -13,6 +9,8 @@ import {
   getVideoStreamFPS,
   hasAudioStream
 } from '@peertube/peertube-ffmpeg'
+import { HttpStatusCode, VideoFileMetadata, VideoState } from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -22,8 +20,10 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { generateVideoWithFramerate, generateHighBitrateVideo } from '@tests/shared/generate.js'
+import { canDoQuickTranscode } from '@peertube/peertube-server/core/lib/transcoding/transcoding-quick-transcode.js'
+import { generateHighBitrateVideo, generateVideoWithFramerate } from '@tests/shared/generate.js'
 import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { expect } from 'chai'
 
 function updateConfigForTranscoding (server: PeerTubeServer) {
   return server.config.updateExistingConfig({
@@ -331,25 +331,7 @@ describe('Test video transcoding', function () {
     function runSuite (mode: 'legacy' | 'resumable') {
 
       before(async function () {
-        await servers[1].config.updateExistingConfig({
-          newConfig: {
-            transcoding: {
-              hls: { enabled: true },
-              webVideos: { enabled: true },
-              resolutions: {
-                '0p': false,
-                '144p': false,
-                '240p': false,
-                '360p': false,
-                '480p': false,
-                '720p': false,
-                '1080p': false,
-                '1440p': false,
-                '2160p': false
-              }
-            }
-          }
-        })
+        await servers[1].config.enableTranscoding({ hls: true, webVideo: true, resolutions: [] })
       })
 
       it('Should merge an audio file with the preview file', async function () {

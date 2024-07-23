@@ -1,16 +1,33 @@
-import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudioFile } from '@peertube/peertube-ffmpeg'
-import { FileStorage, VideoFileMetadata, VideoResolution } from '@peertube/peertube-models'
+import {
+  FFmpegContainer,
+  ffprobePromise,
+  getVideoStreamDimensionsInfo,
+  getVideoStreamFPS,
+  hasAudioStream,
+  hasVideoStream,
+  isAudioFile
+} from '@peertube/peertube-ffmpeg'
+import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, VideoResolution } from '@peertube/peertube-models'
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-options.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
+import { MIMETYPES, REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move, remove } from 'fs-extra/esm'
+import { Readable, Writable } from 'stream'
 import { lTags } from './object-storage/shared/index.js'
-import { storeOriginalVideoFile } from './object-storage/videos.js'
+import {
+  getHLSFileReadStream,
+  getWebVideoFileReadStream,
+  makeHLSFileAvailable,
+  makeWebVideoFileAvailable,
+  storeOriginalVideoFile
+} from './object-storage/videos.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -18,7 +35,7 @@ export async function buildNewFile (options: {
   path: string
   mode: 'web-video' | 'hls'
   ffprobe?: FfprobeData
-}) {
+}): Promise<MVideoFile> {
   const { path, mode, ffprobe: probeArg } = options
 
   const probe = probeArg ?? await ffprobePromise(path)
@@ -27,8 +44,22 @@ export async function buildNewFile (options: {
   const videoFile = new VideoFileModel({
     extname: getLowercaseExtension(path),
     size,
-    metadata: await buildFileMetadata(path, probe)
+    metadata: await buildFileMetadata(path, probe),
+
+    streams: VideoFileStream.NONE,
+
+    formatFlags: mode === 'web-video'
+      ? VideoFileFormatFlag.WEB_VIDEO
+      : VideoFileFormatFlag.FRAGMENTED
   })
+
+  if (await hasAudioStream(path, probe)) {
+    videoFile.streams |= VideoFileStream.AUDIO
+  }
+
+  if (await hasVideoStream(path, probe)) {
+    videoFile.streams |= VideoFileStream.VIDEO
+  }
 
   if (await isAudioFile(path, probe)) {
     videoFile.fps = 0
@@ -69,8 +100,6 @@ export async function removeHLSPlaylist (video: MVideoWithAllFiles) {
 }
 
 export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
-  logger.info('Deleting HLS file %d of %s.', fileToDeleteId, video.url, lTags(video.uuid))
-
   const hls = video.getHLSPlaylist()
   const files = hls.VideoFiles
 
@@ -230,4 +259,135 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
       logger.error('Cannot delete old original file ' + oldSource.keptOriginalFilename, { err, ...lTags() })
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+
+export async function muxToMergeVideoFiles (options: {
+  video: MVideo
+  videoFiles: MVideoFile[]
+  output: Writable
+}) {
+  const { video, videoFiles, output } = options
+
+  const inputs: (string | Readable)[] = []
+  const tmpDestinations: string[] = []
+
+  try {
+    for (const videoFile of videoFiles) {
+      if (!videoFile) continue
+
+      const { input, isTmpDestination } = await buildMuxInput(video, videoFile)
+
+      inputs.push(input)
+
+      if (isTmpDestination === true) tmpDestinations.push(input)
+    }
+
+    const inputsToLog = inputs.map(i => {
+      if (typeof i === 'string') return i
+
+      return 'ReadableStream'
+    })
+
+    logger.info(`Muxing files for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
+
+    try {
+      await new FFmpegContainer(getFFmpegCommandWrapperOptions('vod')).mergeInputs({ inputs, output, logError: true })
+
+      logger.info(`Mux ended for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
+    } catch (err) {
+      const message = err?.message || ''
+
+      if (message.includes('Output stream closed')) {
+        logger.info(`Client aborted mux for video ${video.url}`, lTags(video.uuid))
+        return
+      }
+
+      logger.warn(`Cannot mux files of video ${video.url}`, { err, inputs: inputsToLog, ...lTags(video.uuid) })
+
+      throw err
+    }
+
+  } finally {
+    for (const destination of tmpDestinations) {
+      await remove(destination)
+    }
+  }
+}
+
+async function buildMuxInput (
+  video: MVideo,
+  videoFile: MVideoFile
+): Promise<{ input: Readable, isTmpDestination: false } | { input: string, isTmpDestination: boolean }> {
+
+  // ---------------------------------------------------------------------------
+  // Remote
+  // ---------------------------------------------------------------------------
+
+  if (video.remote === true) {
+    const timeout = REQUEST_TIMEOUTS.VIDEO_FILE
+
+    const videoSizeKB = videoFile.size / 1000
+    const bodyKBLimit = videoSizeKB + 0.1 * videoSizeKB
+
+    // FFmpeg doesn't support multiple input streams, so download the audio file on disk directly
+    if (videoFile.isAudio()) {
+      const destination = VideoPathManager.Instance.buildTMPDestination(videoFile.filename)
+
+      // > 1GB
+      if (bodyKBLimit > 1000 * 1000) {
+        throw new Error('Cannot download remote video file > 1GB')
+      }
+
+      await doRequestAndSaveToFile(videoFile.fileUrl, destination, { timeout, bodyKBLimit })
+
+      return { input: destination, isTmpDestination: true }
+    }
+
+    return { input: generateRequestStream(videoFile.fileUrl, { timeout, bodyKBLimit }), isTmpDestination: false }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Local on FS
+  // ---------------------------------------------------------------------------
+
+  if (videoFile.storage === FileStorage.FILE_SYSTEM) {
+    return { input: VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile), isTmpDestination: false }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Local on object storage
+  // ---------------------------------------------------------------------------
+
+  // FFmpeg doesn't support multiple input streams, so download the audio file on disk directly
+  if (videoFile.hasAudio() && !videoFile.hasVideo()) {
+    const destination = VideoPathManager.Instance.buildTMPDestination(videoFile.filename)
+
+    if (videoFile.isHLS()) {
+      await makeHLSFileAvailable(video.getHLSPlaylist(), videoFile.filename, destination)
+    } else {
+      await makeWebVideoFileAvailable(videoFile.filename, destination)
+    }
+
+    return { input: destination, isTmpDestination: true }
+  }
+
+  if (videoFile.isHLS()) {
+    const { stream } = await getHLSFileReadStream({
+      playlist: video.getHLSPlaylist().withVideo(video),
+      filename: videoFile.filename,
+      rangeHeader: undefined
+    })
+
+    return { input: stream, isTmpDestination: false }
+  }
+
+  // Web video
+  const { stream } = await getWebVideoFileReadStream({
+    filename: videoFile.filename,
+    rangeHeader: undefined
+  })
+
+  return { input: stream, isTmpDestination: false }
 }

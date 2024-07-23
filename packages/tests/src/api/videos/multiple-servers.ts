@@ -7,7 +7,7 @@ import {
   PeerTubeServer,
   cleanupTests,
   createMultipleServers,
-  doubleFollow,
+  followAll,
   makeGetRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -18,6 +18,7 @@ import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
 import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'
 
@@ -49,12 +50,7 @@ describe('Test multiple servers', function () {
       videoChannelId = data[0].id
     }
 
-    // Server 1 and server 2 follow each other
-    await doubleFollow(servers[0], servers[1])
-    // Server 1 and server 3 follow each other
-    await doubleFollow(servers[0], servers[2])
-    // Server 2 and server 3 follow each other
-    await doubleFollow(servers[1], servers[2])
+    await followAll(servers)
   })
 
   it('Should not have videos for all servers', async function () {
@@ -89,7 +85,8 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       let publishedAt: string = null
-      for (const server of servers) {
+
+      await Bluebird.map(servers, async server => {
         const checkAttributes = {
           name: 'my super name for server 1',
           category: 5,
@@ -148,7 +145,7 @@ describe('Test multiple servers', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
         }
-      }
+      })
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
@@ -180,7 +177,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       // All servers should have this video
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const checkAttributes = {
           name: 'my super name for server 2',
           category: 4,
@@ -240,7 +237,7 @@ describe('Test multiple servers', function () {
         const video = data[1]
 
         await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
-      }
+      })
     })
 
     it('Should upload two videos on server 3 and propagate on each server', async function () {
@@ -279,7 +276,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       // All servers should have this video
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const { data } = await server.videos.list()
 
         expect(data).to.be.an('array')
@@ -363,7 +360,7 @@ describe('Test multiple servers', function () {
           ]
         }
         await completeVideoCheck({ server, originServer: servers[2], videoUUID: video2.uuid, attributes: checkAttributesVideo2 })
-      }
+      })
     })
   })
 
@@ -649,7 +646,7 @@ describe('Test multiple servers', function () {
     it('Should have the video 3 updated on each server', async function () {
       this.timeout(30000)
 
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const { data } = await server.videos.list()
 
         const videoUpdated = data.find(video => video.name === 'my super video updated')
@@ -693,7 +690,7 @@ describe('Test multiple servers', function () {
           previewfile: 'custom-preview'
         }
         await completeVideoCheck({ server, originServer: servers[2], videoUUID: videoUpdated.uuid, attributes: checkAttributes })
-      }
+      })
     })
 
     it('Should be able to remove originallyPublishedAt attribute', async function () {
@@ -1044,6 +1041,7 @@ describe('Test multiple servers', function () {
   })
 
   describe('With minimum parameters', function () {
+
     it('Should upload and propagate the video', async function () {
       this.timeout(240000)
 
@@ -1062,7 +1060,7 @@ describe('Test multiple servers', function () {
 
       await waitJobs(servers)
 
-      for (const server of servers) {
+      await Bluebird.map(servers, async server => {
         const { data } = await server.videos.list()
         const video = data.find(v => v.name === 'minimum parameters')
 
@@ -1120,16 +1118,18 @@ describe('Test multiple servers', function () {
           ]
         }
         await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
-      }
+      })
     })
   })
 
   describe('TMP directory', function () {
+
     it('Should have an empty tmp directory', async function () {
       for (const server of servers) {
         await checkTmpIsEmpty(server)
       }
     })
+
   })
 
   after(async function () {

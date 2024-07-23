@@ -174,6 +174,12 @@ async function getVideoStream (path: string, existingProbe?: FfprobeData) {
   return metadata.streams.find(s => s.codec_type === 'video')
 }
 
+async function hasVideoStream (path: string, existingProbe?: FfprobeData) {
+  const videoStream = await getVideoStream(path, existingProbe)
+
+  return !!videoStream
+}
+
 // ---------------------------------------------------------------------------
 // Chapters
 // ---------------------------------------------------------------------------
@@ -209,5 +215,6 @@ export {
   isAudioFile,
   ffprobePromise,
   getVideoStreamBitrate,
-  hasAudioStream
+  hasAudioStream,
+  hasVideoStream
 }

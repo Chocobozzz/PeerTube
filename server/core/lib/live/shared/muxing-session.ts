@@ -1,5 +1,12 @@
 import { wait } from '@peertube/peertube-core-utils'
-import { FileStorage, LiveVideoError, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import {
+  FileStorage,
+  LiveVideoError,
+  VideoFileFormatFlag,
+  VideoFileStream,
+  VideoResolution,
+  VideoStreamingPlaylistType
+} from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { LoggerTagsFn, logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -71,6 +78,7 @@ class MuxingSession extends EventEmitter {
   private readonly ratio: number
 
   private readonly hasAudio: boolean
+  private readonly hasVideo: boolean
 
   private readonly probe: FfprobeData
 
@@ -119,6 +127,7 @@ class MuxingSession extends EventEmitter {
     ratio: number
     allResolutions: number[]
     hasAudio: boolean
+    hasVideo: boolean
     probe: FfprobeData
   }) {
     super()
@@ -137,6 +146,7 @@ class MuxingSession extends EventEmitter {
     this.ratio = options.ratio
     this.probe = options.probe
 
+    this.hasVideo = options.hasVideo
     this.hasAudio = options.hasAudio
 
     this.allResolutions = options.allResolutions
@@ -154,12 +164,14 @@ class MuxingSession extends EventEmitter {
   async runMuxing () {
     this.streamingPlaylist = await this.createLivePlaylist()
 
+    const toTranscode = this.buildToTranscode()
+
     this.createLiveShaStore()
-    this.createFiles()
+    this.createFiles(toTranscode)
 
     await this.prepareDirectories()
 
-    this.transcodingWrapper = this.buildTranscodingWrapper()
+    this.transcodingWrapper = this.buildTranscodingWrapper(toTranscode)
 
     this.transcodingWrapper.on('end', () => this.onTranscodedEnded())
     this.transcodingWrapper.on('error', () => this.onTranscodingError())
@@ -295,16 +307,18 @@ class MuxingSession extends EventEmitter {
     }
   }
 
-  private createFiles () {
-    for (let i = 0; i < this.allResolutions.length; i++) {
-      const resolution = this.allResolutions[i]
-
+  private createFiles (toTranscode: { fps: number, resolution: number }[]) {
+    for (const { resolution, fps } of toTranscode) {
       const file = new VideoFileModel({
         resolution,
+        fps,
         size: -1,
         extname: '.ts',
         infoHash: null,
-        fps: this.fps,
+        formatFlags: VideoFileFormatFlag.NONE,
+        streams: resolution === VideoResolution.H_NOVIDEO
+          ? VideoFileStream.AUDIO
+          : VideoFileStream.VIDEO,
         storage: this.streamingPlaylist.storage,
         videoStreamingPlaylistId: this.streamingPlaylist.id
       })
@@ -484,7 +498,7 @@ class MuxingSession extends EventEmitter {
     })
   }
 
-  private buildTranscodingWrapper () {
+  private buildTranscodingWrapper (toTranscode: { fps: number, resolution: number }[]) {
     const options = {
       streamingPlaylist: this.streamingPlaylist,
       videoLive: this.videoLive,
@@ -495,26 +509,12 @@ class MuxingSession extends EventEmitter {
       inputLocalUrl: this.inputLocalUrl,
       inputPublicUrl: this.inputPublicUrl,
 
-      toTranscode: this.allResolutions.map(resolution => {
-        let toTranscodeFPS: number
+      toTranscode,
 
-        try {
-          toTranscodeFPS = computeOutputFPS({ inputFPS: this.fps, resolution })
-        } catch (err) {
-          err.liveVideoErrorCode = LiveVideoError.INVALID_INPUT_VIDEO_STREAM
-          throw err
-        }
-
-        return {
-          resolution,
-          fps: toTranscodeFPS
-        }
-      }),
-
-      fps: this.fps,
       bitrate: this.bitrate,
       ratio: this.ratio,
       hasAudio: this.hasAudio,
+      hasVideo: this.hasVideo,
       probe: this.probe,
 
       segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
@@ -536,6 +536,25 @@ class MuxingSession extends EventEmitter {
 
   private getPlaylistNameFromTS (segmentPath: string) {
     return `${this.getPlaylistIdFromTS(segmentPath)}.m3u8`
+  }
+
+  private buildToTranscode () {
+    return this.allResolutions.map(resolution => {
+      let toTranscodeFPS: number
+
+      if (resolution === VideoResolution.H_NOVIDEO) {
+        return { resolution, fps: 0 }
+      }
+
+      try {
+        toTranscodeFPS = computeOutputFPS({ inputFPS: this.fps, resolution })
+      } catch (err) {
+        err.liveVideoErrorCode = LiveVideoError.INVALID_INPUT_VIDEO_STREAM
+        throw err
+      }
+
+      return { resolution, fps: toTranscodeFPS }
+    })
   }
 }
 

@@ -178,7 +178,10 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     comments: {
       '@id': 'as:comments',
       '@type': '@id'
-    }
+    },
+
+    PropertyValue: 'sc:PropertyValue',
+    value: 'sc:value'
   }),
 
   Playlist: buildContext({

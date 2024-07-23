@@ -56,7 +56,7 @@ export class EditLiveConfigurationComponent implements OnInit, OnChanges {
       { id: 1000 * 3600 * 10, label: $localize`10 hours` }
     ]
 
-    this.liveResolutions = this.editConfigurationService.getLiveResolutions()
+    this.liveResolutions = this.editConfigurationService.getTranscodingResolutions()
   }
 
   ngOnChanges (changes: SimpleChanges) {

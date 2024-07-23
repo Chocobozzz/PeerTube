@@ -39,7 +39,12 @@ async function checkFilesInObjectStorage (objectStorage: ObjectStorageCommand, v
   await makeRawRequest({ url: hlsPlaylist.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
 }
 
-function runTests (enableObjectStorage: boolean) {
+function runTests (options: {
+  concurrency: number
+  enableObjectStorage: boolean
+}) {
+  const { concurrency, enableObjectStorage } = options
+
   let servers: PeerTubeServer[] = []
   let videoUUID: string
   let publishedAt: string
@@ -73,6 +78,7 @@ function runTests (enableObjectStorage: boolean) {
     publishedAt = video.publishedAt as string
 
     await servers[0].config.enableTranscoding()
+    await servers[0].config.setTranscodingConcurrency(concurrency)
   })
 
   it('Should generate HLS', async function () {
@@ -164,7 +170,7 @@ function runTests (enableObjectStorage: boolean) {
       newConfig: {
         transcoding: {
           enabled: true,
-          resolutions: ConfigCommand.getCustomConfigResolutions(false),
+          resolutions: ConfigCommand.getConfigResolutions(false),
 
           webVideos: {
             enabled: true
@@ -200,7 +206,7 @@ function runTests (enableObjectStorage: boolean) {
       newConfig: {
         transcoding: {
           enabled: true,
-          resolutions: ConfigCommand.getCustomConfigResolutions(true),
+          resolutions: ConfigCommand.getConfigResolutions(true),
 
           webVideos: {
             enabled: true
@@ -255,13 +261,18 @@ function runTests (enableObjectStorage: boolean) {
 
 describe('Test create transcoding jobs from API', function () {
 
-  describe('On filesystem', function () {
-    runTests(false)
-  })
+  for (const concurrency of [ 1, 2 ]) {
+    describe('With concurrency ' + concurrency, function () {
 
-  describe('On object storage', function () {
-    if (areMockObjectStorageTestsDisabled()) return
+      describe('On filesystem', function () {
+        runTests({ concurrency, enableObjectStorage: false })
+      })
 
-    runTests(true)
-  })
+      describe('On object storage', function () {
+        if (areMockObjectStorageTestsDisabled()) return
+
+        runTests({ concurrency, enableObjectStorage: true })
+      })
+    })
+  }
 })

@@ -6,6 +6,9 @@ import Hlsjs from 'hls.js'
 import videojs from 'video.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
+import debug from 'debug'
+
+const debugLogger = debug('peertube:player:p2p-media-loader')
 
 const Plugin = videojs.getPlugin('plugin')
 class P2pMediaLoaderPlugin extends Plugin {
@@ -56,18 +59,22 @@ class P2pMediaLoaderPlugin extends Plugin {
       return
     }
 
-    // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
-    (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (_videojsPlayer: any, hlsjs: any) => {
+    player.on('hlsjs-initialized', (_: any, { hlsjs, engine }) => {
+      this.p2pEngine?.removeAllListeners()
+      this.p2pEngine?.destroy()
+      clearInterval(this.networkInfoInterval)
+
       this.hlsjs = hlsjs
+      this.p2pEngine = engine
+
+      debugLogger('hls.js initialized, initializing p2p-media-loader plugin', { hlsjs, engine })
+
+      player.ready(() => this.initializePlugin())
     })
 
     player.src({
       type: options.type,
       src: options.src
-    })
-
-    player.ready(() => {
-      this.initializePlugin()
     })
   }
 
@@ -76,9 +83,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.p2pEngine?.destroy()
 
     this.hlsjs?.destroy()
-    this.options.segmentValidator?.destroy();
-
-    (videojs as any).Html5Hlsjs?.removeAllHooks()
+    this.options.segmentValidator?.destroy()
 
     clearInterval(this.networkInfoInterval)
 
@@ -111,8 +116,6 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private initializePlugin () {
     initHlsJsPlayer(this.player, this.hlsjs)
-
-    this.p2pEngine = this.options.loader.getEngine()
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       if (navigator.onLine === false) return

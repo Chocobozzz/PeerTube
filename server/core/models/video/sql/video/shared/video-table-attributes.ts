@@ -91,6 +91,8 @@ export class VideoTableAttributes {
       'videoId',
       'width',
       'height',
+      'formatFlags',
+      'streams',
       'storage'
     ]
   }

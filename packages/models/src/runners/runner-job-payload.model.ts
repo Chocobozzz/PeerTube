@@ -16,6 +16,7 @@ export type RunnerJobPayload =
 export interface RunnerJobVODWebVideoTranscodingPayload {
   input: {
     videoFileUrl: string
+    separatedAudioFileUrl: string[]
   }
 
   output: {
@@ -27,11 +28,13 @@ export interface RunnerJobVODWebVideoTranscodingPayload {
 export interface RunnerJobVODHLSTranscodingPayload {
   input: {
     videoFileUrl: string
+    separatedAudioFileUrl: string[]
   }
 
   output: {
     resolution: number
     fps: number
+    separatedAudio: boolean
   }
 }
 
@@ -50,6 +53,7 @@ export interface RunnerJobVODAudioMergeTranscodingPayload {
 export interface RunnerJobStudioTranscodingPayload {
   input: {
     videoFileUrl: string
+    separatedAudioFileUrl: string[]
   }
 
   tasks: VideoStudioTaskPayload[]

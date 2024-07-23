@@ -9,11 +9,14 @@ import express from 'express'
 import { ValidationChain, body, param, query } from 'express-validator'
 import {
   exists,
+  hasArrayLength,
   isBooleanValid,
   isDateValid,
   isFileValid,
   isIdValid,
+  isNotEmptyIntArray,
   toBooleanOrNull,
+  toIntArray,
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc.js'
@@ -52,8 +55,9 @@ import {
   isValidVideoPasswordHeader
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
+import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 
-const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
+export const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
     .custom((_, { req }) => isFileValid({ files: req.files, field: 'videofile', mimeTypeRegex: null, maxSize: null }))
     .withMessage('Should have a file'),
@@ -92,7 +96,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 /**
  * Gets called after the last PUT request
  */
-const videosAddResumableValidator = [
+export const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     const file = buildUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
@@ -130,7 +134,7 @@ const videosAddResumableValidator = [
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
  *
  */
-const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+export const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('filename')
     .custom(isVideoSourceFilenameValid),
   body('name')
@@ -175,7 +179,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const videosUpdateValidator = getCommonVideoEditAttributes().concat([
+export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   isValidVideoIdParam('id'),
 
   body('name')
@@ -215,7 +219,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
+export async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video = getVideoWithAttributes(res)
 
   // Anybody can watch local videos
@@ -244,7 +248,8 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
   })
 }
 
-const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video-and-blacklist' | 'unsafe-only-immutable-attributes') => {
+type FetchType = Extract<VideoLoadType, 'for-api' | 'all' | 'only-video-and-blacklist' | 'unsafe-only-immutable-attributes'>
+export const videosCustomGetValidator = (fetchType: FetchType) => {
   return [
     isValidVideoIdParam('id'),
 
@@ -266,9 +271,9 @@ const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video-and
   ]
 }
 
-const videosGetValidator = videosCustomGetValidator('all')
+export const videosGetValidator = videosCustomGetValidator('all')
 
-const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
+export const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
   isValidVideoIdParam('id'),
 
   param('videoFileId')
@@ -282,7 +287,7 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
-const videosDownloadValidator = [
+export const videosDownloadValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -297,7 +302,20 @@ const videosDownloadValidator = [
   }
 ]
 
-const videosRemoveValidator = [
+export const videosGenerateDownloadValidator = [
+  query('videoFileIds')
+    .customSanitizer(toIntArray)
+    .custom(isNotEmptyIntArray)
+    .custom(v => hasArrayLength(v, { max: 2 })),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+export const videosRemoveValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -311,7 +329,7 @@ const videosRemoveValidator = [
   }
 ]
 
-const videosOverviewValidator = [
+export const videosOverviewValidator = [
   query('page')
     .optional()
     .isInt({ min: 1, max: OVERVIEWS.VIDEOS.SAMPLES_COUNT }),
@@ -323,7 +341,7 @@ const videosOverviewValidator = [
   }
 ]
 
-function getCommonVideoEditAttributes () {
+export function getCommonVideoEditAttributes () {
   return [
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImageValid(req.files, 'thumbnailfile')).withMessage(
@@ -406,7 +424,7 @@ function getCommonVideoEditAttributes () {
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
-const commonVideosFiltersValidator = [
+export const commonVideosFiltersValidator = [
   query('categoryOneOf')
     .optional()
     .customSanitizer(arrayify)
@@ -508,23 +526,7 @@ const commonVideosFiltersValidator = [
 ]
 
 // ---------------------------------------------------------------------------
-
-export {
-  checkVideoFollowConstraints,
-  commonVideosFiltersValidator,
-  getCommonVideoEditAttributes,
-  videoFileMetadataGetValidator,
-  videosAddLegacyValidator,
-  videosAddResumableInitValidator,
-  videosAddResumableValidator,
-  videosCustomGetValidator,
-  videosDownloadValidator,
-  videosGetValidator,
-  videosOverviewValidator,
-  videosRemoveValidator,
-  videosUpdateValidator
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {

@@ -561,7 +561,7 @@ describe('Test runner common actions', function () {
         const { data } = await server.runnerJobs.list({ count: 50, sort: '-updatedAt' })
 
         const children = data.filter(j => j.parent?.uuid === failedJob.uuid)
-        expect(children).to.have.lengthOf(9)
+        expect(children).to.have.lengthOf(5)
 
         for (const child of children) {
           expect(child.parent.uuid).to.equal(failedJob.uuid)
@@ -599,7 +599,7 @@ describe('Test runner common actions', function () {
         {
           const { data } = await server.runnerJobs.list({ count: 10, sort: '-updatedAt' })
           const children = data.filter(j => j.parent?.uuid === jobUUID)
-          expect(children).to.have.lengthOf(9)
+          expect(children).to.have.lengthOf(5)
 
           for (const child of children) {
             expect(child.state.id).to.equal(RunnerJobState.PARENT_CANCELLED)

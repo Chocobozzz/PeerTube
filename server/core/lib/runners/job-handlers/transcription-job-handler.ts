@@ -12,7 +12,7 @@ import { onTranscriptionEnded } from '@server/lib/video-captions.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideoUUID } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
+import { generateRunnerTranscodingAudioInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
@@ -59,7 +59,7 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
     const jobUUID = buildUUID()
     const payload: RunnerJobTranscriptionPayload = {
       input: {
-        videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid)
+        videoFileUrl: generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid)
       }
     }
 

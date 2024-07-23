@@ -451,14 +451,12 @@ describe('Test user notifications', function () {
       await waitJobs(servers)
       await servers[1].live.waitUntilPublished({ videoId: shortUUID })
 
-      const liveDetails = await servers[1].videos.get({ id: shortUUID })
-
       await stopFfmpeg(ffmpegCommand)
 
       await servers[1].live.waitUntilWaiting({ videoId: shortUUID })
       await waitJobs(servers)
 
-      const video = await findExternalSavedVideo(servers[1], liveDetails)
+      const video = await findExternalSavedVideo(servers[1], shortUUID)
       expect(video).to.exist
 
       await checkMyVideoIsPublished({ ...baseParams, videoName: video.name, shortUUID: video.shortUUID, checkType: 'presence' })

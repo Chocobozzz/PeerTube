@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { LiveVideo, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { sha1 } from '@peertube/peertube-node-utils'
+import { ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
-import { sha1 } from '@peertube/peertube-node-utils'
-import { LiveVideo, VideoStreamingPlaylistType } from '@peertube/peertube-models'
-import { ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { SQLCommand } from './sql-command.js'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists.js'
 
@@ -25,7 +25,13 @@ async function checkLiveCleanup (options: {
     if (!await pathExists(hlsPath)) return
 
     const files = await readdir(hlsPath)
-    expect(files).to.have.lengthOf(0)
+    expect(files.filter(f => f !== 'replay')).to.have.lengthOf(0)
+
+    const replayDir = join(hlsPath, 'replay')
+    if (await pathExists(replayDir)) {
+      expect(await readdir(replayDir)).to.have.lengthOf(0)
+    }
+
     return
   }
 
@@ -47,6 +53,9 @@ async function testLiveVideoResolutions (options: {
   resolutions: number[]
   transcoded: boolean
 
+  hasAudio?: boolean
+  hasVideo?: boolean
+
   objectStorage?: ObjectStorageCommand
   objectStorageBaseUrl?: string
 }) {
@@ -55,11 +64,21 @@ async function testLiveVideoResolutions (options: {
     sqlCommand,
     servers,
     liveVideoId,
-    resolutions,
     transcoded,
     objectStorage,
+    hasAudio = true,
+    hasVideo = true,
     objectStorageBaseUrl = objectStorage?.getMockPlaylistBaseUrl()
   } = options
+
+  // Live is always audio/video splitted
+  const splittedAudio = transcoded
+
+  const resolutions = splittedAudio && options.resolutions.length > 1 && !options.resolutions.includes(VideoResolution.H_NOVIDEO)
+    ? [ VideoResolution.H_NOVIDEO, ...options.resolutions ]
+    : [ ...options.resolutions ]
+
+  const isAudioOnly = resolutions.every(r => r === VideoResolution.H_NOVIDEO)
 
   for (const server of servers) {
     const { data } = await server.videos.list()
@@ -67,7 +86,12 @@ async function testLiveVideoResolutions (options: {
 
     const video = await server.videos.get({ id: liveVideoId })
 
-    expect(video.aspectRatio).to.equal(1.7778)
+    if (isAudioOnly) {
+      expect(video.aspectRatio).to.equal(0)
+    } else {
+      expect(video.aspectRatio).to.equal(1.7778)
+    }
+
     expect(video.streamingPlaylists).to.have.lengthOf(1)
 
     const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
@@ -79,6 +103,9 @@ async function testLiveVideoResolutions (options: {
       playlistUrl: hlsPlaylist.playlistUrl,
       resolutions,
       transcoded,
+      splittedAudio,
+      hasAudio,
+      hasVideo,
       withRetry: !!objectStorage
     })
 
@@ -123,7 +150,7 @@ async function testLiveVideoResolutions (options: {
       })
 
       if (originServer.internalServerNumber === server.internalServerNumber) {
-        const infohash = sha1(`${2 + hlsPlaylist.playlistUrl}+V${i}`)
+        const infohash = sha1(`2${hlsPlaylist.playlistUrl}+V${i}`)
         const dbInfohashes = await sqlCommand.getPlaylistInfohash(hlsPlaylist.id)
 
         expect(dbInfohashes).to.include(infohash)

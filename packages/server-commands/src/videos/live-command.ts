@@ -167,6 +167,7 @@ export class LiveCommand extends AbstractCommand {
   async runAndTestStreamError (options: OverrideCommandOptions & {
     videoId: number | string
     shouldHaveError: boolean
+    fixtureName?: string
   }) {
     const command = await this.sendRTMPStreamInVideo(options)
 

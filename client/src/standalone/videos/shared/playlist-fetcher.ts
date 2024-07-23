@@ -1,6 +1,7 @@
 import { HttpStatusCode, ResultList, VideoPlaylistElement } from '@peertube/peertube-models'
 import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
+import { getBackendUrl } from './url'
 
 export class PlaylistFetcher {
 
@@ -68,6 +69,6 @@ export class PlaylistFetcher {
   }
 
   private getPlaylistUrl (id: string) {
-    return window.location.origin + '/api/v1/video-playlists/' + id
+    return getBackendUrl() + '/api/v1/video-playlists/' + id
   }
 }

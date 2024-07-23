@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { LiveVideoError, UserVideoQuota, VideoPrivacy } from '@peertube/peertube-models'
+import { LiveVideoError, UserVideoQuota, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests, createMultipleServers,
@@ -38,14 +38,14 @@ describe('Test live constraints', function () {
     return uuid
   }
 
-  async function checkSaveReplay (videoId: string, resolutions = [ 720 ]) {
+  async function checkSaveReplay (videoId: string, savedResolutions?: number[]) {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoId })
       expect(video.isLive).to.be.false
       expect(video.duration).to.be.greaterThan(0)
     }
 
-    await checkLiveCleanup({ server: servers[0], permanent: false, videoUUID: videoId, savedResolutions: resolutions })
+    await checkLiveCleanup({ server: servers[0], permanent: false, videoUUID: videoId, savedResolutions })
   }
 
   function updateQuota (options: { total: number, daily: number }) {
@@ -100,7 +100,7 @@ describe('Test live constraints', function () {
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
-    await checkSaveReplay(userVideoLiveoId)
+    await checkSaveReplay(userVideoLiveoId, [ VideoResolution.H_720P ])
 
     const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
     expect(session.error).to.equal(LiveVideoError.QUOTA_EXCEEDED)
@@ -136,7 +136,7 @@ describe('Test live constraints', function () {
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
-    await checkSaveReplay(userVideoLiveoId)
+    await checkSaveReplay(userVideoLiveoId, [ VideoResolution.H_720P ])
 
     const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
     expect(session.error).to.equal(LiveVideoError.QUOTA_EXCEEDED)
@@ -223,7 +223,7 @@ describe('Test live constraints', function () {
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
-    await checkSaveReplay(userVideoLiveoId, [ 720, 240, 144 ])
+    await checkSaveReplay(userVideoLiveoId, [ 720, 240, 144, 0 ])
 
     const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
     expect(session.error).to.equal(LiveVideoError.DURATION_EXCEEDED)

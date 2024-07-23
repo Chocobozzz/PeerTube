@@ -5,7 +5,7 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-comm
 
 export class ConfigCommand extends AbstractCommand {
 
-  static getCustomConfigResolutions (enabled: boolean, with0p = false) {
+  static getConfigResolutions (enabled: boolean, with0p = false) {
     return {
       '0p': enabled && with0p,
       '144p': enabled,
@@ -16,6 +16,20 @@ export class ConfigCommand extends AbstractCommand {
       '1080p': enabled,
       '1440p': enabled,
       '2160p': enabled
+    }
+  }
+
+  static getCustomConfigResolutions (enabled: number[]) {
+    return {
+      '0p': enabled.includes(0),
+      '144p': enabled.includes(144),
+      '240p': enabled.includes(240),
+      '360p': enabled.includes(360),
+      '480p': enabled.includes(480),
+      '720p': enabled.includes(720),
+      '1080p': enabled.includes(1080),
+      '1440p': enabled.includes(1440),
+      '2160p': enabled.includes(2160)
     }
   }
 
@@ -211,19 +225,27 @@ export class ConfigCommand extends AbstractCommand {
 
   enableLive (options: {
     allowReplay?: boolean
+    resolutions?: 'min' | 'max' | number[] // default 'min'
     transcoding?: boolean
-    resolutions?: 'min' | 'max' // Default max
+    maxDuration?: number
+    alwaysTranscodeOriginalResolution?: boolean
   } = {}) {
-    const { allowReplay, transcoding, resolutions = 'max' } = options
+    const { allowReplay, transcoding, maxDuration, resolutions = 'min', alwaysTranscodeOriginalResolution } = options
 
     return this.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,
-          allowReplay: allowReplay ?? true,
+          allowReplay,
+          maxDuration,
           transcoding: {
-            enabled: transcoding ?? true,
-            resolutions: ConfigCommand.getCustomConfigResolutions(resolutions === 'max')
+            enabled: transcoding,
+
+            alwaysTranscodeOriginalResolution,
+
+            resolutions: Array.isArray(resolutions)
+              ? ConfigCommand.getCustomConfigResolutions(resolutions)
+              : ConfigCommand.getConfigResolutions(resolutions === 'max')
           }
         }
       }
@@ -246,10 +268,14 @@ export class ConfigCommand extends AbstractCommand {
   enableTranscoding (options: {
     webVideo?: boolean // default true
     hls?: boolean // default true
-    with0p?: boolean // default false
     keepOriginal?: boolean // default false
+    splitAudioAndVideo?: boolean // default false
+
+    resolutions?: 'min' | 'max' | number[] // default 'max'
+
+    with0p?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true, with0p = false, keepOriginal = false } = options
+    const { resolutions = 'max', webVideo = true, hls = true, with0p = false, keepOriginal = false, splitAudioAndVideo = false } = options
 
     return this.updateExistingConfig({
       newConfig: {
@@ -262,14 +288,27 @@ export class ConfigCommand extends AbstractCommand {
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
 
-          resolutions: ConfigCommand.getCustomConfigResolutions(true, with0p),
+          resolutions: Array.isArray(resolutions)
+            ? ConfigCommand.getCustomConfigResolutions(resolutions)
+            : ConfigCommand.getConfigResolutions(resolutions === 'max', with0p),
 
           webVideos: {
             enabled: webVideo
           },
           hls: {
-            enabled: hls
+            enabled: hls,
+            splitAudioAndVideo
           }
+        }
+      }
+    })
+  }
+
+  setTranscodingConcurrency (concurrency: number) {
+    return this.updateExistingConfig({
+      newConfig: {
+        transcoding: {
+          concurrency
         }
       }
     })
@@ -278,9 +317,10 @@ export class ConfigCommand extends AbstractCommand {
   enableMinimumTranscoding (options: {
     webVideo?: boolean // default true
     hls?: boolean // default true
+    splitAudioAndVideo?: boolean // default false
     keepOriginal?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true, keepOriginal = false } = options
+    const { webVideo = true, hls = true, keepOriginal = false, splitAudioAndVideo = false } = options
 
     return this.updateExistingConfig({
       newConfig: {
@@ -294,7 +334,7 @@ export class ConfigCommand extends AbstractCommand {
           allowAdditionalExtensions: true,
 
           resolutions: {
-            ...ConfigCommand.getCustomConfigResolutions(false),
+            ...ConfigCommand.getConfigResolutions(false),
 
             '240p': true
           },
@@ -303,7 +343,8 @@ export class ConfigCommand extends AbstractCommand {
             enabled: webVideo
           },
           hls: {
-            enabled: hls
+            enabled: hls,
+            splitAudioAndVideo
           }
         }
       }

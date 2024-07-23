@@ -3,8 +3,8 @@ import { getAudioStream, getVideoStream } from '@peertube/peertube-ffmpeg'
 import { logger } from '../logger.js'
 import { forceNumber } from '@peertube/peertube-core-utils'
 
-export async function getVideoStreamCodec (path: string) {
-  const videoStream = await getVideoStream(path)
+export async function getVideoStreamCodec (path: string, existingProbe?: FfprobeData) {
+  const videoStream = await getVideoStream(path, existingProbe)
   if (!videoStream) return ''
 
   const videoCodec = videoStream.codec_tag_string

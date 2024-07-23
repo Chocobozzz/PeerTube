@@ -1,5 +1,11 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
-import { TranscodeVODOptionsType, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
+import {
+  MergeAudioTranscodeOptions,
+  TranscodeVODOptionsType,
+  VideoTranscodeOptions,
+  getVideoStreamDuration
+} from '@peertube/peertube-ffmpeg'
+import { VideoFileStream } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -21,25 +27,22 @@ import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
   video: MVideoFullLight
-  inputVideoFile: MVideoFile
   quickTranscode: boolean
   job: Job
 }) {
-  const { video, inputVideoFile, quickTranscode, job } = options
+  const { quickTranscode, job } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
   // Will be released by our transcodeVOD function once ffmpeg is ran
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
 
   try {
-    await video.reload()
-    await inputVideoFile.reload()
+    const video = await VideoModel.loadFull(options.video.id)
+    const inputVideoFile = video.getMaxQualityFile(VideoFileStream.VIDEO)
 
-    const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
-
-    const result = await VideoPathManager.Instance.makeAvailableVideoFile(fileWithVideoOrPlaylist, async videoInputPath => {
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async videoInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       const transcodeType: TranscodeVODOptionsType = quickTranscode
@@ -53,7 +56,7 @@ export async function optimizeOriginalVideofile (options: {
       await buildFFmpegVOD(job).transcode({
         type: transcodeType,
 
-        inputPath: videoInputPath,
+        videoInputPath,
         outputPath: videoOutputPath,
 
         inputFileMutexReleaser,
@@ -89,16 +92,17 @@ export async function transcodeNewWebVideoResolution (options: {
 
   try {
     const video = await VideoModel.loadFull(videoArg.uuid)
-    const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
 
-    const result = await VideoPathManager.Instance.makeAvailableVideoFile(file, async videoInputPath => {
+    const result = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({ videoPath, separatedAudioPath }) => {
       const filename = generateWebVideoFilename(resolution, newExtname)
       const videoOutputPath = join(transcodeDirectory, filename)
 
-      const transcodeOptions = {
-        type: 'video' as 'video',
+      const transcodeOptions: VideoTranscodeOptions = {
+        type: 'video',
 
-        inputPath: videoInputPath,
+        videoInputPath: videoPath,
+        separatedAudioInputPath: separatedAudioPath,
+
         outputPath: videoOutputPath,
 
         inputFileMutexReleaser,
@@ -134,11 +138,9 @@ export async function mergeAudioVideofile (options: {
 
   try {
     const video = await VideoModel.loadFull(videoArg.uuid)
-    const inputVideoFile = video.getMinQualityFile()
+    const inputVideoFile = video.getMaxQualityFile(VideoFileStream.AUDIO)
 
-    const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
-
-    const result = await VideoPathManager.Instance.makeAvailableVideoFile(fileWithVideoOrPlaylist, async audioInputPath => {
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile, async audioInputPath => {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       // If the user updates the video preview during transcoding
@@ -146,15 +148,16 @@ export async function mergeAudioVideofile (options: {
       const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
       await copyFile(previewPath, tmpPreviewPath)
 
-      const transcodeOptions = {
-        type: 'merge-audio' as 'merge-audio',
+      const transcodeOptions: MergeAudioTranscodeOptions = {
+        type: 'merge-audio',
 
-        inputPath: tmpPreviewPath,
+        videoInputPath: tmpPreviewPath,
+        audioPath: audioInputPath,
+
         outputPath: videoOutputPath,
 
         inputFileMutexReleaser,
 
-        audioPath: audioInputPath,
         resolution,
         fps
       }

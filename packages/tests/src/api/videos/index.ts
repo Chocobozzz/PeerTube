@@ -1,4 +1,5 @@
 import './channel-import-videos.js'
+import './generate-download.js'
 import './multiple-servers.js'
 import './resumable-upload.js'
 import './single-server.js'

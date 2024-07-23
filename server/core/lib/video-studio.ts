@@ -5,7 +5,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import { MUser, MVideo, MVideoFile, MVideoFullLight, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MUser, MVideoFile, MVideoFullLight, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
@@ -31,7 +31,7 @@ export function getStudioTaskFilePath (filename: string) {
 }
 
 export async function safeCleanupStudioTMPFiles (tasks: VideoStudioTaskPayload[]) {
-  logger.info('Removing studio task files', { tasks, ...lTags() })
+  logger.info('Removing TMP studio task files', { tasks, ...lTags() })
 
   for (const task of tasks) {
     try {
@@ -64,13 +64,13 @@ export async function approximateIntroOutroAdditionalSize (
     additionalDuration += await getVideoStreamDuration(filePath)
   }
 
-  return (video.getMaxQualityFile().size / video.duration) * additionalDuration
+  return (video.getMaxQualityBytes() / video.duration) * additionalDuration
 }
 
 // ---------------------------------------------------------------------------
 
 export async function createVideoStudioJob (options: {
-  video: MVideo
+  video: MVideoWithFile
   user: MUser
   payload: VideoStudioEditionPayload
 }) {

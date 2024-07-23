@@ -1,9 +1,10 @@
-import { remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { pick } from '@peertube/peertube-core-utils'
 import { FFmpegEdition, FFmpegLive, FFmpegVOD, getDefaultAvailableEncoders, getDefaultEncodersToTry } from '@peertube/peertube-ffmpeg'
 import { RunnerJob, RunnerJobPayload } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
+import { remove } from 'fs-extra/esm'
+import { join } from 'path'
 import { ConfigManager, downloadFile, logger } from '../../../shared/index.js'
 import { getWinstonLogger } from './winston-logger.js'
 
@@ -33,6 +34,18 @@ export async function downloadInputFile (options: {
   }
 
   return destination
+}
+
+export async function downloadSeparatedAudioFileIfNeeded (options: {
+  urls: string[]
+  job: JobWithToken
+  runnerToken: string
+}) {
+  const { urls } = options
+
+  if (!urls || urls.length === 0) return undefined
+
+  return downloadInputFile({ url: urls[0], ...pick(options, [ 'job', 'runnerToken' ]) })
 }
 
 export function scheduleTranscodingProgress (options: {

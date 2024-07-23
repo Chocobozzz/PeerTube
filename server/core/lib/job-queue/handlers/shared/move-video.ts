@@ -44,7 +44,7 @@ export async function moveToJob (options: {
 
   try {
     const source = await VideoSourceModel.loadLatest(video.id)
-    if (source) {
+    if (source?.keptOriginalFilename) {
       logger.debug(`Moving video source ${source.keptOriginalFilename} file of video ${video.uuid}`, lTags)
 
       await moveVideoSourceFile(source)

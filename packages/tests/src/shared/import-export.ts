@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
+import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   ActivityCreate,
   ActivityPubOrderedCollection,
@@ -12,6 +13,7 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '@peertube/peertube-models'
+import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
 import {
   ConfigCommand,
   ObjectStorageCommand,
@@ -23,12 +25,14 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra'
+import { writeFile } from 'fs/promises'
 import JSZip from 'jszip'
-import { resolve } from 'path'
+import { tmpdir } from 'os'
+import { basename, join, resolve } from 'path'
+import { testFileExistsOnFSOrNot } from './checks.js'
 import { MockSmtpServer } from './mock-servers/mock-email.js'
 import { getAllNotificationsSettings } from './notifications.js'
-import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
-import { testFileExistsOnFSOrNot } from './checks.js'
 
 type ExportOutbox = ActivityPubOrderedCollection<ActivityCreate<VideoObject | VideoCommentObject>>
 
@@ -56,6 +60,24 @@ export async function checkFileExistsInZIP (zip: JSZip, path: string, base = '/'
 
   const buf = await zip.file(innerPath).async('arraybuffer')
   expect(buf.byteLength, `${innerPath} is empty`).to.be.greaterThan(0)
+}
+
+export async function probeZIPFile (zip: JSZip, path: string, base = '/') {
+  const innerPath = resolve(base, path).substring(1) // Remove '/' at the beginning of the string
+
+  expect(zip.files[innerPath], `${innerPath} does not exist`).to.exist
+
+  const buf = await zip.file(innerPath).async('arraybuffer')
+
+  const basePath = join(tmpdir(), 'peertube-test')
+  const videoPath = join(basePath, basename(innerPath))
+  await ensureDir(basePath)
+  await writeFile(videoPath, Buffer.from(buf))
+
+  const probe = await ffprobePromise(videoPath)
+  await remove(videoPath)
+
+  return probe
 }
 
 // ---------------------------------------------------------------------------

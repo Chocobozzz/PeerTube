@@ -1,10 +1,10 @@
-import express from 'express'
+import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createTranscodingJobs } from '@server/lib/transcoding/create-transcoding-job.js'
 import { computeResolutionsToTranscode } from '@server/lib/transcoding/transcoding-resolutions.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
-import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@peertube/peertube-models'
+import express from 'express'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares/index.js'
 
 const lTags = loggerTagsFactory('api', 'video')
@@ -33,7 +33,8 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingTranscode')
 
-  const { resolution: maxResolution, hasAudio } = await video.probeMaxQualityFile()
+  const maxResolution = video.getMaxResolution()
+  const hasAudio = video.hasAudio()
 
   const resolutions = await Hooks.wrapObject(
     computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false, hasAudio }),

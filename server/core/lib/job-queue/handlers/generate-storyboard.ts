@@ -1,5 +1,5 @@
-import { FFmpegImage, ffprobePromise, getVideoStreamDimensionsInfo, isAudioFile } from '@peertube/peertube-ffmpeg'
-import { GenerateStoryboardPayload } from '@peertube/peertube-models'
+import { FFmpegImage, ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
+import { GenerateStoryboardPayload, VideoFileStream } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
@@ -34,16 +34,14 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       return
     }
 
-    const inputFile = video.getMaxQualityFile()
+    const inputFile = video.getMaxQualityFile(VideoFileStream.VIDEO)
+    if (!inputFile) {
+      logger.info('Do not generate a storyboard of %s since the video does not have a video stream', payload.videoUUID, lTags)
+      return
+    }
 
     await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
       const probe = await ffprobePromise(videoPath)
-      const isAudio = await isAudioFile(videoPath, probe)
-
-      if (isAudio) {
-        logger.info('Do not generate a storyboard of %s since the video does not have a video stream', payload.videoUUID, lTags)
-        return
-      }
 
       const videoStreamInfo = await getVideoStreamDimensionsInfo(videoPath, probe)
       let spriteHeight: number

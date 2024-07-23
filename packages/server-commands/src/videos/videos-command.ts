@@ -341,6 +341,14 @@ export class VideosCommand extends AbstractCommand {
     return data.find(v => v.name === options.name)
   }
 
+  async findFull (options: OverrideCommandOptions & {
+    name: string
+  }) {
+    const { uuid } = await this.find(options)
+
+    return this.get({ id: uuid })
+  }
+
   // ---------------------------------------------------------------------------
 
   update (options: OverrideCommandOptions & {
@@ -661,5 +669,26 @@ export class VideosCommand extends AbstractCommand {
 
   endVideoResumableUpload (options: Parameters<AbstractCommand['endResumableUpload']>[0]) {
     return super.endResumableUpload(options)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  generateDownload (options: OverrideCommandOptions & {
+    videoId: number | string
+    videoFileIds: number[]
+    query?: Record<string, string>
+  }) {
+    const { videoFileIds, videoId, query = {} } = options
+    const path = '/download/videos/generate/' + videoId
+
+    return this.getRequestBody<Buffer>({
+      ...options,
+
+      path,
+      query: { videoFileIds, ...query },
+      responseType: 'arraybuffer',
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
   }
 }

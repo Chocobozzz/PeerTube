@@ -82,7 +82,8 @@ const playerKeys = {
   'Disable subtitles': 'Disable subtitles',
   'Enable {1} subtitle': 'Enable {1} subtitle',
   '{1} (auto-generated)': '{1} (auto-generated)',
-  'Go back': 'Go back'
+  'Go back': 'Go back',
+  'Audio only': 'Audio only'
 }
 Object.assign(playerKeys, videojs)
 

@@ -1,4 +1,4 @@
-import { hasAudioStream } from '@peertube/peertube-ffmpeg'
+import { VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, TranscriptionModel, WhisperBuiltinModel, transcriberFactory } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
@@ -96,25 +96,30 @@ export async function generateSubtitle (options: {
     inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
 
     const video = await VideoModel.loadFull(options.video.uuid)
-    const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
+    if (!video) {
+      logger.info('Do not process transcription, video does not exist anymore.', lTags(options.video.uuid))
+      return undefined
+    }
 
-    await VideoPathManager.Instance.makeAvailableVideoFile(file, async videoInputPath => {
-      if (await hasAudioStream(videoInputPath) !== true) {
-        logger.info(
-          `Do not run transcription for ${video.uuid} in ${outputPath} because it does not contain an audio stream`,
-          lTags(video.uuid)
-        )
+    const file = video.getMaxQualityFile(VideoFileStream.AUDIO)
 
-        return
-      }
+    if (!file) {
+      logger.info(
+        `Do not run transcription for ${video.uuid} in ${outputPath} because it does not contain an audio stream`,
+        { video, ...lTags(video.uuid) }
+      )
 
+      return
+    }
+
+    await VideoPathManager.Instance.makeAvailableVideoFile(file, async inputPath => {
       // Release input file mutex now we are going to run the command
       setTimeout(() => inputFileMutexReleaser(), 1000)
 
       logger.info(`Running transcription for ${video.uuid} in ${outputPath}`, lTags(video.uuid))
 
       const transcriptFile = await transcriber.transcribe({
-        mediaFilePath: videoInputPath,
+        mediaFilePath: inputPath,
 
         model: CONFIG.VIDEO_TRANSCRIPTION.MODEL_PATH
           ? await TranscriptionModel.fromPath(CONFIG.VIDEO_TRANSCRIPTION.MODEL_PATH)

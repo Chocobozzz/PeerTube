@@ -2,6 +2,7 @@ import { HttpStatusCode, LiveVideo, VideoDetails, VideoToken } from '@peertube/p
 import { logger } from '../../../root-helpers'
 import { PeerTubeServerError } from '../../../types'
 import { AuthHTTP } from './auth-http'
+import { getBackendUrl } from './url'
 
 export class VideoFetcher {
 
@@ -70,11 +71,11 @@ export class VideoFetcher {
   }
 
   private getVideoUrl (id: string) {
-    return window.location.origin + '/api/v1/videos/' + id
+    return getBackendUrl() + '/api/v1/videos/' + id
   }
 
   private getLiveUrl (videoId: string) {
-    return window.location.origin + '/api/v1/videos/live/' + videoId
+    return getBackendUrl() + '/api/v1/videos/live/' + videoId
   }
 
   private loadStoryboards (videoUUID: string): Promise<Response> {
@@ -82,7 +83,7 @@ export class VideoFetcher {
   }
 
   private getStoryboardsUrl (videoId: string) {
-    return window.location.origin + '/api/v1/videos/' + videoId + '/storyboards'
+    return getBackendUrl() + '/api/v1/videos/' + videoId + '/storyboards'
   }
 
   private getVideoTokenUrl (id: string) {
