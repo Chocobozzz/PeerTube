@@ -3393,7 +3393,7 @@
       </trans-unit>
       <trans-unit id="7231414106228227962" datatype="html" xml:space="preserve">
         <source>The requested entity body blends sweet bits with a mellow earthiness.</source>
-        <target state="translated">เนื้อหาที่ร้องขอผสมผสานความหวานเล็กน้อยกับความนุ่มนวลของพื้นดิน</target>
+        <target state="translated">เนื้อหาที่ร้องขอผสมผสานความหวานละมุนละไมเข้ากับกลิ่นหอมอายดินอย่างกลมกล่อม</target>
         <note priority="1" from="description">Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
