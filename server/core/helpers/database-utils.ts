@@ -76,11 +76,13 @@ function saveInTransactionWithRetries <T extends Pick<Model, 'save' | 'changed'>
     return sequelizeTypescript.transaction(async transaction => {
       try {
         await model.save({ transaction })
-      } catch {
+      } catch (err) {
         // Reinit changed keys
         for (const key of changedKeys) {
           model.changed(key as keyof Model, true)
         }
+
+        throw err
       }
     })
   })
