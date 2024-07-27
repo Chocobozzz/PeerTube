@@ -10,8 +10,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.HH" datatype="html">
+      <trans-unit id="ngb.timepicker.HH" datatype="html" xml:space="preserve">
         <source>HH</source>
+        <target state="translated">СС</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -17756,8 +17757,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1677142486230902467" datatype="html">
+      <trans-unit id="1677142486230902467" datatype="html" xml:space="preserve">
         <source>Server error</source>
+        <target state="translated">Сервер хатасы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -17854,8 +17856,9 @@
           <context context-type="linenumber">297</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3099741642167775297" datatype="html">
+      <trans-unit id="3099741642167775297" datatype="html" xml:space="preserve">
         <source>Download</source>
+        <target state="translated">Йөкләп алу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">329</context>
@@ -17876,15 +17879,17 @@
           <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4503408361537553733" datatype="html">
+      <trans-unit id="4503408361537553733" datatype="html" xml:space="preserve">
         <source>Mirror</source>
+        <target state="translated">Көзге</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2631340539474479416" datatype="html">
+      <trans-unit id="2631340539474479416" datatype="html" xml:space="preserve">
         <source>Subtitles</source>
+        <target state="translated">Субтитрлар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">9</context>
@@ -17925,8 +17930,9 @@
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910455707959454672" datatype="html">
+      <trans-unit id="5910455707959454672" datatype="html" xml:space="preserve">
         <source>Torrent (.torrent file)</source>
+        <target state="needs-translation">Торрент (.torrent файлы)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">109</context>
@@ -17946,15 +17952,17 @@
           <context context-type="linenumber">130,132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5235042777215655908" datatype="html">
+      <trans-unit id="5235042777215655908" datatype="html" xml:space="preserve">
         <source>subtitles</source>
+        <target state="translated">субтитрлар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="346270517625845962" datatype="html">
+      <trans-unit id="346270517625845962" datatype="html" xml:space="preserve">
         <source>Encoder</source>
+        <target state="translated">Энкодер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">223</context>
@@ -17974,8 +17982,9 @@
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7742520815129539114" datatype="html">
+      <trans-unit id="7742520815129539114" datatype="html" xml:space="preserve">
         <source>Bitrate</source>
+        <target state="translated">Битрейт</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">227</context>
@@ -17985,22 +17994,25 @@
           <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4094960161662677662" datatype="html">
+      <trans-unit id="4094960161662677662" datatype="html" xml:space="preserve">
         <source>Codec</source>
+        <target state="translated">Кодек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4915431133669985304" datatype="html">
+      <trans-unit id="4915431133669985304" datatype="html" xml:space="preserve">
         <source>Profile</source>
+        <target state="translated">Профиль</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1963136290621768454" datatype="html">
+      <trans-unit id="1963136290621768454" datatype="html" xml:space="preserve">
         <source>Resolution</source>
+        <target state="translated">Төгәллек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">257</context>
@@ -18111,8 +18123,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2343321245279384373" datatype="html">
+      <trans-unit id="2343321245279384373" datatype="html" xml:space="preserve">
         <source>Languages:</source>
+        <target state="translated">Телләр:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">62</context>
@@ -18146,8 +18159,9 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2736556170366900089" datatype="html">
+      <trans-unit id="2736556170366900089" datatype="html" xml:space="preserve">
         <source>Type:</source>
+        <target state="translated">Төр:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">98</context>
@@ -18209,15 +18223,17 @@
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2906587845957718064" datatype="html">
+      <trans-unit id="2906587845957718064" datatype="html" xml:space="preserve">
         <source>Local</source>
+        <target state="translated">Җирле</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1949800099101277248" datatype="html">
+      <trans-unit id="1949800099101277248" datatype="html" xml:space="preserve">
         <source>Languages</source>
+        <target state="translated">Телләр</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">142</context>
@@ -18495,8 +18511,9 @@
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7708270344948043036" datatype="html">
+      <trans-unit id="7708270344948043036" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </source>
+        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">25,27</context>
