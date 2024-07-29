@@ -232,7 +232,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-studio-edition': 1,
-  'manage-video-torrent': 1,
+  'manage-video-torrent': 1, // Keep it to 1 to prevent concurrency issues
   'move-to-object-storage': 1,
   'move-to-file-system': 1,
   'video-channel-import': 1,
