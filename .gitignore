@@ -18,8 +18,9 @@ yarn-error.log
 /packages/tests/fixtures/video_59fps.mp4
 /packages/tests/fixtures/transcription/models-v1/
 
-# Production
+# PeerTube
 /storage
+/dev1
 /config/production.yaml
 /config/local*
 /ffmpeg/
