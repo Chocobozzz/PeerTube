@@ -38,7 +38,8 @@
     (filtersChanged)="onFiltersChanged(true)"
   ></my-video-filters-header>
 
-  <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0 && highlightedLives.length !== 0">No results.</div>
+  <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0 && highlightedLives.length === 0">No results.</div>
+
   <div
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
     [setAngularState]="true" [parentDisabled]="disabled"
