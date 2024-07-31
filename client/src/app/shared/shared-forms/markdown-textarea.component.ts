@@ -1,14 +1,14 @@
-import { Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { ViewportScroller, NgClass, NgIf } from '@angular/common'
-import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
+import { NgClass, NgIf, ViewportScroller } from '@angular/common'
+import { booleanAttribute, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
+import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video } from '@peertube/peertube-models'
-import { FormReactiveErrors } from './form-reactive.service'
+import { Subject } from 'rxjs'
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbTooltip, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { FormReactiveErrors } from './form-reactive.service'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -42,7 +42,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   @Input() formError: string | FormReactiveErrors | FormReactiveErrors[]
 
-  @Input() truncateTo3Lines: boolean
+  @Input({ transform: booleanAttribute }) truncateTo3Lines: boolean
 
   @Input() markdownType: 'text' | 'enhanced' | 'to-unsafe-html' = 'text'
   @Input() customMarkdownRenderer?: (text: string) => Promise<string | HTMLElement>
@@ -54,6 +54,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() name = 'description'
 
   @Input() dir: string
+  @Input({ transform: booleanAttribute }) withEmoji = false
 
   @ViewChild('textarea') textareaElement: ElementRef
   @ViewChild('previewElement') previewElement: ElementRef
@@ -162,9 +163,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
       html = result
     } else if (this.markdownType === 'text') {
-      html = await this.markdownService.textMarkdownToHTML({ markdown: text })
+      html = await this.markdownService.textMarkdownToHTML({ markdown: text, withEmoji: this.withEmoji })
     } else if (this.markdownType === 'enhanced') {
-      html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text })
+      html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text, withEmoji: this.withEmoji })
     } else if (this.markdownType === 'to-unsafe-html') {
       html = await this.markdownService.markdownToUnsafeHTML({ markdown: text })
     }
