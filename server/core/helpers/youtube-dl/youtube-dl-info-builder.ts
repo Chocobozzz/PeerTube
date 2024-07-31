@@ -90,8 +90,14 @@ export class YoutubeDLInfoBuilder {
       originallyPublishedAtWithoutTime: this.buildOriginallyPublishedAt(obj),
       ext: obj.ext,
       webpageUrl: obj.webpage_url,
+
       chapters: isArray(obj.chapters)
-        ? obj.chapters.map((c: { start_time: number, title: string }) => ({ timecode: c.start_time, title: c.title }))
+        ? obj.chapters.map((c: { start_time: number, title: string }) => {
+          return {
+            timecode: c.start_time,
+            title: c.title.slice(0, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max)
+          }
+        })
         : []
     }
   }
