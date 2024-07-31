@@ -66,12 +66,14 @@ export class HotkeysService {
               return
             }
 
-            const result = hotkey.callback.apply(this, [ event, combo ])
+            this.zone.run(() => {
+              const result = hotkey.callback.apply(this, [ event, combo ])
 
-            if (result === false) {
-              event.preventDefault()
-              event.stopPropagation()
-            }
+              if (result === false) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+            })
           }
         })
 
