@@ -403,7 +403,7 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
 
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.fail({
-          status: HttpStatusCode.UNAUTHORIZED_401,
+          status: HttpStatusCode.FORBIDDEN_403,
           message: 'currentPassword is invalid.',
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
