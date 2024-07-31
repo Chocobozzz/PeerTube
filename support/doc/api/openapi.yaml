@@ -7519,7 +7519,10 @@ components:
         - 16
         - 32
       description: >
-        **PeerTube >= 4.0** Include additional videos in results (can be combined using bitwise or operator)
+        **Only administrators and moderators can use this parameter**
+
+
+        Include additional videos in results (can be combined using bitwise or operator)
 
         - `0` NONE
 
