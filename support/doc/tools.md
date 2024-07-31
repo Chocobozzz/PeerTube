@@ -157,6 +157,40 @@ peertube-runner [commands] --id instance-3
 
 You can change the runner configuration (jobs concurrency, ffmpeg threads/nice, whisper engines/models, etc.) by editing `~/.config/peertube-runner-nodejs/[id]/config.toml`.
 
+The runner TOML config template consists of:
+
+```toml
+[jobs]
+# How much concurrent jobs the runner can execute in parallel
+concurrency = 2
+
+[ffmpeg]
+# How much threads a ffmpeg process can use
+# 0 -> let ffmpeg automatically choose
+threads = 0
+nice = 20
+
+[transcription]
+# Choose between "openai-whisper" or "whisper-ctranslate2"
+# Engine binary has to be installed manually (unlike the PeerTube instance that can install whisper automatically)
+engine = "whisper-ctranslate2"
+# Optional whisper binary path if not available in global path
+enginePath = "/var/prunner/.local/pipx/venvs/whisper-ctranslate2/bin/whisper-ctranslate2"
+# Whisper model: "tiny", "base", "small", "medium", "large-v2" or "large-v3"
+model = "large-v2"
+
+# Registered instances are saved in the config file
+[[registeredInstances]]
+url = "..." # URL of the instance
+runnerToken = "..." # Shared runner token secret
+runnerName = "..." # Runner name declared to the PeerTube instance
+
+[[registeredInstances]]
+url = "..."
+runnerToken = "..."
+runnerName = "..."
+```
+
 ### Run the server
 
 #### In a shell
@@ -165,6 +199,20 @@ You need to run the runner in server mode first so it can run transcoding jobs o
 
 ```bash
 peertube-runner server
+```
+
+You can also decide which kind of job the runner can execute with `--enable-job <type>` option.
+This way you can have one dedicated runner for transcription tasks (on a GPU machine for example) and another one for transcoding tasks.
+
+```bash
+# Only transcription tasks
+peertube-runner server --enable-job video-transcription
+# Only VOD transcoding tasks
+peertube-runner server --enable-job vod-web-video-transcoding --enable-job vod-hls-transcoding --enable-job vod-audio-merge-transcoding
+# Only "studio" transcoding
+peertube-runner server --enable-job video-studio-transcoding
+# Only "live" transcoding
+peertube-runner server --enable-job live-rtmp-hls-transcoding
 ```
 
 #### As a Systemd service
