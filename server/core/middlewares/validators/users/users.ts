@@ -1,7 +1,7 @@
-import express from 'express'
-import { body, param, query } from 'express-validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight, UserRole } from '@peertube/peertube-models'
+import express from 'express'
+import { body, param, query } from 'express-validator'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
@@ -31,10 +31,10 @@ import { Redis } from '../../../lib/redis.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import {
   areValidationErrors,
+  checkUserCanManageAccount,
   checkUserEmailExist,
   checkUserIdExist,
   checkUserNameOrEmailDoNotAlreadyExist,
-  checkUserCanManageAccount,
   doesVideoChannelIdExist,
   doesVideoExist,
   isValidVideoIdParam
@@ -211,7 +211,7 @@ const usersUpdateMeValidator = [
     .custom(isUserDescriptionValid),
   body('currentPassword')
     .optional()
-    .custom(isUserPasswordValid),
+    .custom(exists),
   body('password')
     .optional()
     .custom(isUserPasswordValid),
@@ -457,21 +457,7 @@ const ensureCanModerateUser = [
 // ---------------------------------------------------------------------------
 
 export {
-  usersListValidator,
-  usersAddValidator,
-  deleteMeValidator,
-  usersBlockingValidator,
-  usersRemoveValidator,
-  usersUpdateValidator,
-  usersUpdateMeValidator,
-  usersVideoRatingValidator,
-  usersCheckCurrentPasswordFactory,
-  usersGetValidator,
-  usersVideosValidator,
-  usersAskResetPasswordValidator,
-  usersResetPasswordValidator,
-  userAutocompleteValidator,
-  ensureAuthUserOwnsAccountValidator,
-  ensureCanModerateUser,
-  ensureCanManageChannelOrAccount
+  deleteMeValidator, ensureAuthUserOwnsAccountValidator, ensureCanManageChannelOrAccount, ensureCanModerateUser, userAutocompleteValidator, usersAddValidator, usersAskResetPasswordValidator, usersBlockingValidator, usersCheckCurrentPasswordFactory,
+  usersGetValidator, usersListValidator, usersRemoveValidator, usersResetPasswordValidator, usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator, usersVideosValidator
 }
+
