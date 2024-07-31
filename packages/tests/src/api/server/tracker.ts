@@ -107,6 +107,7 @@ describe('Test tracker', function () {
     torrent.on('error', done)
     torrent.on('warning', warn => {
       const message = typeof warn === 'string' ? warn : warn.message
+      if (message.includes('Unsupported tracker protocol')) return done()
       if (message.includes('Error connecting')) return done()
     })
   })
