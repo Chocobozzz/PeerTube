@@ -1,4 +1,4 @@
-import { Server as TrackerServer } from 'bittorrent-tracker'
+import { Server as TrackerServer } from '@peertube/bittorrent-tracker-server'
 import express from 'express'
 import { createServer } from 'http'
 import { LRUCache } from 'lru-cache'
