@@ -352,6 +352,8 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return VideoFileModel.scope({ method: [ ScopeNames.WITH_VIDEO_OR_PLAYLIST, whereVideo ] })
       .findOne(options)
       .then(file => {
+        if (!file) return null
+
         // We used `required: false` so check we have at least a video or a streaming playlist
         if (!file.Video && !file.VideoStreamingPlaylist) return null
 
