@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import bytes from 'bytes'
-import { expect } from 'chai'
-import { stat } from 'fs/promises'
-import merge from 'lodash-es/merge.js'
 import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
-import { areMockObjectStorageTestsDisabled, sha1 } from '@peertube/peertube-node-utils'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -18,12 +14,17 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { expectStartWith, expectLogDoesNotContain } from '@tests/shared/checks.js'
+import { expectLogDoesNotContain, expectStartWith } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { generateHighBitrateVideo } from '@tests/shared/generate.js'
 import { MockObjectStorageProxy } from '@tests/shared/mock-servers/mock-object-storage.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { checkPlaylistInfohash } from '@tests/shared/streaming-playlists.js'
 import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import bytes from 'bytes'
+import { expect } from 'chai'
+import { stat } from 'fs/promises'
+import merge from 'lodash-es/merge.js'
 
 async function checkFiles (options: {
   server: PeerTubeServer
@@ -91,7 +92,6 @@ async function checkFiles (options: {
     const resSha = await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
     expect(JSON.stringify(resSha.body)).to.not.throw
 
-    let i = 0
     for (const file of hls.files) {
       expectStartWith(file.fileUrl, start)
 
@@ -100,15 +100,10 @@ async function checkFiles (options: {
       expectStartWith(location, start)
 
       await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
+    }
 
-      if (originServer.internalServerNumber === server.internalServerNumber) {
-        const infohash = sha1(`${2 + hls.playlistUrl}+V${i}`)
-        const dbInfohashes = await originSQLCommand.getPlaylistInfohash(hls.id)
-
-        expect(dbInfohashes).to.include(infohash)
-      }
-
-      i++
+    if (originServer.internalServerNumber === server.internalServerNumber) {
+      await checkPlaylistInfohash({ video, files: hls.files, sqlCommand: originSQLCommand })
     }
   }
 

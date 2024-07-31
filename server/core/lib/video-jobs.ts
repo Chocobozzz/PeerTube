@@ -125,6 +125,12 @@ export async function addVideoJobsAfterUpdate (options: {
   const jobs: CreateJobArgument[] = []
 
   const filePathChanged = await moveFilesIfPrivacyChanged(video, oldPrivacy)
+  const hls = video.getHLSPlaylist()
+
+  if (filePathChanged && hls) {
+    hls.assignP2PMediaLoaderInfoHashes(video, hls.VideoFiles)
+    await hls.save()
+  }
 
   if (!video.isLive && (nameChanged || filePathChanged)) {
     for (const file of (video.VideoFiles || [])) {

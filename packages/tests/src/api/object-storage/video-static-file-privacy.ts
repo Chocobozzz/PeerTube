@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { basename } from 'path'
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
 import { areScalewayObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
@@ -20,7 +18,9 @@ import {
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
-import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
+import { checkPlaylistInfohash, checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
+import { expect } from 'chai'
+import { basename } from 'path'
 
 function extractFilenameFromUrl (url: string) {
   const parts = basename(url).split(':')
@@ -74,6 +74,8 @@ describe('Object storage for video static file privacy', function () {
 
         await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
       }
+
+      await checkPlaylistInfohash({ video, files: hls.files, sqlCommand })
     }
   }
 

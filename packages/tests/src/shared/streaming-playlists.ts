@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { basename, dirname, join } from 'path'
-import { removeFragmentedMP4Ext, uuidRegex } from '@peertube/peertube-core-utils'
+import { getHLS, removeFragmentedMP4Ext, uuidRegex } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
+  VideoDetails,
   VideoPrivacy,
   VideoResolution,
   VideoStreamingPlaylist,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
-import { sha256 } from '@peertube/peertube-node-utils'
+import { sha1, sha256 } from '@peertube/peertube-node-utils'
 import { makeRawRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
+import { basename, dirname, join } from 'path'
 import { expectStartWith } from './checks.js'
+import { SQLCommand } from './sql-command.js'
 import { hlsInfohashExist } from './tracker.js'
 import { checkWebTorrentWorks } from './webtorrent.js'
 
-async function checkSegmentHash (options: {
+export async function checkSegmentHash (options: {
   server: PeerTubeServer
   baseUrlPlaylist: string
   baseUrlSegment: string
@@ -49,9 +51,7 @@ async function checkSegmentHash (options: {
   expect(sha256(segmentBody)).to.equal(shaBody[videoName][range], `Invalid sha256 result for ${videoName} range ${range}`)
 }
 
-// ---------------------------------------------------------------------------
-
-async function checkLiveSegmentHash (options: {
+export async function checkLiveSegmentHash (options: {
   server: PeerTubeServer
   baseUrlSegment: string
   videoUUID: string
@@ -68,9 +68,25 @@ async function checkLiveSegmentHash (options: {
   expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
 }
 
+export async function checkPlaylistInfohash (options: {
+  video: VideoDetails
+  sqlCommand: SQLCommand
+  files: unknown[]
+}) {
+  const { sqlCommand, video, files } = options
+  const hls = getHLS(video)
+
+  for (let i = 0; i < files.length; i++) {
+    const infohash = sha1(`${2 + hls.playlistUrl}+V${i}`)
+    const dbInfohashes = await sqlCommand.getPlaylistInfohash(hls.id)
+
+    expect(dbInfohashes).to.include(infohash)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
-async function checkResolutionsInMasterPlaylist (options: {
+export async function checkResolutionsInMasterPlaylist (options: {
   server: PeerTubeServer
   playlistUrl: string
   resolutions: number[]
@@ -98,7 +114,7 @@ async function checkResolutionsInMasterPlaylist (options: {
   expect(playlistsLength).to.have.lengthOf(resolutions.length)
 }
 
-async function completeCheckHlsPlaylist (options: {
+export async function completeCheckHlsPlaylist (options: {
   servers: PeerTubeServer[]
   videoUUID: string
   hlsOnly: boolean
@@ -255,7 +271,7 @@ async function completeCheckHlsPlaylist (options: {
   }
 }
 
-async function checkVideoFileTokenReinjection (options: {
+export async function checkVideoFileTokenReinjection (options: {
   server: PeerTubeServer
   videoUUID: string
   videoFileToken: string
@@ -295,16 +311,7 @@ async function checkVideoFileTokenReinjection (options: {
   }
 }
 
-function extractResolutionPlaylistUrls (masterPath: string, masterContent: string) {
+export function extractResolutionPlaylistUrls (masterPath: string, masterContent: string) {
   return masterContent.match(/^([^.]+\.m3u8.*)/mg)
     .map(filename => join(dirname(masterPath), filename))
-}
-
-export {
-  checkSegmentHash,
-  checkLiveSegmentHash,
-  checkResolutionsInMasterPlaylist,
-  completeCheckHlsPlaylist,
-  extractResolutionPlaylistUrls,
-  checkVideoFileTokenReinjection
 }
