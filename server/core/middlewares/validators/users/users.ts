@@ -1,5 +1,5 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserRight, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, UserRight, UserRole } from '@peertube/peertube-models'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
@@ -40,7 +40,7 @@ import {
   isValidVideoIdParam
 } from '../shared/index.js'
 
-const usersListValidator = [
+export const usersListValidator = [
   query('blocked')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -53,7 +53,7 @@ const usersListValidator = [
   }
 ]
 
-const usersAddValidator = [
+export const usersAddValidator = [
   body('username')
     .custom(isUserUsernameValid)
     .withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -112,7 +112,7 @@ const usersAddValidator = [
   }
 ]
 
-const usersRemoveValidator = [
+export const usersRemoveValidator = [
   param('id')
     .custom(isIdValid),
 
@@ -129,7 +129,7 @@ const usersRemoveValidator = [
   }
 ]
 
-const usersBlockingValidator = [
+export const usersBlockingValidator = [
   param('id')
     .custom(isIdValid),
   body('reason')
@@ -149,7 +149,7 @@ const usersBlockingValidator = [
   }
 ]
 
-const deleteMeValidator = [
+export const deleteMeValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     if (user.username === 'root') {
@@ -160,7 +160,7 @@ const deleteMeValidator = [
   }
 ]
 
-const usersUpdateValidator = [
+export const usersUpdateValidator = [
   param('id').custom(isIdValid),
 
   body('password')
@@ -202,7 +202,7 @@ const usersUpdateValidator = [
   }
 ]
 
-const usersUpdateMeValidator = [
+export const usersUpdateMeValidator = [
   body('displayName')
     .optional()
     .custom(isUserDisplayNameValid),
@@ -263,13 +263,14 @@ const usersUpdateMeValidator = [
       }
 
       if (!req.body.currentPassword) {
-        return res.fail({ message: 'currentPassword parameter is missing.' })
+        return res.fail({ message: 'currentPassword parameter is missing' })
       }
 
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: 'currentPassword is invalid.'
+          message: 'currentPassword is invalid.',
+          type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }
     }
@@ -280,7 +281,7 @@ const usersUpdateMeValidator = [
   }
 ]
 
-const usersGetValidator = [
+export const usersGetValidator = [
   param('id')
     .custom(isIdValid),
   query('withStats')
@@ -295,7 +296,7 @@ const usersGetValidator = [
   }
 ]
 
-const usersVideoRatingValidator = [
+export const usersVideoRatingValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -306,7 +307,7 @@ const usersVideoRatingValidator = [
   }
 ]
 
-const usersVideosValidator = [
+export const usersVideosValidator = [
   query('isLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -326,7 +327,7 @@ const usersVideosValidator = [
   }
 ]
 
-const usersAskResetPasswordValidator = [
+export const usersAskResetPasswordValidator = [
   body('email')
     .isEmail(),
 
@@ -351,7 +352,7 @@ const usersAskResetPasswordValidator = [
   }
 ]
 
-const usersResetPasswordValidator = [
+export const usersResetPasswordValidator = [
   param('id')
     .custom(isIdValid),
   body('verificationString')
@@ -377,7 +378,7 @@ const usersResetPasswordValidator = [
   }
 ]
 
-const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
+export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
   return [
     body('currentPassword').optional().custom(exists),
 
@@ -402,8 +403,9 @@ const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Requ
 
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.fail({
-          status: HttpStatusCode.FORBIDDEN_403,
-          message: 'currentPassword is invalid.'
+          status: HttpStatusCode.UNAUTHORIZED_401,
+          message: 'currentPassword is invalid.',
+          type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }
 
@@ -412,13 +414,13 @@ const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Requ
   ]
 }
 
-const userAutocompleteValidator = [
+export const userAutocompleteValidator = [
   param('search')
     .isString()
     .not().isEmpty()
 ]
 
-const ensureAuthUserOwnsAccountValidator = [
+export const ensureAuthUserOwnsAccountValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
 
@@ -428,7 +430,7 @@ const ensureAuthUserOwnsAccountValidator = [
   }
 ]
 
-const ensureCanManageChannelOrAccount = [
+export const ensureCanManageChannelOrAccount = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.user
     const account = res.locals.videoChannel?.Account ?? res.locals.account
@@ -439,7 +441,7 @@ const ensureCanManageChannelOrAccount = [
   }
 ]
 
-const ensureCanModerateUser = [
+export const ensureCanModerateUser = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const authUser = res.locals.oauth.token.User
     const onUser = res.locals.user
@@ -453,11 +455,3 @@ const ensureCanModerateUser = [
     })
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  deleteMeValidator, ensureAuthUserOwnsAccountValidator, ensureCanManageChannelOrAccount, ensureCanModerateUser, userAutocompleteValidator, usersAddValidator, usersAskResetPasswordValidator, usersBlockingValidator, usersCheckCurrentPasswordFactory,
-  usersGetValidator, usersListValidator, usersRemoveValidator, usersResetPasswordValidator, usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator, usersVideosValidator
-}
-

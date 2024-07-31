@@ -58,7 +58,9 @@ export const ServerErrorCode = {
   VIDEO_ALREADY_BEING_TRANSCRIBED: 'video_already_being_transcribed',
   VIDEO_ALREADY_HAS_CAPTIONS: 'video_already_has_captions',
 
-  MAX_USER_VIDEO_QUOTA_EXCEEDED_FOR_USER_EXPORT: 'max_user_video_quota_exceeded_for_user_export'
+  MAX_USER_VIDEO_QUOTA_EXCEEDED_FOR_USER_EXPORT: 'max_user_video_quota_exceeded_for_user_export',
+
+  CURRENT_PASSWORD_IS_INVALID: 'current_password_is_invalid'
 } as const
 
 /**
