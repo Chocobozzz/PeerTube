@@ -16,6 +16,14 @@ type VideoFiltersKeys = {
 
 export type VideoFilterScope = 'local' | 'federated'
 
+export type VideoFilterActive = {
+  key: string
+  canRemove: boolean
+  label: string
+  value?: string
+  rawValue?: string[] | number[]
+}
+
 export class VideoFilters {
   sort: VideoSortField
   nsfw: BooleanBothQuery
@@ -40,7 +48,7 @@ export class VideoFilters {
     [ 'live', 'both' ]
   ])
 
-  private activeFilters: { key: string, canRemove: boolean, label: string, value?: string }[] = []
+  private activeFilters: VideoFilterActive[] = []
   private defaultNSFWPolicy: NSFWPolicyType
 
   private onChangeCallbacks: (() => void)[] = []
@@ -165,7 +173,8 @@ export class VideoFilters {
         key: 'languageOneOf',
         canRemove: true,
         label: $localize`Languages`,
-        value: this.languageOneOf.map(l => l.toUpperCase()).join(', ')
+        value: this.languageOneOf.map(l => l.toUpperCase()).join(', '),
+        rawValue: this.languageOneOf
       })
     }
 
@@ -174,7 +183,8 @@ export class VideoFilters {
         key: 'categoryOneOf',
         canRemove: true,
         label: $localize`Categories`,
-        value: this.categoryOneOf.join(', ')
+        value: this.categoryOneOf.join(', '),
+        rawValue: this.categoryOneOf
       })
     }
 

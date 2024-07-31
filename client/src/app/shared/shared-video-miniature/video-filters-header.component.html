@@ -32,7 +32,7 @@
         <span>
           {{ activeFilter.label }}
 
-          <ng-container *ngIf="activeFilter.value">: {{ activeFilter.value }}</ng-container>
+          <ng-container *ngIf="activeFilter.value">: {{ getFilterValue(activeFilter) }}</ng-container>
         </span>
 
         <button

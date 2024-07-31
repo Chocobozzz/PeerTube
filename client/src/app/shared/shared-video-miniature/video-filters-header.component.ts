@@ -1,20 +1,20 @@
-import debug from 'debug'
-import { Subscription } from 'rxjs'
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 import { AuthService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
-import { UserRight } from '@peertube/peertube-models'
-import { VideoFilters } from './video-filters.model'
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
+import { NgSelectModule } from '@ng-select/ng-select'
+import { UserRight, VideoConstant } from '@peertube/peertube-models'
+import debug from 'debug'
+import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
-import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
-import { NgSelectModule } from '@ng-select/ng-select'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgClass, NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
-import { RouterLink } from '@angular/router'
 import { PeertubeModalService } from '../shared-main/peertube-modal/peertube-modal.service'
+import { VideoFilterActive, VideoFilters } from './video-filters.model'
 
 const debugLogger = debug('peertube:videos:VideoFiltersHeaderComponent')
 
@@ -50,6 +50,9 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
 
   form: FormGroup
 
+  private videoCategories: VideoConstant<number>[] = []
+  private videoLanguages: VideoConstant<string>[] = []
+
   private routeSub: Subscription
 
   constructor (
@@ -83,6 +86,12 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
       this.filters.load(values)
       this.filtersChanged.emit()
     })
+
+    this.serverService.getVideoCategories()
+      .subscribe(categories => this.videoCategories = categories)
+
+    this.serverService.getVideoLanguages()
+      .subscribe(languages => this.videoLanguages = languages)
   }
 
   ngOnDestroy () {
@@ -114,6 +123,30 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     if (canRemove) return $localize`Remove this filter`
 
     return ''
+  }
+
+  getFilterValue (filter: VideoFilterActive) {
+    if ((filter.key === 'categoryOneOf' || filter.key === 'languageOneOf') && Array.isArray(filter.rawValue)) {
+      if (filter.rawValue.length > 2) {
+        return filter.rawValue.length
+      }
+
+      const translated = filter.key === 'categoryOneOf'
+        ? this.videoCategories
+        : this.videoLanguages
+
+      const formatted = filter.rawValue
+        .map(v => {
+          if (v === '_unknown') return $localize`Unknown`
+
+          return translated.find(c => c.id + '' === v)?.label
+        })
+        .join(', ')
+
+      return formatted
+    }
+
+    return filter.value
   }
 
   onAccountSettingsClick (event: Event) {
