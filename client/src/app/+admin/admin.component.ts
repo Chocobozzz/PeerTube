@@ -234,6 +234,7 @@ export class AdminComponent implements OnInit {
 
     return config.transcoding.remoteRunners.enabled ||
       config.live.transcoding.remoteRunners.enabled ||
-      config.videoStudio.remoteRunners.enabled
+      config.videoStudio.remoteRunners.enabled ||
+      config.videoTranscription.remoteRunners.enabled
   }
 }

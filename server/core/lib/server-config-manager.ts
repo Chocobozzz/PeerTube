@@ -193,7 +193,10 @@ class ServerConfigManager {
         }
       },
       videoTranscription: {
-        enabled: CONFIG.VIDEO_TRANSCRIPTION.ENABLED
+        enabled: CONFIG.VIDEO_TRANSCRIPTION.ENABLED,
+        remoteRunners: {
+          enabled: CONFIG.VIDEO_TRANSCRIPTION.ENABLED && CONFIG.VIDEO_TRANSCRIPTION.REMOTE_RUNNERS.ENABLED
+        }
       },
       import: {
         videos: {

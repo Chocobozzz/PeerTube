@@ -349,6 +349,10 @@ export interface ServerConfig {
 
   videoTranscription: {
     enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 }
 
