@@ -6,7 +6,6 @@
   "theme_color": "#fff",
   "description": "A federated video streaming platform using P2P",
   "display": "standalone",
-  "orientation": "default",
   "icons": [
     {
       "src": "/client/assets/images/icons/icon-36x36.png",
