@@ -213,6 +213,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.canGenerateTranscription(this.user, this.serverService.getHTMLConfig().videoTranscription.enabled)
   }
 
+  // ---------------------------------------------------------------------------
+
   isVideoDownloadableByAnonymous () {
     return (
       this.video &&
@@ -221,6 +223,16 @@ export class VideoActionsDropdownComponent implements OnChanges {
       this.video.downloadEnabled
     )
   }
+
+  isVideoDownloadableByUser () {
+    return (
+      this.video &&
+      this.video.isLive !== true &&
+      this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+    )
+  }
+
+  // ---------------------------------------------------------------------------
 
   canVideoBeDuplicated () {
     return !this.video.isLive && this.video.canBeDuplicatedBy(this.user)
@@ -395,7 +407,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           isDisplayed: () => {
             if (!this.displayOptions.download) return false
 
-            return this.isVideoDownloadableByAnonymous() || this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+            return this.isVideoDownloadableByAnonymous() || this.isVideoDownloadableByUser()
           },
           iconName: 'download',
           ownerOrModeratorPrivilege: () => {
