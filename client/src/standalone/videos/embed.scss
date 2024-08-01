@@ -63,6 +63,14 @@ body {
   font-size: 24px;
 }
 
+#error-details {
+  margin-top: 30px
+}
+
+#error-details-content {
+  margin-top: 10px
+}
+
 #placeholder-preview {
   position: absolute;
   top: 0;
@@ -109,6 +117,7 @@ body {
 #video-password-submit:hover {
   background-color: #f47825;
 }
+
 #video-password-error {
   margin-top: 10px;
   margin-bottom: 10px;

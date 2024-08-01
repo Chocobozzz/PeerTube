@@ -26,6 +26,12 @@
       <h1 id="error-title"></h1>
 
       <div id="error-content"></div>
+
+      <details id="error-details">
+        <summary>Error details</summary>
+
+        <div id="error-details-content"></div>
+      </details>
     </div>
 
     <div id="video-password-block">
@@ -49,7 +55,7 @@
 
     <script type="text/javascript">
       // Can be called in embed.ts
-      window.displayIncompatibleBrowser = function () {
+      window.displayIncompatibleBrowser = function (err) {
         const text = 'The player is not compatible with your web browser. Please try latest Firefox version.'
 
         document.title = 'Sorry' + ' - ' + text
@@ -63,6 +69,19 @@
         const errorText = document.getElementById('error-content')
         errorText.innerHTML = text
 
+        const errorDetails = document.getElementById('error-details')
+        let msg = ''
+
+        if (typeof err === 'string') msg = err
+        else if (err instanceof Error) msg = err.name + ' ' + err.message + ' at:\n' + err.stack
+
+        if (msg) {
+          const errorDetailsContent = document.getElementById('error-details-content')
+          errorDetailsContent.innerText = msg
+        } else {
+          errorDetails.style.display = 'none'
+        }
+
         const videoWrapper = document.getElementById('video-wrapper')
         if (videoWrapper) videoWrapper.style.display = 'none'
 
@@ -70,13 +89,17 @@
         if (placeholderPreview) placeholderPreview.style.display = 'none'
       }
 
-      window.onerror = function (msg) {
+      window.onerror = function (msg, source, lineNumber, columnNumber, err) {
         if (typeof msg === 'string' && msg.toLowerCase().includes(' ice ')) {
           console.warn(msg)
           return
         }
 
-        window.displayIncompatibleBrowser()
+        window.displayIncompatibleBrowser(err)
+
+        if (window.logger && typeof window.logger.error === 'function') {
+          window.logger.error('Embed player crashed', err)
+        }
       }
 
       if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
