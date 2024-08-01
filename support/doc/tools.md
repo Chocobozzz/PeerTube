@@ -121,6 +121,9 @@ peertube-cli redundancy remove --video 823
 
 PeerTube supports VOD/Live transcoding and VOD transcription (PeerTube >= 6.2) by a remote PeerTube runner.
 
+The runner communicates with the PeerTube instance using HTTP and WebSocket and doesn't need to have a public IP.
+So you can run a runner on a classic server, a non-public server or even on your own computer!
+
 ### Runner installation
 
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
