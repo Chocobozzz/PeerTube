@@ -1,5 +1,29 @@
 # Changelog
 
+## v6.2.1
+
+### Maintenance
+
+ * Add ability for users to see the error details when the embed player crashed with the message "The player is not compatible with your web browser. Please try latest Firefox version." The web browser also sends a client error log to the server
+
+
+### Bug fixes
+
+ * Fix stuck runner jobs due to DB concurrency issue
+ * Respect OS orientation settings in PWA
+ * Fix "No results" not displayed on no video results
+ * Do not display "Download" option on lives
+ * Fix invalid current password error when updating user password
+ * Fix slow hotkeys detection
+ * Fix hidden runner jobs tab when remote runner is only enabled for transcription
+ * Fix broken HLS P2P by correctly updating HLS infohash on privacy update
+ * Fix videos filters pastille labels for categories and languages
+ * Fix broken youtube-dl import for videos with too long chapter titles
+ * Display emojis in description preview in video edition form
+ * Avoid node-datachannel native dependency that prevents some OS to install PeerTube dependencies
+
+
+
 ## v6.2.0
 
 ### IMPORTANT NOTES
