@@ -163,7 +163,7 @@ To generate the certificate for your domain as required to make https work you c
 ```bash
 sudo systemctl stop nginx
 sudo certbot certonly --standalone --post-hook "systemctl restart nginx"
-sudo systemctl reload nginx
+sudo systemctl restart nginx
 ```
 
 Certbot should have installed a cron to automatically renew your certificate.
