@@ -20,8 +20,9 @@ upstream backend {
 }
 
 server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
+  listen 443 ssl;
+  listen [::]:443 ssl;
+  http2 on;
   server_name ${WEBSERVER_HOST};
 
   access_log /var/log/nginx/peertube.access.log; # reduce I/0 with buffer=10m flush=5m
