@@ -2449,9 +2449,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2528596078796844503" datatype="html">
+      <trans-unit id="2528596078796844503" datatype="html" xml:space="preserve">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>で<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画を公開<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>したいですか？それには、あなたの<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>チャンネル<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を作る必要があります。 </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>で<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画を公開<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> したいですか？ そのためには、まず<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>チャンネル<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を作成する必要があります。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">3</context>
@@ -9448,9 +9448,9 @@
           <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7773354014171617955" datatype="html">
+      <trans-unit id="7773354014171617955" datatype="html" xml:space="preserve">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="translated">ffmpegを使用し、ローカル動画のストーリーボードを生成します。これにより、ユーザーがプレーヤー上で動画をシークする際に動画のプレビューを確認できるようになります。</target>
+        <target state="translated">ffmpegを使用し、ローカル動画のストーリーボードを生成します。これにより、ユーザーがプレーヤー上で動画をシークする際に動画のプレビューを確認できるようになります</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">368</context>
@@ -14896,9 +14896,9 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3379167598974960777" datatype="html">
+      <trans-unit id="3379167598974960777" datatype="html" xml:space="preserve">
         <source>warning</source>
-        <target state="translated">warning</target>
+        <target state="translated">警告</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">125</context>
