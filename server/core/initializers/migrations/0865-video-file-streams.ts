@@ -8,15 +8,18 @@ async function up (utils: {
   const { transaction } = utils
 
   {
+    await utils.sequelize.query('DROP INDEX IF EXISTS "video_file_video_id"')
+    await utils.sequelize.query('DROP INDEX IF EXISTS "video_file_video_streaming_playlist_id"')
+  }
+
+  {
     await utils.queryInterface.addColumn('videoFile', 'formatFlags', {
       type: Sequelize.INTEGER,
       defaultValue: 2, // fragmented
       allowNull: false
     }, { transaction })
 
-    // Web videos
-    const query = 'UPDATE "videoFile" SET "formatFlags" = 1 WHERE "videoId" IS NOT NULL'
-    await utils.sequelize.query(query, { transaction })
+    // Web videos will be updated in the migration script because the query can be slow
 
     await utils.queryInterface.changeColumn('videoFile', 'formatFlags', {
       type: Sequelize.INTEGER,

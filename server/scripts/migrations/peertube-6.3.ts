@@ -1,12 +1,13 @@
 import { ffprobePromise, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream } from '@peertube/peertube-models'
-import { initDatabaseModels } from '@server/initializers/database.js'
+import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
 import { buildFileMetadata } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
 import Bluebird from 'bluebird'
 import { pathExists } from 'fs-extra/esm'
+import { QueryTypes } from 'sequelize'
 
 run()
   .then(() => process.exit(0))
@@ -16,9 +17,46 @@ run()
   })
 
 async function run () {
-  console.log('## Assigning metadata information to local video files ##\n')
-
   await initDatabaseModels(true)
+
+  {
+    console.log('## Updating "formatFlags" column for web videos in "videoFile" table in database ##\n')
+
+    const totalQuery = 'SELECT COUNT(*) AS "total" FROM "videoFile" WHERE "videoId" IS NOT NULL AND "formatFlags" != 1'
+    const res = await sequelizeTypescript.query<{ total: string }>(totalQuery, { type: QueryTypes.SELECT as QueryTypes.SELECT })
+    const total = parseInt(res[0].total)
+
+    console.log(`Will update ${total.toLocaleString()} rows`)
+
+    if (total > 10000) {
+      console.log('Processing update in chunks because there are many rows to update...')
+
+      const chunkSize = 10000
+      let remaining = total
+
+      while (remaining > chunkSize) {
+        const before = new Date().getTime()
+
+        await sequelizeTypescript.query(
+          'UPDATE "videoFile" SET "formatFlags" = 1 WHERE id IN (' +
+            'SELECT id FROM "videoFile" WHERE "videoId" IS NOT NULL AND "formatFlags" != 1 LIMIT ' + chunkSize +
+          ')'
+        )
+
+        remaining -= chunkSize
+
+        const ms = new Date().getTime() - before
+        console.log(`Processed ${chunkSize.toLocaleString()} rows in ${ms.toLocaleString()}ms. Remaining: ${remaining.toLocaleString()}`)
+      }
+    }
+
+    const query = 'UPDATE "videoFile" SET "formatFlags" = 1 WHERE "videoId" IS NOT NULL AND "formatFlags" != 1'
+    await sequelizeTypescript.query(query)
+
+    console.log('Rows updated!')
+  }
+
+  console.log('## Assigning metadata information to local video files ##\n')
 
   const ids = await VideoModel.listLocalIds()
 

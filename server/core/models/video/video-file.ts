@@ -113,23 +113,6 @@ export enum ScopeNames {
   tableName: 'videoFile',
   indexes: [
     {
-      fields: [ 'videoId' ],
-      where: {
-        videoId: {
-          [Op.ne]: null
-        }
-      }
-    },
-    {
-      fields: [ 'videoStreamingPlaylistId' ],
-      where: {
-        videoStreamingPlaylistId: {
-          [Op.ne]: null
-        }
-      }
-    },
-
-    {
       fields: [ 'infoHash' ]
     },
 
