@@ -1,7 +1,3 @@
-import { FSWatcher, watch } from 'chokidar'
-import { FfmpegCommand } from 'fluent-ffmpeg'
-import { ensureDir, remove } from 'fs-extra/esm'
-import { basename, join } from 'path'
 import { wait } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamBitrate, getVideoStreamDimensionsInfo, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import {
@@ -12,9 +8,17 @@ import {
   ServerErrorCode
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { FSWatcher, watch } from 'chokidar'
+import { FfmpegCommand } from 'fluent-ffmpeg'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { readFile } from 'fs/promises'
+import { basename, join } from 'path'
 import { ConfigManager } from '../../../shared/config-manager.js'
 import { logger } from '../../../shared/index.js'
 import { buildFFmpegLive, ProcessOptions } from './common.js'
+
+type CustomLiveRTMPHLSTranscodingUpdatePayload =
+  Omit<LiveRTMPHLSTranscodingUpdatePayload, 'resolutionPlaylistFile'> & { resolutionPlaylistFile?: [ Buffer, string ] | Blob | string }
 
 export class ProcessLiveRTMPHLSTranscoding {
 
@@ -26,6 +30,8 @@ export class ProcessLiveRTMPHLSTranscoding {
 
   private readonly playlistsCreated = new Set<string>()
   private allPlaylistsCreated = false
+
+  private latestFilteredPlaylistContent: { [name: string]: string } = {}
 
   private ffmpegCommand: FfmpegCommand
 
@@ -239,7 +245,7 @@ export class ProcessLiveRTMPHLSTranscoding {
 
     const videoChunkFilename = basename(deletedChunk)
 
-    let payload: LiveRTMPHLSTranscodingUpdatePayload = {
+    let payload: CustomLiveRTMPHLSTranscodingUpdatePayload = {
       type: 'remove-chunk',
       videoChunkFilename
     }
@@ -249,9 +255,10 @@ export class ProcessLiveRTMPHLSTranscoding {
 
       payload = {
         ...payload,
+
         masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
         resolutionPlaylistFilename: playlistName,
-        resolutionPlaylistFile: join(this.outputPath, playlistName)
+        resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
       }
     }
 
@@ -269,7 +276,7 @@ export class ProcessLiveRTMPHLSTranscoding {
 
         const videoChunkFilename = basename(chunk)
 
-        let payload: LiveRTMPHLSTranscodingUpdatePayload = {
+        let payload: CustomLiveRTMPHLSTranscodingUpdatePayload = {
           type: 'add-chunk',
           videoChunkFilename,
           videoChunkFile: chunk
@@ -278,11 +285,14 @@ export class ProcessLiveRTMPHLSTranscoding {
         if (this.allPlaylistsCreated) {
           const playlistName = this.getPlaylistName(videoChunkFilename)
 
+          await this.updatePlaylistContent(playlistName, videoChunkFilename)
+
           payload = {
             ...payload,
+
             masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
             resolutionPlaylistFilename: playlistName,
-            resolutionPlaylistFile: join(this.outputPath, playlistName)
+            resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
           }
         }
 
@@ -295,7 +305,7 @@ export class ProcessLiveRTMPHLSTranscoding {
     await Promise.all(promises)
   }
 
-  private async updateWithRetry (payload: LiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
+  private async updateWithRetry (payload: CustomLiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
     if (this.ended || this.errored) return
 
     try {
@@ -303,7 +313,7 @@ export class ProcessLiveRTMPHLSTranscoding {
         jobToken: this.options.job.jobToken,
         jobUUID: this.options.job.uuid,
         runnerToken: this.options.runnerToken,
-        payload
+        payload: payload as any
       })
     } catch (err) {
       if (currentTry >= 3) throw err
@@ -324,6 +334,22 @@ export class ProcessLiveRTMPHLSTranscoding {
     const playlistIdMatcher = /^([\d+])-/
 
     return basename(segmentPath).match(playlistIdMatcher)[1]
+  }
+
+  private async updatePlaylistContent (playlistName: string, latestChunkFilename: string) {
+    const m3u8Path = join(this.outputPath, playlistName)
+    const playlistContent = await readFile(m3u8Path, 'utf-8')
+
+    // Remove new chunk references, that will be processed later
+    this.latestFilteredPlaylistContent[playlistName] = playlistContent
+      .substring(0, playlistContent.lastIndexOf(latestChunkFilename) + latestChunkFilename.length) + '\n'
+  }
+
+  private buildPlaylistFileParam (playlistName: string) {
+    return [
+      Buffer.from(this.latestFilteredPlaylistContent[playlistName], 'utf-8'),
+      join(this.outputPath, 'master.m3u8')
+    ] as [ Buffer, string ]
   }
 
   // ---------------------------------------------------------------------------

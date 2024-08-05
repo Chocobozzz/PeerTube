@@ -141,9 +141,20 @@ export function makeUploadRequest (options: CommonRequestParams & {
     if (!value) return
 
     if (Array.isArray(value)) {
-      req.attach(attach, buildAbsoluteFixturePath(value[0]), value[1])
+      req.attach(
+        attach,
+        value[0] instanceof Buffer
+          ? value[0]
+          : buildAbsoluteFixturePath(value[0]),
+        value[1]
+      )
     } else {
-      req.attach(attach, buildAbsoluteFixturePath(value))
+      req.attach(
+        attach,
+        value instanceof Buffer
+          ? value
+          : buildAbsoluteFixturePath(value)
+      )
     }
   })
 
