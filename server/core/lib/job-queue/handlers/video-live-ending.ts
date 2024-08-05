@@ -18,6 +18,7 @@ import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
 import { moveToNextState } from '@server/lib/video-state.js'
+import { setVideoTags } from '@server/lib/video.js'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
@@ -30,6 +31,7 @@ import {
   MVideo,
   MVideoLive,
   MVideoLiveSession,
+  MVideoTag,
   MVideoThumbnail,
   MVideoWithAllFiles,
   MVideoWithFileThumbnail
@@ -110,8 +112,9 @@ async function saveReplayToExternalVideo (options: {
   publishedAt: string
   replayDirectory: string
 }) {
-  const { liveVideo, liveSession, publishedAt, replayDirectory } = options
+  const { liveSession, publishedAt, replayDirectory } = options
 
+  const liveVideo = await VideoModel.loadFull(options.liveVideo.id)
   const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
 
   const videoNameSuffix = ` - ${new Date(publishedAt).toLocaleString()}`
@@ -138,7 +141,7 @@ async function saveReplayToExternalVideo (options: {
     support: liveVideo.support,
     privacy: replaySettings.privacy,
     channelId: liveVideo.channelId
-  }) as MVideoWithAllFiles
+  }) as MVideoWithAllFiles & MVideoTag
 
   replayVideo.Thumbnails = []
   replayVideo.VideoFiles = []
@@ -147,6 +150,8 @@ async function saveReplayToExternalVideo (options: {
   replayVideo.url = getLocalVideoActivityPubUrl(replayVideo)
 
   await replayVideo.save()
+
+  await setVideoTags({ video: replayVideo, tags: liveVideo.Tags.map(t => t.name) })
 
   liveSession.replayVideoId = replayVideo.id
   await liveSession.save()

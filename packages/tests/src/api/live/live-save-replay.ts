@@ -48,6 +48,7 @@ describe('Save replay setting', function () {
       channelId: servers[0].store.channel.id,
       privacy: VideoPrivacy.PUBLIC,
       name: 'live'.repeat(30),
+      tags: [ 'tag1', 'tag2' ],
       saveReplay: options.replay,
       replaySettings: options.replaySettings,
       permanentLive: options.permanent
@@ -131,6 +132,13 @@ describe('Save replay setting', function () {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoId })
       expect(video.privacy.id).to.equal(privacy)
+    }
+  }
+
+  async function checkVideoTags (videoId: string, tags: string[]) {
+    for (const server of servers) {
+      const video = await server.videos.get({ id: videoId })
+      expect(video.tags).to.have.members(tags)
     }
   }
 
@@ -311,6 +319,7 @@ describe('Save replay setting', function () {
       await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
       await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.UNLISTED)
+      await checkVideoTags(liveVideoUUID, [ 'tag1', 'tag2' ])
     })
 
     it('Should find the replay live session', async function () {
@@ -443,6 +452,8 @@ describe('Save replay setting', function () {
         await waitJobs(servers)
 
         await servers[1].videos.get({ id: lastReplayUUID, expectedStatus: HttpStatusCode.OK_200 })
+
+        await checkVideoTags(lastReplayUUID, [ 'tag1', 'tag2' ])
       })
 
       it('Should have appropriate ended session and replay live session', async function () {
