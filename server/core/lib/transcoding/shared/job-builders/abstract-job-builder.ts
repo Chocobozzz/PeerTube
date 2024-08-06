@@ -231,7 +231,9 @@ export abstract class AbstractJobBuilder <P> {
         )
       }
 
-      sequentialPayloads.push(parallelPayloads)
+      if (parallelPayloads.length !== 0) {
+        sequentialPayloads.push(parallelPayloads)
+      }
     }
 
     return sequentialPayloads
