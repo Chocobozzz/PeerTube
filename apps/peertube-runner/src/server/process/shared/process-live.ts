@@ -268,41 +268,51 @@ export class ProcessLiveRTMPHLSTranscoding {
   private async sendPendingChunks (): Promise<any> {
     if (this.ended) return Promise.resolve()
 
-    const promises: Promise<any>[] = []
+    const parallelPromises: Promise<any>[] = []
 
     for (const playlist of this.pendingChunksPerPlaylist.keys()) {
+      let sequentialPromises: Promise<any>
+
       for (const chunk of this.pendingChunksPerPlaylist.get(playlist)) {
         logger.debug(`Sending added live chunk ${chunk} update`)
 
         const videoChunkFilename = basename(chunk)
 
-        let payload: CustomLiveRTMPHLSTranscodingUpdatePayload = {
-          type: 'add-chunk',
-          videoChunkFilename,
-          videoChunkFile: chunk
-        }
-
-        if (this.allPlaylistsCreated) {
-          const playlistName = this.getPlaylistName(videoChunkFilename)
-
-          await this.updatePlaylistContent(playlistName, videoChunkFilename)
-
-          payload = {
-            ...payload,
-
-            masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
-            resolutionPlaylistFilename: playlistName,
-            resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
+        const payloadBuilder = async () => {
+          let payload: CustomLiveRTMPHLSTranscodingUpdatePayload = {
+            type: 'add-chunk',
+            videoChunkFilename,
+            videoChunkFile: chunk
           }
+
+          if (this.allPlaylistsCreated) {
+            const playlistName = this.getPlaylistName(videoChunkFilename)
+
+            await this.updatePlaylistContent(playlistName, videoChunkFilename)
+
+            payload = {
+              ...payload,
+
+              masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
+              resolutionPlaylistFilename: playlistName,
+              resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
+            }
+          }
+
+          return payload
         }
 
-        promises.push(this.updateWithRetry(payload))
+        const p = payloadBuilder().then(p => this.updateWithRetry(p))
+
+        if (!sequentialPromises) sequentialPromises = p
+        else sequentialPromises = sequentialPromises.then(() => p)
       }
 
+      parallelPromises.push(sequentialPromises)
       this.pendingChunksPerPlaylist.set(playlist, [])
     }
 
-    await Promise.all(promises)
+    await Promise.all(parallelPromises)
   }
 
   private async updateWithRetry (payload: CustomLiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
