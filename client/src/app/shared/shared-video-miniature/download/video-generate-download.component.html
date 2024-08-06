@@ -17,9 +17,15 @@
       <input type="radio" name="video-file" [id]="'file-' + file.id" [(ngModel)]="videoFileChosen" [value]="'file-' + file.id">
 
       <label [for]="'file-' + file.id">
-        <strong>{{ file.resolution.label }}</strong>
+        <strong>{{ getLabel(file) }}</strong>
 
-        <span class="muted">{{ getFileSize(file) | bytes: 1 }} @if (file.width) { | {{ file.width }}x{{ file.height }} }</span>
+        <span class="muted">
+          {{ getFileSize(file) | bytes: 1 }}
+
+          @if (file.width) { | {{ file.width }}x{{ file.height }} }
+
+          @if (file.fps && file.fps >= 50) { | <ng-container i18n>{{ file.fps }}fps</ng-container> }
+      </span>
       </label>
     </div>
   }

@@ -1,8 +1,10 @@
 import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 import { Engine, HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
+import { getResolutionAndFPSLabel, getResolutionLabel } from '@peertube/peertube-core-utils'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { Level } from 'hls.js'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
 import {
   HLSLoaderClass,
@@ -70,21 +72,17 @@ export class HLSOptionsBuilder {
     const hlsjs = {
       hlsjsConfig: this.getHLSJSOptions(loaderBuilder),
 
-      levelLabelHandler: (level: { height: number, width: number }, player: videojs.VideoJsPlayer) => {
+      levelLabelHandler: (level: Level, player: videojs.VideoJsPlayer) => {
         const resolution = Math.min(level.height || 0, level.width || 0)
-
         const file = this.options.hls.videoFiles.find(f => f.resolution.id === resolution)
-        // We don't have files for live videos
-        if (!file) {
-          if (resolution === 0) return player.localize('Audio only')
 
-          return level.height + 'p'
-        }
+        const resolutionLabel = getResolutionLabel({
+          resolution,
+          height: file?.height ?? level.height,
+          width: file?.width ?? level.width
+        })
 
-        let label = file.resolution.label
-        if (file.fps >= 50) label += file.fps
-
-        return label
+        return player.localize(getResolutionAndFPSLabel(resolutionLabel, file?.fps ?? level.frameRate))
       }
     }
 

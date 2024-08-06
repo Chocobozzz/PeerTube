@@ -1,3 +1,4 @@
+import { getResolutionLabel } from '@peertube/peertube-core-utils'
 import { ActivityVideoUrlObject, type FileStorageType, type VideoSource } from '@peertube/peertube-models'
 import { DOWNLOAD_PATHS, WEBSERVER } from '@server/initializers/constants.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
@@ -6,7 +7,6 @@ import { extname, join } from 'path'
 import { Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { SequelizeModel, doesExist, getSort } from '../shared/index.js'
-import { getResolutionLabel } from './formatter/video-api-format.js'
 import { VideoModel } from './video.js'
 
 @Table({
@@ -148,7 +148,7 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
       resolution: {
         id: this.resolution,
         label: this.resolution !== null
-          ? getResolutionLabel(this.resolution)
+          ? getResolutionLabel({ resolution: this.resolution, height: this.height, width: this.width })
           : null
       },
       size: this.size,

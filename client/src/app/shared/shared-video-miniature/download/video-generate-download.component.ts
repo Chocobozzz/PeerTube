@@ -6,7 +6,7 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 import {
   NgbTooltip
 } from '@ng-bootstrap/ng-bootstrap'
-import { maxBy } from '@peertube/peertube-core-utils'
+import { getResolutionAndFPSLabel, maxBy } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoResolution, VideoSource } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
@@ -50,6 +50,10 @@ export class VideoGenerateDownloadComponent implements OnInit {
     if (this.videoFiles.length === 0) return
 
     this.videoFileChosen = 'file-' + maxBy(this.videoFiles, 'resolution').id
+  }
+
+  getLabel (file: VideoFile) {
+    return getResolutionAndFPSLabel(file.resolution.label, file.fps)
   }
 
   getFileSize (file: VideoFile) {

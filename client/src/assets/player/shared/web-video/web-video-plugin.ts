@@ -1,8 +1,8 @@
+import { addQueryParams, getResolutionAndFPSLabel } from '@peertube/peertube-core-utils'
+import { VideoFile } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import videojs from 'video.js'
-import { logger } from '@root-helpers/logger'
-import { addQueryParams } from '@peertube/peertube-core-utils'
-import { VideoFile } from '@peertube/peertube-models'
 import { PeerTubeResolution, PlayerNetworkInfo, WebVideoPluginOptions } from '../../types'
 
 const debugLogger = debug('peertube:player:web-video-plugin')
@@ -155,23 +155,13 @@ class WebVideoPlugin extends Plugin {
   private buildQualities () {
     const resolutions: PeerTubeResolution[] = this.videoFiles.map(videoFile => ({
       id: videoFile.resolution.id,
-      label: this.buildQualityLabel(videoFile),
+      label: this.player.localize(getResolutionAndFPSLabel(videoFile.resolution.label, videoFile.fps)),
       height: videoFile.resolution.id,
       selected: videoFile.id === this.currentVideoFile?.id,
       selectCallback: () => this.updateVideoFile({ videoFile, isUserResolutionChange: true })
     }))
 
     this.player.peertubeResolutions().add(resolutions)
-  }
-
-  private buildQualityLabel (file: VideoFile) {
-    let label = file.resolution.label
-
-    if (file.fps && file.fps >= 50) {
-      label += file.fps
-    }
-
-    return label
   }
 
   private setupNetworkInfoInterval () {

@@ -303,15 +303,7 @@ export class Html5Hlsjs {
   // ---------------------------------------------------------------------------
 
   private buildLevelLabel (level: Level) {
-    if (this.player.srOptions_.levelLabelHandler) {
-      return this.player.srOptions_.levelLabelHandler(level, this.player)
-    }
-
-    if (level.height) return level.height + 'p'
-    if (level.width) return Math.round(level.width * 9 / 16) + 'p'
-    if (level.bitrate) return (level.bitrate / 1000) + 'kbps'
-
-    return this.player.localize('Audio only')
+    return this.player.srOptions_.levelLabelHandler(level, this.player)
   }
 
   private _removeQuality (index: number) {
