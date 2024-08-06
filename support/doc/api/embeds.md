@@ -168,6 +168,15 @@ See behaviour description [here](https://docs.joinpeertube.org/admin/configurati
 
 Default: `p2p-media-loader` and fallback to `web-video` mode.
 
+
+### playlistPosition
+
+If you are embedding a playlist, select the video to play by specifying its position.
+
+Value must be a number.
+
+Default: `1`
+
 ### api
 
 Enable/Disable embed JavaScript API (see methods below).
