@@ -59,7 +59,7 @@ export class VideoGenerateDownloadComponent implements OnInit {
     if (this.includeAudio) {
       const audio = this.findAudioFileOnly()
 
-      return file.size + (audio.size || 0)
+      return file.size + (audio?.size || 0)
     }
 
     return file.size
