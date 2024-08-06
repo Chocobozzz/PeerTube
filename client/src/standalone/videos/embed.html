@@ -95,6 +95,15 @@
           return
         }
 
+        // Video element is already created, don't crash the player
+        if (document.querySelector('.vjs-can-play')) {
+          if (window.logger && typeof window.logger.error === 'function') {
+            window.logger.error('Uncaught error in embed player ', err)
+          }
+
+          return
+        }
+
         window.displayIncompatibleBrowser(err)
 
         if (window.logger && typeof window.logger.error === 'function') {
