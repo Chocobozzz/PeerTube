@@ -243,7 +243,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   canRemoveVideoFiles () {
-    return this.video.canRemoveFiles(this.user)
+    return this.video.canRemoveAllHLSOrWebFiles(this.user)
   }
 
   canRunTranscoding () {

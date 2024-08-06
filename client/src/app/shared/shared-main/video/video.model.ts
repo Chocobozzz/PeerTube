@@ -265,7 +265,7 @@ export class Video implements VideoServerModel {
       getAllFiles(this).length > 1
   }
 
-  canRemoveFiles (user: AuthUser) {
+  canRemoveAllHLSOrWebFiles (user: AuthUser) {
     return this.isLocal &&
       user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
       this.state.id !== VideoState.TO_TRANSCODE &&

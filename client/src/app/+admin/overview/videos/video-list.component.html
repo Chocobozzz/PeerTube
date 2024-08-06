@@ -128,11 +128,7 @@
               <li>
                 <a title="Download this file" i18n-title [href]="getDownloadUrl(video, video.videoSource.fileDownloadUrl)">{{ video.videoSource.inputFilename }}</a>: {{ video.videoSource.size | bytes: 1 }}
 
-                <button
-                  *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
-                  i18n-title title="Delete this file"
-                  (click)="removeVideoSourceFile(video)"
-                >
+                <button class="border-0 p-0" i18n-title title="Delete this file" (click)="removeVideoSourceFile(video)">
                   <my-global-icon iconName="delete"></my-global-icon>
                 </button>
               </li>

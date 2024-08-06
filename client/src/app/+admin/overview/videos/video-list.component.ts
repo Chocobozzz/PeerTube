@@ -159,13 +159,13 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
         {
           label: $localize`Delete HLS files`,
           handler: videos => this.removeVideoFiles(videos, 'hls'),
-          isDisplayed: videos => videos.every(v => v.canRemoveFiles(this.authUser)),
+          isDisplayed: videos => videos.every(v => v.canRemoveAllHLSOrWebFiles(this.authUser)),
           iconName: 'delete'
         },
         {
           label: $localize`Delete Web Video files`,
           handler: videos => this.removeVideoFiles(videos, 'web-videos'),
-          isDisplayed: videos => videos.every(v => v.canRemoveFiles(this.authUser)),
+          isDisplayed: videos => videos.every(v => v.canRemoveAllHLSOrWebFiles(this.authUser)),
           iconName: 'delete'
         }
       ],
