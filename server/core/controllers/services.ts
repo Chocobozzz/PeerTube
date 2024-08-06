@@ -79,7 +79,11 @@ function buildPlayerURLQuery (inputQueryUrl: string) {
     'subtitle',
     'bigPlayBackgroundColor',
     'mode',
-    'foregroundColor'
+    'foregroundColor',
+    'playbackRate',
+    'api',
+    'waitPasswordFromEmbedAPI',
+    'playlistPosition'
   ])
 
   const params = new URLSearchParams()

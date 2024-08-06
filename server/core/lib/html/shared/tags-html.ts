@@ -41,6 +41,8 @@ type Tags = {
     duration?: string
     views?: number
   }
+
+  oembedUrl?: string
 }
 
 type HookContext = {
@@ -74,14 +76,14 @@ export class TagsHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTagsOptions(tagsValues)
     const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
 
-    const { url, escapedTitle, embed, indexationPolicy } = tagsValues
+    const { url, escapedTitle, oembedUrl, indexationPolicy } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
 
-    if (embed) {
+    if (oembedUrl) {
       oembedLinkTags.push({
         type: 'application/json+oembed',
-        href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(url),
+        href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(oembedUrl),
         escapedTitle
       })
     }

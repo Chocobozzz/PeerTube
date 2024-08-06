@@ -19,7 +19,7 @@ function removeQueryParams (url: string) {
   return objUrl.toString()
 }
 
-function queryParamsToObject (entries: any) {
+function queryParamsToObject (entries: URLSearchParams) {
   const result: { [ id: string ]: string | number | boolean } = {}
 
   for (const [ key, value ] of entries) {

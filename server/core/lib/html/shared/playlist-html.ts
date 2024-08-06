@@ -1,16 +1,16 @@
-import { escapeHTML } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
+import { Memoize } from '@server/helpers/memoize.js'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
+import { MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models/index.js'
 import express from 'express'
 import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
 import { MEMOIZE_TTL, WEBSERVER } from '../../../initializers/constants.js'
-import { Memoize } from '@server/helpers/memoize.js'
-import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { MVideoPlaylistFull } from '@server/types/models/index.js'
-import { TagsHtml } from './tags-html.js'
-import { PageHtml } from './page-html.js'
 import { CommonEmbedHtml } from './common-embed-html.js'
+import { PageHtml } from './page-html.js'
+import { TagsHtml } from './tags-html.js'
 
 export class PlaylistHtml {
 
@@ -39,7 +39,9 @@ export class PlaylistHtml {
       playlist: videoPlaylist,
       addEmbedInfo: true,
       addOG: true,
-      addTwitterCard: true
+      addTwitterCard: true,
+
+      currentQuery: req.query
     })
   }
 
@@ -62,7 +64,10 @@ export class PlaylistHtml {
       playlist,
       addEmbedInfo: true,
       addOG: false,
-      addTwitterCard: false
+      addTwitterCard: false,
+
+      // TODO: Implement it so we can send query params to oembed service
+      currentQuery: {}
     })
   }
 
@@ -77,8 +82,10 @@ export class PlaylistHtml {
     addOG: boolean
     addTwitterCard: boolean
     addEmbedInfo: boolean
+
+    currentQuery: Record<string, string>
   }) {
-    const { html, playlist, addEmbedInfo, addOG, addTwitterCard } = options
+    const { html, playlist, addEmbedInfo, addOG, addTwitterCard, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(playlist.description)
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
@@ -117,7 +124,22 @@ export class PlaylistHtml {
       schemaType,
       ogType,
       twitterCard,
-      embed
+
+      embed,
+      oembedUrl: this.getOEmbedUrl(playlist, currentQuery)
     }, { playlist })
+  }
+
+  private static getOEmbedUrl (playlist: MVideoPlaylist, currentQuery: Record<string, string>) {
+    const base = WEBSERVER.URL + playlist.getWatchStaticPath()
+
+    const additionalQuery: Record<string, string> = {}
+    const allowedParams = new Set([ 'playlistPosition' ])
+
+    for (const [ key, value ] of Object.entries(currentQuery)) {
+      if (allowedParams.has(key)) additionalQuery[key] = value
+    }
+
+    return addQueryParams(base, additionalQuery)
   }
 }

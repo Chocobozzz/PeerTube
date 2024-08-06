@@ -1,4 +1,4 @@
-import { escapeHTML } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
@@ -39,6 +39,7 @@ export class VideoHtml {
     return this.buildVideoHTML({
       html,
       video,
+      currentQuery: req.query,
       addEmbedInfo: true,
       addOG: true,
       addTwitterCard: true
@@ -64,7 +65,10 @@ export class VideoHtml {
       video,
       addEmbedInfo: true,
       addOG: false,
-      addTwitterCard: false
+      addTwitterCard: false,
+
+      // TODO: Implement it so we can send query params to oembed service
+      currentQuery: {}
     })
   }
 
@@ -79,8 +83,10 @@ export class VideoHtml {
     addOG: boolean
     addTwitterCard: boolean
     addEmbedInfo: boolean
+
+    currentQuery: Record<string, string>
   }) {
-    const { html, video, addEmbedInfo, addOG, addTwitterCard } = options
+    const { html, video, addEmbedInfo, addOG, addTwitterCard, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(video.description)
 
     let customHTML = TagsHtml.addTitleTag(html, video.name)
@@ -107,6 +113,7 @@ export class VideoHtml {
 
     return TagsHtml.addTags(customHTML, {
       url: WEBSERVER.URL + video.getWatchStaticPath(),
+
       escapedSiteName: escapeHTML(CONFIG.INSTANCE.NAME),
       escapedTitle: escapeHTML(video.name),
       escapedTruncatedDescription,
@@ -118,9 +125,24 @@ export class VideoHtml {
       image: { url: WEBSERVER.URL + video.getPreviewStaticPath() },
 
       embed,
+      oembedUrl: this.getOEmbedUrl(video, currentQuery),
+
       ogType,
       twitterCard,
       schemaType
     }, { video })
+  }
+
+  private static getOEmbedUrl (video: MVideo, currentQuery: Record<string, string>) {
+    const base = WEBSERVER.URL + video.getWatchStaticPath()
+
+    const additionalQuery: Record<string, string> = {}
+    const allowedParams = new Set([ 'start' ])
+
+    for (const [ key, value ] of Object.entries(currentQuery)) {
+      if (allowedParams.has(key)) additionalQuery[key] = value
+    }
+
+    return addQueryParams(base, additionalQuery)
   }
 }
