@@ -122,7 +122,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
         expect(video.streamingPlaylists).to.have.lengthOf(1)
 
         const files = video.streamingPlaylists[0].files
-        expect(files).to.have.lengthOf(5)
+        expect(files).to.have.lengthOf(6)
 
         for (const file of files) {
           if (objectStorage) {
