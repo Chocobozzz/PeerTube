@@ -209,7 +209,7 @@ export async function completeCheckHlsPlaylist (options: {
       expect(file).to.not.be.undefined
 
       if (file.resolution.id === VideoResolution.H_NOVIDEO) {
-        expect(file.resolution.label).to.equal('Audio')
+        expect(file.resolution.label).to.equal('Audio only')
         expect(file.hasAudio).to.be.true
         expect(file.hasVideo).to.be.false
       } else {

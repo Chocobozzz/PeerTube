@@ -142,7 +142,7 @@ describe('Test video source management', function () {
       expect(source.height).to.equal(0)
       expect(source.width).to.equal(0)
       expect(source.resolution.id).to.equal(0)
-      expect(source.resolution.label).to.equal('Audio')
+      expect(source.resolution.label).to.equal('Audio only')
       expect(source.size).to.equal(105243)
 
       expect(source.metadata?.format).to.exist
