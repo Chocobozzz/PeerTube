@@ -19,7 +19,11 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAc
   }
 
   isDisabled () {
-    return this.payload.privacy !== VideoPrivacy.PUBLIC || this.payload.state !== VideoState.PUBLISHED || this.payload.isBlacklisted()
+    if (this.payload.privacy !== VideoPrivacy.PUBLIC && this.payload.privacy !== VideoPrivacy.INTERNAL) return true
+    if (this.payload.state !== VideoState.PUBLISHED) return true
+    if (this.payload.isBlacklisted()) return true
+
+    return false
   }
 
   getSetting (user: MUserWithNotificationSetting) {

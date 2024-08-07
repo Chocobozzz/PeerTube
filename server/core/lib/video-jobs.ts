@@ -156,13 +156,12 @@ export async function addVideoJobsAfterUpdate (options: {
     }
   })
 
-  const wasConfidentialVideo = new Set<VideoPrivacyType>([
+  const wasConfidentialVideoForNotification = new Set<VideoPrivacyType>([
     VideoPrivacy.PRIVATE,
-    VideoPrivacy.UNLISTED,
-    VideoPrivacy.INTERNAL
+    VideoPrivacy.UNLISTED
   ]).has(oldPrivacy)
 
-  if (wasConfidentialVideo) {
+  if (wasConfidentialVideoForNotification) {
     jobs.push({
       type: 'notify',
       payload: {
