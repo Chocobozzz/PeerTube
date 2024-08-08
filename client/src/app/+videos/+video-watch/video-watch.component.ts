@@ -317,13 +317,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadVideo (options: {
     videoId: string
     forceAutoplay: boolean
+    liveRefresh?: boolean
     videoPassword?: string
   }) {
-    const { videoId, forceAutoplay, videoPassword } = options
+    const { videoId, liveRefresh, forceAutoplay, videoPassword } = options
 
-    if (this.isSameElement(this.video, videoId)) return
-
-    this.video = undefined
+    if (!liveRefresh && this.isSameElement(this.video, videoId)) return
 
     const videoObs = this.hooks.wrapObsFun(
       this.videoService.getVideo.bind(this.videoService),
@@ -895,9 +894,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const videoUUID = this.video.uuid
 
-    // Reset to force refresh the video
-    this.video = undefined
-    this.loadVideo({ videoId: videoUUID, forceAutoplay: true })
+    this.loadVideo({ videoId: videoUUID, forceAutoplay: true, liveRefresh: true })
   }
 
   private handleLiveViewsChange (newViewers: number) {
