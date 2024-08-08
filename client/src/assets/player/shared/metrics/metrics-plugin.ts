@@ -131,7 +131,7 @@ class MetricsPlugin extends Plugin {
       const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
 
       return fetch(this.options_.metricsUrl(), { method: 'POST', body: JSON.stringify(body), headers })
-        .catch(err => logger.info('Cannot send metrics to the server.', err))
+        .catch(err => logger.clientWarn('Cannot send metrics to the server.', err))
     }, this.options_.metricsInterval())
   }
 
