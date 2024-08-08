@@ -12,7 +12,6 @@ ul {
 
   li {
     list-style: none;
-    width: 100%;
   }
 }
 
@@ -273,7 +272,7 @@ my-actor-avatar {
   .block-title {
     @include ellipsis;
     @include margin-left(26px);
-    @include margin-right(30px);
+    @include margin-right(15px);
 
     text-transform: uppercase;
     font-weight: $font-bold; // Bold
