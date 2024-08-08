@@ -18,6 +18,8 @@ class MetricsPlugin extends Plugin {
   private resolutionChanges = 0
   private errors = 0
 
+  private bufferStalled = 0
+
   private p2pEnabled: boolean
   private p2pPeers = 0
 
@@ -33,6 +35,7 @@ class MetricsPlugin extends Plugin {
     this.trackBytes()
     this.trackResolutionChange()
     this.trackErrors()
+    this.trackBufferStalled()
 
     this.one('play', () => {
       this.player.on('video-change', () => {
@@ -56,6 +59,7 @@ class MetricsPlugin extends Plugin {
 
     this.resolutionChanges = 0
     this.errors = 0
+    this.bufferStalled = 0
 
     this.lastPlayerNetworkInfo = undefined
 
@@ -107,6 +111,7 @@ class MetricsPlugin extends Plugin {
         resolutionChanges: this.resolutionChanges,
 
         errors: this.errors,
+        bufferStalled: this.bufferStalled,
 
         downloadedBytesHTTP: this.downloadedBytesHTTP,
 
@@ -127,6 +132,8 @@ class MetricsPlugin extends Plugin {
       this.uploadedBytesP2P = 0
 
       this.errors = 0
+
+      this.bufferStalled = 0
 
       const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
 
@@ -161,7 +168,17 @@ class MetricsPlugin extends Plugin {
 
   private trackErrors () {
     this.player.on('error', () => {
+      debugLogger('Adding player error')
+
       this.errors++
+    })
+  }
+
+  private trackBufferStalled () {
+    this.player.on('buffer-stalled', () => {
+      debugLogger('Adding buffer stalled')
+
+      this.bufferStalled++
     })
   }
 }

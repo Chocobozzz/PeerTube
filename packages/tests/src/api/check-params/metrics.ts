@@ -48,6 +48,7 @@ describe('Test metrics API validators', function () {
         downloadedBytesP2P: 0,
         downloadedBytesHTTP: 0,
         uploadedBytesP2P: 0,
+        bufferStalled: 0,
         videoId: videoUUID
       }
     })
@@ -171,6 +172,14 @@ describe('Test metrics API validators', function () {
         url: server.url,
         path,
         fields: { ...baseParams, p2pPeers: 'toto' }
+      })
+    })
+
+    it('Should fail with an invalid bufferStalled', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields: { ...baseParams, bufferStalled: 'toto' }
       })
     })
 

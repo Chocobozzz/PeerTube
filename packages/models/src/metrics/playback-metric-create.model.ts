@@ -12,6 +12,7 @@ export interface PlaybackMetricCreate {
   resolutionChanges: number
 
   errors: number
+  bufferStalled: number
 
   downloadedBytesP2P: number
   downloadedBytesHTTP: number

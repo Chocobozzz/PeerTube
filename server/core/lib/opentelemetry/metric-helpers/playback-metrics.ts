@@ -5,6 +5,7 @@ import { PlaybackMetricCreate } from '@peertube/peertube-models'
 export class PlaybackMetrics {
   private errorsCounter: Counter
   private resolutionChangesCounter: Counter
+  private bufferStalledCounter: Counter
 
   private downloadedBytesP2PCounter: Counter
   private uploadedBytesP2PCounter: Counter
@@ -27,6 +28,10 @@ export class PlaybackMetrics {
 
     this.resolutionChangesCounter = this.meter.createCounter('peertube_playback_resolution_changes_count', {
       description: 'Resolution changes collected from PeerTube player.'
+    })
+
+    this.bufferStalledCounter = this.meter.createCounter('peertube_playback_buffer_stalled_count', {
+      description: 'Number of times playback is stuck because buffer is running out of data, collected from PeerTube player.'
     })
 
     this.downloadedBytesHTTPCounter = this.meter.createCounter('peertube_playback_http_downloaded_bytes', {
@@ -74,6 +79,10 @@ export class PlaybackMetrics {
     this.downloadedBytesP2PCounter.add(metrics.downloadedBytesP2P, attributes)
 
     this.uploadedBytesP2PCounter.add(metrics.uploadedBytesP2P, attributes)
+
+    if (metrics.bufferStalled) {
+      this.bufferStalledCounter.add(metrics.bufferStalled, attributes)
+    }
 
     if (metrics.p2pPeers) {
       this.peersP2PPeersGaugeBuffer.push({

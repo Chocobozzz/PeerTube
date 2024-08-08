@@ -26,6 +26,10 @@ const addPlaybackMetricValidator = [
   body('resolutionChanges')
     .isInt({ min: 0 }),
 
+  body('bufferStalled')
+    .optional()
+    .isInt({ min: 0 }),
+
   body('errors')
     .isInt({ min: 0 }),
 

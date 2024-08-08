@@ -159,6 +159,15 @@ class P2pMediaLoaderPlugin extends Plugin {
         this.player.trigger('video-ratio-changed', { ratio: level.width / level.height })
       }
     })
+
+    // Track buffer issues
+    this.hlsjs.on(Hlsjs.Events.ERROR, (_event, errorData) => {
+      if (errorData.type !== Hlsjs.ErrorTypes.MEDIA_ERROR) return
+
+      if (errorData.details === Hlsjs.ErrorDetails.BUFFER_STALLED_ERROR) {
+        this.player.trigger('buffer-stalled')
+      }
+    })
   }
 
   private runStats () {

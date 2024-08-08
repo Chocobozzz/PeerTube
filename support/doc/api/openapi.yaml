@@ -10987,6 +10987,9 @@ components:
         resolutionChanges:
           type: number
           description: How many resolution changes occurred since the last metric creation
+        bufferStalled:
+          type: number
+          description: How many times buffer has been stalled since the last metric creation
         errors:
           type: number
           description: How many errors occurred since the last metric creation
