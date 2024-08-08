@@ -286,8 +286,11 @@ export class Html5Hlsjs {
     if (this.errorCounts[data.type]) this.errorCounts[data.type] += 1
     else this.errorCounts[data.type] = 1
 
-    if (data.fatal) logger.error(error.message, { currentTime: this.player.currentTime(), data })
-    else logger.warn(error.message)
+    // Google Bot doesn't support our codecs, but we don't really care
+    if (!/googlebot/i.test(navigator.userAgent)) {
+      if (data.fatal) logger.error(error.message, { currentTime: this.player.currentTime(), data })
+      else logger.warn(error.message)
+    }
 
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
       error.code = 2
