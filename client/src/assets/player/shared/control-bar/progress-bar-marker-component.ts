@@ -20,7 +20,7 @@ export class ProgressBarMarkerComponent extends Component {
 
   createEl () {
     return videojs.dom.createEl('span', {
-      className: 'vjs-marker',
+      className: 'vjs-chapter-marker',
       style: `left: ${this.buildLeftStyle()}`
     }) as HTMLButtonElement
   }

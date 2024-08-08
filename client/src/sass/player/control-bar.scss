@@ -3,6 +3,10 @@
 @use '_mixins' as *;
 @use './_player-variables' as *;
 
+$slider-height: 3px;
+$slider-hover-height: 5px;
+$chapter-marker-size: 10px;
+
 .vjs-peertube-skin.has-chapter {
   .vjs-time-tooltip {
     white-space: pre;
@@ -10,6 +14,29 @@
     padding-top: 4px;
     padding-bottom: 4px;
     top: -4.9em;
+  }
+}
+
+.vjs-chapter-marker {
+  position: absolute;
+
+  top: - math.floor(math.div($chapter-marker-size - $slider-height, 2));
+
+  height: $chapter-marker-size;
+  width: $chapter-marker-size;
+  border-radius: $chapter-marker-size;
+  margin-left: - math.div($chapter-marker-size, 2);
+
+  background-color: $bg-color;
+  cursor: pointer;
+  transition: transform 50ms ease-in-out, border-color 50ms ease-in-out;
+  border: 2px solid transparent;
+  z-index: 2; // On top of mouse marker
+
+  &:hover {
+    transform: scale(1.5);
+
+    border-color: $main-color;
   }
 }
 
@@ -72,7 +99,7 @@
       margin: 0;
       border-radius: 0;
       background-color: rgba(255, 255, 255, .2);
-      height: 3px;
+      height: $slider-height;
       transition: none;
 
       .vjs-play-progress {
@@ -82,9 +109,8 @@
         &::before {
           opacity: 0;
           transition: opacity 0.1s ease;
-          font-size: 14px;
-
-          top: -0.3em;
+          font-size: 15px;
+          z-index: 3; // On top of chapter marker
         }
 
         // Only used on mobile
@@ -104,10 +130,14 @@
 
   .vjs-progress-control:hover .vjs-slider,
   .vjs-progress-control .vjs-slider.vjs-sliding {
-    height: 5px;
+    height: $slider-hover-height;
 
     .vjs-play-progress::before {
       opacity: 1;
+    }
+
+    .vjs-chapter-marker {
+      top: - math.floor(math.div($chapter-marker-size - $slider-hover-height, 2));
     }
   }
 
@@ -462,15 +492,6 @@
       }
     }
   }
-}
-
-.vjs-marker {
-  position: absolute;
-  width: 3px;
-  opacity: .5;
-  background-color: #000;
-  height: 100%;
-  top: 0;
 }
 
 .vjs-peertube-skin.vjs-has-captions .vjs-caption-toggle-control {
