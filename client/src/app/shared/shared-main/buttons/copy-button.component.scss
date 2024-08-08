@@ -1,7 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-button:not(.is-input-group) {
+button:not(.with-border, .is-input-group) {
   border: 0;
 }
 

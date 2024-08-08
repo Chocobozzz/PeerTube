@@ -1,9 +1,8 @@
-import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestService } from '@app/core'
 import { ServerLogLevel } from '@peertube/peertube-models'
+import { catchError, map } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { LogRow } from './log-row.model'
 
@@ -24,7 +23,7 @@ export class LogsService {
     tagsOneOf?: string[]
     level?: ServerLogLevel
     endDate?: string
-  }): Observable<any[]> {
+  }) {
     const { isAuditLog, startDate, endDate, tagsOneOf } = options
 
     let params = new HttpParams()
@@ -38,7 +37,7 @@ export class LogsService {
       ? LogsService.BASE_AUDIT_LOG_URL
       : LogsService.BASE_LOG_URL
 
-    return this.authHttp.get<any[]>(path, { params })
+    return this.authHttp.get<LogRow[]>(path, { params })
                .pipe(
                  map(rows => rows.map(r => new LogRow(r))),
                  catchError(err => this.restExtractor.handleError(err))

@@ -37,19 +37,27 @@
   <div *ngIf="loading" i18n>Loading...</div>
 
   <div #logsElement>
+    <my-copy-button
+      *ngIf="logs.length !== 0"
+      i18n-notification notification="Logs copied" i18n-title title="Copy logs"
+      withBorder="true" [elementContent]="logsContent"
+    ></my-copy-button>
+
     <div *ngIf="!loading && logs.length === 0" i18n>No log.</div>
 
-    <div *ngFor="let log of logs" class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
-      <span class="log-level">{{ log.level }}</span>
+    <div #logsContent>
+      <div *ngFor="let log of logs" class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
+        <span class="log-level">{{ log.level }}</span>
 
-      <span class="log-date">[{{ log.localeDate }}]</span>
+        <span class="log-date">[{{ log.localeDate }}]</span>
 
-      <strong class="log-by" *ngIf="log.by" i18n>By {{ log.by }} -></strong>
-      <strong class="log-domain-action" *ngIf="log.domain">{{ log.domain }} -> {{ log.action }}</strong>
+        <strong class="log-by" *ngIf="log.by" i18n>By {{ log.by }} -></strong>
+        <strong class="log-domain-action" *ngIf="log.domain">{{ log.domain }} -> {{ log.action }}</strong>
 
-      {{ log.message }}
+        {{ log.message }}
 
-      <pre>{{ log.meta }}</pre>
+        <pre>{{ log.meta }}</pre>
+      </div>
     </div>
   </div>
 </div>

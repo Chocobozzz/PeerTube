@@ -1,28 +1,42 @@
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { LocalStorageService, Notifier } from '@app/core'
+import { NgSelectModule } from '@ng-select/ng-select'
 import { ServerLogLevel } from '@peertube/peertube-models'
+import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { CopyButtonComponent } from '../../../shared/shared-main/buttons/copy-button.component'
 import { LogRow } from './log-row.model'
 import { LogsService } from './logs.service'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
-import { NgSelectModule } from '@ng-select/ng-select'
-import { NgFor, NgIf, NgClass, DatePipe } from '@angular/common'
-import { FormsModule } from '@angular/forms'
 
 @Component({
   templateUrl: './logs.component.html',
   styleUrls: [ './logs.component.scss' ],
   standalone: true,
-  imports: [ FormsModule, NgFor, NgSelectModule, NgIf, NgClass, SelectTagsComponent, ButtonComponent, DatePipe ]
+  imports: [
+    FormsModule,
+    NgFor,
+    NgSelectModule,
+    NgIf,
+    NgClass,
+    SelectTagsComponent,
+    ButtonComponent,
+    DatePipe,
+    CopyButtonComponent
+  ]
 })
 export class LogsComponent implements OnInit {
   private static LOCAL_STORAGE_LOG_TYPE_CHOICE_KEY = 'admin-logs-log-type-choice'
 
   @ViewChild('logsElement', { static: true }) logsElement: ElementRef<HTMLElement>
+  @ViewChild('logsContent', { static: true }) logsContent: ElementRef<HTMLElement>
 
   loading = false
 
+  rawLogs: string
   logs: LogRow[] = []
+
   timeChoices: { id: string, label: string, dateFormat: string }[] = []
   levelChoices: { id: ServerLogLevel, label: string }[] = []
   logTypeChoices: { id: 'audit' | 'standard', label: string }[] = []
@@ -71,6 +85,8 @@ export class LogsComponent implements OnInit {
     }).subscribe({
       next: logs => {
         this.logs = logs
+
+        this.rawLogs = this.logs.map(l => `${l.level} ${l.localeDate} ${l.message} ${l.meta}`).join('\n')
 
         setTimeout(() => {
           this.logsElement.nativeElement.scrollIntoView({ block: 'end', inline: 'nearest' })
