@@ -411,6 +411,10 @@ export class Html5Hlsjs {
         this.edgeMargin = this.hlsjsConfig.liveSyncDurationCount * data.details.targetduration
       }
 
+      if (this.isLive && !data.details.live) {
+        this.player.trigger('hlsjs-live-ended')
+      }
+
       this.isLive = data.details.live
       this.dvrDuration = data.details.totalduration
 

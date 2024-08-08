@@ -31,6 +31,8 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private networkInfoInterval: any
 
+  private liveEnded = false
+
   constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
     super(player)
 
@@ -75,8 +77,21 @@ class P2pMediaLoaderPlugin extends Plugin {
 
       player.on('hlsjs-initialized', onHLSJSInitialized)
 
+      // ---------------------------------------------------------------------------
+
+      const onHLSJSLiveEnded = () => {
+        debugLogger('hls.js says the live is ended')
+
+        this.liveEnded = true
+      }
+
+      player.on('hlsjs-live-ended', onHLSJSLiveEnded)
+
+      // ---------------------------------------------------------------------------
+
       this.on('dispose', () => {
         this.player.off('hlsjs-initialized', onHLSJSInitialized)
+        this.player.off('hlsjs-live-ended', onHLSJSLiveEnded)
       })
     }
 
@@ -127,6 +142,11 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       if (navigator.onLine === false) return
+      // We may have errors if the live ended because of a fast-restream in the same permanent live
+      if (this.liveEnded) {
+        (this.player as any).handleTechEnded_()
+        return
+      }
 
       logger.error(`Segment ${segment.id} error.`, err)
 
