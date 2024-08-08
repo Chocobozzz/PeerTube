@@ -16,7 +16,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MVideo, MVideoFile, MVideoId, MVideoThumbnail, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move, remove } from 'fs-extra/esm'
 import { Readable, Writable } from 'stream'
@@ -264,7 +264,7 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
 // ---------------------------------------------------------------------------
 
 export async function muxToMergeVideoFiles (options: {
-  video: MVideo
+  video: MVideoThumbnail
   videoFiles: MVideoFile[]
   output: Writable
 }) {
@@ -274,8 +274,12 @@ export async function muxToMergeVideoFiles (options: {
   const tmpDestinations: string[] = []
 
   try {
+    let maxResolution = 0
+
     for (const videoFile of videoFiles) {
       if (!videoFile) continue
+
+      maxResolution = Math.max(maxResolution, videoFile.resolution)
 
       const { input, isTmpDestination } = await buildMuxInput(video, videoFile)
 
@@ -283,6 +287,13 @@ export async function muxToMergeVideoFiles (options: {
 
       if (isTmpDestination === true) tmpDestinations.push(input)
     }
+
+    // Include cover to audio file?
+    const { coverPath, isTmpDestination } = maxResolution === 0
+      ? await buildCoverInput(video)
+      : { coverPath: undefined, isTmpDestination: false }
+
+    if (coverPath && isTmpDestination) tmpDestinations.push(coverPath)
 
     const inputsToLog = inputs.map(i => {
       if (typeof i === 'string') return i
@@ -293,7 +304,14 @@ export async function muxToMergeVideoFiles (options: {
     logger.info(`Muxing files for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
 
     try {
-      await new FFmpegContainer(getFFmpegCommandWrapperOptions('vod')).mergeInputs({ inputs, output, logError: true })
+      await new FFmpegContainer(getFFmpegCommandWrapperOptions('vod')).mergeInputs({
+        inputs,
+        output,
+        logError: true,
+
+        // Include a cover if this is an audio file
+        coverPath
+      })
 
       logger.info(`Mux ended for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
     } catch (err) {
@@ -390,4 +408,20 @@ async function buildMuxInput (
   })
 
   return { input: stream, isTmpDestination: false }
+}
+
+async function buildCoverInput (video: MVideoThumbnail) {
+  const preview = video.getPreview()
+
+  if (video.isOwned()) return { coverPath: preview?.getPath() }
+
+  if (preview.fileUrl) {
+    const destination = VideoPathManager.Instance.buildTMPDestination(preview.filename)
+
+    await doRequestAndSaveToFile(preview.fileUrl, destination)
+
+    return { coverPath: destination, isTmpDestination: true }
+  }
+
+  return { coverPath: undefined }
 }

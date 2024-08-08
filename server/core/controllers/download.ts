@@ -1,5 +1,5 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
-import { FileStorage, HttpStatusCode, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { FileStorage, HttpStatusCode, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -244,7 +244,14 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  const downloadFilename = buildDownloadFilename({ video, extname: maxBy(videoFiles, 'resolution').extname })
+  const maxResolutionFile = maxBy(videoFiles, 'resolution')
+
+  // Prefer m4a extension for the user if this is a mp4 audio file only
+  const extname = maxResolutionFile.resolution === VideoResolution.H_NOVIDEO && maxResolutionFile.extname === '.mp4'
+    ? '.m4a'
+    : maxResolutionFile.extname
+
+  const downloadFilename = buildDownloadFilename({ video, extname })
   res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
 
   await muxToMergeVideoFiles({ video, videoFiles, output: res })

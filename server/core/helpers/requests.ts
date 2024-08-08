@@ -191,7 +191,7 @@ export function isBinaryResponse (result: Response<any>) {
 // ---------------------------------------------------------------------------
 
 function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBody {
-  const { activityPub, bodyKBLimit = 1000 } = options
+  const { activityPub, bodyKBLimit = 3000 } = options
 
   const context = { bodyKBLimit, httpSignature: options.httpSignature }
 

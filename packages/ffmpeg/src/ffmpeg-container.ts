@@ -12,14 +12,21 @@ export class FFmpegContainer {
     inputs: (Readable | string)[]
     output: Writable
     logError: boolean
+
+    coverPath?: string
   }) {
-    const { inputs, output, logError } = options
+    const { inputs, output, logError, coverPath } = options
 
     this.commandWrapper.buildCommand(inputs)
       .outputOption('-c copy')
       .outputOption('-movflags frag_keyframe+empty_moov')
       .format('mp4')
       .output(output)
+
+    if (coverPath) {
+      this.commandWrapper.getCommand()
+        .addInput(coverPath)
+    }
 
     return this.commandWrapper.runCommand({ silent: !logError })
   }
