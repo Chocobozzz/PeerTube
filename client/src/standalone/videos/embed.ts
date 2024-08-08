@@ -266,11 +266,6 @@ export class PeerTubeEmbed {
       this.buildPlayerIfNeeded()
     ])
 
-    // If already played, we are in a playlist so we don't want to display the poster between videos
-    if (!this.alreadyPlayed) {
-      this.peertubePlayer.setPoster(getBackendUrl() + video.previewPath)
-    }
-
     const playlist = this.playlistTracker
       ? {
         onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer({ uuid, forceAutoplay: false }),
