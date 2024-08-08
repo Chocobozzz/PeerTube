@@ -2,11 +2,11 @@ import { Events, Segment } from '@peertube/p2p-media-loader-core'
 import { Engine, initHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
 import { addQueryParams } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
+import debug from 'debug'
 import Hlsjs from 'hls.js'
 import videojs from 'video.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
-import debug from 'debug'
 
 const debugLogger = debug('peertube:player:p2p-media-loader')
 
@@ -59,18 +59,26 @@ class P2pMediaLoaderPlugin extends Plugin {
       return
     }
 
-    player.on('hlsjs-initialized', (_: any, { hlsjs, engine }) => {
-      this.p2pEngine?.removeAllListeners()
-      this.p2pEngine?.destroy()
-      clearInterval(this.networkInfoInterval)
+    {
+      const onHLSJSInitialized = (_: any, { hlsjs, engine }: { hlsjs: Hlsjs, engine: Engine }) => {
+        this.p2pEngine?.removeAllListeners()
+        this.p2pEngine?.destroy()
+        clearInterval(this.networkInfoInterval)
 
-      this.hlsjs = hlsjs
-      this.p2pEngine = engine
+        this.hlsjs = hlsjs
+        this.p2pEngine = engine
 
-      debugLogger('hls.js initialized, initializing p2p-media-loader plugin', { hlsjs, engine })
+        debugLogger('hls.js initialized, initializing p2p-media-loader plugin', { hlsjs, engine })
 
-      player.ready(() => this.initializePlugin())
-    })
+        player.ready(() => this.initializePlugin())
+      }
+
+      player.on('hlsjs-initialized', onHLSJSInitialized)
+
+      this.on('dispose', () => {
+        this.player.off('hlsjs-initialized', onHLSJSInitialized)
+      })
+    }
 
     player.src({
       type: options.type,
