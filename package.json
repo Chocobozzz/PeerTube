@@ -24,6 +24,7 @@
     "server"
   ],
   "scripts": {
+    "install-node-dependencies": "yarn install --pure-lockfile",
     "benchmark-server": "tsx --conditions=peertube:tsx ./scripts/benchmark.ts",
     "benchmark-transcription": "tsx --conditions=peertube:tsx --tsconfig ./packages/transcription/tsconfig.json ./packages/transcription/src/benchmark.ts",
     "build:client": "bash ./scripts/build/client.sh",
