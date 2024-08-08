@@ -201,6 +201,8 @@ class PeerTubePlugin extends Plugin {
     this.errorModal.addClass('vjs-custom-error-display')
 
     this.player.addClass('vjs-error-display-enabled')
+
+    logger.error('Fatal error in player', this.player.error())
   }
 
   hideFatalError () {
