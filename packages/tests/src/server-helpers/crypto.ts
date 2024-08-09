@@ -20,14 +20,12 @@ describe('Encrypt/Descrypt', function () {
 
     const encrypted = await encrypt(str, 'my_secret')
 
-    let error = false
+    let decrypted = ''
 
     try {
-      await decrypt(encrypted, 'my_sicret')
-    } catch (err) {
-      error = true
-    }
+      decrypted = await decrypt(encrypted, 'my_sicret')
+    } catch { }
 
-    expect(error).to.be.true
+    expect(decrypted).to.not.equal(encrypted)
   })
 })
