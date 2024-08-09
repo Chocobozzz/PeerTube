@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { LiveVideoEventPayload, VideoPrivacy, VideoState, VideoStateType } from '@peertube/peertube-models'
+import { LiveVideoCreate, LiveVideoEventPayload, VideoPrivacy, VideoState, VideoStateType } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -36,11 +36,13 @@ describe('Test live socket messages', function () {
 
   describe('Live socket messages', function () {
 
-    async function createLiveWrapper () {
+    async function createLiveWrapper (options: Partial<LiveVideoCreate> = {}) {
       const liveAttributes = {
         name: 'live video',
         channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.PUBLIC
+        privacy: VideoPrivacy.PUBLIC,
+
+        ...options
       }
 
       const { uuid } = await servers[0].live.create({ fields: liveAttributes })
@@ -172,6 +174,48 @@ describe('Test live socket messages', function () {
       await waitJobs(servers)
 
       expect(stateChanges).to.have.lengthOf(1)
+    })
+
+    it('Should correctly send a force end notification', async function () {
+      this.timeout(60000)
+
+      let hadForcedEndEvent = false
+
+      await servers[0].kill()
+
+      const env = { PEERTUBE_TEST_CONSTANTS_VIDEO_LIVE_CLEANUP_DELAY: '20000' }
+      await servers[0].run({}, { env })
+
+      const liveVideoUUID = await createLiveWrapper({ permanentLive: true })
+
+      {
+        const videoId = await servers[0].videos.getId({ uuid: liveVideoUUID })
+
+        const localSocket = servers[0].socketIO.getLiveNotificationSocket()
+        localSocket.on('force-end', () => { hadForcedEndEvent = true })
+        localSocket.emit('subscribe', { videoId })
+      }
+
+      // Streaming session #1
+      const rtmpOptions = {
+        videoId: liveVideoUUID,
+        copyCodecs: true,
+        fixtureName: 'video_short.mp4'
+      }
+
+      let ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo(rtmpOptions)
+      await servers[0].live.waitUntilPublished({ videoId: liveVideoUUID })
+
+      await stopFfmpeg(ffmpegCommand)
+      await servers[0].live.waitUntilWaiting({ videoId: liveVideoUUID })
+
+      // Streaming session #2
+      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo(rtmpOptions)
+
+      // eslint-disable-next-line no-unmodified-loop-condition
+      while (!hadForcedEndEvent) {
+        await wait(500)
+      }
     })
   })
 

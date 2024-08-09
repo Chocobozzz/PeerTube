@@ -130,6 +130,8 @@ export class Html5Hlsjs {
   private dvrDuration: number = null
   private edgeMargin: number = null
 
+  private liveEnded = false
+
   private handlers: { [ id in 'play' | 'error' ]: EventListener } = {
     play: null,
     error: null
@@ -260,6 +262,16 @@ export class Html5Hlsjs {
   private _handleNetworkError (error: any) {
     if (navigator.onLine === false) return
 
+    // We may have errors if the live ended because of a fast-restream in the same permanent live
+    if (this.liveEnded) {
+      logger.info('Forcing end of live stream after a network error');
+
+      (this.player as any)?.handleTechEnded_()
+      this.hls?.stopLoad()
+
+      return
+    }
+
     if (this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] <= this.maxNetworkErrorRecovery) {
       logger.info('trying to recover network error')
 
@@ -383,6 +395,8 @@ export class Html5Hlsjs {
   }
 
   private initialize () {
+    this.liveEnded = false
+
     this.buildBaseConfig()
 
     if ([ '', 'auto' ].includes(this.videoElement.preload) && !this.videoElement.autoplay && this.hlsjsConfig.autoStartLoad === undefined) {
@@ -403,7 +417,7 @@ export class Html5Hlsjs {
 
     this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
     this.hls.on(Hlsjs.Events.MANIFEST_PARSED, (event, data) => this._onMetaData(event, data))
-    this.hls.on(Hlsjs.Events.LEVEL_LOADED, (event, data) => {
+    this.hls.on(Hlsjs.Events.LEVEL_LOADED, (_event, data) => {
       // The DVR plugin will auto seek to "live edge" on start up
       if (this.hlsjsConfig.liveSyncDuration) {
         this.edgeMargin = this.hlsjsConfig.liveSyncDuration
@@ -412,6 +426,7 @@ export class Html5Hlsjs {
       }
 
       if (this.isLive && !data.details.live) {
+        this.liveEnded = true
         this.player.trigger('hlsjs-live-ended')
       }
 

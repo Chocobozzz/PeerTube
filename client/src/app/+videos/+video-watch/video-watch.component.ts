@@ -562,14 +562,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       if (this.video.isLive) {
         player.one('ended', () => {
-          this.zone.run(() => {
-            // We changed the video, it's not a live anymore
-            if (!this.video.isLive) return
-
-            this.video.state.id = VideoState.LIVE_ENDED
-
-            this.updatePlayerOnNoLive()
-          })
+          this.zone.run(() => this.endLive())
         })
       }
 
@@ -884,6 +877,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       .subscribe(({ type, payload }) => {
         if (type === 'state-change') return this.handleLiveStateChange(payload.state)
         if (type === 'views-change') return this.handleLiveViewsChange(payload.viewers)
+        if (type === 'force-end') return this.endLive()
       })
   }
 
@@ -991,5 +985,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       peertubeLink: false
     }
+  }
+
+  private endLive () {
+    // We changed the video, it's not a live anymore
+    if (!this.video.isLive) return
+
+    this.video.state.id = VideoState.LIVE_ENDED
+
+    this.updatePlayerOnNoLive()
   }
 }

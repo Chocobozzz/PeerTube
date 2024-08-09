@@ -141,14 +141,9 @@ class P2pMediaLoaderPlugin extends Plugin {
     initHlsJsPlayer(this.player, this.hlsjs)
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
-      if (navigator.onLine === false) return
-      // We may have errors if the live ended because of a fast-restream in the same permanent live
-      if (this.liveEnded) {
-        (this.player as any).handleTechEnded_()
-        return
-      }
+      if (navigator.onLine === false || this.liveEnded) return
 
-      logger.error(`Segment ${segment.id} error.`, err)
+      logger.clientError(`Segment ${segment.id} error.`, err)
 
       if (this.options.redundancyUrlManager) {
         this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)

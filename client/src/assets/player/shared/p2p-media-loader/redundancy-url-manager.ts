@@ -7,11 +7,14 @@ class RedundancyUrlManager {
   }
 
   removeBySegmentUrl (segmentUrl: string) {
-    logger.info(`Removing redundancy of segment URL ${segmentUrl}.`)
-
     const baseUrl = getBaseUrl(segmentUrl)
+    const oldLength = baseUrl.length
 
     this.baseUrls = this.baseUrls.filter(u => u !== baseUrl && u !== baseUrl + '/')
+
+    if (oldLength !== this.baseUrls.length) {
+      logger.info(`Removed redundancy of segment URL ${segmentUrl}.`)
+    }
   }
 
   buildUrl (url: string) {

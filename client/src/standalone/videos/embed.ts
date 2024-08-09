@@ -317,17 +317,20 @@ export class PeerTubeEmbed {
     if (video.isLive) {
       this.liveManager.listenForChanges({
         video,
+
         onPublishedVideo: () => {
           this.liveManager.stopListeningForChanges(video)
           this.loadVideoAndBuildPlayer({ uuid: video.uuid, forceAutoplay: true })
-        }
+        },
+
+        onForceEnd: () => this.endLive(video, translations)
       })
 
       if (video.state.id === VideoState.WAITING_FOR_LIVE || video.state.id === VideoState.LIVE_ENDED) {
         this.liveManager.displayInfo({ state: video.state.id, translations })
         this.peertubePlayer.disable()
       } else {
-        this.correctlyHandleLiveEnding(translations)
+        this.player.one('ended', () => this.endLive(video, translations))
       }
     }
 
@@ -369,13 +372,13 @@ export class PeerTubeEmbed {
 
   // ---------------------------------------------------------------------------
 
-  private correctlyHandleLiveEnding (translations: Translations) {
-    this.player.one('ended', () => {
-      // Display the live ended information
-      this.liveManager.displayInfo({ state: VideoState.LIVE_ENDED, translations })
+  private endLive (video: VideoDetails, translations: Translations) {
+    // Display the live ended information
+    this.liveManager.displayInfo({ state: VideoState.LIVE_ENDED, translations })
 
-      this.peertubePlayer.disable()
-    })
+    this.peertubePlayer.unload()
+    this.peertubePlayer.disable()
+    this.peertubePlayer.setPoster(video.previewPath)
   }
 
   private async handlePasswordError (err: PeerTubeServerError) {

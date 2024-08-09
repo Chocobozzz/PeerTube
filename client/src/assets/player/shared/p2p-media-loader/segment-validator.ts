@@ -70,7 +70,7 @@ export class SegmentValidator {
       throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
     }
 
-    debugLogger(`Validating ${filename} range ${segment.range}`)
+    debugLogger(`Validating ${filename}` + (segment.range ? ` range ${segment.range}` : ''))
 
     const calculatedSha = await this.sha256Hex(segment.data)
     if (calculatedSha !== hashShouldBe) {

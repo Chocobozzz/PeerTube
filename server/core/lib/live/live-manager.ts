@@ -279,6 +279,8 @@ class LiveManager {
     if (oldStreamingPlaylist) {
       if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
 
+      PeerTubeSocket.Instance.sendVideoForceEnd(video)
+
       await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
     }
 

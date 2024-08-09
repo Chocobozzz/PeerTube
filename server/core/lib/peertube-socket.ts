@@ -8,6 +8,7 @@ import { UserNotificationModelForApi } from '@server/types/models/user/index.js'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@peertube/peertube-models'
 import { logger } from '../helpers/logger.js'
 import { authenticateRunnerSocket, authenticateSocket } from '../middlewares/index.js'
+import { isDevInstance } from '@peertube/peertube-node-utils'
 
 class PeerTubeSocket {
 
@@ -20,7 +21,11 @@ class PeerTubeSocket {
   private constructor () {}
 
   init (server: HTTPServer) {
-    const io = new SocketServer(server)
+    const io = new SocketServer(server, {
+      cors: isDevInstance()
+        ? { origin: 'http://localhost:5173', methods: [ 'GET', 'POST' ] }
+        : undefined
+    })
 
     io.of('/user-notifications')
       .use(authenticateSocket)
@@ -88,6 +93,8 @@ class PeerTubeSocket {
     }
   }
 
+  // ---------------------------------------------------------------------------
+
   sendVideoLiveNewState (video: MVideo) {
     const data: LiveVideoEventPayload = { state: video.state }
     const type: LiveVideoEventType = 'state-change'
@@ -109,6 +116,18 @@ class PeerTubeSocket {
       .in(video.id + '')
       .emit(type, data)
   }
+
+  sendVideoForceEnd (video: MVideo) {
+    const type: LiveVideoEventType = 'force-end'
+
+    logger.debug('Sending video live "force end" notification of %s.', video.url)
+
+    this.liveVideosNamespace
+      .in(video.id + '')
+      .emit(type)
+  }
+
+  // ---------------------------------------------------------------------------
 
   @Debounce({ timeoutMS: 1000 })
   sendAvailableJobsPingToRunners () {
