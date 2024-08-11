@@ -85,6 +85,10 @@ object_storage:
     __name: "PEERTUBE_OBJECT_STORAGE_MAX_UPLOAD_PART"
     __format: "json"
 
+  max_request_attempts:
+    __name: "PEERTUBE_OBJECT_STORAGE_MAX_REQUEST_ATTEMPTS"
+    __format: "json"
+
   streaming_playlists:
     bucket_name: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BUCKET_NAME"
     prefix: "PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_PREFIX"
