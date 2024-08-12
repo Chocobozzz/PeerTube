@@ -243,9 +243,6 @@ server {
       add_header Access-Control-Allow-Origin  '*';
       add_header Access-Control-Allow-Methods 'GET, OPTIONS';
       add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-
-      # Don't spam access log file with byte range requests
-      access_log off;
     }
 
     # Enabling the sendfile directive eliminates the step of copying the data into the buffer
