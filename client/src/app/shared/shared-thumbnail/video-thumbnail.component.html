@@ -36,7 +36,7 @@
     <div class="icon"></div>
   </div>
 
-  <div class="progress-bar" *ngIf="video.userHistory?.currentTime">
+  <div class="progress-bar" *ngIf="!video.isLive && video.userHistory?.currentTime">
     <div [ngStyle]="{ 'width.%': getProgressPercent() }"></div>
   </div>
 </ng-template>
