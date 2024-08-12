@@ -130,7 +130,13 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
         .subscribe({
           next: () => {
             this.reloadData()
-            this.notifier.success($localize`Job(s) cancelled.`)
+
+            this.notifier.success(
+              formatICU(
+                $localize`{count, plural, =1 {Job cancelled} other {{count} jobs cancelled}}`,
+                { count: jobs.length }
+              )
+            )
           },
 
           error: err => this.notifier.error(err.message)
@@ -151,7 +157,13 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
         .subscribe({
           next: () => {
             this.reloadData()
-            this.notifier.success($localize`Job(s) removed.`)
+
+            this.notifier.success(
+              formatICU(
+                $localize`{count, plural, =1 {Job removed} other {{count} jobs removed}}`,
+                { count: jobs.length }
+              )
+            )
           },
 
           error: err => this.notifier.error(err.message)
