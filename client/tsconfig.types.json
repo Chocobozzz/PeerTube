@@ -4,11 +4,11 @@
     "stripInternal": true,
     "removeComments": false,
     "declaration": true,
-    "outDir": "../packages/types-generator/dist/client/",
+    "outDir": "../packages/types-generator/dist-tmp/client/",
     "emitDeclarationOnly": true,
     "composite": true,
     "rootDir": "src/",
-    "tsBuildInfoFile": "../packages/types-generator/dist/tsconfig.client.tsbuildinfo"
+    "tsBuildInfoFile": "../packages/types-generator/dist-tmp/tsconfig.client.tsbuildinfo"
   },
   "files": [ "src/types/index.ts" ],
   "include": [

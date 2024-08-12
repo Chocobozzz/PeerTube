@@ -1,4 +1,4 @@
-import { RegisterServerOptions, Video } from '../dist/index.js'
+import { RegisterServerOptions, Video, MVideo } from '../dist/index.js'
 import { RegisterClientOptions } from '../dist/client/index.js'
 
 function register1 ({ registerHook }: RegisterServerOptions) {
@@ -12,6 +12,8 @@ function register2 ({ registerHook, peertubeHelpers }: RegisterClientOptions) {
   registerHook({
     target: 'action:admin-plugin-settings.init',
     handler: ({ npmName }: { npmName: string }) => {
+      let video: MVideo
+
       if ('peertube-plugin-transcription' !== npmName) {
         return
       }

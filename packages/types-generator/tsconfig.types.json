@@ -5,10 +5,10 @@
     "removeComments": false,
     "emitDeclarationOnly": true,
     "sourceMap": false,
-    "outDir": "./dist/",
+    "outDir": "./dist-tmp/",
     "baseUrl": "./",
     "rootDir": "./src",
-    "tsBuildInfoFile": "./dist/tsconfig.server.types.tsbuildinfo",
+    "tsBuildInfoFile": "./dist-tmp/tsconfig.server.types.tsbuildinfo",
     "paths": {
       "@server/*": [ "../../server/core/*" ]
     }

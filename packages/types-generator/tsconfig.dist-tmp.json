@@ -5,7 +5,7 @@
       "node_modules/@types",
       "client/node_modules/@types"
     ],
-    "baseUrl": "./dist",
+    "baseUrl": "./dist-tmp",
     "paths": {
       "@server/*": [ "server/core/*" ],
       "@client/*": [ "client/*" ],
