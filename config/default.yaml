@@ -874,17 +874,19 @@ instance:
   # Example: '2 vCore, 2GB RAM...'
   hardware_information: '' # Supports Markdown
 
-  # What are the main languages of your instance? To interact with your users for example
+  # Describe the languages spoken on your instance, to interact with your users for example
   # Uncomment or add the languages you want
   # List of supported languages: https://peertube.cpy.re/api/v1/videos/languages
+  # PeerTube plugins can add additional languages to the official list of supported languages
   languages:
 #    - en
 #    - es
 #    - fr
 
-  # You can specify the main categories of your instance (dedicated to music, gaming or politics etc)
-  # Uncomment or add the category ids you want
+  # Describe the main categories of your instance (to explain for example that your instance is dedicated to music, gaming, etc.)
+  # Uncomment categories you want
   # List of supported categories: https://peertube.cpy.re/api/v1/videos/categories
+  # PeerTube plugins can add additional categories to the official list of supported categories
   categories:
 #    - 1  # Music
 #    - 2  # Films
