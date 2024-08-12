@@ -239,6 +239,12 @@
       <ng-template ngbNavContent>
         <div class="row mb-5">
           <div class="chapters col-md-12 col-xl-6" formArrayName="chapters">
+            <div i18n class="alert pt-alert-primary">
+              Chapters can also be set in the video description.
+
+              Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank">in the PeerTube documentation</a>
+            </div>
+
             <ng-container *ngFor="let chapterControl of getChaptersFormArray().controls; let i = index">
               <div class="chapter" [formGroupName]="i">
                 <!-- Row 1 -->
