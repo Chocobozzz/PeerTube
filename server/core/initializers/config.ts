@@ -448,6 +448,9 @@ const CONFIG = {
       get '1440p' () { return config.get<boolean>('transcoding.resolutions.1440p') },
       get '2160p' () { return config.get<boolean>('transcoding.resolutions.2160p') }
     },
+    FPS: {
+      get MAX () { return config.get<number>('transcoding.fps.max') }
+    },
     HLS: {
       get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') },
       get SPLIT_AUDIO_AND_VIDEO () { return config.get<boolean>('transcoding.hls.split_audio_and_video') }
@@ -506,6 +509,11 @@ const CONFIG = {
         get '1440p' () { return config.get<boolean>('live.transcoding.resolutions.1440p') },
         get '2160p' () { return config.get<boolean>('live.transcoding.resolutions.2160p') }
       },
+
+      FPS: {
+        get MAX () { return config.get<number>('live.transcoding.fps.max') }
+      },
+
       REMOTE_RUNNERS: {
         get ENABLED () { return config.get<boolean>('live.transcoding.remote_runners.enabled') }
       }

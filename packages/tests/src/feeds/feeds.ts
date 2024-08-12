@@ -56,7 +56,7 @@ describe('Test syndication feeds', () => {
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
-    await serverHLSOnly.config.enableTranscoding({ webVideo: false, hls: true, with0p: true })
+    await serverHLSOnly.config.enableTranscoding({ webVideo: false, hls: true, with0p: true, resolutions: 'max' })
 
     {
       const user = await servers[0].users.getMyInfo()

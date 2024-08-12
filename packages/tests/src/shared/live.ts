@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { LiveVideo, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
 import { ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
@@ -50,7 +51,10 @@ async function testLiveVideoResolutions (options: {
 
   servers: PeerTubeServer[]
   liveVideoId: string
+
   resolutions: number[]
+  framerates?: { [id: number]: number }
+
   transcoded: boolean
 
   hasAudio?: boolean
@@ -65,6 +69,7 @@ async function testLiveVideoResolutions (options: {
     servers,
     liveVideoId,
     transcoded,
+    framerates,
     objectStorage,
     hasAudio = true,
     hasVideo = true,
@@ -102,6 +107,7 @@ async function testLiveVideoResolutions (options: {
       server,
       playlistUrl: hlsPlaylist.playlistUrl,
       resolutions,
+      framerates,
       transcoded,
       splittedAudio,
       hasAudio,
@@ -124,6 +130,16 @@ async function testLiveVideoResolutions (options: {
         objectStorage,
         objectStorageBaseUrl
       })
+
+      if (framerates) {
+        const segmentPath = servers[0].servers.buildDirectory(join('streaming-playlists', 'hls', video.uuid, segmentName))
+        const { resolution } = await getVideoStreamDimensionsInfo(segmentPath)
+
+        if (resolution) {
+          const fps = await getVideoStreamFPS(segmentPath)
+          expect(fps).to.equal(framerates[resolution])
+        }
+      }
 
       const baseUrl = objectStorage
         ? join(objectStorageBaseUrl, 'hls')

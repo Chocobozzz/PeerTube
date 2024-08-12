@@ -51,7 +51,7 @@ describe('Test generate download', function () {
       const resolutions = [ VideoResolution.H_NOVIDEO, VideoResolution.H_144P ]
 
       {
-        await server.config.enableTranscoding({ hls: true, webVideo: true, resolutions })
+        await server.config.enableTranscoding({ hls: true, webVideo: true, splitAudioAndVideo: false, resolutions })
         await server.videos.quickUpload({ name: 'common-' + seed })
         await waitJobs(servers)
       }

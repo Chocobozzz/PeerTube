@@ -138,6 +138,10 @@ export interface CustomConfig {
 
     alwaysTranscodeOriginalResolution: boolean
 
+    fps: {
+      max: number
+    }
+
     webVideos: {
       enabled: boolean
     }
@@ -168,8 +172,13 @@ export interface CustomConfig {
       }
       threads: number
       profile: string
+
       resolutions: ConfigResolutions
       alwaysTranscodeOriginalResolution: boolean
+
+      fps: {
+        max: number
+      }
     }
   }
 

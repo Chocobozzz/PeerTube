@@ -343,6 +343,9 @@ function customConfig (): CustomConfig {
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       alwaysTranscodeOriginalResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+      fps: {
+        max: CONFIG.TRANSCODING.FPS.MAX
+      },
       webVideos: {
         enabled: CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
       },
@@ -378,7 +381,10 @@ function customConfig (): CustomConfig {
           '1440p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1440p'],
           '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
         },
-        alwaysTranscodeOriginalResolution: CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+        alwaysTranscodeOriginalResolution: CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+        fps: {
+          max: CONFIG.LIVE.TRANSCODING.FPS.MAX
+        }
       }
     },
     videoStudio: {

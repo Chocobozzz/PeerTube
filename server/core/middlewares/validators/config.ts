@@ -57,6 +57,7 @@ const customConfigUpdateValidator = [
   body('transcoding.remoteRunners.enabled').isBoolean(),
 
   body('transcoding.alwaysTranscodeOriginalResolution').isBoolean(),
+  body('transcoding.fps.max').custom(isIntOrNull),
 
   body('transcoding.webVideos.enabled').isBoolean(),
   body('transcoding.hls.enabled').isBoolean(),
@@ -106,6 +107,7 @@ const customConfigUpdateValidator = [
   body('live.transcoding.resolutions.1440p').isBoolean(),
   body('live.transcoding.resolutions.2160p').isBoolean(),
   body('live.transcoding.alwaysTranscodeOriginalResolution').isBoolean(),
+  body('live.transcoding.fps.max').custom(isIntOrNull),
   body('live.transcoding.remoteRunners.enabled').isBoolean(),
 
   body('search.remoteUri.users').isBoolean(),

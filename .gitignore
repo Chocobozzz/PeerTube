@@ -16,6 +16,7 @@ yarn-error.log
 # Big fixtures generated/downloaded on-demand
 /packages/tests/fixtures/video_high_bitrate_1080p.mp4
 /packages/tests/fixtures/video_59fps.mp4
+/packages/tests/fixtures/video_50fps.mp4
 /packages/tests/fixtures/transcription/models-v1/
 
 # PeerTube

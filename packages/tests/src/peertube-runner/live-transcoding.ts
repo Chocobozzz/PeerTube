@@ -70,6 +70,64 @@ describe('Test Live transcoding in peertube-runner program', function () {
       await servers[0].videos.remove({ id: video.id })
     })
 
+    it('Should cap FPS', async function () {
+      this.timeout(120000)
+
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          live: {
+            transcoding: {
+              fps: { max: 48 }
+            }
+          }
+        }
+      })
+
+      const { video } = await servers[0].live.quickCreate({ permanentLive: true, saveReplay: false, privacy: VideoPrivacy.PUBLIC })
+
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({
+        videoId: video.uuid,
+        copyCodecs: true,
+        fixtureName: '60fps_720p_small.mp4'
+      })
+
+      await waitUntilLivePublishedOnAllServers(servers, video.uuid)
+      await waitJobs(servers)
+
+      await testLiveVideoResolutions({
+        originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
+        servers,
+        liveVideoId: video.uuid,
+        resolutions: [ 720, 480, 360, 240, 144 ],
+        framerates: {
+          720: 48,
+          480: 30,
+          360: 30,
+          240: 30,
+          144: 30
+        },
+        objectStorage,
+        transcoded: true
+      })
+
+      await stopFfmpeg(ffmpegCommand)
+      await waitUntilLiveWaitingOnAllServers(servers, video.uuid)
+
+      const { data } = await servers[0].runnerJobs.list({ sort: '-createdAt' })
+
+      while (true) {
+        const liveJob = data.find(d => d.type === 'live-rtmp-hls-transcoding')
+        expect(liveJob).to.exist
+
+        if (liveJob.state.id === RunnerJobState.COMPLETED) break
+
+        await wait(500)
+      }
+
+      await servers[0].videos.remove({ id: video.id })
+    })
+
     it('Should transcode audio only RTMP stream', async function () {
       this.timeout(120000)
 

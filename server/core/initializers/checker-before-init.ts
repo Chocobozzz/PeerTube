@@ -37,6 +37,7 @@ function checkMissedConfig () {
     'transcoding.resolutions.0p', 'transcoding.resolutions.144p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p',
     'transcoding.resolutions.480p', 'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p',
     'transcoding.resolutions.2160p', 'transcoding.always_transcode_original_resolution', 'transcoding.remote_runners.enabled',
+    'transcoding.fps.max',
     'video_studio.enabled', 'video_studio.remote_runners.enabled',
     'video_file.update.enabled',
     'remote_runners.stalled_jobs.vod', 'remote_runners.stalled_jobs.live',
@@ -85,7 +86,7 @@ function checkMissedConfig () {
     'live.transcoding.resolutions.144p', 'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p',
     'live.transcoding.resolutions.480p', 'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p',
     'live.transcoding.resolutions.1440p', 'live.transcoding.resolutions.2160p', 'live.transcoding.always_transcode_original_resolution',
-    'live.transcoding.remote_runners.enabled',
+    'live.transcoding.fps.max', 'live.transcoding.remote_runners.enabled',
     'storyboards.enabled'
   ]
 

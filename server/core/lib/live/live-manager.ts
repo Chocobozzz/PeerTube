@@ -341,10 +341,14 @@ class LiveManager {
 
       inputLocalUrl,
       inputPublicUrl,
+
       fps,
       bitrate,
       ratio,
+
+      inputResolution: resolution,
       allResolutions,
+
       hasAudio,
       hasVideo,
       probe
@@ -363,7 +367,10 @@ class LiveManager {
     fps: number
     bitrate: number
     ratio: number
+
+    inputResolution: number
     allResolutions: number[]
+
     hasAudio: boolean
     hasVideo: boolean
     probe: FfprobeData
@@ -384,7 +391,18 @@ class LiveManager {
       videoLive,
       user,
 
-      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio', 'hasVideo', 'probe' ])
+      ...pick(options, [
+        'inputLocalUrl',
+        'inputPublicUrl',
+        'inputResolution',
+        'bitrate',
+        'ratio',
+        'fps',
+        'allResolutions',
+        'hasAudio',
+        'hasVideo',
+        'probe'
+      ])
     })
 
     muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, audioOnlyOutput, localLTags }))

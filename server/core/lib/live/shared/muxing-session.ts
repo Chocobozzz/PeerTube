@@ -72,6 +72,8 @@ class MuxingSession extends EventEmitter {
   private readonly inputPublicUrl: string
 
   private readonly fps: number
+
+  private readonly inputResolution: number
   private readonly allResolutions: number[]
 
   private readonly bitrate: number
@@ -125,7 +127,10 @@ class MuxingSession extends EventEmitter {
     fps: number
     bitrate: number
     ratio: number
+
+    inputResolution: number
     allResolutions: number[]
+
     hasAudio: boolean
     hasVideo: boolean
     probe: FfprobeData
@@ -149,6 +154,7 @@ class MuxingSession extends EventEmitter {
     this.hasVideo = options.hasVideo
     this.hasAudio = options.hasAudio
 
+    this.inputResolution = options.inputResolution
     this.allResolutions = options.allResolutions
 
     this.videoUUID = this.videoLive.Video.uuid
@@ -547,7 +553,12 @@ class MuxingSession extends EventEmitter {
       }
 
       try {
-        toTranscodeFPS = computeOutputFPS({ inputFPS: this.fps, resolution })
+        toTranscodeFPS = computeOutputFPS({
+          inputFPS: this.fps,
+          resolution,
+          isOriginResolution: resolution === this.inputResolution,
+          type: 'live'
+        })
       } catch (err) {
         err.liveVideoErrorCode = LiveVideoError.INVALID_INPUT_VIDEO_STREAM
         throw err

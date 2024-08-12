@@ -77,7 +77,7 @@ function runTests (options: {
     const video = await servers[0].videos.get({ id: videoUUID })
     publishedAt = video.publishedAt as string
 
-    await servers[0].config.enableTranscoding()
+    await servers[0].config.enableTranscoding({ webVideo: true, hls: true, resolutions: 'max' })
     await servers[0].config.setTranscodingConcurrency(concurrency)
   })
 

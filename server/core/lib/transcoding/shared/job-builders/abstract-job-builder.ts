@@ -3,7 +3,7 @@ import { VideoResolution } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/framerate.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { DEFAULT_AUDIO_RESOLUTION, VIDEO_TRANSCODING_FPS } from '@server/initializers/constants.js'
+import { DEFAULT_AUDIO_MERGE_RESOLUTION, DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
@@ -36,7 +36,7 @@ export abstract class AbstractJobBuilder <P> {
 
       await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), async videoFilePath => {
         const probe = await ffprobePromise(videoFilePath)
-        const quickTranscode = await canDoQuickTranscode(videoFilePath, probe)
+        const quickTranscode = await canDoQuickTranscode(videoFilePath, CONFIG.TRANSCODING.FPS.MAX, probe)
 
         let inputFPS: number
 
@@ -46,7 +46,8 @@ export abstract class AbstractJobBuilder <P> {
         let hlsAudioAlreadyGenerated = false
 
         if (videoFile.isAudio()) {
-          inputFPS = maxFPS = VIDEO_TRANSCODING_FPS.AUDIO_MERGE // The first transcoding job will transcode to this FPS value
+          // The first transcoding job will transcode to this FPS value
+          inputFPS = maxFPS = Math.min(DEFAULT_AUDIO_MERGE_RESOLUTION, CONFIG.TRANSCODING.FPS.MAX)
           maxResolution = DEFAULT_AUDIO_RESOLUTION
 
           mergeOrOptimizePayload = this.buildMergeAudioPayload({
@@ -59,7 +60,7 @@ export abstract class AbstractJobBuilder <P> {
         } else {
           inputFPS = videoFile.fps
           maxResolution = buildOriginalFileResolution(videoFile.resolution)
-          maxFPS = computeOutputFPS({ inputFPS, resolution: maxResolution })
+          maxFPS = computeOutputFPS({ inputFPS, resolution: maxResolution, isOriginResolution: true, type: 'vod' })
 
           mergeOrOptimizePayload = this.buildOptimizePayload({
             video,
@@ -153,7 +154,7 @@ export abstract class AbstractJobBuilder <P> {
     const inputFPS = video.getMaxFPS()
 
     const children = childrenResolutions.map(resolution => {
-      const fps = computeOutputFPS({ inputFPS, resolution })
+      const fps = computeOutputFPS({ inputFPS, resolution, isOriginResolution: maxResolution === resolution, type: 'vod' })
 
       if (transcodingType === 'hls') {
         return this.buildHLSJobPayload({ video, resolution, fps, isNewVideo, separatedAudio })
@@ -166,7 +167,7 @@ export abstract class AbstractJobBuilder <P> {
       throw new Error('Unknown transcoding type')
     })
 
-    const fps = computeOutputFPS({ inputFPS, resolution: maxResolution })
+    const fps = computeOutputFPS({ inputFPS, resolution: maxResolution, isOriginResolution: true, type: 'vod' })
 
     const parent = transcodingType === 'hls'
       ? this.buildHLSJobPayload({ video, resolution: maxResolution, fps, isNewVideo, separatedAudio })
@@ -199,7 +200,12 @@ export abstract class AbstractJobBuilder <P> {
     const sequentialPayloads: P[][] = []
 
     for (const resolution of resolutionsEnabled) {
-      const fps = computeOutputFPS({ inputFPS: inputVideoFPS, resolution })
+      const fps = computeOutputFPS({
+        inputFPS: inputVideoFPS,
+        resolution,
+        isOriginResolution: resolution === inputVideoResolution,
+        type: 'vod'
+      })
 
       let generateHLS = CONFIG.TRANSCODING.HLS.ENABLED
       if (resolution === VideoResolution.H_NOVIDEO && hlsAudioAlreadyGenerated) generateHLS = false

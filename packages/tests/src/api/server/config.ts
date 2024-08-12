@@ -81,6 +81,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.resolutions['1440p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
+  expect(data.transcoding.fps.max).to.equal(60)
   expect(data.transcoding.webVideos.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
   expect(data.transcoding.hls.splitAudioAndVideo).to.be.false
@@ -106,6 +107,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['1440p']).to.be.false
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
+  expect(data.live.transcoding.fps.max).to.equal(60)
 
   expect(data.videoStudio.enabled).to.be.false
   expect(data.videoStudio.remoteRunners.enabled).to.be.false
@@ -255,6 +257,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         '2160p': false
       },
       alwaysTranscodeOriginalResolution: false,
+      fps: {
+        max: 120
+      },
       webVideos: {
         enabled: true
       },
@@ -290,7 +295,10 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
           '1440p': true,
           '2160p': true
         },
-        alwaysTranscodeOriginalResolution: false
+        alwaysTranscodeOriginalResolution: false,
+        fps: {
+          max: 144
+        }
       }
     },
     videoStudio: {

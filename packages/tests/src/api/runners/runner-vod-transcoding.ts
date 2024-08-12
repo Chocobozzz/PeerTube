@@ -85,7 +85,7 @@ describe('Test runner VOD transcoding', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: true, resolutions: 'max' })
     })
 
     it('Should error a transcoding job', async function () {

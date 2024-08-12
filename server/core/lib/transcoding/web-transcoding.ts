@@ -50,7 +50,7 @@ export async function optimizeOriginalVideofile (options: {
         : 'video'
 
       const resolution = buildOriginalFileResolution(inputVideoFile.resolution)
-      const fps = computeOutputFPS({ inputFPS: inputVideoFile.fps, resolution })
+      const fps = computeOutputFPS({ inputFPS: inputVideoFile.fps, resolution, isOriginResolution: true, type: 'vod' })
 
       // Could be very long!
       await buildFFmpegVOD(job).transcode({

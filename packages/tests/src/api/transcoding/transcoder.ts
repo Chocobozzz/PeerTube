@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getAllFiles, getMaxTheoreticalBitrate, getMinTheoreticalBitrate, omit } from '@peertube/peertube-core-utils'
+import { getAllFiles, omit } from '@peertube/peertube-core-utils'
 import {
   ffprobePromise,
   getAudioStream,
-  getVideoStreamBitrate,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamFPS,
   hasAudioStream
 } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, VideoFileMetadata, VideoState } from '@peertube/peertube-models'
@@ -21,34 +18,8 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { canDoQuickTranscode } from '@peertube/peertube-server/core/lib/transcoding/transcoding-quick-transcode.js'
-import { generateHighBitrateVideo, generateVideoWithFramerate } from '@tests/shared/generate.js'
 import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
 import { expect } from 'chai'
-
-function updateConfigForTranscoding (server: PeerTubeServer) {
-  return server.config.updateExistingConfig({
-    newConfig: {
-      transcoding: {
-        enabled: true,
-        allowAdditionalExtensions: true,
-        allowAudioFiles: true,
-        hls: { enabled: true },
-        webVideos: { enabled: true },
-        resolutions: {
-          '0p': false,
-          '144p': true,
-          '240p': true,
-          '360p': true,
-          '480p': true,
-          '720p': true,
-          '1080p': true,
-          '1440p': true,
-          '2160p': true
-        }
-      }
-    }
-  })
-}
 
 describe('Test video transcoding', function () {
   let servers: PeerTubeServer[] = []
@@ -64,10 +35,16 @@ describe('Test video transcoding', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await updateConfigForTranscoding(servers[1])
+    await servers[1].config.enableTranscoding({
+      alwaysTranscodeOriginalResolution: true,
+      resolutions: 'max',
+      hls: true,
+      webVideo: true,
+      with0p: false
+    })
   })
 
-  describe('Basic transcoding (or not)', function () {
+  describe('Common transcoding', function () {
 
     it('Should not transcode video on server 1', async function () {
       this.timeout(60_000)
@@ -414,7 +391,7 @@ describe('Test video transcoding', function () {
           }
         }
 
-        await updateConfigForTranscoding(servers[1])
+        await servers[1].config.enableTranscoding({ alwaysTranscodeOriginalResolution: true, hls: true, webVideo: true, with0p: false })
       })
     }
 
@@ -427,187 +404,12 @@ describe('Test video transcoding', function () {
     })
   })
 
-  describe('Framerate', function () {
-
-    it('Should transcode a 60 FPS video', async function () {
-      this.timeout(60_000)
-
-      const attributes = {
-        name: 'my super 30fps name for server 2',
-        description: 'my super 30fps description for server 2',
-        fixture: '60fps_720p_small.mp4'
-      }
-      await servers[1].videos.upload({ attributes })
-
-      await waitJobs(servers)
-
-      for (const server of servers) {
-        const { data } = await server.videos.list()
-
-        const video = data.find(v => v.name === attributes.name)
-        const videoDetails = await server.videos.get({ id: video.id })
-
-        expect(videoDetails.files).to.have.lengthOf(5)
-        expect(videoDetails.files[0].fps).to.be.above(58).and.below(62)
-        expect(videoDetails.files[1].fps).to.be.below(31)
-        expect(videoDetails.files[2].fps).to.be.below(31)
-        expect(videoDetails.files[3].fps).to.be.below(31)
-        expect(videoDetails.files[4].fps).to.be.below(31)
-
-        for (const resolution of [ 144, 240, 360, 480 ]) {
-          const file = videoDetails.files.find(f => f.resolution.id === resolution)
-          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-          const fps = await getVideoStreamFPS(path)
-
-          expect(fps).to.be.below(31)
-        }
-
-        const file = videoDetails.files.find(f => f.resolution.id === 720)
-        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-        const fps = await getVideoStreamFPS(path)
-
-        expect(fps).to.be.above(58).and.below(62)
-      }
-    })
-
-    it('Should downscale to the closest divisor standard framerate', async function () {
-      this.timeout(360_000)
-
-      let tempFixturePath: string
-
-      {
-        tempFixturePath = await generateVideoWithFramerate(59)
-
-        const fps = await getVideoStreamFPS(tempFixturePath)
-        expect(fps).to.be.equal(59)
-      }
-
-      const attributes = {
-        name: '59fps video',
-        description: '59fps video',
-        fixture: tempFixturePath
-      }
-
-      await servers[1].videos.upload({ attributes })
-
-      await waitJobs(servers)
-
-      for (const server of servers) {
-        const { data } = await server.videos.list()
-
-        const { id } = data.find(v => v.name === attributes.name)
-        const video = await server.videos.get({ id })
-
-        {
-          const file = video.files.find(f => f.resolution.id === 240)
-          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-          const fps = await getVideoStreamFPS(path)
-          expect(fps).to.be.equal(25)
-        }
-
-        {
-          const file = video.files.find(f => f.resolution.id === 720)
-          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-          const fps = await getVideoStreamFPS(path)
-          expect(fps).to.be.equal(59)
-        }
-      }
-    })
-  })
-
-  describe('Bitrate control', function () {
-
-    it('Should respect maximum bitrate values', async function () {
-      this.timeout(160_000)
-
-      const tempFixturePath = await generateHighBitrateVideo()
-
-      const attributes = {
-        name: 'high bitrate video',
-        description: 'high bitrate video',
-        fixture: tempFixturePath
-      }
-
-      await servers[1].videos.upload({ attributes })
-
-      await waitJobs(servers)
-
-      for (const server of servers) {
-        const { data } = await server.videos.list()
-
-        const { id } = data.find(v => v.name === attributes.name)
-        const video = await server.videos.get({ id })
-
-        for (const resolution of [ 240, 360, 480, 720, 1080 ]) {
-          const file = video.files.find(f => f.resolution.id === resolution)
-          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-
-          const bitrate = await getVideoStreamBitrate(path)
-          const fps = await getVideoStreamFPS(path)
-          const dataResolution = await getVideoStreamDimensionsInfo(path)
-
-          expect(resolution).to.equal(resolution)
-
-          const maxBitrate = getMaxTheoreticalBitrate({ ...dataResolution, fps })
-          expect(bitrate).to.be.below(maxBitrate)
-        }
-      }
-    })
-
-    it('Should not transcode to an higher bitrate than the original file but above our low limit', async function () {
-      this.timeout(160_000)
-
-      const newConfig = {
-        transcoding: {
-          enabled: true,
-          resolutions: {
-            '144p': true,
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          },
-          webVideos: { enabled: true },
-          hls: { enabled: true }
-        }
-      }
-      await servers[1].config.updateExistingConfig({ newConfig })
-
-      const attributes = {
-        name: 'low bitrate',
-        fixture: 'low-bitrate.mp4'
-      }
-
-      const { id } = await servers[1].videos.upload({ attributes })
-
-      await waitJobs(servers)
-
-      const video = await servers[1].videos.get({ id })
-
-      const resolutions = [ 240, 360, 480, 720, 1080 ]
-      for (const r of resolutions) {
-        const file = video.files.find(f => f.resolution.id === r)
-
-        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
-        const bitrate = await getVideoStreamBitrate(path)
-
-        const inputBitrate = 60_000
-        const limit = getMinTheoreticalBitrate({ fps: 10, ratio: 1, resolution: r })
-        let belowValue = Math.max(inputBitrate, limit)
-        belowValue += belowValue * 0.20 // Apply 20% margin because bitrate control is not very precise
-
-        expect(bitrate, `${path} not below ${limit}`).to.be.below(belowValue)
-      }
-    })
-  })
-
   describe('FFprobe', function () {
 
     it('Should provide valid ffprobe data', async function () {
       this.timeout(160_000)
+
+      await servers[1].config.enableTranscoding({ resolutions: 'max' })
 
       const videoUUID = (await servers[1].videos.quickUpload({ name: 'ffprobe data' })).uuid
       await waitJobs(servers)
@@ -667,8 +469,8 @@ describe('Test video transcoding', function () {
     it('Should correctly detect if quick transcode is possible', async function () {
       this.timeout(10_000)
 
-      expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'))).to.be.true
-      expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'))).to.be.false
+      expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'), 60)).to.be.true
+      expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'), 60)).to.be.false
     })
   })
 
@@ -699,82 +501,6 @@ describe('Test video transcoding', function () {
         expect(j.priority).to.be.greaterThan(100)
         expect(j.priority).to.be.lessThan(150)
       }
-    })
-  })
-
-  describe('Bounded transcoding', function () {
-
-    it('Should not generate an upper resolution than original file', async function () {
-      this.timeout(120_000)
-
-      await servers[0].config.updateExistingConfig({
-        newConfig: {
-          transcoding: {
-            enabled: true,
-            hls: { enabled: true },
-            webVideos: { enabled: true },
-            resolutions: {
-              '0p': false,
-              '144p': false,
-              '240p': true,
-              '360p': false,
-              '480p': true,
-              '720p': false,
-              '1080p': false,
-              '1440p': false,
-              '2160p': false
-            },
-            alwaysTranscodeOriginalResolution: false
-          }
-        }
-      })
-
-      const { uuid } = await servers[0].videos.quickUpload({ name: 'video', fixture: 'video_short.webm' })
-      await waitJobs(servers)
-
-      const video = await servers[0].videos.get({ id: uuid })
-      const hlsFiles = video.streamingPlaylists[0].files
-
-      expect(video.files).to.have.lengthOf(2)
-      expect(hlsFiles).to.have.lengthOf(2)
-
-      // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-      const resolutions = getAllFiles(video).map(f => f.resolution.id).sort()
-      expect(resolutions).to.deep.equal([ 240, 240, 480, 480 ])
-    })
-
-    it('Should only keep the original resolution if all resolutions are disabled', async function () {
-      this.timeout(120_000)
-
-      await servers[0].config.updateExistingConfig({
-        newConfig: {
-          transcoding: {
-            resolutions: {
-              '0p': false,
-              '144p': false,
-              '240p': false,
-              '360p': false,
-              '480p': false,
-              '720p': false,
-              '1080p': false,
-              '1440p': false,
-              '2160p': false
-            }
-          }
-        }
-      })
-
-      const { uuid } = await servers[0].videos.quickUpload({ name: 'video', fixture: 'video_short.webm' })
-      await waitJobs(servers)
-
-      const video = await servers[0].videos.get({ id: uuid })
-      const hlsFiles = video.streamingPlaylists[0].files
-
-      expect(video.files).to.have.lengthOf(1)
-      expect(hlsFiles).to.have.lengthOf(1)
-
-      expect(video.files[0].resolution.id).to.equal(720)
-      expect(hlsFiles[0].resolution.id).to.equal(720)
     })
   })
 

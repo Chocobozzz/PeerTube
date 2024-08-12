@@ -90,6 +90,7 @@ export async function checkResolutionsInMasterPlaylist (options: {
   server: PeerTubeServer
   playlistUrl: string
   resolutions: number[]
+  framerates?: { [id: number]: number }
   token?: string
   transcoded?: boolean // default true
   withRetry?: boolean // default false
@@ -101,6 +102,7 @@ export async function checkResolutionsInMasterPlaylist (options: {
     server,
     playlistUrl,
     resolutions,
+    framerates,
     token,
     hasAudio = true,
     hasVideo = true,
@@ -136,7 +138,13 @@ export async function checkResolutionsInMasterPlaylist (options: {
       : ''
 
     if (transcoded) {
-      regexp += `,(FRAME-RATE=\\d+,)?CODECS="${codecs}"${audioGroup}`
+      const framerateRegex = framerates
+        ? framerates[resolution]
+        : '\\d+'
+
+      if (!framerateRegex) throw new Error('Unknown framerate for resolution ' + resolution)
+
+      regexp += `,(FRAME-RATE=${framerateRegex},)?CODECS="${codecs}"${audioGroup}`
     }
 
     expect(masterPlaylist).to.match(new RegExp(`${regexp}`))

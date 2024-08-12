@@ -616,6 +616,11 @@ transcoding:
   # Transcode and keep original resolution, even if it's above your maximum enabled resolution
   always_transcode_original_resolution: true
 
+  fps:
+    # Cap transcoded video FPS
+    # Max resolution file still keeps the original FPS
+    max: 60
+
   # Generate videos in a web compatible format
   # If you also enabled the hls format, it will multiply videos storage by 2
   # If disabled, breaks federation with PeerTube instances < 2.1
@@ -725,6 +730,11 @@ live:
 
     # Also transcode original resolution, even if it's above your maximum enabled resolution
     always_transcode_original_resolution: true
+
+    fps:
+      # Cap transcoded live FPS
+      # Max resolution stream still keeps the original FPS
+      max: 60
 
 video_studio:
   # Enable video edition by users (cut, add intro/outro, add watermark etc)

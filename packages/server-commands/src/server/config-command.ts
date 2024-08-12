@@ -265,17 +265,42 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  enableTranscoding (options: {
-    webVideo?: boolean // default true
-    hls?: boolean // default true
-    keepOriginal?: boolean // default false
-    splitAudioAndVideo?: boolean // default false
+  async enableTranscoding (options: {
+    webVideo?: boolean
+    hls?: boolean
+    keepOriginal?: boolean
+    splitAudioAndVideo?: boolean
 
-    resolutions?: 'min' | 'max' | number[] // default 'max'
+    resolutions?: 'min' | 'max' | number[]
 
-    with0p?: boolean // default false
+    with0p?: boolean
+
+    alwaysTranscodeOriginalResolution?: boolean
+
+    maxFPS?: number
   } = {}) {
-    const { resolutions = 'max', webVideo = true, hls = true, with0p = false, keepOriginal = false, splitAudioAndVideo = false } = options
+    const {
+      webVideo,
+      hls,
+      with0p,
+      keepOriginal,
+      splitAudioAndVideo,
+      alwaysTranscodeOriginalResolution,
+      maxFPS
+    } = options
+
+    let resolutions: ReturnType<typeof ConfigCommand.getCustomConfigResolutions>
+
+    if (Array.isArray(options.resolutions)) {
+      resolutions = ConfigCommand.getCustomConfigResolutions(options.resolutions)
+    } else if (typeof options.resolutions === 'string') {
+      resolutions = ConfigCommand.getConfigResolutions(options.resolutions === 'max', with0p)
+    } else if (with0p !== undefined) {
+      const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })
+
+      resolutions = existing.transcoding.resolutions
+      resolutions['0p'] = with0p === true
+    }
 
     return this.updateExistingConfig({
       newConfig: {
@@ -288,9 +313,9 @@ export class ConfigCommand extends AbstractCommand {
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
 
-          resolutions: Array.isArray(resolutions)
-            ? ConfigCommand.getCustomConfigResolutions(resolutions)
-            : ConfigCommand.getConfigResolutions(resolutions === 'max', with0p),
+          resolutions,
+
+          alwaysTranscodeOriginalResolution,
 
           webVideos: {
             enabled: webVideo
@@ -298,6 +323,9 @@ export class ConfigCommand extends AbstractCommand {
           hls: {
             enabled: hls,
             splitAudioAndVideo
+          },
+          fps: {
+            max: maxFPS
           }
         }
       }

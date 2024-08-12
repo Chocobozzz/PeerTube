@@ -126,7 +126,7 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   return true
 }
 
-export async function canDoQuickVideoTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
+export async function canDoQuickVideoTranscode (path: string, maxFPS: number, probe?: FfprobeData): Promise<boolean> {
   const videoStream = await getVideoStream(path, probe)
   const fps = await getVideoStreamFPS(path, probe)
   const bitRate = await getVideoStreamBitrate(path, probe)
@@ -139,7 +139,7 @@ export async function canDoQuickVideoTranscode (path: string, probe?: FfprobeDat
   if (!videoStream) return false
   if (videoStream['codec_name'] !== 'h264') return false
   if (videoStream['pix_fmt'] !== 'yuv420p') return false
-  if (fps < 2 || fps > 65) return false
+  if (fps < 2 || fps > maxFPS) return false
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
 
   return true
