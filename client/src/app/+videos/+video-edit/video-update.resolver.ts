@@ -37,9 +37,7 @@ export class VideoUpdateResolver {
 
   private buildVideoObservables (video: VideoDetails) {
     return [
-      this.videoService
-        .loadCompleteDescription(video.descriptionPath)
-        .pipe(map(description => Object.assign(video, { description }))),
+      of(video),
 
       this.videoService.getSource(video.id),
 

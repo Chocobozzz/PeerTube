@@ -379,17 +379,6 @@ export class VideoService {
 
   // ---------------------------------------------------------------------------
 
-  loadCompleteDescription (descriptionPath: string) {
-    return this.authHttp
-               .get<{ description: string }>(environment.apiUrl + descriptionPath)
-               .pipe(
-                 map(res => res.description),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  // ---------------------------------------------------------------------------
-
   generateDownloadUrl (options: {
     video: Video
     files: VideoFile[]
