@@ -90,6 +90,7 @@
 my-copy-button {
   position: absolute;
   right: 5px;
+  background: pvar(--mainBackgroundHoverColor);
 }
 
 @include on-small-main-col {
