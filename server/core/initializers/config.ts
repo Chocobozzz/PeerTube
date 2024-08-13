@@ -554,7 +554,9 @@ const CONFIG = {
           get PYTHON_PATH () { return config.get<string>('import.videos.http.youtube_dl_release.python_path') }
         },
 
-        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') }
+        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') },
+
+        get PROXIES () { return config.get<string[]>('import.videos.http.proxies') }
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }

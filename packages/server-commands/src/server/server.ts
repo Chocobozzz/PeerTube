@@ -58,6 +58,7 @@ import { PluginsCommand } from './plugins-command.js'
 import { RedundancyCommand } from './redundancy-command.js'
 import { ServersCommand } from './servers-command.js'
 import { StatsCommand } from './stats-command.js'
+import merge from 'lodash-es/merge.js'
 
 export type RunServerOptions = {
   hideLogs?: boolean
@@ -240,10 +241,10 @@ export class PeerTubeServer {
 
     await this.assignCustomConfigFile()
 
-    const configOverride = this.buildConfigOverride()
+    let configOverride = this.buildConfigOverride()
 
     if (configOverrideArg !== undefined) {
-      Object.assign(configOverride, configOverrideArg)
+      configOverride = merge(configOverride, configOverrideArg)
     }
 
     // Share the environment
@@ -363,9 +364,15 @@ export class PeerTubeServer {
   }
 
   private buildConfigOverride () {
-    if (!this.parallel) return {}
+    const base = process.env.YOUTUBE_DL_PROXY
+      ? { import: { videos: { http: { proxies: [ process.env.YOUTUBE_DL_PROXY ] } } } }
+      : {}
+
+    if (!this.parallel) return base
 
     return {
+      ...base,
+
       listen: {
         port: this.port
       },

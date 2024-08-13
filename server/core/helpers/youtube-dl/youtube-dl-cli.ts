@@ -1,10 +1,11 @@
+import { randomInt } from '@peertube/peertube-core-utils'
+import { VideoResolution, VideoResolutionType } from '@peertube/peertube-models'
+import { CONFIG } from '@server/initializers/config.js'
 import { execa, Options as ExecaNodeOptions } from 'execa'
 import { ensureDir, pathExists } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
 import { OptionsOfBufferResponseBody } from 'got'
 import { dirname, join } from 'path'
-import { VideoResolution, VideoResolutionType } from '@peertube/peertube-models'
-import { CONFIG } from '@server/initializers/config.js'
 import { logger, loggerTagsFactory } from '../logger.js'
 import { getProxy, isProxyEnabled } from '../proxy.js'
 import { isBinaryResponse, peertubeGot } from '../requests.js'
@@ -231,10 +232,17 @@ export class YoutubeDLCLI {
   }
 
   private wrapWithProxyOptions (args: string[]) {
-    if (isProxyEnabled()) {
-      logger.debug('Using proxy %s for YoutubeDL', getProxy(), lTags())
+    const config = CONFIG.IMPORT.VIDEOS.HTTP.PROXIES
+    const configProxyEnabled = Array.isArray(config) && config.length !== 0
 
-      return [ '--proxy', getProxy() ].concat(args)
+    if (configProxyEnabled || isProxyEnabled()) {
+      const proxy = configProxyEnabled
+        ? config[randomInt(0, config.length)]
+        : getProxy()
+
+      logger.debug('Using proxy %s for YoutubeDL', proxy, lTags())
+
+      return [ '--proxy', proxy ].concat(args)
     }
 
     return args

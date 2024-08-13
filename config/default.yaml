@@ -803,6 +803,12 @@ import:
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
 
+      # By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables
+      # But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address
+      # PeerTube will randomly select a proxy from the following list
+      proxies:
+#        - "https://username:password@example.com:8888"
+
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
     torrent:
       # We recommend to only enable magnet URI/torrent import if you trust your users

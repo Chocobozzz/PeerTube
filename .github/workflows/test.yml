@@ -50,6 +50,7 @@ jobs:
       OBJECT_STORAGE_SCALEWAY_KEY_ID: ${{ secrets.OBJECT_STORAGE_SCALEWAY_KEY_ID }}
       OBJECT_STORAGE_SCALEWAY_ACCESS_KEY: ${{ secrets.OBJECT_STORAGE_SCALEWAY_ACCESS_KEY }}
       YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      YOUTUBE_DL_PROXY: ${{ secrets.YOUTUBE_DL_PROXY }}
 
     steps:
       - uses: actions/checkout@v4
