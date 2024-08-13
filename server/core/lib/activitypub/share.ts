@@ -9,6 +9,7 @@ import { fetchAP, getAPId } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send/index.js'
 import { checkUrlsSameHost, getLocalVideoAnnounceActivityPubUrl } from './url.js'
+import { HttpStatusCode } from '@peertube/peertube-models'
 
 const lTags = loggerTagsFactory('share')
 
@@ -32,7 +33,12 @@ export async function addVideoShares (shareUrls: string[], video: MVideoId) {
     try {
       await addVideoShare(shareUrl, video)
     } catch (err) {
-      logger.warn('Cannot add share %s.', shareUrl, { err })
+      if (err.statusCode === HttpStatusCode.NOT_FOUND_404 || err.statusCode === HttpStatusCode.GONE_410) {
+        logger.debug(`Cannot add share ${shareUrl} that does not exist anymore`, { err })
+        return
+      }
+
+      logger.info(`Cannot add share ${shareUrl}`, { err })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }

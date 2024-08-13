@@ -1,4 +1,4 @@
-import { VideoCommentPolicy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import Bluebird from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments.js'
 import { logger } from '../../helpers/logger.js'
@@ -34,7 +34,12 @@ export async function addVideoComments (commentUrls: string[]) {
     try {
       await resolveThread({ url: commentUrl, isVideo: false })
     } catch (err) {
-      logger.warn('Cannot resolve thread %s.', commentUrl, { err })
+      if (err.statusCode === HttpStatusCode.NOT_FOUND_404 || err.statusCode === HttpStatusCode.GONE_410) {
+        logger.debug(`Cannot resolve thread ${commentUrl} that does not exist anymore`, { err })
+        return
+      }
+
+      logger.info(`Cannot resolve thread ${commentUrl}`, { err })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
