@@ -14,6 +14,14 @@ export function areHttpImportTestsDisabled () {
   return disabled
 }
 
+export function areYoutubeImportTestsDisabled () {
+  const disabled = process.env.DISABLE_HTTP_YOUTUBE_IMPORT_TESTS === 'true'
+
+  if (disabled) console.log('DISABLE_HTTP_YOUTUBE_IMPORT_TESTS env set to "true" so youtube import tests are disabled')
+
+  return disabled
+}
+
 export function areMockObjectStorageTestsDisabled () {
   const disabled = process.env.ENABLE_OBJECT_STORAGE_TESTS !== 'true'
 

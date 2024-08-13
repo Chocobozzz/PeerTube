@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { VideoChapter, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
-import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
+import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -229,6 +229,8 @@ describe('Test video chapters', function () {
     if (areHttpImportTestsDisabled()) return
 
     it('Should detect chapters from youtube URL import', async function () {
+      if (areYoutubeImportTestsDisabled()) return
+
       this.timeout(120000)
 
       const attributes = {
@@ -266,6 +268,8 @@ describe('Test video chapters', function () {
     })
 
     it('Should have overriden description priority from youtube URL import', async function () {
+      if (areYoutubeImportTestsDisabled()) return
+
       this.timeout(120000)
 
       const attributes = {

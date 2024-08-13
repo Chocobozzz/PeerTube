@@ -90,7 +90,7 @@ describe('Test proxy', function () {
           name: 'video import',
           channelId: servers[0].store.channel.id,
           privacy: VideoPrivacy.PUBLIC,
-          targetUrl: FIXTURE_URLS.peertube_long
+          targetUrl: FIXTURE_URLS.peertubeLong
         },
         expectedStatus
       })

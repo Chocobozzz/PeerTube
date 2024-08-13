@@ -788,16 +788,24 @@ import:
       youtube_dl_release:
         # Direct download URL to youtube-dl binary
         # Github releases API is also supported
-        # Examples:
+        #
+        # Platform-independent examples:
         #   * https://api.github.com/repos/ytdl-org/youtube-dl/releases
         #   * https://api.github.com/repos/yt-dlp/yt-dlp/releases
         #   * https://yt-dl.org/downloads/latest/youtube-dl
+        #
+        # You can also use a youtube-dl standalone binary (requires python_path: null)
+        # GNU/Linux binaries with support for impersonating browser requests (required by some platforms such as Vimeo) examples:
+        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux (x64)
+        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv7)
+        #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv8/AArch64/ARM64)
         url: 'https://api.github.com/repos/yt-dlp/yt-dlp/releases'
 
         # Release binary name: 'yt-dlp' or 'youtube-dl'
         name: 'yt-dlp'
 
         # Path to the python binary to execute for youtube-dl or yt-dlp
+        # Set to null if you use a youtube-dl executable
         python_path: '/usr/bin/python3'
 
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl

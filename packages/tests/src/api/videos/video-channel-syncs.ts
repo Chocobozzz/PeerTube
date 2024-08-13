@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import { VideoChannelSyncState, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
+import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -14,11 +13,13 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { SQLCommand } from '@tests/shared/sql-command.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test channel synchronizations', function () {
   if (areHttpImportTestsDisabled()) return
+  if (areYoutubeImportTestsDisabled()) return
 
   function runSuite (mode: 'youtube-dl' | 'yt-dlp') {
 

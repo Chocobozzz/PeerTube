@@ -1,6 +1,6 @@
 export const FIXTURE_URLS = {
-  peertube_long: 'https://peertube2.cpy.re/videos/watch/122d093a-1ede-43bd-bd34-59d2931ffc5e',
-  peertube_short: 'https://peertube2.cpy.re/w/3fbif9S3WmtTP8gGsC5HBd',
+  peertubeLong: 'https://peertube2.cpy.re/videos/watch/122d093a-1ede-43bd-bd34-59d2931ffc5e',
+  peertubeShort: 'https://peertube2.cpy.re/w/3fbif9S3WmtTP8gGsC5HBd',
 
   youtube: 'https://www.youtube.com/watch?v=msX3jv1XdvM',
   youtubeChapters: 'https://www.youtube.com/watch?v=TL9P-Er7ils',
