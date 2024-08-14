@@ -232,7 +232,10 @@ app.use('/api/' + API_VERSION, apiRouter)
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
-app.use('/', activityPubRouter)
+if (CONFIG.FEDERATION.ENABLED) {
+  app.use('/', activityPubRouter)
+}
+
 app.use('/', feedsRouter)
 app.use('/', trackerRouter)
 app.use('/', sitemapRouter)

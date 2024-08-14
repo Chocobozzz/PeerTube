@@ -6,6 +6,8 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeActivityPubGetRequest,
+  makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -312,6 +314,26 @@ describe('Test follow constraints', function () {
 
     it('Should get the remote video with a logged in user', async function () {
       await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
+    })
+  })
+
+  describe('When disabling federation', function () {
+
+    before(async function () {
+      this.timeout(60_000)
+
+      await servers[0].kill()
+      await servers[0].run({ federation: { enabled: false } })
+    })
+
+    it('Should not federate anymore', async function () {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'non federated video' })
+      await waitJobs(servers)
+
+      await servers[1].videos.get({ id: uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+      await makeActivityPubGetRequest(servers[0].url, '/inbox', HttpStatusCode.NOT_ACCEPTABLE_406)
+      await makeActivityPubGetRequest(servers[0].url, '/outbox', HttpStatusCode.NOT_ACCEPTABLE_406)
     })
   })
 

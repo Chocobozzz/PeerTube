@@ -341,6 +341,7 @@ const CONFIG = {
     }
   },
   FEDERATION: {
+    ENABLED: config.get<boolean>('federation.enabled'),
     VIDEOS: {
       FEDERATE_UNLISTED: config.get<boolean>('federation.videos.federate_unlisted'),
       CLEANUP_REMOTE_INTERACTIONS: config.get<boolean>('federation.videos.cleanup_remote_interactions')

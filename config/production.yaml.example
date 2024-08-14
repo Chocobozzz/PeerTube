@@ -431,6 +431,9 @@ plugins:
     url: 'https://packages.joinpeertube.org'
 
 federation:
+  # Enable ActivityPub endpoints (inbox/outbox)
+  enabled: true
+
   # Some federated software such as Mastodon may require an HTTP signature to access content
   sign_federated_fetches: true
 

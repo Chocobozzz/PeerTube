@@ -1,5 +1,4 @@
 import express from 'express'
-
 import { activityPubClientRouter } from './client.js'
 import { inboxRouter } from './inbox.js'
 import { outboxRouter } from './outbox.js'
