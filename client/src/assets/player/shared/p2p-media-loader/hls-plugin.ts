@@ -298,7 +298,7 @@ export class Html5Hlsjs {
     if (this.errorCounts[data.type]) this.errorCounts[data.type] += 1
     else this.errorCounts[data.type] = 1
 
-    // Google Bot doesn't support our codecs, but we don't really care
+    // Google Bot doesn't support our codecs, but it should not prevent indexing
     if (!/googlebot/i.test(navigator.userAgent)) {
       if (data.fatal) logger.error(error.message, { currentTime: this.player.currentTime(), data })
       else logger.clientWarn(error.message)

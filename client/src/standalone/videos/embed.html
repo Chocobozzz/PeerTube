@@ -95,6 +95,12 @@
           return
         }
 
+        // Google Bot doesn't support our codecs, but it should not prevent indexing
+        if (!/googlebot/i.test(navigator.userAgent)) {
+          console.error(err)
+          return
+        }
+
         // Video element is already created, don't crash the player
         if (document.querySelector('.vjs-can-play')) {
           if (window.logger && typeof window.logger.error === 'function') {
