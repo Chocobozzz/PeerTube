@@ -8,7 +8,7 @@ import { OptionsOfBufferResponseBody } from 'got'
 import { dirname, join } from 'path'
 import { logger, loggerTagsFactory } from '../logger.js'
 import { getProxy, isProxyEnabled } from '../proxy.js'
-import { isBinaryResponse, peertubeGot } from '../requests.js'
+import { isBinaryResponse, unsafeSSRFGot } from '../requests.js'
 
 type ProcessOptions = Pick<ExecaNodeOptions, 'cwd' | 'maxBuffer'>
 
@@ -45,7 +45,7 @@ export class YoutubeDLCLI {
     }
 
     try {
-      let gotResult = await peertubeGot(url, gotOptions)
+      let gotResult = await unsafeSSRFGot(url, gotOptions)
 
       if (!isBinaryResponse(gotResult)) {
         const json = JSON.parse(gotResult.body.toString())
@@ -56,7 +56,7 @@ export class YoutubeDLCLI {
         const releaseAsset = latest.assets.find(a => a.name === releaseName)
         if (!releaseAsset) throw new Error(`Cannot find appropriate release with name ${releaseName} in release assets`)
 
-        gotResult = await peertubeGot(releaseAsset.browser_download_url, gotOptions)
+        gotResult = await unsafeSSRFGot(releaseAsset.browser_download_url, gotOptions)
       }
 
       if (!isBinaryResponse(gotResult)) {

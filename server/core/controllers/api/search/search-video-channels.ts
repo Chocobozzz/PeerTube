@@ -78,8 +78,8 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQueryAfterSan
   try {
     logger.debug('Doing video channels search index request on %s.', url, { body })
 
-    const { body: searchIndexResult } = await doJSONRequest<ResultList<VideoChannel>>(url, { method: 'POST', json: body })
-    const jsonResult = await Hooks.wrapObject(searchIndexResult, 'filter:api.search.video-channels.index.list.result')
+    const searchIndexResult = await doJSONRequest<ResultList<VideoChannel>>(url, { method: 'POST', json: body, preventSSRF: false })
+    const jsonResult = await Hooks.wrapObject(searchIndexResult.body, 'filter:api.search.video-channels.index.list.result')
 
     return res.json(jsonResult)
   } catch (err) {

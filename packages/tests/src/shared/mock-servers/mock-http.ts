@@ -8,6 +8,11 @@ export class MockHTTP {
   async initialize () {
     const app = express()
 
+    app.get('/redirect/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+      return res.redirect(req.params[0])
+    })
+
     app.get('/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
       return res.sendStatus(200)
     })

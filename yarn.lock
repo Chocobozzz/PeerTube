@@ -6151,6 +6151,14 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
+got-ssrf@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/got-ssrf/-/got-ssrf-3.0.0.tgz#400962f6157ed7ca86024adc274f7c49814d6f3f"
+  integrity sha512-Cg9lmGkaNzT8cUSDbnb1GIgetnsrwCSA8S6ZW6NiY37cEbJ/HoDs/LIradAzLcrL62XPcK6eP1442OFvrNzoIg==
+  dependencies:
+    debug "^4.3.2"
+    ipaddr.js "^2.0.1"
+
 got@^13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/got/-/got-13.0.0.tgz#a2402862cef27a5d0d1b07c0fb25d12b58175422"
@@ -6599,7 +6607,7 @@ ipaddr.js@1.9.1:
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
   integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
 
-ipaddr.js@2.2.0, "ipaddr.js@>= 0.1.5", ipaddr.js@^2.0.0:
+ipaddr.js@2.2.0, "ipaddr.js@>= 0.1.5", ipaddr.js@^2.0.0, ipaddr.js@^2.0.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-2.2.0.tgz#d33fa7bac284f4de7af949638c9d68157c6b92e8"
   integrity sha512-Ag3wB2o37wslZS19hZqorUnrnzSkpOVy+IiiDEiTqNubEYpYuHWIf6K4psgN2ZWKExS4xhVCrRVfb/wfW8fWJA==

@@ -1,14 +1,14 @@
 import type { S3Client } from '@aws-sdk/client-s3'
 import { logger } from '@server/helpers/logger.js'
 import { isProxyEnabled } from '@server/helpers/proxy.js'
-import { getAgent } from '@server/helpers/requests.js'
+import { getProxyAgent } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { lTags } from './logger.js'
 
 async function getProxyRequestHandler () {
   if (!isProxyEnabled()) return null
 
-  const { agent } = getAgent()
+  const { agent } = getProxyAgent()
 
   const { NodeHttpHandler } = await import('@smithy/node-http-handler')
 

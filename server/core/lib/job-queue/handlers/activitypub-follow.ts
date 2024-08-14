@@ -40,7 +40,7 @@ async function processActivityPubFollow (job: Job) {
 
       targetActor = await getOrCreateAPActor(actorUrl, 'all')
     } catch (err) {
-      logger.warn(`Do not follow ${handle} because we could not find the actor URL (in database or using webfinger)`)
+      logger.warn(`Do not follow ${handle} because we could not find the actor URL (in database or using webfinger)`, { err })
       return
     }
   }

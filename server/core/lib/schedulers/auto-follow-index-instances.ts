@@ -39,7 +39,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
       this.lastCheck = new Date()
 
-      const { body } = await doJSONRequest<any>(indexUrl, { searchParams })
+      const { body } = await doJSONRequest<any>(indexUrl, { searchParams, preventSSRF: false })
       if (!body.data || Array.isArray(body.data) === false) {
         logger.error('Cannot auto follow instances of index %s. Please check the auto follow URL.', indexUrl, { body })
         return

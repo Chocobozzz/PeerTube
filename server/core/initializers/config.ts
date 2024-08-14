@@ -342,6 +342,7 @@ const CONFIG = {
   },
   FEDERATION: {
     ENABLED: config.get<boolean>('federation.enabled'),
+    PREVENT_SSRF: config.get<boolean>('federation.prevent_ssrf'),
     VIDEOS: {
       FEDERATE_UNLISTED: config.get<boolean>('federation.videos.federate_unlisted'),
       CLEANUP_REMOTE_INTERACTIONS: config.get<boolean>('federation.videos.cleanup_remote_interactions')

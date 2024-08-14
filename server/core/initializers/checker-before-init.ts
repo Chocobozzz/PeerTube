@@ -74,7 +74,7 @@ function checkMissedConfig () {
     'feeds.videos.count', 'feeds.comments.count',
     'geo_ip.enabled', 'geo_ip.country.database_url', 'geo_ip.city.database_url',
     'remote_redundancy.videos.accept_from',
-    'federation.enabled', 'federation.videos.federate_unlisted', 'federation.videos.cleanup_remote_interactions',
+    'federation.enabled', 'federation.prevent_ssrf', 'federation.videos.federate_unlisted', 'federation.videos.cleanup_remote_interactions',
     'peertube.check_latest_version.enabled', 'peertube.check_latest_version.url',
     'search.remote_uri.users', 'search.remote_uri.anonymous', 'search.search_index.enabled', 'search.search_index.url',
     'search.search_index.disable_local_search', 'search.search_index.is_default_search',

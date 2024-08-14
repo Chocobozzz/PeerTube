@@ -87,8 +87,8 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
   try {
     logger.debug('Doing videos search index request on %s.', url, { body })
 
-    const { body: searchIndexResult } = await doJSONRequest<ResultList<Video>>(url, { method: 'POST', json: body })
-    const jsonResult = await Hooks.wrapObject(searchIndexResult, 'filter:api.search.videos.index.list.result')
+    const searchIndexResult = await doJSONRequest<ResultList<Video>>(url, { method: 'POST', json: body, preventSSRF: false })
+    const jsonResult = await Hooks.wrapObject(searchIndexResult.body, 'filter:api.search.videos.index.list.result')
 
     return res.json(jsonResult)
   } catch (err) {

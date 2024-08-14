@@ -434,6 +434,10 @@ federation:
   # Enable ActivityPub endpoints (inbox/outbox)
   enabled: true
 
+  # Prevent SSRF requests (requests to your internal network for example) by checking the request IP address
+  # More information about SSRF: https://portswigger.net/web-security/ssrf
+  prevent_ssrf: true
+
   # Some federated software such as Mastodon may require an HTTP signature to access content
   sign_federated_fetches: true
 

@@ -27,7 +27,7 @@ export class PeerTubeVersionCheckScheduler extends AbstractScheduler {
 
     logger.info('Checking latest PeerTube version.')
 
-    const { body } = await doJSONRequest<JoinPeerTubeVersions>(CONFIG.PEERTUBE.CHECK_LATEST_VERSION.URL)
+    const { body } = await doJSONRequest<JoinPeerTubeVersions>(CONFIG.PEERTUBE.CHECK_LATEST_VERSION.URL, { preventSSRF: false })
 
     if (!body?.peertube?.latestVersion) {
       logger.warn('Cannot check latest PeerTube version: body is invalid.', { body })

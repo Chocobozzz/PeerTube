@@ -1,9 +1,3 @@
-import { sanitizeUrl } from '@server/helpers/core-utils.js'
-import { logger } from '@server/helpers/logger.js'
-import { doJSONRequest } from '@server/helpers/requests.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { PEERTUBE_VERSION } from '@server/initializers/constants.js'
-import { PluginModel } from '@server/models/server/plugin.js'
 import {
   PeerTubePluginIndex,
   PeertubePluginIndexList,
@@ -11,6 +5,12 @@ import {
   PeertubePluginLatestVersionResponse,
   ResultList
 } from '@peertube/peertube-models'
+import { sanitizeUrl } from '@server/helpers/core-utils.js'
+import { logger } from '@server/helpers/logger.js'
+import { doJSONRequest } from '@server/helpers/requests.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { PEERTUBE_VERSION } from '@server/initializers/constants.js'
+import { PluginModel } from '@server/models/server/plugin.js'
 import { PluginManager } from './plugin-manager.js'
 
 async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {
@@ -28,7 +28,7 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins'
 
   try {
-    const { body } = await doJSONRequest<any>(uri, { searchParams })
+    const { body } = await doJSONRequest<any>(uri, { searchParams, preventSSRF: false })
 
     logger.debug('Got result from PeerTube index.', { body })
 
@@ -57,12 +57,7 @@ async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePlu
   }
 
   const uri = sanitizeUrl(CONFIG.PLUGINS.INDEX.URL) + '/api/v1/plugins/latest-version'
-
-  const options = {
-    json: bodyRequest,
-    method: 'POST' as 'POST'
-  }
-  const { body } = await doJSONRequest<PeertubePluginLatestVersionResponse>(uri, options)
+  const { body } = await doJSONRequest<PeertubePluginLatestVersionResponse>(uri, { json: bodyRequest, method: 'POST', preventSSRF: false })
 
   return body
 }
@@ -79,7 +74,6 @@ async function getLatestPluginVersion (npmName: string) {
 }
 
 export {
-  listAvailablePluginsFromIndex,
-  getLatestPluginVersion,
-  getLatestPluginsVersion
+  getLatestPluginsVersion, getLatestPluginVersion, listAvailablePluginsFromIndex
 }
+

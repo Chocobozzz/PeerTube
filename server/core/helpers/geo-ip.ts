@@ -6,7 +6,7 @@ import maxmind, { CityResponse, CountryResponse, Reader } from 'maxmind'
 import { join } from 'path'
 import { isArray } from './custom-validators/misc.js'
 import { logger, loggerTagsFactory } from './logger.js'
-import { isBinaryResponse, peertubeGot } from './requests.js'
+import { isBinaryResponse, unsafeSSRFGot } from './requests.js'
 
 const lTags = loggerTagsFactory('geo-ip')
 
@@ -95,7 +95,7 @@ export class GeoIP {
     const gotOptions = { context: { bodyKBLimit: 800_000 }, responseType: 'buffer' as 'buffer' }
 
     try {
-      const gotResult = await peertubeGot(url, gotOptions)
+      const gotResult = await unsafeSSRFGot(url, gotOptions)
 
       if (!isBinaryResponse(gotResult)) {
         throw new Error('Not a binary response')
