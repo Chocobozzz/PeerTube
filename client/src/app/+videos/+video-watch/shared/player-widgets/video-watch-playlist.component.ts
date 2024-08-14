@@ -17,7 +17,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
 @Component({
   selector: 'my-video-watch-playlist',
   templateUrl: './video-watch-playlist.component.html',
-  styleUrls: [ './video-watch-playlist.component.scss' ],
+  styleUrls: [ './player-widget.component.scss', './video-watch-playlist.component.scss' ],
   standalone: true,
   imports: [ NgIf, InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
 })

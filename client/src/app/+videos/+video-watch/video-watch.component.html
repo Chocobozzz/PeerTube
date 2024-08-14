@@ -13,10 +13,20 @@
       <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
     </div>
 
-    <my-video-watch-playlist
-      #videoWatchPlaylist [playlist]="playlist"
-      (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
-    ></my-video-watch-playlist>
+    <div class="player-widget-component">
+      <my-video-watch-playlist
+        #videoWatchPlaylist [playlist]="playlist"
+        [hidden]="transcriptionWidgetOpened"
+        (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
+      ></my-video-watch-playlist>
+
+      @if (transcriptionWidgetOpened) {
+        <my-video-transcription
+          [video]="video" [captions]="videoCaptions" [currentTime]="getCurrentTime()"
+          (segmentClicked)="handleTimestampClicked($event)" (closeTranscription)="transcriptionWidgetOpened = false"
+        ></my-video-transcription>
+      }
+    </div>
 
     <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
@@ -53,8 +63,11 @@
               </div>
 
               <my-action-buttons
-                [video]="video" [videoPassword]="videoPassword" [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()" [videoCaptions]="videoCaptions"
+                [video]="video" [videoPassword]="videoPassword" [videoCaptions]="videoCaptions"
+                [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()"
+                [transcriptionWidgetOpened]="transcriptionWidgetOpened"
                 [playlist]="playlist" [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
+                (showTranscriptionWidget)="transcriptionWidgetOpened = true" (hideTranscriptionWidget)="transcriptionWidgetOpened = false"
               ></my-action-buttons>
             </div>
           </div>

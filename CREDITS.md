@@ -754,11 +754,13 @@
 
  * [Olivier Massain](https://dribbble.com/omassain)
  * [Marie-Cécile Godwin Paccard](https://mcgodwin.com/)
+ * [La Coopérative des Internets](https://www.lacooperativedesinternets.fr/)
 
 
 # Icons
 
  * [Feather Icons](https://feathericons.com) (MIT)
+ * [Lucide Icons](https://lucide.dev/) (ISC)
  * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg`, `tip` by Material UI (Apache 2.0)
  * `support` by Chocobozzz (CC-BY)
  * `language` by Aaron Jin (CC-BY)

@@ -45,6 +45,7 @@ import {
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
+import debug from 'debug'
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
 import {
   HLSOptions,
@@ -60,7 +61,6 @@ import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.c
 import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
 import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'
 import { PlayerStylesComponent } from './player-styles.component'
-import { VideoWatchPlaylistComponent } from './shared'
 import { ActionButtonsComponent } from './shared/action-buttons/action-buttons.component'
 import { VideoCommentsComponent } from './shared/comment/video-comments.component'
 import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
@@ -68,7 +68,11 @@ import { VideoAlertComponent } from './shared/information/video-alert.component'
 import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
 import { VideoAvatarChannelComponent } from './shared/metadata/video-avatar-channel.component'
 import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
+import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
+import { VideoWatchPlaylistComponent } from './shared/player-widgets/video-watch-playlist.component'
 import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+
+const debugLogger = debug('peertube:watch:VideoWatchComponent')
 
 type URLOptions = {
   playerMode: PlayerMode
@@ -112,7 +116,9 @@ type URLOptions = {
     VideoCommentsComponent,
     RecommendedVideosComponent,
     PrivacyConcernsComponent,
-    PlayerStylesComponent
+    PlayerStylesComponent,
+    VideoWatchPlaylistComponent,
+    VideoTranscriptionComponent
   ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
@@ -135,6 +141,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   remoteServerDown = false
   noPlaylistVideoFound = false
+
+  transcriptionWidgetOpened = false
 
   private nextRecommendedVideoUUID = ''
   private nextRecommendedVideoTitle = ''
@@ -239,12 +247,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.nextRecommendedVideoTitle = video.name
   }
 
+  // ---------------------------------------------------------------------------
+
   handleTimestampClicked (timestamp: number) {
     if (!this.peertubePlayer || this.video.isLive) return
 
-    this.peertubePlayer.getPlayer().currentTime(timestamp)
+    const player = this.peertubePlayer.getPlayer()
+    if (!player) return
+
+    this.peertubePlayer.setCurrentTime(timestamp)
+
     scrollToTop()
   }
+
+  // ---------------------------------------------------------------------------
 
   onPlaylistVideoFound (videoId: string) {
     this.loadVideo({ videoId, forceAutoplay: false })
@@ -309,7 +325,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       const start = queryParams['start']
       if (this.peertubePlayer?.getPlayer() && start) {
-        this.peertubePlayer.getPlayer().currentTime(parseInt(start, 10))
+        this.peertubePlayer.setCurrentTime(parseInt(start, 10))
       }
     })
   }
@@ -492,6 +508,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.remoteServerDown = false
     this.currentTime = undefined
 
+    if (this.transcriptionWidgetOpened && this.videoCaptions.length === 0) {
+      this.transcriptionWidgetOpened = false
+    }
+
     if (this.isVideoBlur(this.video)) {
       const res = await this.confirmService.confirm(
         $localize`This video contains mature or explicit content. Are you sure you want to watch it?`,
@@ -556,8 +576,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       const player = this.peertubePlayer.getPlayer()
 
       player.on('timeupdate', () => {
-        // Don't need to trigger angular change for this variable, that is sent to children components on click
-        this.currentTime = Math.floor(player.currentTime())
+        const newTime = Math.floor(player.currentTime())
+
+        // Update only if we have at least 1 second difference
+        if (!this.currentTime || Math.abs(newTime - this.currentTime) >= 1) {
+          debugLogger('Updating current time to ' + newTime)
+
+          this.zone.run(() => this.currentTime = newTime)
+        }
       })
 
       if (this.video.isLive) {

@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="!isUserLoggedIn && !video.isLive">
+    @if (!isUserLoggedIn && !video.isLive) {
       <button
         *ngIf="isVideoDownloadable()" class="action-button action-button-download"
         (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
@@ -45,15 +45,15 @@
       </button>
 
       <my-video-download #videoDownloadModal [videoPassword]="videoPassword"></my-video-download>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="isUserLoggedIn">
-      <my-video-actions-dropdown
-        placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [videoCaptions]="videoCaptions"
-        actionAvailabilityHint="true"
-        [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
-      ></my-video-actions-dropdown>
-    </ng-container>
+    <my-video-actions-dropdown
+      [video]="video" [videoCaptions]="videoCaptions" [transcriptionWidgetOpened]="transcriptionWidgetOpened"
+      [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
+      (showTranscriptionWidget)="showTranscriptionWidget.emit()" (hideTranscriptionWidget)="hideTranscriptionWidget.emit()"
+      placement="bottom auto" buttonDirection="horizontal" buttonStyled="true"
+      actionAvailabilityHint="true"
+    ></my-video-actions-dropdown>
   </div>
 
   <div class="likes-dislikes-bar-outer-container">

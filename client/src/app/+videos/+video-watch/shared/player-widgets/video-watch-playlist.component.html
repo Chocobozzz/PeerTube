@@ -1,9 +1,9 @@
 <div
-  *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)" class="playlist"
+  *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)" class="widget-root playlist"
   myInfiniteScroller [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
->
-  <div class="playlist-info">
-    <div class="playlist-display-name">
+  >
+  <div class="widget-header playlist-info">
+    <div class="widget-title playlist-display-name">
       {{ playlist.displayName }}
 
       <span *ngIf="isUnlistedPlaylist()" class="pt-badge badge-warning" i18n>Unlisted</span>

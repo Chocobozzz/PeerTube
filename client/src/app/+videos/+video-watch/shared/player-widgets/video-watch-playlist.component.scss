@@ -4,30 +4,6 @@
 @use '_miniature' as *;
 
 .playlist {
-  position: relative;
-  min-width: 200px;
-  width: 25vw;
-  max-width: 470px;
-  height: 66vh;
-  background-color: pvar(--mainBackgroundColor);
-  overflow-y: auto;
-  border-bottom: 1px solid $separator-border-color;
-
-  .playlist-info {
-    padding: 5px 30px;
-    background-color: pvar(--greyBackgroundColor);
-  }
-
-  .playlist-display-name {
-    font-size: 18px;
-    font-weight: $font-semibold;
-    margin-bottom: 5px;
-
-    .pt-badge {
-      @include margin-left(5px);
-    }
-  }
-
   .playlist-by-index {
     color: pvar(--greyForegroundColor);
     display: flex;

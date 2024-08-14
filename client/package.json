@@ -64,6 +64,7 @@
     "@peertube/p2p-media-loader-core": "^1.0.20",
     "@peertube/p2p-media-loader-hlsjs": "^1.0.20",
     "@peertube/xliffmerge": "^2.0.3",
+    "@plussub/srt-vtt-parser": "^2.0.5",
     "@popperjs/core": "^2.11.5",
     "@types/chart.js": "^2.9.37",
     "@types/core-js": "^2.5.2",

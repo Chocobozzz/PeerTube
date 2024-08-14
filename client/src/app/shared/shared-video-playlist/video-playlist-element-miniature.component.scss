@@ -46,8 +46,6 @@ my-video-thumbnail,
     cursor: pointer;
 
     .position {
-      @include margin-right(10px);
-
       font-weight: $font-semibold;
       color: pvar(--greyForegroundColor);
       min-width: 25px;

@@ -20,7 +20,7 @@ const icons = {
   'flame': require('../../../assets/images/misc/flame.svg'),
   'local': require('../../../assets/images/misc/local.svg'),
 
-  // feather icons
+  // feather/lucide icons
   'copy': require('../../../assets/images/feather/copy.svg'),
   'flag': require('../../../assets/images/feather/flag.svg'),
   'playlists': require('../../../assets/images/feather/list.svg'),
@@ -78,6 +78,7 @@ const icons = {
   'codesandbox': require('../../../assets/images/feather/codesandbox.svg'),
   'award': require('../../../assets/images/feather/award.svg'),
   'stats': require('../../../assets/images/feather/stats.svg'),
+  'filter': require('../../../assets/images/feather/filter.svg'),
   'shield': require('../../../assets/images/misc/shield.svg')
 }
 

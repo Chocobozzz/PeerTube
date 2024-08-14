@@ -1,20 +1,20 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core'
+import { NgClass, NgIf, NgStyle } from '@angular/common'
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { RedirectService, ScreenService } from '@app/core'
-import { UserVideoRateType, VideoCaption, VideoPrivacy } from '@peertube/peertube-models'
-import {
-  VideoActionsDisplayType,
-  VideoActionsDropdownComponent
-} from '../../../../shared/shared-video-miniature/video-actions-dropdown.component'
-import { VideoAddToPlaylistComponent } from '../../../../shared/shared-video-playlist/video-add-to-playlist.component'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
-import { NgbTooltip, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf, NgClass, NgStyle } from '@angular/common'
-import { VideoRateComponent } from './video-rate.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoShareComponent } from '@app/shared/shared-share-modal/video-share.component'
 import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
 import { VideoDownloadComponent } from '@app/shared/shared-video-miniature/download/video-download.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { UserVideoRateType, VideoCaption, VideoPrivacy } from '@peertube/peertube-models'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import {
+  VideoActionsDisplayType,
+  VideoActionsDropdownComponent
+} from '../../../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { VideoAddToPlaylistComponent } from '../../../../shared/shared-video-playlist/video-add-to-playlist.component'
+import { VideoRateComponent } from './video-rate.component'
 
 @Component({
   selector: 'my-action-buttons',
@@ -38,7 +38,7 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.
     VideoShareComponent
   ]
 })
-export class ActionButtonsComponent implements OnInit, OnChanges {
+export class ActionButtonsComponent implements OnChanges {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('supportModal') supportModal: SupportModalComponent
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
@@ -51,8 +51,13 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
   @Input() isUserLoggedIn: boolean
   @Input() isUserOwner: boolean
 
+  @Input() transcriptionWidgetOpened: boolean
+
   @Input() currentTime: number
   @Input() currentPlaylistPosition: number
+
+  @Output() showTranscriptionWidget = new EventEmitter()
+  @Output() hideTranscriptionWidget = new EventEmitter()
 
   likesBarTooltipText = ''
 
@@ -70,7 +75,10 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
     duplicate: true,
     mute: true,
     liveInfo: true,
-    stats: true
+    stats: true,
+    generateTranscription: true,
+    transcriptionWidget: true,
+    transcoding: true
   }
 
   userRating: UserVideoRateType
@@ -80,16 +88,20 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
     private redirectService: RedirectService
   ) { }
 
-  ngOnInit () {
-    // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
-    if (this.isUserLoggedIn || !this.screenService.isInMobileView()) {
-      this.tooltipSupport = $localize`Open the modal to support the video uploader`
-      this.tooltipSaveToPlaylist = $localize`Save to playlist`
-    }
-  }
-
   ngOnChanges () {
     this.setVideoLikesBarTooltipText()
+
+    if (this.isUserLoggedIn) {
+      this.videoActionsOptions.download = true
+
+      // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
+      if (!this.screenService.isInMobileView()) {
+        this.tooltipSupport = $localize`Open the modal to support the video uploader`
+        this.tooltipSaveToPlaylist = $localize`Save to playlist`
+      }
+    } else {
+      this.videoActionsOptions.download = false
+    }
   }
 
   showDownloadModal () {

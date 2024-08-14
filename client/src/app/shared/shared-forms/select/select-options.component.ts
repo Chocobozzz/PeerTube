@@ -1,4 +1,4 @@
-import { Component, forwardRef, HostListener, Input } from '@angular/core'
+import { booleanAttribute, Component, forwardRef, HostListener, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { NgIf } from '@angular/common'
@@ -20,10 +20,13 @@ import { NgSelectModule } from '@ng-select/ng-select'
 })
 export class SelectOptionsComponent implements ControlValueAccessor {
   @Input() items: SelectOptionsItem[] = []
-  @Input() clearable = false
-  @Input() searchable = false
+
+  @Input({ transform: booleanAttribute }) clearable = false
+  @Input({ transform: booleanAttribute }) searchable = false
+
   @Input() groupBy: string
   @Input() labelForId: string
+
   @Input() searchFn: any
 
   selectedId: number | string

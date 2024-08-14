@@ -12,7 +12,7 @@
 
       <button
         class="results-filter-button button-unstyle ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed"
-        [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="collapseBasic"
+        [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="search-results-filter"
       >
         <span class="icon icon-filter"></span>
         <ng-container i18n>
@@ -22,7 +22,7 @@
       </button>
     </div>
 
-    <div class="results-filter" [ngbCollapse]="isSearchFilterCollapsed" [animation]="true">
+    <div id="search-results-filter" class="results-filter" [ngbCollapse]="isSearchFilterCollapsed" [animation]="true">
       <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
 
       <div *ngIf="error" class="alert alert-danger">{{ error }}</div>

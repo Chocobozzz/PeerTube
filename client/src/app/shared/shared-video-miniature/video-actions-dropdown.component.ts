@@ -39,6 +39,7 @@ export type VideoActionsDisplayType = {
   studio?: boolean
   stats?: boolean
   generateTranscription?: boolean
+  transcriptionWidget?: boolean
 }
 
 @Component({
@@ -84,7 +85,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
     removeFiles: false,
     transcoding: false,
     studio: true,
-    stats: true
+    stats: true,
+    generateTranscription: false,
+    transcriptionWidget: false
   }
   @Input() placement = 'auto'
   @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
@@ -96,6 +99,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'vertical'
 
+  @Input() transcriptionWidgetOpened: boolean
+
   @Output() videoFilesRemoved = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
@@ -103,6 +108,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Output() videoAccountMuted = new EventEmitter()
   @Output() transcodingCreated = new EventEmitter()
   @Output() modalOpened = new EventEmitter()
+
+  @Output() showTranscriptionWidget = new EventEmitter()
+  @Output() hideTranscriptionWidget = new EventEmitter()
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
@@ -140,14 +148,16 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   loadDropdownInformation () {
-    if (!this.isUserLoggedIn() || this.loaded === true) return
+    if (this.loaded === true) return
 
     this.loaded = true
 
     if (this.displayOptions.playlist) this.playlistAdd.load()
   }
 
-  /* Show modals */
+  // ---------------------------------------------------------------------------
+  // Show modals
+  // ---------------------------------------------------------------------------
 
   showDownloadModal () {
     this.modalOpened.emit()
@@ -179,37 +189,55 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.liveStreamInformationModal.show(video)
   }
 
-  /* Actions checker */
+  // ---------------------------------------------------------------------------
+  // Actions checker
+  // ---------------------------------------------------------------------------
 
   isVideoUpdatable () {
+    if (!this.user) return false
+
     return this.video.isUpdatableBy(this.user)
   }
 
   isVideoEditable () {
+    if (!this.user) return false
+
     return this.video.isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
   }
 
   isVideoStatsAvailable () {
+    if (!this.user) return false
+
     return this.video.isLocal && this.video.isOwnerOrHasSeeAllVideosRight(this.user)
   }
 
   isVideoRemovable () {
+    if (!this.user) return false
+
     return this.video.isRemovableBy(this.user)
   }
 
   isVideoBlockable () {
+    if (!this.user) return false
+
     return this.video.isBlockableBy(this.user)
   }
 
   isVideoUnblockable () {
+    if (!this.user) return false
+
     return this.video.isUnblockableBy(this.user)
   }
 
   isVideoLiveInfoAvailable () {
+    if (!this.user) return false
+
     return this.video.isLiveInfoAvailableBy(this.user)
   }
 
   canGenerateTranscription () {
+    if (!this.user) return false
+
     return this.video.canGenerateTranscription(this.user, this.serverService.getHTMLConfig().videoTranscription.enabled)
   }
 
@@ -225,6 +253,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoDownloadableByUser () {
+    if (!this.user) return false
+
     return (
       this.video &&
       this.video.isLive !== true &&
@@ -235,22 +265,32 @@ export class VideoActionsDropdownComponent implements OnChanges {
   // ---------------------------------------------------------------------------
 
   canVideoBeDuplicated () {
+    if (!this.user) return false
+
     return !this.video.isLive && this.video.canBeDuplicatedBy(this.user)
   }
 
   isVideoAccountMutable () {
+    if (!this.user) return false
+
     return this.video.account.id !== this.user.account.id
   }
 
   canRemoveVideoFiles () {
+    if (!this.user) return false
+
     return this.video.canRemoveAllHLSOrWebFiles(this.user)
   }
 
   canRunTranscoding () {
+    if (!this.user) return false
+
     return this.video.canRunTranscoding(this.user)
   }
 
-  /* Action handlers */
+  // ---------------------------------------------------------------------------
+  // Action handlers
+  // ---------------------------------------------------------------------------
 
   async unblockVideo () {
     const confirmMessage = $localize`Do you really want to unblock ${this.video.name}? It will be available again in the videos list.`
@@ -400,7 +440,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           iconName: 'playlist-add'
         }
       ],
-      [ // actions regarding the video
+      [ // public actions regarding the video
         {
           label: $localize`Download`,
           handler: () => this.showDownloadModal(),
@@ -417,6 +457,29 @@ export class VideoActionsDropdownComponent implements OnChanges {
             return $localize`This option is visible only to you`
           }
         },
+        {
+          label: $localize`Show transcription`,
+          handler: () => this.showTranscriptionWidget.emit(),
+          isDisplayed: () => {
+            if (!this.displayOptions.transcriptionWidget) return false
+            if (this.transcriptionWidgetOpened) return false
+
+            return Array.isArray(this.videoCaptions) && this.videoCaptions.length !== 0
+          },
+          iconName: 'video-lang'
+        },
+        {
+          label: $localize`Hide transcription`,
+          handler: () => this.hideTranscriptionWidget.emit(),
+          isDisplayed: () => {
+            if (!this.displayOptions.transcriptionWidget) return false
+
+            return this.transcriptionWidgetOpened === true
+          },
+          iconName: 'video-lang'
+        }
+      ],
+      [ // private actions regarding the video
         {
           label: $localize`Display live information`,
           handler: ({ video }) => this.showLiveInfoModal(video),

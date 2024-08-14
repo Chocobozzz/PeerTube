@@ -7,7 +7,7 @@
 $video-default-height: 66vh;
 $video-max-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 
-@mixin playlist-below-player {
+@mixin player-widget-below-player {
   width: 100% !important;
   height: auto !important;
   max-height: 300px !important;
@@ -43,8 +43,8 @@ $video-max-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
       --player-height: #{$video-max-height};
     }
 
-    my-video-watch-playlist ::ng-deep .playlist {
-      @include playlist-below-player;
+    .player-widget-component ::ng-deep .widget-root {
+      @include player-widget-below-player;
     }
   }
 }
@@ -233,8 +233,8 @@ my-video-comments {
     flex-direction: column;
     justify-content: center;
 
-    my-video-watch-playlist ::ng-deep .playlist {
-      @include playlist-below-player;
+    .player-widget-component ::ng-deep .widget-root {
+      @include player-widget-below-player;
     }
   }
 

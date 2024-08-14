@@ -151,6 +151,18 @@ export class PeerTubePlayer {
     (this.player.el() as HTMLElement).style.pointerEvents = 'none'
   }
 
+  setCurrentTime (currentTime: number) {
+    if (this.player.paused()) {
+      this.currentLoadOptions.startTime = currentTime
+
+      this.player.play()
+      return
+    }
+
+    this.player.currentTime(currentTime)
+    this.player.userActive(true)
+  }
+
   private async loadP2PMediaLoader () {
     const hlsOptionsBuilder = new HLSOptionsBuilder({
       ...pick(this.options, [ 'pluginsManager', 'serverUrl', 'authorizationHeader' ]),

@@ -2436,6 +2436,11 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
+"@plussub/srt-vtt-parser@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@plussub/srt-vtt-parser/-/srt-vtt-parser-2.0.5.tgz#4836d1fe9c912b4f48b8c0ce6a9c0c9755b1c66e"
+  integrity sha512-cOedEgu7gyea9k+ixkPCQGf8ABBctFWWsBYnVCzzmuoHz45awc9vKtveHzn7VugR36fzFqgkXaLEn2HdZnzFdQ==
+
 "@polka/parse@^1.0.0-next.0":
   version "1.0.0-next.0"
   resolved "https://registry.yarnpkg.com/@polka/parse/-/parse-1.0.0-next.0.tgz#3551d792acdf4ad0b053072e57498cbe32e45a94"
