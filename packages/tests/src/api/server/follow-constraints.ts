@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   makeActivityPubGetRequest,
-  makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test follow constraints', function () {
   let servers: PeerTubeServer[] = []

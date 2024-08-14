@@ -13,7 +13,7 @@ import { PEERTUBE_VERSION } from '@server/initializers/constants.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { PluginManager } from './plugin-manager.js'
 
-async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {
+export async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {
   const { start = 0, count = 20, search, sort = 'npmName', pluginType } = options
 
   const searchParams: PeertubePluginIndexList & Record<string, string | number> = {
@@ -50,7 +50,7 @@ function addInstanceInformation (result: ResultList<PeerTubePluginIndex>) {
   return result
 }
 
-async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePluginLatestVersionResponse> {
+export async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePluginLatestVersionResponse> {
   const bodyRequest: PeertubePluginLatestVersionRequest = {
     npmNames,
     currentPeerTubeEngine: PEERTUBE_VERSION
@@ -62,7 +62,7 @@ async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePlu
   return body
 }
 
-async function getLatestPluginVersion (npmName: string) {
+export async function getLatestPluginVersion (npmName: string) {
   const results = await getLatestPluginsVersion([ npmName ])
 
   if (Array.isArray(results) === false || results.length !== 1) {
@@ -72,8 +72,3 @@ async function getLatestPluginVersion (npmName: string) {
 
   return results[0].latestVersion
 }
-
-export {
-  getLatestPluginsVersion, getLatestPluginVersion, listAvailablePluginsFromIndex
-}
-

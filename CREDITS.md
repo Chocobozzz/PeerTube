@@ -33,14 +33,14 @@
  * Balázs Meskó
  * Tirifto
  * Wicklow
- * Hannes Ylä-Jääski
  * John Livingston
+ * Hannes Ylä-Jääski
  * Kim
  * Vodoyo Kamal
  * Armin
  * Fontan 030
- * Mohamad Reza
  * Besnik Bleta
+ * Mohamad Reza
  * Quentin PAGÈS
  * Kimsible
  * Felix Ableitner
@@ -74,12 +74,12 @@
  * Cedric F
  * Florent
  * Marc Strange
+ * lutangar
  * Ch
  * J. Lavoie
  * YILDIRIM YAPRAK
  * barzofarev2
  * jan Seli
- * lutangar
  * 李奕寯
  * Kempelen
  * Martin Hoefler
@@ -90,16 +90,17 @@
  * Alexander Ivanov
  * Balázs Úr
  * Echo Kilo
+ * Erik Guldberg
  * Jan Keromnes
  * Luc Didry
  * Siourdakis Thanos
+ * alex gabilondo
  * knuxify
  * Agron Selimaj
  * Attila F
  * Caroline Chuong
  * David Soh
  * Diazepan Medina
- * Erik Guldberg
  * Jason Zhou
  * Loukas Stamellos
  * Ms Kimsible
@@ -113,7 +114,6 @@
  * Kemal Oktay Aktoğan
  * Lucas Declercq
  * Sirxy
- * alex gabilondo
  * matograine
  * Ahmed ABERWAG
  * Daniel Santos
@@ -209,6 +209,7 @@
  * Asr128
  * Aurélien Bertron
  * Axel Viala
+ * Danail Emandiev
  * Daniele Garau
  * Dep Pranata
  * Dirk Kelly
@@ -216,6 +217,7 @@
  * Ehsan Gholami
  * Elga Ahmad Prayoga
  * Girish Ramakrishnan
+ * Goudarz Jafari
  * Hakim Oubouali
  * Hans Meiser
  * Iñigo A
@@ -287,7 +289,6 @@
  * G4dter
  * Gaëtan Rizio
  * Gopherslol
- * Goudarz Jafari
  * HHY
  * Hange
  * Hjalte
@@ -415,6 +416,7 @@
  * Gabriel Scherer
  * Gergo Bogdan
  * Glandos
+ * Grant
  * Grzesiek11
  * Guillaume Pérution-Kihli
  * Gérald CHATAGNON
@@ -445,6 +447,7 @@
  * Johnny Jazeix
  * Jonas Sulzer
  * Jonatan Nyberg
+ * Jonathan Weth
  * Jorge Silva
  * Jos
  * Julien Le Bras
@@ -507,6 +510,7 @@
  * Philipp Fischbeck
  * Philo van Kemenade
  * Predatorix Phoenix
+ * Quantic Axe
  * Quentin Dupont
  * Quentí
  * ROPEDE

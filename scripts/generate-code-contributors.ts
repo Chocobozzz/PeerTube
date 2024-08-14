@@ -25,9 +25,11 @@ async function run () {
     console.log('\n\n# Design\n')
     console.log(' * [Olivier Massain](https://dribbble.com/omassain)')
     console.log(' * [Marie-Cécile Godwin Paccard](https://mcgodwin.com/)')
+    console.log(' * [La Coopérative des Internets](https://www.lacooperativedesinternets.fr/)')
 
     console.log('\n\n# Icons\n')
     console.log(' * [Feather Icons](https://feathericons.com) (MIT)')
+    console.log(' * [Lucide Icons](https://lucide.dev/) (ISC)')
     console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous-services.svg`, `tip` by Material UI (Apache 2.0)')
     console.log(' * `support` by Chocobozzz (CC-BY)')
     console.log(' * `language` by Aaron Jin (CC-BY)')
