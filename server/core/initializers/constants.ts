@@ -1244,6 +1244,74 @@ export const VIDEO_FILTERS = {
   }
 }
 
+export async function buildLanguages () {
+  const { iso6393 } = await import('iso-639-3')
+
+  const languages: { [id: string]: string } = {}
+
+  const additionalLanguages = {
+    sgn: true, // Sign languages (macro language)
+    ase: true, // American sign language
+    asq: true, // Austrian sign language
+    sdl: true, // Arabian sign language
+    bfi: true, // British sign language
+    bzs: true, // Brazilian sign language
+    csl: true, // Chinese sign language
+    cse: true, // Czech sign language
+    dsl: true, // Danish sign language
+    fsl: true, // French sign language
+    gsg: true, // German sign language
+    pks: true, // Pakistan sign language
+    jsl: true, // Japanese sign language
+    sfs: true, // South African sign language
+    swl: true, // Swedish sign language
+    rsl: true, // Russian sign language
+    fse: true, // Finnish sign language
+
+    kab: true, // Kabyle
+    gcf: true, // Guadeloupean
+
+    lat: true, // Latin
+
+    epo: true, // Esperanto
+    tlh: true, // Klingon
+    jbo: true, // Lojban
+    avk: true, // Kotava
+
+    zxx: true // No linguistic content (ISO-639-2)
+  }
+
+  // Only add ISO639-1 languages and some sign languages (ISO639-3)
+  iso6393
+    .filter(l => {
+      return (l.iso6391 !== undefined && l.type === 'living') ||
+        additionalLanguages[l.iso6393] === true
+    })
+    .forEach(l => { languages[l.iso6391 || l.iso6393] = l.name })
+
+  // Override Occitan label
+  languages['oc'] = 'Occitan'
+  languages['el'] = 'Greek'
+  languages['tok'] = 'Toki Pona'
+
+  // Override Portuguese label
+  languages['pt'] = 'Portuguese (Brazilian)'
+  languages['pt-PT'] = 'Portuguese (Portugal)'
+
+  // Override Spanish labels
+  languages['es'] = 'Spanish (Spain)'
+  languages['es-419'] = 'Spanish (Latin America)'
+
+  // Chinese languages
+  languages['zh-Hans'] = 'Simplified Chinese'
+  languages['zh-Hant'] = 'Traditional Chinese'
+
+  // Catalan languages
+  languages['ca-valencia'] = 'Valencian'
+
+  return languages
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -1364,74 +1432,6 @@ function buildMimetypesRegex (obj: { [id: string]: string | string[] }) {
   return Object.keys(obj)
     .map(m => `(${m})`)
     .join('|')
-}
-
-async function buildLanguages () {
-  const { iso6393 } = await import('iso-639-3')
-
-  const languages: { [id: string]: string } = {}
-
-  const additionalLanguages = {
-    sgn: true, // Sign languages (macro language)
-    ase: true, // American sign language
-    asq: true, // Austrian sign language
-    sdl: true, // Arabian sign language
-    bfi: true, // British sign language
-    bzs: true, // Brazilian sign language
-    csl: true, // Chinese sign language
-    cse: true, // Czech sign language
-    dsl: true, // Danish sign language
-    fsl: true, // French sign language
-    gsg: true, // German sign language
-    pks: true, // Pakistan sign language
-    jsl: true, // Japanese sign language
-    sfs: true, // South African sign language
-    swl: true, // Swedish sign language
-    rsl: true, // Russian sign language
-    fse: true, // Finnish sign language
-
-    kab: true, // Kabyle
-    gcf: true, // Guadeloupean
-
-    lat: true, // Latin
-
-    epo: true, // Esperanto
-    tlh: true, // Klingon
-    jbo: true, // Lojban
-    avk: true, // Kotava
-
-    zxx: true // No linguistic content (ISO-639-2)
-  }
-
-  // Only add ISO639-1 languages and some sign languages (ISO639-3)
-  iso6393
-    .filter(l => {
-      return (l.iso6391 !== undefined && l.type === 'living') ||
-        additionalLanguages[l.iso6393] === true
-    })
-    .forEach(l => { languages[l.iso6391 || l.iso6393] = l.name })
-
-  // Override Occitan label
-  languages['oc'] = 'Occitan'
-  languages['el'] = 'Greek'
-  languages['tok'] = 'Toki Pona'
-
-  // Override Portuguese label
-  languages['pt'] = 'Portuguese (Brazilian)'
-  languages['pt-PT'] = 'Portuguese (Portugal)'
-
-  // Override Spanish labels
-  languages['es'] = 'Spanish (Spain)'
-  languages['es-419'] = 'Spanish (Latin America)'
-
-  // Chinese languages
-  languages['zh-Hans'] = 'Simplified Chinese'
-  languages['zh-Hant'] = 'Traditional Chinese'
-
-  // Catalan languages
-  languages['ca-valencia'] = 'Valencian'
-
-  return languages
 }
 
 function generateContentHash () {
