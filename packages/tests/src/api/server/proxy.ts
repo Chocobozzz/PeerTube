@@ -114,7 +114,7 @@ describe('Test proxy', function () {
       this.timeout(240000)
 
       await servers[0].kill()
-      await servers[0].run(getProxyConfig(null), { env: goodEnv })
+      await servers[0].run({}, { env: goodEnv, autoEnableImportProxy: false })
 
       await quickImport()
 
@@ -129,7 +129,7 @@ describe('Test proxy', function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run(getProxyConfig(null), { env: badEnv })
+      await servers[0].run({}, { env: badEnv, autoEnableImportProxy: false })
 
       await quickImport(HttpStatusCode.BAD_REQUEST_400)
     })
@@ -138,7 +138,7 @@ describe('Test proxy', function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run(getProxyConfig('http://localhost:9000'))
+      await servers[0].run(getProxyConfig('http://localhost:9000'), { autoEnableImportProxy: false })
 
       await quickImport(HttpStatusCode.BAD_REQUEST_400)
     })

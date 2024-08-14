@@ -269,7 +269,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding({ webVideo: true, hls: false, with0p: true })
+        await servers[0].config.enableTranscoding({ resolutions: 'max', webVideo: true, hls: false, with0p: true })
       })
 
       runSpecificSuite({ webVideoEnabled: true, hlsEnabled: false, objectStorage })

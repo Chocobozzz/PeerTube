@@ -61,6 +61,7 @@ import { StatsCommand } from './stats-command.js'
 import merge from 'lodash-es/merge.js'
 
 export type RunServerOptions = {
+  autoEnableImportProxy?: boolean
   hideLogs?: boolean
   nodeArgs?: string[]
   peertubeArgs?: string[]
@@ -241,7 +242,7 @@ export class PeerTubeServer {
 
     await this.assignCustomConfigFile()
 
-    let configOverride = this.buildConfigOverride()
+    let configOverride = this.buildConfigOverride(options)
 
     if (configOverrideArg !== undefined) {
       configOverride = merge(configOverride, configOverrideArg)
@@ -363,8 +364,8 @@ export class PeerTubeServer {
     this.customConfigFile = tmpConfigFile
   }
 
-  private buildConfigOverride () {
-    const base = process.env.YOUTUBE_DL_PROXY
+  private buildConfigOverride (options: RunServerOptions) {
+    const base = options.autoEnableImportProxy !== false && process.env.YOUTUBE_DL_PROXY
       ? { import: { videos: { http: { proxies: [ process.env.YOUTUBE_DL_PROXY ] } } } }
       : {}
 
