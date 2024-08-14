@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,7 +11,6 @@ import {
 } from '@peertube/peertube-server-commands'
 import { MockHTTP } from '@tests/shared/mock-servers/mock-http.js'
 import { expect } from 'chai'
-import { HttpStatusCode } from '../../../../models/src/http/http-status-codes.js'
 
 describe('Test SSRF requests', function () {
   let servers: PeerTubeServer[] = []

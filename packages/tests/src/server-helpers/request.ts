@@ -43,7 +43,7 @@ describe('Request helpers', function () {
     const port = await mock.initialize()
 
     const before = new Date().getTime()
-    await doRequest('http://127.0.0.1:' + port)
+    await doRequest('http://127.0.0.1:' + port, { preventSSRF: false })
 
     expect(new Date().getTime() - before).to.be.greaterThan(2000)
 

@@ -124,10 +124,14 @@ export const peertubeGot = CONFIG.FEDERATION.PREVENT_SSRF
 
 // ---------------------------------------------------------------------------
 
-export function doRequest (url: string, options: PeerTubeRequestOptions = {}) {
+export function doRequest (url: string, options: PeerTubeRequestOptions & { preventSSRF?: false } = {}) {
   const gotOptions = buildGotOptions(options) as OptionsOfTextResponseBody
 
-  return peertubeGot(url, gotOptions)
+  const gotInstance = options.preventSSRF === false
+    ? unsafeSSRFGot
+    : peertubeGot
+
+  return gotInstance(url, gotOptions)
     .catch(err => { throw buildRequestError(err) })
 }
 
