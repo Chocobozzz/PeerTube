@@ -372,5 +372,5 @@ videojs.registerComponent('StatsCard', StatsCard)
 
 export {
   StatsCard,
-  StatsCardOptions
+  type StatsCardOptions
 }

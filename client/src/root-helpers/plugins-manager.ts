@@ -299,10 +299,10 @@ class PluginsManager {
 export {
   PluginsManager,
 
-  PluginInfo,
-  PeertubeHelpersFactory,
-  OnFormFields,
-  OnSettingsScripts
+  type PluginInfo,
+  type PeertubeHelpersFactory,
+  type OnFormFields,
+  type OnSettingsScripts
 }
 
 // ---------------------------------------------------------------------------

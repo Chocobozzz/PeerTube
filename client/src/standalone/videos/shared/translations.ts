@@ -1,5 +1,1 @@
-type Translations = { [ id: string ]: string }
-
-export {
-  Translations
-}
+export type Translations = { [ id: string ]: string }

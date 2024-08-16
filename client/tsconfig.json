@@ -15,6 +15,7 @@
     "importHelpers": true,
     "strictBindCallApply": true,
     "target": "ES2022",
+    "isolatedModules": true,
     "typeRoots": [
       "node_modules/@types"
     ],
