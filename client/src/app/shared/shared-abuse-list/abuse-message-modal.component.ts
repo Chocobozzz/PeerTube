@@ -113,12 +113,12 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   private loadMessages () {
     this.abuseService.listAbuseMessages(this.abuse)
       .subscribe({
-        next: async res => {
+        next: res => {
           this.abuseMessages = []
 
           for (const m of res.data) {
             this.abuseMessages.push(Object.assign(m, {
-              messageHtml: await this.htmlRenderer.convertToBr(m.message)
+              messageHtml: this.htmlRenderer.convertToBr(m.message)
             }))
           }
 

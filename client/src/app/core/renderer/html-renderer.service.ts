@@ -1,41 +1,93 @@
 import { Injectable } from '@angular/core'
-import { getCustomMarkupSanitizeOptions, getDefaultSanitizeOptions } from '@peertube/peertube-core-utils'
+import {
+  getDefaultSanitizedHrefAttributes,
+  getDefaultSanitizedSchemes,
+  getDefaultSanitizedTags
+} from '@peertube/peertube-core-utils'
+import DOMPurify, { DOMPurifyI } from 'dompurify'
 import { LinkifierService } from './linkifier.service'
 
 @Injectable()
 export class HtmlRendererService {
-  private sanitizeHtml: typeof import ('sanitize-html')
+  private simpleDomPurify: DOMPurifyI
+  private enhancedDomPurify: DOMPurifyI
 
   constructor (private linkifier: LinkifierService) {
+    this.simpleDomPurify = DOMPurify()
+    this.enhancedDomPurify = DOMPurify()
 
+    this.addHrefHook(this.simpleDomPurify)
+    this.addHrefHook(this.enhancedDomPurify)
+
+    this.addCheckSchemesHook(this.simpleDomPurify, getDefaultSanitizedSchemes())
+    this.addCheckSchemesHook(this.simpleDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
   }
 
-  async convertToBr (text: string) {
-    await this.loadSanitizeHtml()
+  private addHrefHook (dompurifyInstance: DOMPurifyI) {
+    dompurifyInstance.addHook('afterSanitizeAttributes', node => {
+      if ('target' in node) {
+        node.setAttribute('target', '_blank')
 
-    const html = text.replace(/\r?\n/g, '<br />')
+        const rel = node.hasAttribute('rel')
+          ? node.getAttribute('rel') + ' '
+          : ''
 
-    return this.sanitizeHtml(html, {
-      allowedTags: [ 'br' ]
+        node.setAttribute('rel', rel + 'noopener noreferrer')
+      }
     })
   }
 
-  async toSafeHtml (text: string, additionalAllowedTags: string[] = []) {
-    const [ html ] = await Promise.all([
-      // Convert possible markdown to html
-      this.linkifier.linkify(text),
+  private addCheckSchemesHook (dompurifyInstance: DOMPurifyI, schemes: string[]) {
+    const regex = new RegExp(`^(${schemes.join('|')}):`, 'im')
 
-      this.loadSanitizeHtml()
-    ])
+    dompurifyInstance.addHook('afterSanitizeAttributes', node => {
+      const anchor = document.createElement('a')
 
-    const options = additionalAllowedTags.length !== 0
-      ? getCustomMarkupSanitizeOptions(additionalAllowedTags)
-      : getDefaultSanitizeOptions()
+      if (node.hasAttribute('href')) {
+        anchor.href = node.getAttribute('href')
 
-    return this.sanitizeHtml(html, options)
+        if (anchor.protocol && !anchor.protocol.match(regex)) {
+          node.removeAttribute('href')
+        }
+      }
+    })
   }
 
-  private async loadSanitizeHtml () {
-    this.sanitizeHtml = (await import('sanitize-html')).default
+  convertToBr (text: string) {
+    const html = text.replace(/\r?\n/g, '<br />')
+
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: [ 'br' ]
+    })
+  }
+
+  async toSimpleSafeHtml (text: string) {
+    const html = await this.linkifier.linkify(text)
+
+    return this.sanitize(this.simpleDomPurify, html)
+  }
+
+  async toCustomPageSafeHtml (text: string, additionalAllowedTags: string[] = []) {
+    const html = await this.linkifier.linkify(text)
+
+    const enhancedTags = [ 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img' ]
+
+    return this.sanitize(this.enhancedDomPurify, html, {
+      additionalTags: [ ...enhancedTags, ...additionalAllowedTags ],
+      additionalAttributes: [ 'src', 'alt', 'style' ]
+    })
+  }
+
+  private sanitize (domPurify: DOMPurifyI, html: string, options: {
+    additionalTags?: string[]
+    additionalAttributes?: string[]
+  } = {}) {
+    const { additionalTags = [], additionalAttributes = [] } = options
+
+    return domPurify.sanitize(html, {
+      ALLOWED_TAGS: [ ...getDefaultSanitizedTags(), ...additionalTags ],
+      ALLOWED_ATTR: [ ...getDefaultSanitizedHrefAttributes(), ...additionalAttributes ],
+      ALLOW_DATA_ATTR: true
+    })
   }
 }

@@ -1,4 +1,3 @@
-import MarkdownIt from 'markdown-it'
 import { Injectable } from '@angular/core'
 import {
   buildVideoLink,
@@ -9,6 +8,7 @@ import {
   TEXT_RULES,
   TEXT_WITH_HTML_RULES
 } from '@peertube/peertube-core-utils'
+import MarkdownIt from 'markdown-it'
 import { HtmlRendererService } from './html-renderer.service'
 
 type MarkdownParsers = {
@@ -140,7 +140,13 @@ export class MarkdownService {
 
     const html = this.markdownParsers[name].render(markdown)
 
-    if (config.escape) return this.htmlRenderer.toSafeHtml(html, additionalAllowedTags)
+    if (config.escape) {
+      if (name === 'customPageMarkdownIt') {
+        return this.htmlRenderer.toCustomPageSafeHtml(html, additionalAllowedTags)
+      }
+
+      return this.htmlRenderer.toSimpleSafeHtml(html)
+    }
 
     return html
   }
