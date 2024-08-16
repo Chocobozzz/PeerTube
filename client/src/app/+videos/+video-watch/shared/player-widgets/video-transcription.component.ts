@@ -161,8 +161,8 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
             const entries = parse(content).entries
 
             this.segmentsStore = entries.map(({ from, to, text }) => {
-              const start = Math.ceil(from / 1000)
-              const end = Math.ceil(to / 1000)
+              const start = Math.round(from / 1000)
+              const end = Math.round(to / 1000)
 
               return {
                 start,
@@ -217,7 +217,7 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
     for (let i = this.segmentsStore.length - 1; i >= 0; i--) {
       const current = this.segmentsStore[i]
 
-      if (current.start < this.currentTime) {
+      if (current.start <= this.currentTime) {
         this.activeSegment = current
         break
       }
