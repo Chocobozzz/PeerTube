@@ -1,6 +1,6 @@
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { getAbuseTargetUrl } from '@server/lib/activitypub/url.js'
+import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
 import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { MAbuseFull, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
@@ -19,7 +19,7 @@ export class AbuseStateChangeForReporter extends AbstractNotification <MAbuseFul
   }
 
   log () {
-    logger.info('Notifying reporter of abuse % of state change.', getAbuseTargetUrl(this.abuse))
+    logger.info('Notifying reporter of abuse % of state change.', getAbuseIdentifier(this.abuse))
   }
 
   getSetting (user: MUserWithNotificationSetting) {

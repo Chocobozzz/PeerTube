@@ -1,6 +1,6 @@
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { getAbuseTargetUrl } from '@server/lib/activitypub/url.js'
+import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
 import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { MAbuseFull, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
@@ -17,7 +17,7 @@ export class NewAbuseForModerators extends AbstractNotification <NewAbusePayload
   }
 
   log () {
-    logger.info('Notifying %s user/moderators of new abuse %s.', this.moderators.length, getAbuseTargetUrl(this.payload.abuseInstance))
+    logger.info('Notifying %s user/moderators of new abuse %s.', this.moderators.length, getAbuseIdentifier(this.payload.abuseInstance))
   }
 
   getSetting (user: MUserWithNotificationSetting) {

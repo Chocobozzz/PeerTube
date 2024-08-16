@@ -1,5 +1,5 @@
 import { logger } from '@server/helpers/logger.js'
-import { getAbuseTargetUrl } from '@server/lib/activitypub/url.js'
+import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault } from '@server/types/models/index.js'
 import { UserRight } from '@peertube/peertube-models'
@@ -19,7 +19,7 @@ export class NewAbuseMessageForModerators extends AbstractNewAbuseMessage {
   }
 
   log () {
-    logger.info('Notifying moderators of new abuse message on %s.', getAbuseTargetUrl(this.abuse))
+    logger.info('Notifying moderators of new abuse message on %s.', getAbuseIdentifier(this.abuse))
   }
 
   getTargetUsers () {

@@ -125,10 +125,13 @@ export function getLocalApproveReplyActivityPubUrl (video: MVideoUUID, comment: 
 
 // ---------------------------------------------------------------------------
 
-export function getAbuseTargetUrl (abuse: MAbuseFull) {
+// Try to fetch target URL
+// If it doesn't exist anymore use abuse URL
+export function getAbuseIdentifier (abuse: MAbuseFull) {
   return abuse.VideoAbuse?.Video?.url ||
     abuse.VideoCommentAbuse?.VideoComment?.url ||
-    abuse.FlaggedAccount.Actor.url
+    abuse.FlaggedAccount?.Actor?.url ||
+    abuse.id + ''
 }
 
 // ---------------------------------------------------------------------------

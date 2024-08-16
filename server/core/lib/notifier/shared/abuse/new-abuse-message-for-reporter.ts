@@ -1,5 +1,5 @@
 import { logger } from '@server/helpers/logger.js'
-import { getAbuseTargetUrl } from '@server/lib/activitypub/url.js'
+import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault } from '@server/types/models/index.js'
 import { AbstractNewAbuseMessage } from './abstract-new-abuse-message.js'
@@ -21,7 +21,7 @@ export class NewAbuseMessageForReporter extends AbstractNewAbuseMessage {
   }
 
   log () {
-    logger.info('Notifying reporter of new abuse message on %s.', getAbuseTargetUrl(this.abuse))
+    logger.info('Notifying reporter of new abuse message on %s.', getAbuseIdentifier(this.abuse))
   }
 
   getTargetUsers () {
