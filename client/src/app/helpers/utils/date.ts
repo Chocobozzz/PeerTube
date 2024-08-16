@@ -41,7 +41,7 @@ function durationToString (duration: number) {
 }
 
 export {
-  DateFormat,
+  type DateFormat,
 
   durationToString,
   dateToHuman
