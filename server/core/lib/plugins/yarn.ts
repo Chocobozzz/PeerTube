@@ -6,7 +6,7 @@ import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { getLatestPluginVersion } from './plugin-index.js'
 
-async function installNpmPlugin (npmName: string, versionArg?: string) {
+async function installNpmPlugin (npmName: string, versionArg?: string, extraArgs?: string) {
   // Security check
   checkNpmPluginNameOrThrow(npmName)
   if (versionArg) checkPluginVersionOrThrow(versionArg)
@@ -15,13 +15,15 @@ async function installNpmPlugin (npmName: string, versionArg?: string) {
 
   let toInstall = npmName
   if (version) toInstall += `@${version}`
+  if (extraArgs) toInstall += ` ${extraArgs}`
 
   const { stdout } = await execYarn('add ' + toInstall)
 
   logger.debug('Added a yarn package.', { yarnStdout: stdout })
 }
 
-async function installNpmPluginFromDisk (path: string) {
+async function installNpmPluginFromDisk (path: string, extraArgs?: string) {
+  if (extraArgs) path += ` ${extraArgs}`
   await execYarn('add file:' + path)
 }
 

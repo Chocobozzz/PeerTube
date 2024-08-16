@@ -352,6 +352,7 @@ async function startApplication () {
   server.listen(port, hostname, async () => {
     if (cliOptions.plugins) {
       try {
+        await PluginManager.Instance.installDeclarativePlugins()
         await PluginManager.Instance.rebuildNativePluginsIfNeeded()
 
         await PluginManager.Instance.registerPluginsAndThemes()

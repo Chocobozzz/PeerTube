@@ -20,6 +20,7 @@ import { decachePlugin } from '@server/helpers/decache.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins.js'
+import { execShell } from '../../helpers/core-utils.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants.js'
@@ -334,13 +335,93 @@ export class PluginManager implements ServerHook {
 
   // ###################### Installation ######################
 
+  async installDeclarativePlugins () {
+    const pluginDirectory = CONFIG.STORAGE.PLUGINS_DIR
+    let declaredPlugins
+    try {
+      declaredPlugins = await readJSON(join(pluginDirectory, "declarative_plugins.json"));
+    }
+    catch (err) {
+      logger.info("No declarative plugins file found.")
+      return
+    }
+
+    const existingDeclaredPlugins: PluginModel[] = await PluginModel.listDeclarativePluginsAndThemes()
+
+    for (const plugin of existingDeclaredPlugins) {
+      const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+      if (!(npmName in declaredPlugins)) {
+        logger.info("Removing previously declared plugin %s", npmName)
+        await this.uninstall({npmName: npmName, unregister: false})
+      }
+      else {
+        logger.info("Keeping still-declared plugin %s.", npmName)
+      }
+    }
+
+    for (const npmName of Object.keys(declaredPlugins)) {
+      const {
+        pluginPath = null,
+        version = null,
+        extraArgs = null,
+        preInstall = null,
+        postInstall = null
+      } = declaredPlugins[npmName];
+
+      if (preInstall != null) {
+        logger.info("Running pre-install command for plugin %s.", npmName)
+        try {
+          await execShell(preInstall, { cwd: pluginDirectory })
+        } catch (result) {
+          logger.error("Cannot exec pre-install command.", { preInstall, err: result.err, stderr: result.stderr })
+
+          throw result.err
+        }
+      }
+
+      if (pluginPath != null) {
+        logger.info("Installing declared plugin %s from disk (path %s).", npmName, pluginPath)
+        await this.install({
+          toInstall: pluginPath,
+          fromDisk: true,
+          declarative: true,
+          extraArgs: extraArgs,
+        })
+      }
+      else if (version != null) {
+        logger.info("Installing declared plugin %s (version %s) from npm.", npmName, version)
+        await this.install({
+          toInstall: npmName,
+          version: version,
+          declarative: true,
+          extraArgs: extraArgs,
+        })
+      }
+
+      if (postInstall != null) {
+        logger.info("Running post-install command for plugin %s.", npmName)
+        try {
+          await execShell(postInstall, { cwd: pluginDirectory })
+        } catch (result) {
+          logger.error("Cannot exec post-install command.", { postInstall, err: result.err, stderr: result.stderr })
+
+          throw result.err
+        }
+      }
+    }
+
+    this.sortHooksByPriority()
+  }
+
   async install (options: {
     toInstall: string
     version?: string
     fromDisk?: boolean // default false
     register?: boolean // default true
+    declarative?: boolean // default false
+    extraArgs?: string // default empty
   }) {
-    const { toInstall, version, fromDisk = false, register = true } = options
+    const { toInstall, version, fromDisk = false, register = true, declarative = false, extraArgs = null } = options
 
     let plugin: PluginModel
     let npmName: string
@@ -349,8 +430,8 @@ export class PluginManager implements ServerHook {
 
     try {
       fromDisk
-        ? await installNpmPluginFromDisk(toInstall)
-        : await installNpmPlugin(toInstall, version)
+        ? await installNpmPluginFromDisk(toInstall, extraArgs)
+        : await installNpmPlugin(toInstall, version, extraArgs)
 
       npmName = fromDisk ? basename(toInstall) : toInstall
       const pluginType = PluginModel.getTypeFromNpmName(npmName)
@@ -368,6 +449,7 @@ export class PluginManager implements ServerHook {
         version: packageJSON.version,
         enabled: true,
         uninstalled: false,
+        declarative: declarative,
         peertubeEngine: packageJSON.engine.peertube
       }, { returning: true })
 
