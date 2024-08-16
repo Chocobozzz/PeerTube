@@ -121,7 +121,7 @@ export class FFmpegCommandWrapper {
 
       this.command.on('start', cmdline => { shellCommand = cmdline })
 
-      this.command.on('error', (err, stdout, stderr) => {
+      this.command.on('error', (err: Error & { stdout?: string, stderr?: string }, stdout, stderr) => {
         if (silent !== true) this.logger.error('Error in ffmpeg.', { err, stdout, stderr, shellCommand, ...this.lTags })
 
         err.stdout = stdout

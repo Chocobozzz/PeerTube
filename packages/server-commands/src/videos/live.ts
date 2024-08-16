@@ -41,7 +41,6 @@ export function sendRTMPStream (options: {
 
   if (process.env.DEBUG) {
     command.on('stderr', data => console.log(data))
-    command.on('stdout', data => console.log(data))
   }
 
   command.run()
