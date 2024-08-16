@@ -8,8 +8,6 @@
   .peertube-dock {
     --avatarSize: 48px;
 
-    @include padding-right(60px);
-
     transition: opacity 0.1s;
 
     display: flex;
@@ -23,6 +21,8 @@
     font-size: 23px;
     padding: $dock-padding;
     background: linear-gradient(to bottom, rgba(20, 20, 20, .7) 0, rgba(20, 20, 20, 0));
+
+    @include padding-right(60px);
   }
 
   .peertube-dock-avatar {

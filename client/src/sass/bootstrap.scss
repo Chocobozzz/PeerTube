@@ -228,20 +228,20 @@ body {
   }
 
   a {
-    @include disable-default-a-behaviour;
-
     color: pvar(--mainForegroundColor);
+
+    @include disable-default-a-behaviour;
   }
 }
 
 .nav-tabs .nav-link {
-  @include disable-default-a-behaviour;
-
   color: pvar(--mainForegroundColor);
   font-weight: $font-semibold;
   border: 0;
   border-bottom: 2px solid transparent;
   opacity: 0.7;
+
+  @include disable-default-a-behaviour;
 
   &.active {
     color: pvar(--mainForegroundColor);
