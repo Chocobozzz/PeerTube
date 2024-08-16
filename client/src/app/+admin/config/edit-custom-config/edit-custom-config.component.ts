@@ -40,6 +40,7 @@ import { EditHomepageComponent } from './edit-homepage.component'
 import { EditInstanceInformationComponent } from './edit-instance-information.component'
 import { EditLiveConfigurationComponent } from './edit-live-configuration.component'
 import { EditVODTranscodingComponent } from './edit-vod-transcoding.component'
+import merge from 'lodash-es/merge'
 
 type ComponentCustomConfig = CustomConfig & {
   instanceCustomHomepage: CustomPage
@@ -368,7 +369,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     this.forceCheck()
     if (!this.form.valid) return
 
-    const value: ComponentCustomConfig = this.form.getRawValue()
+    const value: ComponentCustomConfig = merge(this.customConfig, this.form.getRawValue())
 
     forkJoin([
       this.configService.updateCustomConfig(omit(value, 'instanceCustomHomepage')),
@@ -376,9 +377,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     ])
       .subscribe({
         next: ([ resConfig ]) => {
-          const instanceCustomHomepage = {
-            content: value.instanceCustomHomepage.content
-          }
+          const instanceCustomHomepage = { content: value.instanceCustomHomepage.content }
 
           this.customConfig = { ...resConfig, instanceCustomHomepage }
 
