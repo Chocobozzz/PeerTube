@@ -6,6 +6,7 @@
 }
 
 input[type=text] {
-  @include peertube-input-text(100%);
   display: block;
+
+  @include peertube-input-text(100%);
 }

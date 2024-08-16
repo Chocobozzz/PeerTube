@@ -44,10 +44,10 @@
 }
 
 a {
-  @include disable-default-a-behaviour;
-
   color: pvar(--mainColor);
   transition: color 0.3s;
+
+  @include disable-default-a-behaviour;
 
   &:hover {
     color: pvar(--mainBackgroundColor);

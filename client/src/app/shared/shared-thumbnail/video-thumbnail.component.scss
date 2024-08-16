@@ -23,13 +23,13 @@
 .video-thumbnail-label-overlay,
 .video-thumbnail-duration-overlay,
 .video-thumbnail-live-overlay {
-  @include static-thumbnail-overlay;
-
   border-radius: 3px;
   font-size: 12px;
   font-weight: $font-semibold;
   line-height: 1.1;
   z-index: z(miniature);
+
+  @include static-thumbnail-overlay;
 }
 
 .video-thumbnail-label-overlay {
@@ -77,9 +77,9 @@
   padding: 3px;
 
   my-global-icon {
-    @include apply-svg-color(#fff);
-
     width: 22px;
     height: 22px;
+
+    @include apply-svg-color(#fff);
   }
 }

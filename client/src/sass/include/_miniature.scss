@@ -2,21 +2,21 @@
 @use '_mixins' as *;
 
 @mixin miniature-name {
-  @include peertube-word-wrap(false);
-
   font-size: 1.1em;
   transition: color 0.2s;
   font-weight: $font-semibold;
   color: pvar(--mainForegroundColor);
+
+  @include peertube-word-wrap(false);
 
   &:hover {
     text-decoration: none;
   }
 
   &.blur-filter {
-    @include padding-left(4px);
-
     filter: blur(3px);
+
+    @include padding-left(4px);
   }
 }
 
@@ -24,8 +24,6 @@
   $play-overlay-transition: 0.2s ease;
   $play-overlay-height: 26px;
   $play-overlay-width: 18px;
-
-  @include disable-outline;
 
   display: flex;
   flex-direction: column;
@@ -36,6 +34,8 @@
   overflow: hidden;
   background-color: #ececec;
   transition: filter $play-overlay-transition;
+
+  @include disable-outline;
 
   .play-overlay {
     position: absolute;

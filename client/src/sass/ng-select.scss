@@ -1,6 +1,5 @@
 @use 'sass:math';
 @use 'sass:color';
-
 @use '_variables' as *;
 @use '_mixins' as *;
 
@@ -38,9 +37,9 @@ $ng-select-input-text: pvar(--mainForegroundColor);
 @import '@ng-select/ng-select/scss/default.theme';
 
 .ng-select {
-  @include rounded-line-height-1-5($ng-select-value-font-size);
-
   font-size: $ng-select-value-font-size;
+
+  @include rounded-line-height-1-5($ng-select-value-font-size);
 
   &.ng-select-focused {
     &:not(.ng-select-opened) > .ng-select-container {
@@ -88,9 +87,9 @@ $ng-select-input-text: pvar(--mainForegroundColor);
     @include padding-left(12px);
 
     .ng-value {
-      @include margin-left(12px);
-
       background-color: pvar(--mainColorLightest);
+
+      @include margin-left(12px);
 
       .ng-value-icon {
         border: 0 !important;

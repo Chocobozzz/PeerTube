@@ -5,9 +5,9 @@
   display: flex;
 
   .information {
-    @include margin-left(50px);
-
     width: 100%;
+
+    @include margin-left(50px);
 
     > div {
       margin-bottom: 30px;
@@ -36,14 +36,13 @@ h2 {
 .section {
   $min-width: 600px;
 
-  @include padding-left(10px);
-
   min-width: $min-width;
-
   margin-bottom: 50px;
   border: 1px solid $separator-border-color;
   border-radius: 5px;
   width: fit-content;
+
+  @include padding-left(10px);
 
   .form-group,
   .description {

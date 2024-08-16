@@ -13,9 +13,9 @@ table {
     }
 
     &.sub-label {
-      @include padding-left(30px);
-
       font-weight: $font-regular;
+
+      @include padding-left(30px);
     }
 
     .more-info {

@@ -2,9 +2,9 @@
 @use '_mixins' as *;
 
 .btn-group-subscribe {
-  @include peertube-button;
-
   padding: 0;
+
+  @include peertube-button;
 
   button.dropdown-toggle {
     font-size: $button-font-size;
@@ -55,8 +55,9 @@
 
   &.subscribe-button {
     .btn {
-      @include orange-button;
       font-weight: 600;
+
+      @include orange-button;
     }
 
     span.followers-count {
@@ -66,9 +67,9 @@
 
   &.unsubscribe-button {
     .btn {
-      @include grey-button;
-
       font-weight: 600;
+
+      @include grey-button;
     }
   }
 

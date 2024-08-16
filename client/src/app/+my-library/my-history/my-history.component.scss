@@ -23,12 +23,12 @@
   }
 
   .history-switch {
-    @include margin-left(auto);
-    @include margin-right(15px);
-
     grid-column: 3;
     display: flex;
     align-items: center;
+
+    @include margin-left(auto);
+    @include margin-right(15px);
 
     label {
       margin: 0 0 0 5px;
@@ -38,11 +38,11 @@
   }
 
   .delete-history {
+    grid-column: 4;
+
     @include peertube-button;
     @include grey-button;
     @include button-with-icon;
-
-    grid-column: 4;
   }
 }
 

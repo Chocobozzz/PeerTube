@@ -37,8 +37,6 @@ body {
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
 
-    @include margin-left(-(math.div($big-play-width, 2)));
-
     outline: 0;
     font-size: 6em;
 
@@ -53,16 +51,18 @@ body {
     margin-top: -(math.div($big-play-height, 2));
     transition: 0.2s background-color;
 
+    @include margin-left(-(math.div($big-play-width, 2)));
+
     &::-moz-focus-inner {
       border: 0;
       padding: 0;
     }
 
     .vjs-icon-placeholder::before {
-      @include big-play-button-triangle-size(45px);
-
       content: '';
       background-image: url('#{$assets-path}/player/images/big-play-button.svg');
+
+      @include big-play-button-triangle-size(45px);
     }
 
     &:focus-visible,

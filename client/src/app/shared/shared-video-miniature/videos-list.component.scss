@@ -38,13 +38,13 @@ $margin-top: 2rem;
   }
 
   my-feed {
-    @include margin-left(5px);
-
     display: inline-block;
     width: 16px;
     color: pvar(--mainColor);
     position: relative;
     top: -2px;
+
+    @include margin-left(5px);
   }
 }
 
@@ -83,10 +83,10 @@ my-global-icon[iconname=live] {
 
 @media screen and (max-width: $mobile-view) {
   my-video-filters-header {
+    display: inline-block;
+
     @include margin-left(1rem);
     @include margin-right(1rem);
-
-    display: inline-block;
   }
 
   .date-title {

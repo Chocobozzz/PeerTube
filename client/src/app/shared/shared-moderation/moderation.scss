@@ -10,13 +10,13 @@
   justify-content: space-between;
 
   .moderation-expanded-label {
-    @include margin-right(5px);
-
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
     text-align: end;
     min-width: 100px;
+
+    @include margin-right(5px);
   }
 
   .moderation-expanded-text {
@@ -48,9 +48,9 @@ my-action-dropdown.show {
 
 .table-comment-link,
 .table-account-link {
-  @include disable-outline;
-
   color: var(--mainForegroundColor);
+
+  @include disable-outline;
 
   ::ng-deep p:last-child {
     margin: 0;

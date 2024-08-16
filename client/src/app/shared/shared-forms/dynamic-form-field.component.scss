@@ -2,18 +2,18 @@
 @use '_mixins' as *;
 
 input:not([type=submit]) {
-  @include peertube-input-text(340px);
-
   max-width: 340px;
   width: 100%;
 
   display: block;
+
+  @include peertube-input-text(340px);
 }
 
 textarea {
-  @include peertube-textarea(340px, 200px);
-
   display: block;
+
+  @include peertube-textarea(340px, 200px);
 }
 
 .peertube-select-container {

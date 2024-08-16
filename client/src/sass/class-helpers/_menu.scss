@@ -2,9 +2,6 @@
 @use '_mixins' as *;
 
 .sub-menu-entry {
-  @include disable-default-a-behaviour;
-  @include margin-right(55px);
-
   border: 0;
   padding: 0;
   opacity: 0.7;
@@ -14,6 +11,9 @@
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   font-size: 1rem;
+
+  @include disable-default-a-behaviour;
+  @include margin-right(55px);
 
   &.active {
     border-bottom-color: pvar(--mainColor);
@@ -45,8 +45,6 @@
 }
 
 .title-page {
-  @include margin-right(55px);
-
   margin-top: 30px;
   margin-bottom: 25px;
 
@@ -55,10 +53,12 @@
   font-weight: $font-semibold;
   font-size: 1.25rem;
 
-  a {
-    @include disable-default-a-behaviour;
+  @include margin-right(55px);
 
+  a {
     color: inherit;
+
+    @include disable-default-a-behaviour;
 
     &:hover {
       color: inherit;
@@ -100,11 +100,11 @@
       @include padding-left(0.5rem);
 
       &::before {
-        @include padding-right(0.5rem);
-
         display: inline-block;
         color: #6c757d;
         content: '/';
+
+        @include padding-right(0.5rem);
       }
     }
 

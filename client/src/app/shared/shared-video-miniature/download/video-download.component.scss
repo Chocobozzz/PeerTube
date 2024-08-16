@@ -8,11 +8,11 @@
   }
 
   my-global-icon[iconName=shield] {
-    @include margin-left(10px);
-
     width: 16px;
     position: relative;
     top: -2px;
+
+    @include margin-left(10px);
   }
 
   .modal-footer {
@@ -26,11 +26,11 @@
 }
 
 .peertube-select-container.title-select {
-  @include peertube-select-container(auto);
-
   display: inline-block;
   margin-left: 10px;
   vertical-align: top;
+
+  @include peertube-select-container(auto);
 }
 
 #dropdown-download-type {

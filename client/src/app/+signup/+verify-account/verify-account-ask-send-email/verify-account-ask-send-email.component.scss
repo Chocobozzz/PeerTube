@@ -3,6 +3,4 @@
 
 input[type=email] {
   @include peertube-input-text(340px);
-
-  display: block;
 }

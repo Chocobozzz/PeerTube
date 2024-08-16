@@ -23,11 +23,11 @@ form {
   }
 
   textarea {
+    min-height: calc(#{$peertube-textarea-height} - 15px * 2);
+
     @include peertube-textarea(100%, $peertube-textarea-height);
     @include button-focus(pvar(--mainColorLightest));
     @include padding-right($markdown-icon-width + 15px !important);
-
-    min-height: calc(#{$peertube-textarea-height} - 15px * 2);
 
     @media screen and (max-width: 600px) {
       @include padding-right($markdown-icon-width + 19px !important);
@@ -91,10 +91,10 @@ form {
     flex: 1;
 
     code {
-      @include margin-left(5px);
-
       display: inline-block;
       vertical-align: middle;
+
+      @include margin-left(5px);
     }
   }
 }

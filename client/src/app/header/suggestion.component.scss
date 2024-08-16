@@ -2,9 +2,9 @@
 @use '_mixins' as *;
 
 a {
-  @include disable-default-a-behaviour;
-
   width: 100%;
+
+  @include disable-default-a-behaviour;
 
   &,
   &:hover {
@@ -23,9 +23,9 @@ a {
 }
 
 my-global-icon {
-  @include apply-svg-color(pvar(--mainForegroundColor));
-
   width: 17px;
   position: relative;
   top: -1px;
+
+  @include apply-svg-color(pvar(--mainForegroundColor));
 }

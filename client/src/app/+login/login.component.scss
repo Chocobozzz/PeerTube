@@ -2,10 +2,10 @@
 @use '_mixins' as *;
 
 label {
-  @include font-size(18px);
-
   display: block;
   margin-bottom: 5px;
+
+  @include font-size(18px);
 }
 
 input[type=text],
@@ -34,14 +34,14 @@ input[type=email] {
 }
 
 .login-form-and-externals {
-  @include margin-left(10px);
-  @include margin-right(10px);
-  @include margin-bottom(2.5rem);
-
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   max-width: 450px;
+
+  @include margin-left(10px);
+  @include margin-right(10px);
+  @include margin-bottom(2.5rem);
 }
 
 .external-login-blocks {
@@ -49,8 +49,6 @@ input[type=email] {
   text-align: center;
 
   .external-login-block {
-    @include disable-default-a-behaviour;
-
     cursor: pointer;
     border: 1px solid #d1d7e0;
     border-radius: 5px;
@@ -62,6 +60,8 @@ input[type=email] {
     min-height: 35px;
     min-width: 100px;
 
+    @include disable-default-a-behaviour;
+
     &:hover {
       background-color: rgba(209, 215, 224, 0.5);
     }
@@ -69,12 +69,12 @@ input[type=email] {
 }
 
 .instance-information {
+  max-width: 600px;
+
   @include margin-left(10px);
   @include margin-right(10px);
   @include margin-bottom(2.5rem);
   @include rfs (22rem, min-width);
-
-  max-width: 600px;
 }
 
 .terms-anchor {
@@ -91,13 +91,13 @@ input[type=email] {
 
     .login-form-and-externals,
     .instance-information {
-      @include margin-left(0);
-      @include margin-right(0);
-
       width: 100%;
       max-width: 450px;
       min-width: unset;
       align-self: center;
+
+      @include margin-left(0);
+      @include margin-right(0);
     }
 
     .instance-information {

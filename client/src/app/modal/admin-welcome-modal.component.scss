@@ -13,10 +13,10 @@
 }
 
 .mascot {
-  @include margin-right(2rem);
-
   display: block;
   min-width: 170px;
+
+  @include margin-right(2rem);
 }
 
 .subtitle {
@@ -46,12 +46,12 @@ li {
 }
 
 .link-block {
-  @include disable-default-a-behaviour;
-
   color: pvar(--mainForegroundColor);
   padding: 10px;
   transition: background-color 0.2s ease-in;
   flex-basis: 33%;
+
+  @include disable-default-a-behaviour;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);

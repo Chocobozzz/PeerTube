@@ -24,17 +24,20 @@
   @include miniature-thumbnail;
 
   .miniature-playlist-info-overlay {
-    @include static-thumbnail-overlay;
-
     position: absolute;
     right: 0;
     bottom: 0;
     height: 100%;
     padding: 0 10px;
-    display: flex;
-    align-items: center;
     font-size: 14px;
     font-weight: $font-semibold;
+
+    @include static-thumbnail-overlay;
+
+    & {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
@@ -45,10 +48,10 @@
   }
 
   .by {
-    @include disable-default-a-behaviour;
-
     display: block;
     color: pvar(--greyForegroundColor);
+
+    @include disable-default-a-behaviour;
   }
 
   .privacy-date {
@@ -66,10 +69,10 @@
   }
 
   .description {
-    @include peertube-word-wrap;
-
     margin-top: 10px;
     color: pvar(--greyForegroundColor);
+
+    @include peertube-word-wrap;
   }
 }
 
@@ -81,10 +84,10 @@
   }
 
   .miniature-thumbnail {
-    @include block-ratio($selector: '::ng-deep a');
-
     margin-top: 10px;
     margin-bottom: 5px;
+
+    @include block-ratio($selector: '::ng-deep a');
   }
 }
 
@@ -99,11 +102,11 @@
   }
 
   .miniature-thumbnail {
-    @include margin-right(1rem);
-
     min-width: var(--rowThumbnailWidth);
     max-width: var(--rowThumbnailWidth);
     height: var(--rowThumbnailHeight);
+
+    @include margin-right(1rem);
   }
 }
 

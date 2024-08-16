@@ -1,21 +1,15 @@
 @use 'sass:math';
 @use 'sass:color';
-
 @use '_variables' as *;
 @use '_bootstrap-variables' as *;
 @use '_mixins' as *;
 @use '_icons' as *;
-
 @use '_fonts';
-
 @use './custom-markup';
 @use './ng-select';
-
 @use './bootstrap';
 @use './primeng-custom';
-
 @use './z-index';
-
 @use './class-helpers/index.scss';
 
 /* clears the ‘X’ from Chrome */
@@ -75,6 +69,7 @@ body {
   color: pvar(--mainForegroundColor);
   background-color: pvar(--mainBackgroundColor);
   font-size: 1rem;
+
   // On desktop browsers, make sure vertical scroll bar is always visible
   // Allow to disable the scrollbar instead of hide it when the content fit the body
   // And not move the content and header horizontally sticked to right when the content is updating
@@ -106,7 +101,7 @@ strong {
 }
 
 input[readonly] {
-  /* Force blank on readonly inputs */
+  // Force blank on readonly inputs
   background-color: pvar(--inputBackgroundColor) !important;
 }
 
@@ -117,10 +112,10 @@ textarea {
 }
 
 button {
-  @include disable-outline;
-
   background: unset;
   color: pvar(--mainForegroundColor);
+
+  @include disable-outline;
 }
 
 label {
@@ -186,8 +181,9 @@ code {
     --horizontalMarginContent: #{$expanded-horizontal-margins};
     --mainColWidth: 100vw;
 
-    @include margin-left(0);
     width: 100%;
+
+    @include margin-left(0);
   }
 
   &.lock-scroll .main-row > router-outlet + * {  /* stylelint-disable-line selector-max-compound-selectors */

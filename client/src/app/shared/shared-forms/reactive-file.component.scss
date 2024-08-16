@@ -15,8 +15,8 @@
   }
 
   .filename {
-    @include margin-left(5px);
-
     font-weight: $font-semibold;
+
+    @include margin-left(5px);
   }
 }

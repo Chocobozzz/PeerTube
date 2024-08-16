@@ -21,9 +21,9 @@
 }
 
 .pt-badge {
-  @include margin-left(15px);
-
   font-size: 13px;
+
+  @include margin-left(15px);
 }
 
 .alert {

@@ -704,11 +704,6 @@ p-table {
         height: auto !important;
 
         .p-paginator-page {
-          &.focus-within,
-          &:focus {
-            box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
-          }
-
           color: pvar(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
           margin: 0 5px !important;
@@ -717,6 +712,11 @@ p-table {
           padding: 5px 2px !important;
           height: auto !important;
           line-height: initial !important;
+
+          &.focus-within,
+          &:focus {
+            box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
+          }
 
           &.p-highlight {
             &, &:hover, &:active, &:focus {

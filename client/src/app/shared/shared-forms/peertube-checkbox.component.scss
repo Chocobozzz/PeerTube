@@ -30,8 +30,6 @@
   }
 
   .recommended {
-    @include margin-left(.5rem);
-
     align-self: baseline;
     display: inline-block;
     padding: 4px 6px;
@@ -43,5 +41,7 @@
     color: pvar(--inputPlaceholderColor);
     background-color: rgba(217, 225, 232, .1);
     border: 1px solid rgba(217, 225, 232, .5);
+
+    @include margin-left(.5rem);
   }
 }

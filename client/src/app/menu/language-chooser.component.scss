@@ -2,10 +2,10 @@
 @use '_mixins' as *;
 
 .help-to-translate {
+  border-radius: 0;
+
   @include peertube-button-link;
   @include orange-button;
-
-  border-radius: 0;
 
   &:focus-visible,
   &:focus {

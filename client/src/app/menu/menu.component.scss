@@ -23,10 +23,6 @@ ul {
 }
 
 .menu-link {
-  @include disable-default-a-behaviour;
-  @include padding-left($menu-lateral-padding);
-  @include padding-right(20px);
-
   display: flex;
   align-items: center;
 
@@ -38,6 +34,10 @@ ul {
   line-height: $line-height-normal;
   width: 100%;
 
+  @include disable-default-a-behaviour;
+  @include padding-left($menu-lateral-padding);
+  @include padding-right(20px);
+
   &.active {
     background-color: rgba(255, 255, 255, 0.15);
   }
@@ -48,12 +48,12 @@ ul {
   }
 
   my-global-icon {
-    @include apply-svg-color(#808080);
-    @include margin-right($menu-link-icon-margin-right);
-
     display: flex;
     width: $menu-link-icon-size;
     height: $menu-link-icon-size;
+
+    @include apply-svg-color(#808080);
+    @include margin-right($menu-link-icon-margin-right);
   }
 }
 
@@ -67,8 +67,6 @@ ul {
 }
 
 nav {
-  @include ellipsis;
-
   background-color: pvar(--menuBackgroundColor);
   color: pvar(--menuForegroundColor);
 
@@ -78,6 +76,8 @@ nav {
   width: 100%;
   margin: 0;
   padding: 0;
+
+  @include ellipsis;
 
   &:focus,
   &:hover {
@@ -122,6 +122,14 @@ my-notification {
 }
 
 .logged-in-more {
+  flex: 1;
+  min-width: 1px;
+  border-radius: 25px;
+  transition: all .1s ease-in-out;
+  cursor: pointer;
+  line-height: 1;
+
+  @include margin-left(13px);
 
   @mixin display-hints($is-mobile: false) {
     background-color: rgba(255, 255, 255, 0.15);
@@ -132,15 +140,6 @@ my-notification {
       }
     }
   }
-
-  @include margin-left(13px);
-
-  flex: 1;
-  min-width: 1px;
-  border-radius: 25px;
-  transition: all .1s ease-in-out;
-  cursor: pointer;
-  line-height: 1;
 
   &.show {
     background-color: rgba(255, 255, 255, 0.2);
@@ -196,10 +195,10 @@ my-actor-avatar {
 }
 
 .logged-in-display-name {
-  @include disable-default-a-behaviour;
-
   font-weight: $font-semibold;
   color: pvar(--menuForegroundColor);
+
+  @include disable-default-a-behaviour;
 }
 
 .logged-in-username {
@@ -224,11 +223,11 @@ my-actor-avatar {
     min-height: 35px;
 
     my-global-icon {
-      // Keep aligned with other icons
-      @include margin-left($additional-margin);
-
       width: $icon-size;
       height: $icon-size;
+
+      // Keep aligned with other icons
+      @include margin-left($additional-margin);
     }
 
     &.active,
@@ -274,14 +273,14 @@ my-actor-avatar {
   margin-bottom: 15px;
 
   .block-title {
-    @include ellipsis;
-    @include margin-left(26px);
-    @include margin-right(15px);
-
     text-transform: uppercase;
     font-weight: $font-bold; // Bold
     font-size: 13px;
     margin-bottom: 25px;
+
+    @include ellipsis;
+    @include margin-left(26px);
+    @include margin-right(15px);
   }
 
   a,
@@ -301,15 +300,15 @@ my-actor-avatar {
 .footer-links {
   a,
   button {
-    @include margin-right(8px);
-    @include disable-default-a-behaviour;
-
     color: pvar(--menuForegroundColor);
     opacity: $footer-links-base-opacity;
     white-space: nowrap;
     font-size: 0.75rem;
     line-height: 1.4rem;
     font-weight: $font-semibold;
+
+    @include margin-right(8px);
+    @include disable-default-a-behaviour;
 
     &:hover {
       opacity: $footer-links-base-opacity + .2;
@@ -318,11 +317,11 @@ my-actor-avatar {
 }
 
 .footer-copyleft a {
-  @include disable-default-a-behaviour;
-
   color: pvar(--menuForegroundColor);
   opacity: $footer-links-base-opacity - .2;
   font-size: 0.85rem;
+
+  @include disable-default-a-behaviour;
 
   &:hover {
     opacity: $footer-links-base-opacity;
@@ -343,11 +342,11 @@ my-actor-avatar {
 }
 
 .dropdown-item {
-  @include dropdown-with-icon-item;
-
   cursor: pointer;
   display: flex;
   align-items: center;
+
+  @include dropdown-with-icon-item;
 
   &:hover {
     .hover-display-toggle {
@@ -390,10 +389,10 @@ my-global-icon {
   top: -1px;
 
   .playlist-icon {
-    @include margin-right(16px);
-
     height: 24px;
     width: 24px;
+
+    @include margin-right(16px);
   }
 
   &.channel-icon {

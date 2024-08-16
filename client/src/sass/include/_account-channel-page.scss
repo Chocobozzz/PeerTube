@@ -16,22 +16,22 @@
 }
 
 @mixin show-more-description {
-  @include margin(10px, auto, 45px);
-
   color: pvar(--mainColor);
   cursor: pointer;
+
+  @include margin(10px, auto, 45px);
 }
 
 @mixin avatar-row-responsive ($img-margin, $grey-font-size) {
-  @include margin-bottom(2rem);
-
   display: flex;
   grid-column: 1;
 
-  > div {
-    @include margin-left($img-margin);
+  @include margin-bottom(2rem);
 
+  > div {
     min-width: 1px;
+
+    @include margin-left($img-margin);
   }
 
   .actor-info {
@@ -44,17 +44,17 @@
   }
 
   .actor-display-name {
-    @include peertube-word-wrap;
-
     display: flex;
     flex-wrap: wrap;
+
+    @include peertube-word-wrap;
   }
 
   h1 {
-    @include font-size(2rem);
-
     font-weight: $font-bold;
     margin: 0;
+
+    @include font-size(2rem);
   }
 
   .actor-handle {
@@ -63,9 +63,9 @@
 
   .actor-handle,
   .actor-counters {
-    @include font-size($grey-font-size);
-
     color: pvar(--greyForegroundColor);
+
+    @include font-size($grey-font-size);
   }
 
   .actor-counters > *:not(:last-child)::after {

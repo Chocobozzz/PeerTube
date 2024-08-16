@@ -13,11 +13,11 @@
 }
 
 .mascot {
-  @include margin-right(2rem);
-
   display: block;
   width: 170px;
   height: 220px;
+
+  @include margin-right(2rem);
 }
 
 .subtitle {

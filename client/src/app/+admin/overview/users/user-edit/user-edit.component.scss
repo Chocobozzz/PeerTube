@@ -1,5 +1,4 @@
 @use 'sass:math';
-
 @use '_variables' as *;
 @use '_mixins' as *;
 
@@ -7,13 +6,12 @@ $form-base-input-width: 340px;
 
 input:not([type=submit]) {
   @include peertube-input-text($form-base-input-width);
-  display: block;
 }
 
 my-input-text {
-  @include responsive-width($form-base-input-width);
-
   display: block;
+
+  @include responsive-width($form-base-input-width);
 }
 
 .peertube-select-container {
@@ -21,9 +19,9 @@ my-input-text {
 }
 
 my-select-custom-value {
-  @include responsive-width($form-base-input-width);
-
   display: block;
+
+  @include responsive-width($form-base-input-width);
 }
 
 .danger-zone {
@@ -46,12 +44,12 @@ my-select-custom-value {
     margin-bottom: 10px;
 
     > a {
-      @include disable-default-a-behaviour;
-
       text-decoration: none;
       color: inherit;
       display: block;
       font-size: 18px;
+
+      @include disable-default-a-behaviour;
 
       &:active,
       &:focus,

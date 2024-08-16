@@ -7,20 +7,19 @@ input#username + .muted {
 
 input[type=text] {
   @include peertube-input-text(340px);
-
-  display: block;
 }
 
 input[type=submit] {
+  margin-top: 15px;
+
   @include peertube-button;
   @include orange-button;
-
-  margin-top: 15px;
 }
 
 textarea {
-  @include peertube-textarea(100%, 150px);
   max-width: 100%;
 
   display: block;
+
+  @include peertube-textarea(100%, 150px);
 }

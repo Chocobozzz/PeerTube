@@ -12,8 +12,6 @@ my-input-text {
 
 input[type=email] {
   @include peertube-input-text(100%);
-
-  display: block;
 }
 
 input[type=submit] {

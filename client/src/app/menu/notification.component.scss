@@ -15,11 +15,11 @@
 
 .notification-inbox-popover,
 .notification-inbox-link a {
-  @include apply-svg-color(#808080);
-
   transition: all .1s ease-in-out;
   border-radius: 25px;
   cursor: pointer;
+
+  @include apply-svg-color(#808080);
 
   ::ng-deep svg {
     transition: color .1s ease-in-out;
@@ -27,18 +27,18 @@
 
   &:hover,
   &:active {
-    @include apply-svg-color(#fff);
-
     background-color: rgba(255, 255, 255, 0.15);
+
+    @include apply-svg-color(#fff);
   }
 }
 
 .notification-inbox-popover.shown,
 .notification-inbox-link a.active {
-  @include apply-svg-color(#fff);
-
   background-color: rgba(255, 255, 255, 0.28);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
+
+  @include apply-svg-color(#fff);
 }
 
 .notification-inbox-popover.hidden {
@@ -105,10 +105,10 @@
         }
 
         button {
-          @include peertube-button;
-
           padding: 0;
           background: transparent;
+
+          @include peertube-button;
         }
 
         a,
@@ -157,11 +157,6 @@
     top: 6px;
     left: 0;
 
-    @media screen and (max-width: $mobile-view) {
-      top: -4px;
-      left: -2px;
-    }
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,5 +169,10 @@
     border-radius: 15px;
     width: 15px;
     height: 15px;
+
+    @media screen and (max-width: $mobile-view) {
+      top: -4px;
+      left: -2px;
+    }
   }
 }

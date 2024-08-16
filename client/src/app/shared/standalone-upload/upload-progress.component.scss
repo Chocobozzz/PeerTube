@@ -7,12 +7,9 @@
   margin-bottom: 40px;
 
   .progress {
-    @include progressbar;
-
     flex-grow: 1;
-    height: 30px;
-    font-size: 14px;
-    background-color: rgba(11, 204, 41, 0.16);
+
+    @include progressbar($height: 30px, $font-size: 14px, $background-color: rgba(11, 204, 41, 0.16));
 
     .progress-bar {
       background-color: $green;
@@ -21,9 +18,9 @@
       font-weight: $font-semibold;
 
       span {
-        @include margin-left(13px);
-
         color: pvar(--mainBackgroundColor);
+
+        @include margin-left(13px);
       }
     }
   }

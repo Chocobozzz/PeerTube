@@ -41,19 +41,7 @@
       </td>
 
       <td>
-        <a [href]="videoChangeOwnership.video.url" class="video-table-video-link" [title]="videoChangeOwnership.video.name" target="_blank" rel="noopener noreferrer">
-          <div class="video-table-video">
-            <div class="video-table-video-image">
-              <img [src]="videoChangeOwnership.video.thumbnailPath" alt="">
-            </div>
-            <div class="video-table-video-text">
-              <div>
-                {{ videoChangeOwnership.video.name }}
-              </div>
-              <div class="muted">by {{ videoChangeOwnership.video.channel?.displayName }} </div>
-            </div>
-          </div>
-        </a>
+        <my-video-cell [video]="videoChangeOwnership.video"></my-video-cell>
       </td>
 
       <td>{{ videoChangeOwnership.createdAt | date: 'short' }}</td>

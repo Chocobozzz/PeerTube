@@ -32,8 +32,6 @@ aside {
 }
 
 .logo {
-  @include margin-right(0.5em);
-
   font-size: 150%;
   height: 100%;
   font-weight: bold;
@@ -41,14 +39,16 @@ aside {
   flex-direction: row;
   align-items: center;
 
-  .icon {
-    @include margin-right(0.5em);
+  @include margin-right(0.5em);
 
+  .icon {
     height: 100%;
     padding: 0 18px 0 32px;
     background: #fff;
     display: flex;
     align-items: center;
+
+    @include margin-right(0.5em);
   }
 }
 
@@ -63,13 +63,10 @@ main {
 }
 
 header {
-  @include padding-right(1em);
-
   width: 100%;
   height: 3.2em;
   background-color: #F1680D;
   color: #fff;
-  //background-image: url(../../assets/images/backdrop/network-o.png);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -77,6 +74,8 @@ header {
   box-shadow: 1px 0 10px rgba(0, 0, 0, 0.6);
   background-size: 50%;
   background-position: top left;
+
+  @include padding-right(1em);
 
   h1 {
     margin: 0;

@@ -16,9 +16,6 @@
   }
 
   ::ng-deep.action-button {
-    @include peertube-button;
-    @include button-with-icon(21px, 0, -1px);
-
     font-size: 100%;
     font-weight: $font-semibold;
     display: inline-block;
@@ -27,6 +24,9 @@
     background-color: transparent !important;
     color: pvar(--actionButtonColor);
     text-transform: uppercase;
+
+    @include peertube-button;
+    @include button-with-icon(21px, 0, -1px);
 
     &::after {
       display: none;

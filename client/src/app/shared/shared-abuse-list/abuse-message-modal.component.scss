@@ -11,9 +11,9 @@ form {
 }
 
 textarea {
-  @include peertube-textarea(100%, 70px);
-
   margin-top: 20px;
+
+  @include peertube-textarea(100%, 70px);
 }
 
 .messages {

@@ -2,8 +2,9 @@
 @use '_mixins' as *;
 
 a {
-  @include disable-default-a-behaviour;
   display: inline-block;
+
+  @include disable-default-a-behaviour;
 
   &,
   &:hover {

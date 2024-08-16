@@ -14,9 +14,7 @@
   .progress {
     @include disable-outline;
     @include button-focus(pvar(--mainColorLightest));
-    @include progressbar;
-
-    height: 2rem;
+    @include progressbar($height: 2rem);
 
     span {
       align-self: center;

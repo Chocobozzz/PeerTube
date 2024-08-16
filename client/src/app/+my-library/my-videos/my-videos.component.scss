@@ -26,11 +26,11 @@ h1 {
 }
 
 .action-button-delete-selection {
+  display: inline-block;
+
   @include peertube-button;
   @include orange-button;
   @include button-with-icon(21px);
-
-  display: inline-block;
 
   my-global-icon {
     @include apply-svg-color(#fff);
@@ -38,10 +38,10 @@ h1 {
 }
 
 .action-button {
-  @include margin-left(10px);
-
   display: flex;
   align-self: flex-end;
+
+  @include margin-left(10px);
 }
 
 my-edit-button {
@@ -59,9 +59,9 @@ my-edit-button {
   }
 
   .action-button {
-    @include margin-left(auto);
-
     margin-top: 10px;
+
+    @include margin-left(auto);
   }
 }
 

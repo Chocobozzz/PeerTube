@@ -45,8 +45,6 @@ button {
 
 .modal-body {
   a {
-    @include disable-default-a-behaviour;
-
     color: currentColor;
     box-sizing: border-box;
     display: block;
@@ -55,6 +53,8 @@ button {
     text-align: initial;
     text-transform: unset;
     width: 100%;
+
+    @include disable-default-a-behaviour;
 
     &.active {
       color: pvar(--mainBackgroundColor) !important;

@@ -3,11 +3,11 @@
 
 .help-tooltip-button {
   my-global-icon {
-    @include apply-svg-color(pvar(--greyForegroundColor));
-
     width: 17px;
     position: relative;
     top: -1px;
+
+    @include apply-svg-color(pvar(--greyForegroundColor));
   }
 }
 
@@ -26,9 +26,9 @@
       }
 
       ul {
-        @include padding-left(20px);
-
         margin-bottom: 0;
+
+        @include padding-left(20px);
       }
     }
   }

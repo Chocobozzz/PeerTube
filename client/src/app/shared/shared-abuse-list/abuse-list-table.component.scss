@@ -10,11 +10,11 @@
 
 .abuse-messages {
   my-global-icon {
-    @include margin-left(3px);
-
     width: 22px;
     position: relative;
     top: -2px;
+
+    @include margin-left(3px);
   }
 }
 

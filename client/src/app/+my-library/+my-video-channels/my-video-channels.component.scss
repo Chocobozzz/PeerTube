@@ -25,9 +25,9 @@ my-edit-button {
 }
 
 .video-channel {
-  @include row-blocks;
-
   padding-bottom: 0;
+
+  @include row-blocks;
 
   my-actor-avatar {
     @include margin-right(10px);
@@ -39,12 +39,12 @@ my-edit-button {
 }
 
 .video-channel-names {
-  @include disable-default-a-behaviour;
-
   width: fit-content;
   display: flex;
   align-items: baseline;
   color: pvar(--mainForegroundColor);
+
+  @include disable-default-a-behaviour;
 }
 
 .video-channel-display-name {
@@ -53,10 +53,10 @@ my-edit-button {
 }
 
 .video-channel-name {
-  @include margin-left(5px);
-
   font-size: 14px;
   color: $grey-actor-name;
+
+  @include margin-left(5px);
 }
 
 .video-channel-followers {

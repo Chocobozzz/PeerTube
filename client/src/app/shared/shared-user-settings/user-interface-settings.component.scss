@@ -2,15 +2,15 @@
 @use '_mixins' as *;
 
 input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
-
   display: block;
   margin-top: 15px;
+
+  @include peertube-button;
+  @include orange-button;
 }
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
-
   margin-bottom: 30px;
+
+  @include peertube-select-container(340px);
 }

@@ -6,9 +6,9 @@
 }
 
 .action-button {
-  @include peertube-button;
-
   display: inline-block;
+
+  @include peertube-button;
 
   &.button-styled {
 
@@ -89,8 +89,7 @@
 
 .owner-moderator-privilege {
   margin: 0 !important;
+  width: 13px !important;
 
   @include margin-left(0.25rem !important);
-
-  width: 13px !important;
 }

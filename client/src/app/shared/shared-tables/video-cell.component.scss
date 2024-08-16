@@ -4,29 +4,31 @@
 @use '_miniature' as *;
 
 .table-video-link {
-  @include disable-outline;
-
   position: relative;
   top: 3px;
+
+  @include disable-outline;
 }
 
 .table-video {
   display: inline-flex;
 
   .table-video-image {
-    $image-height: 45px;
-
     @include miniature-thumbnail;
     @include margin-right(0.5rem);
 
-    height: $image-height;
-    width: #{math.div(16, 9) * $image-height};
-    border-radius: 2px;
-    border: 0;
-    background: transparent;
-    display: inline-flex;
-    justify-content: center;
-    position: relative;
+    & {
+      $image-height: 45px;
+
+      height: $image-height;
+      width: #{math.div(16, 9) * $image-height};
+      border-radius: 2px;
+      border: 0;
+      background: transparent;
+      display: inline-flex;
+      justify-content: center;
+      position: relative;
+    }
 
     img {
       height: 100%;
@@ -39,8 +41,6 @@
     }
 
     .table-video-image-label {
-      @include static-thumbnail-overlay;
-
       position: absolute;
       border-radius: 3px;
       font-size: 10px;
@@ -48,6 +48,8 @@
       line-height: 1.3;
       bottom: 2px;
       right: 2px;
+
+      @include static-thumbnail-overlay;
     }
   }
 

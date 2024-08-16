@@ -6,20 +6,18 @@
 }
 
 .actor-img-edit-button {
-  @include peertube-button-file(30px);
-  @include button-with-icon;
+  @include peertube-button-file(31px);
+  @include button-with-icon(19px, 0);
   @include orange-button;
 
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
+  & {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+  }
 
   input {
     width: 30px;
     height: 30px;
-  }
-
-  my-global-icon {
-    width: 19px;
   }
 }

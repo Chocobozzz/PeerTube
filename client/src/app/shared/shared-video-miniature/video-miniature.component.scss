@@ -26,12 +26,12 @@ my-actor-avatar {
 
 .video-miniature-account,
 .video-miniature-channel {
-  @include disable-default-a-behaviour;
-  @include ellipsis;
-
   display: block;
   font-size: 13px;
   color: pvar(--greyForegroundColor);
+
+  @include disable-default-a-behaviour;
+  @include ellipsis;
 
   &:hover {
     color: $grey-foreground-hover-color;
@@ -160,11 +160,11 @@ my-actor-avatar {
   }
 
   my-video-thumbnail {
-    @include margin-right(1rem);
-
     min-width: var(--rowThumbnailWidth);
     max-width: var(--rowThumbnailWidth);
     height: var(--rowThumbnailHeight);
+
+    @include margin-right(1rem);
   }
 
   .video-miniature-name {

@@ -1,8 +1,6 @@
 @use 'sass:math';
 @use 'sass:color';
-
 @use '_variables' as *;
-
 @import '_bootstrap-mixins';
 
 @mixin disable-default-a-behaviour {
@@ -87,18 +85,17 @@
 }
 
 @mixin peertube-input-text($width, $font-size: $form-input-font-size) {
-  @include rounded-line-height-1-5($font-size);
-
   font-size: $font-size;
 
   padding: 3px 15px;
-  display: inline-block;
   width: $width;
   max-width: $width;
   color: pvar(--inputForegroundColor);
   background-color: pvar(--inputBackgroundColor);
   border: 1px solid pvar(--inputBorderColor);
   border-radius: 3px;
+
+  @include rounded-line-height-1-5($font-size);
 
   &::placeholder {
     color: pvar(--inputPlaceholderColor);
@@ -114,12 +111,12 @@
 }
 
 @mixin peertube-textarea ($width, $height) {
-  @include peertube-input-text($width);
-
   color: pvar(--textareaForegroundColor) !important;
   background-color: pvar(--textareaBackgroundColor) !important;
   height: $height;
   padding: 5px 15px;
+
+  @include peertube-input-text($width);
 }
 
 @mixin orange-button {
@@ -150,11 +147,11 @@
 }
 
 @mixin orange-button-inverted {
-  @include button-focus(pvar(--mainColorLightest));
-
   padding: 2px 13px;
   border: 2px solid pvar(--mainColor);
   font-weight: $font-semibold;
+
+  @include button-focus(pvar(--mainColorLightest));
 
   &,
   &:active,
@@ -181,10 +178,10 @@
 }
 
 @mixin tertiary-button {
-  @include button-focus($grey-button-outline-color);
-
   color: pvar(--greyForegroundColor);
   background-color: transparent;
+
+  @include button-focus($grey-button-outline-color);
 
   &[disabled],
   .disabled {
@@ -197,10 +194,10 @@
 }
 
 @mixin grey-button {
-  @include button-focus($grey-button-outline-color);
-
   background-color: pvar(--greyBackgroundColor);
   color: pvar(--greyForegroundColor);
+
+  @include button-focus($grey-button-outline-color);
 
   &:hover,
   &:active,
@@ -225,10 +222,10 @@
   $color: color.adjust($color: #c54130, $lightness: 10%);
   $text: #fff6f5;
 
-  @include button-focus(color.scale($color, $alpha: -95%));
-
   background-color: $color;
   color: $text;
+
+  @include button-focus(color.scale($color, $alpha: -95%));
 
   &:hover,
   &:active,
@@ -249,8 +246,6 @@
 }
 
 @mixin peertube-button {
-  @include rounded-line-height-1-5($button-font-size);
-
   padding: 4px 13px;
 
   border: 0;
@@ -263,6 +258,8 @@
   cursor: pointer;
 
   font-size: $button-font-size;
+
+  @include rounded-line-height-1-5($button-font-size);
 
   my-global-icon + * {
     @include margin-right(4px);
@@ -283,35 +280,35 @@
 }
 
 @mixin peertube-button-link {
+  display: inline-block;
+
   @include disable-default-a-behaviour;
   @include peertube-button;
-
-  display: inline-block;
 }
 
 @mixin peertube-button-big-link {
+  display: inline-block;
+
   @include disable-default-a-behaviour;
   @include peertube-button-big;
-
-  display: inline-block;
 }
 
 @mixin peertube-button-outline {
-  @include disable-default-a-behaviour;
-  @include peertube-button;
-
   display: inline-block;
   border: 1px solid;
+
+  @include disable-default-a-behaviour;
+  @include peertube-button;
 }
 
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
   my-global-icon {
-    @include margin-right($margin-right);
-
     position: relative;
     display: inline-block;
     width: $width;
     top: $top;
+
+    @include margin-right($margin-right);
   }
 }
 
@@ -338,10 +335,10 @@
 }
 
 @mixin peertube-button-file ($width) {
+  width: $width;
+
   @include peertube-file;
   @include peertube-button;
-
-  width: $width;
 }
 
 @mixin icon ($size) {
@@ -403,8 +400,6 @@
   }
 
   select {
-    @include rounded-line-height-1-5($form-input-font-size);
-
     font-size: $form-input-font-size;
 
     padding: 3px 35px 3px 12px;
@@ -414,6 +409,8 @@
     appearance: none;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
+
+    @include rounded-line-height-1-5($form-input-font-size);
 
     &:focus {
       outline: none;
@@ -562,11 +559,11 @@
   }
 
   + span + span {
-    @include margin-left(5px);
-
     font-weight: $font-regular;
     cursor: pointer;
     display: inline;
+
+    @include margin-left(5px);
   }
 
   &[disabled] + span,
@@ -622,21 +619,21 @@
   padding: 6px 15px;
 
   my-global-icon {
-    @include margin-right(10px);
-
     width: 22px;
     opacity: .7;
     position: relative;
     top: -2px;
+
+    @include margin-right(10px);
   }
 }
 
-@mixin progressbar($small: false) {
-  background-color: pvar(--greyBackgroundColor);
+@mixin progressbar($small: false, $height: 1rem, $font-size: 0.75rem, $background-color: pvar(--greyBackgroundColor)) {
+  background-color: $background-color;
   display: flex;
-  height: 1rem;
+  height: $height;
   overflow: hidden;
-  font-size: 0.75rem;
+  font-size: $font-size;
   border-radius: 0.25rem;
   position: relative;
 
@@ -709,11 +706,11 @@
   white-space: nowrap;
 
   my-actor-avatar {
-    @include margin-right(.2rem);
-
     border-radius: 5rem;
     width: var(--avatar-size);
     height: var(--avatar-size);
+
+    @include margin-right(.2rem);
   }
 
   &.two-lines {
@@ -764,18 +761,18 @@
 
     > span > my-global-icon,
     > my-global-icon {
-      @include margin-right(10px);
-
       width: 24px;
       height: 24px;
       position: relative;
       top: -2px;
+
+      @include margin-right(10px);
     }
 
     .pt-badge {
-      @include margin-left(7px);
-
       vertical-align: top;
+
+      @include margin-left(7px);
     }
   }
 }

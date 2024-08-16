@@ -43,10 +43,10 @@
 }
 
 .form-group-description {
-  @include muted;
-
   font-size: 14px;
   margin-top: 10px;
+
+  @include muted;
 }
 
 // Useful with a "reset" button
@@ -63,10 +63,10 @@ label + .form-group-description,
 }
 
 .reset-button {
+  height: auto;
+
   @include peertube-button;
   @include grey-button;
-
-  height: auto;
 
   &.reset-button-small {
     font-size: 80%;

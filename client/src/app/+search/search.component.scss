@@ -43,12 +43,12 @@
       cursor: pointer;
 
       .icon.icon-filter {
-        @include icon(20px);
-        @include margin-right(5px);
-
         position: relative;
         top: -1px;
         background-image: url('../../assets/images/feather/filter.svg');
+
+        @include icon(20px);
+        @include margin-right(5px);
       }
     }
   }
@@ -72,13 +72,13 @@
 }
 
 .video-channel-names {
-  @include disable-default-a-behaviour;
-
   display: flex;
   align-items: baseline;
   color: pvar(--mainForegroundColor);
   width: fit-content;
   flex-wrap: wrap;
+
+  @include disable-default-a-behaviour;
 }
 
 .video-channel-display-name {
@@ -99,10 +99,10 @@
     grid-template-rows: auto auto;
 
     my-actor-avatar {
-      @include build-channel-img-size($video-thumbnail-medium-width);
-
       grid-column: 1;
       grid-row: 1 / -1;
+
+      @include build-channel-img-size($video-thumbnail-medium-width);
     }
   }
 

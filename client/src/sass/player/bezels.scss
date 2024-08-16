@@ -11,8 +11,6 @@
 }
 
 .vjs-bezel {
-  @include margin-left(-26px);
-
   position: absolute;
   left: 50%;
   top: 50%;
@@ -24,6 +22,8 @@
   border-radius: 26px;
   animation: bezels-fadeout .5s linear 1 normal forwards;
   pointer-events: none;
+
+  @include margin-left(-26px);
 }
 
 .vjs-bezel-icon {

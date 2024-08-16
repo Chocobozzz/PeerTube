@@ -8,8 +8,6 @@
 }
 
 .playlist-info {
-  @include margin-left(calc(#{pvar(--horizontalMarginContent)} * -1));
-
   grid-column: 1;
   background-color: pvar(--submenuBackgroundColor);
   margin-top: -$sub-menu-margin-bottom;
@@ -18,6 +16,8 @@
 
   display: flex;
   flex-direction: column;
+
+  @include margin-left(calc(#{pvar(--horizontalMarginContent)} * -1));
 
   /* fix ellipsis dots background color */
   ::ng-deep .miniature-name::after {
@@ -34,7 +34,6 @@
     @include button-with-icon(17px, 3px, -1px);
     @include grey-button;
     @include apply-svg-color(pvar(--actionButtonColor));
-
     @include margin-right(10px);
   }
 }

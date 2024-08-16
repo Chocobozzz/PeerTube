@@ -14,10 +14,10 @@ input[type=text] {
 }
 
 .video-playlist-buttons {
-  @include margin-left(10px);
-
   display: flex;
   align-self: flex-end;
+
+  @include margin-left(10px);
 }
 
 .video-playlists-header {
@@ -43,9 +43,9 @@ my-delete-button {
   }
 
   .video-playlist-buttons {
-    @include margin-left(auto);
-
     margin-top: 10px;
+
+    @include margin-left(auto);
   }
 }
 

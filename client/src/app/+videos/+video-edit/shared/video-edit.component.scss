@@ -19,8 +19,9 @@ my-peertube-checkbox {
   min-height: 300px;
 
   input {
-    @include peertube-input-text(100%);
     display: block;
+
+    @include peertube-input-text(100%);
   }
 }
 
@@ -30,9 +31,9 @@ my-peertube-checkbox {
   align-items: center;
 
   a.caption-entry-label {
-    @include disable-default-a-behaviour;
-
     color: #000;
+
+    @include disable-default-a-behaviour;
 
     &:hover {
       opacity: 0.8;
@@ -40,16 +41,16 @@ my-peertube-checkbox {
   }
 
   .caption-entry-label {
-    @include margin-right(20px);
-
     font-weight: bold;
     min-width: 100px;
+
+    @include margin-right(20px);
   }
 
   .caption-entry-state {
-    @include margin-right(15px);
-
     min-width: 250px;
+
+    @include margin-right(15px);
 
     &.caption-entry-state-create {
       color: #39CC0B;
@@ -78,10 +79,10 @@ my-peertube-checkbox {
   text-align: end;
 
   .message-submit {
-    @include margin-right(25px);
-
     display: inline-block;
     color: pvar(--greyForegroundColor);
+
+    @include margin-right(25px);
   }
 }
 
@@ -94,8 +95,9 @@ p-calendar {
     }
 
     .p-inputtext {
-      @include peertube-input-text(100%);
       color: #000;
+
+      @include peertube-input-text(100%);
     }
   }
 }

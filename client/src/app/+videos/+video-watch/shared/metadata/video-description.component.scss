@@ -2,11 +2,11 @@
 @use '_mixins' as *;
 
 .video-info-description {
-  @include margin-left($video-watch-info-margin-left);
-  @include margin-right(0);
-
   margin-top: 20px;
   margin-bottom: 20px;
+
+  @include margin-left($video-watch-info-margin-left);
+  @include margin-right(0);
 
   .video-info-description-html {
     @include peertube-word-wrap;
@@ -27,12 +27,12 @@
   }
 
   .video-info-description-more {
-    @include font-size(14px);
-
     cursor: pointer;
     font-weight: $font-semibold;
     color: pvar(--greyForegroundColor);
     margin-top: 1rem;
+
+    @include font-size(14px);
   }
 }
 

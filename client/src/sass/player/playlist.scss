@@ -30,17 +30,17 @@ $playlist-menu-width: 350px;
     justify-content: space-between;
 
     .title {
-      @include ellipsis;
-
       font-size: 14px;
       margin-bottom: 5px;
+
+      @include ellipsis;
     }
 
     .channel {
-      @include ellipsis;
-
       font-size: 11px;
       color: #bfbfbf;
+
+      @include ellipsis;
     }
 
     .cross {
@@ -139,9 +139,9 @@ $playlist-menu-width: 350px;
   }
 
   .item-player {
-    @include play-icon(20px, 16px);
-
     display: none;
+
+    @include play-icon(20px, 16px);
   }
 
   &.vjs-selected {
@@ -170,18 +170,18 @@ $playlist-menu-width: 350px;
     min-width: 1px;
 
     .title {
-      @include ellipsis;
-
       font-size: 13px;
       margin-bottom: 3px;
+
+      @include ellipsis;
     }
 
     .channel,
     .timestamps {
-      @include ellipsis;
-
       font-size: 11px;
       color: #bfbfbf;
+
+      @include ellipsis;
     }
 
     .timestamps {

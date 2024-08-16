@@ -29,17 +29,17 @@ my-global-icon {
   $size: 19px;
   $margin: 2px;
 
-  @include margin-right($margin);
-
   opacity: 1;
   width: $size;
   height: $size;
 
-  &.no-visible {
-    @include margin-right($size + $margin);
+  @include margin-right($margin);
 
+  &.no-visible {
     width: 0;
     height: 0;
+
+    @include margin-right($size + $margin);
   }
 }
 

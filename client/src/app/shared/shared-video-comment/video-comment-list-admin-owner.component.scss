@@ -15,9 +15,9 @@ my-global-icon {
   }
 
   a {
-    @include ellipsis;
-
     color: pvar(--mainForegroundColor);
+
+    @include ellipsis;
   }
 }
 

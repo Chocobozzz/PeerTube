@@ -17,10 +17,10 @@ $width-size: 275px;
   align-items: center;
 
   .upload-icon {
-    @include apply-svg-color(pvar(--inputBorderColor));
-
     width: 90px;
     margin-bottom: 25px;
+
+    @include apply-svg-color(pvar(--inputBorderColor));
   }
 
   .peertube-select-container {
@@ -42,16 +42,17 @@ $width-size: 275px;
   }
 
   input[type=text] {
-    @include peertube-input-text($width-size);
     display: block;
+
+    @include peertube-input-text($width-size);
   }
 
   input[type=button] {
-    @include peertube-button;
-    @include orange-button;
-
     width: $width-size;
     margin-top: 30px;
+
+    @include peertube-button;
+    @include orange-button;
   }
 
   .button-file {

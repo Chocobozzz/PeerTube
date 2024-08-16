@@ -5,11 +5,11 @@
   display: flex;
 
   .left {
-    @include margin-right(10px);
-
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @include margin-right(10px);
 
     .vertical-border {
       width: 2px;
@@ -47,9 +47,6 @@
 }
 
 .video-author {
-  @include padding-right(6px);
-  @include padding-left(6px);
-
   height: 20px;
   background-color: #888888;
   border-radius: 12px;
@@ -60,6 +57,9 @@
   align-items: center;
   display: inline-flex;
   color: #fff !important;
+
+  @include padding-right(6px);
+  @include padding-left(6px);
 }
 
 .comment-account {
@@ -68,9 +68,9 @@
   font-size: 90%;
 
   a {
-    @include disable-default-a-behaviour;
-
     color: pvar(--mainForegroundColor);
+
+    @include disable-default-a-behaviour;
 
     &:hover {
       text-decoration: underline;
@@ -83,11 +83,11 @@
 }
 
 .comment-date {
-  @include margin-left(5px);
-
   font-size: 90%;
   color: pvar(--greyForegroundColor);
   text-decoration: none;
+
+  @include margin-left(5px);
 
   &:hover {
     text-decoration: underline;
@@ -101,11 +101,11 @@
   ::ng-deep a {
 
     &:not(.linkified-url) {
-      @include disable-default-a-behaviour;
-
       color: pvar(--mainForegroundColor);
 
       font-weight: $font-semibold;
+
+      @include disable-default-a-behaviour;
     }
 
   }
@@ -127,10 +127,10 @@
 
   ::ng-deep .dropdown-toggle,
   .comment-action-reply {
-    @include margin-right(10px);
-
     color: pvar(--greyForegroundColor);
     cursor: pointer;
+
+    @include margin-right(10px);
 
     &:hover,
     &:active,

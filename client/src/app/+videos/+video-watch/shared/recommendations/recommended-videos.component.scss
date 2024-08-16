@@ -9,27 +9,27 @@
   flex-wrap: wrap-reverse;
 
   .title-page {
-    @include margin-right(.5rem !important);
-
     margin-bottom: unset;
     margin-top: 0;
+
+    @include margin-right(.5rem !important);
   }
 }
 
 .title-page-autoplay {
-  @include margin-left(auto);
-
   display: flex;
   width: max-content;
   height: max-content;
   align-items: center;
 
-  span {
-    @include margin-right(0.3rem);
+  @include margin-left(auto);
 
+  span {
     text-transform: uppercase;
     font-size: 85%;
     font-weight: 600;
+
+    @include margin-right(0.3rem);
   }
 }
 

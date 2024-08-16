@@ -13,11 +13,11 @@
 }
 
 .links {
-  @include grid-videos-miniature-margins;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include grid-videos-miniature-margins;
 
   &.on-channel-page {
     max-width: $max-channels-width;
@@ -33,16 +33,16 @@ my-copy-button {
 }
 
 .account-info {
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: auto auto;
+
+  background-color: pvar(--submenuBackgroundColor);
+
   @include grid-videos-miniature-margins(false, 15px);
   @include padding-top(3.75rem);
   @include padding-bottom(3.75rem);
   @include margin-bottom(3rem);
   @include font-size(1rem);
-
-  grid-template-columns: 1fr min-content;
-  grid-template-rows: auto auto;
-
-  background-color: pvar(--submenuBackgroundColor);
 }
 
 .account-avatar-row {
@@ -60,10 +60,10 @@ my-copy-button {
 }
 
 .show-more {
+  text-align: center;
+
   @include show-more-description;
   @include padding-bottom(3.75rem);
-
-  text-align: center;
 }
 
 .buttons {
@@ -91,9 +91,9 @@ my-copy-button {
 @media screen and (max-width: $small-view) {
 
   .description:not(.expanded) {
-    @include fade-text(30px, pvar(--submenuBackgroundColor));
-
     max-height: 70px;
+
+    @include fade-text(30px, pvar(--submenuBackgroundColor));
   }
 
   .buttons {

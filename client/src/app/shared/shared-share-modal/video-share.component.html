@@ -11,7 +11,7 @@
   <div class="modal-body">
 
     <div class="playlist" *ngIf="playlist">
-      <h5 *ngIf="playlist" i18n class="text-center">Share the playlist</h5>
+      <h5 *ngIf="video" i18n class="text-center mb-4">Share the playlist</h5>
 
       <div *ngIf="isPrivatePlaylist()" class="alert-private alert alert-warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
@@ -97,7 +97,7 @@
 
 
     <div class="video" *ngIf="video">
-      <h5 *ngIf="playlist" i18n class="text-center">Share the video</h5>
+      <h5 *ngIf="playlist" i18n class="text-center mb-4">Share the video</h5>
 
       <div *ngIf="isPrivateVideo()" class="alert-private alert alert-warning">
         <div i18n>This video is private so you won't be able to share it with external users</div>

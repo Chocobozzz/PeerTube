@@ -33,10 +33,6 @@ $context-menu-width: 350px;
     }
 
     [class^='vjs-icon-'] {
-      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
-
-      @include margin-right(0.8rem !important);
-
       display: inline-flex;
       position: relative;
       top: 2px;
@@ -47,6 +43,10 @@ $context-menu-width: 350px;
 
       -webkit-mask-size: cover;
       mask-size: cover;
+
+      @include margin-right(0.8rem !important);
+
+      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
 
       @each $icon in $icons {
         &[class$="-#{$icon}"] {

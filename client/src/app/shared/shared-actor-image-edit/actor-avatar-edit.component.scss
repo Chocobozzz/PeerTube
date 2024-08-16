@@ -11,10 +11,10 @@
 }
 
 .actor-info-display-name {
+  font-weight: $font-bold;
+
   @include peertube-word-wrap;
   @include font-size(1.25rem);
-
-  font-weight: $font-bold;
 
   @media screen and (max-width: $small-view) {
     @include font-size(18px);

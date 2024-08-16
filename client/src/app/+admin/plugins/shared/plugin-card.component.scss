@@ -12,9 +12,9 @@
   margin-bottom: 10px;
 
   .plugin-name {
-    @include margin-right(10px);
-
     font-weight: $font-semibold;
+
+    @include margin-right(10px);
   }
 
   .plugin-version {
@@ -34,9 +34,9 @@
   }
 
   .buttons {
-    @include margin-left(auto);
-
     width: max-content;
+
+    @include margin-left(auto);
   }
 }
 

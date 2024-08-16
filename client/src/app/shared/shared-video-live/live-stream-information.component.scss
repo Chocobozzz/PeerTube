@@ -14,9 +14,9 @@ p-autocomplete {
 }
 
 .pt-badge {
-  @include margin-right(5px);
-
   font-size: 13px;
+
+  @include margin-right(5px);
 }
 
 .journal-session {

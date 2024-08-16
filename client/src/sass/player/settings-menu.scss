@@ -55,10 +55,11 @@ $setting-transition-easing: ease-out;
 
     .vjs-settings-panel {
       position: absolute;
-      @include right(0);
 
       overflow-y: auto;
       overflow-x: hidden;
+
+      @include right(0);
     }
 
     .vjs-settings-panel-child {
@@ -106,7 +107,6 @@ $setting-transition-easing: ease-out;
 
         .vjs-settings-sub-menu-value::after {
           @include chevron-right(9px, 2px);
-
           @include margin-left(5px);
         }
       }
@@ -128,7 +128,6 @@ $setting-transition-easing: ease-out;
 
             &::before {
               @include chevron-left(9px, 2px);
-
               @include margin-right(10px);
             }
           }
@@ -143,13 +142,13 @@ $setting-transition-easing: ease-out;
             }
 
             &::before {
-              @include icon(15px);
-
               position: absolute;
-              @include left(15px);
               content: ' ';
               margin-top: 1px;
               background-image: url('#{$assets-path}/player/images/tick-white.svg');
+
+              @include icon(15px);
+              @include left(15px);
             }
           }
         }
@@ -163,9 +162,9 @@ $setting-transition-easing: ease-out;
             text-align: start;
 
             .vjs-menu-item-text {
-              @include margin-left(25px);
-
               text-transform: capitalize;
+
+              @include margin-left(25px);
             }
           }
         }

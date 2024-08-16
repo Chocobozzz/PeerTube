@@ -3,7 +3,6 @@
 
 input:not([type=submit]) {
   @include peertube-input-text(100%);
-  display: block;
 
   &#username,
   &#name {

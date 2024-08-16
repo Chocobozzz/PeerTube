@@ -12,9 +12,9 @@
   display: flex;
 
   .action-button {
-    @include margin-left(55px);
-
     display: block;
+
+    @include margin-left(55px);
   }
 }
 
@@ -31,11 +31,11 @@
   }
 
   .checkbox-container {
-    @include margin-right(20px);
-    @include margin-left(12px);
-
     display: flex;
     align-items: center;
+
+    @include margin-right(20px);
+    @include margin-left(12px);
   }
 
   my-video-miniature {

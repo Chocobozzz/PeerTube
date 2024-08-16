@@ -131,14 +131,13 @@ $video-max-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 }
 
 .video-info-name {
-  @include peertube-word-wrap;
-
-  @include margin-right(30px);
-
   min-height: 40px; // Align with the action buttons
   font-size: 27px;
   font-weight: $font-semibold;
   flex-grow: 1;
+
+  @include peertube-word-wrap;
+  @include margin-right(30px);
 }
 
 .video-info-first-row-bottom {
@@ -149,21 +148,21 @@ $video-max-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 }
 
 .video-info-date-views {
-  @include margin-right(10px);
-
   margin-bottom: 10px;
   align-self: start;
   font-size: 14px;
+
+  @include margin-right(10px);
 }
 
 .video-info-channel {
   font-weight: $font-semibold;
 
   a {
+    color: pvar(--mainForegroundColor);
+
     @include disable-default-a-behaviour;
     @include peertube-word-wrap;
-
-    color: pvar(--mainForegroundColor);
 
     &:hover {
       opacity: 0.8;
@@ -196,29 +195,29 @@ my-subscribe-button {
 }
 
 my-video-attributes {
-  @include margin-left($video-watch-info-margin-left);
-
   display: block;
   margin-bottom: 15px;
+
+  @include margin-left($video-watch-info-margin-left);
 }
 
 my-action-buttons {
-  @include margin-left(auto);
-  @include margin-right(0);
-
   display: block;
   margin-top: 0;
   margin-bottom: 10px;
 
   align-items: start;
   width: max-content;
+
+  @include margin-left(auto);
+  @include margin-right(0);
 }
 
 my-recommended-videos {
-  @include padding-left(15px);
-
   display: block;
   min-width: 250px;
+
+  @include padding-left(15px);
 }
 
 my-video-comments {

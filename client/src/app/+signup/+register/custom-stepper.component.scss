@@ -51,11 +51,11 @@ header {
     overflow: hidden;
 
     my-global-icon {
-      @include apply-svg-color(pvar(--mainColor));
-
       display: flex;
       width: 12px;
       height: 12px;
+
+      @include apply-svg-color(pvar(--mainColor));
     }
   }
 }

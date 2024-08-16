@@ -28,12 +28,12 @@
   margin-bottom: 12px;
 
   > span:first-child {
-    @include padding-right(5px);
-
     min-width: 142px;
     display: inline-block;
     color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
+
+    @include padding-right(5px);
   }
 }
 
@@ -41,8 +41,8 @@
   margin-top: 20px;
 
   .peertube-radio-container {
-    @include margin-right(30px);
-
     display: inline-block;
+
+    @include margin-right(30px);
   }
 }

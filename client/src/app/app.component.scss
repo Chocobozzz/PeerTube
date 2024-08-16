@@ -75,8 +75,6 @@
 }
 
 .peertube-title {
-  @include disable-default-a-behaviour;
-
   font-size: 20px;
   font-weight: $font-bold;
   color: inherit !important;
@@ -85,10 +83,12 @@
   overflow: hidden;
   padding: 0 0 0 10px;
 
-  .instance-name {
-    @include ellipsis;
+  @include disable-default-a-behaviour;
 
+  .instance-name {
     width: 100%;
+
+    @include ellipsis;
 
     @media screen and (max-width: $mobile-view) {
       display: none;
@@ -96,11 +96,11 @@
   }
 
   .icon.icon-logo {
-    @include margin-right(0.5rem);
-
     display: inline-block;
     width: 23px;
     height: 24px;
+
+    @include margin-right(0.5rem);
   }
 }
 

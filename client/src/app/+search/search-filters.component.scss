@@ -10,20 +10,19 @@ form {
 }
 
 .peertube-radio-container {
-  @include margin-right(30px);
-
   display: inline-block;
+
+  @include margin-right(30px);
 }
 
 .peertube-select-container {
-  @include peertube-select-container(auto);
-
   margin-bottom: 1rem;
+
+  @include peertube-select-container(auto);
 }
 
 input[type=text] {
   @include peertube-input-text(100%);
-  display: block;
 }
 
 input[type=submit] {

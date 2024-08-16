@@ -1,14 +1,11 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-
 @import './_bootstrap-variables';
-
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 @import 'bootstrap/scss/maps';
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/utilities';
-
 @import 'bootstrap/scss/root';
 @import 'bootstrap/scss/reboot';
 @import 'bootstrap/scss/type';
@@ -27,7 +24,6 @@
 @import 'bootstrap/scss/tooltip';
 @import 'bootstrap/scss/popover';
 @import 'bootstrap/scss/spinners';
-
 @import 'bootstrap/scss/helpers';
 @import 'bootstrap/scss/utilities/api';
 
@@ -144,16 +140,16 @@ body {
     margin-bottom: 5px;
 
     .modal-title {
-      @include margin-right(auto);
-
       font-size: 20px;
       font-weight: $font-semibold;
+
+      @include margin-right(auto);
     }
 
     my-global-icon {
-      @include icon(22px);
-
       opacity: 0.5;
+
+      @include icon(22px);
 
       &:hover {
         opacity: 0.8;
@@ -310,9 +306,9 @@ body {
   }
 
   > * {
-    @include peertube-button-link;
-
     box-shadow: none !important;
+
+    @include peertube-button-link;
 
     &:not(:first-child) {
       border-top-left-radius: 0 !important;

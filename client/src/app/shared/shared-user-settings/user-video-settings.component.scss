@@ -2,10 +2,10 @@
 @use '_mixins' as *;
 
 input[type=submit] {
+  margin-top: 15px;
+
   @include peertube-button;
   @include orange-button;
-
-  margin-top: 15px;
 }
 
 .peertube-select-container {
@@ -13,7 +13,7 @@ input[type=submit] {
 }
 
 my-select-languages {
-  @include responsive-width(340px);
-
   display: block;
+
+  @include responsive-width(340px);
 }

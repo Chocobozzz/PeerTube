@@ -19,11 +19,11 @@ $nav-link-height: 40px;
 
   .about-link,
   .contact-link {
-    @include peertube-button-link;
-    @include orange-button;
-
     height: fit-content;
     margin-top: 10px;
+
+    @include peertube-button-link;
+    @include orange-button;
   }
 }
 

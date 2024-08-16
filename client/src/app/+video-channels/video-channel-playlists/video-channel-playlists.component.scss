@@ -8,8 +8,9 @@
   justify-content: center;
 
   .playlist-wrapper {
-    @include margin-right(15px);
     padding-bottom: 15px;
+
+    @include margin-right(15px);
   }
 }
 
@@ -24,9 +25,9 @@
   }
 
   .playlists {
+    justify-content: left;
+
     @include margin-left(pvar(--horizontalMarginContent) !important);
     @include margin-right(pvar(--horizontalMarginContent) !important);
-
-    justify-content: left;
   }
 }

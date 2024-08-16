@@ -44,12 +44,12 @@
 }
 
 .pastille {
-  @include margin-right(15px);
-
   border-radius: 24px;
   padding: 4px 15px;
   margin-bottom: 15px;
   cursor: pointer;
+
+  @include margin-right(15px);
 
   &:focus-visible {
     outline: pvar(--mainColor) auto 1px;
@@ -95,10 +95,10 @@
   }
 
   > .remove-button {
-    @include margin-left(10px);
-
     border: 0;
     padding: 0;
+
+    @include margin-left(10px);
 
     my-global-icon {
       width: 16px;

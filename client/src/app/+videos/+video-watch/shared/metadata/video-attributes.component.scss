@@ -8,17 +8,18 @@
 }
 
 .attribute-label {
-  @include padding-right(5px);
-
   min-width: 142px;
   display: inline-block;
   color: pvar(--greyForegroundColor);
   font-weight: $font-bold;
+
+  @include padding-right(5px);
 }
 
 a.attribute-value {
-  @include disable-default-a-behaviour;
   color: pvar(--mainForegroundColor);
+
+  @include disable-default-a-behaviour;
 
   &:hover {
     opacity: 0.9;

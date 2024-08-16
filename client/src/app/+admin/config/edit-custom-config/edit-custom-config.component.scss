@@ -25,8 +25,6 @@ my-markdown-textarea {
 input[type=text],
 input[type=number] {
   @include peertube-input-text($form-base-input-width);
-
-  display: block;
 }
 
 .number-with-unit {
@@ -60,22 +58,22 @@ input[type=checkbox] {
 my-select-options,
 my-select-custom-value,
 my-select-checkbox {
-  @include responsive-width($form-base-input-width);
-
   display: block;
+
+  @include responsive-width($form-base-input-width);
 }
 
 input[type=submit] {
+  display: flex;
+
   @include peertube-button;
   @include orange-button;
   @include margin-left(auto);
 
-  display: flex;
-
   + .form-error {
-    @include margin-left(5px);
-
     display: inline;
+
+    @include margin-left(5px);
   }
 }
 
@@ -85,10 +83,10 @@ input[type=submit] {
 }
 
 textarea {
-  @include peertube-textarea(500px, 150px);
-
   max-width: 100%;
   display: block;
+
+  @include peertube-textarea(500px, 150px);
 
   &.small {
     height: 75px;
@@ -136,8 +134,6 @@ ngb-tabset:not(.previews) ::ng-deep {
   justify-content: right;
 
   .callout-link {
-    @include peertube-button-link;
-
     position: relative;
     right: 3.3em;
     top: .3em;
@@ -145,6 +141,8 @@ ngb-tabset:not(.previews) ::ng-deep {
     color: pvar(--mainColor);
     background-color: pvar(--mainBackgroundColor);
     padding: 0 .3em;
+
+    @include peertube-button-link;
   }
 }
 

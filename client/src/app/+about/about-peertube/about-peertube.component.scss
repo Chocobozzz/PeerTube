@@ -8,9 +8,9 @@
 }
 
 .card {
-  @include margin(2rem);
-
   flex-basis: 300px;
+
+  @include margin(2rem);
 }
 
 .card-title {

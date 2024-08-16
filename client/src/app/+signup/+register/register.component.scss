@@ -26,9 +26,9 @@ my-instance-about-accordion {
   align-items: center;
 
   .skip-step {
-    @include margin-right(30px);
-
     display: inline-block;
+
+    @include margin-right(30px);
   }
 
   .skip-step-description {

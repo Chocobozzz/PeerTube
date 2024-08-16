@@ -23,9 +23,9 @@
   }
 
   .log-level {
-    @include margin-right(5px);
-
     font-weight: $font-semibold;
+
+    @include margin-right(5px);
   }
 
   .log-by {
@@ -100,10 +100,10 @@ my-copy-button {
     .peertube-select-container,
     ng-select,
     my-button {
-      @include margin-left(0 !important);
-
       width: 100% !important;
       margin-bottom: 10px !important;
+
+      @include margin-left(0 !important);
     }
 
     my-button {

@@ -21,13 +21,13 @@
   }
 
   my-feed {
-    @include margin-left(5px);
-
     display: inline-block;
     transition: ease-in .2s opacity;
     width: 12px;
     position: relative;
     top: -3px;
+
+    @include margin-left(5px);
   }
 }
 

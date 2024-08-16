@@ -1,21 +1,21 @@
-import { SortMeta, SharedModule } from 'primeng/api'
+import { DatePipe, NgClass, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
-import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
-import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
-import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { Account } from '@app/shared/shared-main/account/account.model'
+import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
+import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
+import { VideoCellComponent } from '../../shared/shared-tables/video-cell.component'
+import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
 
 @Component({
   templateUrl: './my-ownership.component.html',
-  styleUrls: [ './my-ownership.component.scss' ],
   standalone: true,
   imports: [
     GlobalIconComponent,
@@ -28,7 +28,8 @@ import { Account } from '@app/shared/shared-main/account/account.model'
     NgClass,
     AutoColspanDirective,
     MyAcceptOwnershipComponent,
-    DatePipe
+    DatePipe,
+    VideoCellComponent
   ]
 })
 export class MyOwnershipComponent extends RestTable implements OnInit {

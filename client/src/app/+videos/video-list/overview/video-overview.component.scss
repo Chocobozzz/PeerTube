@@ -36,10 +36,10 @@
     }
 
     my-actor-avatar {
-      @include margin-right(8px);
-
       display: inline-block;
       vertical-align: text-top;
+
+      @include margin-right(8px);
     }
   }
 

@@ -17,9 +17,9 @@ my-video-thumbnail {
 
 my-video-thumbnail,
 .fake-thumbnail {
-  @include margin-right(10px);
-
   display: flex; // Avoids an issue with line-height that adds space below the element
+
+  @include margin-right(10px);
 }
 
 .video {
@@ -34,9 +34,9 @@ my-video-thumbnail,
   }
 
   a {
-    @include disable-default-a-behaviour;
-
     color: pvar(--mainForegroundColor);
+
+    @include disable-default-a-behaviour;
   }
 
   > a {
@@ -51,22 +51,22 @@ my-video-thumbnail,
       min-width: 25px;
 
       my-global-icon {
-        @include apply-svg-color(pvar(--greyForegroundColor));
-
         width: 17px;
         position: relative;
         left: -2px;
+
+        @include apply-svg-color(pvar(--greyForegroundColor));
       }
     }
   }
 
   .more,
   my-edit-button {
-    @include margin-left(auto);
-
     justify-self: flex-end;
     cursor: pointer;
     min-width: 24px;
+
+    @include margin-left(auto);
   }
 
   .more {
@@ -107,11 +107,11 @@ my-video-thumbnail,
 }
 
 .video-info-name {
-  @include ellipsis;
-
   font-size: 18px;
   font-weight: $font-semibold;
   display: inline-block;
+
+  @include ellipsis;
 }
 
 .video-info {
@@ -149,17 +149,17 @@ my-video-thumbnail,
 .dropdown-menu {
 
   .dropdown-item {
-    @include dropdown-with-icon-item;
-
     cursor: pointer;
+
+    @include dropdown-with-icon-item;
   }
 
   .timestamp-options {
-    @include padding-left(35px);
-
     padding-top: 0;
     margin-top: 5px;
     margin-bottom: 15px;
+
+    @include padding-left(35px);
 
     > div {
       display: flex;
@@ -172,10 +172,10 @@ my-video-thumbnail,
     }
 
     input {
+      margin-top: 10px;
+
       @include peertube-button;
       @include orange-button;
-
-      margin-top: 10px;
     }
   }
 }

@@ -87,13 +87,13 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-progress-control {
-    @include margin-left($progress-margin);
-
     position: absolute;
     top: $control-bar-slider-top;
     z-index: 100; // On top of the progress bar
     width: calc(100% - (2 * #{$progress-margin}));
     height: 20px;
+
+    @include margin-left($progress-margin);
 
     .vjs-slider {
       margin: 0;
@@ -142,10 +142,10 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-play-control {
-    @include disable-outline;
-
     cursor: pointer;
     width: $control-bar-button-width;
+
+    @include disable-outline;
 
     .vjs-icon-placeholder::before {
       font-size: $control-bar-play-font-size;
@@ -159,19 +159,19 @@ $chapter-marker-size: 9px;
     line-height: inherit;
 
     &.vjs-current-time {
-      @include margin-left(.5em);
-
       font-size: $control-bar-font-size;
       display: inline-block;
       padding: 0;
+
+      @include margin-left(.5em);
 
       .vjs-current-time-display {
         line-height: calc(#{$control-bar-height} - 1px);
 
         &::after {
-          @include margin(0, 1px, 0, 2px);
-
           content: '/';
+
+          @include margin(0, 1px, 0, 2px);
         }
       }
     }
@@ -219,13 +219,13 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-peertube {
-    @include margin-right(6px);
-    @include margin-left(auto);
-
     line-height: $control-bar-height;
     text-align: end;
     overflow: hidden;
     font-size: $control-bar-font-size;
+
+    @include margin-right(6px);
+    @include margin-left(auto);
 
     .vjs-peertube-displayed {
       display: block;
@@ -250,8 +250,6 @@ $chapter-marker-size: 9px;
     }
 
     .icon {
-      @include margin-right(2px);
-
       display: inline-block;
       width: 15px;
       height: 15px;
@@ -260,6 +258,8 @@ $chapter-marker-size: 9px;
       background-repeat: no-repeat;
       position: relative;
       top: -1px;
+
+      @include margin-right(2px);
 
       &.icon-download {
         background-image: url('#{$assets-path}/player/images/arrow-down.svg');
@@ -301,10 +301,10 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-mute-control {
-    @include disable-outline;
-
     padding: 0;
     width: $control-bar-icon-size;
+
+    @include disable-outline;
 
     .vjs-icon-placeholder {
       display: inline-block;
@@ -326,11 +326,11 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-volume-control {
-    @include margin(0, 5px, 0, 5px);
-
     width: 28px;
     display: flex;
     align-items: center;
+
+    @include margin(0, 5px, 0, 5px);
   }
 
   .vjs-volume-bar {
@@ -397,10 +397,10 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-settings {
-    @include disable-outline;
-
     cursor: pointer;
     width: $control-bar-button-width - 4px;
+
+    @include disable-outline;
 
     .vjs-icon-placeholder {
       display: inline-block;
@@ -417,22 +417,22 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-peertube-link {
-    @include disable-outline;
-    @include disable-default-a-behaviour;
-    @include ellipsis;
-
     text-decoration: none;
     line-height: $control-bar-height;
     font-weight: $font-semibold;
     padding: 0 5px;
     max-width: 150px;
+
+    @include ellipsis;
+    @include disable-outline;
+    @include disable-default-a-behaviour;
   }
 
   .vjs-theater-control {
-    @include disable-outline;
-
     width: $control-bar-button-width;
     cursor: pointer;
+
+    @include disable-outline;
 
     .vjs-icon-placeholder {
       transition: transform 0.2s ease;
@@ -475,9 +475,9 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-fullscreen-control {
-    @include disable-outline;
-
     width: $control-bar-button-width;
+
+    @include disable-outline;
 
     .vjs-icon-placeholder {
       display: inline-block;
@@ -567,9 +567,9 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-play-control {
-    @include margin-left(0);
-
     width: 30px;
+
+    @include margin-left(0);
   }
 
   &.vjs-live {

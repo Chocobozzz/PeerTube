@@ -53,9 +53,9 @@
   width: 100%;
 
   my-peertube-checkbox {
-    @include margin-right(10px);
-
     align-self: center;
+
+    @include margin-right(10px);
   }
 
   .display-name {
@@ -68,21 +68,21 @@
   }
 
   .optional-row-icon {
-    @include margin-left(0.5rem);
-
     display: flex;
     align-items: center;
     font-size: 14px;
     cursor: pointer;
 
-    my-global-icon {
-      @include apply-svg-color(#333);
-      @include margin-right(0);
+    @include margin-left(0.5rem);
 
+    my-global-icon {
       position: relative;
       top: 1px;
       width: 19px;
       height: 19px;
+
+      @include apply-svg-color(#333);
+      @include margin-right(0);
     }
 
     &:hover {
@@ -127,21 +127,19 @@
   cursor: pointer;
 
   my-global-icon {
-    @include apply-svg-color(#333);
-    @include margin-right(4px);
-
     position: relative;
     left: -1px;
     top: -1px;
     width: 21px;
     height: 21px;
+
+    @include apply-svg-color(#333);
+    @include margin-right(4px);
   }
 }
 
 input[type=text] {
   @include peertube-input-text(200px);
-
-  display: block;
 }
 
 input[type=submit] {

@@ -14,10 +14,10 @@
 }
 
 .middle-title {
+  margin-top: 0;
+
   @include in-content-small-title;
   @include margin-bottom(1.5rem);
-
-  margin-top: 0;
 }
 
 .block {
@@ -25,17 +25,17 @@
 }
 
 .anchor-link {
-  @include disable-outline;
-
   position: relative;
+
+  @include disable-outline;
 
   &:hover,
   &:active {
     &::after {
-      @include margin-left(0.2em);
-
       content: '#';
       display: inline-block;
+
+      @include margin-left(0.2em);
     }
   }
 

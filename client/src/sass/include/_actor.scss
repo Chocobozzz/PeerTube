@@ -13,12 +13,12 @@
   }
 
   .actor-names {
-    @include disable-default-a-behaviour;
-
     width: fit-content;
     display: flex;
     align-items: baseline;
     color: pvar(--mainForegroundColor);
+
+    @include disable-default-a-behaviour;
   }
 
   .actor-display-name {
@@ -27,18 +27,18 @@
   }
 
   .actor-name {
-    @include margin-left(5px);
-
     font-size: 14px;
     color: $grey-actor-name;
+
+    @include margin-left(5px);
   }
 
   .actor-owner {
-    @include disable-default-a-behaviour;
-
     color: pvar(--mainForegroundColor);
     display: flex;
     align-items: center;
+
+    @include disable-default-a-behaviour;
 
     span:hover {
       opacity: 0.8;

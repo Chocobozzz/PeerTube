@@ -17,9 +17,9 @@ ul {
 }
 
 .dropdown-menu .dropdown-item {
-  @include dropdown-with-icon-item;
-
   top: -1px;
+
+  @include dropdown-with-icon-item;
 }
 
 .sub-menu.no-scroll {
@@ -31,9 +31,11 @@ ul {
     display: none;
   }
 
-  a {
-    @include disable-default-a-behaviour;
+  my-global-icon {
+    @include margin-right(10px);
+  }
 
+  a {
     color: currentColor;
     box-sizing: border-box;
     display: block;
@@ -42,6 +44,8 @@ ul {
     text-align: initial;
     text-transform: unset;
     width: 100%;
+
+    @include disable-default-a-behaviour;
 
     &.active {
       color: pvar(--mainBackgroundColor) !important;

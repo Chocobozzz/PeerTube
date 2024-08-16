@@ -30,10 +30,6 @@
 }
 
 .channel-info {
-  // Use the same margin as the videos grid
-  @include grid-videos-miniature-margins(false, 15px);
-  @include margin-bottom(3rem);
-
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
@@ -41,6 +37,10 @@
   background-color: pvar(--channelBackgroundColor);
   padding-top: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
+
+  // Use the same margin as the videos grid
+  @include grid-videos-miniature-margins(false, 15px);
+  @include margin-bottom(3rem);
 }
 
 .channel-avatar-row {
@@ -58,9 +58,9 @@
 }
 
 .show-more {
-  @include show-more-description;
-
   display: none;
+
+  @include show-more-description;
 }
 
 .channel-buttons {
@@ -75,20 +75,20 @@
 
   // Only used on small screen
   &.bottom {
-    @include margin-bottom(2rem);
-
     justify-content: center;
     display: none;
+
+    @include margin-bottom(2rem);
   }
 }
 
 .owner-card {
-  @include margin-left(105px);
-
   grid-column: 2;
   // Takes all the column
   grid-row: 1 / 3;
   place-self: end;
+
+  @include margin-left(105px);
 }
 
 // Only used on mobile
@@ -126,18 +126,18 @@
   }
 
   .owner-description {
-    @include fade-text(120px, pvar(--mainBackgroundColor));
-
     max-height: 140px;
     word-break: break-word;
+
+    @include fade-text(120px, pvar(--mainBackgroundColor));
   }
 }
 
 .view-account.short {
+  margin-top: 30px;
+
   @include peertube-button-link;
   @include orange-button-inverted;
-
-  margin-top: 30px;
 }
 
 .view-account.complete {
@@ -155,9 +155,9 @@ my-copy-button {
   }
 
   .owner-card {
-    @include margin-left(60px);
-
     grid-row: 2;
+
+    @include margin-left(60px);
   }
 }
 
@@ -174,9 +174,9 @@ my-copy-button {
   }
 
   .channel-description:not(.expanded) {
-    @include fade-text(30px, pvar(--channelBackgroundColor));
-
     max-height: 70px;
+
+    @include fade-text(30px, pvar(--channelBackgroundColor));
   }
 
   .show-more {
@@ -211,16 +211,16 @@ my-copy-button {
     padding: 0;
 
     .avatar-row {
-      @include margin-right(30px);
-
       grid-column: 1;
+
+      @include margin-right(30px);
     }
 
     .owner-description {
-      @include fade-text(30px, pvar(--mainBackgroundColor));
-
       grid-column: 2;
       max-height: 70px;
+
+      @include fade-text(30px, pvar(--mainBackgroundColor));
     }
 
     .view-account {
