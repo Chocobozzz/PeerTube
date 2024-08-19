@@ -281,7 +281,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:activity-pub.activity.context.build.result',
-    handler: context => context.concat([ { recordedAt: 'https://schema.org/recordedAt' } ])
+    handler: context => context.concat([ { recordedAt: 'https://schema.org/recordedAt', videoName: 'https://schema.org/name' } ])
   })
 
   registerHook({
