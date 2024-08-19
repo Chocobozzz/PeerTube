@@ -287,8 +287,6 @@ export class UserExporter {
 
       this.archive.on('entry', entryListener)
 
-      logger.error('Adding stream ' + archivePath)
-
       // Prevent sending a stream that has an error on open resulting in a stucked archiving process
       stream.once('readable', () => {
         if (errored) return
