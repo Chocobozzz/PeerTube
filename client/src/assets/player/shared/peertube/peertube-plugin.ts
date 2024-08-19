@@ -203,7 +203,7 @@ class PeerTubePlugin extends Plugin {
     this.player.addClass('vjs-error-display-enabled')
 
     // Google Bot may throw codecs, but it should not prevent indexing
-    if (!/googlebot/i.test(navigator.userAgent)) {
+    if (/googlebot/i.test(navigator.userAgent)) {
       console.error(this.player.error())
     } else {
       logger.error('Fatal error in player', this.player.error())

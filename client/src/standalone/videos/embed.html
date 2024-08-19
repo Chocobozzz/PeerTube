@@ -96,7 +96,7 @@
         }
 
         // Google Bot doesn't support our codecs, but it should not prevent indexing
-        if (!/googlebot/i.test(navigator.userAgent)) {
+        if (/googlebot/i.test(navigator.userAgent)) {
           console.error(err)
           return
         }
