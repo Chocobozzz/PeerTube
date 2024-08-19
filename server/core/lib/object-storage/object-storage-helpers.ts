@@ -62,14 +62,13 @@ async function storeObject (options: {
 
 async function storeContent (options: {
   content: string
-  inputPath: string
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
 }): Promise<string> {
-  const { content, objectStorageKey, bucketInfo, inputPath, isPrivate } = options
+  const { content, objectStorageKey, bucketInfo, isPrivate } = options
 
-  logger.debug('Uploading %s content to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Uploading %s content to %s%s in bucket %s', content, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
   return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate })
 }

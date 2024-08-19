@@ -49,11 +49,10 @@ export function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: s
   })
 }
 
-export function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, path: string, content: string) {
+export function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, pathOrFilename: string, content: string) {
   return storeContent({
     content,
-    inputPath: path,
-    objectStorageKey: generateHLSObjectStorageKey(playlist, basename(path)),
+    objectStorageKey: generateHLSObjectStorageKey(playlist, basename(pathOrFilename)),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
     isPrivate: playlist.Video.hasPrivateStaticPath()
   })

@@ -17,7 +17,7 @@ import { P2P_MEDIA_LOADER_PEER_VERSION, REQUEST_TIMEOUTS } from '../initializers
 import { sequelizeTypescript } from '../initializers/database.js'
 import { VideoFileModel } from '../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
-import { storeHLSFileFromFilename } from './object-storage/index.js'
+import { storeHLSFileFromContent } from './object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHlsResolutionPlaylistFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -121,14 +121,17 @@ export function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingP
     }
     playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)
 
-    const masterPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.playlistFilename)
-    await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
-
-    logger.info('Updating %s master playlist file of video %s', masterPlaylistPath, video.uuid, lTags(video.uuid))
+    const masterPlaylistContent = masterPlaylists.join('\n') + '\n'
 
     if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-      playlist.playlistUrl = await storeHLSFileFromFilename(playlist, playlist.playlistFilename)
-      await remove(masterPlaylistPath)
+      playlist.playlistUrl = await storeHLSFileFromContent(playlist, playlist.playlistFilename, masterPlaylistContent)
+
+      logger.info(`Updated master playlist file of video ${video.uuid} to object storage ${playlist.playlistUrl}`, lTags(video.uuid))
+    } else {
+      const masterPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.playlistFilename)
+      await writeFile(masterPlaylistPath, masterPlaylistContent)
+
+      logger.info(`Updated master playlist file ${masterPlaylistPath} of video ${video.uuid}`, lTags(video.uuid))
     }
 
     return playlist.save()
@@ -174,12 +177,11 @@ export function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingP
     }
     playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
 
-    const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename)
-    await outputJSON(outputPath, json)
-
     if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-      playlist.segmentsSha256Url = await storeHLSFileFromFilename(playlist, playlist.segmentsSha256Filename)
-      await remove(outputPath)
+      playlist.segmentsSha256Url = await storeHLSFileFromContent(playlist, playlist.segmentsSha256Filename, JSON.stringify(json))
+    } else {
+      const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename)
+      await outputJSON(outputPath, json)
     }
 
     return playlist.save()
