@@ -8188,6 +8188,15 @@ components:
           type: string
           format: url
           description: URL dereferencing the output of ffprobe on the file
+        hasAudio:
+          type: boolean
+          description: "**PeerTube >= 6.2** The file container has an audio stream"
+        hasVideo:
+          type: boolean
+          description: "**PeerTube >= 6.2** The file container has a video stream"
+        storage:
+          $ref: '#/components/schemas/FileStorage'
+
     VideoStreamingPlaylists:
       allOf:
         - type: object
@@ -11248,6 +11257,16 @@ components:
       items:
         $ref: "#/components/schemas/VideoPassword/properties/password"
       uniqueItems: true
+
+    FileStorage:
+      type: integer
+      enum:
+        - 0
+        - 1
+      description: >
+        The file storage type:
+          - `0` File system
+          - `1` Object storage
   callbacks:
     searchIndex:
       'https://search.example.org/api/v1/search/videos':

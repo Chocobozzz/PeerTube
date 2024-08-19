@@ -3,6 +3,7 @@
 import { uuidRegex } from '@peertube/peertube-core-utils'
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
+  FileStorage,
   HttpStatusCode,
   HttpStatusCodeType,
   VideoCaption,
@@ -62,6 +63,12 @@ export async function completeWebVideoFilesCheck (options: {
 
     expect(file.id).to.exist
     expect(file.magnetUri).to.have.lengthOf.above(2)
+
+    if (objectStorageBaseUrl) {
+      expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
+    } else {
+      expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
+    }
 
     {
       const privatePath = requiresAuth

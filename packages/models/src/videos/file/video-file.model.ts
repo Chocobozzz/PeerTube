@@ -1,3 +1,4 @@
+import { FileStorageType } from '../../common/file-storage.enum.js'
 import { VideoConstant } from '../video-constant.model.js'
 import { VideoFileMetadata } from './video-file-metadata.model.js'
 
@@ -25,4 +26,6 @@ export interface VideoFile {
 
   hasAudio: boolean
   hasVideo: boolean
+
+  storage: FileStorageType
 }

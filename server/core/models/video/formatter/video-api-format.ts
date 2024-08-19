@@ -258,7 +258,9 @@ export function videoFilesModelToFormattedJSON (
         metadataUrl: videoFile.metadataUrl ?? getLocalVideoFileMetadataUrl(video, videoFile),
 
         hasAudio: videoFile.hasAudio(),
-        hasVideo: videoFile.hasVideo()
+        hasVideo: videoFile.hasVideo(),
+
+        storage: videoFile.storage
       }
     })
 }

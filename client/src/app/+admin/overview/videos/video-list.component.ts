@@ -2,7 +2,8 @@ import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
+import { formatICU } from '@app/helpers'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -11,7 +12,7 @@ import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.c
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { FileStorage, UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule, TableRowExpandEvent } from 'primeng/table'
@@ -30,7 +31,6 @@ import {
   VideoActionsDropdownComponent
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
 import { VideoAdminService } from './video-admin.service'
-import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 
 @Component({
   selector: 'my-video-list',
@@ -230,7 +230,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
     const files = getAllFiles(video)
 
-    return files.some(f => !f.fileUrl.startsWith(getAbsoluteAPIUrl()))
+    return files.some(f => f.storage === FileStorage.OBJECT_STORAGE)
   }
 
   canRemoveOneFile (video: Video) {

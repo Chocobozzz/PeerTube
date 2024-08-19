@@ -2,6 +2,7 @@
 
 import { getHLS, removeFragmentedMP4Ext, uuidRegex } from '@peertube/peertube-core-utils'
 import {
+  FileStorage,
   HttpStatusCode,
   VideoDetails,
   VideoPrivacy,
@@ -233,6 +234,12 @@ export async function completeCheckHlsPlaylist (options: {
       } else {
         expect(Math.min(file.height, file.width)).to.equal(resolution)
         expect(Math.max(file.height, file.width)).to.be.greaterThan(resolution)
+      }
+
+      if (objectStorageBaseUrl) {
+        expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
+      } else {
+        expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
       }
 
       expect(file.magnetUri).to.have.lengthOf.above(2)
