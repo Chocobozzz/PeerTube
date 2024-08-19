@@ -31,9 +31,6 @@ export default [
         path: 'videos',
         component: VideoChannelVideosComponent,
         data: {
-          meta: {
-            title: $localize`Video channel videos`
-          },
           reuse: {
             enabled: true,
             key: 'video-channel-videos-list'
@@ -42,12 +39,7 @@ export default [
       },
       {
         path: 'video-playlists',
-        component: VideoChannelPlaylistsComponent,
-        data: {
-          meta: {
-            title: $localize`Video channel playlists`
-          }
-        }
+        component: VideoChannelPlaylistsComponent
       }
     ]
   }

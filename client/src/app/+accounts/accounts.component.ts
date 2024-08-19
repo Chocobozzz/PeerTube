@@ -1,7 +1,7 @@
 import { DatePipe, NgClass, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
-import { AuthService, MarkdownService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
+import { AuthService, MarkdownService, MetaService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
@@ -76,30 +76,31 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private videoService: VideoService,
     private markdown: MarkdownService,
     private blocklist: BlocklistService,
-    private screenService: ScreenService
+    private screenService: ScreenService,
+    private metaService: MetaService
   ) {
   }
 
   ngOnInit () {
     this.routeSub = this.route.params
-                        .pipe(
-                          map(params => params['accountId']),
-                          distinctUntilChanged(),
-                          switchMap(accountId => this.accountService.getAccount(accountId)),
-                          tap(account => this.onAccount(account)),
-                          switchMap(account => this.videoChannelService.listAccountVideoChannels({ account })),
-                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
-                            HttpStatusCode.BAD_REQUEST_400,
-                            HttpStatusCode.NOT_FOUND_404
-                          ]))
-                        )
-                        .subscribe({
-                          next: videoChannels => {
-                            this.videoChannels = videoChannels.data
-                          },
+      .pipe(
+        map(params => params['accountId']),
+        distinctUntilChanged(),
+        switchMap(accountId => this.accountService.getAccount(accountId)),
+        tap(account => this.onAccount(account)),
+        switchMap(account => this.videoChannelService.listAccountVideoChannels({ account })),
+        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+          HttpStatusCode.BAD_REQUEST_400,
+          HttpStatusCode.NOT_FOUND_404
+        ]))
+      )
+      .subscribe({
+        next: videoChannels => {
+          this.videoChannels = videoChannels.data
+        },
 
-                          error: err => this.notifier.error(err.message)
-                        })
+        error: err => this.notifier.error(err.message)
+      })
 
     this.links = [
       { label: $localize`CHANNELS`, routerLink: 'video-channels' },
@@ -169,6 +170,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private async onAccount (account: Account) {
+    this.metaService.setTitle(account.displayName)
+
     this.accountDescriptionHTML = await this.markdown.textMarkdownToHTML({
       markdown: account.description,
       withEmoji: true,

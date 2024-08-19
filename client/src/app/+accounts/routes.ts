@@ -35,20 +35,12 @@ export default [
       },
       {
         path: 'video-channels',
-        component: AccountVideoChannelsComponent,
-        data: {
-          meta: {
-            title: $localize`Account video channels`
-          }
-        }
+        component: AccountVideoChannelsComponent
       },
       {
         path: 'videos',
         component: AccountVideosComponent,
         data: {
-          meta: {
-            title: $localize`Account videos`
-          },
           reuse: {
             enabled: true,
             key: 'account-videos-list'

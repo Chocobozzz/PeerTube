@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
-import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService, Hotkey, HotkeysService } from '@app/core'
+import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService, Hotkey, HotkeysService, MetaService } from '@app/core'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { ListOverflowComponent, ListOverflowItem } from '../shared/shared-main/misc/list-overflow.component'
 import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
@@ -58,7 +58,6 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   constructor (
     private route: ActivatedRoute,
-    private notifier: Notifier,
     private authService: AuthService,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService,
@@ -66,40 +65,43 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
     private markdown: MarkdownService,
-    private blocklist: BlocklistService
+    private blocklist: BlocklistService,
+    private metaService: MetaService
   ) { }
 
   ngOnInit () {
     this.routeSub = this.route.params
-                        .pipe(
-                          map(params => params['videoChannelName']),
-                          distinctUntilChanged(),
-                          switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
-                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
-                            HttpStatusCode.BAD_REQUEST_400,
-                            HttpStatusCode.NOT_FOUND_404
-                          ]))
-                        )
-                        .subscribe(async videoChannel => {
-                          this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML({
-                            markdown: videoChannel.description,
-                            withEmoji: true,
-                            withHtml: true
-                          })
+      .pipe(
+        map(params => params['videoChannelName']),
+        distinctUntilChanged(),
+        switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
+        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+          HttpStatusCode.BAD_REQUEST_400,
+          HttpStatusCode.NOT_FOUND_404
+        ]))
+      )
+      .subscribe(async videoChannel => {
+        this.metaService.setTitle(videoChannel.displayName)
 
-                          this.ownerDescriptionHTML = await this.markdown.textMarkdownToHTML({
-                            markdown: videoChannel.ownerAccount.description,
-                            withEmoji: true,
-                            withHtml: true
-                          })
+        this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML({
+          markdown: videoChannel.description,
+          withEmoji: true,
+          withHtml: true
+        })
 
-                          // After the markdown renderer to avoid layout changes
-                          this.videoChannel = videoChannel
-                          this.ownerAccount = new Account(this.videoChannel.ownerAccount)
+        this.ownerDescriptionHTML = await this.markdown.textMarkdownToHTML({
+          markdown: videoChannel.ownerAccount.description,
+          withEmoji: true,
+          withHtml: true
+        })
 
-                          this.loadChannelVideosCount()
-                          this.loadOwnerBlockStatus()
-                        })
+        // After the markdown renderer to avoid layout changes
+        this.videoChannel = videoChannel
+        this.ownerAccount = new Account(this.videoChannel.ownerAccount)
+
+        this.loadChannelVideosCount()
+        this.loadOwnerBlockStatus()
+      })
 
     this.hotkeys = [
       new Hotkey('Shift+s', () => {
