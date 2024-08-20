@@ -15,6 +15,16 @@ export function arrayify <T> (element: T | T[]) {
   return [ element ]
 }
 
+export function unarray <T> (element: T | T[]) {
+  if (Array.isArray(element)) {
+    if (element.length === 0) return undefined
+
+    return element[0]
+  }
+
+  return element
+}
+
 // Avoid conflict with other uniq() functions
 export function uniqify <T> (elements: T[]) {
   return Array.from(new Set(elements))

@@ -1,11 +1,12 @@
+import { unarray } from '@peertube/peertube-core-utils'
+import { peertubeTruncate } from '@server/helpers/core-utils.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { exists, isArray, isDateValid } from '../misc.js'
-import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
 import { isHostValid } from '../servers.js'
-import { peertubeTruncate } from '@server/helpers/core-utils.js'
+import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
 
-function isActorEndpointsObjectValid (endpointObject: any) {
+export function isActorEndpointsObjectValid (endpointObject: any) {
   if (endpointObject?.sharedInbox) {
     return isActivityPubUrlValid(endpointObject.sharedInbox)
   }
@@ -14,18 +15,18 @@ function isActorEndpointsObjectValid (endpointObject: any) {
   return true
 }
 
-function isActorPublicKeyObjectValid (publicKeyObject: any) {
+export function isActorPublicKeyObjectValid (publicKeyObject: any) {
   return isActivityPubUrlValid(publicKeyObject.id) &&
     isActivityPubUrlValid(publicKeyObject.owner) &&
     isActorPublicKeyValid(publicKeyObject.publicKeyPem)
 }
 
 const actorTypes = new Set([ 'Person', 'Application', 'Group', 'Service', 'Organization' ])
-function isActorTypeValid (type: string) {
+export function isActorTypeValid (type: string) {
   return actorTypes.has(type)
 }
 
-function isActorPublicKeyValid (publicKey: string) {
+export function isActorPublicKeyValid (publicKey: string) {
   return exists(publicKey) &&
     typeof publicKey === 'string' &&
     publicKey.startsWith('-----BEGIN PUBLIC KEY-----') &&
@@ -33,13 +34,14 @@ function isActorPublicKeyValid (publicKey: string) {
     validator.default.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
-const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]'
+export const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]'
+
 const actorNameRegExp = new RegExp(`^${actorNameAlphabet}+$`)
-function isActorPreferredUsernameValid (preferredUsername: string) {
+export function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.default.matches(preferredUsername, actorNameRegExp)
 }
 
-function isActorPrivateKeyValid (privateKey: string) {
+export function isActorPrivateKeyValid (privateKey: string) {
   return exists(privateKey) &&
     typeof privateKey === 'string' &&
     (privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') || privateKey.startsWith('-----BEGIN PRIVATE KEY-----')) &&
@@ -48,19 +50,19 @@ function isActorPrivateKeyValid (privateKey: string) {
     validator.default.isLength(privateKey, CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY)
 }
 
-function isActorFollowingCountValid (value: string) {
+export function isActorFollowingCountValid (value: string) {
   return exists(value) && validator.default.isInt('' + value, { min: 0 })
 }
 
-function isActorFollowersCountValid (value: string) {
+export function isActorFollowersCountValid (value: string) {
   return exists(value) && validator.default.isInt('' + value, { min: 0 })
 }
 
-function isActorDeleteActivityValid (activity: any) {
+export function isActorDeleteActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Delete')
 }
 
-function sanitizeAndCheckActorObject (actor: any) {
+export function sanitizeAndCheckActorObject (actor: any) {
   if (!isActorTypeValid(actor.type)) return false
 
   normalizeActor(actor)
@@ -84,11 +86,13 @@ function sanitizeAndCheckActorObject (actor: any) {
     (actor.type !== 'Group' || actor.attributedTo.length !== 0)
 }
 
-function normalizeActor (actor: any) {
+export function normalizeActor (actor: any) {
   if (!actor) return
 
   if (!actor.url) {
     actor.url = actor.id
+  } else if (isArray(actor.url)) {
+    actor.url = unarray(actor.url)
   } else if (typeof actor.url !== 'string') {
     actor.url = actor.url.href || actor.url.url
   }
@@ -104,7 +108,7 @@ function normalizeActor (actor: any) {
   }
 }
 
-function isValidActorHandle (handle: string) {
+export function isValidActorHandle (handle: string) {
   if (!exists(handle)) return false
 
   const parts = handle.split('@')
@@ -113,31 +117,12 @@ function isValidActorHandle (handle: string) {
   return isHostValid(parts[1])
 }
 
-function areValidActorHandles (handles: string[]) {
+export function areValidActorHandles (handles: string[]) {
   return isArray(handles) && handles.every(h => isValidActorHandle(h))
 }
 
-function setValidDescription (obj: any) {
+export function setValidDescription (obj: any) {
   if (!obj.summary) obj.summary = null
 
   return true
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  normalizeActor,
-  actorNameAlphabet,
-  areValidActorHandles,
-  isActorEndpointsObjectValid,
-  isActorPublicKeyObjectValid,
-  isActorTypeValid,
-  isActorPublicKeyValid,
-  isActorPreferredUsernameValid,
-  isActorPrivateKeyValid,
-  isActorFollowingCountValid,
-  isActorFollowersCountValid,
-  isActorDeleteActivityValid,
-  sanitizeAndCheckActorObject,
-  isValidActorHandle
 }
