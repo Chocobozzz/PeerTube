@@ -64,10 +64,14 @@ export async function completeWebVideoFilesCheck (options: {
     expect(file.id).to.exist
     expect(file.magnetUri).to.have.lengthOf.above(2)
 
-    if (objectStorageBaseUrl) {
-      expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
+    if (server.internalServerNumber === originServer.internalServerNumber) {
+      if (objectStorageBaseUrl) {
+        expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
+      } else {
+        expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
+      }
     } else {
-      expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
+      expect(file.storage).to.be.null
     }
 
     {
