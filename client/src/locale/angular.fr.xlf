@@ -7324,9 +7324,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5779804235244672536" datatype="html">
+      <trans-unit id="5779804235244672536" datatype="html" xml:space="preserve">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="translated">Ce qui précède ne peut être vu que dans les légendes (veuillez décrire lesquelles).</target>
+        <target state="translated">Ce qui précède ne peut être vu que dans les sous-titres (veuillez décrire lesquelles).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">179</context>
