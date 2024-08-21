@@ -1543,17 +1543,17 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3805147953573030976" datatype="html">
+      <trans-unit id="3805147953573030976" datatype="html" xml:space="preserve">
         <source>Default NSFW/sensitive videos policy</source>
-        <target state="new">Default NSFW/sensitive videos policy</target>
+        <target state="translated">رویکرد پیش‌فرض درخصوص ویدئوهای حساس</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5211109801015470691" datatype="html">
+      <trans-unit id="5211109801015470691" datatype="html" xml:space="preserve">
         <source>can be redefined by the users</source>
-        <target state="new">can be redefined by the users</target>
+        <target state="translated">امکان بازتعریف آن توسط کاربران وجود دارد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1587,9 +1587,9 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2152404288547034295" datatype="html">
+      <trans-unit id="2152404288547034295" datatype="html" xml:space="preserve">
         <source>Automatic transcription</source>
-        <target state="new">Automatic transcription</target>
+        <target state="translated">رونویسی خودکار</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -1627,9 +1627,9 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591172858390995209" datatype="html">
+      <trans-unit id="2591172858390995209" datatype="html" xml:space="preserve">
         <source>Video Import</source>
-        <target state="new">Video Import</target>
+        <target state="translated">واردکردن ویدئو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">98</context>
@@ -1699,17 +1699,17 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5812787579835788700" datatype="html">
+      <trans-unit id="5812787579835788700" datatype="html" xml:space="preserve">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target state="translated">درون‌ریزی HTTP (یوتیوب، ویمئو، نشانی مستقیم...)</target>
+        <target state="translated">وارد کردن از طريق HTTP (یوتیوب، ویمئو، نشانی مستقیم...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4992364287704007430" datatype="html">
+      <trans-unit id="4992364287704007430" datatype="html" xml:space="preserve">
         <source>Torrent import</source>
-        <target state="translated">وارد کردن تورنت</target>
+        <target state="translated">وارد کردن از تورنت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">109</context>
@@ -1723,25 +1723,25 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4229153235358296216" datatype="html">
+      <trans-unit id="4229153235358296216" datatype="html" xml:space="preserve">
         <source>User Import/Export</source>
-        <target state="new">User Import/Export</target>
+        <target state="translated">اجازه به کاربر برای وارد/خارج کردن</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3384006887221192665" datatype="html">
+      <trans-unit id="3384006887221192665" datatype="html" xml:space="preserve">
         <source>Users can export their data</source>
-        <target state="new">Users can export their data</target>
+        <target state="translated">کاربران میتوانند اطلاعات خودشان را خارج کنند</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552722059425094536" datatype="html">
+      <trans-unit id="5552722059425094536" datatype="html" xml:space="preserve">
         <source>Users can import their data</source>
-        <target state="new">Users can import their data</target>
+        <target state="translated">کاربران میتوانند اطلاعات خودشان را وارد کنند</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">134</context>
@@ -15219,33 +15219,33 @@
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7146070362549250677" datatype="html">
+      <trans-unit id="7146070362549250677" datatype="html" xml:space="preserve">
         <source>Completed jobs</source>
-        <target state="new">Completed jobs</target>
+        <target state="translated">فعالیت‌های کامل‌شده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2841995988789172579" datatype="html">
+      <trans-unit id="2841995988789172579" datatype="html" xml:space="preserve">
         <source>Pending jobs</source>
-        <target state="new">Pending jobs</target>
+        <target state="translated">فعالیت‌های درحال انتظار</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6587308737467829649" datatype="html">
+      <trans-unit id="6587308737467829649" datatype="html" xml:space="preserve">
         <source>Jobs that are being processed</source>
-        <target state="new">Jobs that are being processed</target>
+        <target state="translated">فعالیت‌های درحال پردازش</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2902296494834684511" datatype="html">
+      <trans-unit id="2902296494834684511" datatype="html" xml:space="preserve">
         <source>Failed jobs</source>
-        <target state="new">Failed jobs</target>
+        <target state="translated">فعالیت‌های ناموفق</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -15259,9 +15259,9 @@
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="410829478323542752" datatype="html">
+      <trans-unit id="410829478323542752" datatype="html" xml:space="preserve">
         <source>Delete this job</source>
-        <target state="new">Delete this job</target>
+        <target state="translated">حذف این فعالیت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">90</context>
