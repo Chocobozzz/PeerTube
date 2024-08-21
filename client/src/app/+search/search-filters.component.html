@@ -5,7 +5,7 @@
       <fieldset class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="sort" i18n>Sort</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetField('sort', '-match')" *ngIf="advancedSearch.sort !== '-match'">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('sort', '-match')" *ngIf="advancedSearch.sort !== '-match'">
             Reset
           </button>
         </div>
@@ -19,7 +19,7 @@
       <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="isLive" i18n>Display only</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetField('isLive')" *ngIf="advancedSearch.isLive !== undefined">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('isLive')" *ngIf="advancedSearch.isLive !== undefined">
             Reset
           </button>
         </div>
@@ -38,7 +38,7 @@
       <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="sensitiveContent" i18n>Display sensitive content</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
             Reset
           </button>
         </div>
@@ -57,7 +57,7 @@
       <div class="form-group">
         <div class="radio-label label-container">
           <label for="publishedDateRange" i18n>Published date</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetLocalField('publishedDateRange')" *ngIf="publishedDateRange !== undefined">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetLocalField('publishedDateRange')" *ngIf="publishedDateRange !== undefined">
             Reset
           </button>
         </div>
@@ -71,7 +71,7 @@
       <div class="form-group">
         <div class="label-container">
           <label i18n for="original-publication-after">Original publication year</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetOriginalPublicationYears()" *ngIf="originallyPublishedStartYear || originallyPublishedEndYear">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetOriginalPublicationYears()" *ngIf="originallyPublishedStartYear || originallyPublishedEndYear">
             Reset
           </button>
         </div>
@@ -106,7 +106,7 @@
       <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="durationRange" i18n>Duration</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetLocalField('durationRange')" *ngIf="durationRange !== undefined">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetLocalField('durationRange')" *ngIf="durationRange !== undefined">
             Reset
           </button>
         </div>
@@ -119,7 +119,7 @@
 
       <div class="form-group">
         <label i18n for="category">Category</label>
-        <button i18n class="reset-button reset-button-small" (click)="resetField('categoryOneOf')" *ngIf="advancedSearch.categoryOneOf !== undefined">
+        <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('categoryOneOf')" *ngIf="advancedSearch.categoryOneOf !== undefined">
           Reset
         </button>
         <div class="peertube-select-container">
@@ -132,7 +132,7 @@
 
       <div class="form-group">
         <label i18n for="licence">Licence</label>
-        <button i18n class="reset-button reset-button-small" (click)="resetField('licenceOneOf')" *ngIf="advancedSearch.licenceOneOf !== undefined">
+        <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('licenceOneOf')" *ngIf="advancedSearch.licenceOneOf !== undefined">
           Reset
         </button>
         <div class="peertube-select-container">
@@ -145,7 +145,7 @@
 
       <div class="form-group">
         <label i18n for="language">Language</label>
-        <button i18n class="reset-button reset-button-small" (click)="resetField('languageOneOf')" *ngIf="advancedSearch.languageOneOf !== undefined">
+        <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('languageOneOf')" *ngIf="advancedSearch.languageOneOf !== undefined">
           Reset
         </button>
         <div class="peertube-select-container">
@@ -160,7 +160,7 @@
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <label i18n for="tagsAllOf">All of these tags</label>
-        <button i18n class="reset-button reset-button-small" (click)="resetField('tagsAllOf')" *ngIf="advancedSearch.tagsAllOf">
+        <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('tagsAllOf')" *ngIf="advancedSearch.tagsAllOf">
           Reset
         </button>
         <my-select-tags name="tagsAllOf" labelForId="tagsAllOf" id="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf"></my-select-tags>
@@ -168,7 +168,7 @@
 
       <div class="form-group">
         <label i18n for="tagsOneOf">One of these tags</label>
-        <button i18n class="reset-button reset-button-small" (click)="resetField('tagsOneOf')" *ngIf="advancedSearch.tagsOneOf">
+        <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('tagsOneOf')" *ngIf="advancedSearch.tagsOneOf">
           Reset
         </button>
         <my-select-tags name="tagsOneOf" labelForId="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
@@ -185,7 +185,7 @@
       <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="resultType" i18n>Result types</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetField('resultType')" *ngIf="advancedSearch.resultType !== undefined">
+          <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('resultType')" *ngIf="advancedSearch.resultType !== undefined">
             Reset
           </button>
         </div>
@@ -226,7 +226,7 @@
   </div>
 
   <div class="submit-button">
-    <button i18n class="reset-button me-3" (click)="reset()" *ngIf="advancedSearch.size()">
+    <button type="button" i18n class="reset-button me-3" (click)="reset()" *ngIf="advancedSearch.size()">
       Reset
     </button>
 

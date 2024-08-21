@@ -209,7 +209,11 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   private updateModelFromDurationRange () {
-    if (!this.durationRange) return
+    if (!this.durationRange) {
+      this.advancedSearch.durationMin = undefined
+      this.advancedSearch.durationMax = undefined
+      return
+    }
 
     const fourMinutes = 60 * 4
     const tenMinutes = 60 * 10
