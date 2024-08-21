@@ -3,7 +3,7 @@
 
 p-inputmask {
   ::ng-deep input {
-    width: 80px;
+    width: 100%;
     text-align: center;
 
     &:focus-within,
@@ -25,7 +25,7 @@ p-inputmask {
 
   &:not(.border-disabled) {
     ::ng-deep input {
-      @include peertube-input-text(80px);
+      @include peertube-input-text(100%);
 
       & {
         padding: 3px 10px;

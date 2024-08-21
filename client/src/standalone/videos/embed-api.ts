@@ -44,6 +44,8 @@ export class PeerTubeEmbedApi {
 
     channel.bind('setVideoPassword', (txn, value) => this.embed.setVideoPasswordByAPI(value))
 
+    channel.bind('isPlaying', (txn) => !this.player.paused())
+
     channel.bind('play', (txn, params) => {
       const p = this.player.play()
       if (!p) return
@@ -54,7 +56,9 @@ export class PeerTubeEmbedApi {
     })
 
     channel.bind('pause', (txn, params) => this.player.pause())
+
     channel.bind('seek', (txn, time) => this.player.currentTime(time))
+    channel.bind('getCurrentTime', (txn) => this.player.currentTime())
 
     channel.bind('setVolume', (txn, value) => this.player.volume(value))
     channel.bind('getVolume', (txn, value) => this.player.volume())

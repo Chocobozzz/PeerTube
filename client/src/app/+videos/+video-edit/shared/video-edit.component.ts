@@ -12,7 +12,7 @@ import {
   booleanAttribute
 } from '@angular/core'
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
-import { HooksService, PluginService, ServerService } from '@app/core'
+import { ConfirmService, HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
@@ -70,14 +70,16 @@ import { TimestampInputComponent } from '../../../shared/shared-forms/timestamp-
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
 import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
+import { VideoCaptionAddModalComponent } from './caption/video-caption-add-modal.component'
+import { VideoCaptionEditModalContentComponent } from './caption/video-caption-edit-modal-content.component'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
-import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
-import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -122,7 +124,9 @@ type PluginField = {
     NgbNavOutlet,
     VideoCaptionAddModalComponent,
     DatePipe,
-    ThumbnailManagerComponent
+    ThumbnailManagerComponent,
+    EditButtonComponent,
+    ButtonComponent
   ]
 })
 export class VideoEditComponent implements OnInit, OnDestroy {
@@ -210,7 +214,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private hooks: HooksService,
     private cd: ChangeDetectorRef,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private confirmService: ConfirmService
   ) {
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
@@ -398,9 +403,21 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
-    const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, { centered: true, keyboard: false })
+    const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, {
+      centered: true,
+      size: 'xl',
+
+      beforeDismiss: () => {
+        return this.confirmService.confirm(
+          $localize`Are you sure you want to close this modal without saving your changes?`,
+          $localize`Closing caption edition mocal`
+        )
+      }
+    })
+
     modalRef.componentInstance.videoCaption = videoCaption
     modalRef.componentInstance.serverConfig = this.serverConfig
+    modalRef.componentInstance.publishedVideo = this.publishedVideo
     modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
   }
 

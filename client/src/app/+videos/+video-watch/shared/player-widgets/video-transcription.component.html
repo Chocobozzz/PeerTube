@@ -55,7 +55,7 @@
       [ngClass]="getSegmentClasses(segment)"
     >
       <strong class="segment-start me-2">{{ segment.startFormatted }}</strong>
-      <span class="segment-text fs-7">{{ segment.text }}</span>
+      <span class="segment-text fs-7" [innerHTML]="segment.text | nl2br"></span>
     </div>
   </div>
 

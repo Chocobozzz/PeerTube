@@ -10,6 +10,10 @@ my-peertube-checkbox {
   margin-bottom: 1rem;
 }
 
+my-timestamp-input {
+  width: 85px;
+}
+
 .nav-tabs {
   margin-bottom: 15px;
 }
@@ -27,8 +31,9 @@ my-peertube-checkbox {
 
 .caption-entry {
   display: flex;
-  height: 40px;
+  min-height: 40px;
   align-items: center;
+  flex-wrap: wrap;
 
   a.caption-entry-label {
     color: pvar(--mainForegroundColor);
@@ -59,15 +64,6 @@ my-peertube-checkbox {
     &.caption-entry-state-delete {
       color: $red;
     }
-  }
-
-  .caption-entry-edit {
-    @include peertube-button;
-  }
-
-  .caption-entry-delete {
-    @include peertube-button;
-    @include grey-button;
   }
 }
 

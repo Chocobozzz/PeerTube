@@ -1,6 +1,11 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+my-timestamp-input {
+  display: block;
+  width: 85px;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -86,10 +91,6 @@ h2 {
   @media screen and (max-width: $min-width) {
     min-width: 100%;
   }
-}
-
-my-timestamp-input {
-  display: block;
 }
 
 my-embed {

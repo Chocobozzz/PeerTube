@@ -180,7 +180,38 @@
           <div class="form-group" *ngFor="let videoCaption of videoCaptions">
 
             <div class="caption-entry">
-              <ng-container *ngIf="!videoCaption.action">
+
+              @if (videoCaption.action) {
+                <span class="caption-entry-label">{{ getCaptionLabel(videoCaption) }}</span>
+
+                <div i18n class="caption-entry-state caption-entry-state-create">
+                  @switch (videoCaption.action) {
+                    @case ('CREATE') {
+                      Will be created on update
+                    } @case ('UPDATE') {
+                      Will be edited on update
+                    } @case ('REMOVE') {
+                      Will be deleted on update
+                    }
+                  }
+                </div>
+
+                @if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
+                  <my-edit-button class="me-2" i18n-label label="Edit" (click)="openEditCaptionModal(videoCaption)"></my-edit-button>
+                }
+
+                <my-button i18n (click)="deleteCaption(videoCaption)" icon="undo">
+                  @switch (videoCaption.action) {
+                    @case ('CREATE') {
+                      Cancel create
+                    } @case ('UPDATE') {
+                      Cancel edition
+                    } @case ('REMOVE') {
+                      Cancel deletion
+                    }
+                  }
+                </my-button>
+              } @else {
                 <a
                   i18n-title title="See the subtitle file" class="caption-entry-label" target="_blank" rel="noopener noreferrer"
                   [href]="videoCaption.captionPath"
@@ -188,33 +219,9 @@
 
                 <div i18n class="caption-entry-state">Already uploaded on {{ videoCaption.updatedAt | date }}	&#10004;</div>
 
-                <button i18n class="caption-entry-edit" (click)="openEditCaptionModal(videoCaption)">Edit</button>
-                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</button>
-              </ng-container>
-
-              <ng-container *ngIf="videoCaption.action === 'CREATE'">
-                <span class="caption-entry-label">{{ getCaptionLabel(videoCaption) }}</span>
-
-                <div i18n class="caption-entry-state caption-entry-state-create">Will be created on update</div>
-
-                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</button>
-              </ng-container>
-
-              <ng-container *ngIf="videoCaption.action === 'UPDATE'">
-                <span class="caption-entry-label">{{ getCaptionLabel(videoCaption) }}</span>
-
-                <div i18n class="caption-entry-state caption-entry-state-create">Will be edited on update</div>
-
-                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel edition</button>
-              </ng-container>
-
-              <ng-container *ngIf="videoCaption.action === 'REMOVE'">
-                <span class="caption-entry-label">{{ getCaptionLabel(videoCaption) }}</span>
-
-                <div i18n class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
-
-                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</button>
-              </ng-container>
+                <my-edit-button i18n-label label="Edit" class="me-2" (click)="openEditCaptionModal(videoCaption)"></my-edit-button>
+                <my-delete-button label (click)="deleteCaption(videoCaption)"></my-delete-button>
+              }
             </div>
           </div>
 

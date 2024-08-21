@@ -75,6 +75,13 @@ export class PeerTubePlayer {
   }
 
   /**
+   * Check if the player is playing the media
+   */
+  async isPlaying () {
+    return this.sendMessage<undefined, boolean>('isPlaying')
+  }
+
+  /**
    * Tell the embed to start/resume playback
    */
   async play () {
@@ -120,6 +127,14 @@ export class PeerTubePlayer {
    */
   async getCaptions (): Promise<PeerTubeTextTrack[]> {
     return this.sendMessage<undefined, PeerTubeTextTrack[]>('getCaptions')
+  }
+
+  /**
+   * Get player current time in seconds.
+   *
+   */
+  async getCurrentTime () {
+    return this.sendMessage<undefined, number>('getCurrentTime')
   }
 
   /**

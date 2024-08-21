@@ -23,6 +23,7 @@ import debug from 'debug'
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { Nl2BrPipe } from '../../../../shared/shared-main/angular/nl2br.pipe'
 
 const debugLogger = debug('peertube:watch:VideoTranscriptionComponent')
 
@@ -48,7 +49,8 @@ type Segment = {
     NgFor,
     NgbCollapse,
     FormsModule,
-    SelectOptionsComponent
+    SelectOptionsComponent,
+    Nl2BrPipe
   ]
 })
 export class VideoTranscriptionComponent implements OnInit, OnChanges {

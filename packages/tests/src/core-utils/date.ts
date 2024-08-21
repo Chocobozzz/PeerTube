@@ -1,4 +1,4 @@
-import { millisecondsToTime, secondsToTime } from '@peertube/peertube-core-utils'
+import { millisecondsToTime, millisecondsToVttTime, secondsToTime } from '@peertube/peertube-core-utils'
 import { expect } from 'chai'
 
 describe('Seconds to time', function () {
@@ -25,5 +25,14 @@ describe('Milliseconds to time', function () {
 
   it('Time inferior to 500ms appears as empty string', function () {
     expect(millisecondsToTime(499)).to.equals('')
+  })
+})
+
+describe('Milliseconds to WebVTT time', function () {
+
+  it('Should have a valid WebVTT time', function () {
+    expect(millisecondsToVttTime(1000)).to.equal('00:00:01.000')
+    expect(millisecondsToVttTime(1001)).to.equal('00:00:01.001')
+    expect(millisecondsToVttTime(3600_000 * 4 + (60_000 * 45))).to.equal('04:45:00.000')
   })
 })
