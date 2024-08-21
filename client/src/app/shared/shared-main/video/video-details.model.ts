@@ -12,15 +12,13 @@ import {
 import { Video } from './video.model'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
+  declare channel: VideoChannel
+  declare account: Account
+
   descriptionPath: string
   support: string
-  channel: VideoChannel
   tags: string[]
-  account: Account
   downloadEnabled: boolean
-
-  waitTranscoding: boolean
-  state: VideoConstant<VideoStateType>
 
   commentsEnabled: never
   commentsPolicy: VideoConstant<VideoCommentPolicyType>
@@ -32,8 +30,11 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   inputFileUpdatedAt: Date | string
 
-  files: VideoFile[]
-  streamingPlaylists: VideoStreamingPlaylist[]
+  // These fields are not optional
+  declare files: VideoFile[]
+  declare streamingPlaylists: VideoStreamingPlaylist[]
+  declare waitTranscoding: boolean
+  declare state: VideoConstant<VideoStateType>
 
   constructor (hash: VideoDetailsServerModel, translations = {}) {
     super(hash, translations)

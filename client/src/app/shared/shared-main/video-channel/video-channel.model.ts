@@ -1,14 +1,12 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { Account as ServerAccount, ActorImage, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
-import { Actor } from '../account/actor.model'
 import { maxBy } from '@peertube/peertube-core-utils'
+import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
+import { Actor } from '../account/actor.model'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
   displayName: string
   description: string
   support: string
-
-  isLocal: boolean
 
   nameWithHost: string
   nameWithHostForced: string

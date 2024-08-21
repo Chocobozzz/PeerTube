@@ -1,6 +1,6 @@
-import { forkJoin, Subscription } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
@@ -12,17 +12,16 @@ import {
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistUpdate } from '@peertube/peertube-models'
-import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
+import { forkJoin, Subscription } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
+import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
+import { PreviewUploadComponent } from '../../shared/shared-forms/preview-upload.component'
 import { SelectChannelComponent } from '../../shared/shared-forms/select/select-channel.component'
 import { SelectOptionsComponent } from '../../shared/shared-forms/select/select-options.component'
-import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
 import { HelpComponent } from '../../shared/shared-main/misc/help.component'
-import { PreviewUploadComponent } from '../../shared/shared-forms/preview-upload.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgClass } from '@angular/common'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
 
 @Component({
   templateUrl: './my-video-playlist-edit.component.html',
@@ -43,7 +42,6 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
 })
 export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implements OnInit, OnDestroy {
   error: string
-  videoPlaylistToUpdate: VideoPlaylist
 
   private paramsSub: Subscription
 

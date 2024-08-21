@@ -44,8 +44,7 @@
       "crypto": [
         "src/shims/noop.ts"
       ]
-    },
-    "useDefineForClassFields": false
+    }
   },
   "references": [
     { "path": "../packages/core-utils" },
