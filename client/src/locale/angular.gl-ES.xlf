@@ -1133,9 +1133,9 @@
           <context context-type="linenumber">398</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7054344823477412274" datatype="html">
+      <trans-unit id="7054344823477412274" datatype="html" xml:space="preserve">
         <source>Transcoding jobs created.</source>
-        <target state="translated">Creados os traballos de transcodificación.</target>
+        <target state="translated">Creadas as tarefas de transcodificación.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">410</context>
@@ -1143,7 +1143,7 @@
       </trans-unit>
       <trans-unit id="5112667021094836629" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</source>
-        <target state="translated">{count, plural, =1 {Creado un traballo de transcrición.} other {Creados <x id="count"/> traballos de transcrición.}}</target>
+        <target state="translated">{count, plural, =1 {Creado unha tarefa de transcrición.} other {Creadas <x id="count"/> tarefas de transcrición.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">426</context>
@@ -1463,7 +1463,7 @@
       </trans-unit>
       <trans-unit id="6334544592573094529" datatype="html" xml:space="preserve">
         <source>Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Traballo de transcodificación creado para "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Tarefa de transcodificación creada para "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">400</context>
@@ -1471,7 +1471,7 @@
       </trans-unit>
       <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Traballo de transcrición creado para "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Tarefa de transcrición creada para "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">412</context>
@@ -4398,9 +4398,9 @@
           <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5153270828945387960" datatype="html">
+      <trans-unit id="5153270828945387960" datatype="html" xml:space="preserve">
         <source>Chapters can also be set in the video description. Check the format <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>in the PeerTube documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Chapters can also be set in the video description. Check the format <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>in the PeerTube documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Tamén se poden establecer capítulos na descrición do vídeo. Mira o formato na <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>documentación de PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">243,246</context>
@@ -5759,57 +5759,57 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6690655144509122658" datatype="html">
+      <trans-unit id="6690655144509122658" datatype="html" xml:space="preserve">
         <source>Transcription</source>
-        <target state="new">Transcription</target>
+        <target state="translated">Transcrición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7274091852247477825" datatype="html">
+      <trans-unit id="7274091852247477825" datatype="html" xml:space="preserve">
         <source>Close transcription widget</source>
-        <target state="new">Close transcription widget</target>
+        <target state="translated">Pechar o trebello para transcrición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8990633416780502626" datatype="html">
+      <trans-unit id="8990633416780502626" datatype="html" xml:space="preserve">
         <source>Search transcript</source>
-        <target state="new">Search transcript</target>
+        <target state="translated">Buscar na transcrición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">41,42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3858389380206796447" datatype="html">
+      <trans-unit id="3858389380206796447" datatype="html" xml:space="preserve">
         <source>No results for your search</source>
-        <target state="new">No results for your search</target>
+        <target state="translated">Sen resultados para a busca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5193080399820584196" datatype="html">
+      <trans-unit id="5193080399820584196" datatype="html" xml:space="preserve">
         <source>Jump to this segment</source>
-        <target state="new">Jump to this segment</target>
+        <target state="translated">Ir a este segmento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">52,53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3474117045932203219" datatype="html">
+      <trans-unit id="3474117045932203219" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="c.language.label"/> (automatically generated)</source>
-        <target state="new"><x id="PH" equiv-text="c.language.label"/> (automatically generated)</target>
+        <target state="translated"><x id="PH" equiv-text="c.language.label"/> (xerados automáticamente)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8383362541941827528" datatype="html">
+      <trans-unit id="8383362541941827528" datatype="html" xml:space="preserve">
         <source>Cannot load transcript: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Cannot load transcript: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Non se cargou a transcrición: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -8696,17 +8696,17 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2308490727635384266" datatype="html">
+      <trans-unit id="2308490727635384266" datatype="html" xml:space="preserve">
         <source>Logs copied</source>
-        <target state="new">Logs copied</target>
+        <target state="translated">Copiouse o rexistro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2064122482972455058" datatype="html">
+      <trans-unit id="2064122482972455058" datatype="html" xml:space="preserve">
         <source>Copy logs</source>
-        <target state="new">Copy logs</target>
+        <target state="translated">Copiar rexistro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -10384,33 +10384,33 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1638224906868555688" datatype="html">
+      <trans-unit id="1638224906868555688" datatype="html" xml:space="preserve">
         <source>Split audio and video streams</source>
-        <target state="new">Split audio and video streams</target>
+        <target state="translated">Separar fluxos de audio e vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">124,125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8778692018772808354" datatype="html">
+      <trans-unit id="8778692018772808354" datatype="html" xml:space="preserve">
         <source>Store the audio stream in a separate file from the video.</source>
-        <target state="new">Store the audio stream in a separate file from the video.</target>
+        <target state="translated">Gardar o fluxo de audio nun ficheiro separado do vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4806060468959678872" datatype="html">
+      <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="new">This option adds the ability for the HLS player to propose the "Audio only" quality to users.</target>
+        <target state="translated">Esta opción engade a posibilidade de que o reprodutor HLS ofreza ás usuarias a versión "Só Audio".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7702925566184017292" datatype="html">
+      <trans-unit id="7702925566184017292" datatype="html" xml:space="preserve">
         <source>It also saves disk space by not duplicating the audio stream in each resolution file</source>
-        <target state="new">It also saves disk space by not duplicating the audio stream in each resolution file</target>
+        <target state="translated">Tamén axuda a aforrar espazo en disco non duplicando o fluxo de audio para cada resolución de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">129</context>
@@ -10536,17 +10536,17 @@
           <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671557140564655234" datatype="html">
+      <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Activada a transcodificación HLS porque polo menos ten que estar activado 1 formato de saída cando a transcodificación está activada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2487046557845958040" datatype="html">
+      <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Activada a transcodificación automática Web Videos porque polo menos ten que estar activado 1 formato de saída cando a transcodificación está activada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -10896,17 +10896,17 @@
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="246143686312852623" datatype="html">
+      <trans-unit id="246143686312852623" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8917573897450243216" datatype="html">
+      <trans-unit id="8917573897450243216" datatype="html" xml:space="preserve">
         <source>Include audio</source>
-        <target state="new">Include audio</target>
+        <target state="translated">Incluír audio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">36</context>
@@ -13596,9 +13596,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5508725342419733476" datatype="html">
+      <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
-        <target state="new">"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</target>
+        <target state="translated">«Separar audio e vídeo» ten que estar activadopara que o reprodutor PeerTube ofreza a resolución «Só audio» ás usuarias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -15296,9 +15296,9 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6494788464560085904" datatype="html">
+      <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="new">{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</target>
+        <target state="translated">{count, plural, =1 {Tarefa cancelada} other {<x id="count"/> tarefas canceladas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -21217,26 +21217,25 @@
           <context context-type="linenumber">445</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7165751653955793192" datatype="html">
+      <trans-unit id="7165751653955793192" datatype="html" xml:space="preserve">
         <source>Subtitle files</source>
-        <target state="new">Subtitle files</target>
+        <target state="translated">Ficheiros de subtítulos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-download.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="845306824019288325" datatype="html">
+      <trans-unit id="845306824019288325" datatype="html" xml:space="preserve">
         <source>The following link contains a private token and should not be shared with anyone.</source>
-        <target state="new"> The following link contains a private token and should not be shared with anyone.
-</target>
+        <target state="translated">A seguinte ligazón contén un token privado que non deberías compartir con ninguén.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">2,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5245067205415784313" datatype="html">
+      <trans-unit id="5245067205415784313" datatype="html" xml:space="preserve">
         <source>Other users cannot download the original file</source>
-        <target state="new">Other users cannot download the original file</target>
+        <target state="translated">Outras usuarias non poden descargar o ficheiro orixinal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">17</context>
@@ -21254,17 +21253,17 @@
           <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5568422920123461404" datatype="html">
+      <trans-unit id="5568422920123461404" datatype="html" xml:space="preserve">
         <source>Show transcription</source>
-        <target state="new">Show transcription</target>
+        <target state="translated">Mostrar transcrición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">461</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1984753051925435175" datatype="html">
+      <trans-unit id="1984753051925435175" datatype="html" xml:space="preserve">
         <source>Hide transcription</source>
-        <target state="new">Hide transcription</target>
+        <target state="translated">Agochar transcrición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">472</context>
@@ -21498,17 +21497,17 @@
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7896600179187469316" datatype="html">
+      <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</source>
-        <target state="new">{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</target>
+        <target state="translated">{count, plural, =1 {Tarefa eliminada} other {<x id="count"/> tarefas eliminadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8527948211896740910" datatype="html">
+      <trans-unit id="8527948211896740910" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="translated">Tes a certeza de querer eliminar este programa? Non poderá volver a executar tarefas con el.</target>
+        <target state="translated">Tes a certeza de querer eliminar este programa? Non poderás volver a executar tarefas con el.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">65</context>
