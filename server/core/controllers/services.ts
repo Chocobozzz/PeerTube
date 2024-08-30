@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { escapeHTML, forceNumber } from '@peertube/peertube-core-utils'
 import { MChannelSummary } from '@server/types/models/index.js'
 import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants.js'
@@ -10,6 +11,7 @@ const servicesRouter = express.Router()
 servicesRouter.use('/oembed',
   apiRateLimiter,
   asyncMiddleware(oembedValidator),
+  cors({ origin: '*' }),
   generateOEmbed
 )
 servicesRouter.use('/redirect/accounts/:accountName',
