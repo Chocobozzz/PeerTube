@@ -4598,9 +4598,9 @@
           <context context-type="linenumber">448</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1669378369440073270" datatype="html">
+      <trans-unit id="1669378369440073270" datatype="html" xml:space="preserve">
         <source>Plugin settings</source>
-        <target state="translated">Axustes do Plugin</target>
+        <target state="translated">Axustes do complemento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">466</context>
@@ -5679,9 +5679,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2392048495773035896" datatype="html">
+      <trans-unit id="2392048495773035896" datatype="html" xml:space="preserve">
         <source>Open the modal to support the video uploader</source>
-        <target state="translated">Abrir a ventá emerxente para axudar á autora</target>
+        <target state="translated">Abrir a xanela modal para axudar á autora do vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -8159,33 +8159,33 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2338185419645468935" datatype="html">
+      <trans-unit id="2338185419645468935" datatype="html" xml:space="preserve">
         <source>List installed plugins</source>
-        <target state="translated">Lista de plugins instalados</target>
+        <target state="translated">Lista de complementos instalados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8897412584195581488" datatype="html">
+      <trans-unit id="8897412584195581488" datatype="html" xml:space="preserve">
         <source>Search plugins</source>
-        <target state="translated">Buscar plugins</target>
+        <target state="translated">Buscar complementos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4994333937800672218" datatype="html">
+      <trans-unit id="4994333937800672218" datatype="html" xml:space="preserve">
         <source>Show plugin</source>
-        <target state="translated">Mostrar plugin</target>
+        <target state="translated">Mostrar complemento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8259696070728377358" datatype="html">
+      <trans-unit id="8259696070728377358" datatype="html" xml:space="preserve">
         <source>Plugins/Themes</source>
-        <target state="translated">Plugins/Decorados</target>
+        <target state="translated">Complementos/Decorados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -8235,9 +8235,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7002061007877950198" datatype="html">
+      <trans-unit id="7002061007877950198" datatype="html" xml:space="preserve">
         <source>Plugin homepage (new window)</source>
-        <target state="translated">Páxina do plugin (nova ventá)</target>
+        <target state="translated">Páxina do complemento (nova xanela)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">8</context>
@@ -8327,9 +8327,9 @@
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2006841089844688970" datatype="html">
+      <trans-unit id="2006841089844688970" datatype="html" xml:space="preserve">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="translated">Para cargar os novos plugins ou decorados instalados, actualiza a páxina.</target>
+        <target state="translated">Para cargar os novos complementos ou decorados instalados, actualiza a páxina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">4</context>
@@ -14768,9 +14768,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="212615365039028546" datatype="html">
+      <trans-unit id="212615365039028546" datatype="html" xml:space="preserve">
         <source>You don't have plugins installed yet.</source>
-        <target state="translated">Aínda non tes plugins instalados.</target>
+        <target state="translated">Aínda non tes complementos instalados.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">106</context>
@@ -14872,17 +14872,17 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3150704904301058778" datatype="html">
+      <trans-unit id="3150704904301058778" datatype="html" xml:space="preserve">
         <source>The plugin index is not available. Please retry later.</source>
-        <target state="translated">O índice de plugins non está dispoñible, inténtao máis tarde.</target>
+        <target state="translated">O índice de complementos non está dispoñible, inténtao máis tarde.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1387301493234848481" datatype="html">
+      <trans-unit id="1387301493234848481" datatype="html" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target state="translated">Instala só decorados e plugins nos que confíes, porque poden executar calquera código na túa instancia.</target>
+        <target state="translated">Instala só decorados e complementos nos que confíes, porque poden executar calquera código na túa instancia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -14912,9 +14912,9 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2941409202780782189" datatype="html">
+      <trans-unit id="2941409202780782189" datatype="html" xml:space="preserve">
         <source>plugin</source>
-        <target state="translated">plugin</target>
+        <target state="translated">complemento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">31</context>
