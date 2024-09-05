@@ -9,9 +9,9 @@ import { accountNameWithHostGetValidator } from '../middlewares/validators/index
 const servicesRouter = express.Router()
 
 servicesRouter.use('/oembed',
+  cors(),
   apiRateLimiter,
   asyncMiddleware(oembedValidator),
-  cors({ origin: '*' }),
   generateOEmbed
 )
 servicesRouter.use('/redirect/accounts/:accountName',

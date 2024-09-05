@@ -201,9 +201,6 @@ function checkParamEmbed (
   return makeGetRequest({
     url: server.url,
     path,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
     query: Object.assign(query, { url: embedUrl }),
     expectedStatus
   })
