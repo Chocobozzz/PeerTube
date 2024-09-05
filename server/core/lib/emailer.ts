@@ -271,6 +271,8 @@ class Emailer {
 
     const toEmails = arrayify(options.to)
 
+    const errors: Error[] = []
+
     for (const to of toEmails) {
       const baseOptions: SendEmailDefaultOptions = {
         template: 'common',
@@ -292,9 +294,22 @@ class Emailer {
       // overridden/new variables given for a specific template in the payload
       const sendOptions = merge(baseOptions, options)
 
-      await email.send(sendOptions)
-        .then(res => logger.debug('Sent email.', { res }))
-        .catch(err => logger.error('Error in email sender.', { err }))
+      try {
+        const res = await email.send(sendOptions)
+
+        logger.debug('Sent email.', { res })
+      } catch (err) {
+        errors.push(err)
+
+        logger.error('Error in email sender.', { err })
+      }
+    }
+
+    if (errors.length !== 0) {
+      const err = new Error('Some errors when sent emails') as Error & { errors: Error[] }
+      err.errors = errors
+
+      throw err
     }
   }
 
