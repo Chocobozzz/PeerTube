@@ -41,7 +41,7 @@
     "  off": "  κλειστό",
     "Player mode": "Player mode",
     "Play in loop": "Λούπα",
-    "This live has not started yet.": "Αυτό το live δεν ξεκίνησε ακόμα.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Αυτό το live τελείωσε.",
     "The video failed to play, will try to fast forward.": "Αποτυχία στην αναπαραγωγή του βίντεο, προσπάθεια για παρακάτω.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Εκκίνηση του παραθύρου διαλόγου. Πατώντας Esc ακυρώνετε και κλείνετε το παράθυρο.",
     "End of dialog window.": "Τέλος του παραθύρου διαλόγου.",
     "{1} is loading.": "Το {1} φορτώνεται.",
+    "This live has not started yet.": "Αυτό το live δεν ξεκίνησε ακόμα.",
     "Uses P2P, others may know you are watching this video.": "Με χρήση P2P. Άλλοι ίσως μπορούν να δουν ότι παρακολουθείτε αυτό το βίντεο."
 }

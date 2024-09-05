@@ -41,7 +41,7 @@
     "  off": "  av",
     "Player mode": "Spillermodus",
     "Play in loop": "Play in loop",
-    "This live has not started yet.": "This live has not started yet.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Direktesendingen er avsluttet.",
     "The video failed to play, will try to fast forward.": "The video failed to play, will try to fast forward.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "",
     "End of dialog window.": "",
     "{1} is loading.": "",
+    "This live has not started yet.": "This live has not started yet.",
     "Uses P2P, others may know you are watching this video.": ""
 }

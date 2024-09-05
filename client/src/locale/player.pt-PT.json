@@ -41,7 +41,7 @@
     "  off": "  desligado",
     "Player mode": "Modo do reprodutor",
     "Play in loop": "Reproduzir em repetição",
-    "This live has not started yet.": "Esta transmissão ainda não começou.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Esta transmissão terminou.",
     "The video failed to play, will try to fast forward.": "O vídeo falhou ao reproduzir, vamos tentar avançar para a frente.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Início da janela de diálogo. A tecla Esc irá cancelar e fechar a janela.",
     "End of dialog window.": "Fim da janela de diálogo.",
     "{1} is loading.": "{1} está a carregar.",
+    "This live has not started yet.": "Esta transmissão ainda não começou.",
     "Uses P2P, others may know you are watching this video.": "Utiliza P2P, terceiros poderão saber que estás a ver este vídeo."
 }

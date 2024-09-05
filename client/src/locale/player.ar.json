@@ -41,7 +41,7 @@
     "  off": "  معطّل",
     "Player mode": "وضع التشغيل",
     "Play in loop": "التشغيل في حلقة",
-    "This live has not started yet.": "هذا المباشر لم يبدأ بعد.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "انتهى هذا المباشر.",
     "The video failed to play, will try to fast forward.": "فشل تشغيل المقطع، سيحاول التسريع للأمام.",
     "{1} / {2} dropped of {3}": "تم إسقاط {1} / {2} من {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "الضغط على زر Esc في بداية نافذة الحوار سيلغي ويقفل النافذة.",
     "End of dialog window.": "نهاية نافذة الحوار.",
     "{1} is loading.": "جارٍ تحميل {1}.",
+    "This live has not started yet.": "هذا المباشر لم يبدأ بعد.",
     "Uses P2P, others may know you are watching this video.": "يستخدم P2P، يمكن للآخرين معرفة إن كنت تشاهد هذا الفيديو."
 }

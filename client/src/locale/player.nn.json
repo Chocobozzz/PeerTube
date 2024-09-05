@@ -41,7 +41,7 @@
     "  off": "  av",
     "Player mode": "Player mode",
     "Play in loop": "Play in loop",
-    "This live has not started yet.": "This live has not started yet.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "This live has ended.",
     "The video failed to play, will try to fast forward.": "Greidde ikkje spela filmen, vil prøva å spola framover.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -144,5 +144,6 @@
     "Caption Settings Dialog": "Undertekstinnstillingar",
     "Beginning of dialog window. Escape will cancel and close the window.": "Starten på dialogvindauga. Å trykkja Escape avbryt og lukkar vindauga.",
     "End of dialog window.": "Slutten på dialogvindauga.",
-    "{1} is loading.": "{1} lastar."
+    "{1} is loading.": "{1} lastar.",
+    "This live has not started yet.": "This live has not started yet."
 }

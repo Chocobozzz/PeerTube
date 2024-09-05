@@ -41,7 +41,7 @@
     "  off": "  خاموش",
     "Player mode": "وضعیت پخش‌کننده",
     "Play in loop": "پخش در حالت لوپ",
-    "This live has not started yet.": "این پخش زنده هنوز شروع نشده است.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "این پخش زنده تمام شده است.",
     "The video failed to play, will try to fast forward.": "پخش ویدئو با مشکل روبرو شد، تلاش برای جلو بردن آن.",
     "{1} / {2} dropped of {3}": "{1} / {2} از {3} کاهش یافت",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "شروع پنجره گفتگو . برای ستن این پنجره دکمه escape را بزنید.",
     "End of dialog window.": "انتهای پنجره دیالوگ.",
     "{1} is loading.": "{1} در حال بارگیری است.",
+    "This live has not started yet.": "این پخش زنده هنوز شروع نشده است.",
     "Uses P2P, others may know you are watching this video.": "استفاده‌از P2P، ممکنه‌بقیه‌متوجه‌شوند‌ شما‌این ویدئو‌را تماشا‌میکنید."
 }

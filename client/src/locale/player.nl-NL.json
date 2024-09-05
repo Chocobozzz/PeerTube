@@ -41,7 +41,7 @@
     "  off": "  uit",
     "Player mode": "Videospelermodus",
     "Play in loop": "Afspelen in lus",
-    "This live has not started yet.": "Deze live-uitzending is nog niet begonnen.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Deze live-uitzending is voorbij.",
     "The video failed to play, will try to fast forward.": "De video wilde niet afspelen, ik zal proberen door te spoelen.",
     "{1} / {2} dropped of {3}": "{1} / {2} verloren beelden van {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Begin van dialoogvenster. Escape verwerpt de wijzigingen en sluit het venster.",
     "End of dialog window.": "Einde van dialoogvenster.",
     "{1} is loading.": "{1} wordt geladen.",
+    "This live has not started yet.": "Deze live-uitzending is nog niet begonnen.",
     "Uses P2P, others may know you are watching this video.": "Maakt gebruik van P2P, anderen kunnen mogelijk zien dat je deze video bekijkt."
 }

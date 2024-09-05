@@ -41,7 +41,7 @@
     "  off": "  slökkt",
     "Player mode": "Spilarahamur",
     "Play in loop": "Spila endurtekið aftur",
-    "This live has not started yet.": "Þetta beina streymi er ekki byrjað ennþá.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Þessu beina streymi er lokið.",
     "The video failed to play, will try to fast forward.": "Ekki tókst að spila myndskeiðið, munum reyna að spóla áfram.",
     "{1} / {2} dropped of {3}": "{1} / {2} sleppt af {3}",
@@ -144,5 +144,6 @@
     "Caption Settings Dialog": "Gluggi fyrir stillingar skýringartexta",
     "Beginning of dialog window. Escape will cancel and close the window.": "Byrjunin á kvaðningarglugganum. Sé ýtt á Esc er hætt við og glugganum lokað.",
     "End of dialog window.": "Endi samskiptaglugga.",
-    "{1} is loading.": "{1} er að hlaðast inn."
+    "{1} is loading.": "{1} er að hlaðast inn.",
+    "This live has not started yet.": "Þetta beina streymi er ekki byrjað ennþá."
 }

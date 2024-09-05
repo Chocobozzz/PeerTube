@@ -41,7 +41,7 @@
     "  off": "  aus",
     "Player mode": "Player-Modus",
     "Play in loop": "In Schleife abspielen",
-    "This live has not started yet.": "Diese Live-Übertragung hat noch nicht begonnen.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Die Live-Übertragung wurde beendet.",
     "The video failed to play, will try to fast forward.": "Das Video kann nicht abgespielt werden, versuche vorzuspulen.",
     "{1} / {2} dropped of {3}": "{1} / {2} verworfen von {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Anfang des Dialogfensters. Mit der Escape-Taste wird das Fenster ohne Speichern geschlossen.",
     "End of dialog window.": "Ende des Dialogfensters.",
     "{1} is loading.": "{1} lädt.",
+    "This live has not started yet.": "Diese Live-Übertragung hat noch nicht begonnen.",
     "Uses P2P, others may know you are watching this video.": "Nutzt Peer-to-Peer-Technologie, daher könnten andere wissen, dass Du dieses Video ansiehst."
 }

@@ -41,7 +41,7 @@
     "  off": "",
     "Player mode": "",
     "Play in loop": "pini la o open sin",
-    "This live has not started yet.": "This live has not started yet.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "This live has ended.",
     "The video failed to play, will try to fast forward.": "pakala li lon. mi alasa tawa pini pakala.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -144,5 +144,6 @@
     "Caption Settings Dialog": "",
     "Beginning of dialog window. Escape will cancel and close the window.": "",
     "End of dialog window.": "",
-    "{1} is loading.": "mi awen kama jo e {1}."
+    "{1} is loading.": "mi awen kama jo e {1}.",
+    "This live has not started yet.": "This live has not started yet."
 }

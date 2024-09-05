@@ -41,7 +41,7 @@
     "  off": "  désactivé",
     "Player mode": "Player mode",
     "Play in loop": "Lecture en boucle",
-    "This live has not started yet.": "Ce direct n'a pas encore démarré.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Ce direct est terminé.",
     "The video failed to play, will try to fast forward.": "La lecture de la vidéo a échoué, tentative de lecture en avance rapide.",
     "{1} / {2} dropped of {3}": "{1} / {2} supprimées sur {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Début de la fenêtre de dialogue. La touche d’échappement annulera et fermera la fenêtre.",
     "End of dialog window.": "Fin de la fenêtre de dialogue.",
     "{1} is loading.": "{1} est en train de charger.",
+    "This live has not started yet.": "Ce direct n'a pas encore démarré.",
     "Uses P2P, others may know you are watching this video.": "Utilise le P2P, d’autres personnes pourraient savoir que vous regardez cette vidéo."
 }

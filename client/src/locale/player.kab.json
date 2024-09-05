@@ -41,7 +41,7 @@
     "  off": "  ittwasens",
     "Player mode": "Player mode",
     "Play in loop": "Play in loop",
-    "This live has not started yet.": "This live has not started yet.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "This live has ended.",
     "The video failed to play, will try to fast forward.": "The video failed to play, will try to fast forward.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Tazwara n usfaylu n udiwenni. Taqeffalt Escape ad t-tsefsex yerna ad temdel asfaylu.",
     "End of dialog window.": "Taggara n usfaylu n udiwenni.",
     "{1} is loading.": "{1} yettali-d.",
+    "This live has not started yet.": "This live has not started yet.",
     "Uses P2P, others may know you are watching this video.": "Isseqdac P2P, zemren wiyaḍ ad ẓren belli tettwaliḍ tavidyut-a."
 }

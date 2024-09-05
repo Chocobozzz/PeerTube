@@ -41,7 +41,7 @@
     "  off": "  ki",
     "Player mode": "Lejátszó módja",
     "Play in loop": "Ismételt lejátszás",
-    "This live has not started yet.": "Ez az élő adás még nem kezdődött el.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Ez az élő adás már befejeződött.",
     "The video failed to play, will try to fast forward.": "A videó lejátszása nem sikerült, gyors előretekerés megkísérlése.",
     "{1} / {2} dropped of {3}": "{1} / {2} eldobva, összes: {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "A párbeszédablak kezdete. Az Escape megszakítja és bezárja az ablakot.",
     "End of dialog window.": "Párbeszédablak vége.",
     "{1} is loading.": "{1} töltődik.",
+    "This live has not started yet.": "Ez az élő adás még nem kezdődött el.",
     "Uses P2P, others may know you are watching this video.": "Egyenrangú hálózatot használ, ezért mások is tudhatják, hogy ezt a videót nézi."
 }

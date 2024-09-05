@@ -41,7 +41,7 @@
     "  off": "  kapalı",
     "Player mode": "Player mode",
     "Play in loop": "Döngüde oynat",
-    "This live has not started yet.": "Bu canlı yayın henüz başlamadı.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Canlı yayın sona erdi.",
     "The video failed to play, will try to fast forward.": "Video oynatılamadı, ileri sarmayı deneyin.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "İletişim penceresi başlatılıyor. Çıkış yapmak; iptal eder ve pencereyi kapatır.",
     "End of dialog window.": "İletişim penceresinin sonu.",
     "{1} is loading.": "{1} yükleniyor.",
+    "This live has not started yet.": "Bu canlı yayın henüz başlamadı.",
     "Uses P2P, others may know you are watching this video.": "P2P kullanılıyor. Bu videoyu izlediğinizi diğerleri biliyor olabilir."
 }

@@ -41,7 +41,7 @@
     "  off": "  isključeno",
     "Player mode": "Modus playera",
     "Play in loop": "Ponavljaj reprodukciju",
-    "This live has not started yet.": "Ovaj prijenos uživo još nije pokrenut.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Ovaj prijenos uživo je završen.",
     "The video failed to play, will try to fast forward.": "Reprodukcija videa nije uspjela, pokušat će se premotati unaprijed.",
     "{1} / {2} dropped of {3}": "{1} / {2} zanemareno od {3}",
@@ -144,5 +144,6 @@
     "Caption Settings Dialog": "Dijalog za postavke titlova",
     "Beginning of dialog window. Escape will cancel and close the window.": "Početak prozora dijaloga. Tipka Escape prekida radnju i zatvara prozor.",
     "End of dialog window.": "Kraj prozora dijaloga.",
-    "{1} is loading.": "{1} se učitava."
+    "{1} is loading.": "{1} se učitava.",
+    "This live has not started yet.": "Ovaj prijenos uživo još nije pokrenut."
 }

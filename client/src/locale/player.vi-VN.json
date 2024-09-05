@@ -41,7 +41,7 @@
     "  off": "  tắt",
     "Player mode": "Kiểu phát",
     "Play in loop": "Phát lặp lại",
-    "This live has not started yet.": "Buổi livestream chưa bắt đầu.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Buổi livestream đã kết thúc.",
     "The video failed to play, will try to fast forward.": "Không thể phát video, sẽ cố gắng tua nhanh.",
     "{1} / {2} dropped of {3}": "{1} / {2} thất bại trong {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Đang mở cửa sổ hộp thoại. Thoát lúc này sẽ hủy bỏ và đóng cửa sổ.",
     "End of dialog window.": "Hết cửa sổ hộp thoại.",
     "{1} is loading.": "Đang tải {1}.",
+    "This live has not started yet.": "Buổi livestream chưa bắt đầu.",
     "Uses P2P, others may know you are watching this video.": "Khi dùng P2P, người khác có thể biết bạn đang xem video này."
 }

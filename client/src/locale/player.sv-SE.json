@@ -41,7 +41,7 @@
     "  off": "  av",
     "Player mode": "Uppspelningsläge",
     "Play in loop": "Spela i slinga",
-    "This live has not started yet.": "Den här sändningen har inte startat än.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Den här sändningen är avslutad.",
     "The video failed to play, will try to fast forward.": "Videon kunde inte spelas upp, försöker spola framåt.",
     "{1} / {2} dropped of {3}": "{1} / {2} av {3} har hoppats över",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Början av dialogruta. Tryck Escape för att avbryta och stänga fönstret.",
     "End of dialog window.": "Slut på dialogruta.",
     "{1} is loading.": "{1} laddar.",
+    "This live has not started yet.": "Den här sändningen har inte startat än.",
     "Uses P2P, others may know you are watching this video.": "Använder P2P, andra kan veta att du tittar på den här videon."
 }

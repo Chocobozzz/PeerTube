@@ -41,7 +41,7 @@
     "  off": "  dheth",
     "Player mode": "Player mode",
     "Play in loop": "Cluich ’na lùb",
-    "This live has not started yet.": "Cha do thòisich an sruthadh beò seo fhathast.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Thàinig an sruthadh beò seo gu crìch.",
     "The video failed to play, will try to fast forward.": "Dh’fhàillig le cluich a’ video, a’ feuchainn ri toinneadh air adhart.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Toiseach uinneag còmhraidh. Sguiridh Escape dheth ’s dùinidh e an uinneag.",
     "End of dialog window.": "Deireadh uinneag còmhraidh.",
     "{1} is loading.": "Tha {1} ’ga luchdadh.",
+    "This live has not started yet.": "Cha do thòisich an sruthadh beò seo fhathast.",
     "Uses P2P, others may know you are watching this video.": "Cleachdaidh e P2P, dh’fhaoidte gum bi fios aig càch gu bheil thu a’ coimhead air a’ video seo."
 }

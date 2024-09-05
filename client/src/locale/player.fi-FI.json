@@ -41,7 +41,7 @@
     "  off": "  off",
     "Player mode": "Soittimen tila",
     "Play in loop": "Toista luupissa",
-    "This live has not started yet.": "Live ei ole alkanut vielä.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Live on päättynyt.",
     "The video failed to play, will try to fast forward.": "Videon toistossa tapahtui virhe. Yritetään kelata eteenpäin.",
     "{1} / {2} dropped of {3}": "{1} / {2} tiputettu {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Valintaikkunan alku. Escape-näppäin peruuttaa ja sulkee ikkunan.",
     "End of dialog window.": "Valintaikkunan loppu.",
     "{1} is loading.": "{1} latautuu.",
+    "This live has not started yet.": "Live ei ole alkanut vielä.",
     "Uses P2P, others may know you are watching this video.": "Käyttää vertaisverkkoa, muut saattavat tietää katsovasi tätä videota."
 }

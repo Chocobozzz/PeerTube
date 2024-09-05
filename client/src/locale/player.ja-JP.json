@@ -41,7 +41,7 @@
     "  off": "  オフ",
     "Player mode": "再生モード",
     "Play in loop": "ループ再生",
-    "This live has not started yet.": "このライブ配信はまだ始まっていません。",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "このライブ配信は終了しました。",
     "The video failed to play, will try to fast forward.": "動画の再生に失敗しました。早送りで再生しようとしています。",
     "{1} / {2} dropped of {3}": "{1} / {3}フレームの内 {2}ドロップ",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "最初のダイアログウィンドウ。Escキーでキャンセルし、ウィンドウを閉じます。",
     "End of dialog window.": "ダイアログウィンドウの終了です。",
     "{1} is loading.": "{1}を読み込み中です。",
+    "This live has not started yet.": "このライブ配信はまだ始まっていません。",
     "Uses P2P, others may know you are watching this video.": "P2P機能を使用すると、この動画を再生していることが第三者に知られるかもしれません。"
 }

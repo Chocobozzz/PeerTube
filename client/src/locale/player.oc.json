@@ -41,7 +41,7 @@
     "  off": "  desactivats",
     "Player mode": "Player mode",
     "Play in loop": "Lector en bocla",
-    "This live has not started yet.": "Lo dirècte a pas encara començat.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Lo dirèct es acabat.",
     "The video failed to play, will try to fast forward.": "The video failed to play, will try to fast forward.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Debuta de la fenèstra. Escapar anullarà e tamparà la fenèstra.",
     "End of dialog window.": "Fin de la fenèstra.",
     "{1} is loading.": "{1} es a cargar.",
+    "This live has not started yet.": "Lo dirècte a pas encara començat.",
     "Uses P2P, others may know you are watching this video.": "Utiliza lo P2P, se pòt que d’autres sián a agachar aquesta vidèo."
 }

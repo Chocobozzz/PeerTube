@@ -41,7 +41,7 @@
     "  off": "  выключить",
     "Player mode": "Режим проигрывателя",
     "Play in loop": "Воспроизведение в цикле",
-    "This live has not started yet.": "Трансляция ещё не началась.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Трансляция закончилась.",
     "The video failed to play, will try to fast forward.": "Не удалось воспроизвести видео, постараюсь перемотать вперед.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Начало диалогового окна. Клавиша «Escape» отменит действие и закроет окно.",
     "End of dialog window.": "Конец диалогового окна.",
     "{1} is loading.": "Загрузка {1}.",
+    "This live has not started yet.": "Трансляция ещё не началась.",
     "Uses P2P, others may know you are watching this video.": "Использует P2P, позволяя другим узнать, что вы просматриваете это видео."
 }

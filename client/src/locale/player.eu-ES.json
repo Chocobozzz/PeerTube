@@ -41,7 +41,7 @@
     "  off": "  itzalita",
     "Player mode": "Erreproduzigailuaren modua",
     "Play in loop": "Begiztan erreproduzitu",
-    "This live has not started yet.": "Zuzeneko hau ez da oraindik hasi.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Zuzeneko hau amaitu da.",
     "The video failed to play, will try to fast forward.": "Bideoa ezin izan da erreproduzitu eta azkar aurreratzen saiatuko da.",
     "{1} / {2} dropped of {3}": "{1} / {2} hemendik erorita {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Elkarrizketa koadroaren hasiera. Esc teklak ezeztatu eta leihoa itxiko du.",
     "End of dialog window.": "Elkarrizketa koadroaren amaiera.",
     "{1} is loading.": "{1} kargatzen ari da.",
+    "This live has not started yet.": "Zuzeneko hau ez da oraindik hasi.",
     "Uses P2P, others may know you are watching this video.": "P2P darabil, beste batzuk bideo hau ikusten ari zarela jakin dezakete."
 }

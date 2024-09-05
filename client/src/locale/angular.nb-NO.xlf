@@ -5527,15 +5527,16 @@ The link will expire within 1 hour.</source>
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="4262297989675590582" datatype="html">
-        <source>This live has not started yet.</source>
-        <target state="translated">Denne direktesendingen har ikke startet ennå.</target>
+      </trans-unit><trans-unit id="1455798149629145184" datatype="html">
+        <source> TThis live is not currently streaming.
+</source><target state="new"> TThis live is not currently streaming.
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
+      
       <trans-unit id="4926204350710628499" datatype="html">
         <source>This live has ended.</source>
         <target state="translated">Denne direktesendingen er avsluttet.</target>
@@ -16108,19 +16109,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
         <target state="translated">Video før utgave</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">73</context></context-group></trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
         <target state="new">Edition tasks:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">78</context></context-group></trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
         <target state="translated">Er du sikker på at du vil redigere "<x id="PH" equiv-text="this.video.name"/>"?</target>

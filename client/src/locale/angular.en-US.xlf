@@ -3013,12 +3013,15 @@ The link will expire within 1 hour.</target>
 </source><target state="final"> This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>.
 </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">2</context></context-group></trans-unit><trans-unit id="4262297989675590582" datatype="html">
-        <source> This live has not started yet.
-</source><target state="final"> This live has not started yet.
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">2</context></context-group></trans-unit><trans-unit id="1455798149629145184" datatype="html">
+        <source> TThis live is not currently streaming.
+</source><target state="final"> TThis live is not currently streaming.
 </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">6</context></context-group></trans-unit><trans-unit id="4926204350710628499" datatype="html">
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
+          <context context-type="linenumber">6,9</context>
+        </context-group>
+      </trans-unit><trans-unit id="4926204350710628499" datatype="html">
         <source> This live has ended.
 </source><target state="final"> This live has ended.
 </target>
@@ -8608,10 +8611,10 @@ The link will expire within 1 hour.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">66</context></context-group></trans-unit><trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source><target state="final">Video before edition</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">75</context></context-group></trans-unit><trans-unit id="1109043661443571733" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">73</context></context-group></trans-unit><trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source><target state="final">Edition tasks:</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">80</context></context-group></trans-unit><trans-unit id="3541115907775840269" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">78</context></context-group></trans-unit><trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source><target state="final">Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">93</context></context-group></trans-unit><trans-unit id="3858880927114551513" datatype="html">

@@ -41,7 +41,7 @@
     "  off": "  已关闭",
     "Player mode": "播放器模式",
     "Play in loop": "循环播放",
-    "This live has not started yet.": "这场直播还没有开始。",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "此次直播已经结束了。",
     "The video failed to play, will try to fast forward.": "播放此视频失败，将尝试快进。",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "开始对话框。按下 Esc 将取消和关闭该窗口。",
     "End of dialog window.": "结束对话框。",
     "{1} is loading.": "正在加载 {1}。",
+    "This live has not started yet.": "这场直播还没有开始。",
     "Uses P2P, others may know you are watching this video.": "使用对等网络时，其他人可能会知道你正在观看此视频。"
 }

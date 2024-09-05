@@ -11574,14 +11574,14 @@ The link will expire within 1 hour.</source>
         <source>Video before edition</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
-          <context context-type="linenumber">75,76</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
-          <context context-type="linenumber">80,82</context>
+          <context context-type="linenumber">78,80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
@@ -13576,8 +13576,8 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">2,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4262297989675590582" datatype="html">
-        <source> This live has not started yet.
+      <trans-unit id="1455798149629145184" datatype="html">
+        <source> TThis live is not currently streaming.
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>

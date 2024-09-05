@@ -41,7 +41,7 @@
     "  off": "  off",
     "Player mode": "Player mode",
     "Play in loop": "Filmi ripete",
-    "This live has not started yet.": "This live has not started yet.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "This live has ended.",
     "The video failed to play, will try to fast forward.": "The video failed to play, will try to fast forward.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Komenco de interaga fenestro. Nuliga klavo nuligos kaj fermos la fenestron.",
     "End of dialog window.": "Fino de interaga fenestro.",
     "{1} is loading.": "{1} estas enlegata.",
+    "This live has not started yet.": "This live has not started yet.",
     "Uses P2P, others may know you are watching this video.": "Uzas samtavolan teĥnikaron; aliuloj eble scios, ke vi spektas la filmon."
 }

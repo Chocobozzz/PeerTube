@@ -41,7 +41,7 @@
     "  off": "  off",
     "Player mode": "Mënyrë lojtësi",
     "Play in loop": "",
-    "This live has not started yet.": "Ky transmetim i drejtpërdrejtë s’ka filluar ende.",
+    "This live is not currently streaming.": "This live is not currently streaming.",
     "This live has ended.": "Ky transmetim i drejtpërdrejtë ka përfunduar.",
     "The video failed to play, will try to fast forward.": "Dështoi luajtja e videos, do të provohet të shtyhet përpara.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
@@ -145,5 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Fillim i dritares së dialogëve. Shtypja e tastit Esc do ta anulojë veprimin dhe mbyllë dritaren.",
     "End of dialog window.": "Hap dritare dialogu.",
     "{1} is loading.": "{1} po ngarkohet.",
+    "This live has not started yet.": "Ky transmetim i drejtpërdrejtë s’ka filluar ende.",
     "Uses P2P, others may know you are watching this video.": "Përdor P2P, të tjerë mund të dinë që po shihni këtë video."
 }
