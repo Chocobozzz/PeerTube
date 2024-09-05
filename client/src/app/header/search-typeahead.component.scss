@@ -2,6 +2,8 @@
 @use '_mixins' as *;
 
 #search-video {
+  text-overflow: ellipsis;
+
   @include peertube-input-text($search-input-width, 14px);
   @include padding-left(10px);
   @include padding-right(40px); // For the search icon

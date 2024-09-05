@@ -142,8 +142,6 @@ class SettingsMenuItem extends MenuItem {
    *
    */
   createEl () {
-    console.log('create el')
-
     const el = videojs.dom.createEl('li', {
       className: 'vjs-menu-item',
       tabIndex: 0
