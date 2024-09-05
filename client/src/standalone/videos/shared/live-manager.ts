@@ -83,7 +83,7 @@ export class LiveManager {
   }
 
   private displayWaitingForLiveInfo (translations: Translations) {
-    this.playerHTML.displayInformation('This live has not started yet.', translations)
+    this.playerHTML.displayInformation('This live is not currently streaming.', translations)
   }
 
   private displayEndedLiveInfo (translations: Translations) {
