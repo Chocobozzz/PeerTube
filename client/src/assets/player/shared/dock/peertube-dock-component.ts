@@ -9,8 +9,7 @@ export type PeerTubeDockComponentOptions = {
 }
 
 class PeerTubeDockComponent extends Component {
-
-  options_: videojs.ComponentOptions & PeerTubeDockComponentOptions
+  declare options_: videojs.ComponentOptions & PeerTubeDockComponentOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor (player: videojs.Player, options: videojs.ComponentOptions & PeerTubeDockComponentOptions) {

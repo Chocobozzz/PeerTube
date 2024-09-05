@@ -1,17 +1,18 @@
+import { VideoChapter } from '@peertube/peertube-models'
 import videojs from 'video.js'
 import { ChaptersOptions } from '../../types'
-import { VideoChapter } from '@peertube/peertube-models'
 import { ProgressBarMarkerComponent } from './progress-bar-marker-component'
 
 const Plugin = videojs.getPlugin('plugin')
 
 class ChaptersPlugin extends Plugin {
-  private chapters: VideoChapter[] = []
-  private markers: ProgressBarMarkerComponent[] = []
+  declare private chapters: VideoChapter[]
+  declare private markers: ProgressBarMarkerComponent[]
 
   constructor (player: videojs.Player, options: videojs.ComponentOptions & ChaptersOptions) {
     super(player, options)
 
+    this.markers = []
     this.chapters = options.chapters
 
     this.player.ready(() => {

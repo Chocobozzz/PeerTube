@@ -12,31 +12,45 @@ const debugLogger = debug('peertube:player:p2p-media-loader')
 
 const Plugin = videojs.getPlugin('plugin')
 class P2pMediaLoaderPlugin extends Plugin {
-  private readonly options: P2PMediaLoaderPluginOptions
+  declare private readonly options: P2PMediaLoaderPluginOptions
 
-  private hlsjs: Hlsjs
-  private p2pEngine: Engine
-  private statsP2PBytes = {
-    pendingDownload: [] as number[],
-    pendingUpload: [] as number[],
-    peersWithWebSeed: 0,
-    peersP2POnly: 0,
-    totalDownload: 0,
-    totalUpload: 0
+  declare private hlsjs: Hlsjs
+  declare private p2pEngine: Engine
+  declare private statsP2PBytes: {
+    pendingDownload: number[]
+    pendingUpload: number[]
+    peersWithWebSeed: number
+    peersP2POnly: number
+    totalDownload: number
+    totalUpload: number
   }
-  private statsHTTPBytes = {
-    pendingDownload: [] as number[],
-    totalDownload: 0
+  declare private statsHTTPBytes: {
+    pendingDownload: number[]
+    totalDownload: number
   }
 
-  private networkInfoInterval: any
+  declare private networkInfoInterval: any
 
-  private liveEnded = false
+  declare private liveEnded: boolean
 
   constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
     super(player)
 
     this.options = options
+
+    this.statsP2PBytes = {
+      pendingDownload: [] as number[],
+      pendingUpload: [] as number[],
+      peersWithWebSeed: 0,
+      peersP2POnly: 0,
+      totalDownload: 0,
+      totalUpload: 0
+    }
+    this.statsHTTPBytes = {
+      pendingDownload: [] as number[],
+      totalDownload: 0
+    }
+    this.liveEnded = false
 
     // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
     if (!(videojs as any).Html5Hlsjs) {

@@ -6,11 +6,10 @@ import { getPointerPosition } from './util'
 const Plugin = videojs.getPlugin('plugin')
 
 class ContextMenuPlugin extends Plugin {
-  options_: ContextMenuPluginOptions & videojs.MenuOptions
+  declare options_: ContextMenuPluginOptions & videojs.MenuOptions
+  declare menu: ContextMenu
 
-  menu: ContextMenu
-
-  private onContextMenuBind: (e: TouchEvent & MouseEvent) => void
+  declare private onContextMenuBind: (e: TouchEvent & MouseEvent) => void
 
   constructor (player: videojs.Player, options: ContextMenuPluginOptions & videojs.MenuOptions) {
     super(player, options)

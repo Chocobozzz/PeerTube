@@ -6,18 +6,20 @@ import { PlaylistMenuItem } from './playlist-menu-item'
 const Component = videojs.getComponent('Component')
 
 class PlaylistMenu extends Component {
-  private menuItems: PlaylistMenuItem[] = []
+  declare private menuItems: PlaylistMenuItem[]
 
-  private readonly userInactiveHandler: () => void
-  private readonly onMouseEnter: () => void
-  private readonly onMouseLeave: () => void
+  declare private readonly userInactiveHandler: () => void
+  declare private readonly onMouseEnter: () => void
+  declare private readonly onMouseLeave: () => void
 
-  private readonly onPlayerCick: (event: Event) => void
+  declare private readonly onPlayerCick: (event: Event) => void
 
-  options_: PlaylistPluginOptions & videojs.ComponentOptions
+  declare options_: PlaylistPluginOptions & videojs.ComponentOptions
 
   constructor (player: videojs.Player, options?: PlaylistPluginOptions & videojs.ComponentOptions) {
     super(player, options)
+
+    this.menuItems = []
 
     this.userInactiveHandler = () => {
       this.close()

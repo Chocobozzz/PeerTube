@@ -5,10 +5,10 @@ import { PeerTubeLinkButtonOptions } from '../../types'
 const Component = videojs.getComponent('Component')
 
 class PeerTubeLinkButton extends Component {
-  private mouseEnterHandler: () => void
-  private clickHandler: () => void
+  declare private mouseEnterHandler: () => void
+  declare private clickHandler: () => void
 
-  options_: PeerTubeLinkButtonOptions & videojs.ComponentOptions
+  declare options_: PeerTubeLinkButtonOptions & videojs.ComponentOptions
 
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions & videojs.ComponentOptions) {
     super(player, options)

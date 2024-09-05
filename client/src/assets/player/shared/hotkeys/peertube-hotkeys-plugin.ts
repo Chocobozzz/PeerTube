@@ -12,11 +12,11 @@ class PeerTubeHotkeysPlugin extends Plugin {
   private static readonly VOLUME_STEP = 0.1
   private static readonly SEEK_STEP = 5
 
-  private readonly handleKeyFunction: (event: KeyboardEvent) => void
+  declare private readonly handleKeyFunction: (event: KeyboardEvent) => void
 
-  private readonly handlers: KeyHandler[]
+  declare private readonly handlers: KeyHandler[]
 
-  private readonly isLive: boolean
+  declare private readonly isLive: boolean
 
   constructor (player: videojs.Player, options: videojs.PlayerOptions & HotkeysOptions) {
     super(player, options)

@@ -23,22 +23,22 @@ export interface SettingsMenuItemOptions extends videojs.MenuItemOptions {
 }
 
 class SettingsMenuItem extends MenuItem {
-  settingsButton: SettingsButton
-  dialog: SettingsDialog
-  mainMenu: videojs.Menu
-  panel: SettingsPanel
-  panelChild: SettingsPanelChild
-  panelChildEl: HTMLElement
-  size: number[]
-  menuToLoad: string
-  subMenu: SettingsButton
+  declare settingsButton: SettingsButton
+  declare dialog: SettingsDialog
+  declare mainMenu: videojs.Menu
+  declare panel: SettingsPanel
+  declare panelChild: SettingsPanelChild
+  declare panelChildEl: HTMLElement
+  declare size: number[]
+  declare menuToLoad: string
+  declare subMenu: SettingsButton
 
-  submenuClickHandler: typeof SettingsMenuItem.prototype.onSubmenuClick
-  transitionEndHandler: typeof SettingsMenuItem.prototype.onTransitionEnd
+  declare submenuClickHandler: typeof SettingsMenuItem.prototype.onSubmenuClick
+  declare transitionEndHandler: typeof SettingsMenuItem.prototype.onTransitionEnd
 
-  settingsSubMenuTitleEl_: HTMLElement
-  settingsSubMenuValueEl_: HTMLElement
-  settingsSubMenuEl_: HTMLElement
+  declare settingsSubMenuTitleEl_: HTMLElement
+  declare settingsSubMenuValueEl_: HTMLElement
+  declare settingsSubMenuEl_: HTMLElement
 
   constructor (player: videojs.Player, options?: SettingsMenuItemOptions) {
     super(player, options)
@@ -142,6 +142,8 @@ class SettingsMenuItem extends MenuItem {
    *
    */
   createEl () {
+    console.log('create el')
+
     const el = videojs.dom.createEl('li', {
       className: 'vjs-menu-item',
       tabIndex: 0

@@ -7,7 +7,7 @@ const Menu = videojs.getComponent('Menu')
 type ContextMenuOptions = ContextMenuPluginOptions & { position: { left: number, top: number } }
 
 class ContextMenu extends Menu {
-  options_: ContextMenuOptions & videojs.MenuOptions
+  declare options_: ContextMenuOptions & videojs.MenuOptions
 
   constructor (player: videojs.Player, options: ContextMenuOptions) {
     super(player, { ...options, menuButton: undefined })

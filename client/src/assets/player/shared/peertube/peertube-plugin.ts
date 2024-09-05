@@ -23,35 +23,40 @@ const debugLogger = debug('peertube:player:peertube')
 const Plugin = videojs.getPlugin('plugin')
 
 class PeerTubePlugin extends Plugin {
-  private readonly videoViewUrl: () => string
-  private readonly authorizationHeader: () => string
-  private readonly initialInactivityTimeout: number
+  declare private readonly videoViewUrl: () => string
+  declare private readonly authorizationHeader: () => string
+  declare private readonly initialInactivityTimeout: number
 
-  private readonly hasAutoplay: () => videojs.Autoplay
+  declare private readonly hasAutoplay: () => videojs.Autoplay
 
-  private currentSubtitle: string
-  private currentPlaybackRate: number
+  declare private currentSubtitle: string
+  declare private currentPlaybackRate: number
 
-  private videoViewInterval: any
+  declare private videoViewInterval: any
 
-  private menuOpened = false
-  private mouseInControlBar = false
-  private mouseInSettings = false
+  declare private menuOpened: boolean
+  declare private mouseInControlBar: boolean
+  declare private mouseInSettings: boolean
 
-  private errorModal: videojs.ModalDialog
+  declare private errorModal: videojs.ModalDialog
 
-  private hasInitialSeek = false
+  declare private hasInitialSeek: boolean
 
-  private videoViewOnPlayHandler: (...args: any[]) => void
-  private videoViewOnSeekedHandler: (...args: any[]) => void
-  private videoViewOnEndedHandler: (...args: any[]) => void
+  declare private videoViewOnPlayHandler: (...args: any[]) => void
+  declare private videoViewOnSeekedHandler: (...args: any[]) => void
+  declare private videoViewOnEndedHandler: (...args: any[]) => void
 
-  private stopTimeHandler: (...args: any[]) => void
+  declare private stopTimeHandler: (...args: any[]) => void
 
-  private resizeObserver: ResizeObserver
+  declare private resizeObserver: ResizeObserver
 
   constructor (player: videojs.Player, private readonly options: PeerTubePluginOptions) {
     super(player)
+
+    this.menuOpened = false
+    this.mouseInControlBar = false
+    this.mouseInSettings = false
+    this.hasInitialSeek = false
 
     this.videoViewUrl = options.videoViewUrl
     this.authorizationHeader = options.authorizationHeader

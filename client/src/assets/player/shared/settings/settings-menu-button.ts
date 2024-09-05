@@ -17,18 +17,18 @@ export interface SettingsButtonOptions extends videojs.ComponentOptions {
 }
 
 class SettingsButton extends Button {
-  dialog: SettingsDialog
-  dialogEl: HTMLElement
-  menu: MenuFocusFixed
-  panel: SettingsPanel
-  panelChild: SettingsPanelChild
+  declare dialog: SettingsDialog
+  declare dialogEl: HTMLElement
+  declare menu: MenuFocusFixed
+  declare panel: SettingsPanel
+  declare panelChild: SettingsPanelChild
 
-  addSettingsItemHandler: typeof SettingsButton.prototype.onAddSettingsItem
-  disposeSettingsItemHandler: typeof SettingsButton.prototype.onDisposeSettingsItem
-  documentClickHandler: typeof SettingsButton.prototype.onDocumentClick
-  userInactiveHandler: typeof SettingsButton.prototype.onUserInactive
+  declare addSettingsItemHandler: typeof SettingsButton.prototype.onAddSettingsItem
+  declare disposeSettingsItemHandler: typeof SettingsButton.prototype.onDisposeSettingsItem
+  declare documentClickHandler: typeof SettingsButton.prototype.onDocumentClick
+  declare userInactiveHandler: typeof SettingsButton.prototype.onUserInactive
 
-  private settingsButtonOptions: SettingsButtonOptions
+  declare private settingsButtonOptions: SettingsButtonOptions
 
   constructor (player: videojs.Player, options?: SettingsButtonOptions) {
     super(player, options)

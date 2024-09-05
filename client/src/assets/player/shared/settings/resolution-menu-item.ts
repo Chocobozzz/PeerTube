@@ -7,12 +7,12 @@ export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
 }
 
 class ResolutionMenuItem extends MenuItem {
-  readonly resolutionId: number
-  private readonly label: string
+  declare readonly resolutionId: number
+  declare private readonly label: string
 
-  private autoResolutionChosen: string
+  declare private autoResolutionChosen: string
 
-  private updateSelectionHandler: () => void
+  declare private updateSelectionHandler: () => void
 
   constructor (player: videojs.Player, options?: ResolutionMenuItemOptions) {
     super(player, { ...options, selectable: true })

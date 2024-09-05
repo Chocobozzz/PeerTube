@@ -4,8 +4,8 @@ import videojs, { VideoJsPlayer } from 'video.js'
 const TimeToolTip = videojs.getComponent('TimeTooltip') as any // FIXME: typings don't have write method
 
 class TimeTooltip extends TimeToolTip {
-  private currentTimecode: string
-  private currentChapterTitle: string
+  declare private currentTimecode: string
+  declare private currentChapterTitle: string
 
   write (timecode: string) {
     const player: VideoJsPlayer = this.player()

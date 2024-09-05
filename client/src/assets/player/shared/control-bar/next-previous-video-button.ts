@@ -4,7 +4,7 @@ import { NextPreviousVideoButtonOptions } from '../../types'
 const Button = videojs.getComponent('Button')
 
 class NextPreviousVideoButton extends Button {
-  options_: NextPreviousVideoButtonOptions & videojs.ComponentOptions
+  declare options_: NextPreviousVideoButtonOptions & videojs.ComponentOptions
 
   constructor (player: videojs.Player, options?: NextPreviousVideoButtonOptions & videojs.ComponentOptions) {
     super(player, options)

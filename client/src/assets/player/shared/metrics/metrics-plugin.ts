@@ -9,28 +9,39 @@ const debugLogger = debug('peertube:player:metrics')
 const Plugin = videojs.getPlugin('plugin')
 
 class MetricsPlugin extends Plugin {
-  options_: MetricsPluginOptions
+  declare options_: MetricsPluginOptions
 
-  private downloadedBytesP2P = 0
-  private downloadedBytesHTTP = 0
-  private uploadedBytesP2P = 0
+  declare private downloadedBytesP2P: number
+  declare private downloadedBytesHTTP: number
+  declare private uploadedBytesP2P: number
 
-  private resolutionChanges = 0
-  private errors = 0
+  declare private resolutionChanges: number
+  declare private errors: number
 
-  private bufferStalled = 0
+  declare private bufferStalled: number
 
-  private p2pEnabled: boolean
-  private p2pPeers = 0
+  declare private p2pEnabled: boolean
+  declare private p2pPeers: number
 
-  private lastPlayerNetworkInfo: PlayerNetworkInfo
+  declare private lastPlayerNetworkInfo: PlayerNetworkInfo
 
-  private metricsInterval: any
+  declare private metricsInterval: any
 
   constructor (player: videojs.Player, options: MetricsPluginOptions) {
     super(player)
 
     this.options_ = options
+
+    this.downloadedBytesP2P = 0
+    this.downloadedBytesHTTP = 0
+    this.uploadedBytesP2P = 0
+
+    this.resolutionChanges = 0
+    this.errors = 0
+
+    this.bufferStalled = 0
+
+    this.p2pPeers = 0
 
     this.trackBytes()
     this.trackResolutionChange()

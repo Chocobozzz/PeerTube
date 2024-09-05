@@ -4,7 +4,7 @@ import { StatsCard, StatsCardOptions } from './stats-card'
 const Plugin = videojs.getPlugin('plugin')
 
 class StatsForNerdsPlugin extends Plugin {
-  private statsCard: StatsCard
+  declare private statsCard: StatsCard
 
   constructor (player: videojs.Player, options: StatsCardOptions) {
     super(player)

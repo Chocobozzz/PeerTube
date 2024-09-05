@@ -6,12 +6,12 @@ import { PlaylistItemOptions } from '../../types'
 const Component = videojs.getComponent('Component')
 
 class PlaylistMenuItem extends Component {
-  private element: VideoPlaylistElement
+  declare private element: VideoPlaylistElement
 
-  private clickHandler: () => void
-  private keyDownHandler: (event: KeyboardEvent) => void
+  declare private clickHandler: () => void
+  declare private keyDownHandler: (event: KeyboardEvent) => void
 
-  options_: videojs.ComponentOptions & PlaylistItemOptions
+  declare options_: videojs.ComponentOptions & PlaylistItemOptions
 
   constructor (player: videojs.Player, options?: PlaylistItemOptions) {
     super(player, options as any)

@@ -32,29 +32,35 @@ export interface EndCardOptions extends videojs.ComponentOptions, UpNextPluginOp
 
 const Component = videojs.getComponent('Component')
 export class EndCard extends Component {
-  options_: EndCardOptions
+  declare options_: EndCardOptions
 
-  dashOffsetTotal = 586
-  dashOffsetStart = 293
-  interval = 50
-  upNextEvents = new videojs.EventTarget()
-  ticks = 0
-  totalTicks: number
+  declare dashOffsetTotal: number
+  declare dashOffsetStart: number
+  declare interval: number
+  declare upNextEvents: videojs.EventTarget
+  declare ticks: number
+  declare totalTicks: number
 
-  container: HTMLDivElement
-  title: HTMLElement
-  autoplayRing: HTMLElement
-  cancelButton: HTMLElement
-  suspendedMessage: HTMLElement
-  nextButton: HTMLElement
+  declare container: HTMLDivElement
+  declare title: HTMLElement
+  declare autoplayRing: HTMLElement
+  declare cancelButton: HTMLElement
+  declare suspendedMessage: HTMLElement
+  declare nextButton: HTMLElement
 
-  private timeout: any
+  declare private timeout: any
 
-  private onEndedHandler: () => void
-  private onPlayingHandler: () => void
+  declare private onEndedHandler: () => void
+  declare private onPlayingHandler: () => void
 
   constructor (player: videojs.Player, options: EndCardOptions) {
     super(player, options)
+
+    this.dashOffsetTotal = 586
+    this.dashOffsetStart = 293
+    this.interval = 50
+    this.upNextEvents = new videojs.EventTarget()
+    this.ticks = 0
 
     this.totalTicks = this.options_.timeout / this.interval
 

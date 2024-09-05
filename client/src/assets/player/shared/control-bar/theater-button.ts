@@ -7,7 +7,7 @@ class TheaterButton extends Button {
 
   private static readonly THEATER_MODE_CLASS = 'vjs-theater-enabled'
 
-  private theaterButtonOptions: TheaterButtonOptions
+  declare private theaterButtonOptions: TheaterButtonOptions
 
   constructor (player: videojs.Player, options: TheaterButtonOptions & videojs.ComponentOptions) {
     super(player, options)

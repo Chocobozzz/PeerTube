@@ -4,7 +4,7 @@ import { ContextMenuItemOptions } from '../../types'
 const MenuItem = videojs.getComponent('MenuItem')
 
 class ContextMenuItem extends MenuItem {
-  options_: ContextMenuItemOptions
+  declare options_: ContextMenuItemOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor (player: videojs.Player, options: ContextMenuItemOptions) {

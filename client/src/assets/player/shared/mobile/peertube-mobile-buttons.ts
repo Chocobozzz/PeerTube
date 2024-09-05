@@ -2,14 +2,14 @@ import videojs from 'video.js'
 
 const Component = videojs.getComponent('Component')
 class PeerTubeMobileButtons extends Component {
-  private mainButton: HTMLDivElement
+  declare private mainButton: HTMLDivElement
 
-  private rewind: Element
-  private forward: Element
-  private rewindText: Element
-  private forwardText: Element
+  declare private rewind: Element
+  declare private forward: Element
+  declare private rewindText: Element
+  declare private forwardText: Element
 
-  private touchStartHandler: (e: TouchEvent) => void
+  declare private touchStartHandler: (e: TouchEvent) => void
 
   createEl () {
     const container = super.createEl('div', { className: 'vjs-mobile-buttons-overlay' }) as HTMLDivElement

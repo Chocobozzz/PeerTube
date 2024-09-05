@@ -11,27 +11,29 @@ class PeerTubeMobilePlugin extends Plugin {
   private static readonly DOUBLE_TAP_DELAY_MS = 250
   private static readonly SET_CURRENT_TIME_DELAY = 1000
 
-  private peerTubeMobileButtons: PeerTubeMobileButtons
+  declare private peerTubeMobileButtons: PeerTubeMobileButtons
 
-  private seekAmount = 0
+  declare private seekAmount: number
 
-  private lastTapEvent: TouchEvent
-  private tapTimeout: ReturnType<typeof setTimeout>
-  private newActiveState: boolean
+  declare private lastTapEvent: TouchEvent
+  declare private tapTimeout: ReturnType<typeof setTimeout>
+  declare private newActiveState: boolean
 
-  private setCurrentTimeTimeout: ReturnType<typeof setTimeout>
+  declare private setCurrentTimeTimeout: ReturnType<typeof setTimeout>
 
-  private onPlayHandler: () => void
-  private onFullScreenChangeHandler: () => void
-  private onTouchStartHandler: (event: TouchEvent) => void
-  private onMobileButtonTouchStartHandler: (event: TouchEvent) => void
-  private sliderActiveHandler: () => void
-  private sliderInactiveHandler: () => void
+  declare private onPlayHandler: () => void
+  declare private onFullScreenChangeHandler: () => void
+  declare private onTouchStartHandler: (event: TouchEvent) => void
+  declare private onMobileButtonTouchStartHandler: (event: TouchEvent) => void
+  declare private sliderActiveHandler: () => void
+  declare private sliderInactiveHandler: () => void
 
-  private seekBar: videojs.Component
+  declare private seekBar: videojs.Component
 
   constructor (player: videojs.Player, options: videojs.PlayerOptions) {
     super(player, options)
+
+    this.seekAmount = 0
 
     this.peerTubeMobileButtons = player.addChild('PeerTubeMobileButtons', { reportTouchActivity: false }) as PeerTubeMobileButtons
 

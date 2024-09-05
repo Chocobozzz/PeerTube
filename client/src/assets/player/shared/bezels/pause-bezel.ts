@@ -33,20 +33,23 @@ function getPlayBezel () {
 
 const Component = videojs.getComponent('Component')
 export class PauseBezel extends Component {
-  container: HTMLDivElement
+  declare container: HTMLDivElement
 
-  private firstPlayDone = false
-  private paused = false
+  declare private firstPlayDone: boolean
+  declare private paused: boolean
 
-  private playerPauseHandler: () => void
-  private playerPlayHandler: () => void
-  private videoChangeHandler: () => void
+  declare private playerPauseHandler: () => void
+  declare private playerPlayHandler: () => void
+  declare private videoChangeHandler: () => void
 
   constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
     super(player, options)
 
     // Hide bezels on mobile since we already have our mobile overlay
     if (isMobile()) return
+
+    this.firstPlayDone = false
+    this.paused = false
 
     this.playerPauseHandler = () => {
       if (player.seeking()) return

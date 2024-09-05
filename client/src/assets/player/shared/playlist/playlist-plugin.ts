@@ -6,8 +6,8 @@ import { PlaylistMenu } from './playlist-menu'
 const Plugin = videojs.getPlugin('plugin')
 
 class PlaylistPlugin extends Plugin {
-  private playlistMenu: PlaylistMenu
-  private playlistButton: PlaylistButton
+  declare private playlistMenu: PlaylistMenu
+  declare private playlistButton: PlaylistButton
 
   constructor (player: videojs.Player, options?: PlaylistPluginOptions) {
     super(player, options)

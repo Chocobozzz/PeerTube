@@ -6,7 +6,7 @@ const Component = videojs.getComponent('Component')
 // Default menu doesn't check if the child is disabled/hidden
 
 class MenuFocusFixed extends Menu {
-  private focusedChild_: number
+  declare private focusedChild_: number
 
   handleKeyDown (event: KeyboardEvent) {
     if (event.key === 'Escape') {

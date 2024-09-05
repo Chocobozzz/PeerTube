@@ -10,16 +10,16 @@ const debugLogger = debug('peertube:player:web-video-plugin')
 const Plugin = videojs.getPlugin('plugin')
 
 class WebVideoPlugin extends Plugin {
-  private readonly videoFiles: VideoFile[]
+  declare private readonly videoFiles: VideoFile[]
 
-  private currentVideoFile: VideoFile
-  private videoFileToken: () => string
+  declare private currentVideoFile: VideoFile
+  declare private videoFileToken: () => string
 
-  private networkInfoInterval: any
+  declare private networkInfoInterval: any
 
-  private onErrorHandler: () => void
-  private onPlayHandler: () => void
-  private onLoadedMetadata: () => void
+  declare private onErrorHandler: () => void
+  declare private onPlayHandler: () => void
+  declare private onLoadedMetadata: () => void
 
   constructor (player: videojs.Player, options?: WebVideoPluginOptions) {
     super(player, options)

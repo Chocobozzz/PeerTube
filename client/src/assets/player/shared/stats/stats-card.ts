@@ -30,40 +30,49 @@ interface InfoElement {
 
 const Component = videojs.getComponent('Component')
 class StatsCard extends Component {
-  options_: StatsCardOptions
+  declare options_: StatsCardOptions
 
-  updateInterval: any
+  declare updateInterval: any
 
-  mode: 'web-video' | 'p2p-media-loader'
+  declare mode: 'web-video' | 'p2p-media-loader'
 
-  metadataStore: any = {}
+  declare metadataStore: any
 
-  intervalMs = 300
-  playerNetworkInfo: PlayerNetworkInfo = {}
+  declare intervalMs: number
+  declare playerNetworkInfo: PlayerNetworkInfo
 
-  private containerEl: HTMLDivElement
-  private infoListEl: HTMLDivElement
+  declare private containerEl: HTMLDivElement
+  declare private infoListEl: HTMLDivElement
 
-  private playerMode: InfoElement
-  private p2p: InfoElement
-  private uuid: InfoElement
-  private viewport: InfoElement
-  private resolution: InfoElement
-  private volume: InfoElement
-  private codecs: InfoElement
-  private color: InfoElement
-  private connection: InfoElement
+  declare private playerMode: InfoElement
+  declare private p2p: InfoElement
+  declare private uuid: InfoElement
+  declare private viewport: InfoElement
+  declare private resolution: InfoElement
+  declare private volume: InfoElement
+  declare private codecs: InfoElement
+  declare private color: InfoElement
+  declare private connection: InfoElement
 
-  private network: InfoElement
-  private transferred: InfoElement
-  private download: InfoElement
+  declare private network: InfoElement
+  declare private transferred: InfoElement
+  declare private download: InfoElement
 
-  private bufferProgress: InfoElement
-  private bufferState: InfoElement
+  declare private bufferProgress: InfoElement
+  declare private bufferState: InfoElement
 
-  private liveLatency: InfoElement
+  declare private liveLatency: InfoElement
 
-  private onNetworkInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
+  declare private onNetworkInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
+
+  constructor (player: videojs.Player, options?: StatsCardOptions) {
+    super(player, options)
+
+    this.metadataStore = {}
+
+    this.intervalMs = 300
+    this.playerNetworkInfo = {}
+  }
 
   createEl () {
     this.containerEl = videojs.dom.createEl('div', {

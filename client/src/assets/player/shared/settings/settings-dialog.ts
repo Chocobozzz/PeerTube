@@ -3,6 +3,7 @@ import videojs from 'video.js'
 const Component = videojs.getComponent('Component')
 
 class SettingsDialog extends Component {
+
   constructor (player: videojs.Player) {
     super(player)
 

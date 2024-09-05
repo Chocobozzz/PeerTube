@@ -4,7 +4,6 @@ import { bytes } from '../common'
 
 const Button = videojs.getComponent('Button')
 class P2PInfoButton extends Button {
-  el_: HTMLElement
 
   createEl () {
     const div = videojs.dom.createEl('div', { className: 'vjs-peertube' })

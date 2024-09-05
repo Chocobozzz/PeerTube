@@ -4,7 +4,7 @@ import { ProgressBarMarkerComponentOptions } from '../../types'
 const Component = videojs.getComponent('Component')
 
 export class ProgressBarMarkerComponent extends Component {
-  options_: ProgressBarMarkerComponentOptions & videojs.ComponentOptions
+  declare options_: ProgressBarMarkerComponentOptions & videojs.ComponentOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor (player: videojs.Player, options?: ProgressBarMarkerComponentOptions & videojs.ComponentOptions) {

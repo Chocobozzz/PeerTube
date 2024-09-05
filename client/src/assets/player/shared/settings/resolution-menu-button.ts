@@ -4,7 +4,7 @@ import { ResolutionMenuItem } from './resolution-menu-item'
 const Menu = videojs.getComponent('Menu')
 const MenuButton = videojs.getComponent('MenuButton')
 class ResolutionMenuButton extends MenuButton {
-  labelEl_: HTMLElement
+  declare labelEl_: HTMLElement
 
   constructor (player: videojs.Player, options?: videojs.MenuButtonOptions) {
     super(player, options)

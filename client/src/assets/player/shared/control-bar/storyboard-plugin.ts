@@ -7,24 +7,24 @@ import { StoryboardOptions } from '../../types'
 const Plugin = videojs.getPlugin('plugin')
 
 class StoryboardPlugin extends Plugin {
-  private url: string
-  private height: number
-  private width: number
-  private interval: number
+  declare private url: string
+  declare private height: number
+  declare private width: number
+  declare private interval: number
 
-  private cached: boolean
+  declare private cached: boolean
 
-  private mouseTimeTooltip: videojs.MouseTimeDisplay
-  private seekBar: { el(): HTMLElement, mouseTimeDisplay: any, playProgressBar: any }
-  private progress: any
+  declare private mouseTimeTooltip: videojs.MouseTimeDisplay
+  declare private seekBar: { el(): HTMLElement, mouseTimeDisplay: any, playProgressBar: any }
+  declare private progress: any
 
-  private spritePlaceholder: HTMLElement
+  declare private spritePlaceholder: HTMLElement
 
-  private readonly sprites: { [id: string]: HTMLImageElement } = {}
+  declare private readonly sprites: { [id: string]: HTMLImageElement }
 
-  private readonly boundedHijackMouseTooltip: typeof StoryboardPlugin.prototype.hijackMouseTooltip
+  declare private readonly boundedHijackMouseTooltip: typeof StoryboardPlugin.prototype.hijackMouseTooltip
 
-  private onReadyOrLoadstartHandler: (event: { type: 'ready' }) => void
+  declare private onReadyOrLoadstartHandler: (event: { type: 'ready' }) => void
 
   constructor (player: videojs.Player, options: videojs.ComponentOptions & StoryboardOptions) {
     super(player, options)
@@ -33,6 +33,8 @@ class StoryboardPlugin extends Plugin {
     this.height = options.height
     this.width = options.width
     this.interval = options.interval
+
+    this.sprites = {}
 
     this.boundedHijackMouseTooltip = this.hijackMouseTooltip.bind(this)
 

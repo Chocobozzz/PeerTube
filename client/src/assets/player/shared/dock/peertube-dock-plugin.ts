@@ -10,7 +10,7 @@ export type PeerTubeDockPluginOptions = {
 }
 
 class PeerTubeDockPlugin extends Plugin {
-  private dockComponent: PeerTubeDockComponent
+  declare private dockComponent: PeerTubeDockComponent
 
   constructor (player: videojs.Player, options: videojs.PlayerOptions & PeerTubeDockPluginOptions) {
     super(player, options)

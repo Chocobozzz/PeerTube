@@ -4,13 +4,15 @@ import { PeerTubeResolution } from '../../types'
 const Plugin = videojs.getPlugin('plugin')
 
 class PeerTubeResolutionsPlugin extends Plugin {
-  private currentSelection: PeerTubeResolution
-  private resolutions: PeerTubeResolution[] = []
+  declare private currentSelection: PeerTubeResolution
+  declare private resolutions: PeerTubeResolution[]
 
-  private autoResolutionChosenId: number
+  declare private autoResolutionChosenId: number
 
   constructor (player: videojs.Player) {
     super(player)
+
+    this.resolutions = []
 
     player.on('video-change', () => {
       this.resolutions = []

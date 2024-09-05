@@ -4,9 +4,9 @@ import { PeerTubeLinkButtonOptions } from '../../types'
 const ClickableComponent = videojs.getComponent('ClickableComponent')
 
 class PeerTubeLiveDisplay extends ClickableComponent {
-  private interval: any
+  declare private interval: any
 
-  private contentEl_: any
+  declare private contentEl_: any
 
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
