@@ -1,7 +1,7 @@
 <div class="margin-content">
   <h1 class="title-page" i18n>Studio for {{ video.name }}</h1>
 
-  <div class="columns">
+  <div class="grid-container">
     <form role="form" [formGroup]="form">
 
       <div class="section cut" formGroupName="cut">
@@ -69,20 +69,17 @@
       ></my-button>
     </form>
 
+    <div class="embed-container">
+      <div class="mb-1 fw-bold" i18n>Video before edition</div>
+      <my-embed [video]="video"></my-embed>
+    </div>
 
-    <div class="information">
-      <div>
-        <div class="mb-1 fw-bold" i18n>Video before edition</div>
-        <my-embed [video]="video"></my-embed>
-      </div>
+    <div class="tasks-container" *ngIf="!noEdition()">
+      <div class="mb-1 fw-bold" i18n>Edition tasks:</div>
 
-      <div *ngIf="!noEdition()">
-        <div class="mb-1 fw-bold" i18n>Edition tasks:</div>
-
-        <ol>
-          <li *ngFor="let task of getTasksSummary()">{{ task }}</li>
-        </ol>
-      </div>
+      <ol>
+        <li *ngFor="let task of getTasksSummary()">{{ task }}</li>
+      </ol>
     </div>
   </div>
 </div>
