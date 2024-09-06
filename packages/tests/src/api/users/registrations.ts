@@ -202,7 +202,7 @@ describe('Test registrations', function () {
       await server.registrations.reject({ id: id4, moderationResponse: 'I do not want id 4 on this instance' })
     })
 
-    it('Should have sent an email to the user explanining the registration has been rejected', async function () {
+    it('Should have sent an email to the user explaining the registration has been rejected', async function () {
       this.timeout(50000)
 
       await waitJobs([ server ])
@@ -220,7 +220,7 @@ describe('Test registrations', function () {
       await server.registrations.accept({ id: id3, moderationResponse: 'Welcome id 3' })
     })
 
-    it('Should have sent an email to the user explanining the registration has been accepted', async function () {
+    it('Should have sent an email to the user explaining the registration has been accepted', async function () {
       this.timeout(50000)
 
       await waitJobs([ server ])

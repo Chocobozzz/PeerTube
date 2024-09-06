@@ -1,6 +1,7 @@
 import { arrayify } from '@peertube/peertube-core-utils'
 import { EmailPayload, SendEmailDefaultOptions, UserExportState, UserRegistrationState } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
+import { UserModel } from '@server/models/user/user.js'
 import { readFileSync } from 'fs'
 import merge from 'lodash-es/merge.js'
 import { Transporter, createTransport } from 'nodemailer'
@@ -10,7 +11,6 @@ import { CONFIG, isEmailEnabled } from '../initializers/config.js'
 import { WEBSERVER } from '../initializers/constants.js'
 import { MRegistration, MUser, MUserExport, MUserImport } from '../types/models/index.js'
 import { JobQueue } from './job-queue/index.js'
-import { UserModel } from '@server/models/user/user.js'
 
 class Emailer {
 
@@ -253,6 +253,7 @@ class Emailer {
 
     const email = new EmailTemplates({
       send: true,
+      juice: false,
       htmlToText: {
         selectors: [
           { selector: 'img', format: 'skip' },
