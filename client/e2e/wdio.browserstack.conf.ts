@@ -100,7 +100,7 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 8', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 11', osVersion: '13' })
       },
       {
         browserName: 'Safari',
