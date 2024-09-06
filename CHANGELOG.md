@@ -1,6 +1,6 @@
 # Changelog
 
-## v6.3.0-rc.1 (not released yet)
+## v6.3.0-rc.1
 
 ### IMPORTANT NOTES
 
@@ -63,7 +63,9 @@
   * Fix video file object storage detection in admin videos overview
   * Support ActivityPub remote actors with array `url` field
   * Fix resetting duration filter in search page
-
+  * Use first step *Public* privacy when publishing lives without having validated the second step
+  * Fix studio page responsive
+  * Add CORS to oEmbed API
 
 
 ## v6.2.1
