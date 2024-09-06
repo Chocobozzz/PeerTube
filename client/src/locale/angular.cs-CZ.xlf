@@ -10280,17 +10280,17 @@
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1143448052369512390" datatype="html">
+      <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
-        <target state="new">If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</target>
+        <target state="translated">Pokud je tato možnost povolena, vstupní soubor se po překódování neodstraní, ale přesune se do vyhrazené složky nebo úložiště objektů</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8968030053137661433" datatype="html">
+      <trans-unit id="8968030053137661433" datatype="html" xml:space="preserve">
         <source>Output</source>
-        <target state="new">Output</target>
+        <target state="translated">Výstup</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">80</context>
@@ -10336,33 +10336,33 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1638224906868555688" datatype="html">
+      <trans-unit id="1638224906868555688" datatype="html" xml:space="preserve">
         <source>Split audio and video streams</source>
-        <target state="new">Split audio and video streams</target>
+        <target state="translated">Rozdělit audio a video streamy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">124,125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8778692018772808354" datatype="html">
+      <trans-unit id="8778692018772808354" datatype="html" xml:space="preserve">
         <source>Store the audio stream in a separate file from the video.</source>
-        <target state="new">Store the audio stream in a separate file from the video.</target>
+        <target state="translated">Uložení zvukového streamu do samostatného souboru odděleně od videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4806060468959678872" datatype="html">
+      <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="new">This option adds the ability for the HLS player to propose the "Audio only" quality to users.</target>
+        <target state="translated">Tato možnost přidává přehrávači HLS možnost nabídnout uživatelům kvalitu "Pouze audio".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7702925566184017292" datatype="html">
+      <trans-unit id="7702925566184017292" datatype="html" xml:space="preserve">
         <source>It also saves disk space by not duplicating the audio stream in each resolution file</source>
-        <target state="new">It also saves disk space by not duplicating the audio stream in each resolution file</target>
+        <target state="translated">Šetří také místo na disku, protože neduplikuje zvukový stream v každém souboru s rozlišením</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">129</context>
@@ -10488,17 +10488,17 @@
           <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671557140564655234" datatype="html">
+      <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Automatické povolení překódování HLS, protože při povoleném překódování musí být povolen alespoň 1 výstupní formát</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2487046557845958040" datatype="html">
+      <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Automatické povolení překódování webových videí, protože při povolení překódování musí být povolen alespoň 1 výstupní formát</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -10848,25 +10848,25 @@
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="246143686312852623" datatype="html">
+      <trans-unit id="246143686312852623" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8917573897450243216" datatype="html">
+      <trans-unit id="8917573897450243216" datatype="html" xml:space="preserve">
         <source>Include audio</source>
-        <target state="new">Include audio</target>
+        <target state="translated">Včetně zvuku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5994555025353715987" datatype="html">
+      <trans-unit id="5994555025353715987" datatype="html" xml:space="preserve">
         <source>Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></source>
-        <target state="new"> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></target>
+        <target state="translated">Aktualizujte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>vaše nastavení<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a &gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">3</context>
@@ -11710,9 +11710,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1295676134074258121" datatype="html">
+      <trans-unit id="1295676134074258121" datatype="html" xml:space="preserve">
         <source>New video or live from your subscriptions</source>
-        <target state="new">New video or live from your subscriptions</target>
+        <target state="translated">Nové video nebo živé vysílání z vašich odběrů</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -11742,9 +11742,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3686251233087069053" datatype="html">
+      <trans-unit id="3686251233087069053" datatype="html" xml:space="preserve">
         <source>UPDATE PLAYLIST</source>
-        <target state="new">UPDATE PLAYLIST</target>
+        <target state="translated">AKTUALIZOVAT SEZNAM SKLADEB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">28</context>
@@ -11914,9 +11914,9 @@
           <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2405893290244253562" datatype="html">
+      <trans-unit id="2405893290244253562" datatype="html" xml:space="preserve">
         <source>A view means that someone watched the video for several seconds (10 seconds by default)</source>
-        <target state="new">A view means that someone watched the video for several seconds (10 seconds by default)</target>
+        <target state="translated">Zobrazení znamená, že někdo sledoval video po dobu několika sekund (ve výchozím nastavení 10 sekund)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">312</context>
@@ -11934,9 +11934,9 @@
           <context context-type="linenumber">344</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="699590710757792843" datatype="html">
+      <trans-unit id="699590710757792843" datatype="html" xml:space="preserve">
         <source>Regions</source>
-        <target state="new">Regions</target>
+        <target state="translated">Regiony</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -12370,9 +12370,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4257078540065035665" datatype="html">
+      <trans-unit id="4257078540065035665" datatype="html" xml:space="preserve">
         <source>UPDATE CHANNEL</source>
-        <target state="new">UPDATE CHANNEL</target>
+        <target state="translated">AKTUALIZOVAT KANÁL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">11</context>
@@ -13550,9 +13550,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5508725342419733476" datatype="html">
+      <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
-        <target state="new">"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</target>
+        <target state="translated">"Rozdělit audio a video" musí být povoleno, aby přehrávač PeerTube nabízel uživatelům rozlišení "Pouze audio"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -14684,25 +14684,25 @@
           <context context-type="linenumber">304</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1097469307544219823" datatype="html">
+      <trans-unit id="1097469307544219823" datatype="html" xml:space="preserve">
         <source>Instance watched words lists</source>
-        <target state="new">Instance watched words lists</target>
+        <target state="translated">Seznamy sledovaných slov v instanci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5841439724861780893" datatype="html">
+      <trans-unit id="5841439724861780893" datatype="html" xml:space="preserve">
         <source>Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="new">Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</target>
+        <target state="translated">Název/popis videa a komentáře, které obsahují některé ze sledovaných slov, jsou automaticky označeny názvem seznamu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5485804110353816120" datatype="html">
+      <trans-unit id="5485804110353816120" datatype="html" xml:space="preserve">
         <source>These automatic tags can be used to filter comments and videos.</source>
-        <target state="new">These automatic tags can be used to filter comments and videos.</target>
+        <target state="translated">Tyto automatické značky lze použít k filtrování komentářů a videí.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">7</context>
@@ -15048,9 +15048,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="725311187158639317" datatype="html">
+      <trans-unit id="725311187158639317" datatype="html" xml:space="preserve">
         <source>Files <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;localVideoFilesSize&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Files <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;localVideoFilesSize&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">Soubory <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;localVideoFilesSize&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">45,46</context>
@@ -15072,33 +15072,33 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8447575918459582040" datatype="html">
+      <trans-unit id="8447575918459582040" datatype="html" xml:space="preserve">
         <source>Comments are disabled</source>
-        <target state="new">Comments are disabled</target>
+        <target state="translated">Komentáře jsou vypnuty</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5018413305553485964" datatype="html">
+      <trans-unit id="5018413305553485964" datatype="html" xml:space="preserve">
         <source>Comments are enabled</source>
-        <target state="new">Comments are enabled</target>
+        <target state="translated">Komentáře jsou povoleny</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="63077766244971546" datatype="html">
+      <trans-unit id="63077766244971546" datatype="html" xml:space="preserve">
         <source>Comments may require approval depending on your auto tag policies</source>
-        <target state="new">Comments may require approval depending on your auto tag policies</target>
+        <target state="translated">Komentáře mohou vyžadovat schválení v závislosti na automatických zásadách pro označování</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8069667549070509050" datatype="html">
+      <trans-unit id="8069667549070509050" datatype="html" xml:space="preserve">
         <source>Any new comment requires approval</source>
-        <target state="new">Any new comment requires approval</target>
+        <target state="translated">Každý nový komentář vyžaduje schválení</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">121</context>
@@ -15992,17 +15992,17 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5468340957320375738" datatype="html">
+      <trans-unit id="5468340957320375738" datatype="html" xml:space="preserve">
         <source>⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</source>
-        <target state="new">⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</target>
+        <target state="translated">⚠️ Váš e-mail nelze použít v podcastu RSS, protože ještě nebyl ověřen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422757693184001803" datatype="html">
+      <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="new">Save email settings</target>
+        <target state="translated">Uložit nastavení e-mailu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">20</context>
@@ -16148,9 +16148,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4190395479539865710" datatype="html">
+      <trans-unit id="4190395479539865710" datatype="html" xml:space="preserve">
         <source>The transcription of your video has been generated</source>
-        <target state="new">The transcription of your video has been generated</target>
+        <target state="translated">Přepis vašeho videa byl vygenerován</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -16196,9 +16196,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">Uložit profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">38</context>
@@ -16300,9 +16300,9 @@
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6723130720822791647" datatype="html">
+      <trans-unit id="6723130720822791647" datatype="html" xml:space="preserve">
         <source>Create your channel</source>
-        <target state="new">Create your channel</target>
+        <target state="translated">Vytvořit svůj kanál</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -16316,9 +16316,9 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6697109866731379499" datatype="html">
+      <trans-unit id="6697109866731379499" datatype="html" xml:space="preserve">
         <source>Update <x id="PH" equiv-text="this.videoChannel?.name"/></source>
-        <target state="new">Update <x id="PH" equiv-text="this.videoChannel?.name"/></target>
+        <target state="translated">Aktualizovat <x id="PH" equiv-text="this.videoChannel?.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context>
           <context context-type="linenumber">200</context>
@@ -16674,9 +16674,9 @@
           <context context-type="linenumber">319</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8501241441398968873" datatype="html">
+      <trans-unit id="8501241441398968873" datatype="html" xml:space="preserve">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="new">It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">Vymaže {count, plural, =1 {1 video} other {<x id="count"/>} videí nahraných v tomto kanálu a nebude možné vytvořit další kanál nebo účet se stejným názvem (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -16802,9 +16802,9 @@
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7484325899601915135" datatype="html">
+      <trans-unit id="7484325899601915135" datatype="html" xml:space="preserve">
         <source>Your watched words</source>
-        <target state="new">Your watched words</target>
+        <target state="translated">Vaše sledovaná slova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">190</context>
@@ -17674,17 +17674,17 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6180920471345723927" datatype="html">
+      <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="new"> The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </target>
+        <target state="translated">Kvóta videa zohledňuje pouze velikost <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nahraných<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videí, nikoli překódovaných souborů nebo uživatelských exportních archivů (které mohou obsahovat video soubory). </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1623552341334328156" datatype="html">
+      <trans-unit id="1623552341334328156" datatype="html" xml:space="preserve">
         <source>Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">Překódování je povoleno, takže velikost videa může být maximálně ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">10</context>
@@ -17788,9 +17788,9 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1043265374828694539" datatype="html">
+      <trans-unit id="1043265374828694539" datatype="html" xml:space="preserve">
         <source>Auto tag policies</source>
-        <target state="new">Auto tag policies</target>
+        <target state="translated">Zásady automatického označování</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -17876,25 +17876,25 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1962184615200253792" datatype="html">
+      <trans-unit id="1962184615200253792" datatype="html" xml:space="preserve">
         <source>Your watched words lists</source>
-        <target state="new">Your watched words lists</target>
+        <target state="translated">Vaše seznamy sledovaných slov</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-watched-words-list/my-account-watched-words-list.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2364233042886987548" datatype="html">
+      <trans-unit id="2364233042886987548" datatype="html" xml:space="preserve">
         <source>Comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="new">Comments that contain any of the watched words are automatically tagged with the name of the list.</target>
+        <target state="translated">Komentáře, které obsahují některé ze sledovaných slov, jsou automaticky označeny názvem seznamu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-watched-words-list/my-account-watched-words-list.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="315406341700403563" datatype="html">
+      <trans-unit id="315406341700403563" datatype="html" xml:space="preserve">
         <source>These automatic tags can be used to filter comments or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>automatically block<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> them.</source>
-        <target state="new">These automatic tags can be used to filter comments or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>automatically block<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> them.</target>
+        <target state="translated">Tyto automatické značky lze použít k filtrování komentářů nebo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/> jejich automatickému blokování<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-watched-words-list/my-account-watched-words-list.component.html</context>
           <context context-type="linenumber">7</context>
@@ -17908,9 +17908,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8232112521354108802" datatype="html">
+      <trans-unit id="8232112521354108802" datatype="html" xml:space="preserve">
         <source>Short description must not be longer than 250 characters.</source>
-        <target state="new">Short description must not be longer than 250 characters.</target>
+        <target state="translated">Krátký popis nesmí být delší než 250 znaků.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -18036,9 +18036,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977908106285712483" datatype="html">
+      <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
-        <target state="new">Max live duration must be greater or equal to -1.</target>
+        <target state="translated">Maximální doba trvání živého vstupu musí být větší nebo rovna -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -18052,9 +18052,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8156930104143421972" datatype="html">
+      <trans-unit id="8156930104143421972" datatype="html" xml:space="preserve">
         <source>Max instance lives must be greater or equal to -1.</source>
-        <target state="new">Max instance lives must be greater or equal to -1.</target>
+        <target state="translated">Maximální počet živých instancí musí být větší nebo roven -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -18068,9 +18068,9 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6094685877052448543" datatype="html">
+      <trans-unit id="6094685877052448543" datatype="html" xml:space="preserve">
         <source>Max user lives must be greater or equal to -1.</source>
-        <target state="new">Max user lives must be greater or equal to -1.</target>
+        <target state="translated">Maximální počet živých uživatelů musí být větší nebo roven -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -18108,57 +18108,57 @@
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5727962096948024837" datatype="html">
+      <trans-unit id="5727962096948024837" datatype="html" xml:space="preserve">
         <source>Concurrency must be greater or equal to 1.</source>
-        <target state="new">Concurrency must be greater or equal to 1.</target>
+        <target state="translated">Souběh musí být větší nebo roven 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912757266988770184" datatype="html">
+      <trans-unit id="6912757266988770184" datatype="html" xml:space="preserve">
         <source>Index URL must be a URL</source>
-        <target state="new">Index URL must be a URL</target>
+        <target state="translated">Adresa URL indexu musí být URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3256383206363817433" datatype="html">
+      <trans-unit id="3256383206363817433" datatype="html" xml:space="preserve">
         <source>Search index URL must be a URL</source>
-        <target state="new">Search index URL must be a URL</target>
+        <target state="translated">Adresa URL vyhledávacího indexu musí být URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4327605300509435150" datatype="html">
+      <trans-unit id="4327605300509435150" datatype="html" xml:space="preserve">
         <source>Export expiration is required.</source>
-        <target state="new">Export expiration is required.</target>
+        <target state="translated">Je vyžadována expirace exportu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8101376384086436513" datatype="html">
+      <trans-unit id="8101376384086436513" datatype="html" xml:space="preserve">
         <source>Export expiration must be greater or equal to 1.</source>
-        <target state="new">Export expiration must be greater or equal to 1.</target>
+        <target state="translated">Expirace exportu musí být větší nebo rovna 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7568988728218416870" datatype="html">
+      <trans-unit id="7568988728218416870" datatype="html" xml:space="preserve">
         <source>Max user video quota is required.</source>
-        <target state="new">Max user video quota is required.</target>
+        <target state="translated">Maximální uživatelská kvóta videa je vyžadována.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6536118679588615245" datatype="html">
+      <trans-unit id="6536118679588615245" datatype="html" xml:space="preserve">
         <source>Max user video video quota must be greater or equal to 1.</source>
-        <target state="new">Max user video video quota must be greater or equal to 1.</target>
+        <target state="translated">Maximální kvóta uživatelských videí musí být větší nebo rovna 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">134</context>
@@ -18512,17 +18512,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1089471746995032310" datatype="html">
+      <trans-unit id="1089471746995032310" datatype="html" xml:space="preserve">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form.</source>
-        <target state="new">Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form.</target>
+        <target state="translated">Moderátoři <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> budou muset schválit vaši žádost o registraci, jakmile dokončíte vyplňování formuláře.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036308773059264427" datatype="html">
+      <trans-unit id="1036308773059264427" datatype="html" xml:space="preserve">
         <source>They usually respond within <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</source>
-        <target state="new">They usually respond within <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">Obvykle odpovídají v rámci <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">6</context>
@@ -19156,65 +19156,65 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708973013815646385" datatype="html">
+      <trans-unit id="4708973013815646385" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</source>
-        <target state="new"><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</target>
+        <target state="translated"><x id="PH" equiv-text="word"/> není platný (min. 1 znak/max. 100 znaků)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1715587073952235112" datatype="html">
+      <trans-unit id="1715587073952235112" datatype="html" xml:space="preserve">
         <source>There are too much words in the list (max 500 words)</source>
-        <target state="new">There are too much words in the list (max 500 words)</target>
+        <target state="translated">V seznamu je příliš mnoho slov (max. 500 slov)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1391063124784029164" datatype="html">
+      <trans-unit id="1391063124784029164" datatype="html" xml:space="preserve">
         <source>List name is required.</source>
-        <target state="new">List name is required.</target>
+        <target state="translated">Název seznamu je vyžadován.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4341509997126306236" datatype="html">
+      <trans-unit id="4341509997126306236" datatype="html" xml:space="preserve">
         <source>List name must be at least 1 character long.</source>
-        <target state="new">List name must be at least 1 character long.</target>
+        <target state="translated">Název seznamu musí mít alespoň 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="55815482589008245" datatype="html">
+      <trans-unit id="55815482589008245" datatype="html" xml:space="preserve">
         <source>List name cannot be more than 100 characters long.</source>
-        <target state="new">List name cannot be more than 100 characters long.</target>
+        <target state="translated">Název seznamu nesmí být delší než 100 znaků.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1312213389883835455" datatype="html">
+      <trans-unit id="1312213389883835455" datatype="html" xml:space="preserve">
         <source>Words are required.</source>
-        <target state="new">Words are required.</target>
+        <target state="translated">Slova jsou vyžadována.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6677020266490766837" datatype="html">
+      <trans-unit id="6677020266490766837" datatype="html" xml:space="preserve">
         <source>Words entered contain duplicates.</source>
-        <target state="new">Words entered contain duplicates.</target>
+        <target state="translated">Zadaná slova obsahují duplicity.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1048926006551468313" datatype="html">
+      <trans-unit id="1048926006551468313" datatype="html" xml:space="preserve">
         <source>A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</source>
-        <target state="new">A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</target>
+        <target state="translated">Slovo musí mít 1 až 100 znaků a celkový počet slov nesmí překročit 500 položek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -19769,9 +19769,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6263183216314915807" datatype="html">
+      <trans-unit id="6263183216314915807" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</source>
-        <target state="new">Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</target>
+        <target state="translated">Vyžaduje schválení moderátory (~ <x id="PH" equiv-text="responseTime"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -19939,25 +19939,25 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7919708461177482031" datatype="html">
+      <trans-unit id="7919708461177482031" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</source>
-        <target state="new">PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</target>
+        <target state="translated">PeerTube považuje video "<x id="PH" equiv-text="video.name"/>" za již přepsané.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1574297288544496710" datatype="html">
+      <trans-unit id="1574297288544496710" datatype="html" xml:space="preserve">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</source>
-        <target state="new"> If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</target>
+        <target state="translated">Pokud si myslíte, že služba PeerTube není v pořádku (video je po havárii v rozbitém stavu atd.), můžete toto video přepsat násilím.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1333875259678532637" datatype="html">
+      <trans-unit id="1333875259678532637" datatype="html" xml:space="preserve">
         <source>Force transcription</source>
-        <target state="new">Force transcription</target>
+        <target state="translated">Nucený přepis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">123</context>
@@ -20479,9 +20479,9 @@
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1962360936689895737" datatype="html">
+      <trans-unit id="1962360936689895737" datatype="html" xml:space="preserve">
         <source>A subtitle will be automatically generated from your video.</source>
-        <target state="new"> A subtitle will be automatically generated from your video. </target>
+        <target state="translated">Z videa se automaticky vygenerují titulky.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">177</context>
@@ -20601,9 +20601,9 @@
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="929597387091598826" datatype="html">
+      <trans-unit id="929597387091598826" datatype="html" xml:space="preserve">
         <source>Auto tags</source>
-        <target state="new">Auto tags</target>
+        <target state="translated">Automatické značky</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">40</context>
@@ -20773,17 +20773,17 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332428159510983797" datatype="html">
+      <trans-unit id="4332428159510983797" datatype="html" xml:space="preserve">
         <source>Expires on</source>
-        <target state="new">Expires on</target>
+        <target state="translated">Vyprší v</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931356925707804915" datatype="html">
+      <trans-unit id="8931356925707804915" datatype="html" xml:space="preserve">
         <source>Download your archive</source>
-        <target state="new">Download your archive</target>
+        <target state="translated">Stáhnout archiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">61</context>
