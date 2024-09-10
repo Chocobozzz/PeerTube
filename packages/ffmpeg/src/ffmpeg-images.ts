@@ -30,7 +30,6 @@ export class FFmpegImage {
     const { path, destination, newSize } = options
 
     this.commandWrapper.buildCommand(path)
-      .fps(20)
       .size(`${newSize.width}x${newSize.height}`)
       .output(destination)
 
