@@ -42,8 +42,8 @@ async function checkStoryboard (options: {
   expect(storyboard.storyboardPath).to.exist
 
   if (tilesCount) {
-    expect(storyboard.totalWidth).to.equal(spriteWidth * Math.min(tilesCount, 10))
-    expect(storyboard.totalHeight).to.equal(spriteHeight * Math.max((tilesCount / 10), 1))
+    expect(storyboard.totalWidth).to.equal(spriteWidth * Math.min(tilesCount, 11))
+    expect(storyboard.totalHeight).to.equal(spriteHeight * Math.max((tilesCount / 11), 1))
   }
 
   const { body } = await makeGetRequest({ url: server.url, path: storyboard.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
@@ -86,7 +86,7 @@ describe('Test video storyboard', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      await checkStoryboard({ server, uuid, spriteDuration: 2, spriteHeight: 154, tilesCount: 60 })
+      await checkStoryboard({ server, uuid, spriteDuration: 2, spriteHeight: 154, tilesCount: 66 })
     }
   })
 
