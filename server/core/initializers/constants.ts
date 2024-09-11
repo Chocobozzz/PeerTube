@@ -941,7 +941,7 @@ export const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number,
 
 export const STORYBOARD = {
   SPRITE_MAX_SIZE: 192,
-  SPRITES_MAX_EDGE_COUNT: 10
+  SPRITES_MAX_EDGE_COUNT: 11
 }
 
 export const EMBED_SIZE = {

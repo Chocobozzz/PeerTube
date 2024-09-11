@@ -73,7 +73,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
 
       logger.debug(
         'Generating storyboard from video of %s to %s', video.uuid, destination,
-        { ...lTags, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
+        { ...lTags, totalSprites, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
       )
 
       await ffmpeg.generateStoryboardFromVideo({
@@ -148,7 +148,7 @@ function buildSpritesMetadata (options: {
   // We can generate a single line so we don't need a prime number
   if (totalSprites <= STORYBOARD.SPRITES_MAX_EDGE_COUNT) return { spriteDuration, totalSprites }
 
-  return { spriteDuration, totalSprites: findNearestGridPrime(totalSprites, STORYBOARD.SPRITES_MAX_EDGE_COUNT) }
+  return { spriteDuration, totalSprites }
 }
 
 function findGridSize (options: {
@@ -159,27 +159,9 @@ function findGridSize (options: {
 
   for (let i = 1; i <= maxEdgeCount; i++) {
     for (let j = i; j <= maxEdgeCount; j++) {
-      if (toFind === i * j) return { width: j, height: i }
+      if (toFind <= i * j) return { width: j, height: i }
     }
   }
 
   throw new Error(`Could not find grid size (to find: ${toFind}, max edge count: ${maxEdgeCount}`)
-}
-
-function findNearestGridPrime (value: number, maxMultiplier: number) {
-  for (let i = value; i--; i > 0) {
-    if (!isPrimeWithin(i, maxMultiplier)) return i
-  }
-
-  throw new Error('Could not find prime number below ' + value)
-}
-
-function isPrimeWithin (value: number, maxMultiplier: number) {
-  if (value < 2) return false
-
-  for (let i = 2, end = Math.min(Math.sqrt(value), maxMultiplier); i <= end; i++) {
-    if (value % i === 0 && value / i <= maxMultiplier) return false
-  }
-
-  return true
 }
