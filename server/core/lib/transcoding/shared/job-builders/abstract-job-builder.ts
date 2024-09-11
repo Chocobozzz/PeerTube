@@ -38,8 +38,6 @@ export abstract class AbstractJobBuilder <P> {
         const probe = await ffprobePromise(videoFilePath)
         const quickTranscode = await canDoQuickTranscode(videoFilePath, CONFIG.TRANSCODING.FPS.MAX, probe)
 
-        let inputFPS: number
-
         let maxFPS: number
         let maxResolution: number
 
@@ -47,7 +45,7 @@ export abstract class AbstractJobBuilder <P> {
 
         if (videoFile.isAudio()) {
           // The first transcoding job will transcode to this FPS value
-          inputFPS = maxFPS = Math.min(DEFAULT_AUDIO_MERGE_RESOLUTION, CONFIG.TRANSCODING.FPS.MAX)
+          maxFPS = Math.min(DEFAULT_AUDIO_MERGE_RESOLUTION, CONFIG.TRANSCODING.FPS.MAX)
           maxResolution = DEFAULT_AUDIO_RESOLUTION
 
           mergeOrOptimizePayload = this.buildMergeAudioPayload({
@@ -58,7 +56,7 @@ export abstract class AbstractJobBuilder <P> {
             fps: maxFPS
           })
         } else {
-          inputFPS = videoFile.fps
+          const inputFPS = videoFile.fps
           maxResolution = buildOriginalFileResolution(videoFile.resolution)
           maxFPS = computeOutputFPS({ inputFPS, resolution: maxResolution, isOriginResolution: true, type: 'vod' })
 
@@ -116,7 +114,7 @@ export abstract class AbstractJobBuilder <P> {
         const lowerResolutionJobPayloads = await this.buildLowerResolutionJobPayloads({
           video,
           inputVideoResolution: maxResolution,
-          inputVideoFPS: inputFPS,
+          inputVideoFPS: maxFPS,
           hasAudio: videoFile.hasAudio(),
           isNewVideo,
           hlsAudioAlreadyGenerated

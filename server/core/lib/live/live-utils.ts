@@ -3,7 +3,7 @@ import { FileStorage, LiveVideoLatencyMode, LiveVideoLatencyModeType, VideoState
 import { logger } from '@server/helpers/logger.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
-import { pathExists, remove, } from 'fs-extra/esm'
+import { pathExists, remove } from 'fs-extra/esm'
 import { readdir, rmdir } from 'fs/promises'
 import { basename, join } from 'path'
 import { listHLSFileKeysOf, removeHLSFileObjectStorageByFullKey, removeHLSObjectStorage } from '../object-storage/index.js'

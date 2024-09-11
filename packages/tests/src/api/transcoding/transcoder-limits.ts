@@ -64,6 +64,16 @@ describe('Test video transcoding limits', function () {
       }
     }
 
+    function updateMaxFPS (value: number) {
+      return servers[1].config.updateExistingConfig({
+        newConfig: {
+          transcoding: {
+            fps: { max: value }
+          }
+        }
+      })
+    }
+
     it('Should transcode a 60 FPS video', async function () {
       this.timeout(60_000)
 
@@ -117,25 +127,37 @@ describe('Test video transcoding limits', function () {
     it('Should configure max FPS', async function () {
       this.timeout(120_000)
 
-      const update = (value: number) => {
-        return servers[1].config.updateExistingConfig({
-          newConfig: {
-            transcoding: {
-              fps: { max: value }
-            }
-          }
-        })
-      }
-
-      await update(15)
+      await updateMaxFPS(15)
 
       const attributes = { name: 'capped 15fps', fixture: '60fps_720p_small.mp4' }
       const { uuid } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
       await testFPS(uuid, 15, 15)
+    })
 
-      await update(60)
+    it('Should not duplicate resolution on re-transcoding', async function () {
+      this.timeout(120_000)
+
+      await updateMaxFPS(50)
+
+      const attributes = { name: 'capped 50fps', fixture: '60fps_720p_small.mp4' }
+      const { uuid } = await servers[1].videos.upload({ attributes })
+
+      await waitJobs(servers)
+      await testFPS(uuid, 50, 25)
+
+      await servers[1].videos.runTranscoding({ transcodingType: 'web-video', videoId: uuid })
+      await waitJobs(servers)
+
+      const video = await servers[1].videos.get({ id: uuid })
+      expect(video.files.map(f => f.resolution.id)).to.deep.equal([ 720, 480, 360, 240, 144 ])
+
+      await testFPS(uuid, 50, 25)
+    })
+
+    after(async function () {
+      await updateMaxFPS(60)
     })
   })
 
