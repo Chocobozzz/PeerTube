@@ -16,14 +16,21 @@ async function checkLiveCleanup (options: {
   videoUUID: string
   permanent: boolean
   savedResolutions?: number[]
+  deleted?: boolean // default false
 }) {
-  const { server, videoUUID, permanent, savedResolutions = [] } = options
+  const { server, videoUUID, permanent, savedResolutions = [], deleted = false } = options
 
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
+  const hlsPathExists = await pathExists(hlsPath)
+
+  if (deleted) {
+    expect(hlsPathExists).to.be.false
+    return
+  }
 
   if (permanent) {
-    if (!await pathExists(hlsPath)) return
+    if (!hlsPathExists) return
 
     const files = await readdir(hlsPath)
     expect(files.filter(f => f !== 'replay')).to.have.lengthOf(0)
@@ -32,15 +39,13 @@ async function checkLiveCleanup (options: {
     if (await pathExists(replayDir)) {
       expect(await readdir(replayDir)).to.have.lengthOf(0)
     }
+  } else {
+    if (savedResolutions.length === 0) {
+      return checkUnsavedLiveCleanup(server, videoUUID, hlsPath)
+    }
 
-    return
+    return checkSavedLiveCleanup(hlsPath, savedResolutions)
   }
-
-  if (savedResolutions.length === 0) {
-    return checkUnsavedLiveCleanup(server, videoUUID, hlsPath)
-  }
-
-  return checkSavedLiveCleanup(hlsPath, savedResolutions)
 }
 
 // ---------------------------------------------------------------------------

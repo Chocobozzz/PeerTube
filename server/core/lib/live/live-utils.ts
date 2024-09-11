@@ -1,12 +1,12 @@
 import { pathExists, remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
+import { readdir, rmdir } from 'fs/promises'
 import { basename, join } from 'path'
-import { LiveVideoLatencyMode, LiveVideoLatencyModeType, FileStorage } from '@peertube/peertube-models'
+import { LiveVideoLatencyMode, LiveVideoLatencyModeType, FileStorage, VideoState } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
 import { listHLSFileKeysOf, removeHLSFileObjectStorageByFullKey, removeHLSObjectStorage } from '../object-storage/index.js'
-import { getLiveDirectory } from '../paths.js'
+import { getLiveDirectory, getLiveReplayBaseDirectory } from '../paths.js'
 
 function buildConcatenatedName (segmentOrPlaylistPath: string) {
   const num = basename(segmentOrPlaylistPath).match(/^(\d+)(-|\.)/)
@@ -16,6 +16,17 @@ function buildConcatenatedName (segmentOrPlaylistPath: string) {
 
 async function cleanupAndDestroyPermanentLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   await cleanupTMPLiveFiles(video, streamingPlaylist)
+
+  if (video.state === VideoState.WAITING_FOR_LIVE) {
+    // Try to delete local filesystem empty paths
+    // Object storage doesn't have the concept of directories so we don't need to duplicate the logic here
+    try {
+      await rmdir(getLiveReplayBaseDirectory(video))
+      await rmdir(getLiveDirectory(video))
+    } catch (err) {
+      logger.debug('Cannot cleanup permanent local live files', { err })
+    }
+  }
 
   await streamingPlaylist.destroy()
 }

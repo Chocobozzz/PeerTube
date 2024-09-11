@@ -269,7 +269,7 @@ describe('Save replay setting', function () {
       await publishLiveAndDelete({ permanent: false, replay: false })
 
       await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.NOT_FOUND_404)
-      await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
+      await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false, deleted: true })
     })
   })
 
@@ -381,7 +381,7 @@ describe('Save replay setting', function () {
       await publishLiveAndDelete({ permanent: false, replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } })
 
       await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.NOT_FOUND_404)
-      await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
+      await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false, deleted: true })
     })
   })
 
@@ -563,7 +563,14 @@ describe('Save replay setting', function () {
       })
 
       it('Should have cleaned up the live files', async function () {
-        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
+        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: true })
+      })
+
+      it('Should delete the empty live and also delete the empty directory', async function () {
+        await servers[0].videos.remove({ id: liveVideoUUID })
+        await waitJobs(servers)
+
+        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: true, deleted: true })
       })
 
       it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
@@ -586,7 +593,7 @@ describe('Save replay setting', function () {
           await servers[1].videos.get({ id: videoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         }
 
-        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
+        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: true })
       })
 
       it('Should correctly terminate the stream on delete and not save the video', async function () {
@@ -602,7 +609,7 @@ describe('Save replay setting', function () {
         expect(replay).to.not.exist
 
         await checkVideosExist(liveVideoUUID, 1, HttpStatusCode.NOT_FOUND_404)
-        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
+        await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: true, deleted: true })
       })
     })
   })
