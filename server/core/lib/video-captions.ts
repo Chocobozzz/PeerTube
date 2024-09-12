@@ -19,6 +19,7 @@ import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const lTags = loggerTagsFactory('video-caption')
 
@@ -39,8 +40,10 @@ export async function createLocalCaption (options: {
 
   await moveAndProcessCaptionFile({ path }, videoCaption)
 
-  await sequelizeTypescript.transaction(async t => {
-    await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(t => {
+      return VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
+    })
   })
 
   return Object.assign(videoCaption, { Video: video })

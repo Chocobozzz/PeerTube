@@ -17,6 +17,7 @@ import {
   listVideoCaptionsValidator
 } from '../../../middlewares/validators/index.js'
 import { VideoCaptionModel } from '../../../models/video/video-caption.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const lTags = loggerTagsFactory('api', 'video-caption')
 
@@ -39,7 +40,7 @@ videoCaptionsRouter.put('/:videoId/captions/:captionLanguage',
   authenticate,
   reqVideoCaptionAdd,
   asyncMiddleware(addVideoCaptionValidator),
-  asyncRetryTransactionMiddleware(createVideoCaption)
+  asyncMiddleware(createVideoCaption)
 )
 
 videoCaptionsRouter.delete('/:videoId/captions/:captionLanguage',
@@ -88,8 +89,10 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
     automaticallyGenerated: false
   })
 
-  await sequelizeTypescript.transaction(async t => {
-    await federateVideoIfNeeded(video, false, t)
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async t => {
+      return federateVideoIfNeeded(video, false, t)
+    })
   })
 
   Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
