@@ -8,7 +8,7 @@ async function downloadImage (options: {
   url: string
   destDir: string
   destName: string
-  size: { width: number, height: number }
+  size?: { width: number, height: number }
 }) {
   const { url, destDir, destName, size } = options
 

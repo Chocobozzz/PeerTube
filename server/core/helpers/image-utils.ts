@@ -14,7 +14,7 @@ export function generateImageFilename (extension = '.jpg') {
 export async function processImage (options: {
   path: string
   destination: string
-  newSize: { width: number, height: number }
+  newSize?: { width: number, height: number }
   keepOriginal?: boolean // default false
 }) {
   const { path, destination, newSize, keepOriginal = false } = options
@@ -59,7 +59,7 @@ export async function getImageSize (path: string) {
 async function jimpProcessor (options: {
   path: string
   destination: string
-  newSize: {
+  newSize?: {
     width: number
     height: number
   }
@@ -92,7 +92,11 @@ async function jimpProcessor (options: {
     return copy(path, destination)
   }
 
-  await autoResize({ sourceImage, newSize, destination })
+  if (newSize) {
+    await autoResize({ sourceImage, newSize, destination })
+  } else {
+    await write(sourceImage, destination)
+  }
 }
 
 async function autoResize (options: {
@@ -126,22 +130,23 @@ function write (image: Jimp, destination: string) {
 
 function skipProcessing (options: {
   sourceImage: Jimp
-  newSize: { width: number, height: number }
+  newSize?: { width: number, height: number }
   imageBytes: number
   inputExt: string
   outputExt: string
 }) {
   const { sourceImage, newSize, imageBytes, inputExt, outputExt } = options
-  const { width, height } = newSize
 
   if (hasExif(sourceImage)) return false
-  if (sourceImage.getWidth() !== width || sourceImage.getHeight() !== height) return false
+  if (newSize && (sourceImage.getWidth() !== newSize.width || sourceImage.getHeight() !== newSize.height)) return false
   if (inputExt !== outputExt) return false
 
   const kB = 1000
 
-  if (height >= 1000) return imageBytes <= 200 * kB
-  if (height >= 500) return imageBytes <= 100 * kB
+  if (newSize) {
+    if (newSize.height >= 1000) return imageBytes <= 200 * kB
+    if (newSize.height >= 500) return imageBytes <= 100 * kB
+  }
 
   return imageBytes <= 15 * kB
 }

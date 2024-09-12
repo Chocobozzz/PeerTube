@@ -118,7 +118,7 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
   private downloadImage (options: {
     fileUrl: string
     filename: string
-    size: { width: number, height: number }
+    size?: { width: number, height: number }
   }) {
     const downloaderOptions = {
       url: options.fileUrl,

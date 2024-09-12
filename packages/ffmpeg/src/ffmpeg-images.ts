@@ -25,13 +25,15 @@ export class FFmpegImage {
   processGIF (options: {
     path: string
     destination: string
-    newSize: { width: number, height: number }
+    newSize?: { width: number, height: number }
   }): Promise<void> {
     const { path, destination, newSize } = options
 
-    this.commandWrapper.buildCommand(path)
-      .size(`${newSize.width}x${newSize.height}`)
-      .output(destination)
+    const command = this.commandWrapper.buildCommand(path)
+
+    if (newSize) command.size(`${newSize.width}x${newSize.height}`)
+
+    command.output(destination)
 
     return this.commandWrapper.runCommand()
   }
