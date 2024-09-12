@@ -127,7 +127,12 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   getQuery (options: BuildVideosListQueryOptions) {
     this.buildIdsListQuery(options)
 
-    return { query: this.query, sort: this.sort, replacements: this.replacements }
+    return {
+      query: this.query,
+      sort: this.sort,
+      replacements: this.replacements,
+      queryConfig: this.queryConfig
+    }
   }
 
   private buildIdsListQuery (options: BuildVideosListQueryOptions) {
@@ -574,12 +579,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     const escapedSearch = this.sequelize.escape(search)
     const escapedLikeSearch = this.sequelize.escape('%' + search + '%')
 
+    this.queryConfig = 'SET pg_trgm.word_similarity_threshold = 0.40;'
+
     this.cte.push(
       '"trigramSearch" AS (' +
       '  SELECT "video"."id", ' +
-      `  word_similarity(lower(immutable_unaccent("video"."name")), lower(immutable_unaccent(${escapedSearch}))) as similarity ` +
+      `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) as similarity ` +
       '  FROM "video" ' +
-      '  WHERE lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+      '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
       '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
       ')'
     )

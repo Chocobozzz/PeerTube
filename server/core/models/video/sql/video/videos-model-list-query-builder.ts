@@ -66,11 +66,12 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {
     const idsQueryBuilder = new VideosIdListQueryBuilder(this.sequelize)
-    const { query, sort, replacements } = idsQueryBuilder.getQuery(options)
+    const { query, sort, replacements, queryConfig } = idsQueryBuilder.getQuery(options)
 
     this.replacements = replacements
     this.innerQuery = query
     this.innerSort = sort
+    this.queryConfig = queryConfig
   }
 
   private buildMainQuery (options: BuildVideosListQueryOptions, serverActor: MActorAccount) {
