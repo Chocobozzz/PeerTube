@@ -10,6 +10,7 @@
   background-color: pvar(--mainBackgroundColor);
   overflow-y: auto;
   border-bottom: 1px solid $separator-border-color;
+  display: block;
 
   .widget-header {
     background-color: pvar(--submenuBackgroundColor);

@@ -1,6 +1,12 @@
-<div
-  *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)" class="widget-root playlist"
-  myInfiniteScroller [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
+<my-infinite-scroller
+  *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)"
+  class="widget-root playlist"
+  [(currentPage)]="playlistPagination.currentPage"
+  [isLoading]="isLoading"
+  [hasMore]="hasMoreResults"
+  [onItself]="true"
+  (nearOfBottom)="onPlaylistVideosNearOfBottom()"
+  (pageChange)="onPageChange()"
   >
   <div class="widget-header playlist-info">
     <div class="widget-title playlist-display-name">
@@ -37,11 +43,11 @@
     </div>
   </div>
 
-  <div *ngFor="let playlistElement of playlistElements" [ngClass]="'element-' + playlistElement.position">
+  <div *ngFor="let playlistElement of playlistElements" [ngClass]="'element element-' + playlistElement.position">
     <my-video-playlist-element-miniature
       [playlistElement]="playlistElement" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
       [playing]="currentPlaylistPosition === playlistElement.position" [accountLink]="false" [position]="playlistElement.position"
       [touchScreenEditButton]="true"
     ></my-video-playlist-element-miniature>
   </div>
-</div>
+</my-infinite-scroller>
