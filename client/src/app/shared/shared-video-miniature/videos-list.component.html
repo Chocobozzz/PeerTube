@@ -81,4 +81,10 @@
       </div>
     </ng-container>
   </div>
+
+  <div class="d-flex justify-content-center">
+    <a *ngIf="lastQueryLength === this.pagination.itemsPerPage" class="peertube-button-link orange-button" i18n [routerLink]="['.']" [queryParams]="{ page: pagination.currentPage + 1}" [queryParamsHandling]="'merge'">
+      Load more
+    </a>
+  </div>
 </div>
