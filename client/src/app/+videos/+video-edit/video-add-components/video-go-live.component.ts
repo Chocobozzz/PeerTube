@@ -106,7 +106,12 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
     const video: LiveVideoCreate = {
       name,
-      privacy: this.firstStepPrivacyId,
+
+      // Password privacy needs a password that will be set in the next step
+      privacy: this.firstStepPrivacyId === VideoPrivacy.PASSWORD_PROTECTED
+        ? VideoPrivacy.PRIVATE
+        : this.highestPrivacy,
+
       nsfw: this.serverConfig.instance.isNSFW,
       waitTranscoding: true,
       permanentLive: this.firstStepPermanentLive,
