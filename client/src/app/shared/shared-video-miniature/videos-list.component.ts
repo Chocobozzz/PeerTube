@@ -1,6 +1,6 @@
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, booleanAttribute } from '@angular/core'
-import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router'
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
@@ -18,7 +18,7 @@ import { ResultList, UserRight, VideoSortField } from '@peertube/peertube-models
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { Observable, Subject, Subscription, forkJoin, fromEvent, of } from 'rxjs'
-import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
+import { concatMap, debounceTime, filter, map, switchMap } from 'rxjs/operators'
 import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
@@ -67,7 +67,8 @@ enum GroupDate {
     VideoFiltersHeaderComponent,
     InfiniteScrollerDirective,
     VideoMiniatureComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    RouterLink
   ]
 })
 export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
@@ -97,7 +98,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() displayOptions: MiniatureDisplayOptions
 
-  @Input({ transform: booleanAttribute }) disabled = false
+  @Input({ transform: booleanAttribute }) disabled: boolean
 
   @Output() filtersChanged = new EventEmitter<VideoFilters>()
   @Output() videosLoaded = new EventEmitter<Video[]>()
@@ -113,6 +114,13 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   userMiniature: User
 
+  pagination: ComponentPaginationLight = {
+    currentPage: 1,
+    itemsPerPage: 25
+  }
+
+  lastQueryLength: number
+
   private defaultDisplayOptions: MiniatureDisplayOptions = {
     date: true,
     views: true,
@@ -127,15 +135,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private userSub: Subscription
   private resizeSub: Subscription
 
-  private pagination: ComponentPaginationLight = {
-    currentPage: 1,
-    itemsPerPage: 25
-  }
-
   private groupedDateLabels: { [id in GroupDate]: string }
   private groupedDates: { [id: number]: GroupDate } = {}
-
-  private lastQueryLength: number
 
   private videoRequests = new Subject<{
     reset: boolean
@@ -152,13 +153,32 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     private route: ActivatedRoute,
     private screenService: ScreenService,
     private peertubeRouter: PeerTubeRouterService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    public router: Router
   ) {
 
   }
 
   ngOnInit () {
     this.subscribeToVideoRequests()
+    this.disabled = this.disabled || this.route.snapshot.queryParams.finiteScroll === 'true'
+
+    this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd)
+    )
+    .subscribe((event: NavigationEnd) => {
+      const search = event.url.split('?')[1]
+      const params = new URLSearchParams(search)
+      const newPage = +params.get('page') || this.pagination.currentPage
+
+      if (newPage === this.pagination.currentPage) {
+        return
+      }
+
+      this.pagination.currentPage = newPage
+      this.loadMoreVideos(true)
+    })
 
     const hiddenFilters = this.hideScopeFilter
       ? [ 'scope' ]
@@ -292,7 +312,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reloadVideos () {
-    this.pagination.currentPage = 1
+    this.pagination.currentPage = +this.route.snapshot.queryParams.page || 1
     this.loadMoreVideos(true)
   }
 
