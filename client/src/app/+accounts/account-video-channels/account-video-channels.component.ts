@@ -1,6 +1,6 @@
-import { from, Subject, Subscription } from 'rxjs'
+import { from, Subject } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService } from '@app/core'
 import { SimpleMemoize } from '@app/helpers'
 import { NSFWPolicyType, VideoSortField } from '@peertube/peertube-models'
@@ -8,7 +8,7 @@ import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared/s
 import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/common/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -22,13 +22,16 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   templateUrl: './account-video-channels.component.html',
   styleUrls: [ './account-video-channels.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
 })
-export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
+export class AccountVideoChannelsComponent implements OnInit {
   account: Account
   videoChannels: VideoChannel[] = []
 
   videos: { [id: number]: { total: number, videos: Video[] } } = {}
+
+  hasMoreVideoChannels = true
+  isLoading = true
 
   channelsDescriptionHTML: { [ id: number ]: string } = {}
 
@@ -60,8 +63,6 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     blacklistInfo: false
   }
 
-  private accountSub: Subscription
-
   constructor (
     private accountService: AccountService,
     private videoChannelService: VideoChannelService,
@@ -71,15 +72,6 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit () {
-    // Parent get the account for us
-    this.accountSub = this.accountService.accountLoaded
-        .subscribe(account => {
-          this.account = account
-          this.videoChannels = []
-
-          this.loadMoreChannels()
-        })
-
     this.userService.getAnonymousOrLoggedUser()
       .subscribe(user => {
         this.userMiniature = user
@@ -88,18 +80,22 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
       })
   }
 
-  ngOnDestroy () {
-    if (this.accountSub) this.accountSub.unsubscribe()
-  }
+  loadMoreChannels (reset = false) {
+    let hasDoneReset = false
+    this.isLoading = true
 
-  loadMoreChannels () {
-    const options = {
-      account: this.account,
-      componentPagination: this.channelPagination,
-      sort: '-updatedAt'
-    }
-
-    this.videoChannelService.listAccountVideoChannels(options)
+    // Parent get the account for us
+    this.accountService.accountLoaded
+      .pipe(
+        tap(account => {
+          this.account = account
+        }),
+        switchMap(() => this.videoChannelService.listAccountVideoChannels({
+          account: this.account,
+          componentPagination: this.channelPagination,
+          sort: '-updatedAt'
+        }))
+      )
       .pipe(
         tap(res => {
           this.channelPagination.totalItems = res.total
@@ -118,13 +114,21 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(async ({ videoChannel, videos, total }) => {
+        this.isLoading = false
         this.channelsDescriptionHTML[videoChannel.id] = await this.markdown.textMarkdownToHTML({
           markdown: videoChannel.description,
           withEmoji: true,
           withHtml: true
         })
 
+        if (reset && !hasDoneReset) {
+          hasDoneReset = true
+          this.videoChannels = []
+        }
+
         this.videoChannels.push(videoChannel)
+        this.hasMoreVideoChannels = (this.channelPagination.currentPage * this.channelPagination.itemsPerPage) <
+          this.channelPagination.totalItems
 
         this.videos[videoChannel.id] = { videos, total }
 
@@ -148,6 +152,10 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
   getChannelDescription (videoChannel: VideoChannel) {
     return this.channelsDescriptionHTML[videoChannel.id]
+  }
+
+  onPageChange () {
+    this.loadMoreChannels(true)
   }
 
   onNearOfBottom () {

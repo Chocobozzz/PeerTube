@@ -16,7 +16,7 @@
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
 
 <div class="video-channels-header d-flex justify-content-between gap-2">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+  <my-advanced-input-filter [emitOnInit]="false" (search)="onSearch($event)"></my-advanced-input-filter>
 
   <a class="peertube-create-button" routerLink="/manage/create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
@@ -26,7 +26,14 @@
 
 <div class="no-results" i18n *ngIf="this.pagination.totalItems === 0">No channel found.</div>
 
-<div class="video-channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
+<my-infinite-scroller
+  class="video-channels"
+  [(currentPage)]="pagination.currentPage"
+  [isLoading]="isLoading"
+  (nearOfBottom)="onNearOfBottom()"
+  (currentPageChange)="onPageChange()"
+  [hasMore]="hasMoreResults"
+>
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
     <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
 
@@ -68,4 +75,4 @@
       </div>
     </div>
   </div>
-</div>
+</my-infinite-scroller>

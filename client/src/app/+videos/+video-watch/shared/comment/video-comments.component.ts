@@ -10,8 +10,8 @@ import { VideoComment } from '@app/shared/shared-video-comment/video-comment.mod
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
-import { Subject, Subscription } from 'rxjs'
-import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
+import { Subscription } from 'rxjs'
+import { InfiniteScrollerComponent } from '../../../../shared/shared-main/common/infinite-scroller.component'
 import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { LoaderComponent } from '../../../../shared/shared-main/common/loader.component'
 import { VideoCommentAddComponent } from './video-comment-add.component'
@@ -31,7 +31,7 @@ import { VideoCommentComponent } from './video-comment.component'
     NgbDropdownItem,
     NgIf,
     VideoCommentAddComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     VideoCommentComponent,
     NgFor,
     LoaderComponent
@@ -56,6 +56,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     totalItems: null
   }
   totalNotDeletedComments: number
+  hasMoreResults = true
+  isLoading = false
 
   inReplyToCommentId: number
   commentReplyRedraftValue: string
@@ -67,8 +69,6 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   threadLoading: { [ id: number ]: boolean } = {}
 
   syndicationItems: Syndication[] = []
-
-  onDataSubject = new Subject<any[]>()
 
   private sub: Subscription
 
@@ -161,13 +161,16 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       'filter:api.video-watch.video-threads.list.result'
     )
 
+    this.isLoading = true
+
     obs.subscribe({
       next: res => {
         this.comments = this.comments.concat(res.data)
         this.componentPagination.totalItems = res.total
         this.totalNotDeletedComments = res.totalNotDeletedComments
+        this.hasMoreResults = hasMoreItems(this.componentPagination)
 
-        this.onDataSubject.next(res.data)
+        this.isLoading = false
 
         this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
       },
@@ -277,6 +280,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  onPageChange (newPage: number) {
+    this.resetVideo(newPage)
+  }
+
   onNearOfBottom () {
     if (hasMoreItems(this.componentPagination)) {
       this.componentPagination.currentPage++
@@ -291,7 +298,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     comment.account = null
   }
 
-  private resetVideo () {
+  private resetVideo (page = 1) {
     if (this.video.commentsPolicy.id === VideoCommentPolicy.DISABLED) return
 
     // Reset all our fields
@@ -300,7 +307,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.threadComments = {}
     this.threadLoading = {}
     this.inReplyToCommentId = undefined
-    this.componentPagination.currentPage = 1
+    this.componentPagination.currentPage = page
     this.componentPagination.totalItems = null
     this.totalNotDeletedComments = null
 

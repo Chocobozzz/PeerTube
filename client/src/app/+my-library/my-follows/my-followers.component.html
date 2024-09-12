@@ -7,12 +7,19 @@
 </div>
 
 <div class="followers-header">
-  <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+  <my-advanced-input-filter [emitOnInit]="false" [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
 </div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No follower found.</div>
 
-<div class="actors" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<my-infinite-scroller
+  class="actors"
+  [(currentPage)]="pagination.currentPage"
+  [isLoading]="isLoading"
+  (nearOfBottom)="onNearOfBottom()"
+  (currentPageChange)="onPageChange()"
+  [hasMore]="hasMoreResults"
+>
   <div *ngFor="let follow of follows" class="actor">
     <my-actor-avatar [actor]="follow.follower" actorType="account" [href]="follow.follower.url" size="40"></my-actor-avatar>
 
@@ -28,4 +35,4 @@
       </div>
     </div>
   </div>
-</div>
+</my-infinite-scroller>

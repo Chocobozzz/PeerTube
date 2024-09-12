@@ -1,4 +1,4 @@
-import { Subject, Subscription, switchMap } from 'rxjs'
+import { Subscription, switchMap } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Notifier, ScreenService, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -7,7 +7,7 @@ import { VideosOverview } from './videos-overview.model'
 import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
 import { VideoMiniatureComponent } from '../../../shared/shared-video-miniature/video-miniature.component'
 import { RouterLink } from '@angular/router'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../../shared/shared-main/common/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 
 @Component({
@@ -15,21 +15,21 @@ import { NgIf, NgFor } from '@angular/common'
   templateUrl: './video-overview.component.html',
   styleUrls: [ './video-overview.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, RouterLink, VideoMiniatureComponent, ActorAvatarComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, RouterLink, VideoMiniatureComponent, ActorAvatarComponent ]
 })
 export class VideoOverviewComponent implements OnInit, OnDestroy {
-  onDataSubject = new Subject<any>()
+  hasMoreResults = true
 
   overviews: VideosOverview[] = []
   notResults = false
 
   userMiniature: User
+  currentPage = 1
+  isLoading = true
 
   private loaded = false
-  private currentPage = 1
   private maxPage = 20
   private lastWasEmpty = false
-  private isLoading = false
 
   private userSub: Subscription
 
@@ -74,22 +74,26 @@ export class VideoOverviewComponent implements OnInit, OnDestroy {
     return videos.slice(0, numberOfVideos * 2)
   }
 
+  onPageChange () {
+    this.loadMoreResults(true)
+  }
+
   onNearOfBottom () {
     if (this.currentPage >= this.maxPage) return
     if (this.lastWasEmpty) return
-    if (this.isLoading) return
 
     this.currentPage++
     this.loadMoreResults()
   }
 
-  private loadMoreResults () {
+  private loadMoreResults (reset = false) {
     this.isLoading = true
 
     this.overviewService.getVideosOverview(this.currentPage)
         .subscribe({
           next: overview => {
             this.isLoading = false
+            this.hasMoreResults = this.currentPage < this.maxPage
 
             if (overview.tags.length === 0 && overview.channels.length === 0 && overview.categories.length === 0) {
               this.lastWasEmpty = true
@@ -99,8 +103,8 @@ export class VideoOverviewComponent implements OnInit, OnDestroy {
             }
 
             this.loaded = true
-            this.onDataSubject.next(overview)
 
+            if (reset) this.overviews = []
             this.overviews.push(overview)
           },
 

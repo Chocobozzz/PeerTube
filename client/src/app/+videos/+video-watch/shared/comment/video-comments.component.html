@@ -28,7 +28,14 @@
 
     <div *ngIf="totalNotDeletedComments === 0 && comments.length === 0" i18n>No comments.</div>
 
-    <div class="comment-threads" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+    <my-infinite-scroller
+      class="comment-threads"
+      [(currentPage)]="componentPagination.currentPage"
+      [isLoading]="isLoading"
+      (nearOfBottom)="onNearOfBottom()"
+      (currentPageChange)="onPageChange($event)"
+      [hasMore]="hasMoreResults"
+    >
       <div>
         <div class="anchor" #commentHighlightBlock id="highlighted-comment"></div>
         <my-video-comment
@@ -90,7 +97,7 @@
         </my-video-comment>
 
       </div>
-    </div>
+    </my-infinite-scroller>
   } @else {
     <div i18n>Comments are disabled.</div>
   }

@@ -1,6 +1,6 @@
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, booleanAttribute } from '@angular/core'
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router'
+import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
@@ -18,8 +18,8 @@ import { ResultList, UserRight, VideoSortField } from '@peertube/peertube-models
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { Observable, Subject, Subscription, forkJoin, fromEvent, of } from 'rxjs'
-import { concatMap, debounceTime, filter, map, switchMap } from 'rxjs/operators'
-import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
+import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
+import { InfiniteScrollerComponent } from '../shared-main/common/infinite-scroller.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
 import { Syndication } from '../shared-main/feeds/syndication.model'
@@ -65,10 +65,9 @@ enum GroupDate {
     NgTemplateOutlet,
     ButtonComponent,
     VideoFiltersHeaderComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     VideoMiniatureComponent,
-    GlobalIconComponent,
-    RouterLink
+    GlobalIconComponent
   ]
 })
 export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
@@ -98,11 +97,12 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() displayOptions: MiniatureDisplayOptions
 
-  @Input({ transform: booleanAttribute }) disabled: boolean
+  @Input({ transform: booleanAttribute }) disabled = false
 
   @Output() filtersChanged = new EventEmitter<VideoFilters>()
   @Output() videosLoaded = new EventEmitter<Video[]>()
 
+  hasMoreResults = true
   videos: Video[] = []
   highlightedLives: Video[] = []
 
@@ -118,8 +118,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     currentPage: 1,
     itemsPerPage: 25
   }
-
-  lastQueryLength: number
 
   private defaultDisplayOptions: MiniatureDisplayOptions = {
     date: true,
@@ -138,6 +136,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private groupedDateLabels: { [id in GroupDate]: string }
   private groupedDates: { [id: number]: GroupDate } = {}
 
+  private lastQueryLength: number
+
   private videoRequests = new Subject<{
     reset: boolean
     obsVideos: Observable<Pick<ResultList<Video>, 'data'>>
@@ -153,32 +153,13 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     private route: ActivatedRoute,
     private screenService: ScreenService,
     private peertubeRouter: PeerTubeRouterService,
-    private serverService: ServerService,
-    public router: Router
+    private serverService: ServerService
   ) {
 
   }
 
   ngOnInit () {
     this.subscribeToVideoRequests()
-    this.disabled = this.disabled || this.route.snapshot.queryParams.finiteScroll === 'true'
-
-    this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd)
-    )
-    .subscribe((event: NavigationEnd) => {
-      const search = event.url.split('?')[1]
-      const params = new URLSearchParams(search)
-      const newPage = +params.get('page') || this.pagination.currentPage
-
-      if (newPage === this.pagination.currentPage) {
-        return
-      }
-
-      this.pagination.currentPage = newPage
-      this.loadMoreVideos(true)
-    })
 
     const hiddenFilters = this.hideScopeFilter
       ? [ 'scope' ]
@@ -210,8 +191,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         if (this.loadUserVideoPreferences) {
           this.loadUserSettings(user)
         }
-
-        this.scheduleOnFiltersChanged(false)
 
         this.subscribeToAnonymousUpdate()
         this.subscribeToSearchChange()
@@ -272,6 +251,10 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     return video.id
   }
 
+  onPageChange () {
+    this.loadMoreVideos(true)
+  }
+
   onNearOfBottom () {
     if (this.disabled) return
 
@@ -312,7 +295,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reloadVideos () {
-    this.pagination.currentPage = +this.route.snapshot.queryParams.page || 1
     this.loadMoreVideos(true)
   }
 
@@ -504,6 +486,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: ({ videos, highlightedLives, reset }) => {
           this.hasDoneFirstQuery = true
+          this.hasMoreResults = videos.length === this.pagination.itemsPerPage
           this.lastQueryLength = videos.length
 
           if (reset) {

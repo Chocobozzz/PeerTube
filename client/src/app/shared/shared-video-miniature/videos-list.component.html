@@ -40,10 +40,15 @@
 
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0 && highlightedLives.length === 0">No results.</div>
 
-  <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
-    [setAngularState]="true" [parentDisabled]="disabled"
-    class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
+  <my-infinite-scroller
+    [(currentPage)]="pagination.currentPage"
+    (currentPageChange)="onPageChange()"
+    (nearOfBottom)="onNearOfBottom()"
+    [hasMore]="hasMoreResults"
+    [setAngularState]="true"
+    [parentDisabled]="disabled"
+    class="videos"
+    [ngClass]="{ 'display-as-row': displayAsRow }"
   >
     <ng-container *ngIf="highlightedLives.length !== 0">
       <h2 class="date-title">
@@ -80,11 +85,5 @@
         </my-video-miniature>
       </div>
     </ng-container>
-  </div>
-
-  <div class="d-flex justify-content-center">
-    <a *ngIf="lastQueryLength === this.pagination.itemsPerPage" class="peertube-button-link orange-button" i18n [routerLink]="['.']" [queryParams]="{ page: pagination.currentPage + 1}" [queryParamsHandling]="'merge'">
-      Load more
-    </a>
-  </div>
+  </my-infinite-scroller>
 </div>
