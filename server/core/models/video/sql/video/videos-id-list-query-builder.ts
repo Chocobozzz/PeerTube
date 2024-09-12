@@ -577,7 +577,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.cte.push(
       '"trigramSearch" AS (' +
       '  SELECT "video"."id", ' +
-      `  similarity(lower(immutable_unaccent("video"."name")), lower(immutable_unaccent(${escapedSearch}))) as similarity ` +
+      `  word_similarity(lower(immutable_unaccent("video"."name")), lower(immutable_unaccent(${escapedSearch}))) as similarity ` +
       '  FROM "video" ' +
       '  WHERE lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
       '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
