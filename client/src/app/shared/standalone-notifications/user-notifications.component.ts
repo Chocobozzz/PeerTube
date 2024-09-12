@@ -80,9 +80,8 @@ export class UserNotificationsComponent implements OnInit {
   onNearOfBottom () {
     if (this.infiniteScroll === false) return
 
-    this.componentPagination.currentPage++
-
     if (hasMoreItems(this.componentPagination)) {
+      this.componentPagination.currentPage++
       this.loadNotifications()
     }
   }
