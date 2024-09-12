@@ -80,11 +80,11 @@ export class UserNotificationsComponent implements OnInit {
   onNearOfBottom () {
     if (this.infiniteScroll === false) return
 
-    this.componentPagination.currentPage++
-
     if (hasMoreItems(this.componentPagination)) {
       this.loadNotifications()
     }
+
+    this.componentPagination.currentPage++
   }
 
   markAsRead (notification: UserNotification) {
