@@ -54,9 +54,9 @@ describe('Object storage for video static file privacy', function () {
       const { text } = await makeRawRequest({
         url: internalFileUrl,
         token: server.accessToken,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
-      expect(text).to.contain('Unsupported Authorization Type')
+      expect(text).to.contain('AccessDenied')
     }
 
     const hls = getHLS(video)
