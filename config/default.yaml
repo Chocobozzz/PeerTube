@@ -636,6 +636,7 @@ transcoding:
     # Store the audio stream in a separate file from the video
     # This option adds the ability for the HLS player to propose the "Audio only" quality to users
     # It also saves disk space by not duplicating the audio stream in each resolution file
+    # /!\ If enabled, remote PeerTube instances < 6.3.0 won't be able to play these videos
     split_audio_and_video: false
 
 live:

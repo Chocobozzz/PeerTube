@@ -123,6 +123,8 @@
                             inputName="transcodingHlsSplitAudioAndVideo" formControlName="splitAudioAndVideo"
                             i18n-labelText labelText="Split audio and video streams"
                           >
+                            <ng-container i18n ngProjectAs="description">If enabled, remote PeerTube instances <= 6.3.0 won't be able to play these videos</ng-container>
+
                             <ng-template ptTemplate="help">
                               <ng-container i18n>Store the audio stream in a separate file from the video.</ng-container> <br />
                               <ng-container i18n>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</ng-container> <br />
@@ -158,9 +160,7 @@
                       inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
                       i18n-labelText labelText="Also transcode original resolution"
                     >
-                      <ng-container i18n ngProjectAs="description">
-                        Even if it's above your maximum enabled resolution
-                      </ng-container>
+                      <ng-container i18n ngProjectAs="description">Even if it's above your maximum enabled resolution</ng-container>
                     </my-peertube-checkbox>
                   </div>
                 </div>
