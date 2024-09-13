@@ -6,7 +6,7 @@ import { MUserAccountDefault } from '@server/types/models/index.js'
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserCreate, UserCreateResult, UserRight, UserUpdate } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger.js'
-import { logger } from '../../../helpers/logger.js'
+import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils.js'
 import { WEBSERVER } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -51,6 +51,7 @@ import { userExportsRouter } from './user-exports.js'
 import { userImportRouter } from './user-imports.js'
 
 const auditLogger = auditLoggerFactory('users')
+const lTags = loggerTagsFactory('api', 'users')
 
 const usersRouter = express.Router()
 
@@ -170,11 +171,11 @@ async function createUser (req: express.Request, res: express.Response) {
   })
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
-  logger.info('User %s with its channel and account created.', body.username)
+  logger.info('User %s with its channel and account created.', body.username, lTags(user.username))
 
   if (createPassword) {
     // this will send an email for newly created users, so then can set their first password.
-    logger.info('Sending to user %s a create password email', body.username)
+    logger.info('Sending to user %s a create password email', body.username, lTags(user.username))
     const verificationString = await Redis.Instance.setCreatePasswordVerificationString(user.id)
     const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
     Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
@@ -194,8 +195,11 @@ async function createUser (req: express.Request, res: express.Response) {
 
 async function unblockUser (req: express.Request, res: express.Response) {
   const user = res.locals.user
+  const byUser = res.locals.oauth.token.User
 
   await changeUserBlock(res, user, false)
+
+  logger.info(`Unblocked user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
 
   Hooks.runAction('action:api.user.unblocked', { user, req, res })
 
@@ -204,9 +208,12 @@ async function unblockUser (req: express.Request, res: express.Response) {
 
 async function blockUser (req: express.Request, res: express.Response) {
   const user = res.locals.user
+  const byUser = res.locals.oauth.token.User
   const reason = req.body.reason
 
   await changeUserBlock(res, user, true, reason)
+
+  logger.info(`Blocked user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
 
   Hooks.runAction('action:api.user.blocked', { user, req, res })
 
@@ -237,6 +244,7 @@ async function listUsers (req: express.Request, res: express.Response) {
 
 async function removeUser (req: express.Request, res: express.Response) {
   const user = res.locals.user
+  const byUser = res.locals.oauth.token.User
 
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
@@ -244,6 +252,8 @@ async function removeUser (req: express.Request, res: express.Response) {
     // Use a transaction to avoid inconsistencies with hooks (account/channel deletion & federation)
     await user.destroy({ transaction: t })
   })
+
+  logger.info(`Removed user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
 
   Hooks.runAction('action:api.user.deleted', { user, req, res })
 
@@ -253,6 +263,7 @@ async function removeUser (req: express.Request, res: express.Response) {
 async function updateUser (req: express.Request, res: express.Response) {
   const body: UserUpdate = req.body
   const userToUpdate = res.locals.user
+  const byUser = res.locals.oauth.token.User
   const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
   const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
@@ -278,6 +289,8 @@ async function updateUser (req: express.Request, res: express.Response) {
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
+  logger.info(`Updated user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
+
   Hooks.runAction('action:api.user.updated', { user, req, res })
 
   // Don't need to send this update to followers, these attributes are not federated
@@ -292,6 +305,8 @@ async function askResetUserPassword (req: express.Request, res: express.Response
   const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
   Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
 
+  logger.info(`User ${user.username} asked password reset.`, lTags(user.username))
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
@@ -301,6 +316,8 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
 
   await user.save()
   await Redis.Instance.removePasswordVerificationString(user.id)
+
+  logger.info(`User ${user.username} reset its password.`, lTags(user.username))
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
