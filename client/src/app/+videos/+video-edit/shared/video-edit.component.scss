@@ -31,7 +31,7 @@ my-peertube-checkbox {
   align-items: center;
 
   a.caption-entry-label {
-    color: #000;
+    color: pvar(--mainForegroundColor);
 
     @include disable-default-a-behaviour;
 
@@ -53,11 +53,11 @@ my-peertube-checkbox {
     @include margin-right(15px);
 
     &.caption-entry-state-create {
-      color: #39CC0B;
+      color: $green;
     }
 
     &.caption-entry-state-delete {
-      color: #FF0000;
+      color: $red;
     }
   }
 
