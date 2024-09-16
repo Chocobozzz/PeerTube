@@ -49,7 +49,7 @@ export abstract class APVideoAbstractBuilder {
 
   protected async getOrCreateVideoChannelFromVideoObject () {
     const channel = await findOwner(this.videoObject.id, this.videoObject.attributedTo, 'Group')
-    if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.url)
+    if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.id)
 
     return getOrCreateAPActor(channel.id, 'all')
   }

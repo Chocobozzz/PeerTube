@@ -307,7 +307,7 @@ export async function muxToMergeVideoFiles (options: {
       await new FFmpegContainer(getFFmpegCommandWrapperOptions('vod')).mergeInputs({
         inputs,
         output,
-        logError: true,
+        logError: false,
 
         // Include a cover if this is an audio file
         coverPath
