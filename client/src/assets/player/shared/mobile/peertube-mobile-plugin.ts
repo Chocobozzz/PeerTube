@@ -9,11 +9,12 @@ const Plugin = videojs.getPlugin('plugin')
 
 class PeerTubeMobilePlugin extends Plugin {
   private static readonly DOUBLE_TAP_DELAY_MS = 250
-  private static readonly SET_CURRENT_TIME_DELAY = 1000
+  private static readonly SET_CURRENT_TIME_DELAY = 750
 
   declare private peerTubeMobileButtons: PeerTubeMobileButtons
 
   declare private seekAmount: number
+  declare private doubleTapping: boolean
 
   declare private lastTapEvent: TouchEvent
   declare private tapTimeout: ReturnType<typeof setTimeout>
@@ -88,24 +89,35 @@ class PeerTubeMobilePlugin extends Plugin {
 
   private initTouchStartEvents () {
     const handleTouchStart = (event: TouchEvent) => {
+      debugLogger('Handle touch start')
+
       if (this.tapTimeout) {
         clearTimeout(this.tapTimeout)
         this.tapTimeout = undefined
       }
 
-      if (this.lastTapEvent && event.timeStamp - this.lastTapEvent.timeStamp < PeerTubeMobilePlugin.DOUBLE_TAP_DELAY_MS) {
+      if (
+        this.doubleTapping ||
+        (this.lastTapEvent && event.timeStamp - this.lastTapEvent.timeStamp < PeerTubeMobilePlugin.DOUBLE_TAP_DELAY_MS)
+      ) {
         debugLogger('Detected double tap')
 
-        this.lastTapEvent = undefined
+        this.lastTapEvent = event
         this.onDoubleTap(event)
         return
       }
 
       this.newActiveState = !this.player.userActive()
 
-      this.tapTimeout = setTimeout(() => {
-        debugLogger('No double tap detected, set user active state to %s.', this.newActiveState)
+      // video.js forces userActive on tap so we prevent this behaviour with a custom class
+      if (this.newActiveState === true) {
+        this.player.addClass('vjs-force-inactive')
+      }
 
+      this.tapTimeout = setTimeout(() => {
+        debugLogger('No double tap detected, set user active state to ' + this.newActiveState)
+
+        this.player.removeClass('vjs-force-inactive')
         this.player.userActive(this.newActiveState)
       }, PeerTubeMobilePlugin.DOUBLE_TAP_DELAY_MS)
 
@@ -113,16 +125,14 @@ class PeerTubeMobilePlugin extends Plugin {
     }
 
     this.onTouchStartHandler = event => {
-      // Only enable user active on player touch, we listen event on peertube mobile buttons to disable it
-      if (this.player.userActive()) return
-
       handleTouchStart(event)
     }
     this.player.on('touchstart', this.onTouchStartHandler)
 
     this.onMobileButtonTouchStartHandler = event => {
-      // Prevent mousemove/click events firing on the player, that conflict with our user active logic
+      // Prevent mousemove/click/tap events firing on the player, that conflict with our user active logic
       event.preventDefault()
+      event.stopPropagation()
 
       handleTouchStart(event)
     }
@@ -165,6 +175,7 @@ class PeerTubeMobilePlugin extends Plugin {
   private scheduleSetCurrentTime () {
     this.player.pause()
     this.player.addClass('vjs-fast-seeking')
+    this.doubleTapping = true
 
     if (this.setCurrentTimeTimeout) clearTimeout(this.setCurrentTimeTimeout)
 
@@ -180,7 +191,9 @@ class PeerTubeMobilePlugin extends Plugin {
       this.peerTubeMobileButtons.displayFastSeek(0)
 
       this.player.removeClass('vjs-fast-seeking')
+      this.player.removeClass('vjs-force-inactive')
       this.player.userActive(false)
+      this.doubleTapping = false
 
       this.player.play()
     }, PeerTubeMobilePlugin.SET_CURRENT_TIME_DELAY)
