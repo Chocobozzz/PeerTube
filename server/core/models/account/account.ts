@@ -2,6 +2,7 @@ import { Account, AccountSummary } from '@peertube/peertube-models'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions } from 'sequelize'
 import {
+  AfterDestroy,
   AllowNull,
   BeforeDestroy,
   BelongsTo, Column,
@@ -268,6 +269,18 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     }
 
     return undefined
+  }
+
+  @AfterDestroy
+  static async deleteActorIfRemote (instance: AccountModel, options) {
+    if (!instance.Actor) {
+      instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
+    }
+
+    // Remote actor, delete it
+    if (instance.Actor.serverId) {
+      await instance.Actor.destroy({ transaction: options.transaction })
+    }
   }
 
   // ---------------------------------------------------------------------------

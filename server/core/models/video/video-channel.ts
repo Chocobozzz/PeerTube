@@ -33,10 +33,11 @@ import { sendDeleteActor } from '../../lib/activitypub/send/index.js'
 import {
   MChannelAP,
   MChannelBannerAccountDefault,
+  MChannelDefault,
   MChannelFormattable,
   MChannelHost,
   MChannelSummaryFormattable,
-  type MChannel, MChannelDefault
+  type MChannel
 } from '../../types/models/video/index.js'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
@@ -44,11 +45,11 @@ import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
 import {
-  SequelizeModel,
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
   createSimilarityAttribute,
   getSort,
+  SequelizeModel,
   setAsUpdated,
   throwIfNotValid
 } from '../shared/index.js'
@@ -445,6 +446,18 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     }
 
     return undefined
+  }
+
+  @AfterDestroy
+  static async deleteActorIfRemote (instance: VideoChannelModel, options) {
+    if (!instance.Actor) {
+      instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
+    }
+
+    // Remote actor, delete it
+    if (instance.Actor.serverId) {
+      await instance.Actor.destroy({ transaction: options.transaction })
+    }
   }
 
   static countByAccount (accountId: number) {
