@@ -14,9 +14,13 @@ const lTags = loggerTagsFactory('request')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
+
   responseBody?: any
   responseHeaders?: any
+
   requestHeaders?: any
+  requestUrl?: any
+  requestMethod?: any
 }
 
 export type PeerTubeRequestOptions = {
@@ -251,6 +255,8 @@ function buildRequestError (error: RequestError) {
 
   if (error.options) {
     newError.requestHeaders = error.options.headers
+    newError.requestUrl = error.options.url
+    newError.requestMethod = error.options.method
   }
 
   return newError

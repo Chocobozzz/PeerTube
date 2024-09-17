@@ -38,7 +38,7 @@ async function createAccountPlaylists (playlistUrls: string[]) {
 
       return createOrUpdateVideoPlaylist(playlistObject)
     } catch (err) {
-      logger.warn('Cannot add playlist element %s.', playlistUrl, { err, ...lTags(playlistUrl) })
+      logger.warn('Cannot add playlist element ' + playlistUrl, { err, ...lTags(playlistUrl) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
@@ -149,7 +149,7 @@ async function buildElementsDBAttributes (elementUrls: string[], playlist: MVide
 
       elementsToCreate.push(playlistElementObjectToDBAttributes(elementObject, playlist, video))
     } catch (err) {
-      logger.warn('Cannot add playlist element %s.', elementUrl, { err, ...lTags(playlist.uuid, playlist.url) })
+      logger.warn('Cannot add playlist element ' + elementUrl, { err, ...lTags(playlist.uuid, playlist.url) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 

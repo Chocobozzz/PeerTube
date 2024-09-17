@@ -29,7 +29,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
 
     if (isAccountActor(byActorFull.type)) {
-      if (!byActorFull.Account) throw new Error('Actor ' + byActorFull.url + ' is a person but we cannot find it in database.')
+      if (!byActorFull.Account) throw new Error(`Actor ${byActorFull.url} is a person but we cannot find the account in database.`)
 
       const accountToDelete = byActorFull.Account as MAccountActor
       accountToDelete.Actor = byActorFull
