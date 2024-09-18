@@ -3017,15 +3017,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
         <target state="translated">активна параллельная работа</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
-          <context context-type="linenumber">283</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">216</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">283</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">218</context></context-group></trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
         <target state="translated">Разрешить импорт с URL-адресом HTTP (e.g. YouTube)</target>
@@ -10148,7 +10142,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Также перекодировать оригинальное разрешение</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">140</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">161</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">140</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">163</context></context-group></trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
         <source>Even if it's above your maximum enabled resolution</source>
         <target state="translated">Даже если оно выше вашего максимально разрешенного разрешения</target>
@@ -10210,15 +10204,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7911929966701561067" datatype="html">
         <source>TRANSCODING</source>
         <target state="translated">ТРАНСКОДИРОВАНИЕ</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">93</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">93</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit>
       <trans-unit id="8212237880239644112" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
         <target state="translated">То же, что и обработка видео, обработка потоковой передачи, чтобы они были в потоковой форме, которую может воспроизводить любое устройство. Потребуется более мощный процессор.</target>
@@ -10230,99 +10218,63 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4560217482714993155">
         <source>Transcoding enabled</source>
         <target>Транскодирование активировано</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">36</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">38</context></context-group></trans-unit>
       <trans-unit id="1386306711019304612" datatype="html" xml:space="preserve">
         <source>Input</source>
         <target state="translated">Вход</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">44</context></context-group></trans-unit>
       <trans-unit id="8646250517331978259" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;>"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
         <target state="translated">Использовать <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;>"/>удаленных участников<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> для обработки транскодирования VOD. Удаленные участники должны сначала зарегистрироваться на вашем экземпляре. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">180</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">182</context></context-group></trans-unit>
       <trans-unit id="7452751710576287271">
         <source>Allow additional extensions</source>
         <target>Разрешить дополнительные расширения</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">49</context></context-group></trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
         <target state="translated">Позволяет пользователям загружать видео с дополнительными расширениями, кроме .mp4, .ogv и .webm (например: .avi, .mov, .mkv и т. д).</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">52</context></context-group></trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
         <source>Allow audio files upload</source>
         <target state="translated">Разрешить загрузку аудиофайлов</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">58</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">60</context></context-group></trans-unit>
       <trans-unit id="8340360585610503574" datatype="html">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
         <target state="translated">Позволяет пользователям загружать аудиофайлы .mp3, .ogg, .wma, .flac, .aac, or .ac3.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">61</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
         <target state="translated">Файл будет объединен в неподвижное видео с файлом предварительного просмотра при загрузке.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">64</context></context-group></trans-unit>
       <trans-unit id="8718102504014634857" datatype="html" xml:space="preserve">
         <source>Keep a version of the input file</source>
         <target state="translated">Сохраните версию входного файла</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">72</context></context-group></trans-unit>
       <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
         <target state="translated">Если этот параметр включен, входной файл не удаляется после перекодирования, а перемещается в выделенную папку или объектное хранилище</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">75</context></context-group></trans-unit>
       <trans-unit id="8968030053137661433" datatype="html" xml:space="preserve">
         <source>Output</source>
         <target state="translated">Выход</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">82</context></context-group></trans-unit>
       <trans-unit id="2093595615152706886" datatype="html">
         <source>Web Videos enabled</source>
         <target state="translated">Включено веб-видео</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">86</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">88</context></context-group></trans-unit>
       <trans-unit id="2036818807823848377" datatype="html">
         <source>Output formats</source>
         <target state="translated">Форматы вывода</target>
@@ -10334,179 +10286,122 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8373385486403101567" datatype="html">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
         <target state="translated">Если вы также включили поддержку HLS, объем хранилища видео увеличится в 2 раза</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">90</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">92</context></context-group></trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
         <target state="translated">поддержка HLS с P2P включена</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">101</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">103</context></context-group></trans-unit>
       <trans-unit id="4354548488369167450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Requires ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul>"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Требуется ffmpeg >= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Генерируйте списки воспроизведения HLS и фрагментированные файлы MP4, что приводит к лучшему воспроизведению, чем при использовании веб-видео:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul>"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Изменение разрешения происходит более плавно<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Более быстрое воспроизведение, особенно с длинными видео<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Более стабильное воспроизведение (меньше ошибок/бесконечная загрузка)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Если вы также включили поддержку веб-видео, это увеличит объем хранилища видео в 2 раза<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">106</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">108</context></context-group></trans-unit>
       <trans-unit id="1638224906868555688" datatype="html" xml:space="preserve">
         <source>Split audio and video streams</source>
         <target state="translated">Разделение аудио и видеопотоков</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">126</context></context-group></trans-unit><trans-unit id="443904340561625146" datatype="html">
+        <source>If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</source><target state="new">If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">124,125</context>
-        </context-group>
-      </trans-unit><trans-unit id="2398250197396018198" datatype="html">
-        <source>If enabled, remote PeerTube instances &lt;= 6.3.0 won't be able to play these videos</source><target state="new">If enabled, remote PeerTube instances &lt;= 6.3.0 won't be able to play these videos</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8778692018772808354" datatype="html" xml:space="preserve">
         <source>Store the audio stream in a separate file from the video.</source>
         <target state="translated">Сохраните аудиопоток в отдельном файле от видео.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">129</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">131</context></context-group></trans-unit>
       <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
         <target state="translated">Эта опция позволяет проигрывателю HLS предлагать пользователям качество "Только аудио".</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">130</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">132</context></context-group></trans-unit>
       <trans-unit id="7702925566184017292" datatype="html" xml:space="preserve">
         <source>It also saves disk space by not duplicating the audio stream in each resolution file</source>
         <target state="translated">Это также экономит место на диске, поскольку не дублирует аудиопоток в каждом файле разрешения</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">131</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">133</context></context-group></trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
         <source>Resolutions to generate</source>
         <target state="translated">Разрешения для обработки</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">143</context></context-group></trans-unit><trans-unit id="2720128810058691158" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">145</context></context-group></trans-unit><trans-unit id="2720128810058691158" datatype="html">
         <source>Even if it's above your maximum enabled resolution</source><target state="new">Even if it's above your maximum enabled resolution</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">163</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">165</context></context-group></trans-unit>
       <trans-unit id="8056487097039524924" datatype="html">
         <source>Enable remote runners for VOD</source>
         <target state="translated">Включить удаленных участников для VOD</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">176</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">178</context></context-group></trans-unit>
       <trans-unit id="1126867109775813762">
         <source>Transcoding threads</source>
         <target>Количество потоков для транскодирования</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">188</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">190</context></context-group></trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
         <target state="translated">потребует не более <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> для обработки трансляций </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">192</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">194</context></context-group></trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
         <target state="translated">потребуется как минимум <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> для обработки трансляций </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">196</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">198</context></context-group></trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
         <target state="translated">Одновременное перекодирование заданий</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">211</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">213</context></context-group></trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
         <target state="translated">позволяет перекодировать несколько файлов параллельно. ⚠️ Требуется перезапуск PeerTube</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">212</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">214</context></context-group></trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
         <source>Transcoding profile</source>
         <target state="translated">Профиль транскодирования</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">223</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">225</context></context-group></trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
         <target state="translated">новые профили транскодирования могут быть добавлены плагинами PeerTube</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">224</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">226</context></context-group></trans-unit>
       <trans-unit id="5843661880070076970" datatype="html">
         <source>VIDEO STUDIO</source>
         <target state="translated">ВИДЕОСТУДИЯ</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">243</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">245</context></context-group></trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
         <target state="translated">Позволяет вашим пользователям редактировать свое видео (вырезать, добавлять вступление/концовку, добавлять водяной знак и т. д.)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">245</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">247</context></context-group></trans-unit>
       <trans-unit id="252604800845369275" datatype="html">
         <source>Enable video studio</source>
         <target state="translated">Включить видеостудию</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">255</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">257</context></context-group></trans-unit>
       <trans-unit id="3313548535394806921" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
         <target state="translated">⚠️ Сначала необходимо включить транскодирование, чтобы включить видеостудию</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">258</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">260</context></context-group></trans-unit>
       <trans-unit id="7185229240632050966" datatype="html">
         <source>Enable remote runners for studio</source>
         <target state="translated">Включить удаленных участников для студии</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">266</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">268</context></context-group></trans-unit>
       <trans-unit id="5552130276182854923" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;>"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
         <target state="translated">Использовать <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;>"/>удаленных участников<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> для обработки задач студийного транскодирования. Удаленные участники должны сначала зарегистрироваться на вашем экземпляре. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">270</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">272</context></context-group></trans-unit>
       <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
         <target state="translated">Автоматическое включение транскодирования HLS, поскольку при включении транскодирования должен быть включен по крайней мере 1 выходной формат</target>
@@ -13734,19 +13629,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8538708819525283296" datatype="html">
         <source>However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;>"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> before tweaking the following values. </source>
         <target state="translated">Однако вы можете прочитать <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;>"/>наши рекомендации<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> перед настройкой следующих значений. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">15</context></context-group></trans-unit>
       <trans-unit id="2384409178337534505" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
         <target state="translated">Обработайте загруженные видео, чтобы они были в потоковой форме, которую можно было воспроизвести на любом устройстве. Хотя это требует больших ресурсов, это важная часть PeerTube, так что действуйте осторожно.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">26</context></context-group></trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
         <source>Updating instance configuration from the web interface is disabled by the system administrator.</source>
         <target state="translated">Обновление конфигурации экземпляра через веб-интерфейс отключено системным администратором.</target>
