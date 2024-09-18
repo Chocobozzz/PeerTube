@@ -832,6 +832,7 @@ import:
       # By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables
       # But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address
       # PeerTube will randomly select a proxy from the following list
+      # You may need to use a standalone youtube-dl binary (see `url` key comment above) to use this feature
       proxies:
 #        - "https://username:password@example.com:8888"
 
