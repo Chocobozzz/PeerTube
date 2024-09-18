@@ -130,6 +130,48 @@ module.exports = {
       }
     },
 
+    before: function () {
+      require('./src/commands/upload')
+
+      // Force keep alive: https://www.browserstack.com/docs/automate/selenium/error-codes/keep-alive-not-used#Node_JS
+      const http = require('http')
+      const https = require('https')
+
+      const keepAliveTimeout = 30 * 1000
+
+      // eslint-disable-next-line no-prototype-builtins
+      if (http.globalAgent?.hasOwnProperty('keepAlive')) {
+        http.globalAgent.keepAlive = true
+        https.globalAgent.keepAlive = true
+        http.globalAgent.keepAliveMsecs = keepAliveTimeout
+        https.globalAgent.keepAliveMsecs = keepAliveTimeout
+      } else {
+        const agent = new http.Agent({
+          keepAlive: true,
+          keepAliveMsecs: keepAliveTimeout
+        })
+
+        const secureAgent = new https.Agent({
+          keepAlive: true,
+          keepAliveMsecs: keepAliveTimeout
+        })
+
+        const httpRequest = http.request
+        const httpsRequest = https.request
+
+        http.request = function (options, callback) {
+          if (options.protocol === 'https:') {
+            options['agent'] = secureAgent
+            return httpsRequest(options, callback)
+          }
+          else {
+            options['agent'] = agent
+            return httpRequest(options, callback)
+          }
+        }
+      }
+    },
+
     onPrepare: onBrowserStackPrepare,
     onComplete: onBrowserStackComplete
 
