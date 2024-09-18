@@ -1,6 +1,6 @@
 # Changelog
 
-## v6.3.0-rc.1
+## v6.3.0
 
 ### IMPORTANT NOTES
 
@@ -55,6 +55,7 @@
   * Forward watch page `start` query param to the OEmbed service so that the embed starts at the correct time
   * Notify local users on when an *Internal* video is published
   * Add ability for admins to disable federation (disabling ActivityPub endpoints)
+  * Improve local video search relevance
 
 ### Bug fixes
 
@@ -73,6 +74,11 @@
   * Use first step *Public* privacy when publishing lives without having validated the second step
   * Fix studio page responsive
   * Add CORS to oEmbed API
+  * Fix storyboard display at the end of the video
+  * Correctly cleanup permanent live empty directories
+  * Fix duplicated resolutions when capping fps
+  * Don't resize remote actor images with unknown size
+  * More robust caption update concurrency
 
 
 ## v6.2.1
