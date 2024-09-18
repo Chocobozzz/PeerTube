@@ -49,6 +49,7 @@ storage:
   avatars: '../data/avatars/'
   web_videos: '../data/web-videos/'
   streaming_playlists: '../data/streaming-playlists'
+  original_video_files: '../data/original-video-files'
   redundancy: '../data/redundancy/'
   logs: '../data/logs/'
   previews: '../data/previews/'
