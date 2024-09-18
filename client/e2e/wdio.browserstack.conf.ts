@@ -163,8 +163,7 @@ module.exports = {
           if (options.protocol === 'https:') {
             options['agent'] = secureAgent
             return httpsRequest(options, callback)
-          }
-          else {
+          } else {
             options['agent'] = agent
             return httpRequest(options, callback)
           }
