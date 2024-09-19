@@ -54,7 +54,7 @@ my-edit-button {
 
 .video-channel-name {
   font-size: 14px;
-  color: $grey-actor-name;
+  color: pvar(--greyForegroundColor);
 
   @include margin-left(5px);
 }
