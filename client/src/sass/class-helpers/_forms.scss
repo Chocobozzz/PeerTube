@@ -11,7 +11,7 @@
   +.nav-preview,
   // Markdown textarea
   +*+.tab-content {
-    border-color: $red !important;
+    border-color: pvar(--red) !important;
   }
 }
 
@@ -27,7 +27,7 @@
 }
 
 .form-error {
-  color: $red;
+  color: pvar(--red);
 }
 
 // Disable red error on input focus

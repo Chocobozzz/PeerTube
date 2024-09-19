@@ -2,9 +2,9 @@
 @use '_mixins' as *;
 
 my-global-icon[iconName=tick] {
-  color: $green;
+  color: pvar(--green);
 }
 
 my-global-icon[iconName=cross] {
-  color: $red;
+  color: pvar(--red);
 }

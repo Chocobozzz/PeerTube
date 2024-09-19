@@ -22,6 +22,9 @@ body {
   /*** theme ***/
   // now beware sass requires interpolation
   // for css custom properties #{$var}
+  --red: #{$red};
+  --green: #{$green};
+
   --mainColor: #{$main-color};
   --mainColorLighter: #{$main-color-lighter};
   --mainColorLightest: #{$main-color-lightest};

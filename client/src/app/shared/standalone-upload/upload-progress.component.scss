@@ -12,7 +12,7 @@
     @include progressbar($height: 30px, $font-size: 14px, $background-color: rgba(11, 204, 41, 0.16));
 
     .progress-bar {
-      background-color: $green;
+      background-color: pvar(--green);
       line-height: 30px;
       text-align: start;
       font-weight: $font-semibold;

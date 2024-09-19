@@ -56,14 +56,6 @@ my-timestamp-input {
     min-width: 250px;
 
     @include margin-right(15px);
-
-    &.caption-entry-state-create {
-      color: $green;
-    }
-
-    &.caption-entry-state-delete {
-      color: $red;
-    }
   }
 }
 

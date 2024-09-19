@@ -4,6 +4,14 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+.red {
+  color: pvar(--red);
+}
+
+.green {
+  color: pvar(--green);
+}
+
 .link-orange {
   color: pvar(--mainForegroundColor);
   font-weight: $font-semibold;

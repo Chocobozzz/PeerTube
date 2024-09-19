@@ -3,10 +3,6 @@
 @use '_mixins' as *;
 @use 'bootstrap/scss/functions' as *;
 
-tr.banned > td {
-  background-color: color.adjust($color: $red, $lightness: 40%) !important;
-}
-
 .banned-info {
   font-style: italic;
 }

@@ -184,17 +184,16 @@
               @if (videoCaption.action) {
                 <span class="caption-entry-label">{{ getCaptionLabel(videoCaption) }}</span>
 
-                <div i18n class="caption-entry-state caption-entry-state-create">
-                  @switch (videoCaption.action) {
-                    @case ('CREATE') {
-                      Will be created on update
-                    } @case ('UPDATE') {
-                      Will be edited on update
-                    } @case ('REMOVE') {
-                      Will be deleted on update
-                    }
+                @switch (videoCaption.action) {
+                  @case ('CREATE') {
+                    <div i18n class="caption-entry-state green">Will be created on update</div>
+                  } @case ('UPDATE') {
+                    <div i18n class="caption-entry-state green">Will be edited on update</div>
+                    Will be edited on update
+                  } @case ('REMOVE') {
+                    <div i18n class="caption-entry-state red">Will be deleted on update</div>
                   }
-                </div>
+                }
 
                 @if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
                   <my-edit-button class="me-2" i18n-label label="Edit" (click)="openEditCaptionModal(videoCaption)"></my-edit-button>
@@ -203,7 +202,7 @@
                 <my-button i18n (click)="deleteCaption(videoCaption)" icon="undo">
                   @switch (videoCaption.action) {
                     @case ('CREATE') {
-                      Cancel create
+                      Cancel creation
                     } @case ('UPDATE') {
                       Cancel edition
                     } @case ('REMOVE') {
