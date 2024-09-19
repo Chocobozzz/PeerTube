@@ -34,6 +34,7 @@ export class InputTextComponent implements ControlValueAccessor, AfterViewInit {
   @Input() show = false
   @Input() formError: string | FormReactiveErrors | FormReactiveErrors[]
   @Input() autofocus = false
+  @Input() ariaLabel: string
 
   get inputType () {
     return this.show

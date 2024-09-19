@@ -4,6 +4,7 @@
     [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly"
     #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
     [ngClass]="{ 'input-error': formError }"
+    [attr.aria-label]="ariaLabel"
   />
 
   <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary" [title]="toggleTitle">

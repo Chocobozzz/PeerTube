@@ -28,7 +28,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-text [value]="playlistUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+              <my-input-text
+                inputId="playlist-url" i18n-ariaLabel ariaLabel="Playlist URL"
+                [value]="playlistUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
+              ></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -49,6 +52,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
               <my-input-text
+                inputId="playlist-embed-url" i18n-ariaLabel ariaLabel="Playlist embed URL"
                 [value]="customizations.onlyEmbedUrl ? playlistEmbedUrl : playlistEmbedHTML" (change)="onUpdate()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-text>
@@ -118,7 +122,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-text [value]="videoUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+              <my-input-text
+                inputId="video-url" i18n-ariaLabel ariaLabel="Video URL"
+                [value]="videoUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
+              ></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -139,6 +146,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
               <my-input-text
+                inputId="video-embed-url" i18n-ariaLabel ariaLabel="Video embed URL"
                 [value]="customizations.onlyEmbedUrl ? videoEmbedUrl : videoEmbedHTML" (ngModelChange)="onUpdate()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-text>

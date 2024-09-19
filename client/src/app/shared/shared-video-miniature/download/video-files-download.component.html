@@ -6,7 +6,11 @@
 
   <ng-template #rootNavContent>
     <div class="nav-content">
-      <my-input-text [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getVideoFileLink()"></my-input-text>
+      <my-input-text
+        inputId="video-file-link"
+        i18n-ariaLabel ariaLabel="Video file link"
+        [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getVideoFileLink()"
+      ></my-input-text>
     </div>
   </ng-template>
 

@@ -9,7 +9,10 @@
 
     <ng-template ngbNavContent>
       <div class="nav-content">
-        <my-input-text [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getCaptionLink()"></my-input-text>
+        <my-input-text
+          inputId="subtitle-url" i18n-ariaLabel ariaLabel="Subtitle URL"
+          [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getCaptionLink()"
+        ></my-input-text>
       </div>
     </ng-template>
   </li>
