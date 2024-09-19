@@ -50,7 +50,7 @@
       Cancel
     </button>
 
-    <button *ngIf="isAddButtonDisplayed()" class="peertube-button orange-button" [ngClass]="{ disabled: !form.valid || addingComment }">
+    <button *ngIf="isAddButtonDisplayed()" class="peertube-button orange-button" [disabled]="!form.valid || addingComment">
       {{ addingCommentButtonValue }}
     </button>
   </div>

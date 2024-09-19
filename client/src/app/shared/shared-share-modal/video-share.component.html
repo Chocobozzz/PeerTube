@@ -186,7 +186,7 @@
             i18n-labelText labelText="Auto select subtitle"
           ></my-peertube-checkbox>
 
-          <div class="peertube-select-container" [ngClass]="{ disabled: !customizations.subtitleCheckbox }">
+          <div class="peertube-select-container">
             <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox" class="form-control">
               <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
             </select>

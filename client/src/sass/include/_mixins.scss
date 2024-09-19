@@ -134,8 +134,7 @@
     background-color: pvar(--mainHoverColor);
   }
 
-  &[disabled],
-  &.disabled {
+  &[disabled] {
     cursor: default;
     color: #fff;
     background-color: pvar(--inputBorderColor);
@@ -165,8 +164,7 @@
     background-color: pvar(--mainColorLightest);
   }
 
-  &[disabled],
-  &.disabled {
+  &[disabled] {
     cursor: default;
     color: pvar(--mainColor);
     background-color: pvar(--inputBorderColor);
@@ -183,8 +181,7 @@
 
   @include button-focus($grey-button-outline-color);
 
-  &[disabled],
-  .disabled {
+  &[disabled] {
     cursor: default;
   }
 
@@ -202,14 +199,12 @@
   &:hover,
   &:active,
   &:focus,
-  &[disabled],
-  &.disabled {
+  &[disabled] {
     color: pvar(--greyForegroundColor);
     background-color: pvar(--greySecondaryBackgroundColor);
   }
 
-  &[disabled],
-  &.disabled {
+  &[disabled] {
     cursor: default;
   }
 
@@ -230,13 +225,11 @@
   &:hover,
   &:active,
   &:focus,
-  &[disabled],
-  &.disabled {
+  &[disabled] {
     background-color: color.adjust($color: $color, $lightness: 10%);
   }
 
-  &[disabled],
-  &.disabled {
+  &[disabled] {
     cursor: default;
   }
 
@@ -368,14 +361,6 @@
   background: pvar(--inputBackgroundColor);
   position: relative;
   height: min-content;
-
-  &.disabled {
-    background-color: #E5E5E5;
-
-    select {
-      cursor: default;
-    }
-  }
 
   select[disabled] {
     background-color: #f9f9f9;
