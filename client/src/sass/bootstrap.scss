@@ -31,6 +31,7 @@ body {
   --bs-border-color-translucent: #{pvar(--inputBorderColor)};
 
   --bs-body-color: #{pvar(--mainForegroundColor)};
+  --bs-body-bg: #{pvar(--mainBackgroundColor)};
 }
 
 .accordion {
