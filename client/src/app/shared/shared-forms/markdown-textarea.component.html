@@ -26,9 +26,13 @@
     </ng-container>
 
     <button type="button" (click)="onMaximizeClick()" class="maximize-button border-0 m-3" [disabled]="disabled">
-      <my-global-icon *ngIf="!isMaximized" [ngbTooltip]="maximizeInText" iconName="fullscreen"></my-global-icon>
-
-      <my-global-icon *ngIf="isMaximized" [ngbTooltip]="maximizeOutText" iconName="exit-fullscreen"></my-global-icon>
+      @if (isMaximized) {
+        <my-global-icon [ngbTooltip]="maximizeOutText" iconName="exit-fullscreen"></my-global-icon>
+        <span class="visually-hidden">{{ maximizeOutText }}</span>
+      } @else {
+        <my-global-icon [ngbTooltip]="maximizeInText" iconName="fullscreen"></my-global-icon>
+        <span class="visually-hidden">{{ maximizeInText }}</span>
+      }
     </button>
   </div>
 
