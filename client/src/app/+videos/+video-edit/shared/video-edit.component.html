@@ -54,6 +54,7 @@
               </my-help>
 
               <my-markdown-textarea
+                inputId="description"
                 formControlName="description" [markdownVideo]="publishedVideo"
                 [formError]="formErrors.description" truncateTo3Lines="true" withEmoji="true"
               ></my-markdown-textarea>
@@ -395,6 +396,7 @@
 
             <div class="form-group">
               <label i18n for="support">Support</label>
+
               <my-help helpType="markdownEnhanced">
                 <ng-template ptTemplate="preHtml">
                   <ng-container i18n>
@@ -404,7 +406,7 @@
               </my-help>
 
               <my-markdown-textarea
-                id="support" formControlName="support" markdownType="enhanced"
+                inputId="support" formControlName="support" markdownType="enhanced"
                 [formError]="formErrors['support']"
               ></my-markdown-textarea>
             </div>
@@ -440,7 +442,7 @@
               </div>
 
               <p-calendar
-                id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
+                inputId="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
                 [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
               >
               </p-calendar>

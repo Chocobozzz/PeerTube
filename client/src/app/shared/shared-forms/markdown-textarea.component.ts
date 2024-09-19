@@ -51,7 +51,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   @Input() markdownVideo: Video
 
-  @Input() name = 'description'
+  @Input({ required: true }) inputId: string
 
   @Input() dir: string
   @Input({ transform: booleanAttribute }) withEmoji = false

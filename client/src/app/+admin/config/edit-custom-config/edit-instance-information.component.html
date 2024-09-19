@@ -65,7 +65,7 @@
           </div>
 
           <my-markdown-textarea
-            name="instanceDescription" formControlName="description"
+            inputId="instanceDescription" formControlName="description"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.description']"
           ></my-markdown-textarea>
@@ -152,7 +152,7 @@
           <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
 
           <my-markdown-textarea
-            name="instanceTerms" formControlName="terms" markdownType="enhanced"
+            inputId="instanceTerms" formControlName="terms" markdownType="enhanced"
             [formError]="formErrors['instance.terms']"
           ></my-markdown-textarea>
         </div>
@@ -161,7 +161,7 @@
           <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
 
           <my-markdown-textarea
-            name="instanceCodeOfConduct" formControlName="codeOfConduct" markdownType="enhanced"
+            inputId="instanceCodeOfConduct" formControlName="codeOfConduct" markdownType="enhanced"
             [formError]="formErrors['instance.codeOfConduct']"
           ></my-markdown-textarea>
         </div>
@@ -171,7 +171,7 @@
           <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
 
           <my-markdown-textarea
-            name="instanceModerationInformation" formControlName="moderationInformation" markdownType="enhanced"
+            inputId="instanceModerationInformation" formControlName="moderationInformation" markdownType="enhanced"
             [formError]="formErrors['instance.moderationInformation']"
           ></my-markdown-textarea>
         </div>
@@ -191,7 +191,7 @@
           <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
 
           <my-markdown-textarea
-            name="instanceAdministrator" formControlName="administrator" markdownType="enhanced"
+            inputId="instanceAdministrator" formControlName="administrator" markdownType="enhanced"
             [formError]="formErrors['instance.administrator']"
           ></my-markdown-textarea>
         </div>
@@ -201,7 +201,7 @@
           <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
           <my-markdown-textarea
-            name="instanceCreationReason" formControlName="creationReason" markdownType="enhanced"
+            inputId="instanceCreationReason" formControlName="creationReason" markdownType="enhanced"
             [formError]="formErrors['instance.creationReason']"
           ></my-markdown-textarea>
         </div>
@@ -211,7 +211,7 @@
           <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
 
           <my-markdown-textarea
-            name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" markdownType="enhanced"
+            inputId="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" markdownType="enhanced"
             [formError]="formErrors['instance.maintenanceLifetime']"
           ></my-markdown-textarea>
         </div>
@@ -221,7 +221,7 @@
           <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
 
           <my-markdown-textarea
-            name="instanceBusinessModel" formControlName="businessModel" markdownType="enhanced"
+            inputId="instanceBusinessModel" formControlName="businessModel" markdownType="enhanced"
             [formError]="formErrors['instance.businessModel']"
           ></my-markdown-textarea>
         </div>
@@ -241,7 +241,7 @@
           <div i18n class="label-small-info">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
 
           <my-markdown-textarea
-            name="instanceHardwareInformation" formControlName="hardwareInformation" markdownType="enhanced"
+            inputId="instanceHardwareInformation" formControlName="hardwareInformation" markdownType="enhanced"
             [formError]="formErrors['instance.hardwareInformation']"
           ></my-markdown-textarea>
         </div>

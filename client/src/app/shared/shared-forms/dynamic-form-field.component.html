@@ -28,13 +28,13 @@
 
   <my-markdown-textarea
     *ngIf="setting.type === 'markdown-text'"
-    markdownType="text" [id]="setting.name" [formControlName]="setting.name"
+    markdownType="text" [inputId]="setting.name" [formControlName]="setting.name"
     [formError]="formErrors['settings.name']"
   ></my-markdown-textarea>
 
   <my-markdown-textarea
     *ngIf="setting.type === 'markdown-enhanced'"
-    markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name"
+    markdownType="enhanced" [inputId]="setting.name" [formControlName]="setting.name"
     [formError]="formErrors['settings.name']"
   ></my-markdown-textarea>
 

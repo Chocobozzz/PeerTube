@@ -16,7 +16,7 @@
           </div>
 
           <my-markdown-textarea
-            name="instanceCustomHomepageContent" formControlName="content"
+            inputId="instanceCustomHomepageContent" formControlName="content"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instanceCustomHomepage.content']"
             dir="ltr"
