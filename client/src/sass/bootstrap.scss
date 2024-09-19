@@ -32,6 +32,8 @@ body {
 
   --bs-body-color: #{pvar(--mainForegroundColor)};
   --bs-body-bg: #{pvar(--mainBackgroundColor)};
+
+  --bs-emphasis-color: #{pvar(--mainForegroundColor)};
 }
 
 .accordion {
