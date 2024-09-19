@@ -1,6 +1,6 @@
 <div class="input-group">
   <input
-    [id]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
+    [id]="inputId" [name]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
     [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly"
     #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
     [ngClass]="{ 'input-error': formError }"
