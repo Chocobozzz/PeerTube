@@ -88,7 +88,7 @@ class PeerTubeMobilePlugin extends Plugin {
   }
 
   private initTouchStartEvents () {
-    const handleTouchStart = (event: TouchEvent) => {
+    const handleTouchStart = (event: TouchEvent, onlyDetectDoubleTap = false) => {
       debugLogger('Handle touch start')
 
       if (this.tapTimeout) {
@@ -107,10 +107,12 @@ class PeerTubeMobilePlugin extends Plugin {
         return
       }
 
+      if (onlyDetectDoubleTap) return
+
       this.newActiveState = !this.player.userActive()
 
       // video.js forces userActive on tap so we prevent this behaviour with a custom class
-      if (this.newActiveState === true) {
+      if (!this.player.paused() && this.newActiveState === true) {
         this.player.addClass('vjs-force-inactive')
       }
 
@@ -125,7 +127,10 @@ class PeerTubeMobilePlugin extends Plugin {
     }
 
     this.onTouchStartHandler = event => {
-      handleTouchStart(event)
+      // If user is active, only listen to mobile button overlay events to know if we need to hide them
+      const onlyDetectDoubleTap = this.player.userActive()
+
+      handleTouchStart(event, onlyDetectDoubleTap)
     }
     this.player.on('touchstart', this.onTouchStartHandler)
 
@@ -190,12 +195,15 @@ class PeerTubeMobilePlugin extends Plugin {
       this.seekAmount = 0
       this.peerTubeMobileButtons.displayFastSeek(0)
 
-      this.player.removeClass('vjs-fast-seeking')
-      this.player.removeClass('vjs-force-inactive')
       this.player.userActive(false)
       this.doubleTapping = false
 
       this.player.play()
+
+      setTimeout(() => {
+        this.player.removeClass('vjs-fast-seeking')
+        this.player.removeClass('vjs-force-inactive')
+      }, 100)
     }, PeerTubeMobilePlugin.SET_CURRENT_TIME_DELAY)
   }
 }

@@ -186,8 +186,11 @@
   }
 }
 
-.vjs-force-inactive .vjs-control-bar {
-  display: none;
+.vjs-force-inactive,
+.vjs-fast-seeking {
+   .vjs-control-bar {
+    display: none;
+  }
 }
 
 @keyframes fadeInAndOut {
