@@ -509,7 +509,7 @@
       </trans-unit>
       <trans-unit id="859336734803187408" datatype="html" xml:space="preserve">
         <source><x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoCaption.language.label }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> transcription of <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/>your video <x id="INTERPOLATION_1" equiv-text="{{ notification.videoCaption.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been generated </source>
-        <target state="translated">&lt;x id=„START_EMPHASISED_TEXT“ ctype=„x-em“ equiv-text=„&amp;lt;em&amp;gt;“/&gt;&lt;x id=„INTERPOLATION“ equiv-text="{{ notification.videoCaption.language. label }}„/&gt;&lt;x id=“CLOSE_EMPHASISED_TEXT„ ctype=“x-em„ equiv-text=“&amp;lt;/em&amp;gt;„/&gt; přepis &lt;x id=“START_LINK„ ctype=“x-a„ equiv-text=“&amp;lt;a (click)=&amp;quot;markAsRead(notification)&amp;quot; [routerLink]=&amp;quot;notification. videoUrl&amp;quot;&amp;gt;„/&gt;Vaše video &lt;x id=“INTERPOLATION_1„ equiv-text=“{{ notification.videoCaption.video.name }}„/&gt;&lt;x id=“CLOSE_LINK„ ctype=“x-a„ equiv-text=“&amp;lt;/a&amp;gt;"/&gt; bylo vytvořeno. </target>
+        <target state="translated"><x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoCaption.language.label }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> přepis <x id="START_LINK" ctype="x-a" equiv-text="&lt; a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/>vaše video <x id="INTERPOLATION_1" equiv-text="{{ notification.videoCaption.video. jméno }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> bylo vygenerováno </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">246,247</context>
@@ -1023,7 +1023,7 @@
       </trans-unit>
       <trans-unit id="3699875908605792812" datatype="html" xml:space="preserve">
         <source>Web Videos (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</source>
-        <target state="translated">Webová videa (&lt;x id=„INTERPOLATION“ equiv-text=„{{ video.files.length }}“/&gt;)</target>
+        <target state="translated">Webová videa (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">106</context>
@@ -1141,25 +1141,25 @@
           <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5112667021094836629" datatype="html">
+      <trans-unit id="5112667021094836629" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</source>
-        <target state="new">{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</target>
+        <target state="translated">{count, plural, =1 {1 překladová úloha vytvořena.} other {<x id="count"/> překladové úlohy vytvořeny.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">426</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2376618077234059570" datatype="html">
+      <trans-unit id="2376618077234059570" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video already has captions.} other {<x id="count"/> videos already have captions.}}</source>
-        <target state="new">{count, plural, =1 {1 video already has captions.} other {<x id="count"/> videos already have captions.}}</target>
+        <target state="translated">{count, plural, =1 {1 video již má titulky.} other {<x id="count"/> videa již mají titulky.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">435</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1403418704976301994" datatype="html">
+      <trans-unit id="1403418704976301994" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video is already being transcribed.} other {<x id="count"/> videos are already being transcribed.}}</source>
-        <target state="new">{count, plural, =1 {1 video is already being transcribed.} other {<x id="count"/> videos are already being transcribed.}}</target>
+        <target state="translated">{count, plural, =1 {1 video už bylo přeloženo.} other {<x id="count"/> videa již byla přeložena.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">445</context>
@@ -1461,7 +1461,7 @@
       </trans-unit>
       <trans-unit id="6334544592573094529" datatype="html" xml:space="preserve">
         <source>Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Úloha překódování vytvořena pro „&lt;x id=“PH„ equiv-text=“video.name„/&gt;“.</target>
+        <target state="translated">Úloha překódování vytvořena pro "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">400</context>
@@ -1469,7 +1469,7 @@
       </trans-unit>
       <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Úloha přepisu vytvořená pro „&lt;x id=“PH„ equiv-text=“video.name„/&gt;“.</target>
+        <target state="translated">Úloha přepisu vytvořená pro "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">412</context>
@@ -2199,7 +2199,7 @@
       </trans-unit>
       <trans-unit id="921088049695906924" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">V současné době tato instance neumožňuje registraci uživatele, můžete zkontrolovat &lt;x id=„START_LINK“ ctype=„x-a“ equiv-text="&amp;lt;a class=&amp;quot;link-orange terms-anchor d-inline&amp;quot; (click)=&amp;quot;onTermsClick($event, instanceInformation)&amp;quot; href=&amp;quot;/about/instance#terms&amp;quot;&amp;gt;„/&gt;Terms&lt;x id=“CLOSE_LINK„ ctype=“x-a„ equiv-text=“&amp;lt;/a&amp;gt; „/&gt;&lt;x id=„START_LINK_1“ equiv-text="&amp;lt;a class=&amp;quot;terms-link&amp;quot; target=&amp;quot;_blank&amp;quot; routerLink=&amp;quot;/about/instance&amp;quot; fragment=&amp;quot;terms&amp;quot;&amp;gt; „/&gt;Terms&lt;x id=„CLOSE_LINK“ ctype=„x-a“ equiv-text=„&amp;lt;/a&amp;gt;“/&gt; pro více informací nebo si najděte instanci, která vám dává možnost zaregistrovat si účet a nahrávat tam svá videa. Najděte si tu svou mezi více instancemi na adrese: &lt;x id=„START_LINK_2“ equiv-text=„&amp;lt;a class=&amp;quot;link-orange&amp;quot; href=&amp;quot;https://joinpeertube.org/instances&amp;quot; target=&amp;quot;_blank&amp;quot; rel=&amp;quot;noopener noreferrer&amp;quot;&amp;gt;“/&gt;https://joinpeertube.org/instances&lt;x id=„CLOSE_LINK“ ctype=„x-a“ equiv-text=„&amp;lt;/a&amp;gt;“/&gt;. </target>
+        <target state="translated">V současné době tato instance neumožňuje registraci uživatele, můžete zkontrolovat <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Podmínky<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Podmínky<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pro další podrobnosti nebo najděte instanci, která vám dává možnost zaregistrovat si účet a nahrajte tam svá videa. Najděte svůj mezi několika instancemi na: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">30,33</context>
@@ -2421,7 +2421,7 @@
       </trans-unit>
       <trans-unit id="1257029815550886575" datatype="html" xml:space="preserve">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</source>
-        <target state="translated">Pomocí svého oblíbeného nástroje již můžete sledovat &lt;x id=„INTERPOLATION“ equiv-text=„{{ instanceName }}“/&gt;.</target>
+        <target state="translated">Pomocí svého oblíbeného nástroje již můžete sledovat <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2541,7 +2541,7 @@
       </trans-unit>
       <trans-unit id="3109023679137193515" datatype="html" xml:space="preserve">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Oficiální webové stránky PeerTube (novinky, podpora, příspěvky...): &lt;x id=„START_LINK“ ctype=„x-a“ equiv-text=„&amp;lt;a href=&amp;quot;https://joinpeertube.org&amp;quot; target=&amp;quot;_blank&amp;quot; rel=&amp;quot;noopener noreferrer&amp;quot;&amp;gt;“/&gt;https://joinpeertube.org&lt;x id=„CLOSE_LINK“ ctype=„x-a“ equiv-text=„&amp;lt;/a&amp;gt;“/&gt;</target>
+        <target state="translated">Oficiální webové stránky PeerTube (novinky, podpora, příspěvky...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -2549,7 +2549,7 @@
       </trans-unit>
       <trans-unit id="647900782867860768" datatype="html" xml:space="preserve">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Umístěte svou instanci na veřejný seznam PeerTube: &lt;x id=„START_LINK“ ctype=„x-a“ equiv-text=„&amp;lt;a href=&amp;quot;https://instances.joinpeertube.org/instances&amp;quot;&amp;gt;“/&gt;https://instances.joinpeertube.org/instances&lt;x id=„CLOSE_LINK“ ctype=„x-a“ equiv-text=„&amp;lt;/a&amp;gt;“/&gt;</target>
+        <target state="translated">Umístěte svou instanci na veřejný seznam PeerTube: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">46</context>
@@ -3470,7 +3470,7 @@
       </trans-unit>
       <trans-unit id="6323654987364970496" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in this instance's network</source>
-        <target state="translated">Hledat „&lt;x id=“PH„ equiv-text=“this.result.text„/&gt;“ v síti této instance</target>
+        <target state="translated">Hledat "<x id="PH" equiv-text="this.result.text"/>" v síti této instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -3478,7 +3478,7 @@
       </trans-unit>
       <trans-unit id="2820857203884114586" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in the vidiverse</source>
-        <target state="translated">Hledat „&lt;x id=“PH„ equiv-text=“this.result.text„/&gt;“ ve vidiverse</target>
+        <target state="translated">Hledat "<x id="PH" equiv-text="this.result.text"/>" ve vidiverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -4398,7 +4398,7 @@
       </trans-unit>
       <trans-unit id="5153270828945387960" datatype="html" xml:space="preserve">
         <source>Chapters can also be set in the video description. Check the format <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>in the PeerTube documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Kapitoly lze nastavit i v popisu videa. Zkontrolujte formát &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt;a href=&amp;quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&amp;quot; target=&amp;quot ;_blank&amp;quot;&amp;gt;"/&gt;v dokumentaci PeerTube&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt;/a&amp;gt;"/&gt;</target>
+        <target state="translated">Kapitoly lze nastavit i v popisu videa. Zkontrolujte formát <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>v dokumentaci PeerTube <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">243,246</context>
@@ -4903,7 +4903,7 @@
       </trans-unit>
       <trans-unit id="3011306880188617431" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="list.listName"/> list?</source>
-        <target state="translated">Opravdu chcete odstranit tento &lt;x id=„PH“ equiv-text=„list.listName“/&gt; seznam?</target>
+        <target state="translated">Opravdu chcete odstranit tento <x id="PH" equiv-text="list.listName"/> seznam?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -5799,7 +5799,7 @@
       </trans-unit>
       <trans-unit id="3474117045932203219" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="c.language.label"/> (automatically generated)</source>
-        <target state="translated">&lt;x id=„PH“ equiv-text=„c.language.label“/&gt; (generováno automaticky)</target>
+        <target state="translated"><x id="PH" equiv-text="c.language.label"/> (generováno automaticky)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">149</context>
@@ -5807,7 +5807,7 @@
       </trans-unit>
       <trans-unit id="8383362541941827528" datatype="html" xml:space="preserve">
         <source>Cannot load transcript: <x id="PH" equiv-text="err.message"/></source>
-        <target state="translated">Nelze načíst přepis: &lt;x id=„PH“ equiv-text=„err.message“/&gt;</target>
+        <target state="translated">Nelze načíst přepis: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -6295,7 +6295,7 @@
       </trans-unit>
       <trans-unit id="7260030884541952275" datatype="html" xml:space="preserve">
         <source>That contain any word from your "<x id="PH" equiv-text="tag.name"/>" watched word list</source>
-        <target state="translated">Které obsahují libovolné slovo z vašeho seznamu sledovaných slov „&lt;x id=“PH„ equiv-text=“tag.name„/&gt;“</target>
+        <target state="translated">Které obsahují libovolné slovo z vašeho seznamu sledovaných slov "<x id="PH" equiv-text="tag.name"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-auto-tag-policies/my-account-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -7597,9 +7597,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5810973984628060415" datatype="html">
+      <trans-unit id="5810973984628060415" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</source>
-        <target state="new">{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</target>
+        <target state="translated">{count, plural, =1 {komentář schválen.} other {<x id="count"/> komentáře scháleny.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">196</context>
@@ -10588,9 +10588,9 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="224402797620080356" datatype="html">
+      <trans-unit id="224402797620080356" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {scénář uložený v mezipaměti} other {scénáře uložené v mezipaměti}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">64</context>
@@ -14592,17 +14592,17 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7822423019936222997" datatype="html">
+      <trans-unit id="7822423019936222997" datatype="html" xml:space="preserve">
         <source>Send a message to the reporter (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
-        <target state="new">Send a message to the reporter (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</target>
+        <target state="translated">Odeslat zprávu reportérovi (aktuálně {count, plural, =1 {<x id="count"/> zpráva} other {<x id="count"/> zpráv}})</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4116081436059310531" datatype="html">
+      <trans-unit id="4116081436059310531" datatype="html" xml:space="preserve">
         <source>Send a message to the admins/moderators (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
-        <target state="new">Send a message to the admins/moderators (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</target>
+        <target state="translated">Pošlete zprávu administrátorům/moderátorům (aktuálně {count, plural, =1 {<x id="count"/> zpráva} other {<x id="count"/> zpráv}})</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">221</context>
@@ -15256,17 +15256,17 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6494788464560085904" datatype="html">
+      <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="new">{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</target>
+        <target state="translated">{count, plural, =1 {úloha zrušena} other {<x id="count"/> úloh zrušeno}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2175266358082397536" datatype="html">
+      <trans-unit id="2175266358082397536" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</source>
-        <target state="new">Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</target>
+        <target state="translated">Opravdu chcete odstranit {count, plural, =1 {tuto úlohu} other {<x id="count"/> úlohy}}? Zrušeny budou také podřazené úlohy.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -20843,7 +20843,7 @@
       </trans-unit>
       <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Pokud zahrnete video soubory, bude archivní soubor mít &lt;x id=„START_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;strong&amp;gt;“/&gt;přibližně &lt;x id=„INTERPOLATION“ equiv-text=„{{ archiveWeightEstimation | bytes }}“/&gt;&lt;x id=„CLOSE_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;/strong&amp;gt;“/&gt;</target>
+        <target state="translated">Pokud zahrnete video soubory, bude archivní soubor mít <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>přibližně <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">104</context>
@@ -20899,7 +20899,7 @@
       </trans-unit>
       <trans-unit id="7544701838241243416" datatype="html" xml:space="preserve">
         <source>This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </source>
-        <target state="translated">Jedná se o &lt;x id=„START_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;strong&amp;gt;“/&gt;importní&lt;x id=„CLOSE_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;/strong&amp;gt;“/&gt; nástroj, nikoli o migrační nástroj. To je důvod, proč jsou data (jako kanály nebo videa) duplikována a nejsou přesunuta z vaší předchozí webové stránky PeerTube. </target>
+        <target state="translated">Jedná se o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>importní<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> nástroj, nikoli o migrační nástroj. To je důvod, proč jsou data (jako kanály nebo videa) duplikována a nejsou přesunuta z vaší předchozí webové stránky PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">13</context>
@@ -20979,7 +20979,7 @@
       </trans-unit>
       <trans-unit id="8379828414303668485" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If the archive contains video files<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, create videos if they do not already exist</source>
-        <target state="translated">&lt;x id=„START_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;strong&amp;gt;“/&gt;Pokud archiv obsahuje video soubory&lt;x id=„CLOSE_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;/strong&amp;gt;“/&gt;, vytvořte videa, pokud ještě neexistují</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Pokud archiv obsahuje video soubory<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, vytvořte videa, pokud ještě neexistují</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">28</context>
@@ -21033,17 +21033,17 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7690080704928394942" datatype="html">
+      <trans-unit id="7690080704928394942" datatype="html" xml:space="preserve">
         <source>Select the archive file to import</source>
-        <target state="new">Select the archive file to import</target>
+        <target state="translated">Vyberte archivní soubor, který chcete importovat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2185709317252805927" datatype="html">
+      <trans-unit id="2185709317252805927" datatype="html" xml:space="preserve">
         <source>Select the file to import</source>
-        <target state="new">Select the file to import</target>
+        <target state="translated">Vyberte soubor k importu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">68</context>
