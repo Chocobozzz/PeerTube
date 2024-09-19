@@ -5929,15 +5929,16 @@ The link will expire within 1 hour.</source>
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="1455798149629145184" datatype="html" xml:space="preserve">
-        <source>TThis live is not currently streaming.</source>
-        <target state="translated">O directo non está a emitir neste momento.</target>
+      </trans-unit><trans-unit id="6481633820711333116" datatype="html">
+        <source> This live is not currently streaming.
+</source><target state="new"> This live is not currently streaming.
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
+      
       <trans-unit id="4926204350710628499" datatype="html">
         <source>This live has ended.</source>
         <target state="translated">O directo xa rematou.</target>
