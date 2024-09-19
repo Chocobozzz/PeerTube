@@ -61,6 +61,7 @@
               *ngIf="chartOptions && videoChannelsChartData && videoChannelsChartData[i]"
               width="40vw" height="100px"
               type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions"
+              [ariaLabel]="getChartAriaLabel(videoChannelsChartData[i])"
             ></p-chart>
           </ng-template>
         </div>

@@ -19,6 +19,8 @@ import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-b
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
 
+type CustomChartData = (ChartData & { startDate: string, total: number })
+
 @Component({
   templateUrl: './my-video-channels.component.html',
   styleUrls: [ './my-video-channels.component.scss' ],
@@ -42,7 +44,7 @@ import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/cha
 export class MyVideoChannelsComponent {
   videoChannels: VideoChannel[] = []
 
-  videoChannelsChartData: ChartData[]
+  videoChannelsChartData: CustomChartData[]
 
   chartOptions: ChartOptions
 
@@ -146,8 +148,15 @@ export class MyVideoChannelsComponent {
               fill: false,
               borderColor: '#c6c6c6'
             }
-          ]
-        } as ChartData))
+          ],
+
+          total: v.viewsPerDay.map(day => day.views)
+            .reduce((p, c) => p + c, 0),
+
+          startDate: v.viewsPerDay.length !== 0
+            ? v.viewsPerDay[0].date.toLocaleDateString()
+            : ''
+        }))
 
         this.buildChartOptions()
 
@@ -206,5 +215,11 @@ export class MyVideoChannelsComponent {
         intersect: false
       }
     }
+  }
+
+  getChartAriaLabel (data: CustomChartData) {
+    if (!data.startDate) return ''
+
+    return formatICU($localize`${data.total} {value, plural, =1 {view} other {views}} since ${data.startDate}`, { value: data.total })
   }
 }
