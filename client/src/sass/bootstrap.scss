@@ -49,6 +49,10 @@ body {
   font-family: $main-fonts;
 }
 
+.btn-outline-secondary {
+  --bs-btn-color: #{pvar(--greyForegroundColor)};
+}
+
 .flex-auto {
   flex: auto;
 }
