@@ -1,0 +1,11 @@
+<div
+  role="progressbar" class="progress-container" tabindex="0" [ngbTooltip]="label"
+  [attr.aria-valuenow]="value" aria-valuemin="0" [attr.aria-valuemax]="max"
+  [attr.aria-label]="label"
+  [ngClass]="{ red: theme === 'red', green: theme === 'green', small: size === 'small' }"
+>
+  <div class="progress-bar" [style]="{ width: percentage() + '%' }"></div>
+
+  <span class="value">{{ valueFormatted }}</span>
+  <span class="max" *ngIf="maxFormatted">{{ maxFormatted }}</span>
+</div>

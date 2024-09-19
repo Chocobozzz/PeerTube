@@ -1,16 +1,15 @@
 import { NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, UserService } from '@app/core'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { first } from 'rxjs'
 import { BytesPipe } from '../angular/bytes.pipe'
+import { ProgressBarComponent } from '../misc/progress-bar.component'
 
 @Component({
   selector: 'my-user-quota',
   templateUrl: './user-quota.component.html',
-  styleUrls: [ './user-quota.component.scss' ],
   standalone: true,
-  imports: [ NgbTooltip, NgIf, BytesPipe ]
+  imports: [ NgIf, BytesPipe, ProgressBarComponent ]
 })
 
 export class UserQuotaComponent implements OnInit {
@@ -62,11 +61,11 @@ export class UserQuotaComponent implements OnInit {
     return this.user.videoQuotaDaily !== -1
   }
 
-  titleVideoQuota () {
-    return `${new BytesPipe().transform(this.userVideoQuotaUsed, 0).toString()} / ${this.userVideoQuota}`
+  labelQuota () {
+    return `Total video quota: ${new BytesPipe().transform(this.userVideoQuotaUsed, 0).toString()} / ${this.userVideoQuota}`
   }
 
-  titleVideoQuotaDaily () {
-    return `${new BytesPipe().transform(this.userVideoQuotaUsedDaily, 0).toString()} / ${this.userVideoQuotaDaily}`
+  labelQuotaDaily () {
+    return `Total daily video quota: ${new BytesPipe().transform(this.userVideoQuotaUsedDaily, 0).toString()} / ${this.userVideoQuotaDaily}`
   }
 }

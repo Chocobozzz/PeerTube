@@ -100,7 +100,12 @@ export const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     const file = buildUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
-    const cleanup = () => safeUploadXCleanup(file)
+    const cleanup = () => {
+      safeUploadXCleanup(file)
+
+      Redis.Instance.deleteUploadSession(req.query.upload_id)
+        .catch(err => logger.error('Cannot delete upload session', { err }))
+    }
 
     const uploadId = req.query.upload_id
     const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)

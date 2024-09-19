@@ -628,47 +628,6 @@
   }
 }
 
-@mixin progressbar($small: false, $height: 1rem, $font-size: 0.75rem, $background-color: pvar(--greyBackgroundColor)) {
-  background-color: $background-color;
-  display: flex;
-  height: $height;
-  overflow: hidden;
-  font-size: $font-size;
-  border-radius: 0.25rem;
-  position: relative;
-
-  span {
-    position: absolute;
-    color: pvar(--greyForegroundColor);
-
-    @if $small {
-      top: -1px;
-    }
-
-    &:nth-of-type(1) {
-      left: .2rem;
-    }
-    &:nth-of-type(2) {
-      right: .2rem;
-    }
-  }
-
-  .progress-bar {
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--mainColor);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    white-space: nowrap;
-    transition: width 0.6s ease;
-
-    &.red {
-      background-color: color.adjust($color: #c54130, $lightness: 10%);
-    }
-  }
-}
-
 @mixin divider($color: pvar(--submenuBackgroundColor), $background: pvar(--mainBackgroundColor)) {
   width: 95%;
   border-top: .05rem solid $color;

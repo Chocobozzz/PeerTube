@@ -28,6 +28,7 @@ import {
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
+import { ProgressBarComponent } from '@app/shared/shared-main/misc/progress-bar.component'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -65,7 +66,8 @@ type UserForList = User & {
     AutoColspanDirective,
     UserBanModalComponent,
     DatePipe,
-    BytesPipe
+    BytesPipe,
+    ProgressBarComponent
   ]
 })
 export class UserListComponent extends RestTable <User> implements OnInit {

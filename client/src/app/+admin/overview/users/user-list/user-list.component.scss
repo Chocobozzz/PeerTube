@@ -24,18 +24,7 @@ my-global-icon {
   width: 18px;
 }
 
-.progress {
-  width: auto;
-  max-width: 100%;
-
-  @include progressbar($small: true);
-}
-
 @media screen and (max-width: $primeng-breakpoint) {
-  .progress {
-    width: 100%;
-  }
-
   .empty-cell {
     padding: 0;
   }

@@ -32,7 +32,8 @@ $bg-color: #fff;
 $fg-color: #212529;
 
 $red: #EE0700;
-$green: #338809;
+$green: #278904;
+$white: #fff;
 
 $expanded-horizontal-margins: 150px;
 $not-expanded-horizontal-margins: 30px;
@@ -108,6 +109,7 @@ $primeng-breakpoint: 960px;
 $variables: (
   --red: var(--red),
   --green: var(--green),
+  --white: var(--white),
 
   --mainColor: var(--mainColor),
   --mainColorLighter: var(--mainColorLighter),

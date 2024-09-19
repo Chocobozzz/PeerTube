@@ -5,23 +5,8 @@
 .upload-progress-cancel {
   display: flex;
   margin-bottom: 40px;
+}
 
-  .progress {
-    flex-grow: 1;
-
-    @include progressbar($height: 30px, $font-size: 14px, $background-color: rgba(11, 204, 41, 0.16));
-
-    .progress-bar {
-      background-color: pvar(--green);
-      line-height: 30px;
-      text-align: start;
-      font-weight: $font-semibold;
-
-      span {
-        color: pvar(--mainBackgroundColor);
-
-        @include margin-left(13px);
-      }
-    }
-  }
+my-progress-bar {
+  width: 100%;
 }
