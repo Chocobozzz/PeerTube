@@ -102,7 +102,7 @@
   }
 
   &[readonly] {
-    opacity: 0.7;
+    color: pvar(--greyForegroundColor);
   }
 
   @media screen and (max-width: calc(#{$width} + 40px)) {
