@@ -6431,7 +6431,7 @@
       </trans-unit>
       <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="translated">Adresář obsahující export ve vlastním formátu PeerTube JSON, který lze použít k opětovnému importu účtu do jiné instance PeerTube.</target>
+        <target state="translated">Adresář obsahující export ve vlastním formátu PeerTube JSON, který lze použít k opětovnému importu účtu do jiné instance PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
@@ -6439,7 +6439,7 @@
       </trans-unit>
       <trans-unit id="7743206617778542802" datatype="html" xml:space="preserve">
         <source>A directory containing static files (thumbnails, avatars, video files etc.)</source>
-        <target state="translated">Adresář obsahující statické soubory (miniatury, avatary, videosoubory atd.).</target>
+        <target state="translated">Adresář obsahující statické soubory (miniatury, avatary, videosoubory atd.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">30</context>
@@ -10342,7 +10342,7 @@
       </trans-unit>
       <trans-unit id="443904340561625146" datatype="html" xml:space="preserve">
         <source>If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</source>
-        <target state="translated">Pokud je tato možnost povolena, vzdálené instance PeerTube &lt; 6.3.0 nebudou moci tato videa přehrávat.</target>
+        <target state="translated">Pokud je tato možnost povolena, vzdálené instance PeerTube &lt; 6.3.0 nebudou moci tato videa přehrávat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">128</context>
@@ -20843,7 +20843,7 @@
       </trans-unit>
       <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Pokud zahrnete video soubory, bude archivní soubor mít &lt;x id=„START_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;strong&amp;gt;“/&gt;přibližně &lt;x id=„INTERPOLATION“ equiv-text=„{{ archiveWeightEstimation | bytes }}“/&gt;&lt;x id=„CLOSE_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;/strong&amp;gt;“/&gt;.</target>
+        <target state="translated">Pokud zahrnete video soubory, bude archivní soubor mít &lt;x id=„START_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;strong&amp;gt;“/&gt;přibližně &lt;x id=„INTERPOLATION“ equiv-text=„{{ archiveWeightEstimation | bytes }}“/&gt;&lt;x id=„CLOSE_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;/strong&amp;gt;“/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">104</context>
