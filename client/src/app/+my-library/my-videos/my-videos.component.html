@@ -22,8 +22,7 @@
   <my-advanced-input-filter [emitOnInit]="false" [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
 
   <div class="peertube-select-container peertube-select-button">
-    <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control">
-      <option value="undefined" disabled i18n>Sort by</option>
+    <select [(ngModel)]="sort" (ngModelChange)="onChangeSortColumn()" class="form-control" i18n-ariaLabel aria-label="Sort by">
       <option value="-publishedAt" i18n>Last published first</option>
       <option value="-createdAt" i18n>Last created first</option>
       <option value="-views" i18n>Most viewed first</option>

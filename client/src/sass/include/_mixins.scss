@@ -412,21 +412,8 @@
 
     @include rounded-line-height-1-5($form-input-font-size);
 
-    &:focus {
-      outline: none;
-    }
-
-    &:-moz-focusring {
-      color: transparent;
-      text-shadow: 0 0 0 #000;
-    }
-
     option {
       color: #000;
-
-      &[value=undefined] {
-        font-weight: $font-semibold;
-      }
     }
   }
 
