@@ -20825,25 +20825,25 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Zahrnout video soubory do archivního souboru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">Pokud chcete svá videa znovu importovat na jinou webovou stránku PeerTube, je nutné zahrnout video soubory</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Pokud zahrnete video soubory, bude archivní soubor mít &lt;x id=„START_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;strong&amp;gt;“/&gt;přibližně &lt;x id=„INTERPOLATION“ equiv-text=„{{ archiveWeightEstimation | bytes }}“/&gt;&lt;x id=„CLOSE_TAG_STRONG“ ctype=„x-strong“ equiv-text=„&amp;lt;/strong&amp;gt;“/&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">104</context>
@@ -21009,17 +21009,17 @@
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5245328363134510565" datatype="html">
+      <trans-unit id="5245328363134510565" datatype="html" xml:space="preserve">
         <source>You can't re-import an archive because you already have an import that is currently being processed by PeerTube.</source>
-        <target state="new"> You can't re-import an archive because you already have an import that is currently being processed by PeerTube. </target>
+        <target state="translated">Nemůžete znovu importovat archiv, protože již máte import, který je právě zpracováván službou PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1473104874710475790" datatype="html">
+      <trans-unit id="1473104874710475790" datatype="html" xml:space="preserve">
         <source>Upload completed. Your archive import will be processed as soon as possible.</source>
-        <target state="new"> Upload completed. Your archive import will be processed as soon as possible. </target>
+        <target state="translated">Nahrávání dokončeno. Import archivu bude zpracován co nejdříve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">62</context>
