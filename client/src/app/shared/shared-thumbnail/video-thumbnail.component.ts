@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common'
-import { Component, EventEmitter, Input, Output, ViewChild, viewChild } from '@angular/core'
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ScreenService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'

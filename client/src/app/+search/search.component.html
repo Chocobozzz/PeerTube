@@ -12,13 +12,15 @@
 
       <button
         class="results-filter-button button-unstyle ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed"
-        [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="search-results-filter"
+        [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="search-results-filter" [title]="getFilterButtonTitle()"
       >
         <span class="icon icon-filter"></span>
+
         <ng-container i18n>
           Filters
-          <span *ngIf="numberOfFilters() > 0" class="pt-badge badge-secondary">{{ numberOfFilters() }}</span>
         </ng-container>
+
+        <span *ngIf="numberOfFilters() > 0" class="pt-badge badge-secondary">{{ numberOfFilters() }}</span>
       </button>
     </div>
 

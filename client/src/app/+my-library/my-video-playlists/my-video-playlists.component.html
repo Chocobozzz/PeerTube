@@ -1,7 +1,7 @@
 <h1>
   <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
   <ng-container i18n>My playlists</ng-container>
-  <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
+  <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
 </h1>
 
 <my-channels-setup-message></my-channels-setup-message>

@@ -9,6 +9,7 @@ import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avat
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { formatICU } from '@app/helpers'
 
 @Component({
   templateUrl: './my-followers.component.html',
@@ -72,6 +73,13 @@ export class MyFollowersComponent implements OnInit {
 
   isFollowingAccount (follow: ActorFollow) {
     return follow.following.name === this.getUsername()
+  }
+
+  getTotalTitle () {
+    return formatICU(
+      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {follower} other {followers}}`,
+      { total: this.pagination.totalItems }
+    )
   }
 
   private loadFollowers (more = true) {

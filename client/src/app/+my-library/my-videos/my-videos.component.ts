@@ -244,6 +244,13 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.videoChangeOwnershipModal.show(video)
   }
 
+  getTotalTitle () {
+    return formatICU(
+      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {video} other {videos}}`,
+      { total: this.pagination.totalItems }
+    )
+  }
+
   private removeVideoFromArray (id: number) {
     this.videos = this.videos.filter(v => v.id !== id)
   }

@@ -10,6 +10,7 @@ import { NgIf, NgFor } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
+import { formatICU } from '@app/helpers'
 
 @Component({
   templateUrl: './my-subscriptions.component.html',
@@ -55,6 +56,13 @@ export class MySubscriptionsComponent {
   onSearch (search: string) {
     this.search = search
     this.loadSubscriptions(false)
+  }
+
+  getTotalTitle () {
+    return formatICU(
+      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {subscription} other {subscriptions}}`,
+      { total: this.pagination.totalItems }
+    )
   }
 
   private loadSubscriptions (more = true) {

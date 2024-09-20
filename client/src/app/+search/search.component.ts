@@ -270,6 +270,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     return this.lastSearchTarget === 'search-index'
   }
 
+  getFilterButtonTitle () {
+    return $localize`${this.numberOfFilters()} active filters, open the filters panel`
+  }
+
   private resetPagination () {
     this.pagination.currentPage = 1
     this.pagination.totalItems = null

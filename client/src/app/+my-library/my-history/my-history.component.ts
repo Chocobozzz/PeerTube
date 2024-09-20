@@ -1,7 +1,7 @@
 import { tap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
-import { immutableAssign } from '@app/helpers'
+import { formatICU, immutableAssign } from '@app/helpers'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
 import { FormsModule } from '@angular/forms'
@@ -161,5 +161,12 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     }
 
     return $localize`You don't have any video in your watch history yet.`
+  }
+
+  getTotalTitle () {
+    return formatICU(
+      $localize`Your history contains ${this.pagination.totalItems} {total, plural, =1 {video} other {videos}}`,
+      { total: this.pagination.totalItems }
+    )
   }
 }

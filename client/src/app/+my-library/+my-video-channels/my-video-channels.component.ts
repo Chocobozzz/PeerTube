@@ -222,4 +222,11 @@ export class MyVideoChannelsComponent {
 
     return formatICU($localize`${data.total} {value, plural, =1 {view} other {views}} since ${data.startDate}`, { value: data.total })
   }
+
+  getTotalTitle () {
+    return formatICU(
+      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {channel} other {channels}}`,
+      { total: this.pagination.totalItems }
+    )
+  }
 }

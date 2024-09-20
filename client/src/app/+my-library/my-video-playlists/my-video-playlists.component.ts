@@ -14,6 +14,7 @@ import { NgIf, NgFor } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { formatICU } from '@app/helpers'
 
 @Component({
   templateUrl: './my-video-playlists.component.html',
@@ -87,6 +88,13 @@ export class MyVideoPlaylistsComponent {
   onSearch (search: string) {
     this.search = search
     this.loadVideoPlaylists(true)
+  }
+
+  getTotalTitle () {
+    return formatICU(
+      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {playlist} other {playlists}}`,
+      { total: this.pagination.totalItems }
+    )
   }
 
   private loadVideoPlaylists (reset = false) {
