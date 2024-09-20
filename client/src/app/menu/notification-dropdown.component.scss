@@ -5,7 +5,7 @@
   scrollbar-color: auto;
 }
 
-.notification-inbox-popover {
+.notification-inbox-dropdown {
   padding: 10px;
 }
 
@@ -13,7 +13,7 @@
   padding: 13px 10px;
 }
 
-.notification-inbox-popover,
+.notification-inbox-dropdown,
 .notification-inbox-link a {
   transition: all .1s ease-in-out;
   border-radius: 25px;
@@ -33,7 +33,7 @@
   }
 }
 
-.notification-inbox-popover.shown,
+.notification-inbox-dropdown.shown,
 .notification-inbox-link a.active {
   background-color: rgba(255, 255, 255, 0.28);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
@@ -41,21 +41,17 @@
   @include apply-svg-color(#fff);
 }
 
-.notification-inbox-popover.hidden {
+.notification-inbox-dropdown.hidden {
   display: none;
 }
 
 ::ng-deep {
-  .popover-notifications.popover {
+  .dropdown-notifications {
     max-width: none;
     top: -6px !important;
     left: 7px !important;
 
-    .arrow {
-      display: none;
-    }
-
-    .popover-body {
+    .dropdown-menu {
       padding: 0;
       font-size: 14px;
       font-family: $main-fonts;
@@ -130,20 +126,23 @@
       }
 
       .all-notifications {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        margin-top: -1px; // To not have 2 borders with the last notification
+        text-align: center;
         font-weight: $font-semibold;
         color: pvar(--mainForegroundColor);
-        padding: 7px 0;
-        margin-top: auto;
-        text-decoration: none;
+        padding: 0.75rem 0;
+        text-decoration: underline !important;
+
+        &:hover {
+          opacity: 0.85;
+        }
       }
     }
   }
 }
 
-.notification-inbox-popover,
+.notification-inbox-dropdown,
 .notification-inbox-link {
   cursor: pointer;
   position: relative;

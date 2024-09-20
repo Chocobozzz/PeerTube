@@ -6,14 +6,14 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 import { LoaderComponent } from '@app/shared/shared-main/loaders/loader.component'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
-import { NgbPopover, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
 import { Subject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
 
 @Component({
-  selector: 'my-notification',
-  templateUrl: './notification.component.html',
-  styleUrls: [ './notification.component.scss' ],
+  selector: 'my-notification-dropdown',
+  templateUrl: './notification-dropdown.component.html',
+  styleUrls: [ './notification-dropdown.component.scss' ],
   standalone: true,
   imports: [
     CommonModule,
@@ -22,11 +22,12 @@ import { filter } from 'rxjs/operators'
     GlobalIconComponent,
     LoaderComponent,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    NgbDropdownModule
   ]
 })
-export class NotificationComponent implements OnInit, OnDestroy {
-  @ViewChild('popover', { static: true }) popover: NgbPopover
+export class NotificationDropdownComponent implements OnInit, OnDestroy {
+  @ViewChild('dropdown', { static: false }) dropdown: NgbDropdown
 
   @Output() navigate = new EventEmitter<HTMLAnchorElement>()
 
@@ -61,7 +62,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
     this.routeSub = this.router.events
                         .pipe(filter(event => event instanceof NavigationEnd))
-                        .subscribe(() => this.closePopover())
+                        .subscribe(() => this.closeDropdown())
   }
 
   ngOnDestroy () {
@@ -73,29 +74,17 @@ export class NotificationComponent implements OnInit, OnDestroy {
     return this.screenService.isInMobileView()
   }
 
-  closePopover () {
-    this.popover.close()
+  closeDropdown () {
+    if (this.dropdown) this.dropdown.close()
   }
 
-  onPopoverShown () {
+  onDropdownShown () {
     this.opened = true
-
-    document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
   }
 
-  onPopoverHidden () {
+  onDropdownHidden () {
     this.loaded = false
     this.opened = false
-
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
-  }
-
-  // Lock menu scroll when menu scroll to avoid fleeing / detached dropdown
-  onMenuScrollEvent () {
-    document.querySelector('nav').scrollTo(0, 0)
   }
 
   onNotificationLoaded () {
@@ -103,7 +92,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   onNavigate (link: HTMLAnchorElement) {
-    this.closePopover()
+    this.closeDropdown()
     this.navigate.emit(link)
   }
 

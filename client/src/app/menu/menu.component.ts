@@ -27,7 +27,7 @@ import debug from 'debug'
 import { forkJoin, Subscription } from 'rxjs'
 import { first, switchMap } from 'rxjs/operators'
 import { LanguageChooserComponent } from './language-chooser.component'
-import { NotificationComponent } from './notification.component'
+import { NotificationDropdownComponent } from './notification-dropdown.component'
 import { QuickSettingsModalComponent } from './quick-settings-modal.component'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
@@ -39,7 +39,7 @@ const debugLogger = debug('peertube:menu:MenuComponent')
   standalone: true,
   imports: [
     CommonModule,
-    NotificationComponent,
+    NotificationDropdownComponent,
     ActorAvatarComponent,
     InputSwitchComponent,
     SignupLabelComponent,
