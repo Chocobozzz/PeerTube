@@ -9,25 +9,25 @@
 <ng-template #aContent>
   <img alt="" [attr.aria-label]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 
-  <div *ngIf="displayWatchLaterPlaylist" class="video-thumbnail-actions-overlay">
-    <ng-container *ngIf="inWatchLaterPlaylist !== true">
-      <button class="video-thumbnail-watch-later-overlay button-unstyle" placement="left" [ngbTooltip]="addToWatchLaterText" container="body" (click)="onWatchLaterClick($event)">
-        <my-global-icon iconName="clock" [attr.aria-label]="addToWatchLaterText" role="button"></my-global-icon>
-      </button>
-    </ng-container>
-
-    <ng-container *ngIf="inWatchLaterPlaylist === true">
-      <button class="video-thumbnail-watch-later-overlay button-unstyle" placement="left" [ngbTooltip]="addedToWatchLaterText" container="body" (click)="onWatchLaterClick($event)">
-        <my-global-icon iconName="tick" [attr.aria-label]="addedToWatchLaterText" role="button"></my-global-icon>
-      </button>
-    </ng-container>
+  <div *ngIf="displayWatchLaterPlaylist" class="actions-overlay">
+    <button
+      class="watch-icon-overlay button-unstyle"
+      placement="left" [ngbTooltip]="getWatchIconText()" container="body" #watchLaterTooltip="ngbTooltip"
+      (click)="onWatchLaterClick($event)"
+    >
+      @if (inWatchLaterPlaylist) {
+        <my-global-icon iconName="tick" [attr.aria-label]="inWatchLaterPlaylist"></my-global-icon>
+      } @else {
+        <my-global-icon iconName="clock" [attr.aria-label]="addToWatchLaterText"></my-global-icon>
+      }
+    </button>
   </div>
 
-  <div class="video-thumbnail-label-overlay warning"><ng-content select="label-warning"></ng-content></div>
-  <div class="video-thumbnail-label-overlay danger"><ng-content select="label-danger"></ng-content></div>
+  <div class="label-overlay warning"><ng-content select="label-warning"></ng-content></div>
+  <div class="label-overlay danger"><ng-content select="label-danger"></ng-content></div>
 
-  <div class="video-thumbnail-duration-overlay" *ngIf="!video.isLive">{{ video.durationLabel }}</div>
-  <div  class="video-thumbnail-live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }" *ngIf="video.isLive">
+  <div class="duration-overlay" *ngIf="!video.isLive">{{ video.durationLabel }}</div>
+  <div  class="live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }" *ngIf="video.isLive">
     <ng-container i18n *ngIf="!isLiveEnded()">LIVE</ng-container>
     <ng-container i18n *ngIf="isLiveEnded()">LIVE ENDED</ng-container>
   </div>

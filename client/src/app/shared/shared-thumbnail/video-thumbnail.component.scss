@@ -19,10 +19,10 @@
   }
 }
 
-.video-thumbnail-watch-later-overlay,
-.video-thumbnail-label-overlay,
-.video-thumbnail-duration-overlay,
-.video-thumbnail-live-overlay {
+.watch-icon-overlay,
+.label-overlay,
+.duration-overlay,
+.live-overlay {
   border-radius: 3px;
   font-size: 12px;
   font-weight: $font-semibold;
@@ -32,7 +32,7 @@
   @include static-thumbnail-overlay;
 }
 
-.video-thumbnail-label-overlay {
+.label-overlay {
   position: absolute;
   padding: 0 5px;
   left: 5px;
@@ -43,15 +43,15 @@
   &.danger { background-color: #ff0000; }
 }
 
-.video-thumbnail-duration-overlay,
-.video-thumbnail-live-overlay {
+.duration-overlay,
+.live-overlay {
   position: absolute;
   padding: 0 3px;
   right: 5px;
   bottom: 5px;
 }
 
-.video-thumbnail-live-overlay {
+.live-overlay {
   font-weight: $font-semibold;
   color: #fff;
 
@@ -60,7 +60,7 @@
   }
 }
 
-.video-thumbnail-actions-overlay {
+.actions-overlay {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
   }
 }
 
-.video-thumbnail-watch-later-overlay {
+.watch-icon-overlay {
   padding: 3px;
 
   my-global-icon {

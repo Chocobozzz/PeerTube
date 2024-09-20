@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { NgClass, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common'
+import { Component, EventEmitter, Input, Output, ViewChild, viewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { ScreenService } from '@app/core'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { VideoState } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { RouterLink } from '@angular/router'
-import { NgIf, NgTemplateOutlet, NgClass, NgStyle } from '@angular/common'
 import { Video } from '../shared-main/video/video.model'
 
 @Component({
@@ -15,6 +15,8 @@ import { Video } from '../shared-main/video/video.model'
   imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
 })
 export class VideoThumbnailComponent {
+  @ViewChild('watchLaterTooltip') watchLaterTooltip: NgbTooltip
+
   @Input() video: Video
   @Input() nsfw = false
 
@@ -31,11 +33,17 @@ export class VideoThumbnailComponent {
   @Output() watchLaterClick = new EventEmitter<boolean>()
 
   addToWatchLaterText: string
-  addedToWatchLaterText: string
+  removeFromWatchLaterText: string
 
   constructor (private screenService: ScreenService) {
     this.addToWatchLaterText = $localize`Add to watch later`
-    this.addedToWatchLaterText = $localize`Remove from watch later`
+    this.removeFromWatchLaterText = $localize`Remove from watch later`
+  }
+
+  getWatchIconText () {
+    if (this.inWatchLaterPlaylist) return this.removeFromWatchLaterText
+
+    return this.addToWatchLaterText
   }
 
   isLiveEnded () {
@@ -72,6 +80,8 @@ export class VideoThumbnailComponent {
     this.watchLaterClick.emit(this.inWatchLaterPlaylist)
 
     event.stopPropagation()
+    this.watchLaterTooltip.close()
+
     return false
   }
 }

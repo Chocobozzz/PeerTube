@@ -1,4 +1,4 @@
-<div class="video-miniature" [ngClass]="getClasses()" (mouseenter)="loadActions()">
+<div class="video-miniature" [ngClass]="getClasses()" (mouseenter)="loadActions()" (focusin)="loadActions()">
   <my-video-thumbnail
     [ariaLabel]="getAriaLabel()"
     [video]="video" [nsfw]="isVideoBlur" [videoRouterLink]="videoRouterLink" [videoHref]="videoHref" [videoTarget]="videoTarget"

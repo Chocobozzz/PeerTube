@@ -118,6 +118,7 @@ export class VideoMiniatureComponent implements OnInit {
   videoTarget: string
 
   private ownerDisplayType: 'account' | 'videoChannel'
+  private actionsLoaded = false
 
   constructor (
     private screenService: ScreenService,
@@ -244,9 +245,12 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   loadActions () {
+    if (this.actionsLoaded) return
     if (this.displayVideoActions) this.showActions = true
 
     this.loadWatchLater()
+
+    this.actionsLoaded = true
   }
 
   onVideoBlocked () {

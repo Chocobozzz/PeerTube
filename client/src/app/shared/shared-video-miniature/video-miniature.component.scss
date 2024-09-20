@@ -77,8 +77,9 @@ my-actor-avatar {
   }
 }
 
-.video-miniature:hover {
-  ::ng-deep .video-thumbnail-actions-overlay,
+.video-miniature:hover,
+.video-miniature:focus-within {
+  my-video-thumbnail ::ng-deep .actions-overlay,
   .video-actions ::ng-deep .dropdown-root {
     opacity: 1 !important;
   }
