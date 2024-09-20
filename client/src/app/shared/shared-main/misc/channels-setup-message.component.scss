@@ -1,28 +1,14 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.channels-setup-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.pt-alert-primary {
+  text-align: center;
 }
 
 my-global-icon {
   width: 32px;
-  align-self: flex-start;
+  display: inline-block;
+  margin-bottom: 0.75rem;
 
   @include apply-svg-color(pvar(--mainColor));
-
-  + div {
-    margin-left: 10px;
-    text-align: center;
-  }
-}
-
-.channels-settings-link {
-  height: fit-content;
-  margin-top: 10px;
-
-  @include peertube-button-link;
-  @include grey-button;
 }
