@@ -16,7 +16,7 @@
 
       <input
         *ngIf="!isPasswordInput" type="text"
-        myAutofocusid="confirmInput" name="confirmInput"
+        myAutofocus id="confirmInput" name="confirmInput"
         [(ngModel)]="inputValue" (keyup.enter)="confirm()"
       />
 
