@@ -6,6 +6,8 @@ import { VideoHtml } from './shared/video-html.js'
 import { PlaylistHtml } from './shared/playlist-html.js'
 import { ActorHtml } from './shared/actor-html.js'
 import { PageHtml } from './shared/page-html.js'
+import { VideosHtml, VideosOrderType } from './shared/videos-html.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 class ClientHtml {
 
@@ -18,6 +20,20 @@ class ClientHtml {
   }
 
   // ---------------------------------------------------------------------------
+
+  static getVideosHTMLPage (type: VideosOrderType, req: express.Request, res: express.Response, paramLang?: string) {
+    if (type) {
+      return VideosHtml.getVideosHTML(type, req, res)
+    }
+
+    const [ , eventualType ] = CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE.split('/videos/') as VideosOrderType[]
+
+    if (eventualType) {
+      return VideosHtml.getVideosHTML(eventualType, req, res)
+    }
+
+    return PageHtml.getDefaultHTML(req, res, paramLang)
+  }
 
   static getWatchHTMLPage (videoIdArg: string, req: express.Request, res: express.Response) {
     return VideoHtml.getWatchVideoHTML(videoIdArg, req, res)

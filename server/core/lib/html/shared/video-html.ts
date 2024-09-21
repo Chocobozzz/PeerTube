@@ -15,7 +15,6 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class VideoHtml {
-
   static async getWatchVideoHTML (videoIdArg: string, req: express.Request, res: express.Response) {
     const videoId = toCompleteUUID(videoIdArg)
 

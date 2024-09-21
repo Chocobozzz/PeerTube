@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerConfig, VideoPlaylistCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, makeGetRequest, makeHTMLRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { checkIndexTags, getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests } from '@tests/shared/client.js'
 
@@ -21,6 +21,8 @@ describe('Test index HTML generation', function () {
   let unlistedPlaylistId: string
 
   let instanceDescription: string
+
+  const getTitleWithSuffix = (title: string, config: ServerConfig) => `${title} - ${config.instance.name}`
 
   before(async function () {
     this.timeout(120000);
@@ -46,7 +48,7 @@ describe('Test index HTML generation', function () {
       const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
-      checkIndexTags(res.text, 'PeerTube', instanceDescription, '', config)
+      checkIndexTags(res.text, getTitleWithSuffix('Trending', config), instanceDescription, '', config)
     })
 
     it('Should update the customized configuration and have the correct index html tags', async function () {
@@ -70,20 +72,25 @@ describe('Test index HTML generation', function () {
       const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
-      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
+      checkIndexTags(res.text, getTitleWithSuffix('Trending', config), 'my short description', 'body { background-color: red; }', config)
     })
 
     it('Should have valid index html updated tags (title, description...)', async function () {
       const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
 
-      checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
+      checkIndexTags(res.text, getTitleWithSuffix('Trending', config), 'my short description', 'body { background-color: red; }', config)
     })
   })
 
   describe('Canonical tags', function () {
 
     it('Should use the original video URL for the canonical tag', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/videos/trending?page=2')
+      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/videos/trending?page=2" />`)
+    })
+
+    it('Should use pagination in video URL for the canonical tag', async function () {
       for (const basePath of getWatchVideoBasePaths()) {
         for (const id of videoIds) {
           const res = await makeHTMLRequest(servers[0].url, basePath + id)
@@ -111,6 +118,18 @@ describe('Test index HTML generation', function () {
       accountURLtest(await makeHTMLRequest(servers[0].url, '/@root@' + servers[0].host))
     })
 
+    it('Should use pagination in account video channels URL for the canonical tag', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/a/root/video-channels?page=2')
+
+      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/a/root/video-channels?page=2" />`)
+    })
+
+    it('Should use pagination in account videos URL for the canonical tag', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/a/root/videos?page=2')
+
+      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/a/root/videos?page=2" />`)
+    })
+
     it('Should use the original channel URL for the canonical tag', async function () {
       const channelURLtests = res => {
         expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/c/root_channel/videos" />`)
@@ -119,6 +138,19 @@ describe('Test index HTML generation', function () {
       channelURLtests(await makeHTMLRequest(servers[0].url, '/video-channels/root_channel@' + servers[0].host))
       channelURLtests(await makeHTMLRequest(servers[0].url, '/c/root_channel@' + servers[0].host))
       channelURLtests(await makeHTMLRequest(servers[0].url, '/@root_channel@' + servers[0].host))
+    })
+
+    it('Should use pagination in channel videos URL for the canonical tag', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/c/root_channel/videos?page=2')
+
+      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/c/root_channel/videos?page=2" />`)
+    })
+
+    it('Should use pagination in channel playlists URL for the canonical tag', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/c/root_channel/video-playlists?page=2')
+      console.log(res.text)
+
+      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/c/root_channel/video-playlists?page=2" />`)
     })
   })
 
