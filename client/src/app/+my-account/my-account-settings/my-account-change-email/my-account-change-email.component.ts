@@ -5,6 +5,7 @@ import { AuthService, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { HttpStatusCode, User } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { tap } from 'rxjs/operators'
@@ -15,7 +16,7 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   templateUrl: './my-account-change-email.component.html',
   styleUrls: [ './my-account-change-email.component.scss' ],
   standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
   error: string

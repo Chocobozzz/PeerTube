@@ -26,9 +26,9 @@
         </div>
       </div>
 
-      <div i18n *ngIf="httpEnabled() === false"  class="alert alert-warning">
+      <my-alert i18n *ngIf="httpEnabled() === false"  type="warning">
         It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
-      </div>
+      </my-alert>
 
       <div class="form-group inputs">
         <input

@@ -58,9 +58,9 @@
 >
 </my-upload-progress>
 
-<div *ngIf="videoUploaded && !error" class="alert pt-alert-primary" i18n>
+<my-alert *ngIf="videoUploaded && !error" type="primary" i18n>
   Congratulations! Your video is now available in your private library.
-</div>
+</my-alert>
 
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form" class="mb-3">

@@ -1,5 +1,4 @@
-import { concat, of } from 'rxjs'
-import { pairwise } from 'rxjs/operators'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
@@ -11,15 +10,17 @@ import {
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { concat, of } from 'rxjs'
+import { pairwise } from 'rxjs/operators'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
-import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-register-step-user',
   templateUrl: './register-step-user.component.html',
   styleUrls: [ './step.component.scss' ],
   standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
   @Input() videoUploadDisabled = false

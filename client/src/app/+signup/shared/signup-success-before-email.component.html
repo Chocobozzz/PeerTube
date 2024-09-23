@@ -9,7 +9,7 @@
   </ng-container>
 </my-signup-step-title>
 
-<div class="alert pt-alert-primary">
+<my-alert type="primary">
   <p *ngIf="requiresApproval" i18n>Your account request has been sent!</p>
   <p *ngIf="!requiresApproval" i18n>Your account has been created!</p>
 
@@ -32,4 +32,4 @@
       If you need help using PeerTube, you can have a look at the <a class="link-orange" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
     </p>
   </ng-container>
-</div>
+</my-alert>

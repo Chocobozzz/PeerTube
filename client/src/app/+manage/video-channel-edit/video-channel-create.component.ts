@@ -1,6 +1,6 @@
-import { of } from 'rxjs'
-import { switchMap } from 'rxjs/operators'
+import { NgClass, NgIf } from '@angular/common'
 import { AfterViewInit, Component, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, HooksService, Notifier } from '@app/core'
 import {
@@ -10,17 +10,18 @@ import {
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { HttpStatusCode, VideoChannelCreate } from '@peertube/peertube-models'
-import { VideoChannelEdit } from './video-channel-edit'
-import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
-import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
-import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
-import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
-import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgClass } from '@angular/common'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { HttpStatusCode, VideoChannelCreate } from '@peertube/peertube-models'
+import { of } from 'rxjs'
+import { switchMap } from 'rxjs/operators'
+import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
+import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
+import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
+import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
+import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
   templateUrl: './video-channel-edit.component.html',
@@ -35,7 +36,8 @@ import { VideoChannelService } from '@app/shared/shared-main/channel/video-chann
     NgClass,
     HelpComponent,
     MarkdownTextareaComponent,
-    PeertubeCheckboxComponent
+    PeertubeCheckboxComponent,
+    AlertComponent
   ]
 })
 export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {

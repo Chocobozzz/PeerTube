@@ -1,6 +1,7 @@
 import { KeyValuePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import {
   NgbCollapse,
   NgbNav,
@@ -48,7 +49,8 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
     KeyValuePipe,
     NgbTooltip,
     NgTemplateOutlet,
-    NgClass
+    NgClass,
+    AlertComponent
   ]
 })
 export class VideoFilesDownloadComponent implements OnInit {

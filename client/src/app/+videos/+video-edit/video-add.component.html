@@ -1,13 +1,16 @@
 <ng-template #AlertButtons>
-  <a i18n routerLink="/about/instance" *ngIf="!isContactFormEnabled" class="about-link">Read instance rules for help</a>
-  <a i18n routerLink="/about/contact" *ngIf="isContactFormEnabled" class="contact-link">Contact us</a>
+  @if (isContactFormEnabled) {
+    <a i18n routerLink="/about/contact" class="peertube-button-link orange-button mt-2">Contact us</a>
+  } @else {
+    <a i18n routerLink="/about/instance" class="peertube-button-link orange-button mt-2">Read instance rules for help</a>
+  }
 </ng-template>
 
 <ng-container *ngIf="user.isUploadDisabled()">
-  <div class="upload-message upload-disabled alert alert-warning">
+  <my-alert class="upload-message upload-disabled" type="warning">
     <div>{{ uploadMessages?.noQuota }}</div>
     <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
-  </div>
+  </my-alert>
 
   <div class="upload-image">
     <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
@@ -15,26 +18,28 @@
 </ng-container>
 
 <ng-container *ngIf="!user.isUploadDisabled()">
-  <div *ngIf="user.isAutoBlocked(serverConfig)" class="upload-message auto-blocked alert alert-warning">
+  <my-alert rounded="false" *ngIf="user.isAutoBlocked(serverConfig)" class="upload-message auto-blocked" type="warning">
     <div>{{ uploadMessages?.autoBlock }}</div>
     <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft && !hasNoQuotaLeftDaily"></ng-template>
-  </div>
+  </my-alert>
 
-  <div *ngIf="hasNoQuotaLeftDaily" class="upload-message quota-daily-left alert alert-warning">
+  <my-alert rounded="false" *ngIf="hasNoQuotaLeftDaily" class="upload-message quota-daily-left" type="warning">
     <div>{{ uploadMessages?.quotaLeftDaily }}</div>
     <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft"></ng-template>
-  </div>
+  </my-alert>
 
-  <div *ngIf="hasNoQuotaLeft" class="upload-message quota-left alert alert-warning">
+  <my-alert rounded="false" *ngIf="hasNoQuotaLeft" class="upload-message quota-left" type="warning">
     <div>{{ uploadMessages?.quotaLeft }}</div>
     <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
-  </div>
+  </my-alert>
 
-  <div *ngIf="isRootUser()" class="upload-message root-user alert alert-warning" i18n>
-    We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.
+  <my-alert rounded="false" *ngIf="isRootUser()" class="upload-message root-user root-user root-user" type="warning">
+    <ng-container i18n>We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.</ng-container>
+
     <br />
-    Instead, <a class="text-decoration-underline alert-link" routerLink="/admin/users">create a dedicated account</a> to upload your videos.
-  </div>
+
+    <ng-container i18n>Instead, <a class="text-decoration-underline alert-link" routerLink="/admin/users">create a dedicated account</a> to upload your videos.</ng-container>
+  </my-alert>
 </ng-container>
 
 <div *ngIf="!user.isUploadDisabled()" class="margin-content">

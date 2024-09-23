@@ -13,9 +13,9 @@
   <form novalidate [formGroup]="form" (ngSubmit)="processRegistration()">
     <div class="modal-body mb-3">
 
-      <div i18n *ngIf="!registration.emailVerified" class="alert alert-warning">
+      <my-alert i18n *ngIf="!registration.emailVerified" type="warning">
         Registration email has not been verified. Email delivery has been disabled by default.
-      </div>
+      </my-alert>
 
       <div class="description">
         <ng-container *ngIf="isAccept()">
@@ -27,9 +27,9 @@
             An email will be sent to <em>{{ registration.email }}</em> explaining its account has been created with the moderation response you'll write below.
           </p>
 
-          <div *ngIf="!isEmailEnabled()" class="alert alert-warning" i18n>
+          <my-alert *ngIf="!isEmailEnabled()" type="warning" i18n>
             Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its account has been created.
-          </div>
+          </my-alert>
         </ng-container>
 
         <ng-container *ngIf="isReject()">
@@ -37,9 +37,9 @@
             An email will be sent to <em>{{ registration.email }}</em> explaining its registration request has been <strong>rejected</strong> with the moderation response you'll write below.
           </p>
 
-          <div *ngIf="!isEmailEnabled()" class="alert alert-warning" i18n>
+          <my-alert *ngIf="!isEmailEnabled()" type="warning" i18n>
             Emails are not enabled on this instance so PeerTube won't be able to send an email to <em>{{ registration.email }}</em> explaining its registration request has been rejected.
-          </div>
+          </my-alert>
         </ng-container>
       </div>
 

@@ -1,19 +1,20 @@
-import { pairwise } from 'rxjs/operators'
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 import { MenuService, ThemeService } from '@app/core'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { HTMLServerConfig } from '@peertube/peertube-models'
-import { ConfigService } from '../shared/config.service'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
-import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
-import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
+import { pairwise } from 'rxjs/operators'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
-import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
-import { NgFor, NgIf, NgClass } from '@angular/common'
-import { RouterLink } from '@angular/router'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
+import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
+import { ConfigService } from '../shared/config.service'
 
 @Component({
   selector: 'my-edit-basic-configuration',
@@ -33,7 +34,8 @@ import { RouterLink } from '@angular/router'
     NgClass,
     UserRealQuotaInfoComponent,
     SelectOptionsComponent,
-    PeerTubeTemplateDirective
+    PeerTubeTemplateDirective,
+    AlertComponent
   ]
 })
 export class EditBasicConfigurationComponent implements OnInit, OnChanges {

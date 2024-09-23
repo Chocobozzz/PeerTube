@@ -1,20 +1,21 @@
-import { ReplaySubject, Subscription } from 'rxjs'
-import { filter } from 'rxjs/operators'
+import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, AuthStatus, LocalStorageService, User, UserService } from '@app/core'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { CommonModule } from '@angular/common'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { UserInterfaceSettingsComponent } from '@app/shared/shared-user-settings/user-interface-settings.component'
 import { UserVideoSettingsComponent } from '@app/shared/shared-user-settings/user-video-settings.component'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { ReplaySubject, Subscription } from 'rxjs'
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'my-quick-settings',
   templateUrl: './quick-settings-modal.component.html',
   standalone: true,
-  imports: [ CommonModule, GlobalIconComponent, UserVideoSettingsComponent, UserInterfaceSettingsComponent ]
+  imports: [ CommonModule, GlobalIconComponent, UserVideoSettingsComponent, UserInterfaceSettingsComponent, AlertComponent ]
 })
 export class QuickSettingsModalComponent implements OnInit, OnDestroy {
   private static readonly QUERY_MODAL_NAME = 'quick-settings'

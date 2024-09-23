@@ -1,22 +1,23 @@
 import { CdkStep, CdkStepperNext, CdkStepperPrevious } from '@angular/cdk/stepper'
+import { NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
-import { SignupService } from '../shared/signup.service'
-import { SignupSuccessBeforeEmailComponent } from '../shared/signup-success-before-email.component'
-import { LoaderComponent } from '../../shared/shared-main/common/loader.component'
-import { RegisterStepChannelComponent } from './steps/register-step-channel.component'
-import { RegisterStepUserComponent } from './steps/register-step-user.component'
-import { RegisterStepTermsComponent } from './steps/register-step-terms.component'
-import { RegisterStepAboutComponent } from './steps/register-step-about.component'
-import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
-import { CustomStepperComponent } from './custom-stepper.component'
-import { SignupLabelComponent } from '../../shared/shared-main/users/signup-label.component'
-import { NgIf } from '@angular/common'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
+import { LoaderComponent } from '../../shared/shared-main/common/loader.component'
+import { SignupLabelComponent } from '../../shared/shared-main/users/signup-label.component'
+import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
+import { SignupSuccessBeforeEmailComponent } from '../shared/signup-success-before-email.component'
+import { SignupService } from '../shared/signup.service'
+import { CustomStepperComponent } from './custom-stepper.component'
+import { RegisterStepAboutComponent } from './steps/register-step-about.component'
+import { RegisterStepChannelComponent } from './steps/register-step-channel.component'
+import { RegisterStepTermsComponent } from './steps/register-step-terms.component'
+import { RegisterStepUserComponent } from './steps/register-step-user.component'
 
 @Component({
   selector: 'my-register',
@@ -38,7 +39,8 @@ import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/ins
     RegisterStepUserComponent,
     RegisterStepChannelComponent,
     LoaderComponent,
-    SignupSuccessBeforeEmailComponent
+    SignupSuccessBeforeEmailComponent,
+    AlertComponent
   ]
 })
 export class RegisterComponent implements OnInit {

@@ -1,10 +1,12 @@
 <my-instance-banner class="d-block mb-4" rounded="true"></my-instance-banner>
 
-<p class="alert pt-alert-primary text-center" *ngIf="requiresApproval">
-  <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have finished to fill the form.</ng-container>
+<my-alert *ngIf="requiresApproval" type="primary" class="text-center">
+  <p>
+    <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have finished to fill the form.</ng-container>
 
-  <ng-container *ngIf="averageResponseTime" i18n>They usually respond within {{ averageResponseTime | myDaysDurationFormatter }}.</ng-container>
-</p>
+    <ng-container *ngIf="averageResponseTime" i18n>They usually respond within {{ averageResponseTime | myDaysDurationFormatter }}.</ng-container>
+  </p>
+</my-alert>
 
 <div class="why">
   <h3 i18n>Why creating an account?</h3>

@@ -1,25 +1,26 @@
-import { forkJoin, Subject, Subscription } from 'rxjs'
-import { LinkType } from 'src/types/link.type'
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
 import { validateHost } from '@app/shared/form-validators/host-validators'
-import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
-import { NumberFormatterPipe } from '../shared/shared-main/common/number-formatter.pipe'
-import { VideoPlaylistMiniatureComponent } from '../shared/shared-video-playlist/video-playlist-miniature.component'
-import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../shared/shared-video-miniature/video-miniature.component'
-import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
-import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
-import { SearchFiltersComponent } from './search-filters.component'
-import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
-import { InfiniteScrollerDirective } from '../shared/shared-main/common/infinite-scroller.directive'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 import { SearchService } from '@app/shared/shared-search/search.service'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
+import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
+import { forkJoin, Subject, Subscription } from 'rxjs'
+import { LinkType } from 'src/types/link.type'
+import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
+import { InfiniteScrollerDirective } from '../shared/shared-main/common/infinite-scroller.directive'
+import { NumberFormatterPipe } from '../shared/shared-main/common/number-formatter.pipe'
+import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../shared/shared-video-miniature/video-miniature.component'
+import { VideoPlaylistMiniatureComponent } from '../shared/shared-video-playlist/video-playlist-miniature.component'
+import { SearchFiltersComponent } from './search-filters.component'
 
 @Component({
   selector: 'my-search',
@@ -38,7 +39,8 @@ import { SearchService } from '@app/shared/shared-search/search.service'
     SubscribeButtonComponent,
     VideoMiniatureComponent,
     VideoPlaylistMiniatureComponent,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    AlertComponent
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {

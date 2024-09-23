@@ -1,8 +1,8 @@
 <my-plugin-navigation [pluginType]="pluginType"></my-plugin-navigation>
 
-<div class="alert pt-alert-primary" i18n *ngIf="pluginInstalled">
+<my-alert class="mt-3" type="primary" i18n *ngIf="pluginInstalled">
   To load your new installed plugins or themes, refresh the page.
-</div>
+</my-alert>
 
 <div class="result-and-search">
   <ng-container *ngIf="!search">

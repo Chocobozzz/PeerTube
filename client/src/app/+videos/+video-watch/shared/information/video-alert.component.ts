@@ -1,15 +1,16 @@
+import { DatePipe, NgIf } from '@angular/common'
 import { Component, Input } from '@angular/core'
 import { AuthUser } from '@app/core'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
-import { NgIf, DatePipe } from '@angular/common'
 
 @Component({
   selector: 'my-video-alert',
   templateUrl: './video-alert.component.html',
-  styleUrls: [ './video-alert.component.scss' ],
   standalone: true,
-  imports: [ NgIf, DatePipe ]
+  styles: `my-alert { text-align: center }`,
+  imports: [ NgIf, DatePipe, AlertComponent ]
 })
 export class VideoAlertComponent {
   @Input() user: AuthUser

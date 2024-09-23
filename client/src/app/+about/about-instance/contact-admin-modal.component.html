@@ -46,7 +46,7 @@
         <div *ngIf="formErrors.body" class="form-error" role="alert">{{ formErrors.body }}</div>
       </div>
 
-      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
       <div class="form-group inputs">
         <input
@@ -58,7 +58,6 @@
       </div>
     </form>
 
-    <div *ngIf="!isContactFormEnabled()" class="alert alert-danger" i18n>The contact form is not enabled on this instance.</div>
-
+    <my-alert *ngIf="!isContactFormEnabled()" type="danger" i18n>The contact form is not enabled on this instance.</my-alert>
   </div>
 </ng-template>

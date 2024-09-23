@@ -1,6 +1,6 @@
-<div class="alert alert-warning" *ngIf="isConfidentialVideo()" i18n>
+<my-alert type="warning" *ngIf="isConfidentialVideo()" i18n>
   The following link contains a private token and should not be shared with anyone.
-</div>
+</my-alert>
 
 <div ngbNav #resolutionNav="ngbNav" class="nav-tabs" [activeId]="activeResolutionId" (activeIdChange)="onResolutionIdChange($event)">
 

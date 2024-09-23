@@ -1,8 +1,8 @@
 <h1 class="visually-hidden" i18n>Configuration</h1>
 
-<div class="alert alert-warning" *ngIf="!isUpdateAllowed()" i18n>
+<my-alert type="warning" *ngIf="!isUpdateAllowed()" i18n>
   Updating instance configuration from the web interface is disabled by the system administrator.
-</div>
+</my-alert>
 
 <form role="form" [formGroup]="form">
 

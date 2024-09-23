@@ -1,28 +1,28 @@
-<div i18n class="alert pt-alert-primary" *ngIf="hasVideoScheduledPublication()">
+<my-alert rounded="false" type="primary" i18n *ngIf="hasVideoScheduledPublication()">
   This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
-</div>
+</my-alert>
 
-<div i18n class="alert pt-alert-primary" *ngIf="isWaitingForLive()">
+<my-alert rounded="false" type="primary" i18n *ngIf="isWaitingForLive()">
   This live is not currently streaming.
-</div>
+</my-alert>
 
-<div i18n class="alert pt-alert-primary" *ngIf="isLiveEnded()">
+<my-alert rounded="false" type="primary" i18n *ngIf="isLiveEnded()">
   This live has ended.
-</div>
+</my-alert>
 
-<div class="alert alert-warning" *ngIf="getAlertWarning()">
+<my-alert rounded="false" type="warning" *ngIf="getAlertWarning()">
   {{ getAlertWarning() }}
-</div>
+</my-alert>
 
-<div i18n class="alert alert-warning" *ngIf="noPlaylistVideoFound">
+<my-alert rounded="false" i18n type="warning" *ngIf="noPlaylistVideoFound">
   There are no videos available in this playlist.
-</div>
+</my-alert>
 
-<div class="alert alert-danger" *ngIf="video?.blacklisted">
+<my-alert rounded="false" type="danger" *ngIf="video?.blacklisted">
   <div class="blocked-label" i18n>This video is blocked.</div>
   {{ video.blacklistedReason }}
-</div>
+</my-alert>
 
-<div i18n class="alert alert-warning" *ngIf="video?.canAccessPasswordProtectedVideoWithoutPassword(user)">
+<my-alert rounded="false" i18n type="warning" *ngIf="video?.canAccessPasswordProtectedVideoWithoutPassword(user)">
   This video is password protected.
-</div>
+</my-alert>

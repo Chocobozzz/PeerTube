@@ -5,13 +5,14 @@ import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 
 @Component({
   selector: 'my-account-profile',
   templateUrl: './my-account-profile.component.html',
   styleUrls: [ './my-account-profile.component.scss' ],
   standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
   @Input() user: User = null

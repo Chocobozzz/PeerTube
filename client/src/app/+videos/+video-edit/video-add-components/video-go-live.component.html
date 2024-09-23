@@ -39,15 +39,16 @@
   </div>
 </div>
 
-<div *ngIf="error" class="alert alert-danger">
+<my-alert *ngIf="error" type="danger">
   <div i18n>Sorry, but something went wrong</div>
-  {{ error }}
-</div>
 
-<div class="alert pt-alert-primary" i18n *ngIf="isInUpdateForm && getMaxLiveDuration() >= 0">
+  {{ error }}
+</my-alert>
+
+<my-alert type="primary" i18n *ngIf="isInUpdateForm && getMaxLiveDuration() >= 0">
   Max live duration is {{ getMaxLiveDuration() | myTimeDurationFormatter }}.
   If your live reaches this limit, it will be automatically terminated.
-</div>
+</my-alert>
 
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!isInUpdateForm" novalidate [formGroup]="form">

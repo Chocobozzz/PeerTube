@@ -57,7 +57,7 @@
   </div>
 </ng-template>
 
-<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
 <div class="pt-two-cols d-xxl-none"> <!-- hidden on large screens, as it is then displayed on the right side of the form -->
   <div class="col-0 col-xl-3"></div>

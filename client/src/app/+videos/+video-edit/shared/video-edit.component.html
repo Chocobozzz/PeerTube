@@ -174,9 +174,9 @@
 
       <ng-template ngbNavContent>
         <div class="captions">
-          <div class="alert pt-alert-primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()" i18n>
+          <my-alert type="primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()" i18n>
             A subtitle will be automatically generated from your video.
-          </div>
+          </my-alert>
 
           <div class="form-group" *ngFor="let videoCaption of videoCaptions">
 
@@ -246,11 +246,11 @@
       <ng-template ngbNavContent>
         <div class="row mb-5">
           <div class="chapters col-md-12 col-xl-6" formArrayName="chapters">
-            <div i18n class="alert pt-alert-primary">
+            <my-alert type="primary" i18n>
               Chapters can also be set in the video description.
 
               Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank">in the PeerTube documentation</a>
-            </div>
+            </my-alert>
 
             <ng-container *ngFor="let chapterControl of getChaptersFormArray().controls; let i = index">
               <div class="chapter" [formGroupName]="i">
@@ -303,9 +303,9 @@
       <ng-template ngbNavContent>
         <div class="row live-settings">
           <div class="col-md-12">
-            <div class="alert pt-alert-primary">
+            <my-alert type="primary">
               <my-live-documentation-link></my-live-documentation-link>
-            </div>
+            </my-alert>
 
             <div *ngIf="liveVideo.rtmpUrl" class="form-group">
               <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>

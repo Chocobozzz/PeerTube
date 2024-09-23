@@ -27,7 +27,7 @@
     <div id="search-results-filter" class="results-filter" [ngbCollapse]="isSearchFilterCollapsed" [animation]="true">
       <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
 
-      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
     </div>
   </div>
 

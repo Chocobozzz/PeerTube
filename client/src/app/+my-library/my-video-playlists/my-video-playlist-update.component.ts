@@ -12,6 +12,7 @@ import {
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistUpdate } from '@peertube/peertube-models'
 import { forkJoin, Subscription } from 'rxjs'
@@ -37,7 +38,8 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
     HelpComponent,
     MarkdownTextareaComponent,
     SelectOptionsComponent,
-    SelectChannelComponent
+    SelectChannelComponent,
+    AlertComponent
   ]
 })
 export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implements OnInit, OnDestroy {

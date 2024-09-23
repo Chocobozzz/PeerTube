@@ -1,23 +1,24 @@
-import { environment } from 'src/environments/environment'
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { getExternalAuthHref } from '@peertube/peertube-core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@peertube/peertube-models'
+import { environment } from 'src/environments/environment'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { InstanceBannerComponent } from '../shared/shared-instance/instance-banner.component'
 import { AutofocusDirective } from '../shared/shared-main/common/autofocus.directive'
 import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-selector.directive'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgClass, NgTemplateOutlet, NgFor } from '@angular/common'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
-import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
-import { FormReactive } from '@app/shared/shared-forms/form-reactive'
-import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 
 @Component({
   selector: 'my-login',
@@ -37,7 +38,8 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
     NgFor,
     InstanceBannerComponent,
     InstanceAboutAccordionComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    AlertComponent
   ]
 })
 

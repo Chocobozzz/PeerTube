@@ -1,29 +1,30 @@
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { RouterLink } from '@angular/router'
 import { HooksService, ServerService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import {
+  NgbCollapse,
   NgbModal,
   NgbNav,
+  NgbNavContent,
   NgbNavItem,
   NgbNavLink,
   NgbNavLinkBase,
-  NgbNavContent,
-  NgbNavOutlet,
-  NgbCollapse
+  NgbNavOutlet
 } from '@ng-bootstrap/ng-bootstrap'
-import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
-import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
-import { PluginPlaceholderComponent } from '../shared-main/plugins/plugin-placeholder.component'
-import { FormsModule } from '@angular/forms'
-import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { QRCodeModule } from 'angularx-qrcode'
 import { InputTextComponent } from '../shared-forms/input-text.component'
-import { RouterLink } from '@angular/router'
-import { NgIf, NgClass, NgFor } from '@angular/common'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { AlertComponent } from '../shared-main/common/alert.component'
+import { PluginPlaceholderComponent } from '../shared-main/plugins/plugin-placeholder.component'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
 
 type Customizations = {
@@ -77,7 +78,8 @@ type TabId = 'url' | 'qrcode' | 'embed'
     TimestampInputComponent,
     NgClass,
     NgFor,
-    NgbCollapse
+    NgbCollapse,
+    AlertComponent
   ]
 })
 export class VideoShareComponent {

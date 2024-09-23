@@ -130,6 +130,8 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   checkUserValidityOrThrow(user)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
+    // Keep this message sync with the client
+    // TODO: use custom server code
     throw new AccessDeniedError('User email is not verified.')
   }
 

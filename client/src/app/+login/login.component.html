@@ -15,7 +15,7 @@
 <div class="margin-content">
   <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
 
-    <div class="alert pt-alert-primary" role="alert">
+    <my-alert type="primary">
       <h5 class="alert-heading" i18n>
         Logging into an account lets you publish content
       </h5>
@@ -31,19 +31,19 @@
           Find yours among multiple instances at: <a class="link-orange" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       }
-    </div>
+    </my-alert>
 
-    <div class="alert alert-danger" i18n *ngIf="externalAuthError">
+    <my-alert type="danger" i18n *ngIf="externalAuthError">
       Sorry but there was an issue with the external login process. Please <a class="link-orange" routerLink="/about">contact an administrator</a>.
-    </div>
+    </my-alert>
 
-    <div *ngIf="error" class="alert alert-danger" role="alert">
+    <my-alert *ngIf="error" type="danger">
       {{ error }}
 
       <a *ngIf="error === 'User email is not verified.'" class="ms-1 link-orange" i18n routerLink="/verify-account/ask-send-email">
         Request new verification email
       </a>
-    </div>
+    </my-alert>
 
     <div class="wrapper">
       <div class="login-form-and-externals">
@@ -137,9 +137,9 @@
 
   <div class="modal-body text-start">
 
-    <div *ngIf="isEmailDisabled()" class="alert alert-danger" i18n>
+    <my-alert *ngIf="isEmailDisabled()" type="danger" i18n>
       We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
-    </div>
+    </my-alert>
 
     <div *ngIf="!isEmailDisabled()" class="mb-4" i18n>
       Enter your email address and we will send you a link to reset your password.

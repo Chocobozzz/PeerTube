@@ -1,4 +1,4 @@
-<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
 <form role="form" (ngSubmit)="updateMyProfile()" [formGroup]="form">
 

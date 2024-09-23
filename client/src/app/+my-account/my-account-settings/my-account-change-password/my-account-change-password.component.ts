@@ -1,5 +1,6 @@
-import { filter } from 'rxjs/operators'
+import { NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, UserService } from '@app/core'
 import {
   USER_CONFIRM_PASSWORD_VALIDATOR,
@@ -8,17 +9,17 @@ import {
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { HttpStatusCode, User } from '@peertube/peertube-models'
+import { filter } from 'rxjs/operators'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-account-change-password',
   templateUrl: './my-account-change-password.component.html',
   styleUrls: [ './my-account-change-password.component.scss' ],
   standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string

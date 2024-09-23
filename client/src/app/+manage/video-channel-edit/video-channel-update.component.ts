@@ -12,6 +12,7 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { shallowCopy } from '@peertube/peertube-core-utils'
 import { VideoChannelUpdate } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
@@ -36,7 +37,8 @@ import { VideoChannelEdit } from './video-channel-edit'
     NgClass,
     HelpComponent,
     MarkdownTextareaComponent,
-    PeertubeCheckboxComponent
+    PeertubeCheckboxComponent,
+    AlertComponent
   ]
 })
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {

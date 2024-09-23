@@ -1,14 +1,15 @@
+import { DatePipe, NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LiveVideo, LiveVideoError, LiveVideoErrorType, LiveVideoSession } from '@peertube/peertube-models'
-import { LiveVideoService } from './live-video.service'
-import { EditButtonComponent } from '../shared-main/buttons/edit-button.component'
-import { RouterLink } from '@angular/router'
 import { InputTextComponent } from '../shared-forms/input-text.component'
-import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
-import { NgIf, NgFor, DatePipe } from '@angular/common'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { EditButtonComponent } from '../shared-main/buttons/edit-button.component'
+import { AlertComponent } from '../shared-main/common/alert.component'
+import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
+import { LiveVideoService } from './live-video.service'
 
 @Component({
   selector: 'my-live-stream-information',
@@ -23,7 +24,8 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
     NgFor,
     RouterLink,
     EditButtonComponent,
-    DatePipe
+    DatePipe,
+    AlertComponent
   ],
   providers: [ LiveVideoService ]
 })

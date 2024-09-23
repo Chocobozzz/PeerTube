@@ -1,5 +1,5 @@
-<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-<div *ngIf="success" class="alert alert-success">{{ success }}</div>
+<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+<my-alert *ngIf="success" type="success">{{ success }}</my-alert>
 
 <div i18n class="pending-email" *ngIf="user.pendingEmail">
   <strong>{{ user.pendingEmail }}</strong> is awaiting email verification

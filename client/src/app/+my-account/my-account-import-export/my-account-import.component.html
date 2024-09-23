@@ -48,9 +48,9 @@
       </div>
 
       @if (hasPendingImport()) {
-        <div i18n class="alert pt-alert-primary">
+        <my-alert i18n type="primary">
           You can't re-import an archive because you already have an import that is currently being processed by PeerTube.
-        </div>
+        </my-alert>
       } @else {
         <my-upload-progress
           [isUploading]="uploadingArchive" [uploadPercents]="uploadPercents" [error]="error" [uploaded]="archiveUploadFinished"
@@ -58,9 +58,9 @@
         >
         </my-upload-progress>
 
-        <div *ngIf="archiveUploadFinished && !error" class="alert pt-alert-primary" i18n>
+        <my-alert *ngIf="archiveUploadFinished && !error" type="primary" i18n>
           Upload completed. Your archive import will be processed as soon as possible.
-        </div>
+        </my-alert>
 
         <div [hidden]="uploadingArchive || archiveUploadFinished" class="button-file form-control" i18n-ngbTooltip ngbTooltip="(extension: .zip)">
           <span i18n>Select the archive file to import</span>

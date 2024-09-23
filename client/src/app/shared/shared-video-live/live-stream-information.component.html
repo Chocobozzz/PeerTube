@@ -13,9 +13,9 @@
       <div class="pt-badge badge-blue" *ngIf="live.saveReplay" i18n>Replay will be saved</div>
     </div>
 
-    <div class="alert pt-alert-primary">
+    <my-alert type="primary">
       <my-live-documentation-link></my-live-documentation-link>
-    </div>
+    </my-alert>
 
     <div *ngIf="live.rtmpUrl" class="form-group">
       <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>

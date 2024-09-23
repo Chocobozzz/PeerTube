@@ -1,16 +1,17 @@
-import { forkJoin } from 'rxjs'
+import { NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { NgIf } from '@angular/common'
-import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { SearchService } from '@app/shared/shared-search/search.service'
+import { forkJoin } from 'rxjs'
 
 @Component({
   selector: 'my-remote-interaction',
   templateUrl: './remote-interaction.component.html',
   standalone: true,
-  imports: [ NgIf ]
+  imports: [ NgIf, AlertComponent ]
 })
 export class RemoteInteractionComponent implements OnInit {
   error = ''

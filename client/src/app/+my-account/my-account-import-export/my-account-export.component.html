@@ -89,11 +89,11 @@
 
   <div class="modal-body">
 
-    <div i18n class="alert alert-warning" *ngIf="hasAlreadyACompletedArchive()">
+    <my-alert i18n type="warning" *ngIf="hasAlreadyACompletedArchive()">
       You already have an active archive. Requesting a new export archive will remove the current one.
-    </div>
+    </my-alert>
 
-    <div *ngIf="errorInModal" class="alert alert-danger">{{ errorInModal }}</div>
+    <my-alert *ngIf="errorInModal" type="danger">{{ errorInModal }}</my-alert>
 
     <my-peertube-checkbox
       inputName="exportWithVideos" [(ngModel)]="exportWithVideosFiles"

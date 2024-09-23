@@ -8,22 +8,13 @@ $border-color: #EAEAEA;
 $nav-link-height: 40px;
 
 .upload-message {
+  display: block;
   width: 100%;
   text-align: center;
   margin-bottom: 0;
-  border-radius: 0;
 
   &:last-child {
     margin-bottom: 1rem;
-  }
-
-  .about-link,
-  .contact-link {
-    height: fit-content;
-    margin-top: 10px;
-
-    @include peertube-button-link;
-    @include orange-button;
   }
 }
 

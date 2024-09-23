@@ -7,6 +7,7 @@ import { UNIQUE_HOSTS_OR_HANDLE_VALIDATOR } from '@app/shared/form-validators/ho
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { splitAndGetNotEmpty } from '@root-helpers/string'
@@ -17,7 +18,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   templateUrl: './follow-modal.component.html',
   styleUrls: [ './follow-modal.component.scss' ],
   standalone: true,
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf, AlertComponent ]
 })
 export class FollowModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

@@ -1,7 +1,7 @@
 <div>
 
   <div class="margin-content signup-disabled" *ngIf="signupDisabled">
-    <div class="alert alert-warning" i18n>Signup is not enabled on this instance.</div>
+    <my-alert type="warning" i18n>Signup is not enabled on this instance.</my-alert>
   </div>
 
   <ng-container *ngIf="!signupDisabled">
@@ -114,7 +114,7 @@
             <div i18n>PeerTube is creating your account...</div>
           </div>
 
-          <div *ngIf="signupError" class="alert alert-danger">{{ signupError }}</div>
+          <my-alert *ngIf="signupError" type="danger">{{ signupError }}</my-alert>
 
           <my-signup-success-before-email
             *ngIf="signupSuccess"

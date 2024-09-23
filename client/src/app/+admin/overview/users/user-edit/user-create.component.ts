@@ -1,4 +1,6 @@
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
@@ -13,20 +15,19 @@ import {
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { UserCreate, UserRole } from '@peertube/peertube-models'
-import { UserEdit } from './user-edit'
-import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
-import { UserPasswordComponent } from './user-password.component'
-import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
-import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
-import { SelectCustomValueComponent } from '../../../../shared/shared-forms/select/select-custom-value.component'
-import { InputTextComponent } from '../../../../shared/shared-forms/input-text.component'
-import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/common/peertube-template.directive'
-import { HelpComponent } from '../../../../shared/shared-main/buttons/help.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { ActorAvatarEditComponent } from '../../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
-import { NgIf, NgTemplateOutlet, NgClass, NgFor } from '@angular/common'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
+import { UserCreate, UserRole } from '@peertube/peertube-models'
+import { ActorAvatarEditComponent } from '../../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { InputTextComponent } from '../../../../shared/shared-forms/input-text.component'
+import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
+import { SelectCustomValueComponent } from '../../../../shared/shared-forms/select/select-custom-value.component'
+import { HelpComponent } from '../../../../shared/shared-main/buttons/help.component'
+import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
+import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/common/peertube-template.directive'
+import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
+import { UserEdit } from './user-edit'
+import { UserPasswordComponent } from './user-password.component'
 
 @Component({
   selector: 'my-user-create',
@@ -49,7 +50,8 @@ import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
     UserRealQuotaInfoComponent,
     PeertubeCheckboxComponent,
     UserPasswordComponent,
-    BytesPipe
+    BytesPipe,
+    AlertComponent
   ]
 })
 export class UserCreateComponent extends UserEdit implements OnInit {

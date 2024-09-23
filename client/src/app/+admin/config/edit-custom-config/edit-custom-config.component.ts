@@ -27,9 +27,11 @@ import {
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
 import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, CustomPage, HTMLServerConfig } from '@peertube/peertube-models'
+import merge from 'lodash-es/merge'
 import omit from 'lodash-es/omit'
 import { forkJoin } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
@@ -40,7 +42,6 @@ import { EditHomepageComponent } from './edit-homepage.component'
 import { EditInstanceInformationComponent } from './edit-instance-information.component'
 import { EditLiveConfigurationComponent } from './edit-live-configuration.component'
 import { EditVODTranscodingComponent } from './edit-vod-transcoding.component'
-import merge from 'lodash-es/merge'
 
 type ComponentCustomConfig = CustomConfig & {
   instanceCustomHomepage: CustomPage
@@ -67,7 +68,8 @@ type ComponentCustomConfig = CustomConfig & {
     EditLiveConfigurationComponent,
     EditAdvancedConfigurationComponent,
     NgbNavOutlet,
-    NgFor
+    NgFor,
+    AlertComponent
   ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {

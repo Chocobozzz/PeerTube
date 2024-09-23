@@ -32,6 +32,7 @@ import {
 } from '@app/shared/form-validators/video-validators'
 import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
 import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
@@ -68,10 +69,11 @@ import { SelectOptionsComponent } from '../../../shared/shared-forms/select/sele
 import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
 import { TimestampInputComponent } from '../../../shared/shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
 import { VideoCaptionAddModalComponent } from './caption/video-caption-add-modal.component'
@@ -79,7 +81,6 @@ import { VideoCaptionEditModalContentComponent } from './caption/video-caption-e
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 import { VideoEditType } from './video-edit.type'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -126,7 +127,8 @@ type PluginField = {
     DatePipe,
     ThumbnailManagerComponent,
     EditButtonComponent,
-    ButtonComponent
+    ButtonComponent,
+    AlertComponent
   ]
 })
 export class VideoEditComponent implements OnInit, OnDestroy {

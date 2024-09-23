@@ -9,6 +9,7 @@ import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoChannelSyncCreate } from '@peertube/peertube-models'
 import { mergeMap } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
@@ -19,7 +20,7 @@ import { SelectChannelComponent } from '../../../shared/shared-forms/select/sele
   templateUrl: './video-channel-sync-edit.component.html',
   styleUrls: [ './video-channel-sync-edit.component.scss' ],
   standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, SelectChannelComponent ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, SelectChannelComponent, AlertComponent ]
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string

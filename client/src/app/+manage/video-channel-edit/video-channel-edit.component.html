@@ -1,4 +1,4 @@
-<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
 <div class="margin-content pt-4">
   <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
