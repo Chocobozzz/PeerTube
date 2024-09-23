@@ -7,7 +7,7 @@ import { VideosOverview } from './videos-overview.model'
 import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
 import { VideoMiniatureComponent } from '../../../shared/shared-video-miniature/video-miniature.component'
 import { RouterLink } from '@angular/router'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
 import { NgIf, NgFor } from '@angular/common'
 
 @Component({

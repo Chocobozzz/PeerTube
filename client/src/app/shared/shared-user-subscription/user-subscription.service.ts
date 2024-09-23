@@ -8,9 +8,9 @@ import { buildBulkObservable } from '@app/helpers'
 import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { Video } from '../shared-main/video/video.model'
-import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { VideoService } from '../shared-main/video/video.service'
-import { VideoChannelService } from '../shared-main/video-channel/video-channel.service'
+import { VideoChannelService } from '../shared-main/channel/video-channel.service'
 
 const debugLogger = debug('peertube:subscriptions:UserSubscriptionService')
 

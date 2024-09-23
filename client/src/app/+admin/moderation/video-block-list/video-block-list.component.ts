@@ -8,7 +8,7 @@ import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-
 import { VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'

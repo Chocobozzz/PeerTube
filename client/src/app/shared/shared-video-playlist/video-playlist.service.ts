@@ -23,8 +23,8 @@ import {
 import { environment } from '../../../environments/environment'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
-import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
-import { VideoChannelService } from '../shared-main/video-channel/video-channel.service'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
+import { VideoChannelService } from '../shared-main/channel/video-channel.service'
 import { AccountService } from '../shared-main/account/account.service'
 import { Account } from '../shared-main/account/account.model'
 

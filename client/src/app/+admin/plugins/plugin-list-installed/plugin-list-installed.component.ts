@@ -10,7 +10,7 @@ import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delet
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
 import { PluginCardComponent } from '../shared/plugin-card.component'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
 import { NgIf, NgFor } from '@angular/common'
 import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 

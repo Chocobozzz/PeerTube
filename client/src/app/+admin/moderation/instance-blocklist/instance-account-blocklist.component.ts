@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { NgIf, DatePipe } from '@angular/common'
-import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'

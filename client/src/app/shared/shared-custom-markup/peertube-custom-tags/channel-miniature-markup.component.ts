@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared-actor-image/actor-avatar.component'
 import { NgIf } from '@angular/common'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
 

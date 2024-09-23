@@ -1,14 +1,15 @@
 import { DatePipe } from '@angular/common'
 import { AccountService } from './account/account.service'
-import { FromNowPipe } from './angular/from-now.pipe'
-import { UserHistoryService } from './users/user-history.service'
-import { UserNotificationService } from './users/user-notification.service'
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth/auth-interceptor.service'
+import { VideoChannelSyncService } from './channel/video-channel-sync.service'
+import { VideoChannelService } from './channel/video-channel.service'
 import { CustomPageService } from './custom-page/custom-page.service'
+import { FromNowPipe } from './date/from-now.pipe'
 import { InstanceService } from './instance/instance.service'
 import { ActorRedirectGuard } from './router/actor-redirect-guard.service'
+import { UserHistoryService } from './users/user-history.service'
+import { UserNotificationService } from './users/user-notification.service'
 import { VideoCaptionService } from './video-caption/video-caption.service'
-import { VideoChannelService } from './video-channel/video-channel.service'
 import { RedundancyService } from './video/redundancy.service'
 import { VideoChapterService } from './video/video-chapter.service'
 import { VideoFileTokenService } from './video/video-file-token.service'
@@ -38,6 +39,7 @@ export function getMainProviders () {
     VideoChapterService,
     CustomPageService,
     ActorRedirectGuard,
-    InstanceService
+    InstanceService,
+    VideoChannelSyncService
   ]
 }

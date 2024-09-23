@@ -11,7 +11,7 @@ import {
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
+import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { shallowCopy } from '@peertube/peertube-core-utils'
 import { VideoChannelUpdate } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
@@ -19,7 +19,7 @@ import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/a
 import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
 import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
-import { HelpComponent } from '../../shared/shared-main/misc/help.component'
+import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({

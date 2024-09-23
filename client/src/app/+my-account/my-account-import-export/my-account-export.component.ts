@@ -7,7 +7,7 @@ import { PeerTubeProblemDocument, ServerErrorCode, UserExport, UserExportState }
 import { concatMap, from, of, switchMap, toArray } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../../shared/shared-main/common/bytes.pipe'
 import { UserImportExportService } from './user-import-export.service'
 
 @Component({

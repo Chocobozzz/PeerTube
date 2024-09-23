@@ -1,5 +1,5 @@
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 
 export abstract class VideoChannelEdit extends FormReactive {
   videoChannel: VideoChannel

@@ -3,7 +3,7 @@ import { AuthService, User } from '@app/core'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { NgIf } from '@angular/common'
-import { VideoChannel } from '../video-channel/video-channel.model'
+import { VideoChannel } from './video-channel.model'
 
 @Component({
   selector: 'my-channels-setup-message',

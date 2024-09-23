@@ -1,8 +1,8 @@
-import { environment } from 'src/environments/environment'
 import { Component, Input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { PluginsManager } from '@root-helpers/plugins-manager'
-import { LinkComponent } from './link.component'
+import { environment } from 'src/environments/environment'
+import { LinkComponent } from '../common/link.component'
 
 @Component({
   selector: 'my-login-link',

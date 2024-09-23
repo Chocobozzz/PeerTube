@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { HTMLServerConfig, VideoResolution } from '@peertube/peertube-models'
-import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../../shared/shared-main/common/bytes.pipe'
 import { NgIf } from '@angular/common'
 
 @Component({

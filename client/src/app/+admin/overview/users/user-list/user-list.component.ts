@@ -18,8 +18,8 @@ import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../s
 import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCheckboxComponent } from '../../../../shared/shared-forms/select/select-checkbox.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
-import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
-import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
+import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
+import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import {
   AccountMutedStatus,
@@ -28,7 +28,7 @@ import {
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
-import { ProgressBarComponent } from '@app/shared/shared-main/misc/progress-bar.component'
+import { ProgressBarComponent } from '@app/shared/shared-main/common/progress-bar.component'
 
 type UserForList = User & {
   rawVideoQuota: number

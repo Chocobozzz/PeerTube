@@ -2,10 +2,10 @@ import { NgClass } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, ScreenService, ServerService } from '@app/core'
-import { ListOverflowItem } from '@app/shared/shared-main/misc/list-overflow.component'
-import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
+import { ListOverflowItem } from '@app/shared/shared-main/menu/list-overflow.component'
+import { TopMenuDropdownParam } from '@app/shared/shared-main/menu/top-menu-dropdown.component'
 import { UserRight, UserRightType } from '@peertube/peertube-models'
-import { TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { TopMenuDropdownComponent } from '../shared/shared-main/menu/top-menu-dropdown.component'
 
 @Component({
   templateUrl: './admin.component.html',

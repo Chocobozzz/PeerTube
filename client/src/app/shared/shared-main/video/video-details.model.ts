@@ -1,5 +1,5 @@
 import { Account } from '@app/shared/shared-main/account/account.model'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import {
   VideoCommentPolicyType,
   VideoConstant,

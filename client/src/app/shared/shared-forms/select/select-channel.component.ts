@@ -3,7 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/f
 import { SelectChannelItem } from '../../../../types/select-options-item.model'
 import { NgFor } from '@angular/common'
 import { NgSelectModule } from '@ng-select/ng-select'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 
 @Component({
   selector: 'my-select-channel',

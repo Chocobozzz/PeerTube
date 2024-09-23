@@ -11,7 +11,7 @@ import {
   ServerService
 } from '@app/core'
 import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component'
-import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { EmbedComponent, EmbedVideoInput } from '@app/shared/shared-main/video/embed.component'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { imageToDataURL } from '@root-helpers/images'

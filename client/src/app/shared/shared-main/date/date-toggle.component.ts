@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core'
-import { FromNowPipe } from '../angular/from-now.pipe'
+import { FromNowPipe } from './from-now.pipe'
 
 @Component({
   selector: 'my-date-toggle',

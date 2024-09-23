@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
+import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { NgClass, NgIf } from '@angular/common'
 
 @Component({

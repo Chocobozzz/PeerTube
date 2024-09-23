@@ -16,8 +16,8 @@ import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCheckboxComponent } from '../../../shared/shared-forms/select/select-checkbox.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
+import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 
 @Component({
   selector: 'my-edit-instance-information',

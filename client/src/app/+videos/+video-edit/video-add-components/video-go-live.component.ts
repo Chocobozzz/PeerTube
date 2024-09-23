@@ -16,7 +16,7 @@ import {
   VideoPrivacy
 } from '@peertube/peertube-models'
 import { VideoSend } from './video-send'
-import { TimeDurationFormatterPipe } from '../../../shared/shared-main/angular/time-duration-formatter.pipe'
+import { TimeDurationFormatterPipe } from '../../../shared/shared-main/date/time-duration-formatter.pipe'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { VideoEditComponent } from '../shared/video-edit.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'

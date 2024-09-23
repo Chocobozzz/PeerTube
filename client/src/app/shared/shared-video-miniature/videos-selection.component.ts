@@ -7,10 +7,10 @@ import { ResultList, VideosExistInPlaylists, VideoSortField } from '@peertube/pe
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
 import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
 import { Video } from '../shared-main/video/video.model'
-import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
+import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
 
 export type SelectionType = { [ id: number ]: boolean }
 

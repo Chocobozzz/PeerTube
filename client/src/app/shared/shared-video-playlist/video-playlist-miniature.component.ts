@@ -2,9 +2,9 @@ import { LinkType } from 'src/types/link.type'
 import { Component, Input, OnInit } from '@angular/core'
 import { VideoPlaylist } from './video-playlist.model'
 import { MarkdownService } from '@app/core'
-import { FromNowPipe } from '../shared-main/angular/from-now.pipe'
+import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 import { RouterLink } from '@angular/router'
-import { LinkComponent } from '../shared-main/angular/link.component'
+import { LinkComponent } from '../shared-main/common/link.component'
 import { NgClass, NgIf } from '@angular/common'
 
 @Component({

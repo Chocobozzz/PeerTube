@@ -37,7 +37,7 @@
       Sorry but there was an issue with the external login process. Please <a class="link-orange" routerLink="/about">contact an administrator</a>.
     </div>
 
-    <div *ngIf="error" class="alert alert-danger">
+    <div *ngIf="error" class="alert alert-danger" role="alert">
       {{ error }}
 
       <a *ngIf="error === 'User email is not verified.'" class="ms-1 link-orange" i18n routerLink="/verify-account/ask-send-email">

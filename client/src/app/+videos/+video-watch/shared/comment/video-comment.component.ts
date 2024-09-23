@@ -11,7 +11,7 @@ import { VideoCommentThreadTree } from '@app/shared/shared-video-comment/video-c
 import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
 import { User, UserRight } from '@peertube/peertube-models'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
-import { FromNowPipe } from '../../../../shared/shared-main/angular/from-now.pipe'
+import { FromNowPipe } from '../../../../shared/shared-main/date/from-now.pipe'
 import { UserModerationDropdownComponent } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
 import { VideoCommentAddComponent } from './video-comment-add.component'

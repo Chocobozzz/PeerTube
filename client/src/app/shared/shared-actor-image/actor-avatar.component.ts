@@ -3,7 +3,7 @@ import { Account } from '../shared-main/account/account.model'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { RouterLink } from '@angular/router'
 import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
-import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
 
 export type ActorAvatarInput = {
   name: string

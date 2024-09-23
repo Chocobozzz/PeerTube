@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { BatchDomainsModalComponent } from '../../shared/shared-moderation/batch-domains-modal.component'
 import { NgIf, DatePipe } from '@angular/common'
-import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
+import { AutoColspanDirective } from '../../shared/shared-main/common/auto-colspan.directive'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { SharedModule } from 'primeng/api'

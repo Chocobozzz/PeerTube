@@ -6,7 +6,7 @@ import { SignupService } from '@app/+signup/shared/signup.service'
 import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { BytesPipe } from '../../../shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
 import { NgIf, NgClass } from '@angular/common'
 
 @Component({

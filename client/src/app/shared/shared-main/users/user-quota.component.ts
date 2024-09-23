@@ -2,8 +2,8 @@ import { NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, UserService } from '@app/core'
 import { first } from 'rxjs'
-import { BytesPipe } from '../angular/bytes.pipe'
-import { ProgressBarComponent } from '../misc/progress-bar.component'
+import { BytesPipe } from '../common/bytes.pipe'
+import { ProgressBarComponent } from '../common/progress-bar.component'
 
 @Component({
   selector: 'my-user-quota',

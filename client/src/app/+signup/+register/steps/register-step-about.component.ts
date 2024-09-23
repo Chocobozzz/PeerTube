@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { ServerStats } from '@peertube/peertube-models'
-import { DaysDurationFormatterPipe } from '../../../shared/shared-main/angular/days-duration-formatter.pipe'
+import { DaysDurationFormatterPipe } from '../../../shared/shared-main/date/days-duration-formatter.pipe'
 import { NgIf } from '@angular/common'
 import { InstanceBannerComponent } from '../../../shared/shared-instance/instance-banner.component'
 

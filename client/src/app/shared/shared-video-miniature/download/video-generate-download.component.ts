@@ -10,7 +10,7 @@ import { getResolutionAndFPSLabel, maxBy } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoResolution, VideoSource } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { BytesPipe } from '../../shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../../shared-main/common/bytes.pipe'
 import { VideoDetails } from '../../shared-main/video/video-details.model'
 
 @Component({

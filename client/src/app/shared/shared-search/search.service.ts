@@ -12,9 +12,9 @@ import {
 import { environment } from '../../../environments/environment'
 import { AdvancedSearch } from './advanced-search.model'
 import { Video } from '../shared-main/video/video.model'
-import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { VideoService } from '../shared-main/video/video.service'
-import { VideoChannelService } from '../shared-main/video-channel/video-channel.service'
+import { VideoChannelService } from '../shared-main/channel/video-channel.service'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 

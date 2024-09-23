@@ -14,13 +14,13 @@ import { HttpStatusCode, VideoChannelCreate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
 import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
 import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
-import { HelpComponent } from '../../shared/shared-main/misc/help.component'
+import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
 import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgIf, NgClass } from '@angular/common'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
-import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
+import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 
 @Component({
   templateUrl: './video-channel-edit.component.html',

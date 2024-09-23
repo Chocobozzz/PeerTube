@@ -2,7 +2,7 @@ import { NgClass } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { AuthUser, PluginService, ScreenService } from '@app/core'
-import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/menu/top-menu-dropdown.component'
 
 @Component({
   templateUrl: './my-account.component.html',

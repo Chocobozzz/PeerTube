@@ -11,9 +11,9 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import { Subject, Subscription } from 'rxjs'
-import { InfiniteScrollerDirective } from '../../../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
 import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
-import { LoaderComponent } from '../../../../shared/shared-main/loaders/loader.component'
+import { LoaderComponent } from '../../../../shared/shared-main/common/loader.component'
 import { VideoCommentAddComponent } from './video-comment-add.component'
 import { VideoCommentComponent } from './video-comment.component'
 

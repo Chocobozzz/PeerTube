@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { getUploadXRetryConfig } from '@app/helpers'
-import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable()

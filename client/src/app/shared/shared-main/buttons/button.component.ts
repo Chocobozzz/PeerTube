@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, booleanAttribute } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { LoaderComponent } from '../loaders/loader.component'
+import { LoaderComponent } from '../common/loader.component'
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'

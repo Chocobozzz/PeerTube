@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { ServerStats } from '@peertube/peertube-models'
-import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../../shared/shared-main/common/bytes.pipe'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { NgIf, DecimalPipe } from '@angular/common'
 

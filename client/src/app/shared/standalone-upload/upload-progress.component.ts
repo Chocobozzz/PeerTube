@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { ProgressBarComponent } from '../shared-main/misc/progress-bar.component'
+import { ProgressBarComponent } from '../shared-main/common/progress-bar.component'
 
 @Component({
   selector: 'my-upload-progress',

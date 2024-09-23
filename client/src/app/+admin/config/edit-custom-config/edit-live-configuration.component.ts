@@ -8,7 +8,7 @@ import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/
 import { RouterLink } from '@angular/router'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { NgClass, NgIf, NgFor } from '@angular/common'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 
 @Component({

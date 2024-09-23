@@ -6,7 +6,7 @@ import { VideoRedundanciesTarget, VideoRedundancy, VideosRedundancyStats } from 
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { ChartModule } from 'primeng/chart'
 import { VideoRedundancyInformationComponent } from './video-redundancy-information.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -14,7 +14,7 @@ import { NgIf, NgFor } from '@angular/common'
 import { TableModule } from 'primeng/table'
 import { FormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
 
 @Component({

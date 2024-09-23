@@ -1,8 +1,8 @@
 import { AfterContentInit, Component, ContentChildren, forwardRef, Input, QueryList, TemplateRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
-import { HelpComponent } from '../shared-main/misc/help.component'
+import { HelpComponent } from '../shared-main/buttons/help.component'
 import { NgIf, NgTemplateOutlet } from '@angular/common'
-import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
+import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
 
 @Component({
   selector: 'my-peertube-checkbox',

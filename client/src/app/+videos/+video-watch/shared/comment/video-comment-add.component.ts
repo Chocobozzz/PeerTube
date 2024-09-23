@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs'
-import { getLocaleDirection, NgClass, NgIf, NgFor } from '@angular/common'
+import { getLocaleDirection, NgClass, NgFor, NgIf } from '@angular/common'
 import {
   Component,
   ElementRef,
@@ -13,23 +12,24 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCommentCreate } from '@peertube/peertube-models'
-import { LoginLinkComponent } from '../../../../shared/shared-main/angular/login-link.component'
-import { RemoteSubscribeComponent } from '../../../../shared/shared-user-subscription/remote-subscribe.component'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
-import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../../../../shared/shared-main/misc/help.component'
-import { TextareaAutoResizeDirective } from '../../../../shared/shared-forms/textarea-autoresize.directive'
-import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { VideoCommentCreate } from '@peertube/peertube-models'
+import { Observable } from 'rxjs'
+import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
+import { TextareaAutoResizeDirective } from '../../../../shared/shared-forms/textarea-autoresize.directive'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { HelpComponent } from '../../../../shared/shared-main/buttons/help.component'
+import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/common/peertube-template.directive'
+import { RemoteSubscribeComponent } from '../../../../shared/shared-user-subscription/remote-subscribe.component'
 
 @Component({
   selector: 'my-video-comment-add',

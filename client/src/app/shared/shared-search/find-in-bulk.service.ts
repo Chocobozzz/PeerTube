@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
 import { AdvancedSearch } from './advanced-search.model'
 import { SearchService } from './search.service'
-import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { Video } from '../shared-main/video/video.model'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
 

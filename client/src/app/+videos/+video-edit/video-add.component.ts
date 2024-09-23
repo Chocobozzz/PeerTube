@@ -15,7 +15,7 @@ import { VideoImportTorrentComponent } from './video-add-components/video-import
 import { VideoImportUrlComponent } from './video-add-components/video-import-url.component'
 import { VideoUploadComponent } from './video-add-components/video-upload.component'
 import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
-import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
+import { ChannelsSetupMessageComponent } from '../../shared/shared-main/channel/channels-setup-message.component'
 import { UserQuotaComponent } from '../../shared/shared-main/users/user-quota.component'
 import { NgIf, NgTemplateOutlet, NgClass } from '@angular/common'
 

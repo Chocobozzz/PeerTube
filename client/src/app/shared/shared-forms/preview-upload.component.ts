@@ -5,7 +5,7 @@ import { imageToDataURL } from '@root-helpers/images'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { NgIf, NgStyle } from '@angular/common'
 import { ReactiveFileComponent } from './reactive-file.component'
-import { BytesPipe } from '../shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../shared-main/common/bytes.pipe'
 
 @Component({
   selector: 'my-preview-upload',

@@ -18,7 +18,7 @@ import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import {
   VideoActionsDisplayType,

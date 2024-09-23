@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { FileRedundancyInformation, StreamingPlaylistRedundancyInformation } from '@peertube/peertube-models'
-import { BytesPipe } from '../../../shared/shared-main/angular/bytes.pipe'
+import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
 import { DatePipe } from '@angular/common'
 
 @Component({

@@ -10,8 +10,8 @@ import { NgIf } from '@angular/common'
 import { RouterLink } from '@angular/router'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
-import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../shared-main/misc/help.component'
+import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
+import { HelpComponent } from '../shared-main/buttons/help.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({

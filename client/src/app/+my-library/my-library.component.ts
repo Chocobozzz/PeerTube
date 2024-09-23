@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, AuthUser, ScreenService, ServerService } from '@app/core'
 import { HTMLServerConfig } from '@peertube/peertube-models'
-import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/menu/top-menu-dropdown.component'
 
 @Component({
   templateUrl: './my-library.component.html',

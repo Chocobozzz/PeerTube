@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router'
 import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
-import { LoaderComponent } from '@app/shared/shared-main/loaders/loader.component'
+import { LoaderComponent } from '@app/shared/shared-main/common/loader.component'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
 import { NgbDropdown, NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'

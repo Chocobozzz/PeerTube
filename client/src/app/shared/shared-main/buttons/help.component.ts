@@ -4,7 +4,7 @@ import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgTemplateOutlet } from '@angular/common'
-import { PeerTubeTemplateDirective } from '../angular/peertube-template.directive'
+import { PeerTubeTemplateDirective } from '../common/peertube-template.directive'
 
 @Component({
   selector: 'my-help',

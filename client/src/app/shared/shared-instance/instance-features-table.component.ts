@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
-import { BytesPipe } from '../shared-main/angular/bytes.pipe'
-import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../shared-main/misc/help.component'
+import { BytesPipe } from '../shared-main/common/bytes.pipe'
+import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
+import { HelpComponent } from '../shared-main/buttons/help.component'
 import { FeatureBooleanComponent } from './feature-boolean.component'
 import { NgIf, NgFor } from '@angular/common'
-import { DaysDurationFormatterPipe } from '../shared-main/angular/days-duration-formatter.pipe'
+import { DaysDurationFormatterPipe } from '../shared-main/date/days-duration-formatter.pipe'
 
 @Component({
   selector: 'my-instance-features-table',

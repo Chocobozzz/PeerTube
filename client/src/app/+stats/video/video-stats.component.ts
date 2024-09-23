@@ -21,10 +21,10 @@ import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOu
 import { FormsModule } from '@angular/forms'
 import { SelectOptionsComponent } from '../../shared/shared-forms/select/select-options.component'
 import { EmbedComponent } from '../../shared/shared-main/video/embed.component'
-import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../../shared/shared-main/misc/help.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
+import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { NgFor, NgIf } from '@angular/common'
-import { NumberFormatterPipe } from '@app/shared/shared-main/angular/number-formatter.pipe'
+import { NumberFormatterPipe } from '@app/shared/shared-main/common/number-formatter.pipe'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
