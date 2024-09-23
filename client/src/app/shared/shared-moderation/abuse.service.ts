@@ -150,7 +150,7 @@ export class AbuseService {
         id: 'serverRules',
         label: $localize`Breaks server rules`,
         // eslint-disable-next-line max-len
-        description: $localize`Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.`
+        help: $localize`Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.`
       }
     ]
 
