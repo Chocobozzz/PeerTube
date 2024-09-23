@@ -41,7 +41,6 @@ export class ButtonComponent implements OnInit, OnChanges {
       'peertube-button-link': !!this.ptRouterLink,
       'orange-button': this.theme === 'orange',
       'grey-button': this.theme === 'grey',
-      'disabled': this.disabled,
       'icon-only': !this.label,
       'has-icon': !!this.icon,
       'responsive-label': this.responsiveLabel

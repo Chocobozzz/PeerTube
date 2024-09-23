@@ -1,4 +1,4 @@
-<button *ngIf="!ptRouterLink" type="button" class="action-button" [ngClass]="classes" [ngbTooltip]="title">
+<button *ngIf="!ptRouterLink" type="button" class="action-button" [ngClass]="classes" [disabled]="disabled" [ngbTooltip]="title">
   <ng-container *ngTemplateOutlet="content"></ng-container>
 </button>
 
