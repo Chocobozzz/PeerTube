@@ -21,7 +21,7 @@ import {
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting
 } from '@server/types/models/index.js'
-import { col, FindOptions, fn, literal, Op, QueryTypes, where, WhereOptions } from 'sequelize'
+import { col, FindOptions, fn, literal, Op, QueryTypes, ScopeOptions, where, WhereOptions } from 'sequelize'
 import {
   AfterDestroy,
   AfterUpdate,
@@ -84,6 +84,8 @@ enum ScopeNames {
   WITH_TOTAL_FILE_SIZES = 'WITH_TOTAL_FILE_SIZES',
   WITH_STATS = 'WITH_STATS'
 }
+
+type WhereUserIdScopeOptions = { whereUserId?: '$userId' | '"UserModel"."id"' }
 
 @DefaultScope(() => ({
   include: [
@@ -159,107 +161,113 @@ enum ScopeNames {
       }
     ]
   },
-  [ScopeNames.WITH_QUOTA]: {
-    attributes: {
-      include: [
-        [
-          literal(
-            '(' +
-              UserModel.generateUserQuotaBaseSQL({
-                whereUserId: '"UserModel"."id"',
-                daily: false,
-                onlyMaxResolution: true
-              }) +
-            ')'
-          ),
-          'videoQuotaUsed'
-        ],
-        [
-          literal(
-            '(' +
-              UserModel.generateUserQuotaBaseSQL({
-                whereUserId: '"UserModel"."id"',
-                daily: true,
-                onlyMaxResolution: true
-              }) +
-            ')'
-          ),
-          'videoQuotaUsedDaily'
+  [ScopeNames.WITH_QUOTA]: (options: WhereUserIdScopeOptions = {}) => {
+    return {
+      attributes: {
+        include: [
+          [
+            literal(
+              '(' +
+                UserModel.generateUserQuotaBaseSQL({
+                  whereUserId: options.whereUserId ?? '"UserModel"."id"',
+                  daily: false,
+                  onlyMaxResolution: true
+                }) +
+              ')'
+            ),
+            'videoQuotaUsed'
+          ],
+          [
+            literal(
+              '(' +
+                UserModel.generateUserQuotaBaseSQL({
+                  whereUserId: options.whereUserId ?? '"UserModel"."id"',
+                  daily: true,
+                  onlyMaxResolution: true
+                }) +
+              ')'
+            ),
+            'videoQuotaUsedDaily'
+          ]
         ]
-      ]
+      }
     }
   },
-  [ScopeNames.WITH_TOTAL_FILE_SIZES]: {
-    attributes: {
-      include: [
-        [
-          literal(
-            '(' +
-              UserModel.generateUserQuotaBaseSQL({
-                whereUserId: '"UserModel"."id"',
-                daily: false,
-                onlyMaxResolution: false
-              }) +
-            ')'
-          ),
-          'totalVideoFileSize'
+  [ScopeNames.WITH_TOTAL_FILE_SIZES]: (options: WhereUserIdScopeOptions = {}) => {
+    return {
+      attributes: {
+        include: [
+          [
+            literal(
+              '(' +
+                UserModel.generateUserQuotaBaseSQL({
+                  whereUserId: options.whereUserId ?? '"UserModel"."id"',
+                  daily: false,
+                  onlyMaxResolution: false
+                }) +
+              ')'
+            ),
+            'totalVideoFileSize'
+          ]
         ]
-      ]
+      }
     }
   },
-  [ScopeNames.WITH_STATS]: {
-    attributes: {
-      include: [
-        [
-          literal(
-            '(' +
-              'SELECT COUNT("video"."id") ' +
-              'FROM "video" ' +
-              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-              'WHERE "account"."userId" = "UserModel"."id"' +
-            ')'
-          ),
-          'videosCount'
-        ],
-        [
-          literal(
-            '(' +
-              `SELECT concat_ws(':', "abuses", "acceptedAbuses") ` +
-              'FROM (' +
-                'SELECT COUNT("abuse"."id") AS "abuses", ' +
-                       `COUNT("abuse"."id") FILTER (WHERE "abuse"."state" = ${AbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
+  [ScopeNames.WITH_STATS]: (options: WhereUserIdScopeOptions = {}) => {
+    return {
+      attributes: {
+        include: [
+          [
+            literal(
+              '(' +
+                'SELECT COUNT("video"."id") ' +
+                'FROM "video" ' +
+                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+                'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+                `WHERE "account"."userId" = ${options.whereUserId}` +
+              ')'
+            ),
+            'videosCount'
+          ],
+          [
+            literal(
+              '(' +
+                `SELECT concat_ws(':', "abuses", "acceptedAbuses") ` +
+                'FROM (' +
+                  'SELECT COUNT("abuse"."id") AS "abuses", ' +
+                        `COUNT("abuse"."id") FILTER (WHERE "abuse"."state" = ${AbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
+                  'FROM "abuse" ' +
+                  'INNER JOIN "account" ON "account"."id" = "abuse"."flaggedAccountId" ' +
+                  `WHERE "account"."userId" = ${options.whereUserId}` +
+                ') t' +
+              ')'
+            ),
+            'abusesCount'
+          ],
+          [
+            literal(
+              '(' +
+                'SELECT COUNT("abuse"."id") ' +
                 'FROM "abuse" ' +
-                'INNER JOIN "account" ON "account"."id" = "abuse"."flaggedAccountId" ' +
-                'WHERE "account"."userId" = "UserModel"."id"' +
-              ') t' +
-            ')'
-          ),
-          'abusesCount'
-        ],
-        [
-          literal(
-            '(' +
-              'SELECT COUNT("abuse"."id") ' +
-              'FROM "abuse" ' +
-              'INNER JOIN "account" ON "account"."id" = "abuse"."reporterAccountId" ' +
-              'WHERE "account"."userId" = "UserModel"."id"' +
-            ')'
-          ),
-          'abusesCreatedCount'
-        ],
-        [
-          literal(
-            '(' +
-              'SELECT COUNT("videoComment"."id") ' +
-              'FROM "videoComment" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoComment"."accountId" ' +
-              'WHERE "account"."userId" = "UserModel"."id"' +
-            ')'
-          ),
-          'videoCommentsCount'
+                'INNER JOIN "account" ON "account"."id" = "abuse"."reporterAccountId" ' +
+                `WHERE "account"."userId" = ${options.whereUserId}` +
+              ')'
+            ),
+            'abusesCreatedCount'
+          ],
+          [
+            literal(
+              '(' +
+                'SELECT COUNT("videoComment"."id") ' +
+                'FROM "videoComment" ' +
+                'INNER JOIN "account" ON "account"."id" = "videoComment"."accountId" ' +
+                `WHERE "account"."userId" = ${options.whereUserId}` +
+              ')'
+            ),
+            'videoCommentsCount'
+          ]
         ]
-      ]
+      }
     }
   }
 }))
@@ -619,17 +627,20 @@ export class UserModel extends SequelizeModel<UserModel> {
   }
 
   static loadByIdWithChannels (id: number, withStats = false): Promise<MUserDefault> {
-    const scopes = [
-      ScopeNames.WITH_VIDEOCHANNELS
-    ]
+    const scopes: (string | ScopeOptions)[] = [ ScopeNames.WITH_VIDEOCHANNELS ]
 
     if (withStats) {
-      scopes.push(ScopeNames.WITH_QUOTA)
-      scopes.push(ScopeNames.WITH_STATS)
-      scopes.push(ScopeNames.WITH_TOTAL_FILE_SIZES)
+      const scopeOptions: WhereUserIdScopeOptions = { whereUserId: '$userId' }
+
+      scopes.push({ method: [ ScopeNames.WITH_QUOTA, scopeOptions ] })
+      scopes.push({ method: [ ScopeNames.WITH_STATS, scopeOptions ] })
+      scopes.push({ method: [ ScopeNames.WITH_TOTAL_FILE_SIZES, scopeOptions ] })
     }
 
-    return UserModel.scope(scopes).findByPk(id)
+    return UserModel.scope(scopes).findOne({
+      where: { id },
+      bind: { userId: id }
+    })
   }
 
   static loadByUsername (username: string): Promise<MUserDefault> {
