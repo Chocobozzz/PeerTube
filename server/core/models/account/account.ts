@@ -1,4 +1,4 @@
-import { Account, AccountSummary } from '@peertube/peertube-models'
+import { Account, AccountSummary, VideoPrivacy } from '@peertube/peertube-models'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -433,6 +433,21 @@ export class AccountModel extends SequelizeModel<AccountModel> {
           where: {
             serverId: null
           }
+        },
+        {
+          attributes: [ 'id' ],
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id' ],
+              model: VideoModel.unscoped(),
+              required: true,
+              where: {
+                privacy: VideoPrivacy.PUBLIC
+              }
+            }
+          ]
         }
       ]
     }
