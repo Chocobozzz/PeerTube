@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   ConfigCommand,
@@ -16,7 +15,8 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
-import { checkResolutionsInMasterPlaylist } from '@tests/shared/streaming-playlists.js'
+import { checkResolutionsInMasterPlaylist, completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { expect } from 'chai'
 
 async function checkFilesInObjectStorage (objectStorage: ObjectStorageCommand, video: VideoDetails) {
   for (const file of video.files) {
@@ -81,175 +81,273 @@ function runTests (options: {
     await servers[0].config.setTranscodingConcurrency(concurrency)
   })
 
-  it('Should generate HLS', async function () {
-    this.timeout(60000)
+  describe('Common transcoding', function () {
 
-    await servers[0].videos.runTranscoding({
-      videoId: videoUUID,
-      transcodingType: 'hls'
+    it('Should generate HLS', async function () {
+      this.timeout(60000)
+
+      await servers[0].videos.runTranscoding({
+        videoId: videoUUID,
+        transcodingType: 'hls'
+      })
+
+      await waitJobs(servers)
+      await expectNoFailedTranscodingJob(servers[0])
+
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: videoUUID })
+
+        expect(videoDetails.files).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+
+        if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
+      }
     })
 
-    await waitJobs(servers)
-    await expectNoFailedTranscodingJob(servers[0])
+    it('Should generate Web Video', async function () {
+      this.timeout(60000)
 
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videoUUID })
+      await servers[0].videos.runTranscoding({
+        videoId: videoUUID,
+        transcodingType: 'web-video'
+      })
 
-      expect(videoDetails.files).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+      await waitJobs(servers)
 
-      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
-    }
-  })
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: videoUUID })
 
-  it('Should generate Web Video', async function () {
-    this.timeout(60000)
+        expect(videoDetails.files).to.have.lengthOf(5)
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
-    await servers[0].videos.runTranscoding({
-      videoId: videoUUID,
-      transcodingType: 'web-video'
+        if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
+      }
     })
 
-    await waitJobs(servers)
+    it('Should generate Web Video from HLS only video', async function () {
+      this.timeout(60000)
 
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videoUUID })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: videoUUID })
+      await waitJobs(servers)
 
-      expect(videoDetails.files).to.have.lengthOf(5)
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+      await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
+      await waitJobs(servers)
 
-      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
-    }
-  })
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: videoUUID })
 
-  it('Should generate Web Video from HLS only video', async function () {
-    this.timeout(60000)
+        expect(videoDetails.files).to.have.lengthOf(5)
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
-    await servers[0].videos.removeAllWebVideoFiles({ videoId: videoUUID })
-    await waitJobs(servers)
+        if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
+      }
+    })
 
-    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
-    await waitJobs(servers)
+    it('Should only generate Web Video', async function () {
+      this.timeout(60000)
 
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videoUUID })
+      await servers[0].videos.removeHLSPlaylist({ videoId: videoUUID })
+      await waitJobs(servers)
 
-      expect(videoDetails.files).to.have.lengthOf(5)
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+      await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
+      await waitJobs(servers)
 
-      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
-    }
-  })
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: videoUUID })
 
-  it('Should only generate Web Video', async function () {
-    this.timeout(60000)
+        expect(videoDetails.files).to.have.lengthOf(5)
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
 
-    await servers[0].videos.removeHLSPlaylist({ videoId: videoUUID })
-    await waitJobs(servers)
+        if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
+      }
+    })
 
-    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
-    await waitJobs(servers)
+    it('Should correctly update HLS playlist on resolution change', async function () {
+      this.timeout(120000)
 
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: videoUUID })
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          transcoding: {
+            enabled: true,
+            resolutions: ConfigCommand.getConfigResolutions(false),
 
-      expect(videoDetails.files).to.have.lengthOf(5)
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
-
-      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
-    }
-  })
-
-  it('Should correctly update HLS playlist on resolution change', async function () {
-    this.timeout(120000)
-
-    await servers[0].config.updateExistingConfig({
-      newConfig: {
-        transcoding: {
-          enabled: true,
-          resolutions: ConfigCommand.getConfigResolutions(false),
-
-          webVideos: {
-            enabled: true
-          },
-          hls: {
-            enabled: true
+            webVideos: {
+              enabled: true
+            },
+            hls: {
+              enabled: true
+            }
           }
+        }
+      })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'quick' })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: uuid })
+
+        expect(videoDetails.files).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(1)
+
+        if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
+
+        shouldBeDeleted = [
+          videoDetails.streamingPlaylists[0].files[0].fileUrl,
+          videoDetails.streamingPlaylists[0].playlistUrl,
+          videoDetails.streamingPlaylists[0].segmentsSha256Url
+        ]
+      }
+
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          transcoding: {
+            enabled: true,
+            resolutions: ConfigCommand.getConfigResolutions(true),
+
+            webVideos: {
+              enabled: true
+            },
+            hls: {
+              enabled: true
+            }
+          }
+        }
+      })
+
+      await servers[0].videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: uuid })
+
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+
+        if (enableObjectStorage) {
+          await checkFilesInObjectStorage(objectStorage, videoDetails)
+
+          const hlsPlaylist = videoDetails.streamingPlaylists[0]
+          const resolutions = hlsPlaylist.files.map(f => f.resolution.id)
+          await checkResolutionsInMasterPlaylist({ server: servers[0], playlistUrl: hlsPlaylist.playlistUrl, resolutions })
+
+          const shaBody = await servers[0].streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: true })
+          expect(Object.keys(shaBody)).to.have.lengthOf(5)
         }
       }
     })
 
-    const { uuid } = await servers[0].videos.quickUpload({ name: 'quick' })
-
-    await waitJobs(servers)
-
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: uuid })
-
-      expect(videoDetails.files).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(1)
-
-      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
-
-      shouldBeDeleted = [
-        videoDetails.streamingPlaylists[0].files[0].fileUrl,
-        videoDetails.streamingPlaylists[0].playlistUrl,
-        videoDetails.streamingPlaylists[0].segmentsSha256Url
-      ]
-    }
-
-    await servers[0].config.updateExistingConfig({
-      newConfig: {
-        transcoding: {
-          enabled: true,
-          resolutions: ConfigCommand.getConfigResolutions(true),
-
-          webVideos: {
-            enabled: true
-          },
-          hls: {
-            enabled: true
-          }
-        }
+    it('Should have correctly deleted previous files', async function () {
+      for (const fileUrl of shouldBeDeleted) {
+        await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
 
-    await servers[0].videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
-    await waitJobs(servers)
+    it('Should not have updated published at attributes', async function () {
+      const video = await servers[0].videos.get({ id: videoUUID })
 
-    for (const server of servers) {
-      const videoDetails = await server.videos.get({ id: uuid })
+      expect(video.publishedAt).to.equal(publishedAt)
+    })
+  })
 
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
-      expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
+  describe('With split audio and video', function () {
 
-      if (enableObjectStorage) {
-        await checkFilesInObjectStorage(objectStorage, videoDetails)
+    async function runTest (options: {
+      audio: boolean
+      hls: boolean
+      webVideo: boolean
+      afterWebVideo: boolean
+      resolutions?: number[]
+    }) {
+      let resolutions = options.resolutions
 
-        const hlsPlaylist = videoDetails.streamingPlaylists[0]
-        const resolutions = hlsPlaylist.files.map(f => f.resolution.id)
-        await checkResolutionsInMasterPlaylist({ server: servers[0], playlistUrl: hlsPlaylist.playlistUrl, resolutions })
+      if (!resolutions) {
+        resolutions = [ 720, 240 ]
 
-        const shaBody = await servers[0].streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: true })
-        expect(Object.keys(shaBody)).to.have.lengthOf(5)
+        if (options.audio) resolutions.push(0)
       }
+
+      const objectStorageBaseUrl = enableObjectStorage
+        ? objectStorage?.getMockPlaylistBaseUrl()
+        : undefined
+
+      await servers[0].config.enableTranscoding({
+        resolutions,
+        hls: options.hls,
+        splitAudioAndVideo: false,
+        webVideo: options.webVideo
+      })
+
+      const { uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'hls splitted' })
+      await waitJobs(servers)
+      await completeCheckHlsPlaylist({
+        servers,
+        resolutions,
+        videoUUID,
+        hlsOnly: !options.webVideo,
+        splittedAudio: false,
+        objectStorageBaseUrl
+      })
+
+      await servers[0].config.enableTranscoding({
+        resolutions,
+        hls: true,
+        splitAudioAndVideo: true,
+        webVideo: options.afterWebVideo
+      })
+
+      await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'hls' })
+      await waitJobs(servers)
+
+      if (options.afterWebVideo) {
+        await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
+        await waitJobs(servers)
+      }
+
+      await completeCheckHlsPlaylist({
+        servers,
+        resolutions,
+        videoUUID,
+        hlsOnly: !options.afterWebVideo,
+        splittedAudio: true,
+        objectStorageBaseUrl
+      })
     }
-  })
 
-  it('Should have correctly deleted previous files', async function () {
-    for (const fileUrl of shouldBeDeleted) {
-      await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-    }
-  })
+    it('Should split audio and video from an existing Web & HLS video', async function () {
+      this.timeout(60000)
 
-  it('Should not have updated published at attributes', async function () {
-    const video = await servers[0].videos.get({ id: videoUUID })
+      await runTest({ webVideo: true, hls: true, afterWebVideo: true, audio: false })
+    })
 
-    expect(video.publishedAt).to.equal(publishedAt)
+    it('Should split audio and video from an existing HLS video without audio resolution', async function () {
+      this.timeout(60000)
+
+      await runTest({ webVideo: false, hls: true, afterWebVideo: true, audio: false })
+    })
+
+    it('Should split audio and video to a HLS only video from an existing HLS video without audio resolution', async function () {
+      this.timeout(60000)
+
+      await runTest({ webVideo: false, hls: true, afterWebVideo: false, audio: false })
+    })
+
+    it('Should split audio and video to a HLS only video from an existing HLS video with audio resolution', async function () {
+      this.timeout(60000)
+
+      await runTest({ webVideo: false, hls: true, afterWebVideo: false, audio: false })
+    })
+
+    it('Should split audio and video on HLS only video that only have 1 resolution', async function () {
+      this.timeout(60000)
+
+      await runTest({ webVideo: false, hls: true, afterWebVideo: false, audio: false, resolutions: [ 720 ] })
+    })
   })
 
   after(async function () {

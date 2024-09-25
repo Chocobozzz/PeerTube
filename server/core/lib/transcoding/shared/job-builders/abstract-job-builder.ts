@@ -127,8 +127,7 @@ export abstract class AbstractJobBuilder <P> {
     }
 
     await this.createJobs({
-      parent: mergeOrOptimizePayload,
-      children,
+      payloads: [ [ mergeOrOptimizePayload ], ...children ],
       user,
       video
     })
@@ -151,19 +150,24 @@ export abstract class AbstractJobBuilder <P> {
 
     const inputFPS = video.getMaxFPS()
 
-    const children = childrenResolutions.map(resolution => {
-      const fps = computeOutputFPS({ inputFPS, resolution, isOriginResolution: maxResolution === resolution, type: 'vod' })
+    const children = childrenResolutions
+      .map(resolution => {
+        const fps = computeOutputFPS({ inputFPS, resolution, isOriginResolution: maxResolution === resolution, type: 'vod' })
 
-      if (transcodingType === 'hls') {
-        return this.buildHLSJobPayload({ video, resolution, fps, isNewVideo, separatedAudio })
-      }
+        if (transcodingType === 'hls') {
+          // We'll generate audio resolution in a parent job
+          if (resolution === VideoResolution.H_NOVIDEO && separatedAudio) return undefined
 
-      if (transcodingType === 'webtorrent' || transcodingType === 'web-video') {
-        return this.buildWebVideoJobPayload({ video, resolution, fps, isNewVideo })
-      }
+          return this.buildHLSJobPayload({ video, resolution, fps, isNewVideo, separatedAudio })
+        }
 
-      throw new Error('Unknown transcoding type')
-    })
+        if (transcodingType === 'webtorrent' || transcodingType === 'web-video') {
+          return this.buildWebVideoJobPayload({ video, resolution, fps, isNewVideo })
+        }
+
+        throw new Error('Unknown transcoding type')
+      })
+      .filter(r => !!r)
 
     const fps = computeOutputFPS({ inputFPS, resolution: maxResolution, isOriginResolution: true, type: 'vod' })
 
@@ -171,9 +175,17 @@ export abstract class AbstractJobBuilder <P> {
       ? this.buildHLSJobPayload({ video, resolution: maxResolution, fps, isNewVideo, separatedAudio })
       : this.buildWebVideoJobPayload({ video, resolution: maxResolution, fps, isNewVideo })
 
-    // Process the last resolution after the other ones to prevent concurrency issue
-    // Because low resolutions use the biggest one as ffmpeg input
-    await this.createJobs({ video, parent, children: [ children ], user: null })
+    // Low resolutions use the biggest one as ffmpeg input so we need to process max resolution (with audio) independently
+    const payloads: [ [ P ], ...(P[][]) ] = [ [ parent ] ]
+
+    // Process audio first to not override the max resolution where the audio stream will be removed
+    if (transcodingType === 'hls' && separatedAudio) {
+      payloads.unshift([ this.buildHLSJobPayload({ video, resolution: VideoResolution.H_NOVIDEO, fps, isNewVideo, separatedAudio }) ])
+    }
+
+    if (children && children.length !== 0) payloads.push(children)
+
+    await this.createJobs({ video, payloads, user: null })
   }
 
   private async buildLowerResolutionJobPayloads (options: {
@@ -247,8 +259,7 @@ export abstract class AbstractJobBuilder <P> {
 
   protected abstract createJobs (options: {
     video: MVideoFullLight
-    parent: P
-    children: P[][]
+    payloads: [ [ P ], ...(P[][]) ] // Array of sequential jobs to create that depend on parent job
     user: MUserId | null
   }): Promise<void>
 

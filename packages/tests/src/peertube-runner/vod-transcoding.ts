@@ -243,6 +243,41 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         resolutions: [ 720, 480, 360, 240, 144, 0 ]
       })
     })
+
+    it('Should re-transcode a non splitted audio/video HLS only video', async function () {
+      this.timeout(240000)
+
+      const resolutions = [ 720, 240 ]
+
+      await servers[0].config.enableTranscoding({
+        hls: true,
+        webVideo: false,
+        resolutions,
+        splitAudioAndVideo: false
+      })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'manual hls only transcoding', fixture: 'video_short.mp4' })
+      await waitJobs(servers, { runnerJobs: true })
+
+      await servers[0].config.enableTranscoding({
+        hls: hlsEnabled,
+        webVideo: webVideoEnabled,
+        resolutions,
+        splitAudioAndVideo: splittedAudio
+      })
+
+      await servers[0].videos.runTranscoding({ transcodingType: 'hls', videoId: uuid })
+      await waitJobs(servers, { runnerJobs: true })
+
+      await completeCheckHlsPlaylist({
+        hlsOnly: true,
+        servers: [ servers[0] ],
+        videoUUID: uuid,
+        splittedAudio,
+        objectStorageBaseUrl: objectStorageBaseUrlHLS,
+        resolutions
+      })
+    })
   }
 
   before(async function () {
@@ -266,10 +301,12 @@ describe('Test VOD transcoding in peertube-runner program', function () {
   })
 
   function runSuites (objectStorage?: ObjectStorageCommand) {
+    const resolutions = 'max'
+
     describe('Web video only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding({ resolutions: 'max', webVideo: true, hls: false, with0p: true })
+        await servers[0].config.enableTranscoding({ resolutions, webVideo: true, hls: false, with0p: true })
       })
 
       runSpecificSuite({ webVideoEnabled: true, hlsEnabled: false, objectStorage })
@@ -278,7 +315,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('HLS videos only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding({ webVideo: false, hls: true, with0p: true })
+        await servers[0].config.enableTranscoding({ resolutions, webVideo: false, hls: true, with0p: true })
       })
 
       runSpecificSuite({ webVideoEnabled: false, hlsEnabled: true, objectStorage })
@@ -287,7 +324,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('HLS only with separated audio only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding({ webVideo: false, hls: true, splitAudioAndVideo: true, with0p: true })
+        await servers[0].config.enableTranscoding({ resolutions, webVideo: false, hls: true, splitAudioAndVideo: true, with0p: true })
       })
 
       runSpecificSuite({ webVideoEnabled: false, hlsEnabled: true, splittedAudio: true, objectStorage })
@@ -296,7 +333,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video & HLS with separated audio only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, splitAudioAndVideo: true, with0p: true })
+        await servers[0].config.enableTranscoding({ resolutions, hls: true, webVideo: true, splitAudioAndVideo: true, with0p: true })
       })
 
       runSpecificSuite({ webVideoEnabled: true, hlsEnabled: true, splittedAudio: true, objectStorage })
@@ -305,7 +342,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video & HLS enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true, splitAudioAndVideo: false })
+        await servers[0].config.enableTranscoding({ resolutions, hls: true, webVideo: true, with0p: true, splitAudioAndVideo: false })
       })
 
       runSpecificSuite({ webVideoEnabled: true, hlsEnabled: true, objectStorage })

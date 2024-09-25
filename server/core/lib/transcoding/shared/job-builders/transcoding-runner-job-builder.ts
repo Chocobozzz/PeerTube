@@ -31,15 +31,17 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
 
   protected async createJobs (options: {
     video: MVideo
-    parent: Payload
-    children: Payload[][] // Array of sequential jobs to create that depend on parent job
+    payloads: [ [ Payload ], ...(Payload[][]) ] // Array of sequential jobs to create that depend on parent job
     user: MUserId | null
   }): Promise<void> {
-    const { parent, children, user } = options
+    const { payloads, user } = options
+
+    const parent = payloads[0][0]
+    payloads.shift()
 
     const parentJob = await this.createJob({ payload: parent, user })
 
-    for (const parallelPayloads of children) {
+    for (const parallelPayloads of payloads) {
       let lastJob = parentJob
 
       for (const parallelPayload of parallelPayloads) {

@@ -22,14 +22,16 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder <Payload> {
 
   protected async createJobs (options: {
     video: MVideo
-    parent: Payload
-    children: Payload[][]
+    payloads: [ [ Payload ], ...(Payload[][]) ] // Array of sequential jobs to create that depend on parent job
     user: MUserId | null
   }): Promise<void> {
-    const { video, parent, children, user } = options
+    const { video, payloads, user } = options
 
-    const nextTranscodingSequentialJobs = await Bluebird.mapSeries(children, payloads => {
-      return Bluebird.mapSeries(payloads, payload => {
+    const parent = payloads[0][0]
+    payloads.shift()
+
+    const nextTranscodingSequentialJobs = await Bluebird.mapSeries(payloads, p => {
+      return Bluebird.mapSeries(p, payload => {
         return this.buildTranscodingJob({ payload, user })
       })
     })
@@ -42,9 +44,9 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder <Payload> {
       }
     }
 
-    const mergeOrOptimizeJob = await this.buildTranscodingJob({ payload: parent, user, hasChildren: !!children.length })
+    const parentJob = await this.buildTranscodingJob({ payload: parent, user, hasChildren: payloads.length !== 0 })
 
-    await JobQueue.Instance.createSequentialJobFlow(mergeOrOptimizeJob, transcodingJobBuilderJob)
+    await JobQueue.Instance.createSequentialJobFlow(parentJob, transcodingJobBuilderJob)
 
     // transcoding-job-builder job will increase pendingTranscode
     await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingTranscode')
