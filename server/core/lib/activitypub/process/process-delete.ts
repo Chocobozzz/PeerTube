@@ -27,6 +27,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   if (activity.actor === objectUrl) {
     // We need more attributes (all the account and channel)
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
+    if (!byActorFull) return
 
     if (isAccountActor(byActorFull.type)) {
       if (!byActorFull.Account) throw new Error(`Actor ${byActorFull.url} is a person but we cannot find the account in database.`)
