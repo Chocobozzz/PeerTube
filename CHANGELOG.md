@@ -1,5 +1,17 @@
 # Changelog
 
+## v6.3.1
+
+### IMPORTANT NOTES
+
+  * If you upgrade from PeerTube **< v6.3.0**, please follow v6.3.0 IMPORTANT NOTES
+
+### Bug fixes
+
+  * Fix player settings button on mobile
+  * Fix removed audio when splitting audio and video streams on existing videos when running HLS transcoding
+
+
 ## v6.3.0
 
 ### IMPORTANT NOTES
