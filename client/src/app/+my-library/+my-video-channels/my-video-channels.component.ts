@@ -13,7 +13,7 @@ import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avat
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { DeferLoadingDirective } from '../../shared/shared-main/angular/defer-loading.directive'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { NumberFormatterPipe } from '../../shared/shared-main/angular/number-formatter.pipe'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
@@ -29,7 +29,7 @@ import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/cha
     RouterLink,
     ChannelsSetupMessageComponent,
     AdvancedInputFilterComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     ActorAvatarComponent,
     EditButtonComponent,
@@ -41,6 +41,8 @@ import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/cha
 })
 export class MyVideoChannelsComponent {
   videoChannels: VideoChannel[] = []
+  hasMoreResults = true
+  isLoading = true
 
   videoChannelsChartData: ChartData[]
 
@@ -74,9 +76,7 @@ export class MyVideoChannelsComponent {
     this.search = search
 
     this.pagination.currentPage = 1
-    this.videoChannels = []
-
-    this.loadMoreVideoChannels()
+    this.onPageChange()
   }
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
@@ -108,17 +108,24 @@ export class MyVideoChannelsComponent {
       })
   }
 
+  onPageChange () {
+    this.loadMoreVideoChannels(true)
+  }
+
   onNearOfBottom () {
-    if (!hasMoreItems(this.pagination)) return
+    if (!hasMoreItems(this.pagination)) {
+      return
+    }
 
     this.pagination.currentPage += 1
 
     this.loadMoreVideoChannels()
   }
 
-  private loadMoreVideoChannels () {
-    if (this.pagesDone.has(this.pagination.currentPage)) return
+  private loadMoreVideoChannels (reset = false) {
+    if (!reset && this.pagesDone.has(this.pagination.currentPage)) return
     this.pagesDone.add(this.pagination.currentPage)
+    this.isLoading = true
 
     return this.authService.userInformationLoaded
       .pipe(
@@ -133,6 +140,9 @@ export class MyVideoChannelsComponent {
         switchMap(options => this.videoChannelService.listAccountVideoChannels(options))
       )
       .subscribe(res => {
+        this.isLoading = false
+        this.hasMoreResults = res.data.length === this.pagination.itemsPerPage
+        if (reset) this.videoChannels = []
         this.videoChannels = this.videoChannels.concat(res.data)
         this.pagination.totalItems = res.total
 

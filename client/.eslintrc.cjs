@@ -1,4 +1,4 @@
-{
+module.exports = {
   "root": true,
   "ignorePatterns": [
     "projects/**/*",
@@ -15,10 +15,11 @@
           "tsconfig.eslint.json"
         ],
         "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true,
-        "createDefaultProgram": false
+        "createDefaultProgram": false,
+        "tsconfigRootDir": __dirname,
       },
       "extends": [
-        "../.eslintrc.json",
+        "../.eslintrc.cjs",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],

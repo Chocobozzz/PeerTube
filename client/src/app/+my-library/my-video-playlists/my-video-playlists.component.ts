@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs'
 import { mergeMap } from 'rxjs/operators'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, Notifier } from '@app/core'
@@ -6,7 +5,7 @@ import { VideoPlaylistType } from '@peertube/peertube-models'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { RouterLink } from '@angular/router'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
@@ -25,7 +24,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
     ChannelsSetupMessageComponent,
     AdvancedInputFilterComponent,
     RouterLink,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     VideoPlaylistMiniatureComponent,
     DeleteButtonComponent,
@@ -34,14 +33,14 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
 })
 export class MyVideoPlaylistsComponent {
   videoPlaylists: VideoPlaylist[] = []
+  hasMoreResults = true
+  isLoading = true
 
   pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 5,
     totalItems: null
   }
-
-  onDataSubject = new Subject<any[]>()
 
   search: string
 
@@ -76,9 +75,15 @@ export class MyVideoPlaylistsComponent {
     return playlist.type.id === VideoPlaylistType.REGULAR
   }
 
+  onPageChange () {
+    this.loadVideoPlaylists(true)
+  }
+
   onNearOfBottom () {
     // Last page
-    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
+    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) {
+      return
+    }
 
     this.pagination.currentPage += 1
     this.loadVideoPlaylists()
@@ -90,6 +95,8 @@ export class MyVideoPlaylistsComponent {
   }
 
   private loadVideoPlaylists (reset = false) {
+    this.isLoading = true
+
     this.authService.userInformationLoaded
         .pipe(mergeMap(() => {
           const user = this.authService.getUser()
@@ -100,8 +107,9 @@ export class MyVideoPlaylistsComponent {
 
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
+          this.hasMoreResults = (this.pagination.itemsPerPage * this.pagination.currentPage) < this.pagination.totalItems
 
-          this.onDataSubject.next(res.data)
+          this.isLoading = false
         })
   }
 }

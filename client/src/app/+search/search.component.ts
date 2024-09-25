@@ -1,11 +1,11 @@
-import { forkJoin, Subject, Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
 import { validateHost } from '@app/shared/form-validators/host-validators'
-import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
+import { HTMLServerConfig, ResultList, SearchTargetType } from '@peertube/peertube-models'
 import { NumberFormatterPipe } from '../shared/shared-main/angular/number-formatter.pipe'
 import { VideoPlaylistMiniatureComponent } from '../shared/shared-video-playlist/video-playlist-miniature.component'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../shared/shared-video-miniature/video-miniature.component'
@@ -14,7 +14,7 @@ import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.
 import { SearchFiltersComponent } from './search-filters.component'
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
-import { InfiniteScrollerDirective } from '../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../shared/shared-main/angular/infinite-scroller.component'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
@@ -27,7 +27,7 @@ import { SearchService } from '@app/shared/shared-search/search.service'
   templateUrl: './search.component.html',
   standalone: true,
   imports: [
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgIf,
     NgbCollapse,
     SearchFiltersComponent,
@@ -50,6 +50,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     currentPage: 1,
     totalItems: null as number
   }
+  hasMoreResults = true
+  isSearching = false
   advancedSearch: AdvancedSearch = new AdvancedSearch()
   isSearchFilterCollapsed = true
   currentSearch: string
@@ -69,13 +71,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   userMiniature: User
 
-  onSearchDataSubject = new Subject<any>()
-
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
-
-  private hasMoreResults = true
-  private isSearching = false
 
   private lastSearchTarget: SearchTargetType
 
@@ -121,8 +118,6 @@ export class SearchComponent implements OnInit, OnDestroy {
           // Don't hide filters if we have some of them AND the user just came on the webpage, or we have an error
           this.isSearchFilterCollapsed = !this.error && (this.isInitialLoad === false || !this.advancedSearch.containsValues())
           this.isInitialLoad = false
-
-          this.search()
         },
 
         error: err => this.notifier.error(err.message)
@@ -173,9 +168,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
         this.lastSearchTarget = this.advancedSearch.searchTarget
 
-        this.hasMoreResults = this.results.length < this.pagination.totalItems
-
-        this.onSearchDataSubject.next(results)
+        this.hasMoreResults = this.calculateHasMoreResults(results)
       },
 
       error: err => {
@@ -196,6 +189,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.isSearching = false
       }
     })
+  }
+
+  onPageChange () {
+    this.results = []
+    this.search()
   }
 
   onNearOfBottom () {
@@ -271,10 +269,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private resetPagination () {
-    this.pagination.currentPage = 1
     this.pagination.totalItems = null
+    this.pagination.currentPage = 1
 
-    this.results = []
+    this.onPageChange()
   }
 
   private updateTitle () {
@@ -297,7 +295,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private getVideosObs () {
     const params = {
       search: this.currentSearch,
-      componentPagination: immutableAssign(this.pagination, { itemsPerPage: 10 }),
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.buildVideosPerPage() }),
       advancedSearch: this.advancedSearch
     }
 
@@ -358,6 +356,28 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return undefined
+  }
+
+  private calculateHasMoreResults (results: [ResultList<VideoChannel>, ResultList<VideoPlaylist>, ResultList<Video>]) {
+    const [ channels, playlists, videos ] = results
+
+    if ((this.pagination.currentPage * this.buildChannelsPerPage()) < channels.total) {
+      return true
+    }
+
+    if ((this.pagination.currentPage * this.buildPlaylistsPerPage()) < playlists.total) {
+      return true
+    }
+
+    if ((this.pagination.currentPage * this.buildVideosPerPage()) < videos.total) {
+      return true
+    }
+
+    return false
+  }
+
+  private buildVideosPerPage () {
+    return 10
   }
 
   private buildChannelsPerPage () {

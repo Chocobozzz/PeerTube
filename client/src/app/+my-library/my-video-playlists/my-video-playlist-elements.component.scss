@@ -56,8 +56,8 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.video:last-child {
-  border: 0;
+.video:not(:has(+ .video)) {
+  margin-bottom: 20px;
 }
 
 .videos.cdk-drop-list-dragging .video:not(.cdk-drag-placeholder) {

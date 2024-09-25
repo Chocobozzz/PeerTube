@@ -4,20 +4,21 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 import { ActorFollow } from '@peertube/peertube-models'
-import { Subject } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
   standalone: true,
-  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
+  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerComponent, NgFor, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {
   follows: ActorFollow[] = []
+  hasMoreResults = true
+  isLoading = true
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -25,7 +26,6 @@ export class MyFollowersComponent implements OnInit {
     totalItems: null
   }
 
-  onDataSubject = new Subject<any[]>()
   search: string
 
   inputFilters: AdvancedInputFilter[]
@@ -57,9 +57,15 @@ export class MyFollowersComponent implements OnInit {
     ]
   }
 
+  onPageChange () {
+    this.loadFollowers(false)
+  }
+
   onNearOfBottom () {
     // Last page
-    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
+    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) {
+      return
+    }
 
     this.pagination.currentPage += 1
     this.loadFollowers()
@@ -75,6 +81,8 @@ export class MyFollowersComponent implements OnInit {
   }
 
   private loadFollowers (more = true) {
+    this.isLoading = true
+
     this.userSubscriptionService.listFollowers({
       pagination: this.pagination,
       nameWithHost: this.getUsername(),
@@ -85,8 +93,9 @@ export class MyFollowersComponent implements OnInit {
           ? this.follows.concat(res.data)
           : res.data
         this.pagination.totalItems = res.total
+        this.hasMoreResults = (this.pagination.itemsPerPage * this.pagination.currentPage) < this.pagination.totalItems
 
-        this.onDataSubject.next(res.data)
+        this.isLoading = false
       },
 
       error: err => this.notifier.error(err.message)
