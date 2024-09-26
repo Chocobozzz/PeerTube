@@ -150,10 +150,11 @@
         </div>
 
         <div class="form-group">
-          <label i18n for="videoQuota">Video quota</label>
+          <label i18n id="videoQuotaLabel" for="videoQuota">Video quota</label>
 
           <my-select-custom-value
-            id="videoQuota"
+            labelId="videoQuotaLabel"
+            labelForId="videoQuota"
             [items]="videoQuotaOptions"
             formControlName="videoQuota"
             i18n-inputSuffix inputSuffix="bytes" inputType="number"
@@ -168,10 +169,11 @@
         </div>
 
         <div class="form-group">
-          <label i18n for="videoQuotaDaily">Daily video quota</label>
+          <label i18n id="videoQuotaDailyLabel" for="videoQuotaDaily">Daily video quota</label>
 
           <my-select-custom-value
-            id="videoQuotaDaily"
+            labelId="videoQuotaDailyLabel"
+            labelForId="videoQuotaDaily"
             [items]="videoQuotaDailyOptions"
             formControlName="videoQuotaDaily"
             i18n-inputSuffix inputSuffix="bytes" inputType="number"

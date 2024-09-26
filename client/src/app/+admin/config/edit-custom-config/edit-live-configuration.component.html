@@ -164,7 +164,7 @@
           </div>
 
           <div class="form-group" [ngClass]="getDisabledLiveLocalTranscodingClass()">
-            <label i18n for="liveTranscodingThreads">Live transcoding threads</label>
+            <label i18n id="liveTranscodingThreadsLabel" for="liveTranscodingThreads">Live transcoding threads</label>
 
             <span class="small muted ms-1">
               <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
@@ -177,7 +177,8 @@
             </span>
 
             <my-select-custom-value
-              id="liveTranscodingThreads"
+              labelId="liveTranscodingThreadsLabel"
+              labelForId="liveTranscodingThreads"
               [items]="transcodingThreadOptions"
               formControlName="threads"
               [clearable]="false"

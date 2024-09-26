@@ -25,10 +25,11 @@
       </ng-container>
 
       <div class="form-group" formGroupName="instance">
-        <label i18n for="instanceDefaultClientRoute">Landing page</label>
+        <label i18n id="instanceDefaultClientRouteLabel" for="instanceDefaultClientRoute">Landing page</label>
 
         <my-select-custom-value
-          id="instanceDefaultClientRoute"
+          labelId="instanceDefaultClientRouteLabel"
+          labelForId="instanceDefaultClientRoute"
           [items]="defaultLandingPageOptions"
           formControlName="defaultClientRoute"
           inputType="text"
@@ -219,10 +220,11 @@
 
       <ng-container formGroupName="user">
         <div class="form-group">
-          <label i18n for="userVideoQuota">Default video quota per user</label>
+          <label i18n id="userVideoQuotaLabel" for="userVideoQuota">Default video quota per user</label>
 
           <my-select-custom-value
-            id="userVideoQuota"
+            labelId="userVideoQuotaLabel"
+            labelForId="userVideoQuota"
             [items]="getVideoQuotaOptions()"
             formControlName="videoQuota"
             i18n-inputSuffix inputSuffix="bytes" inputType="number"
@@ -235,10 +237,11 @@
         </div>
 
         <div class="form-group">
-          <label i18n for="userVideoQuotaDaily">Default daily upload limit per user</label>
+          <label i18n id="userVideoQuotaDaily" for="userVideoQuotaDaily">Default daily upload limit per user</label>
 
           <my-select-custom-value
-            id="userVideoQuotaDaily"
+            labelId="userVideoQuotaDailyLabel"
+            labelForId="userVideoQuotaDaily"
             [items]="getVideoQuotaDailyOptions()"
             formControlName="videoQuotaDaily"
             i18n-inputSuffix inputSuffix="bytes" inputType="number"
@@ -552,12 +555,13 @@
               <ng-container ngProjectAs="extra">
 
                 <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
-                  <label i18n for="exportUsersMaxUserVideoQuota">Max user video quota allowed to generate the export</label>
+                  <label i18n id="exportUsersMaxUserVideoQuota" for="exportUsersMaxUserVideoQuota">Max user video quota allowed to generate the export</label>
 
                   <span i18n class="ms-2 small muted">If the user decides to include the video files in the archive</span>
 
                   <my-select-custom-value
-                    id="exportUsersMaxUserVideoQuota"
+                    labelId="exportUsersMaxUserVideoQuota"
+                    labelForId="exportUsersMaxUserVideoQuota"
                     [items]="exportMaxUserVideoQuotaOptions"
                     formControlName="maxUserVideoQuota"
                     i18n-inputSuffix inputSuffix="bytes" inputType="number"

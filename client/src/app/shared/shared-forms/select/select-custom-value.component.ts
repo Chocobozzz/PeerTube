@@ -19,11 +19,14 @@ import { SelectOptionsComponent } from './select-options.component'
   imports: [ SelectOptionsComponent, FormsModule, NgIf ]
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {
+  @Input({ required: true }) labelForId: string
+  @Input({ required: true }) labelId: string
+
   @Input() items: SelectOptionsItem[] = []
+
   @Input() clearable = false
   @Input() searchable = false
   @Input() groupBy: string
-  @Input() labelForId: string
   @Input() inputSuffix: string
   @Input() inputType = 'text'
 

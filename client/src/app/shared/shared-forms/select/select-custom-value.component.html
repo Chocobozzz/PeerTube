@@ -12,7 +12,7 @@
   ></my-select-options>
 
   <ng-container *ngIf="isCustomValue()">
-    <input [(ngModel)]="customValue" (ngModelChange)="onModelChange()" [type]="inputType" class="form-control" />
+    <input [attr.aria-labelledby]="labelId" [(ngModel)]="customValue" (ngModelChange)="onModelChange()" [type]="inputType" class="form-control" />
 
     <span *ngIf="inputSuffix" class="input-suffix">{{ inputSuffix }}</span>
   </ng-container>
