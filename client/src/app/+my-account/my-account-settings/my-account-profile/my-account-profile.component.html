@@ -1,6 +1,6 @@
 <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
-<form role="form" (ngSubmit)="updateMyProfile()" [formGroup]="form">
+<form (ngSubmit)="updateMyProfile()" [formGroup]="form">
 
   <div class="form-group">
     <label i18n for="username">Username</label>

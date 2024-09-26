@@ -1,7 +1,7 @@
 <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
 <div class="margin-content pt-4">
-  <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+  <form (ngSubmit)="formValidated()" [formGroup]="form">
 
     <div class="pt-two-cols"> <!-- channel grid -->
       <div class="title-col">

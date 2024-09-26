@@ -85,7 +85,7 @@
 
   <div class="content-col">
     <div class="row">
-      <form class="col" role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+      <form class="col" (ngSubmit)="formValidated()" [formGroup]="form">
         <div class="form-group" *ngIf="isCreation()">
           <label i18n for="username">Username</label>
           <input

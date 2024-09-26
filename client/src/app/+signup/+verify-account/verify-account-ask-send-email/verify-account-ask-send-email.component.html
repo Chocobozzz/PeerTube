@@ -1,7 +1,7 @@
 <div class="margin-content">
   <h1 i18n class="title-page">Request email for account verification</h1>
 
-  <form *ngIf="requiresEmailVerification; else emailVerificationNotRequired" role="form" (ngSubmit)="askSendVerifyEmail()" [formGroup]="form">
+  <form *ngIf="requiresEmailVerification; else emailVerificationNotRequired" (ngSubmit)="askSendVerifyEmail()" [formGroup]="form">
     <div class="form-group">
       <label i18n for="verify-email-email">Email</label>
 
