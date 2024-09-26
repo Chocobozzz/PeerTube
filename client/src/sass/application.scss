@@ -111,8 +111,9 @@ input[readonly] {
 
 input,
 textarea {
-  outline: none;
   color: pvar(--inputForegroundColor);
+
+  @include disable-outline;
 }
 
 button {

@@ -24,11 +24,6 @@ my-select-custom-value {
   @include responsive-width($form-base-input-width);
 }
 
-.danger-zone button {
-  @include danger-button;
-  @include disable-outline;
-}
-
 .dashboard {
   display: flex;
   flex-wrap: wrap;

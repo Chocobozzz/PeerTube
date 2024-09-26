@@ -32,6 +32,10 @@
   @include tertiary-button;
 }
 
+.danger-button {
+  @include danger-button;
+}
+
 .peertube-radio-container {
   @include peertube-radio-container;
 }

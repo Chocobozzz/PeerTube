@@ -25,7 +25,7 @@
       margin-bottom: 10px;
 
       &.pt-title-danger {
-        color: color.adjust($color: #c54130, $lightness: 10%);
+        color: pvar(--red);
       }
     }
   }

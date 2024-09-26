@@ -225,9 +225,9 @@
   <div class="content-col">
 
     <div class="danger-zone">
-      <div class="form-group">
+    <div class="form-group">
         <div class="mb-1 fw-bold" i18n>Send a link to reset the password by email to the user</div>
-        <button class="peertube-button" (click)="resetPassword()" i18n>Ask for new password</button>
+        <button class="peertube-button danger-button" (click)="resetPassword()" i18n>Ask for new password</button>
       </div>
 
       <div class="form-group">
@@ -237,7 +237,7 @@
 
       <div *ngIf="user.twoFactorEnabled" class="form-group">
         <div class="mb-1 fw-bold" i18n>This user has two factor authentication enabled</div>
-        <button class="peertube-button" (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
+        <button class="peertube-button danger-button" (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
       </div>
     </div>
 

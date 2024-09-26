@@ -191,8 +191,8 @@
 }
 
 @mixin grey-button {
-  background-color: pvar(--greyBackgroundColor);
   color: pvar(--greyForegroundColor);
+  background-color: pvar(--greyBackgroundColor);
 
   @include button-focus($grey-button-outline-color);
 
@@ -214,27 +214,24 @@
 }
 
 @mixin danger-button {
-  $color: color.adjust($color: #c54130, $lightness: 10%);
-  $text: #fff6f5;
+  background-color: pvar(--red);
+  color: pvar(--white);
 
-  background-color: $color;
-  color: $text;
-
-  @include button-focus(color.scale($color, $alpha: -95%));
+  @include button-focus(pvar(--red));
 
   &:hover,
   &:active,
-  &:focus,
-  &[disabled] {
-    background-color: color.adjust($color: $color, $lightness: 10%);
+  &:focus:not(:focus-visible) {
+    opacity: 0.8;
   }
 
   &[disabled] {
     cursor: default;
+    opacity: 0.7;
   }
 
   my-global-icon {
-    @include apply-svg-color($text);
+    @include apply-svg-color(pvar(--white));
   }
 }
 
