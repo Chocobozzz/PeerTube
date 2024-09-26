@@ -50,6 +50,7 @@ li {
   padding: 10px;
   transition: background-color 0.2s ease-in;
   flex-basis: 33%;
+  text-align: center;
 
   @include disable-default-a-behaviour;
 
@@ -57,15 +58,9 @@ li {
     background-color: rgba(0, 0, 0, 0.05);
   }
 
-  .link-title {
+  > h5 {
     font-weight: $font-semibold;
-    display: flex;
-    justify-content: center;
+    font-size: 1rem;
     margin-bottom: 5px;
-  }
-
-  .link-title,
-  div {
-    text-align: center;
   }
 }
