@@ -1,16 +1,16 @@
 <div class="sub-menu" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed, 'no-scroll': isModalOpened }">
   <ul *ngFor="let menuEntry of menuEntries; index as id">
 
-    <li *ngIf="menuEntry.routerLink && isDisplayed(menuEntry)">
-      <a
-        class="sub-menu-entry" [routerLink]="menuEntry.routerLink" routerLinkActive="active"
-        #routerLink (click)="onActiveLinkScrollToTop(routerLink)" ariaCurrentWhenActive="page"
-      >{{ menuEntry.label }}</a>
-    </li>
+    @if (isDisplayed(menuEntry)) {
 
-    <ng-container *ngIf="!menuEntry.routerLink && isDisplayed(menuEntry)">
-      <!-- On mobile, use a modal to display sub menu items -->
-      @if (isInSmallView) {
+      @if (menuEntry.routerLink) {
+        <li *ngIf="menuEntry.routerLink && isDisplayed(menuEntry)">
+          <a
+            class="sub-menu-entry" [routerLink]="menuEntry.routerLink" routerLinkActive="active"
+            #routerLink (click)="onActiveLinkScrollToTop(routerLink)" ariaCurrentWhenActive="page"
+          >{{ menuEntry.label }}</a>
+        </li>
+      } @else if (isInSmallView) { <!-- On mobile, use a modal to display sub menu items -->
         <li>
           <button class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }" (click)="openModal(id)">
             {{ menuEntry.label }}
@@ -20,10 +20,8 @@
         </li>
       } @else {
         <!-- On desktop, use a classic dropdown -->
-        <div ngbDropdown #dropdown="ngbDropdown" autoClose="true" container="body">
-          <li>
-            <button ngbDropdownToggle class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }">{{ menuEntry.label }}</button>
-          </li>
+        <li ngbDropdown #dropdown="ngbDropdown" autoClose="true" container="body">
+          <button ngbDropdownToggle class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }">{{ menuEntry.label }}</button>
 
           <ul ngbDropdownMenu>
             <li *ngFor="let menuChild of menuEntry.children">
@@ -39,9 +37,9 @@
               </a>
             </li>
           </ul>
-        </div>
+        </li>
       }
-    </ng-container>
+    }
   </ul>
 </div>
 
