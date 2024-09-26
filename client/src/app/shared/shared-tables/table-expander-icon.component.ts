@@ -5,7 +5,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 @Component({
   selector: 'my-table-expander-icon',
   template: `
-<button class="expander border-0 p-0" [ngbTooltip]="tooltip">
+<button type="button" class="expander border-0 p-0" [ngbTooltip]="tooltip" [ariaLabel]="tooltip">
   <i [ngClass]="expanded ? 'chevron-down' : 'chevron-right'"></i>
 </button>`,
   standalone: true,
