@@ -12,22 +12,30 @@
   color: pvar(--green);
 }
 
+@mixin underline-orange {
+  text-decoration: underline !important;
+  text-decoration-color: pvar(--mainColor) !important;
+  text-underline-offset: 0.25em !important;
+  text-decoration-thickness: 0.15em !important;
+}
+
 .link-orange {
   color: pvar(--mainForegroundColor);
   font-weight: $font-semibold;
-  border-bottom: 0.18em solid pvar(--mainColor);
-  display: inline-block;
   line-height: 1.1;
+
+  @include underline-orange;
 
   &:hover {
     color: pvar(--mainForegroundColor);
     opacity: 0.8;
+
+    @include underline-orange;
   }
 }
 
 .underline-orange {
-  display: inline-block;
-  border-bottom: 0.19em solid pvar(--mainColor);
+  @include underline-orange;
 }
 
 // ---------------------------------------------------------------------------

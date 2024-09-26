@@ -26,11 +26,12 @@ input[type=email] {
 
 .wrapper,
 my-alert {
-  display: block;
   max-width: 1200px;
 }
 
 my-alert {
+  display: block;
+
   @include margin(0, auto, 2rem);
 }
 

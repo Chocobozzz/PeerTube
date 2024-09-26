@@ -7,11 +7,11 @@
   &:hover,
   &:focus,
   &:active {
-    text-decoration: none !important;
+    text-decoration: none;
   }
 
   &:focus:not(:focus-visible) {
-    outline: none !important;
+    outline: none;
   }
 }
 
