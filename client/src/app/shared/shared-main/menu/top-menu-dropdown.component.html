@@ -1,10 +1,8 @@
-<div class="sub-menu" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed, 'no-scroll': isModalOpened }">
-  <ul *ngFor="let menuEntry of menuEntries; index as id">
-
+<ul class="sub-menu" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed, 'no-scroll': isModalOpened }">
+  <ng-container *ngFor="let menuEntry of menuEntries; index as id">
     @if (isDisplayed(menuEntry)) {
-
       @if (menuEntry.routerLink) {
-        <li *ngIf="menuEntry.routerLink && isDisplayed(menuEntry)">
+        <li>
           <a
             class="sub-menu-entry" [routerLink]="menuEntry.routerLink" routerLinkActive="active"
             #routerLink (click)="onActiveLinkScrollToTop(routerLink)" ariaCurrentWhenActive="page"
@@ -40,8 +38,8 @@
         </li>
       }
     }
-  </ul>
-</div>
+  </ng-container>
+</ul>
 
 <ng-template #modal let-close="close" let-dismiss="dismiss">
   <div class="modal-body">

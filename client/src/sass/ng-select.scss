@@ -14,7 +14,7 @@ $ng-select-bg: pvar(--mainBackgroundColor);
 $ng-select-selected: color.adjust($main-color, $lightness: 40%);
 // $ng-select-selected-text: $ng-select-primary-text !default;
 
-$ng-select-marked: pvar(--mainColorLightest);
+$ng-select-marked: pvar(--mainColorVeryLight);
 // $ng-select-marked-text: $ng-select-primary-text !default;
 
 $ng-select-box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
