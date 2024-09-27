@@ -101,24 +101,6 @@ async function up (utils: {
       defaultValue: 0
     }, { transaction })
   }
-
-  {
-    // 5. Create the index - check if we are inside a transaction
-    const isInTransaction = !!transaction;
-    if (isInTransaction) {
-      // Create the index without 'concurrently' if in a transaction
-      await utils.queryInterface.addIndex('videoComment', ['videoId'], {
-        name: 'comments_video_id_idx',
-        transaction
-      });
-    } else {
-      // Create the index concurrently if no transaction
-      await utils.queryInterface.addIndex('videoComment', ['videoId'], {
-        concurrently: true,
-        name: 'comments_video_id_idx'
-      });
-    }
-  }
 }
 
 function down (options) {
