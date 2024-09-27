@@ -172,6 +172,15 @@ code {
     }
   }
 
+  .skip-to-content-sub-menu {
+    display: block;
+    z-index: z(modal);
+    padding: 1rem;
+    background: pvar(--mainBackgroundColor);
+    text-align: center;
+    text-decoration: underline;
+  }
+
   // Use an appropriate offset top when sub-menu fixed
   .sub-menu-offset-content {
     padding-top: $sub-menu-height + $sub-menu-margin-bottom;
