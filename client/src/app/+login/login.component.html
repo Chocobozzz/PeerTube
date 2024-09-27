@@ -54,7 +54,7 @@
               <div>
                 <label i18n for="username">Username or email address</label>
                 <input
-                  type="text" id="username" i18n-placeholder placeholder="Example: john@example.com" required tabindex="1"
+                  type="text" id="username" i18n-placeholder placeholder="Example: john@example.com" required
                   formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" myAutofocus
                   autocomplete="username"
                 >
@@ -70,7 +70,7 @@
 
               <my-input-text
                 formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
-                [formError]="formErrors['password']" autocomplete="current-password" [tabindex]="2"
+                [formError]="formErrors['password']" autocomplete="current-password"
               ></my-input-text>
             </div>
           </ng-container>
