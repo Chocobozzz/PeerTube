@@ -1,36 +1,66 @@
+<h1>
+  <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Logs</ng-container>
+</h1>
+
 <div class="header">
-  <div class="peertube-select-container">
-    <select [(ngModel)]="logType" (ngModelChange)="refresh()" class="form-control">
-      <option *ngFor="let logTypeChoice of logTypeChoices" [value]="logTypeChoice.id">{{ logTypeChoice.label }}</option>
-    </select>
+
+  <div>
+    <label i18n for="log-type">Log type</label>
+
+    <div class="peertube-select-container">
+      <select id="log-type" [(ngModel)]="logType" (ngModelChange)="refresh()" class="form-control">
+        <option *ngFor="let logTypeChoice of logTypeChoices" [value]="logTypeChoice.id">{{ logTypeChoice.label }}</option>
+      </select>
+    </div>
   </div>
 
-  <ng-select
-    [(ngModel)]="startDate"
-    (ngModelChange)="refresh()"
-    [clearable]="false"
-    [searchable]="false"
-  >
-    <ng-option *ngFor="let time of timeChoices" [value]="time.id">
-      {{ time.label }} ({{ time.id | date: time.dateFormat }} - <span i18n>now</span>)
-    </ng-option>
-  </ng-select>
+  @if (!isAuditLog()) {
+    <div>
+      <label i18n for="log-start-date">Start date</label>
 
-  <ng-select
-    [(ngModel)]="level"
-    (ngModelChange)="refresh()"
-    [clearable]="false"
-    [searchable]="false"
-    *ngIf="!isAuditLog()"
-  >
-    <ng-option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">
-      <span class="level-choice" [ngClass]="levelChoice.id">&#11044;</span> {{ levelChoice.label }}
-    </ng-option>
-  </ng-select>
+      <ng-select
+        [(ngModel)]="startDate"
+        (ngModelChange)="refresh()"
+        [clearable]="false"
+        [searchable]="false"
+        labelForId="log-start-date"
+      >
+        <ng-option *ngFor="let time of timeChoices" [value]="time.id">
+          {{ time.label }} ({{ time.id | date: time.dateFormat }} - <span i18n>now</span>)
+        </ng-option>
+      </ng-select>
+    </div>
 
-  <my-select-tags *ngIf="!isAuditLog()" i18n-placeholder placeholder="Filter logs by tags" [(ngModel)]="tagsOneOf" (ngModelChange)="refresh()"></my-select-tags>
+    <div>
+      <label i18n for="log-level">Log level</label>
 
-  <my-button i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
+      <ng-select
+        [(ngModel)]="level"
+        (ngModelChange)="refresh()"
+        [clearable]="false"
+        [searchable]="false"
+        labelForId="log-level"
+      >
+        <ng-option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">
+          <span class="level-choice me-1" [ngClass]="levelChoice.id">&#11044;</span> {{ levelChoice.label }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <div>
+      <label i18n for="log-tags">Filter logs by tags</label>
+
+      <my-select-tags
+        *ngIf="!isAuditLog()"
+        labelForId="log-tags"
+        i18n-placeholder placeholder="Example: ffmpeg, api"
+        [(ngModel)]="tagsOneOf" (ngModelChange)="refresh()"
+      ></my-select-tags>
+    </div>
+  }
+
+  <my-button class="mt-auto" i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
 </div>
 
 <div class="logs">

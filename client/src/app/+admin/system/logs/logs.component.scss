@@ -6,7 +6,7 @@
   font-size: 13px;
   max-height: 500px;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.03);
+  background: rgb(250, 250, 250);
   padding: 20px;
 
   > div {
@@ -33,11 +33,11 @@
   }
 
   .warn {
-    color: pvar(--mainColor);
+    color: #C74801;
   }
 
   .error {
-    color: pvar(--red);
+    color: #DC262B;
   }
 
   pre {
@@ -83,7 +83,7 @@
   }
 
   &.error {
-    color: rgb(250, 5, 5);
+    color: #DC262B;
   }
 }
 

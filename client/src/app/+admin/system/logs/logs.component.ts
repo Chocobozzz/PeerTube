@@ -2,6 +2,7 @@ import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { LocalStorageService, Notifier } from '@app/core'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgSelectModule } from '@ng-select/ng-select'
 import { ServerLogLevel } from '@peertube/peertube-models'
 import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
@@ -23,7 +24,8 @@ import { LogsService } from './logs.service'
     SelectTagsComponent,
     ButtonComponent,
     DatePipe,
-    CopyButtonComponent
+    CopyButtonComponent,
+    GlobalIconComponent
   ]
 })
 export class LogsComponent implements OnInit {

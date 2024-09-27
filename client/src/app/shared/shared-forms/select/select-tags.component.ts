@@ -17,6 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select'
   imports: [ NgSelectModule, FormsModule ]
 })
 export class SelectTagsComponent implements ControlValueAccessor {
+  @Input({ required: true }) labelForId: string
   @Input() availableItems: string[] = []
   @Input() selectedItems: string[] = []
   @Input() placeholder = $localize`Enter a new tag`
