@@ -70,6 +70,10 @@ export class VideoThumbnailComponent {
     return (currentTime / this.video.duration) * 100
   }
 
+  getDurationOverlayLabel () {
+    return $localize`Video duration is ${this.video.durationLabel}`
+  }
+
   getVideoRouterLink () {
     if (this.videoRouterLink) return this.videoRouterLink
 

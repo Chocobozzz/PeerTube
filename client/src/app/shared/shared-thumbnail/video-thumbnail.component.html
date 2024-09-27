@@ -7,18 +7,18 @@
 </a>
 
 <ng-template #aContent>
-  <img alt="" [attr.aria-label]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
+  <img alt="" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 
   <div *ngIf="displayWatchLaterPlaylist" class="actions-overlay">
     <button
       class="watch-icon-overlay button-unstyle"
       placement="left" [ngbTooltip]="getWatchIconText()" container="body" #watchLaterTooltip="ngbTooltip"
-      (click)="onWatchLaterClick($event)"
+      (click)="onWatchLaterClick($event)" [attr.aria-label]="inWatchLaterPlaylist ? removeFromWatchLaterText : addToWatchLaterText"
     >
       @if (inWatchLaterPlaylist) {
-        <my-global-icon iconName="tick" [attr.aria-label]="inWatchLaterPlaylist"></my-global-icon>
+        <my-global-icon iconName="tick"></my-global-icon>
       } @else {
-        <my-global-icon iconName="clock" [attr.aria-label]="addToWatchLaterText"></my-global-icon>
+        <my-global-icon iconName="clock"></my-global-icon>
       }
     </button>
   </div>
@@ -26,17 +26,22 @@
   <div class="label-overlay warning"><ng-content select="label-warning"></ng-content></div>
   <div class="label-overlay danger"><ng-content select="label-danger"></ng-content></div>
 
-  <div class="duration-overlay" *ngIf="!video.isLive">{{ video.durationLabel }}</div>
-  <div  class="live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }" *ngIf="video.isLive">
-    <ng-container i18n *ngIf="!isLiveEnded()">LIVE</ng-container>
-    <ng-container i18n *ngIf="isLiveEnded()">LIVE ENDED</ng-container>
-  </div>
+  @if (video.isLive) {
+    <div  class="live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }">
+      <ng-container i18n *ngIf="!isLiveEnded()">LIVE</ng-container>
+      <ng-container i18n *ngIf="isLiveEnded()">LIVE ENDED</ng-container>
+    </div>
+  } @else {
+    <div class="duration-overlay" [ariaLabel]="getDurationOverlayLabel()">{{ video.durationLabel }}</div>
+  }
 
   <div class="play-overlay">
     <div class="icon"></div>
   </div>
 
   <div class="progress-bar" *ngIf="!video.isLive && video.userHistory?.currentTime">
-    <div [ngStyle]="{ 'width.%': getProgressPercent() }"></div>
+    <div [ngStyle]="{ 'width.%': getProgressPercent() }">
+      <span class="visually-hidden" i18n>You watched {{ getProgressPercent() }}% of this video</span>
+    </div>
   </div>
 </ng-template>
