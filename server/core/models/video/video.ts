@@ -1151,6 +1151,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     isLive?: boolean
     isLocal?: boolean
     include?: VideoIncludeType
+    includeTags?: boolean
 
     hasFiles?: boolean // default false
 
@@ -1215,6 +1216,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'privacyOneOf',
         'isLocal',
         'include',
+        'includeTags',
         'displayOnlyForFollower',
         'hasFiles',
         'accountId',

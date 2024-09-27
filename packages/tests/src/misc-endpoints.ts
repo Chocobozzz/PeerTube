@@ -210,9 +210,16 @@ describe('Test misc endpoints', function () {
         token: user3Token
       })
 
-      await server.videos.upload({ attributes: { name: 'video 1', nsfw: false }, videoChannelId: channel1Id })
+      const { id: video1Id } = await server.videos.upload({ attributes: { name: 'video 1', nsfw: false }, videoChannelId: channel1Id })
       await server.videos.upload({ attributes: { name: 'video 2', nsfw: false }, videoChannelId: channel2Id })
       await server.videos.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE }, videoChannelId: channel3Id })
+
+      await server.videos.update({
+        id: video1Id,
+        attributes: {
+          tags: [ 'fish', 'chips' ]
+        }
+      })
 
       const res = await makeGetRequest({
         url: server.url,
@@ -226,6 +233,18 @@ describe('Test misc endpoints', function () {
       expect(res.text).to.contain('<video:title>video 1</video:title>')
       expect(res.text).to.contain('<video:title>video 2</video:title>')
       expect(res.text).to.not.contain('<video:title>video 3</video:title>')
+
+      expect(res.text).to.match(/<video:thumbnail_loc>.*\.jpg<\/video:thumbnail_loc>/)
+      expect(res.text).to.match(/<video:content_loc>.*\.webm<\/video:content_loc>/)
+      expect(res.text).to.match(/<video:player_loc>.*\/videos\/embed\/.*<\/video:player_loc>/)
+      expect(res.text).to.match(/<video:duration>.*<\/video:duration>/)
+      expect(res.text).to.match(/<video:rating>0<\/video:rating>/)
+      expect(res.text).to.match(/<video:view_count>0<\/video:view_count>/)
+      expect(res.text).to.match(/<video:publication_date>.*<\/video:publication_date>/)
+      expect(res.text).to.match(/<video:tag>fish<\/video:tag>/)
+      expect(res.text).to.match(/<video:tag>chips<\/video:tag>/)
+      expect(res.text).to.match(/<video:uploader.*>channel 1<\/video:uploader>/)
+      expect(res.text).to.match(/<video:live>NO<\/video:live>/)
 
       expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel1/videos</loc></url>')
       expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel2/videos</loc></url>')
