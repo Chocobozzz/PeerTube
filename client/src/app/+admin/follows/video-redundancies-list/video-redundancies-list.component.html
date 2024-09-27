@@ -98,7 +98,7 @@
     </div>
 
     <div class="chart-block" *ngFor="let r of redundanciesGraphsData">
-      <p-chart type="pie" [data]="r.graphData" [options]="r.options" width="300px" height="300px"></p-chart>
+      <p-chart [ariaLabel]="r.ariaLabel" type="pie" [data]="r.graphData" [options]="r.options" width="300px" height="300px"></p-chart>
     </div>
 
   </div>

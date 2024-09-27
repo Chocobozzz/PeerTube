@@ -1,21 +1,21 @@
-import { ChartData, ChartOptions, TooltipItem } from 'chart.js'
-import { SortMeta, SharedModule } from 'primeng/api'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { VideoRedundanciesTarget, VideoRedundancy, VideosRedundancyStats } from '@peertube/peertube-models'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { ChartModule } from 'primeng/chart'
-import { VideoRedundancyInformationComponent } from './video-redundancy-information.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
-import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf, NgFor } from '@angular/common'
-import { TableModule } from 'primeng/table'
 import { FormsModule } from '@angular/forms'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { VideoRedundanciesTarget, VideoRedundancy, VideosRedundancyStats } from '@peertube/peertube-models'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { ChartData, ChartOptions, TooltipItem } from 'chart.js'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { ChartModule } from 'primeng/chart'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { VideoRedundancyInformationComponent } from './video-redundancy-information.component'
 
 @Component({
   selector: 'my-video-redundancies-list',
@@ -48,7 +48,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   displayType: VideoRedundanciesTarget = 'my-videos'
 
-  redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: ChartData, options: ChartOptions }[] = []
+  redundanciesGraphsData: { stats: VideosRedundancyStats, graphData: ChartData, options: ChartOptions, ariaLabel: string }[] = []
 
   noRedundancies = false
 
@@ -133,6 +133,8 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
     this.redundanciesGraphsData.push({
       stats,
+      ariaLabel: $localize`Redundancy strategy "${stats.strategy}". ` + labels.join('. '),
+
       graphData: {
         labels,
         datasets: [
@@ -149,6 +151,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
           }
         ]
       },
+
       options: {
         plugins: {
           title: {
