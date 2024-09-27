@@ -77,6 +77,7 @@ export class MyVideoChannelsComponent {
 
     this.pagination.currentPage = 1
     this.videoChannels = []
+    this.pagesDone.clear()
 
     this.loadMoreVideoChannels()
   }
