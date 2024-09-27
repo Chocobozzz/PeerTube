@@ -37,8 +37,8 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 
 1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
 
-```
-# apt-get install curl sudo unzip vim
+```sh
+sudo apt-get install curl sudo unzip vim
 ```
 
 2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access. You can see a guide for how to do this in Debian/Ubuntu [here](https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-20-04).
@@ -52,7 +52,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 
 On Ubuntu >= focal (20.04 LTS) or Debian >= Bullseye:
 
-```
+```sh
 sudo apt update
 sudo apt install python3-dev python3-pip python-is-python3
 python --version # Should be >= 3.x
@@ -60,7 +60,7 @@ python --version # Should be >= 3.x
 
 6. Install common dependencies:
 
-```
+```sh
 sudo apt update
 sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
 ffmpeg -version # Should be >= 4.1
@@ -70,7 +70,7 @@ redis-server --version # Should be >= 6.x
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
 
-```
+```sh
 sudo systemctl start redis postgresql
 ```
 
@@ -78,13 +78,13 @@ sudo systemctl start redis postgresql
 
 1. Run:
 
-```
+```sh
 sudo pacman -S nodejs-lts-fermium yarn ffmpeg postgresql openssl redis git wget unzip python python-pip base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
 
-```
+```sh
 sudo systemctl start redis postgresql
 ```
 
@@ -103,7 +103,7 @@ sudo systemctl start redis postgresql
 
 4. Install Packages:
 
-```
+```sh
 sudo yum update
 sudo yum install epel-release centos-release-scl
 sudo yum update
@@ -112,25 +112,25 @@ sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl g
 
 5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-7.
 
-```
+```sh
 sudo scl enable devtoolset-7 bash
 ```
 
 Later when you invoke any node command, please prefix them with `CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++`, such as with:
 
-```
+```sh
 sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
 
 6. Initialize the PostgreSQL database:
 
-```
+```sh
 sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
 
-```
+```sh
 sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
@@ -145,7 +145,7 @@ sudo systemctl enable --now postgresql
 
 3. Install or compile ffmpeg:
 
-```
+```sh
 sudo dnf install epel-release dnf-utils
 sudo yum-config-manager --set-enabled powertools
 sudo yum-config-manager --add-repo=https://negativo17.org/repos/epel-multimedia.repo
@@ -154,7 +154,7 @@ sudo dnf install ffmpeg
 
 4. Install packages:
 
-```
+```sh
 sudo dnf update
 sudo dnf install epel-release
 sudo dnf update
@@ -163,19 +163,19 @@ sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl g
 
 5. You'll need a symlink for python3 to python for youtube-dl to work
 
-```
+```sh
 sudo ln -s /usr/bin/python3 /usr/bin/python
 ```
 
 6. Initialize the PostgreSQL database:
 
-```
+```sh
 sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
 
-```
+```sh
 sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
@@ -183,22 +183,22 @@ sudo systemctl enable --now postgresql
 ## Rocky Linux 8.4
 
 1. Pull the latest updates:
-```
+```sh
 sudo dnf update -y
 ```
 
 2. Install NodeJS 18.x:
-```
+```sh
 sudo dnf module install -y nodejs:18
 ```
 
 3. Install yarn:
-```
+```sh
 sudo npm install --global yarn
 ```
 
 4. Install or compile ffmpeg (if you want to compile... enjoy):
-```
+```sh
 sudo dnf install -y epel-release
 sudo dnf --enablerepo=powertools install -y SDL2 SDL2-devel
 sudo dnf install -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
@@ -207,7 +207,7 @@ sudo dnf update -y
 ```
 
 5. Install PostgreSQL and Python3 and other stuff:
-```
+```sh
 sudo dnf install -y nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git python3 python3-pip
 sudo ln -s /usr/bin/python3 /usr/bin/python
 sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
@@ -216,7 +216,7 @@ sudo systemctl enable --now postgresql
 ```
 
 6. Configure the peertube user:
-```
+```sh
 sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
 ```
 
@@ -230,13 +230,13 @@ sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
 
 1. Upgrade your packages:
 
-```
+```sh
 dnf upgrade
 ```
 
 2. Add a user with sudoers group access:
 
-```
+```sh
 useradd my-peertube-user
 passwd my-peertube-user
 usermod my-peertube-user -a -G wheel	# Add my-peertube-user to sudoers
@@ -254,14 +254,14 @@ su my-peertube-user
 
 6. Enable [RPM Fusion](https://rpmfusion.org) for Fedora (available for x86, x86_64, armhfp)
 
-```
+```sh
 sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 ```
 This is necessary because `ffmpeg` is not in the Fedora repos.
 
 7. Run:
 
-```
+```sh
 sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
@@ -270,7 +270,7 @@ redis-server --version # Should be >= 6.x
 
 8. Configure nginx
 
-```
+```sh
 sudo mkdir /etc/nginx/sites-available
 sudo mkdir /etc/nginx/sites-enabled
 sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
@@ -281,7 +281,7 @@ sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
 _from [PostgreSQL documentation](https://www.postgresql.org/download/linux/redhat/):_
 > Due to policies for Red Hat family distributions, the PostgreSQL installation will not be enabled for automatic start or have the database initialized automatically.
 
-```
+```sh
 # PostgreSQL
 sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 sudo systemctl enable postgresql.service
@@ -299,20 +299,20 @@ sudo systemctl start redis.service
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
 -  Ports used by peertube dev setup:
-```
+```sh
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
 sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
 ```
 - Optional
 
-```
+```sh
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
 ```
 
 - Reload firewall
 
-```
+```sh
 sudo firewall-cmd --reload
 ```
 
@@ -320,7 +320,7 @@ sudo firewall-cmd --reload
 
 This is necessary if you are running dev setup, otherwise you will have errors with `nodemon`
 
-```
+```sh
 echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 ```
 
@@ -330,7 +330,7 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 
 1. Register system as root user to Red Hat Subscription Management (create a free Red Hat account if you don't have one yet).
 
-```
+```sh
 # subscription-manager register --username <username> --password <password> --auto-attach
 # dnf upgrade
 # reboot
@@ -338,20 +338,20 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 
 2. Install Node.JS
 
-```
+```sh
 sudo dnf module install nodejs:18
 ```
 
 3. Install Yarn
 
-```
+```sh
 curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
 sudo dnf install yarn
 ```
 
 4. Install FFmpeg
 
-```
+```sh
 sudo subscription-manager repos --enable "codeready-builder-for-rhel-8-$(arch)-rpms"
 sudo dnf install --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
@@ -361,25 +361,25 @@ sudo dnf install ffmpeg
 
 5. Run:
 
-```
+```sh
 sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git
 ```
 
 6. You'll need a symlink for python3 to python for youtube-dl to work
 
-```
+```sh
 sudo alternatives --set python3 /usr/bin/python
 ```
 
 7. Initialize the PostgreSQL database:
 
-```
+```sh
 sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 ```
 
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
 
-```
+```sh
 sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
@@ -388,7 +388,7 @@ If you are running the production guide, you also need to slightly pre-configure
 
 8. Configure nginx
 
-```
+```sh
 sudo mkdir /etc/nginx/sites-available
 sudo mkdir /etc/nginx/sites-enabled
 sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
@@ -399,7 +399,7 @@ sudo systemctl enable --now nginx
 
 To add the 'peertube' user, you first have to create the 'www' folder and once the 'peertube' user is added, you have to set the access permissions.
 
-```
+```sh
 sudo mkdir /var/www
 
 sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
@@ -413,20 +413,20 @@ sudo chmod 755 /var/www/peertube/
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
 -  Ports used by peertube dev setup:
-```
+```sh
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
 sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
 ```
 - Optional
 
-```
+```sh
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
 ```
 
 - Reload firewall
 
-```
+```sh
 sudo firewall-cmd --reload
 ```
 
@@ -434,7 +434,7 @@ sudo firewall-cmd --reload
 
 This is necessary if you are running dev setup, otherwise you will have errors with `nodemon`
 
-```
+```sh
 echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 ```
 
@@ -447,7 +447,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 
 1. bootstrap pkg, initialize db and install peertube's dependencies, always as root (sudo not yet installed):
 
-```
+```sh
 pkg
 pkg update
 pkg install -y sudo bash wget git python nginx pkgconf postgresql13-server postgresql13-contrib redis openssl node npm yarn ffmpeg unzip
@@ -455,8 +455,8 @@ pkg install -y sudo bash wget git python nginx pkgconf postgresql13-server postg
 
 2. Allow users in the wheel group (hope you don't forgot to add your user on wheel group!) to use sudo.
 
-```
-# visudo
+```sh
+visudo
 ```
 
 Uncomment the line 90
@@ -467,7 +467,7 @@ Uncomment the line 90
 
 3. Enable nginx, redis, postgresql services and initialize database.
 
-```
+```sh
 sysrc postgresql_enable="YES"
 sysrc redis_enable="YES"
 sysrc nginx_enable="YES"
@@ -475,7 +475,7 @@ sysrc nginx_enable="YES"
 
 Initialize database and start services
 
-```
+```sh
 service postgresql initdb
 service postgresql start
 service redis start
@@ -536,7 +536,7 @@ www-servers/nginx
 
 2. If you are on a "stable" Gentoo you need to accept the testing keyword ~amd64 yarn:
 
-```
+```sh
 mkdir -p /etc/portage/package.keywords
 cat << EOF >> /etc/portage/package.keywords/peertube
 # required by yarn (argument) for PeerTube
@@ -546,19 +546,19 @@ EOF
 
 3. Compile the peertube set:
 
-```
+```sh
 emerge -a @peertube
 ```
 
 4. Initialize the PostgreSQL database if you just merged it:
 
-```
+```sh
 emerge --config postgresql
 ```
 
 5. (For OpenRC) Enable and then start the services (replace with the correct PostgreSQL slot):
 
-```
+```sh
 rc-update add redis
 rc-update add postgresql-11
 rc-service redis start
@@ -567,7 +567,7 @@ rc-service postgresql-11 start
 
 6. Create Python version symlink for youtube-dl:
 
-```
+```sh
 emerge -1 python-exec
 ```
 
@@ -575,19 +575,19 @@ emerge -1 python-exec
 
 1. Install Packages:
 
-```
+```sh
 pkg_add sudo bash wget git python nginx pkgconf postgresql-server postgresql-contrib redis openssl
 ```
 
 2. Install yarn:
 
-```
+```sh
 npm install --global yarn
 ```
 
 3. Allow users in the wheel group to use sudo
 
-```
+```sh
 visudo
 ```
 Uncomment line #43:
@@ -598,7 +598,7 @@ Uncomment line #43:
 
 4. Enable services:
 
-```
+```sh
 rcctl enable postgresql redis nginx
 ```
 
