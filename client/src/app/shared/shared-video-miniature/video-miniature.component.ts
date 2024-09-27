@@ -39,7 +39,8 @@ export type MiniatureDisplayOptions = {
   nsfw?: boolean
 
   by?: boolean
-  forceChannelInBy?: boolean
+  forceChannelInBy?: boolean,
+  commentCount?: boolean
 }
 @Component({
   selector: 'my-video-miniature',
