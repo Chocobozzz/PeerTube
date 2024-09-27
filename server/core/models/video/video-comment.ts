@@ -13,6 +13,9 @@ import { getServerActor } from '@server/models/application/application.js'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { Op, Order, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
   BelongsTo, Column,
   CreatedAt,
@@ -221,6 +224,40 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     onDelete: 'CASCADE'
   })
   CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
+
+  @AfterCreate
+  static async incrementCommentCount(instance: VideoCommentModel, options: any) {
+    if (instance.heldForReview) return // Don't count held comments
+
+    await VideoModel.increment('commentCount', {
+      by: 1,
+      where: { id: instance.videoId },
+      transaction: options.transaction
+    })
+  }
+
+  @AfterDestroy
+  static async decrementCommentCount(instance: VideoCommentModel, options: any) {
+    if (instance.heldForReview) return // Don't count held comments
+
+    await VideoModel.decrement('commentCount', {
+      by: 1,
+      where: { id: instance.videoId },
+      transaction: options.transaction
+    })
+  }
+
+  @AfterUpdate
+  static async updateCommentCountOnHeldStatusChange(instance: VideoCommentModel, options: any) {
+    if (instance.changed('heldForReview')) {
+      const method = instance.heldForReview ? 'decrement' : 'increment'
+      await VideoModel[method]('commentCount', {
+        by: 1,
+        where: { id: instance.videoId },
+        transaction: options.transaction
+      })
+    }
+  }
 
   // ---------------------------------------------------------------------------
 

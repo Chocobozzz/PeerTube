@@ -60,7 +60,9 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
     currentTime: number
   }
 
-  pluginData?: any
+  pluginData?: any,
+
+  commentCount: number
 }
 
 // Not included by default, needs query params
