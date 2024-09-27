@@ -272,15 +272,16 @@ my-actor-avatar {
 .footer-block {
   margin-bottom: 15px;
 
-  .block-title {
-    text-transform: uppercase;
-    font-weight: $font-bold; // Bold
-    font-size: 13px;
-    margin-bottom: 25px;
-
-    @include ellipsis;
+  .block-container {
     @include margin-left(26px);
     @include margin-right(15px);
+    @include ellipsis;
+  }
+
+  .block-title {
+    text-transform: uppercase;
+    font-weight: $font-bold;
+    font-size: 13px;
   }
 
   a,

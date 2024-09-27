@@ -121,12 +121,12 @@
 
       <ng-container *ngFor="let menuSection of menuSections" >
         <ul [ngClass]="[ menuSection.key, 'menu-block' ]">
-          <li i18n class="block-title">{{ menuSection.title }}</li>
+          <li i18n class="block-container">
+            <span class="block-title">{{ menuSection.title }}</span>
 
-          <li>
-            <ul>
+            <ul class="mt-3">
               <li *ngFor="let link of menuSection.links">
-                <a class="menu-link" [routerLink]="link.path" routerLinkActive="active">
+                <a class="menu-link ps-0" [routerLink]="link.path" routerLinkActive="active">
                   <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
                   <ng-container>{{ link.shortLabel }}</ng-container>
                 </a>
@@ -138,17 +138,21 @@
     </div>
 
     <div class="footer">
-      <div class="footer-block">
-        <button *ngIf="!isLoggedIn" class="menu-link button-unstyle" (click)="openQuickSettings()">
-          <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>My settings</ng-container>
-        </button>
+      <ul class="footer-block">
+        <li>
+          <button *ngIf="!isLoggedIn" class="menu-link button-unstyle" (click)="openQuickSettings()">
+            <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>My settings</ng-container>
+          </button>
+        </li>
 
-        <a class="menu-link" routerLink="/about" routerLinkActive="active">
-          <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>About</ng-container>
-        </a>
-      </div>
+        <li>
+          <a class="menu-link" routerLink="/about" routerLinkActive="active">
+            <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>About</ng-container>
+          </a>
+        </li>
+      </ul>
 
       <div class="footer-bottom">
 
