@@ -45,6 +45,11 @@
 
 .dropdown-item {
   @include dropdown-with-icon-item;
+
+  label {
+    font-weight: normal;
+    margin: 0;
+  }
 }
 
 .dropdown-toggle::after {
