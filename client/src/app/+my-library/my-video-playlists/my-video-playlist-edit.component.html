@@ -69,11 +69,9 @@
       </div>
 
       <div class="form-group">
-        <label for="videoChannelIdl" i18n>Channel</label>
+        <label for="videoChannelId" i18n>Channel</label>
 
-        <my-select-channel
-          labelForId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"
-        ></my-select-channel>
+        <my-select-channel labelForId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"></my-select-channel>
 
         <div *ngIf="formErrors['videoChannelId']" class="form-error" role="alert">{{ formErrors['videoChannelId'] }}</div>
       </div>

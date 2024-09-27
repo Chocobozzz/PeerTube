@@ -54,21 +54,19 @@
       </td>
 
       <td>
-        <div class="actor">
-          <my-actor-avatar
-            class="channel"
-            [actor]="videoChannelSync.channel" actorType="channel"
-            [internalHref]="[ '/c', videoChannelSync.channel.name ]"
-            size="25"
-          ></my-actor-avatar>
+        <a [routerLink]="[ '/c', videoChannelSync.channel.name ]" i18n-title title="Channel page">
+          <div class="chip two-lines">
+            <my-actor-avatar
+              [actor]="videoChannelSync.channel" actorType="channel"
+              [internalHref]="[ '/c', videoChannelSync.channel.name ]" size="32"
+            ></my-actor-avatar>
 
-          <div class="actor-info">
-            <a [routerLink]="[ '/c', videoChannelSync.channel.name ]" class="actor-names" i18n-title title="Channel page">
-              <div class="actor-display-name">{{ videoChannelSync.channel.displayName }}</div>
-              <div class="actor-name">{{ videoChannelSync.channel.name }}</div>
-            </a>
+            <div>
+              <span class="fw-semibold">{{ videoChannelSync.channel.displayName }}</span>
+              <span class="muted">{{ videoChannelSync.channel.name }}</span>
+            </div>
           </div>
-        </div>
+        </a>
       </td>
 
       <td>

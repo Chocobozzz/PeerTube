@@ -30,8 +30,8 @@
       </div>
 
       <div class="form-group">
-        <label i18n for="videoChannel">Video Channel</label>
-        <my-select-channel required [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
+        <label i18n for="videoChannel">Video channel</label>
+        <my-select-channel labelForId="videoChannel" [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
 
         <div *ngIf="formErrors['videoChannel']" class="form-error" role="alert">
           {{ formErrors['videoChannel'] }}
@@ -42,12 +42,12 @@
         <label for="existingVideoStrategy" i18n>Options for existing videos on remote channel:</label>
 
         <div class="peertube-radio-container">
-          <input type="radio" name="existingVideoStrategy" id="import" value="import" formControlName="existingVideoStrategy" required />
+          <input type="radio" name="existingVideoStrategy" id="import" value="import" formControlName="existingVideoStrategy" />
           <label for="import" i18n>Import all and watch for new publications</label>
         </div>
 
         <div class="peertube-radio-container">
-          <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" required />
+          <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" />
           <label for="doNothing" i18n>Only watch for new publications</label>
         </div>
       </div>

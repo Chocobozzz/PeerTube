@@ -20,6 +20,7 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
   imports: [ NgSelectModule, FormsModule, NgFor ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
+  @Input({ required: true }) labelForId: string
   @Input() items: SelectChannelItem[] = []
 
   channels: SelectChannelItem[] = []

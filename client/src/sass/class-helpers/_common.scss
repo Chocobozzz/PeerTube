@@ -99,7 +99,43 @@
 // ---------------------------------------------------------------------------
 
 .chip {
-  @include chip;
+  --avatarSize: 1.2rem;
+
+  display: inline-flex;
+  color: pvar(--mainForegroundColor);
+  height: var(--avatarSize);
+  max-width: 320px;
+  overflow: hidden;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+  align-items: center;
+
+  my-actor-avatar {
+    border-radius: 5rem;
+    width: var(--avatarSize);
+    height: var(--avatarSize);
+
+    @include margin-right(0.5rem);
+  }
+
+  &.two-lines {
+    --avatarSize: 2rem;
+
+    font-size: 14px;
+    line-height: 1rem;
+
+    my-actor-avatar {
+      display: inline-block;
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------

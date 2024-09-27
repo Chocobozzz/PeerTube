@@ -14,6 +14,7 @@ import { VideoChannelSyncCreate } from '@peertube/peertube-models'
 import { mergeMap } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { REQUIRED_VALIDATOR } from '@app/shared/form-validators/common-validators'
 
 @Component({
   selector: 'my-video-channel-sync-edit',
@@ -41,8 +42,8 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
-      videoChannel: null,
-      existingVideoStrategy: null
+      videoChannel: REQUIRED_VALIDATOR,
+      existingVideoStrategy: REQUIRED_VALIDATOR
     })
 
     listUserChannelsForSelect(this.authService)

@@ -5,6 +5,7 @@
   [bindValue]="bindValue"
   [clearable]="clearable"
   [searchable]="searchable"
+  [labelForId]="labelForId"
 >
   <ng-option *ngFor="let channel of channels" [value]="channel.id">
     <img alt="" class="avatar me-1" [src]="channel.avatarPath" />

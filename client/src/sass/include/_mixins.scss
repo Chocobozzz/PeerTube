@@ -620,45 +620,6 @@
   }
 }
 
-@mixin chip {
-  --avatar-size: 1.2rem;
-
-  display: inline-flex;
-  color: pvar(--mainForegroundColor);
-  height: var(--avatar-size);
-  max-width: 320px;
-  overflow: hidden;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-  white-space: nowrap;
-
-  my-actor-avatar {
-    border-radius: 5rem;
-    width: var(--avatar-size);
-    height: var(--avatar-size);
-
-    @include margin-right(.2rem);
-  }
-
-  &.two-lines {
-    --avatar-size: 2rem;
-
-    font-size: 14px;
-    line-height: 1rem;
-
-    my-actor-avatar {
-      display: inline-block;
-    }
-
-    > div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-  }
-}
-
 // applies ratio (default to 16:9) to a child element (using $selector) only using
 // an immediate's parent size. This allows to set a ratio without explicit
 // dimensions, as width/height cannot be computed from each other.
