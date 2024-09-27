@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../../shared/shared-main/buttons/button.comp
 import { NgSelectModule } from '@ng-select/ng-select'
 import { NgFor, NgClass, NgIf } from '@angular/common'
 import { FormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-jobs',
@@ -30,7 +31,8 @@ import { FormsModule } from '@angular/forms'
     SharedModule,
     NgIf,
     NgbTooltip,
-    TableExpanderIconComponent
+    TableExpanderIconComponent,
+    GlobalIconComponent
   ]
 })
 export class JobsComponent extends RestTable implements OnInit {

@@ -45,9 +45,12 @@
       </div>
     </div>
 
+    <label class="visually-hidden" for="sort-videos">Sort videos</label>
+
     <ng-select
       class="sort"
       formControlName="sort"
+      labelForId="sort-videos"
       [clearable]="false"
       [searchable]="false"
       [bindValue]="null"
