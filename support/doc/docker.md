@@ -177,4 +177,4 @@ docker build . -f ./support/docker/production/Dockerfile.bookworm
 
 ### Development
 
-We don't have a Docker image for development. See [the CONTRIBUTING guide](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#develop) for more information on how you can hack PeerTube!
+We don't have a Docker image for development. See [the CONTRIBUTING guide](https://docs.joinpeertube.org/contribute/getting-started#develop) for more information on how you can hack PeerTube!

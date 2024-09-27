@@ -1,39 +1,10 @@
-# Welcome to the contributing guide for PeerTube
+# PeerTube Contributing Guide
 
-Interested in contributing? Awesome!
+Welcome to the contributing guide for PeerTube! Interested in contributing? Awesome!
 
 **This guide will present you the following contribution topics:**
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [Translate](#translate)
-- [Give your feedback](#give-your-feedback)
-- [Write documentation](#write-documentation)
-- [Improve the website](#improve-the-website)
-- [Develop](#develop)
-  - [Prerequisites](#prerequisites)
-  - [Online development](#online-development)
-  - [Server side](#server-side)
-  - [Client side](#client-side)
-  - [Client and server side](#client-and-server-side)
-  - [Embed](#embed)
-  - [RTL layout](#rtl-layout)
-  - [Testing](#testing)
-    - [Unit/integration tests](#unitintegration-tests)
-    - [Play with a federation of PeerTube servers](#play-with-a-federation-of-peertube-servers)
-  - [Emails](#emails)
-  - [OpenAPI documentation](#openapi-documentation)
-  - [Environment variables](#environment-variables)
-  - [Generate/pull translations](#generatepull-translations)
-  - [Release PeerTube](#release-peertube)
-  - [PeerTube packages](#peertube-packages)
-  - [CI](#ci)
-  - [Monitoring](#monitoring)
-  - [Test live stream](#test-live-stream)
-- [Plugins & Themes](#plugins--themes)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+[[toc]]
 
 ## Translate
 
@@ -64,7 +35,7 @@ You can update it by writing markdown files in the following repository: https:/
 The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
 To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
 
-```
+```sh
 npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
 ```
 
@@ -85,6 +56,9 @@ It is not hosted on GitHub but on [Framasoft](https://framasoft.org/)'s own [Git
 
 ## Develop
 
+> [!TIP]
+> In dev mode, administrator username is **root** and password is **test**
+
 Always talk about features you want to develop by creating/finding and commenting the issue tackling your problem
 before you start working on it, and inform the community that you begin coding by claiming the issue.
 
@@ -96,13 +70,12 @@ link your PR to the issues it solves by using the GitHub syntax: "fixes #issue_n
 
 First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead to crashes.
 
-1) Make sure that you have followed
-[the steps](/support/doc/dependencies.md)
-to install the dependencies.
+1) Make sure that you have followed [the steps](/support/doc/dependencies.md) to install the dependencies.
 1) Install [parallel](https://www.gnu.org/software/parallel/) to be able to run tests.
 1) Fork the GitHub repository.
 1) Run the following commands.
-```
+
+```sh
 git clone https://github.com/Chocobozzz/PeerTube
 cd PeerTube
 git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
@@ -115,7 +88,8 @@ the `yarn install --pure-lockfile` command.
 
 When you create a new branch you should also tell to use your repo for upload
 not default one. To do just do:
-```
+
+```sh
 git push --set-upstream me <your branch name>
 ```
 
@@ -124,7 +98,7 @@ Then, create a postgres database and user with the values set in the
 there, the following commands would create a new database called `peertube_dev`
 and a postgres user called `peertube` with password `peertube`:
 
-```
+```sh
 # sudo -u postgres createuser -P peertube
 Enter password for new role: peertube
 # sudo -u postgres createdb -O peertube peertube_dev
@@ -132,15 +106,13 @@ Enter password for new role: peertube
 
 Then enable extensions PeerTube needs:
 
-```
+```sh
 sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
 sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
 PeerTube also requires a running redis server, no special setup is needed for
 this.
-
-In dev mode, administrator username is **root** and password is **test**.
 
 ### Online development
 
@@ -152,7 +124,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 To develop on the server-side:
 
-```
+```sh
 npm run dev:server
 ```
 
@@ -168,7 +140,7 @@ More detailed documentation is available:
 
 To develop on the client side:
 
-```
+```sh
 npm run dev:client
 ```
 
@@ -186,7 +158,7 @@ The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
 File changes are automatically recompiled, injected in the web browser (no need to refresh manually)
 and the web server is automatically restarted.
 
-```
+```sh
 npm run dev
 ```
 
@@ -196,7 +168,7 @@ The embed is a standalone application built using Vite.
 The generated files (HTML entrypoint and multiple JS and CSS files) are served by the Vite server (behind `localhost:5173/videos/embed/:videoUUID` or `localhost:5173/video-playlists/embed/:playlistUUID`).
 The following command will compile embed files and run the PeerTube server:
 
-```
+```sh
 npm run dev:embed
 ```
 
@@ -204,7 +176,7 @@ npm run dev:embed
 
 To test RTL (right-to-left) layout using `ar` locale:
 
-```
+```sh
 npm run dev -- --ar-locale
 ```
 
@@ -222,21 +194,21 @@ See the [dedicated documentation](/support/doc/development/tests.md) to run test
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
 Then, we can create the databases (if they don't already exist):
 
-```
+```sh
 sudo -u postgres createuser you_username --createdb --superuser
 createdb -O peertube peertube_test{1,2,3}
 ```
 
 Build the application and flush the old tests data:
 
-```
+```sh
 npm run build
 npm run clean:server:test
 ```
 
 To run 3 nodes:
 
-```
+```sh
 NODE_APP_INSTANCE=1 NODE_ENV=test npm start
 NODE_APP_INSTANCE=2 NODE_ENV=test npm start
 NODE_APP_INSTANCE=3 NODE_ENV=test npm start
