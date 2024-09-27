@@ -36,29 +36,35 @@
       <th scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
+
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
       </th>
+
       <th scope="col" style="width: 70px;">
         <div class="c-hand column-toggle" ngbDropdown placement="bottom-left auto" container="body" autoClose="outside">
-          <button class="border-0 p-0" ngbDropdownToggle>
+          <button type="button" class="border-0 p-0" ngbDropdownToggle i18n-title title="Open table configuration">
             <my-global-icon iconName="columns"></my-global-icon>
           </button>
 
-          <div role="menu" class="dropdown-menu" ngbDropdownMenu>
-            <div class="dropdown-header" i18n>Table parameters</div>
-            <div ngbDropdownItem class="dropdown-item">
+          <div ngbDropdownMenu class="p-3">
+            <div class="form-group">
+              <label i18n for="select-columns">Select the columns to display</label>
+
               <my-select-checkbox
-                name="columns"
+                labelForId="select-columns"
                 [availableItems]="columns"
                 [selectableGroup]="false" [(ngModel)]="selectedColumns"
-                i18n-placeholder placeholder="Select columns"
+                i18n-placeholder placeholder="Select the columns to display"
               >
               </my-select-checkbox>
             </div>
-            <div ngbDropdownItem class="dropdown-item">
-              <my-peertube-checkbox inputName="highlightBannedUsers" [(ngModel)]="highlightBannedUsers"
-                i18n-labelText labelText="Highlight banned users"></my-peertube-checkbox>
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="highlightBannedUsers" [(ngModel)]="highlightBannedUsers"
+                i18n-labelText labelText="Highlight banned users"
+              ></my-peertube-checkbox>
             </div>
           </div>
         </div>
