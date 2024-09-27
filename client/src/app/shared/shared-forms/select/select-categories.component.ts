@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit } from '@angular/core'
+import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -20,6 +20,8 @@ import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
   imports: [ SelectCheckboxAllComponent, FormsModule ]
 })
 export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
+  @Input({ required: true }) labelForId: string
+
   selectedCategories: ItemSelectCheckboxValue[] = []
   availableCategories: SelectOptionsItem[] = []
 

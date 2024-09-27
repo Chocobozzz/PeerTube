@@ -20,6 +20,7 @@ import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
   imports: [ SelectCheckboxAllComponent, FormsModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
+  @Input({ required: true }) labelForId: string
   @Input() maxLanguages: number
 
   selectedLanguages: ItemSelectCheckboxValue[]

@@ -15,6 +15,7 @@ import { ItemSelectCheckboxValue, SelectCheckboxComponent } from './select-check
     [availableItems]="availableItems"
     [selectableGroup]="true" [selectableGroupAsModel]="true"
     [placeholder]="placeholder"
+    [labelForId]="labelForId"
     (focusout)="onBlur()"
   >
   </my-select-checkbox>`,
@@ -29,6 +30,7 @@ import { ItemSelectCheckboxValue, SelectCheckboxComponent } from './select-check
   imports: [ SelectCheckboxComponent, FormsModule ]
 })
 export class SelectCheckboxAllComponent implements ControlValueAccessor {
+  @Input({ required: true }) labelForId: string
   @Input() availableItems: SelectOptionsItem[] = []
   @Input() allGroupLabel: string
 

@@ -80,7 +80,7 @@
         <label class="with-description" for="languageOneOf" i18n>Languages:</label>
         <ng-template *ngTemplateOutlet="updateSettings; context: { $implicit: 'video-languages-subtitles' }"></ng-template>
 
-        <my-select-languages [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
+        <my-select-languages labelForId="languageOneOf" [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
       </div>
 
       <div class="form-group" role="radiogroup">
@@ -134,7 +134,7 @@
       <div class="form-group">
         <label for="categoryOneOf" i18n>Categories:</label>
 
-        <my-select-categories formControlName="categoryOneOf"></my-select-categories>
+        <my-select-categories labelForId="categoryOneOf" formControlName="categoryOneOf"></my-select-categories>
       </div>
 
       <div class="form-group" *ngIf="canSeeAllVideos()">

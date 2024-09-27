@@ -20,6 +20,7 @@ export type ItemSelectCheckboxValue = { id?: string, group?: string } | string
   imports: [ NgSelectModule, FormsModule ]
 })
 export class SelectCheckboxComponent implements OnInit, ControlValueAccessor {
+  @Input({ required: true }) labelForId: string
   @Input() availableItems: SelectOptionsItem[] = []
   @Input() selectedItems: ItemSelectCheckboxValue[] = []
   @Input() selectableGroup: boolean
