@@ -2034,10 +2034,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ng-select/ng-select@^13.3.0":
-  version "13.7.0"
-  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-13.7.0.tgz#f8cef490af1e6ee4ef601c7e15f6441e7fa4fdeb"
-  integrity sha512-GMNu3bLYxWAbgy9pXZ4RgnWp/cxRcrWRQdxLLyg8p9gMCLpim1p4TXR8laXJKK25MKG/LEaWgs+90yCVOoWgZA==
+"@ng-select/ng-select@^13.8.1":
+  version "13.8.1"
+  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-13.8.1.tgz#4884fa51aeccd534e3dd646385405248c867da68"
+  integrity sha512-zN+uYkTOZliRxEm9zS7M08g21YXaNsBLp9/zJgjC5TzNrrfB6vxgOzbDjYzNUqSbZsbod70HoPgzmi81pJhMyg==
   dependencies:
     tslib "^2.3.1"
 
