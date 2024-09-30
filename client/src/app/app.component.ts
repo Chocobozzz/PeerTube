@@ -202,16 +202,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getNotificationRole (message: { severity: 'success' | 'error' | 'info' }) {
-    switch (message.severity) {
-      case 'error':
-        return 'alert'
-
-      default:
-        return 'status'
-    }
-  }
-
   // ---------------------------------------------------------------------------
 
   private initRouteEvents () {

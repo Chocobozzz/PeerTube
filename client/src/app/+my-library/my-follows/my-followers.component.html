@@ -1,10 +1,11 @@
-<h1>
-  <span class="text-nowrap me-2">
+<div class="d-flex">
+  <h1 class="text-nowrap">
     <my-global-icon iconName="follower" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My followers</ng-container>
-    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
-  </span>
-</h1>
+  </h1>
+
+  <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
+</div>
 
 <div class="followers-header">
   <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
