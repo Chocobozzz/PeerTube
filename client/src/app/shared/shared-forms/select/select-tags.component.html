@@ -1,14 +1,8 @@
-<ng-select
-  [items]="availableItems"
+<p-chips
   [(ngModel)]="selectedItems"
   (ngModelChange)="onModelChange()"
   [placeholder]="placeholder"
-  [maxSelectedItems]="5"
-  [clearable]="true"
-  [addTag]="true"
-  [multiple]="true"
-  [isOpen]="false"
-  [searchable]="true"
-  [labelForId]="labelForId"
->
-</ng-select>
+  [inputId]="inputId"
+  [allowDuplicate]="false"
+  [caseSensitiveDuplication]="false"
+></p-chips>

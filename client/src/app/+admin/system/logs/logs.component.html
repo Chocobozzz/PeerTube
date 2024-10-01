@@ -53,7 +53,7 @@
 
       <my-select-tags
         *ngIf="!isAuditLog()"
-        labelForId="log-tags"
+        inputId="log-tags"
         i18n-placeholder placeholder="Example: ffmpeg, api"
         [(ngModel)]="tagsOneOf" (ngModelChange)="refresh()"
       ></my-select-tags>

@@ -459,6 +459,105 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   border: 1px solid #a80000;
 }
 
+//chips
+
+.p-chips:not(.p-disabled):hover .p-chips-multiple-container {
+  border-color: pvar(--inputBorderColor);
+}
+.p-chips:not(.p-disabled).p-focus .p-chips-multiple-container {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.25rem var(--mainColorLightest);
+}
+.p-chips .p-chips-multiple-container {
+  padding: 3px 15px;
+  gap: 0.25rem;
+}
+.p-chips .p-chips-multiple-container .p-chips-token {
+  padding: 2px 15px;
+  margin-right: 0.5rem;
+  background: pvar(--mainColorLightest);
+  color: pvar(--mainForegroundColor);
+  border-radius: 3px;
+}
+.p-chips .p-chips-multiple-container .p-chips-token.p-focus {
+  background: pvar(--mainColorVeryLight);
+  color: pvar(--mainForegroundColor);
+}
+.p-chips .p-chips-multiple-container .p-chips-token .p-chips-token-icon {
+  margin-left: 0.5rem;
+}
+.p-chips .p-chips-multiple-container .p-chips-input-token {
+  padding: 3px 0;
+}
+.p-chips .p-chips-multiple-container .p-chips-input-token input {
+  color: pvar(--mainForegroundColor);
+  padding: 0;
+  margin: 0;
+}
+
+p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
+  border-color: pvar(--red);
+}
+
+p-chips.p-chips-clearable .p-inputtext {
+  padding-right: 1.429rem;
+}
+p-chips.p-chips-clearable .p-chips-clear-icon {
+  color: pvar(--greyForegroundColor);
+  right: 0.429rem;
+}
+
+.p-inputtext {
+  font-size: 15px;
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainBackgroundColor);
+  padding: 3px 15px;
+  border: 1px solid pvar(--inputBorderColor);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  border-radius: 3px;
+}
+.p-inputtext:enabled:hover {
+  border-color: pvar(--inputBorderColor);
+}
+.p-inputtext:enabled:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.25rem var(--mainColorLightest);
+}
+.p-inputtext.ng-dirty.ng-invalid {
+  border-color: pvar(--red);
+}
+.p-inputtext.p-variant-filled {
+  background-color: #f4f4f4;
+}
+.p-inputtext.p-variant-filled:enabled:hover {
+  background-color: #f4f4f4;
+}
+.p-inputtext.p-variant-filled:enabled:focus {
+  background-color: #f4f4f4;
+}
+.p-inputtext.p-inputtext-sm {
+  font-size: 0.875rem;
+  padding: 0.375375rem 0.375375rem;
+}
+.p-inputtext.p-inputtext-lg {
+  font-size: 1.25rem;
+  padding: 0.53625rem 0.53625rem;
+}
+
+.p-input-filled .p-inputtext {
+  background-color: #f4f4f4;
+}
+.p-input-filled .p-inputtext:enabled:hover {
+  background-color: #f4f4f4;
+}
+.p-input-filled .p-inputtext:enabled:focus {
+  background-color: #f4f4f4;
+}
+
+
 // ---------------------------------------------------------------------------
 // PeerTube customizations
 // ---------------------------------------------------------------------------
@@ -900,5 +999,29 @@ p-toast {
         }
       }
     }
+  }
+}
+
+p-chips {
+  .p-input-wrapper {
+    display: flex;
+  }
+
+  .p-chips-token-label {
+    line-height: normal;
+  }
+
+  .p-chips-input-token {
+    line-height: normal;
+  }
+
+  .p-chips-multiple-container {
+    padding: 1px 15px !important;
+    margin-block-end: 0 !important;
+    width: 100% !important;
+  }
+
+  .p-chips-input-token {
+    flex-basis: 100px;
   }
 }

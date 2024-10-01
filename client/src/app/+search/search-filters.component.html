@@ -163,7 +163,7 @@
         <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('tagsAllOf')" *ngIf="advancedSearch.tagsAllOf">
           Reset
         </button>
-        <my-select-tags name="tagsAllOf" labelForId="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf"></my-select-tags>
+        <my-select-tags name="tagsAllOf" inputId="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf"></my-select-tags>
       </div>
 
       <div class="form-group">
@@ -171,7 +171,7 @@
         <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('tagsOneOf')" *ngIf="advancedSearch.tagsOneOf">
           Reset
         </button>
-        <my-select-tags name="tagsOneOf" labelForId="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
+        <my-select-tags name="tagsOneOf" inputId="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
       </div>
 
       <div class="form-group">

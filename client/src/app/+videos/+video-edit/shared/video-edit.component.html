@@ -34,7 +34,7 @@
                 </ng-template>
               </my-help>
 
-              <my-select-tags labelForId="label-tags" formControlName="tags"></my-select-tags>
+              <my-select-tags inputId="label-tags" formControlName="tags" class="d-block w-100"></my-select-tags>
               <div *ngIf="formErrors.tags" class="form-error" role="alert">
                 {{ formErrors.tags }}
               </div>

@@ -1,10 +1,9 @@
 import { Component, Input, forwardRef } from '@angular/core'
-import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms'
-import { NgSelectModule } from '@ng-select/ng-select'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ChipsModule } from 'primeng/chips'
 
 @Component({
   selector: 'my-select-tags',
-  styleUrls: [ './select-shared.component.scss', './select-tags.component.scss' ],
   templateUrl: './select-tags.component.html',
   providers: [
     {
@@ -14,10 +13,10 @@ import { NgSelectModule } from '@ng-select/ng-select'
     }
   ],
   standalone: true,
-  imports: [ NgSelectModule, FormsModule ]
+  imports: [ ChipsModule, FormsModule ]
 })
 export class SelectTagsComponent implements ControlValueAccessor {
-  @Input({ required: true }) labelForId: string
+  @Input({ required: true }) inputId: string
   @Input() availableItems: string[] = []
   @Input() selectedItems: string[] = []
   @Input() placeholder = $localize`Enter a new tag`
