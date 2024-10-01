@@ -6,7 +6,6 @@ import { SelectOptionsComponent } from './select-options.component'
 
 @Component({
   selector: 'my-select-custom-value',
-  styleUrls: [ './select-shared.component.scss' ],
   templateUrl: './select-custom-value.component.html',
   providers: [
     {
@@ -19,14 +18,14 @@ import { SelectOptionsComponent } from './select-options.component'
   imports: [ SelectOptionsComponent, FormsModule, NgIf ]
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {
-  @Input({ required: true }) labelForId: string
+  @Input({ required: true }) inputId: string
   @Input({ required: true }) labelId: string
 
   @Input() items: SelectOptionsItem[] = []
 
   @Input() clearable = false
   @Input() searchable = false
-  @Input() groupBy: string
+
   @Input() inputSuffix: string
   @Input() inputType = 'text'
 

@@ -73,10 +73,7 @@
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
                 <label i18n for="liveMaxDuration">Max live duration</label>
 
-                <my-select-options
-                  labelForId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"
-                  bindLabel="label" bindValue="value" [clearable]="false" [searchable]="true"
-                ></my-select-options>
+                <my-select-options inputId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"></my-select-options>
 
                 <div *ngIf="formErrors.live.maxDuration" class="form-error" role="alert">{{ formErrors.live.maxDuration }}</div>
               </div>
@@ -178,7 +175,7 @@
 
             <my-select-custom-value
               labelId="liveTranscodingThreadsLabel"
-              labelForId="liveTranscodingThreads"
+              inputId="liveTranscodingThreads"
               [items]="transcodingThreadOptions"
               formControlName="threads"
               [clearable]="false"
@@ -190,13 +187,7 @@
             <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
             <span class="small muted ms-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 
-            <my-select-options
-              id="liveTranscodingProfile"
-              formControlName="profile"
-              [items]="transcodingProfiles"
-              [clearable]="false"
-            >
-            </my-select-options>
+            <my-select-options inputId="liveTranscodingProfile" formControlName="profile" [items]="transcodingProfiles"></my-select-options>
 
             <div *ngIf="formErrors.live.transcoding.profile" class="form-error" role="alert">{{ formErrors.live.transcoding.profile }}</div>
           </div>

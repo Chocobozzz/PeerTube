@@ -1,14 +1,25 @@
+import { CommonModule } from '@angular/common'
 import { Component, forwardRef, Input, OnChanges } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
-import { SelectChannelItem } from '../../../../types/select-options-item.model'
-import { NgFor } from '@angular/common'
-import { NgSelectModule } from '@ng-select/ng-select'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
+import { DropdownModule } from 'primeng/dropdown'
+import { SelectChannelItem, SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { SelectOptionsComponent } from './select-options.component'
 
 @Component({
   selector: 'my-select-channel',
-  styleUrls: [ './select-shared.component.scss' ],
-  templateUrl: './select-channel.component.html',
+  template: `
+  <my-select-options
+    [inputId]="inputId"
+
+    [items]="channels"
+
+    [(ngModel)]="selectedId"
+    (ngModelChange)="onModelChange()"
+
+    [filter]="channels && channels.length > 5"
+  ></my-select-options>
+  `,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -17,28 +28,22 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
     }
   ],
   standalone: true,
-  imports: [ NgSelectModule, FormsModule, NgFor ]
+  imports: [ DropdownModule, FormsModule, CommonModule, SelectOptionsComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
-  @Input({ required: true }) labelForId: string
+  @Input({ required: true }) inputId: string
   @Input() items: SelectChannelItem[] = []
 
-  channels: SelectChannelItem[] = []
+  channels: SelectOptionsItem[]
   selectedId: number
-
-  // ng-select options
-  bindLabel = 'label'
-  bindValue = 'id'
-  clearable = false
-  searchable = false
 
   ngOnChanges () {
     this.channels = this.items.map(c => {
       const avatarPath = c.avatarPath
         ? c.avatarPath
-        : VideoChannel.GET_DEFAULT_AVATAR_URL(20)
+        : VideoChannel.GET_DEFAULT_AVATAR_URL(21)
 
-      return Object.assign({}, c, { avatarPath })
+      return Object.assign({}, c, { imageUrl: avatarPath })
     })
   }
 
@@ -60,5 +65,9 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
 
   onModelChange () {
     this.propagateChange(this.selectedId)
+  }
+
+  getSelectedChannel () {
+    return (this.channels || []).find(c => c.id + '' === this.selectedId + '')
   }
 }

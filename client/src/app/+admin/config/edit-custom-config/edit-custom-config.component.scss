@@ -56,8 +56,7 @@ input[type=checkbox] {
 }
 
 my-select-options,
-my-select-custom-value,
-my-select-checkbox {
+my-select-custom-value {
   display: block;
 
   @include responsive-width($form-base-input-width);

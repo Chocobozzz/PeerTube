@@ -2,17 +2,17 @@
 @use '_mixins' as *;
 
 .select-job-state {
+  display: block;
   min-width: 120px;
+
+  ::ng-deep .pt-badge {
+    font-size: 13px;
+  }
 }
 
 .select-job-type {
+  display: block;
   min-width: 240px;
-
-  ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
-    @media screen and (min-height: 500px) {
-      max-height: calc(90vh - 250px);
-    }
-  }
 }
 
 @media screen and (min-width: $primeng-breakpoint) {

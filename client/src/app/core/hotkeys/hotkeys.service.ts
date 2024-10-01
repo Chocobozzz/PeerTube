@@ -13,7 +13,8 @@ export class HotkeysService {
   cheatSheetToggle = new Subject<boolean>()
 
   private hotkeys: Hotkey[] = []
-  private readonly preventIn = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
+  private readonly preventInNode = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
+  private readonly preventInRole = new Set([ 'combobox' ])
 
   private disabled = false
 
@@ -62,7 +63,7 @@ export class HotkeysService {
             const target = event.target as HTMLElement
             const nodeName: string = target.nodeName.toUpperCase()
 
-            if (target.isContentEditable || this.preventIn.has(nodeName)) {
+            if (target.isContentEditable || this.preventInNode.has(nodeName) || this.preventInRole.has(target.getAttribute('role'))) {
               return
             }
 

@@ -28,14 +28,12 @@
 
     <div class="form-group">
       <label i18n for="first-step-channel">Channel</label>
-      <my-select-channel labelForId="first-step-channel" [items]="userVideoChannels" [(ngModel)]="firstStepChannelId"></my-select-channel>
+      <my-select-channel inputId="first-step-channel" [items]="userVideoChannels" [(ngModel)]="firstStepChannelId"></my-select-channel>
     </div>
 
     <div class="form-group">
       <label i18n for="first-step-privacy">Privacy</label>
-      <my-select-options
-        labelForId="first-step-privacy" [items]="videoPrivacies" [(ngModel)]="firstStepPrivacyId"
-      ></my-select-options>
+      <my-select-options inputId="first-step-privacy" [items]="videoPrivacies" [(ngModel)]="firstStepPrivacyId"></my-select-options>
     </div>
 
     <input

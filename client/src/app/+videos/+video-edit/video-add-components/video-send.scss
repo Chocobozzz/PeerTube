@@ -26,10 +26,12 @@ $width-size: 275px;
   .peertube-select-container {
     @include peertube-select-container($width-size);
   }
-  my-select-options ::ng-deep ng-select,
-  my-select-channel ::ng-deep ng-select,
+
+  my-select-channel,
+  my-select-options,
   .peertube-radio-container,
   .form-group-description {
+    display: block;
     width: $width-size;
 
     @media screen and (max-width: $width-size) {

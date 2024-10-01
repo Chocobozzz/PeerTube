@@ -29,7 +29,7 @@
 
         <my-select-custom-value
           labelId="instanceDefaultClientRouteLabel"
-          labelForId="instanceDefaultClientRoute"
+          inputId="instanceDefaultClientRoute"
           [items]="defaultLandingPageOptions"
           formControlName="defaultClientRoute"
           inputType="text"
@@ -224,7 +224,7 @@
 
           <my-select-custom-value
             labelId="userVideoQuotaLabel"
-            labelForId="userVideoQuota"
+            inputId="userVideoQuota"
             [items]="getVideoQuotaOptions()"
             formControlName="videoQuota"
             i18n-inputSuffix inputSuffix="bytes" inputType="number"
@@ -241,7 +241,7 @@
 
           <my-select-custom-value
             labelId="userVideoQuotaDailyLabel"
-            labelForId="userVideoQuotaDaily"
+            inputId="userVideoQuotaDaily"
             [items]="getVideoQuotaDailyOptions()"
             formControlName="videoQuotaDaily"
             i18n-inputSuffix inputSuffix="bytes" inputType="number"
@@ -561,7 +561,7 @@
 
                   <my-select-custom-value
                     labelId="exportUsersMaxUserVideoQuota"
-                    labelForId="exportUsersMaxUserVideoQuota"
+                    inputId="exportUsersMaxUserVideoQuota"
                     [items]="exportMaxUserVideoQuotaOptions"
                     formControlName="maxUserVideoQuota"
                     i18n-inputSuffix inputSuffix="bytes" inputType="number"
@@ -574,10 +574,7 @@
                 <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
                   <label i18n for="exportUsersExportExpiration">User export expiration</label>
 
-                  <my-select-options
-                    labelForId="exportUsersExportExpiration" [items]="exportExpirationOptions" formControlName="exportExpiration"
-                    bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false"
-                  ></my-select-options>
+                  <my-select-options inputId="exportUsersExportExpiration" [items]="exportExpirationOptions" formControlName="exportExpiration"></my-select-options>
 
                   <div i18n class="mt-1 small muted">The archive file is deleted after this period.</div>
 

@@ -1,19 +1,21 @@
-<div class="root">
+<div class="d-flex align-items-center">
   <my-select-options
-    [items]="itemsWithCustom"
-    [clearable]="clearable"
-    [searchable]="searchable"
-    [groupBy]="groupBy"
-    [labelForId]="labelForId"
+    class="flex-grow-1"
+
+    [inputId]="inputId"
     [disabled]="disabled"
 
+    [items]="itemsWithCustom"
     [(ngModel)]="selectedId"
     (ngModelChange)="onModelChange()"
   ></my-select-options>
 
-  <ng-container *ngIf="isCustomValue()">
-    <input [attr.aria-labelledby]="labelId" [(ngModel)]="customValue" (ngModelChange)="onModelChange()" [type]="inputType" class="form-control" />
+  @if (isCustomValue()) {
+    <input
+      [attr.aria-labelledby]="labelId" [(ngModel)]="customValue" (ngModelChange)="onModelChange()"
+      [type]="inputType" class="ms-2 form-control pt-input-text"
+    />
 
-    <span *ngIf="inputSuffix" class="input-suffix">{{ inputSuffix }}</span>
-  </ng-container>
+    <span *ngIf="inputSuffix" class="ms-1">{{ inputSuffix }}</span>
+  }
 </div>

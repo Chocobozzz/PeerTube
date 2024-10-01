@@ -25,7 +25,6 @@ export class SelectTagsComponent implements ControlValueAccessor {
 
   writeValue (items: string[]) {
     this.selectedItems = items
-    this.propagateChange(this.selectedItems)
   }
 
   registerOnChange (fn: (_: any) => void) {

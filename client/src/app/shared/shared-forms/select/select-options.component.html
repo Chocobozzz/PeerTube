@@ -1,22 +1,44 @@
-<ng-select
-  [items]="items"
-  [groupBy]="groupBy"
+<p-dropdown
+  [inputId]="inputId"
+
+  [options]="items"
+
   [(ngModel)]="selectedId"
   (ngModelChange)="onModelChange()"
-  [clearable]="clearable"
-  [labelForId]="labelForId"
-  [searchable]="searchable"
-  [searchFn]="searchFn"
-  [disabled]="disabled"
 
-  bindLabel="label"
-  bindValue="id"
+  optionValue="id"
+
+  [showClear]="clearable"
+
+  [filter]="filter"
+  filterBy="label"
+
+  i18n-filterPlaceholder filterPlaceholder="Search"
+  i18n-emptyFilterMessage emptyFilterMessage="No results found"
+  i18n-emptyMessage emptyMessage="No items available"
+
+  [virtualScroll]="virtualScroll"
+  [virtualScrollItemSize]="virtualScrollItemSize"
 >
-  <ng-template ng-option-tmp let-item="item" let-index="index">
-    {{ item.label }}
-    <ng-container *ngIf="item.description">
-      <br>
-      <span [title]="item.description" class="muted">{{ item.description }}</span>
-    </ng-container>
+  <ng-template #itemTemplate let-item let-description="description">
+    @if (customItemTemplate) {
+      <ng-template [ngTemplateOutlet]="customItemTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+    } @else {
+      <div class="d-flex align-items-center">
+        <img *ngIf="item.imageUrl" alt="" class="me-2" [src]="item.imageUrl" />
+
+        <span [ngClass]="item.classes">{{ item.label }}</span>
+      </div>
+
+      <span *ngIf="description" class="muted">{{ description }}</span>
+    }
   </ng-template>
-</ng-select>
+
+  <ng-template pTemplate="selectedItem">
+    <ng-template [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{ $implicit: getSelectedItem() }"></ng-template>
+  </ng-template>
+
+  <ng-template let-item pTemplate="item">
+    <ng-template [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{ $implicit: item, description: item.description }"></ng-template>
+  </ng-template>
+</p-dropdown>

@@ -6,6 +6,7 @@
   font-size: 13px;
   max-height: 500px;
   overflow-y: auto;
+  color: #000;
   background: rgb(250, 250, 250);
   padding: 20px;
 
@@ -67,8 +68,9 @@
 }
 
 .level-choice {
-  font-size: 80%;
-  vertical-align: text-top;
+  font-size: 14px;
+  position: relative;
+  top: -1px;
 
   &.debug {
     color: rgb(197, 197, 197);
@@ -83,7 +85,7 @@
   }
 
   &.error {
-    color: #DC262B;
+    color: pvar(--red);
   }
 }
 
@@ -97,9 +99,7 @@ my-copy-button {
   .header {
     flex-direction: column;
 
-    .peertube-select-container,
-    ng-select,
-    my-button {
+    > * {
       width: 100% !important;
       margin-bottom: 10px !important;
 

@@ -1,20 +1,21 @@
-import { SortMeta, SharedModule } from 'primeng/api'
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { escapeHTML } from '@peertube/peertube-core-utils'
+import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { AutoColspanDirective } from '@app/shared/shared-main/common/auto-colspan.directive'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Job, JobState, JobType } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
+import { SelectOptionsItem } from 'src/types'
 import { JobStateClient } from '../../../../types/job-state-client.type'
 import { JobTypeClient } from '../../../../types/job-type-client.type'
-import { JobService } from './job.service'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { TableModule } from 'primeng/table'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { NgSelectModule } from '@ng-select/ng-select'
-import { NgFor, NgClass, NgIf } from '@angular/common'
-import { FormsModule } from '@angular/forms'
-import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { JobService } from './job.service'
 
 @Component({
   selector: 'my-jobs',
@@ -24,7 +25,6 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
   imports: [
     FormsModule,
     NgFor,
-    NgSelectModule,
     NgClass,
     ButtonComponent,
     TableModule,
@@ -32,15 +32,22 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
     NgIf,
     NgbTooltip,
     TableExpanderIconComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    SelectOptionsComponent,
+    AutoColspanDirective
   ]
 })
 export class JobsComponent extends RestTable implements OnInit {
   private static LOCAL_STORAGE_STATE = 'jobs-list-state'
   private static LOCAL_STORAGE_TYPE = 'jobs-list-type'
 
-  jobState?: JobStateClient | 'all'
-  jobStates: JobStateClient[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
+  jobState?: JobStateClient
+  jobStates: JobStateClient[] = [ 'all', 'active', 'completed', 'failed', 'waiting', 'delayed' ]
+  jobStateItems: SelectOptionsItem[] = this.jobStates.map(s => ({
+    id: s,
+    label: s,
+    classes: this.getJobStateClasses(s)
+  }))
 
   jobType: JobTypeClient = 'all'
   jobTypes: JobTypeClient[] = [
@@ -74,6 +81,7 @@ export class JobsComponent extends RestTable implements OnInit {
     'video-transcription',
     'videos-views-stats'
   ]
+  jobTypeItems: SelectOptionsItem[] = this.jobTypes.map(i => ({ id: i, label: i }))
 
   jobs: Job[] = []
   totalRecords: number
@@ -96,27 +104,21 @@ export class JobsComponent extends RestTable implements OnInit {
     return 'JobsComponent'
   }
 
-  getJobStateClass (state: JobStateClient) {
+  getJobStateClasses (state: JobStateClient) {
     switch (state) {
       case 'active':
-        return 'badge-blue'
+        return [ 'pt-badge', 'badge-blue' ]
       case 'completed':
-        return 'badge-green'
+        return [ 'pt-badge', 'badge-green' ]
       case 'delayed':
-        return 'badge-brown'
+        return [ 'pt-badge', 'badge-brown' ]
       case 'failed':
-        return 'badge-red'
+        return [ 'pt-badge', 'badge-red' ]
       case 'waiting':
-        return 'badge-yellow'
+        return [ 'pt-badge', 'badge-yellow' ]
     }
-  }
 
-  getColspan () {
-    if (this.jobState === 'all' && this.hasGlobalProgress()) return 7
-
-    if (this.jobState === 'all' || this.hasGlobalProgress()) return 6
-
-    return 5
+    return []
   }
 
   onJobStateOrTypeChanged () {
@@ -174,13 +176,10 @@ export class JobsComponent extends RestTable implements OnInit {
 
   private loadJobStateAndType () {
     const state = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_STATE)
+    if (state) this.jobState = state as JobState
 
-    // FIXME: We use <ng-option> that doesn't escape HTML
-    // https://github.com/ng-select/ng-select/issues/1363
-    if (state) this.jobState = escapeHTML(state) as JobState
-
-    const type = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_TYPE)
-    if (type) this.jobType = type as JobType
+    const jobType = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_TYPE)
+    if (jobType) this.jobType = jobType as JobType
   }
 
   private saveJobStateAndType () {

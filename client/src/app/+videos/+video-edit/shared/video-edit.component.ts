@@ -82,7 +82,6 @@ import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 import { VideoEditType } from './video-edit.type'
 
-type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
   pluginInfo: PluginInfo
   commonOptions: RegisterClientFormFieldOptions
@@ -167,7 +166,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   commentPolicies: VideoConstant<VideoCommentPolicyType>[] = []
-  videoLanguages: VideoLanguages[] = []
+  videoLanguages: VideoConstant<string>[] = []
   latencyModes: SelectOptionsItem[] = [
     {
       id: LiveVideoLatencyMode.SMALL_LATENCY,
@@ -303,16 +302,14 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       this.instanceService.getAbout(),
       this.serverService.getVideoLanguages()
     ]).pipe(map(([ about, languages ]) => ({ about, languages })))
-      .subscribe(res => {
-        this.videoLanguages = res.languages
-          .map(l => {
-            if (l.id === 'zxx') return { ...l, group: $localize`Other`, groupOrder: 1 }
+      .subscribe(({ about, languages }) => {
+        this.videoLanguages = [
+          ...languages.filter(l => about.instance.languages.includes(l.id)),
 
-            return res.about.instance.languages.includes(l.id)
-              ? { ...l, group: $localize`Instance languages`, groupOrder: 0 }
-              : { ...l, group: $localize`All languages`, groupOrder: 2 }
-          })
-          .sort((a, b) => a.groupOrder - b.groupOrder)
+          languages.find(l => l.id === 'zxx'),
+
+          ...languages.filter(l => !about.instance.languages.includes(l.id) && l.id !== 'zxx')
+        ]
       })
 
     this.serverService.getVideoPrivacies()

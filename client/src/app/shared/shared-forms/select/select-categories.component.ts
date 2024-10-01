@@ -1,14 +1,25 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
-import { ItemSelectCheckboxValue } from './select-checkbox.component'
-import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
+import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all.component'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-select-categories',
-  styleUrls: [ './select-shared.component.scss' ],
-  templateUrl: './select-categories.component.html',
+  template: `
+<my-select-checkbox-default-all
+  *ngIf="availableCategories"
+  [inputId]="inputId"
+  [(ngModel)]="selectedCategories"
+  (ngModelChange)="onModelChange()"
+  [availableItems]="availableCategories"
+  i18n-placeholder placeholder="Add a new category"
+  i18n-allSelectedLabel allSelectedLabel="All categories"
+  i18n-selectedLabel selectedLabel="{1} categories selected"
+>
+</my-select-checkbox-default-all>
+`,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -17,19 +28,13 @@ import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
     }
   ],
   standalone: true,
-  imports: [ SelectCheckboxAllComponent, FormsModule ]
+  imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
 })
 export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
-  @Input({ required: true }) labelForId: string
+  @Input({ required: true }) inputId: string
 
-  selectedCategories: ItemSelectCheckboxValue[] = []
-  availableCategories: SelectOptionsItem[] = []
-
-  allCategoriesGroup = $localize`All categories`
-
-  // Fix a bug on ng-select when we update items after we selected items
-  private toWrite: any
-  private loaded = false
+  selectedCategories: string[]
+  availableCategories: SelectOptionsItem[]
 
   constructor (
     private server: ServerService
@@ -41,9 +46,7 @@ export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
     this.server.getVideoCategories()
       .subscribe(
         categories => {
-          this.availableCategories = categories.map(c => ({ label: c.label, id: c.id + '', group: this.allCategoriesGroup }))
-          this.loaded = true
-          this.writeValue(this.toWrite)
+          this.availableCategories = categories.map(c => ({ label: c.label, id: c.id + '' }))
         }
       )
   }
@@ -51,14 +54,9 @@ export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
   propagateChange = (_: any) => { /* empty */ }
 
   writeValue (categories: string[] | number[]) {
-    if (!this.loaded) {
-      this.toWrite = categories
-      return
-    }
-
     this.selectedCategories = categories
       ? categories.map(c => c + '')
-      : categories as string[]
+      : null
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -70,6 +68,10 @@ export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
   }
 
   onModelChange () {
-    this.propagateChange(this.selectedCategories)
+    this.propagateChange(
+      this.selectedCategories
+        ? this.selectedCategories.map(c => c + '')
+        : null
+    )
   }
 }

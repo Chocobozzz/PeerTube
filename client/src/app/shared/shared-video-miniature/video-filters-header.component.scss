@@ -111,16 +111,6 @@
   min-width: 250px;
   max-width: 300px;
   height: min-content;
-
-  ::ng-deep {
-    .ng-select-container {
-      height: 33px !important;
-    }
-
-    .ng-value strong {
-      @include margin-left(5px);
-    }
-  }
 }
 
 my-select-languages,

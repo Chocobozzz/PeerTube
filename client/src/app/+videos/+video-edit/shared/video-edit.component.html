@@ -64,14 +64,12 @@
           <div class="col-video-edit">
             <div class="form-group">
               <label i18n for="channel">Channel</label>
-              <my-select-channel labelForId="channel" [items]="userVideoChannels" formControlName="channelId"></my-select-channel>
+              <my-select-channel class="d-block" inputId="channel" [items]="userVideoChannels" formControlName="channelId"></my-select-channel>
             </div>
 
             <div class="form-group">
               <label i18n for="category">Category</label>
-              <my-select-options
-                labelForId="category" [items]="videoCategories" formControlName="category" [clearable]="true"
-              ></my-select-options>
+              <my-select-options inputId="category" [items]="videoCategories" formControlName="category" clearable="true"></my-select-options>
 
               <div *ngIf="formErrors.category" class="form-error" role="alert">
                 {{ formErrors.category }}
@@ -89,9 +87,7 @@
                 </ng-template>
               </my-help>
 
-              <my-select-options
-                labelForId="licence" [items]="videoLicences" formControlName="licence" [clearable]="true"
-              ></my-select-options>
+              <my-select-options inputId="licence" [items]="videoLicences" formControlName="licence" clearable="true"></my-select-options>
 
               <div *ngIf="formErrors.licence" class="form-error" role="alert">
                 {{ formErrors.licence }}
@@ -101,8 +97,8 @@
             <div class="form-group">
               <label i18n for="language">Language</label>
               <my-select-options
-                labelForId="language" [items]="videoLanguages" formControlName="language"
-                [clearable]="true" [searchable]="true" [groupBy]="'group'"
+                inputId="language" [items]="videoLanguages" formControlName="language"
+                clearable="true" filter="true" virtualScroll="true"
               ></my-select-options>
 
               <div *ngIf="formErrors.language" class="form-error" role="alert">
@@ -112,9 +108,7 @@
 
             <div class="form-group">
               <label i18n for="privacy">Privacy</label>
-              <my-select-options
-                labelForId="privacy" [items]="videoPrivacies" formControlName="privacy" [clearable]="false"
-              ></my-select-options>
+              <my-select-options inputId="privacy" [items]="videoPrivacies" formControlName="privacy"></my-select-options>
 
               <div *ngIf="formErrors.privacy" class="form-error" role="alert">
                 {{ formErrors.privacy }}
@@ -358,16 +352,12 @@
 
             <div class="form-group mx-4" *ngIf="isSaveReplayEnabled()">
               <label i18n for="replayPrivacy">Privacy of the new replay</label>
-              <my-select-options
-                labelForId="replayPrivacy" [items]="replayPrivacies" [clearable]="false" formControlName="replayPrivacy"
-              ></my-select-options>
+              <my-select-options inputId="replayPrivacy" [items]="replayPrivacies" formControlName="replayPrivacy"></my-select-options>
             </div>
 
             <div class="form-group" *ngIf="isLatencyModeEnabled()">
               <label i18n for="latencyMode">Latency mode</label>
-              <my-select-options
-                labelForId="latencyMode" [items]="latencyModes" formControlName="latencyMode" [clearable]="true"
-              ></my-select-options>
+              <my-select-options inputId="latencyMode" [items]="latencyModes" formControlName="latencyMode" clearable="true"></my-select-options>
 
               <div *ngIf="formErrors.latencyMode" class="form-error" role="alert">
                 {{ formErrors.latencyMode }}
@@ -454,7 +444,7 @@
 
             <div class="form-group mb-4">
               <label i18n for="commentsPolicy">Comments policy</label>
-              <my-select-options labelForId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy" [clearable]="false"></my-select-options>
+              <my-select-options inputId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy"></my-select-options>
 
               <div *ngIf="formErrors.commentsPolicy" class="form-error" role="alert">
                 {{ formErrors.commentsPolicy }}

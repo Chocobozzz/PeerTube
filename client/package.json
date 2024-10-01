@@ -56,7 +56,6 @@
     "@formatjs/intl-locale": "^4.0.0",
     "@formatjs/intl-pluralrules": "^5.2.2",
     "@ng-bootstrap/ng-bootstrap": "^17.0.0",
-    "@ng-select/ng-select": "^13.8.1",
     "@ngx-loading-bar/core": "^6.0.0",
     "@ngx-loading-bar/http-client": "^6.0.0",
     "@ngx-loading-bar/router": "^6.0.0",

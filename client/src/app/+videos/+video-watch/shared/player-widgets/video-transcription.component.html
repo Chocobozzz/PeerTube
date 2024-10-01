@@ -30,8 +30,8 @@
             <label i18n for="transcription-language">Language</label>
 
             <my-select-options
-              labelForId="transcription-language" [items]="languagesOptions"
-              [(ngModel)]="currentLanguage" (ngModelChange)="updateCurrentCaption()" clearable="false"
+              inputId="transcription-language" [items]="languagesOptions"
+              [(ngModel)]="currentLanguage" (ngModelChange)="updateCurrentCaption()"
             ></my-select-options>
           </div>
         </div>

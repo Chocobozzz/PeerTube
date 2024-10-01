@@ -146,19 +146,19 @@ body .p-paginator .p-dropdown {
 // Dropdown
 
 body .p-dropdown {
-  background: #ffffff;
-  border: 1px solid #a6a6a6;
+  background: pvar(--mainBackgroundColor);;
+  border: 1px solid pvar(--inputBorderColor);
   transition: border-color 0.2s, box-shadow 0.2s;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 body .p-dropdown:not(.p-disabled):hover {
-  border-color: #212121;
+  border-color: pvar(--inputBorderColor);
 }
 body .p-dropdown:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
-  border-color: pvar(--mainColor);
+  border-color: pvar(--inputBorderColor);
 }
 body .p-dropdown.p-dropdown-clearable .p-dropdown-label {
   @include padding-right(0);
@@ -168,9 +168,9 @@ body .p-dropdown .p-dropdown-label {
   border: 0 none;
 }
 body .p-dropdown .p-dropdown-label.p-placeholder {
-  color: #6c757d;
+  color: pvar(--inputPlaceholderColor);
 }
-body .p-dropdown .p-dropdown-label:enabled:focus {
+.p-dropdown .p-dropdown-label:focus, .p-dropdown .p-dropdown-label:enabled:focus {
   outline: 0 none;
   box-shadow: none;
 }
@@ -190,25 +190,24 @@ body .p-dropdown.p-dropdown-clearable .p-dropdown-label {
   @include padding-right(4em);
 }
 body .p-dropdown-panel {
-  background-color: #ffffff;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  border: 0 none;
+  background-color: pvar(--mainBackgroundColor);
+  border: 1px solid pvar(--inputBorderColor);
   border-radius: 6px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
-body .p-dropdown-panel .p-dropdown-filter-container {
+.p-dropdown-panel .p-dropdown-header {
   padding: 0.429em 0.857em 0.429em 0.857em;
-  border-bottom: 1px solid #eaeaea;
-  color: #333333;
-  background-color: #ffffff;
+  border-bottom: 1px solid pvar(--mainColorVeryLight);
+  color: pvar(--mainForegroundColor);
+  background-color: pvar(--mainBackgroundColor);
   margin: 0;
 }
-body .p-dropdown-panel .p-dropdown-filter-container .p-dropdown-filter {
+.p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
   @include padding-right(2em);
 
   width: 100%;
 }
-body .p-dropdown-panel .p-dropdown-filter-container .p-dropdown-filter-icon {
+.p-dropdown-panel .p-dropdown-header .p-dropdown-filter-icon {
   top: 50%;
   margin-top: -0.5em;
   right: 1.357em;
@@ -216,29 +215,47 @@ body .p-dropdown-panel .p-dropdown-filter-container .p-dropdown-filter-icon {
 }
 body .p-dropdown-panel .p-dropdown-items {
   padding: 0;
-}
-body .p-dropdown-panel .p-dropdown-items .p-dropdown-item, body .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group {
   margin: 0;
-  padding: 0.429em 0.857em;
+}
+body .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  margin: 0;
+  padding: 8px 16px;
   border: 0 none;
-  color: #333333;
+  color: pvar(--mainForegroundColor);
   background-color: transparent;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-body .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight,
-body .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group.p-highlight {
-  color: #ffffff;
-  background-color: pvar(--mainColor);
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:first-child {
+  margin-top: 0;
 }
-body .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover,
-body .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group:not(.p-highlight):not(.p-disabled):hover {
-  color: #333333;
-  background-color: #eaeaea;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainColorLightest);
 }
-body p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
-  border: 1px solid #a80000;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus {
+  background: pvar(--mainColorLightest);
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainColorVeryLight);;
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainColorVeryLight);;
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item-group {
+  margin: 0;
+  padding: 0.857rem;
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainColorVeryLight);;
+  font-weight: $font-semibold;
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message {
+  padding: 8px 16px;
+  color: pvar(--mainForegroundColor);
+  background: transparent;
 }
 
 // p-toast
@@ -507,6 +524,178 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   color: pvar(--greyForegroundColor);
   right: 0.429rem;
 }
+
+// multiselect
+
+.p-multiselect {
+  background: pvar(--mainBackgroundColor);
+  border: 1px solid pvar(--inputBorderColor);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  border-radius: 3px;
+  font-size: 15px;
+}
+.p-multiselect:not(.p-disabled):hover {
+  border-color: pvar(--inputBorderColor);;
+}
+.p-multiselect:not(.p-disabled).p-focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.25rem var(--mainColorLightest);
+}
+.p-multiselect .p-multiselect-label {
+  padding: 4px 15px;
+  line-height: normal;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.p-multiselect .p-multiselect-label.p-placeholder {
+  color: pvar(--inputPlaceholderColor);
+}
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+  padding: 2px 7px;
+  margin-right: 0.25rem;
+  background: pvar(--mainColorLightest);
+  color: pvar(--mainForegroundColor);
+  border-radius: 3px;
+}
+.p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
+  margin-left: 0.5rem;
+}
+.p-multiselect .p-multiselect-trigger {
+  background: transparent;
+  width: 2.357rem;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.p-multiselect.p-variant-filled {
+  background: pvar(--mainColorLightest);
+}
+.p-multiselect.p-variant-filled:not(.p-disabled):hover {
+  background-color: pvar(--mainColorLightest);
+}
+.p-multiselect.p-variant-filled:not(.p-disabled).p-focus {
+  background-color: pvar(--mainColorLightest);
+}
+
+.p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label {
+  padding: 3px 15px;
+}
+
+.p-multiselect-clearable .p-multiselect-label-container {
+  padding-right: 1.429rem;
+}
+.p-multiselect-clearable .p-multiselect-clear-icon {
+  color: pvar(--greyForegroundColor);
+  right: 2.357rem;
+}
+
+.p-multiselect-panel {
+  background: pvar(--mainBackgroundColor);
+  color: pvar(--mainForegroundColor);
+  border: 1px solid pvar(--inputBorderColor);
+  border-radius: 3px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+}
+.p-multiselect-panel .p-multiselect-header {
+  padding: 0.429rem 0.857rem;
+  border-bottom: 1px solid pvar(--inputBorderColor);
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainBackgroundColor);
+  margin: 0;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
+  padding-right: 1.429rem;
+}
+.p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-multiselect-filter-icon {
+  right: 0.429rem;
+  color: pvar(--greyForegroundColor);
+}
+.p-multiselect-panel .p-multiselect-header .p-checkbox {
+  margin-right: 0.5rem;
+}
+.p-multiselect-panel .p-multiselect-header .p-multiselect-close {
+  margin-left: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  color: pvar(--greyForegroundColor);
+  border: 0 none;
+  background: transparent;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.p-multiselect-panel .p-multiselect-header .p-multiselect-close:enabled:hover {
+  color: pvar(--mainColor);
+  border-color: transparent;
+  background: transparent;
+}
+.p-multiselect-panel .p-multiselect-header .p-multiselect-close:focus-visible {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem pvar(--mainColorVeryLight);
+}
+.p-multiselect-panel .p-multiselect-items {
+  padding: 0;
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item {
+  margin: 0;
+  padding: 6px 14px;
+  border: 0 none;
+  color: pvar(--mainForegroundColor);
+  background: transparent;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  border-radius: 0;
+  line-height: normal;
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item:first-child {
+  margin-top: 0;
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+  color: pvar(--mainBackgroundColor);
+  background: pvar(--mainColor);
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight.p-focus {
+  background: pvar(--mainColor);
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled).p-focus {
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainColorVeryLight);
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
+  color: pvar(--mainForegroundColor);
+  background: pvar(--mainColorVeryLight);
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox {
+  margin-right: 0.5rem;
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item-group {
+  margin: 0;
+  padding: 0.857rem;
+  color: pvar(--mainForegroundColor);
+  background-color: pvar(--mainColorVeryLight);
+  font-weight: $font-semibold;
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-empty-message {
+  padding: 0.429rem 0.857rem;
+  color: pvar(--mainForegroundColor);
+  background: transparent;
+}
+
+.p-input-filled .p-multiselect {
+  background-color: pvar(--mainColorVeryLight);
+}
+.p-input-filled .p-multiselect:not(.p-disabled):hover {
+  background-color: pvar(--mainColorVeryLight);
+}
+.p-input-filled .p-multiselect:not(.p-disabled).p-focus {
+  background-color: pvar(--mainColorVeryLight);
+}
+
+p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
+  border-color: pvar(--red);
+}
+
+// input text (used by p-chips)
 
 .p-inputtext {
   font-size: 15px;
@@ -1023,5 +1212,29 @@ p-chips {
 
   .p-chips-input-token {
     flex-basis: 100px;
+  }
+}
+
+.p-multiselect {
+  width: 100%;
+
+  &.p-multiselect-chip .p-multiselect-token {
+    line-height: normal;
+  }
+}
+
+.p-dropdown-clear-icon,
+.p-multiselect-clear-icon {
+  margin-top: -.5em;
+}
+
+.p-dropdown {
+  width: 100%;
+  font-size: 15px;
+
+  .p-dropdown-label {
+    padding: 4px 15px;
+    line-height: normal;
+    min-height: 29px;
   }
 }

@@ -7,34 +7,19 @@
   <div class="select-filter-block">
     <label for="jobType" i18n>Job type</label>
 
-    <ng-select
-      class="select-job-type"
-      labelForId="jobType"
-      [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()"
-      [searchable]="true"
-      [clearable]="false"
-    >
-      <ng-option *ngFor="let jobType of jobTypes" [value]="jobType">{{ jobType }}</ng-option>
-    </ng-select>
+    <my-select-options
+      class="select-job-type" inputId="jobType" filter="true"
+      [items]="jobTypeItems" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()"
+    ></my-select-options>
   </div>
 
   <div class="select-filter-block">
     <label for="jobState" i18n>Job state</label>
-    <ng-select
-      class="select-job-state"
-      labelForId="jobState"
-      [(ngModel)]="jobState"
-      (ngModelChange)="onJobStateOrTypeChanged()"
-      [clearable]="false"
-      [searchable]="false"
-    >
-      <ng-option value="all">
-        <span i18n="Selector for the list displaying jobs, filtering by their state">any</span>
-      </ng-option>
-      <ng-option *ngFor="let state of jobStates" [value]="state">
-        <span class="pt-badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
-      </ng-option>
-    </ng-select>
+
+    <my-select-options
+      class="select-job-state" inputId="jobState"
+      [items]="jobStateItems" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()"
+    ></my-select-options>
   </div>
 
   <div class="button-filter-block">
@@ -78,7 +63,7 @@
       <td class="job-priority c-hand" [pRowToggler]="job">{{ job.priority }}</td>
 
       <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
-        <span class="pt-badge ellipsis" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
+        <span class="ellipsis" [ngClass]="getJobStateClasses(job.state)">{{ job.state }}</span>
       </td>
 
       <td *ngIf="hasGlobalProgress()" class="job-progress c-hand" [pRowToggler]="job">
@@ -96,7 +81,7 @@
 
   <ng-template pTemplate="rowexpansion" let-job>
     <tr>
-      <td [attr.colspan]="getColspan()">
+      <td myAutoColspan>
         <pre>{{ [
           'Job: ' + job.id,
           'Type: ' + job.type,
@@ -105,13 +90,15 @@
         ].join('\n') }}</pre>
       </td>
     </tr>
+
     <tr>
-      <td [attr.colspan]="getColspan()">
+      <td myAutoColspan>
         <pre>{{ job.data }}</pre>
       </td>
     </tr>
+
     <tr class="job-error" *ngIf="job.error">
-      <td [attr.colspan]="getColspan()">
+      <td myAutoColspan>
         <pre>{{ job.error }}</pre>
       </td>
     </tr>
@@ -119,18 +106,22 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="getColspan()">
+      <td myAutoColspan>
         <div class="no-results">
           <div class="d-block">
-            <ng-container *ngIf="jobState === 'all'">
-              <ng-container *ngIf="jobType === 'all'" i18n>No jobs found.</ng-container>
-              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
-            </ng-container>
-
-            <ng-container *ngIf="jobState !== 'all'">
-              <ng-container *ngIf="jobType === 'all'" i18n>No <span class="pt-badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
-              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="pt-badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
-            </ng-container>
+            @if (jobState === 'all') {
+              @if (jobType === 'all') {
+                <ng-container i18n>No jobs found.</ng-container>
+              } @else {
+                <ng-container i18n>No <code>{{ jobType }}</code> jobs found.</ng-container>
+              }
+            } @else {
+              @if (jobType === 'all') {
+                <ng-container i18n>No <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span> jobs found.</ng-container>
+              } @else {
+                <ng-container i18n>No <code>{{ jobType }}</code> jobs found that are <span [ngClass]="getJobStateClasses(jobState)">{{ jobState }}</span>.</ng-container>
+              }
+            }
           </div>
         </div>
       </td>

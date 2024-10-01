@@ -9,7 +9,8 @@ input[type=text] {
   @include peertube-select-container(340px);
 }
 
-my-select-channel {
+my-select-channel,
+my-select-options {
   display: block;
   max-width: 340px;
 }

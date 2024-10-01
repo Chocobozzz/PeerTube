@@ -201,7 +201,7 @@
 
           <my-select-custom-value
             labelId="transcodingThreadsLabel"
-            labelForId="transcodingThreads"
+            inputId="transcodingThreads"
             [items]="transcodingThreadOptions"
             formControlName="threads"
             [clearable]="false"
@@ -226,12 +226,7 @@
           <label i18n for="transcodingProfile">Transcoding profile</label>
           <span class="small muted ms-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
 
-          <my-select-options
-            id="transcodingProfile"
-            formControlName="profile"
-            [items]="transcodingProfiles"
-            [clearable]="false"
-          ></my-select-options>
+          <my-select-options inputId="transcodingProfile" formControlName="profile" [items]="transcodingProfiles"></my-select-options>
 
           <div *ngIf="formErrors.transcoding.profile" class="form-error" role="alert">{{ formErrors.transcoding.profile }}</div>
         </div>

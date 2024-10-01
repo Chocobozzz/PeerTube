@@ -20,11 +20,13 @@
   </div>
 
   <div class="stats-with-date">
-    <div class="overall-stats">
-      <div class="date-filter-wrapper">
-        <h2>{{ getViewersStatsTitle() }}</h2>
 
-        <my-select-options [(ngModel)]="currentDateFilter" (ngModelChange)="onDateFilterChange()" [items]="dateFilters"></my-select-options>
+    <div class="overall-stats">
+      <h2>{{ getViewersStatsTitle() }}</h2>
+
+      <div class="date-filter-wrapper">
+        <label class="visually-hidden" for="date-filter">Filter viewers stats by date</label>
+        <my-select-options inputId="date-filter" [(ngModel)]="currentDateFilter" (ngModelChange)="onDateFilterChange()" [items]="dateFilters"></my-select-options>
       </div>
 
       <div class="cards">

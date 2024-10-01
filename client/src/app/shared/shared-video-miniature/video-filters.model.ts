@@ -1,5 +1,5 @@
 import { splitIntoArray, toBoolean } from '@app/helpers'
-import { escapeHTML, getAllPrivacies } from '@peertube/peertube-core-utils'
+import { getAllPrivacies } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   NSFWPolicyType,
@@ -112,28 +112,19 @@ export class VideoFilters {
   // ---------------------------------------------------------------------------
 
   load (obj: Partial<AttributesOnly<VideoFilters>>) {
-    // FIXME: We may use <ng-option> that doesn't escape HTML so prefer to escape things
-    // https://github.com/ng-select/ng-select/issues/1363
+    if (obj.sort !== undefined) this.sort = obj.sort
 
-    const escapeIfNeeded = (value: any) => {
-      if (typeof value === 'string') return escapeHTML(value)
+    if (obj.nsfw !== undefined) this.nsfw = obj.nsfw
 
-      return value
-    }
+    if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(obj.languageOneOf)
+    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(obj.categoryOneOf)
 
-    if (obj.sort !== undefined) this.sort = escapeIfNeeded(obj.sort) as VideoSortField
-
-    if (obj.nsfw !== undefined) this.nsfw = escapeIfNeeded(obj.nsfw) as BooleanBothQuery
-
-    if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(escapeIfNeeded(obj.languageOneOf))
-    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(escapeIfNeeded(obj.categoryOneOf))
-
-    if (obj.scope !== undefined) this.scope = escapeIfNeeded(obj.scope) as VideoFilterScope
+    if (obj.scope !== undefined) this.scope = obj.scope
     if (obj.allVideos !== undefined) this.allVideos = toBoolean(obj.allVideos)
 
-    if (obj.live !== undefined) this.live = escapeIfNeeded(obj.live) as BooleanBothQuery
+    if (obj.live !== undefined) this.live = obj.live
 
-    if (obj.search !== undefined) this.search = escapeIfNeeded(obj.search)
+    if (obj.search !== undefined) this.search = obj.search
 
     this.buildActiveFilters()
   }

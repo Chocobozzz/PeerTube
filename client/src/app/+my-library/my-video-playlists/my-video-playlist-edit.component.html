@@ -59,11 +59,7 @@
 
       <div class="form-group">
         <label i18n for="privacy">Privacy</label>
-        <div class="peertube-select-container">
-          <my-select-options
-          labelForId="privacy" [items]="videoPlaylistPrivacies" formControlName="privacy" [clearable]="false"
-        ></my-select-options>
-        </div>
+        <my-select-options inputId="privacy" [items]="videoPlaylistPrivacies" formControlName="privacy"></my-select-options>
 
         <div *ngIf="formErrors.privacy" class="form-error" role="alert">{{ formErrors.privacy }}</div>
       </div>
@@ -71,7 +67,7 @@
       <div class="form-group">
         <label for="videoChannelId" i18n>Channel</label>
 
-        <my-select-channel labelForId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"></my-select-channel>
+        <my-select-channel inputId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"></my-select-channel>
 
         <div *ngIf="formErrors['videoChannelId']" class="form-error" role="alert">{{ formErrors['videoChannelId'] }}</div>
       </div>

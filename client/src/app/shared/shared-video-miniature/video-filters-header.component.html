@@ -47,34 +47,11 @@
 
     <label class="visually-hidden" for="sort-videos">Sort videos</label>
 
-    <ng-select
-      class="sort"
-      formControlName="sort"
-      labelForId="sort-videos"
-      [clearable]="false"
-      [searchable]="false"
-      [bindValue]="null"
-    >
-      <ng-option i18n value="-publishedAt">Sort by <strong>"Recently Added"</strong></ng-option>
-      <ng-option i18n value="-originallyPublishedAt">Sort by <strong>"Original Publication Date"</strong></ng-option>
-
-      <ng-option i18n value="name">Sort by <strong>"Name"</strong></ng-option>
-
-      @if (isTrendingSortEnabled('most-viewed')) {
-        <ng-option i18n value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
-      }
-
-      @if (isTrendingSortEnabled('hot')) {
-        <ng-option i18n value="-hot">Sort by <strong>"Hot"</strong></ng-option>
-      }
-
-      @if (isTrendingSortEnabled('most-liked')) {
-        <ng-option i18n value="-likes">Sort by <strong>"Likes"</strong></ng-option>
-      }
-
-      <ng-option i18n value="-views">Sort by <strong>"Global Views"</strong></ng-option>
-    </ng-select>
-
+    <my-select-options inputId="sort-videos" class="sort" formControlName="sort" [items]="sortItems">
+      <ng-template ptTemplate="item" let-item>
+        <ng-container>Sort by <strong>"{{ item.label }}"</strong></ng-container>
+      </ng-template>
+    </my-select-options>
   </div>
 
   <div [ngbCollapse]="areFiltersCollapsed" [animation]="true">
@@ -83,7 +60,7 @@
         <label class="with-description" for="languageOneOf" i18n>Languages:</label>
         <ng-template *ngTemplateOutlet="updateSettings; context: { $implicit: 'video-languages-subtitles' }"></ng-template>
 
-        <my-select-languages labelForId="languageOneOf" [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
+        <my-select-languages inputId="languageOneOf" [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
       </div>
 
       <div class="form-group" role="radiogroup">
@@ -137,7 +114,7 @@
       <div class="form-group">
         <label for="categoryOneOf" i18n>Categories:</label>
 
-        <my-select-categories labelForId="categoryOneOf" formControlName="categoryOneOf"></my-select-categories>
+        <my-select-categories inputId="categoryOneOf" formControlName="categoryOneOf"></my-select-categories>
       </div>
 
       <div class="form-group" *ngIf="canSeeAllVideos()">

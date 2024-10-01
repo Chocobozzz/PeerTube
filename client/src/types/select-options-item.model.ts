@@ -1,13 +1,14 @@
 export interface SelectOptionsItem {
   id: string | number
   label: string
+
   description?: string
-  group?: string
-  groupLabel?: string
+  imageUrl?: string
+  classes?: string[]
 }
 
 export interface SelectChannelItem extends SelectOptionsItem {
-  id: number
-  support: string
+  id: number // Force number
   avatarPath?: string
+  support?: string
 }

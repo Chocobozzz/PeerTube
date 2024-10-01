@@ -2034,13 +2034,6 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ng-select/ng-select@^13.8.1":
-  version "13.8.1"
-  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-13.8.1.tgz#4884fa51aeccd534e3dd646385405248c867da68"
-  integrity sha512-zN+uYkTOZliRxEm9zS7M08g21YXaNsBLp9/zJgjC5TzNrrfB6vxgOzbDjYzNUqSbZsbod70HoPgzmi81pJhMyg==
-  dependencies:
-    tslib "^2.3.1"
-
 "@ngtools/webpack@18.2.0":
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-18.2.0.tgz#7977e2686020e00ace813a81445cb487dd5ee56b"
@@ -10890,7 +10883,7 @@ tsconfig-paths@^3.15.0:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@2.6.3, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.6.2:
+tslib@2.6.3, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0, tslib@^2.6.2:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.3.tgz#0438f810ad7a9edcde7a241c3d80db693c8cbfe0"
   integrity sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==
