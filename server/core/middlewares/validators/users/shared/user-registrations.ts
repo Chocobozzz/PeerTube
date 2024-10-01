@@ -3,14 +3,19 @@ import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { MRegistration } from '@server/types/models/index.js'
 import { forceNumber, pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { getUserByEmailPermissive } from '@server/lib/user.js'
 
 function checkRegistrationIdExist (idArg: number | string, res: express.Response) {
   const id = forceNumber(idArg)
   return checkRegistrationExist(() => UserRegistrationModel.load(id), res)
 }
 
-function checkRegistrationEmailExist (email: string, res: express.Response, abortResponse = true) {
-  return checkRegistrationExist(() => UserRegistrationModel.loadByEmail(email), res, abortResponse)
+function checkRegistrationEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
+  return checkRegistrationExist(async () => {
+    const registrations = await UserRegistrationModel.loadByEmailCaseInsensitive(email)
+
+    return getUserByEmailPermissive(registrations, email)
+  }, res, abortResponse)
 }
 
 async function checkRegistrationHandlesDoNotAlreadyExist (options: {
@@ -54,7 +59,7 @@ async function checkRegistrationExist (finder: () => Promise<MRegistration>, res
 
 export {
   checkRegistrationIdExist,
-  checkRegistrationEmailExist,
+  checkRegistrationEmailExistPermissive,
   checkRegistrationHandlesDoNotAlreadyExist,
   checkRegistrationExist
 }

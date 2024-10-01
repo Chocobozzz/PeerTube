@@ -673,6 +673,18 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.findOne(query)
   }
 
+  static loadByEmailCaseInsensitive (email: string): Promise<MUserDefault[]> {
+    const query = {
+      where: where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      )
+    }
+
+    return UserModel.findAll(query)
+  }
+
   static loadByUsernameOrEmail (username: string, email?: string): Promise<MUserDefault> {
     if (!email) email = username
 

@@ -28,9 +28,21 @@ describe('Test users API validators', function () {
     await server.config.enableSignup(true)
 
     await server.users.generate('moderator2', UserRole.MODERATOR)
+    await server.users.create({ username: 'user' })
+    await server.users.create({ username: 'user_similar', email: 'User@example.com' })
+    await server.users.generate('user2')
 
     await server.registrations.requestRegistration({
       username: 'request1',
+      registrationReason: 'tt'
+    })
+    await server.registrations.requestRegistration({
+      username: 'request_1',
+      email: 'Request1@example.com',
+      registrationReason: 'tt'
+    })
+    await server.registrations.requestRegistration({
+      username: 'request2',
       registrationReason: 'tt'
     })
   })
@@ -48,6 +60,39 @@ describe('Test users API validators', function () {
       const fields = { email: 'hello' }
 
       await makePostBodyRequest({ url: server.url, path, fields })
+    })
+
+    it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
+      const fields = { email: 'USER@example.com' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+
+    it('Should success with correct capitalization when multiple users with similar email exists', async function () {
+      const fields = { email: 'User@example.com' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+
+    it('Should success with wrong capitalization when no similar emails exists', async function () {
+      const fields = { email: 'USER2@example.com' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
     })
 
     it('Should success with the correct params', async function () {
@@ -104,7 +149,29 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path, fields })
     })
 
-    it('Should succeed with the correct params', async function () {
+    it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
+      const fields = { email: 'REQUEST1@example.com' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+
+    it('Should success with wrong capitalization when no similar emails exists', async function () {
+      const fields = { email: 'REQUEST2@example.com' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+
+    it('Should success with correct capitalization when multiple users with similar email exists', async function () {
       const fields = { email: 'request1@example.com' }
 
       await makePostBodyRequest({
