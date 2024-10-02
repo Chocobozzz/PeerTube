@@ -804,6 +804,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: successful operation
@@ -2267,6 +2268,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: successful operation
@@ -2813,6 +2815,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: successful operation
@@ -4506,6 +4509,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: successful operation
