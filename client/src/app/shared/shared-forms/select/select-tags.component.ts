@@ -1,5 +1,7 @@
-import { Component, Input, forwardRef } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Component, Input, OnInit, forwardRef } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { isMobile } from '@root-helpers/web-browser'
 import { ChipsModule } from 'primeng/chips'
 
 @Component({
@@ -13,13 +15,23 @@ import { ChipsModule } from 'primeng/chips'
     }
   ],
   standalone: true,
-  imports: [ ChipsModule, FormsModule ]
+  imports: [ CommonModule, ChipsModule, FormsModule ]
 })
-export class SelectTagsComponent implements ControlValueAccessor {
+export class SelectTagsComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true }) inputId: string
   @Input() availableItems: string[] = []
   @Input() selectedItems: string[] = []
   @Input() placeholder = $localize`Enter a new tag`
+
+  separator: string
+
+  ngOnInit () {
+    // FIXME: workaround for https://github.com/primefaces/primeng/issues/13981
+    if (isMobile()) {
+      this.separator = ','
+      this.placeholder = $localize`Use a comma (,) to add a tag`
+    }
+  }
 
   propagateChange = (_: any) => { /* empty */ }
 
