@@ -642,26 +642,52 @@
 }
 
 @mixin sub-menu-h1 {
-  ::ng-deep h1 {
-    font-size: 1.3rem;
+  ::ng-deep .sub-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
     border-bottom: 2px solid $grey-background-color;
     padding-bottom: 15px;
     margin-bottom: $sub-menu-margin-bottom;
 
-    > span > my-global-icon,
-    > my-global-icon {
-      width: 24px;
-      height: 24px;
-      position: relative;
-      top: -2px;
-
-      @include margin-right(10px);
+    > * {
+      gap: 0.5rem;
+      display: flex;
+      align-items: center;
     }
 
-    .pt-badge {
-      vertical-align: top;
+    .sub-title {
+      &,
+      h1 {
+        font-size: 1.3rem;
+      }
 
-      @include margin-left(7px);
+      h1 {
+        margin: 0;
+      }
+
+      > my-global-icon {
+        width: 24px;
+        height: 24px;
+
+        svg {
+          vertical-align: initial;
+        }
+      }
+
+      my-feed {
+        display: inline-block;
+        width: 15px;
+
+        my-global-icon svg {
+          vertical-align: initial;
+          position: relative;
+          top: 1px;
+        }
+      }
     }
   }
 }

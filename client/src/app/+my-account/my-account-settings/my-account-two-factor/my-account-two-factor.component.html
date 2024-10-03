@@ -1,7 +1,9 @@
-<h1>
-  <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>Two factor authentication</ng-container>
-</h1>
+<div class="sub-title-container">
+  <div class="sub-title">
+    <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+    <h1 i18n>Two factor authentication</h1>
+  </div>
+</div>
 
 <div i18n *ngIf="twoFactorAlreadyEnabled === true" class="root already-enabled">
   Two factor authentication is already enabled.

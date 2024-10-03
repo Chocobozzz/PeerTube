@@ -23,7 +23,7 @@ import { VideoBlockService } from '@app/shared/shared-moderation/video-block.ser
 @Component({
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
-  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ],
+  styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
   standalone: true,
   imports: [
     GlobalIconComponent,

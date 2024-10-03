@@ -1,14 +1,16 @@
-<h1 class="d-flex justify-content-between">
-  <span class="text-nowrap me-2">
+<div class="sub-title-container">
+  <span class="sub-title">
     <my-global-icon iconName="codesandbox" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>Remote runners</ng-container>
+    <h1 i18n>Remote runners</h1>
   </span>
 
-  <a routerLink="/admin/system/runners/registration-tokens-list" class="peertube-button-link peertube-button-icon grey-button">
-    <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>Runner registration tokens</ng-container>
-  </a>
-</h1>
+  <div>
+    <a routerLink="/admin/system/runners/registration-tokens-list" class="peertube-button-link peertube-button-icon grey-button">
+      <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Runner registration tokens</ng-container>
+    </a>
+  </div>
+</div>
 
 <p-table
   [value]="runners" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"

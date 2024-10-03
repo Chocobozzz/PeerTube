@@ -1,17 +1,17 @@
-<h1>
-  <span class="text-nowrap me-2">
+<div class="sub-title-container">
+  <div class="sub-title">
     <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My channels</ng-container>
-    <span *ngIf="this.pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ this.pagination.totalItems }}</span>
-  </span>
+    <h1 i18n>My channels</h1>
+    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
+  </div>
 
   <div>
-    <a routerLink="/my-library/video-channel-syncs" class="button-link">
+    <a routerLink="/my-library/video-channel-syncs" class="peertube-button-link grey-button peertube-button-icon">
       <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
       <ng-container i18n>My synchronizations</ng-container>
     </a>
   </div>
-</h1>
+</div>
 
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
 

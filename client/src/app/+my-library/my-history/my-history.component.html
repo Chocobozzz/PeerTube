@@ -1,8 +1,10 @@
-<h1>
-  <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My watch history</ng-container>
-  <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
-</h1>
+<div class="sub-title-container">
+  <div class="sub-title">
+    <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
+    <h1 i18n>My watch history</h1>
+    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
+  </div>
+</div>
 
 <div class="top-buttons">
   <div class="search-wrapper">

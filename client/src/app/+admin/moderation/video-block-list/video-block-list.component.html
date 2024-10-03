@@ -1,7 +1,9 @@
-<h1>
-  <my-global-icon iconName="cross" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>Video blocks</ng-container>
-</h1>
+<div class="sub-title-container">
+  <div class="sub-title">
+    <my-global-icon iconName="cross" aria-hidden="true"></my-global-icon>
+    <h1 i18n>Video blocks</h1>
+  </div>
+</div>
 
 <p-table
   [value]="blocklist" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"

@@ -1,14 +1,16 @@
-<h1 class="d-flex justify-content-between">
-  <span>
+<div class="sub-title-container">
+  <div class="sub-title">
     <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My imports</ng-container>
-  </span>
+    <h1 i18n>My imports</h1>
+  </div>
 
-  <a routerLink="/my-library/video-channel-syncs" class="button-link">
-    <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My synchronizations</ng-container>
-  </a>
-</h1>
+  <div>
+    <a routerLink="/my-library/video-channel-syncs" class="peertube-button-link peertube-icon-link grey-button">
+      <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>My synchronizations</ng-container>
+    </a>
+  </div>
+</div>
 
 <div class="mb-4 d-flex justify-content-between">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>

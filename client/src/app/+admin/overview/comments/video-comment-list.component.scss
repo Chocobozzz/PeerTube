@@ -1,9 +1,0 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-
-my-feed {
-  display: inline-block;
-  width: 15px;
-
-  @include margin-left(5px);
-}

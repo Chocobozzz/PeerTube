@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-h1 {
-  display: flex;
-}
-
 input[type=text] {
   @include peertube-input-text(300px);
 }

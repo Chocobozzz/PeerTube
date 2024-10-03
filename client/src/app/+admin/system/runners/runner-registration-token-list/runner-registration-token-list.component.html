@@ -1,7 +1,7 @@
-<h1 class="d-flex justify-content-between">
-  <span class="text-nowrap me-2">
+<div class="sub-title-container">
+  <span class="sub-title">
     <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>Runner registration tokens</ng-container>
+    <h1 i18n>Runner registration tokens</h1>
   </span>
 
   <div>
@@ -10,7 +10,7 @@
       <ng-container i18n>Remote runners</ng-container>
     </a>
   </div>
-</h1>
+</div>
 
 <p-table
   [value]="registrationTokens" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"

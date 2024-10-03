@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
 import { Debug } from '@peertube/peertube-models'
 import { DebugService } from './debug.service'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 
 @Component({
   templateUrl: './debug.component.html',
   styleUrls: [ './debug.component.scss' ],
-  standalone: true
+  standalone: true,
+  imports: [
+    GlobalIconComponent
+  ]
 })
 export class DebugComponent implements OnInit {
   debug: Debug

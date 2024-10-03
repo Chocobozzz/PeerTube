@@ -1,10 +1,9 @@
-<div class="d-flex">
-  <h1 class="text-nowrap">
+<div class="sub-title-container">
+  <div class="sub-title">
     <my-global-icon iconName="follower" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My followers</ng-container>
-  </h1>
-
-  <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
+    <h1 i18n>My followers</h1>
+    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
+  </div>
 </div>
 
 <div class="followers-header">

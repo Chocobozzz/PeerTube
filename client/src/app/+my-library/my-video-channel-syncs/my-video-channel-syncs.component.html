@@ -1,9 +1,11 @@
 <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
-<h1>
-  <my-global-icon iconName="refresh" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My synchronizations</ng-container>
-</h1>
+<div class="sub-title-container">
+  <div class="sub-title">
+    <my-global-icon iconName="refresh" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My synchronizations</ng-container>
+  </div>
+</div>
 
 <div *ngIf="!syncEnabled()">
   <p class="muted" i18n>⚠️ The instance doesn't allow channel synchronization</p>

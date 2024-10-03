@@ -1,19 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-h1 {
-  display: flex;
-  justify-content: space-between;
-
-  my-global-icon {
-    top: -4px;
-  }
-
-  .button-link {
-    @include peertube-button-link;
-    @include grey-button;
-    @include button-with-icon(18px, 3px, -1px);
-  }
+.sub-title my-global-icon {
+  position: relative;
+  top: -3px;
 }
 
 input[type=text] {

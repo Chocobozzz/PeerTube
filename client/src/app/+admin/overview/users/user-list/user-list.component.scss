@@ -3,6 +3,11 @@
 @use '_mixins' as *;
 @use 'bootstrap/scss/functions' as *;
 
+.sub-title-container my-global-icon {
+  position: relative;
+  top: -2px;
+}
+
 .banned-info {
   font-style: italic;
 }
@@ -18,10 +23,6 @@
 p-tableCheckbox {
   position: relative;
   top: -2.5px;
-}
-
-my-global-icon {
-  width: 18px;
 }
 
 @media screen and (max-width: $primeng-breakpoint) {

@@ -10,21 +10,6 @@ input[type=text] {
   @include margin-left(0.5rem);
 }
 
-h1 {
-  display: flex;
-  justify-content: space-between;
-
-  .button-link {
-    @include peertube-button-link;
-    @include grey-button;
-    @include button-with-icon(18px, 3px, -1px);
-
-    &:not(:last-child) {
-      @include margin-right(10px);
-    }
-  }
-}
-
 .action-button-delete-selection {
   display: inline-block;
 

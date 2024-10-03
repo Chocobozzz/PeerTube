@@ -1,17 +1,22 @@
-<div class="root">
-  <h4 i18n>IP address</h4>
-
-  <p i18n>PeerTube thinks your web browser public IP is <strong>{{ debug?.ip }}</strong>.</p>
-
-  <p i18n>If this is not your correct public IP, please consider fixing it because:</p>
-  <ul>
-    <li i18n>Views may not be counted correctly (reduced compared to what they should be)</li>
-    <li i18n>Anti brute force system could be overzealous</li>
-    <li i18n>P2P system could not work correctly</li>
-  </ul>
-
-  <p i18n>To fix it:<p>
-  <ul>
-    <li i18n>Check the <code>trust_proxy</code> configuration key</li>
-  </ul>
+<div class="sub-title-container">
+  <div class="sub-title">
+    <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
+    <h1 i18n>Debug</h1>
+  </div>
 </div>
+
+<h2 class="fs-5" i18n>IP address</h2>
+
+<p i18n>PeerTube thinks your web browser public IP is <strong>{{ debug?.ip }}</strong>.</p>
+
+<p i18n>If this is not your correct public IP, please consider fixing it because:</p>
+<ul>
+  <li i18n>Views may not be counted correctly (reduced compared to what they should be)</li>
+  <li i18n>Anti brute force system could be overzealous</li>
+  <li i18n>P2P system could not work correctly</li>
+</ul>
+
+<p i18n>To fix it:<p>
+<ul>
+  <li i18n>Check the <code>trust_proxy</code> configuration key</li>
+</ul>
