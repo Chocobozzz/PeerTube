@@ -502,7 +502,7 @@ export class PeerTubePlayer {
         {
           label: player.localize('Copy the video URL'),
           listener: function () {
-            copyToClipboard(buildVideoLink({ shortUUID }))
+            copyToClipboard(buildVideoLink({ shortUUID }), player.el() as HTMLElement)
           }
         },
         {
@@ -510,17 +510,17 @@ export class PeerTubePlayer {
           listener: function () {
             const url = buildVideoLink({ shortUUID })
 
-            copyToClipboard(decorateVideoLink({ url, startTime: player.currentTime() }))
+            copyToClipboard(decorateVideoLink({ url, startTime: player.currentTime() }), player.el() as HTMLElement)
           }
         },
         {
           icon: 'code',
           label: player.localize('Copy embed code'),
           listener: () => {
-            copyToClipboard(buildVideoOrPlaylistEmbed({
-              embedUrl: self.currentLoadOptions.embedUrl,
-              embedTitle: self.currentLoadOptions.embedTitle
-            }))
+            copyToClipboard(
+              buildVideoOrPlaylistEmbed({ embedUrl: self.currentLoadOptions.embedUrl, embedTitle: self.currentLoadOptions.embedTitle }),
+              player.el() as HTMLElement
+            )
           }
         }
       ]
