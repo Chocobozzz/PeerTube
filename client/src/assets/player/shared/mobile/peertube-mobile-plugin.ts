@@ -36,11 +36,14 @@ class PeerTubeMobilePlugin extends Plugin {
 
     this.seekAmount = 0
 
-    this.peerTubeMobileButtons = player.addChild('PeerTubeMobileButtons', { reportTouchActivity: false }) as PeerTubeMobileButtons
-
     if (videojs.browser.IS_ANDROID && screen.orientation) {
       this.handleFullscreenRotation()
     }
+
+    // Don't add buttons if the player doesn't have controls
+    if (!player.controls()) return
+
+    this.peerTubeMobileButtons = player.addChild('PeerTubeMobileButtons', { reportTouchActivity: false }) as PeerTubeMobileButtons
 
     if (!this.player.options_.userActions) this.player.options_.userActions = {};
 
