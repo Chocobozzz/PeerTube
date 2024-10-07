@@ -284,6 +284,7 @@ function buildTags (video: MVideoAP) {
 
 function buildIcon (video: MVideoAP): ActivityIconObject[] {
   return [ video.getMiniature(), video.getPreview() ]
+    .filter(i => !!i)
     .map(i => i.toActivityPubObject(video))
 }
 
