@@ -104,7 +104,7 @@ export class VideoGenerateDownloadComponent implements OnInit {
       files.push(this.findAudioFileOnly())
     }
 
-    return this.videoService.generateDownloadUrl({ video: this.video, files })
+    return this.videoService.generateDownloadUrl({ video: this.video, videoFileToken: this.videoFileToken, files })
   }
 
   // ---------------------------------------------------------------------------
