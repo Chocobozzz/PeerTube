@@ -141,6 +141,19 @@
                   </div>
                 </ng-container>
 
+                <div class="form-group" formGroupName="fps" [ngClass]="getTranscodingDisabledClass()">
+                  <label i18n for="transcodingFPSMax">Max video FPS</label>
+
+                  <span i18n class="ms-2 small muted">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</span>
+
+                  <div class="number-with-unit">
+                    <input type="number" name="transcodingFPSMax" formControlName="max" />
+                    <span>FPS</span>
+                  </div>
+
+                  <div *ngIf="formErrors.transcoding.fps.max" class="form-error" role="alert">{{ formErrors.transcoding.fps.max }}</div>
+                </div>
+
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                   <div class="mb-2 fw-bold" i18n>Resolutions to generate</div>
 

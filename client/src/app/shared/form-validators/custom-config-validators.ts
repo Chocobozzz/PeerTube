@@ -65,6 +65,14 @@ export const TRANSCODING_THREADS_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const TRANSCODING_MAX_FPS_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.required, Validators.min(1) ],
+  MESSAGES: {
+    required: $localize`Transcoding max FPS is required.`,
+    min: $localize`Transcoding max FPS must be greater or equal to 1.`
+  }
+}
+
 export const MAX_LIVE_DURATION_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(-1) ],
   MESSAGES: {

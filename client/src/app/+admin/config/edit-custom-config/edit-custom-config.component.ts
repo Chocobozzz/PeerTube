@@ -22,6 +22,7 @@ import {
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
   SIGNUP_MINIMUM_AGE_VALIDATOR,
+  TRANSCODING_MAX_FPS_VALIDATOR,
   TRANSCODING_THREADS_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -30,6 +31,7 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
 import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import { CustomConfig, CustomPage, HTMLServerConfig } from '@peertube/peertube-models'
+import merge from 'lodash-es/merge'
 import omit from 'lodash-es/omit'
 import { forkJoin } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
@@ -40,7 +42,6 @@ import { EditHomepageComponent } from './edit-homepage.component'
 import { EditInstanceInformationComponent } from './edit-instance-information.component'
 import { EditLiveConfigurationComponent } from './edit-live-configuration.component'
 import { EditVODTranscodingComponent } from './edit-vod-transcoding.component'
-import merge from 'lodash-es/merge'
 
 type ComponentCustomConfig = CustomConfig & {
   instanceCustomHomepage: CustomPage
@@ -239,6 +240,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         },
         remoteRunners: {
           enabled: null
+        },
+        fps: {
+          max: TRANSCODING_MAX_FPS_VALIDATOR
         }
       },
       live: {
@@ -260,6 +264,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           alwaysTranscodeOriginalResolution: null,
           remoteRunners: {
             enabled: null
+          },
+          fps: {
+            max: TRANSCODING_MAX_FPS_VALIDATOR
           }
         }
       },
