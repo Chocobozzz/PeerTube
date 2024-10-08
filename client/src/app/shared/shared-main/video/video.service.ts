@@ -382,13 +382,16 @@ export class VideoService {
   generateDownloadUrl (options: {
     video: Video
     files: VideoFile[]
+    videoFileToken?: string
   }) {
-    const { video, files } = options
+    const { video, files, videoFileToken } = options
 
     if (files.length === 0) throw new Error('Cannot generate download URL without files')
 
     let url = `${VideoService.BASE_VIDEO_DOWNLOAD_URL}/${video.uuid}?`
     url += files.map(f => 'videoFileIds=' + f.id).join('&')
+
+    if (videoFileToken) url += `&videoFileToken=${videoFileToken}`
 
     return url
   }

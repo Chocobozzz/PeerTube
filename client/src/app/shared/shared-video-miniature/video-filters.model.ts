@@ -45,7 +45,8 @@ export class VideoFilters {
     [ 'categoryOneOf', undefined ],
     [ 'scope', 'federated' ],
     [ 'allVideos', false ],
-    [ 'live', 'both' ]
+    [ 'live', 'both' ],
+    [ 'search', '' ]
   ])
 
   private activeFilters: VideoFilterActive[] = []

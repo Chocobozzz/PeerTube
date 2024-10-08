@@ -155,25 +155,30 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   }
 
   private addFilterToSearch (search: string, newFilter: AdvancedInputFilterChild) {
-    const prefix = newFilter.value.split(':').shift()
+    const filterTokens = this.restService.tokenizeString(newFilter.value)
+    let searchTokens = this.restService.tokenizeString(search)
 
-    // Tokenize search and remove a potential existing filter
-    const tokens = this.restService.tokenizeString(search)
-                                   .filter(t => !t.startsWith(prefix))
+    for (const filterToken of filterTokens) {
+      const prefix = filterToken.split(':').shift()
 
-    tokens.push(newFilter.value)
+      // Tokenize search and remove a potential existing filter
+      searchTokens = searchTokens.filter(t => !t.startsWith(prefix))
+      searchTokens.push(filterToken)
+    }
 
-    return tokens.join(' ')
+    return searchTokens.join(' ')
   }
 
   private parseFilters (search: string) {
-    const tokens = this.restService.tokenizeString(search)
+    const searchTokens = this.restService.tokenizeString(search)
 
     this.enabledFilters = new Set()
 
     for (const group of this.filters) {
       for (const filter of group.children) {
-        if (tokens.includes(filter.value)) {
+        const filterTokens = this.restService.tokenizeString(filter.value)
+
+        if (filterTokens.every(filterToken => searchTokens.includes(filterToken))) {
           this.enabledFilters.add(filter.value)
         }
       }

@@ -178,7 +178,14 @@ async function saveReplayToExternalVideo (options: {
     inputFileMutexReleaser()
   }
 
-  await copyOrRegenerateThumbnails({ liveVideo, replayVideo })
+  try {
+    await copyOrRegenerateThumbnails({ liveVideo, replayVideo })
+  } catch (err) {
+    logger.error(
+      `Cannot copy/regenerate thumbnails of ended live ${liveVideo.uuid} to external video ${replayVideo.uuid}`,
+      lTags(liveVideo.uuid, replayVideo.uuid)
+    )
+  }
 
   await createStoryboardJob(replayVideo)
   await createTranscriptionTaskIfNeeded(replayVideo)
@@ -280,7 +287,11 @@ async function replaceLiveByReplay (options: {
   }
 
   // Regenerate the thumbnail & preview?
-  await regenerateMiniaturesIfNeeded(videoWithFiles, undefined)
+  try {
+    await regenerateMiniaturesIfNeeded(videoWithFiles, undefined)
+  } catch (err) {
+    logger.error(`Cannot regenerate thumbnails of ended live ${videoWithFiles.uuid}`, lTags(liveVideo.uuid))
+  }
 
   // We consider this is a new video
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })

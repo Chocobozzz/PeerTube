@@ -1,5 +1,18 @@
 # Changelog
 
+## v6.3.2
+
+### Bug fixes
+
+ * Fix 403 error when downloading private/internal video
+ * Don't crash video federation and live replay generation on missing thumbnail/preview
+ * Fix advanced search input with multiple automatic search tokens
+ * Fix player "Copy URL" when the video is fullscreen
+ * Fix account videos search
+ * Add missing max transcoding fps config in admin
+ * Don't add mobile buttons if the player controls are disabled
+
+
 ## v6.3.1
 
 ### IMPORTANT NOTES

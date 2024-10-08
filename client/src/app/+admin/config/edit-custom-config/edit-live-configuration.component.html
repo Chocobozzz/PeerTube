@@ -48,7 +48,7 @@
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
                 <label i18n for="liveMaxInstanceLives">Max simultaneous lives created on your instance</label>
 
-                <span class="ms-2 small muted">(-1 for "unlimited")</span>
+                <span i18n class="ms-2 small muted">(-1 for "unlimited")</span>
 
                 <div class="number-with-unit">
                   <input type="number" id="liveMaxInstanceLives" formControlName="maxInstanceLives" />
@@ -60,7 +60,7 @@
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
                 <label i18n for="liveMaxUserLives">Max simultaneous lives created per user</label>
-                <span class="ms-2 small muted">(-1 for "unlimited")</span>
+                <span i18n class="ms-2 small muted">(-1 for "unlimited")</span>
 
                 <div class="number-with-unit">
                   <input type="number" id="liveMaxUserLives" formControlName="maxUserLives" />
@@ -112,6 +112,19 @@
             <h3 class="callout-title" i18n>Output formats</h3>
 
             <div [ngClass]="getDisabledLiveTranscodingClass()">
+
+              <div class="form-group" formGroupName="fps">
+                <label i18n for="liveTranscodingFPSMax">Max live FPS</label>
+
+                <span i18n class="ms-2 small muted">Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</span>
+
+                <div class="number-with-unit">
+                  <input type="number" name="liveTranscodingFPSMax" formControlName="max" />
+                  <span>FPS</span>
+                </div>
+
+                <div *ngIf="formErrors.live.transcoding.fps.max" class="form-error" role="alert">{{ formErrors.live.transcoding.fps.max }}</div>
+              </div>
 
               <div class="ms-2 mt-3">
                 <h4 i18n>Live resolutions to generate</h4>
