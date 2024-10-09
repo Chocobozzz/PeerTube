@@ -6,8 +6,8 @@ import { logger } from '@root-helpers/logger'
 import { InputTextComponent } from '../../shared-forms/input-text.component'
 
 @Component({
-  selector: 'my-subtitle-files-download',
-  templateUrl: './subtitle-files-download.component.html',
+  selector: "my-subtitle-files-download",
+  templateUrl: "./subtitle-files-download.component.html",
   standalone: true,
   imports: [
     NgIf,
@@ -18,54 +18,77 @@ import { InputTextComponent } from '../../shared-forms/input-text.component'
     NgbNavLink,
     NgbNavLinkBase,
     NgbNavContent,
-    NgbNavOutlet
-  ]
+    NgbNavOutlet,
+  ],
 })
 export class SubtitleFilesDownloadComponent implements OnInit {
-  @Input({ required: true }) videoCaptions: VideoCaption[]
+  @Input({ required: true }) videoCaptions: VideoCaption[];
 
-  @Output() downloaded = new EventEmitter<void>()
+  @Output() downloaded = new EventEmitter<void>();
 
-  activeNavId: string
+  activeNavId: string;
 
-  getCaptions () {
-    if (!this.videoCaptions) return []
+  getCaptions() {
+    if (!this.videoCaptions) return [];
 
-    return this.videoCaptions
+    return this.videoCaptions;
   }
 
-  ngOnInit () {
+  ngOnInit() {
     if (this.hasCaptions()) {
-      this.activeNavId = this.videoCaptions[0].language.id
+      this.activeNavId = this.videoCaptions[0].language.id;
     }
   }
 
-  download () {
-    window.location.assign(this.getCaptionLink())
+  async download() {
+    const captionLink = this.getCaptionLink();
+    if (!captionLink) return;
 
-    this.downloaded.emit()
+    try {
+      const response = await fetch(captionLink);
+      const blob = await response.blob();
+      const link = document.createElement("a");
+
+      link.href = window.URL.createObjectURL(blob);
+      
+      link.download = "subtitle.srt";
+      
+      document.body.appendChild(link);
+      
+      link.click();
+      
+      document.body.removeChild(link);
+      
+      window.URL.revokeObjectURL(link.href);
+
+      this.downloaded.emit();
+    } catch (error) {
+      console.error("Error in downloading the subtile: ", error);
+      logger.error("Error downloading the subtitle");
+    }
   }
 
-  hasCaptions () {
-    return this.getCaptions().length !== 0
+  hasCaptions() {
+    return this.getCaptions().length !== 0;
   }
 
-  getCaption () {
-    const caption = this.getCaptions()
-      .find(c => c.language.id === this.activeNavId)
+  getCaption() {
+    const caption = this.getCaptions().find(
+      (c) => c.language.id === this.activeNavId
+    );
 
     if (!caption) {
-      logger.error(`Cannot find caption ${this.activeNavId}`)
-      return undefined
+      logger.error(`Cannot find caption ${this.activeNavId}`);
+      return undefined;
     }
 
-    return caption
+    return caption;
   }
 
-  getCaptionLink () {
-    const caption = this.getCaption()
-    if (!caption) return ''
+  getCaptionLink() {
+    const caption = this.getCaption();
+    if (!caption) return "";
 
-    return window.location.origin + caption.captionPath
+    return window.location.origin + caption.captionPath;
   }
 }
