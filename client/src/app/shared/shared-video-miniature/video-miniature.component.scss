@@ -110,6 +110,15 @@ my-actor-avatar {
 
   .video-miniature-created-at-views {
     display: block;
+
+    .comment-count {
+      float: right;
+      text-align: right;
+
+      span {
+        margin-left: 5px;
+      }
+    }
   }
 
   .video-actions {

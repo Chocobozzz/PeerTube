@@ -25,6 +25,7 @@ import { NgClass, NgIf, NgFor } from '@angular/common'
 import { Video } from '../shared-main/video/video.model'
 import { VideoService } from '../shared-main/video/video.service'
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -37,7 +38,8 @@ export type MiniatureDisplayOptions = {
   nsfw?: boolean
 
   by?: boolean
-  forceChannelInBy?: boolean
+  forceChannelInBy?: boolean,
+  commentCount?: boolean
 }
 @Component({
   selector: 'my-video-miniature',
@@ -55,7 +57,8 @@ export type MiniatureDisplayOptions = {
     VideoViewsCounterComponent,
     RouterLink,
     NgFor,
-    VideoActionsDropdownComponent
+    VideoActionsDropdownComponent,
+    GlobalIconComponent
   ]
 })
 export class VideoMiniatureComponent implements OnInit {
@@ -67,6 +70,7 @@ export class VideoMiniatureComponent implements OnInit {
     date: true,
     views: true,
     by: true,
+    commentCount: true,
     avatar: false,
     privacyLabel: false,
     privacyText: false,
