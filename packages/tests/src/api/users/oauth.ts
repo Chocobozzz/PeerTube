@@ -28,6 +28,8 @@ describe('Test oauth', function () {
     })
 
     await setAccessTokensToServers([ server ])
+    await server.users.create({ username: 'user1', email: 'user@example.com' })
+    await server.users.create({ username: 'user2', email: 'User@example.com', password: 'AdvancedPassword' })
 
     sqlCommand = new SQLCommand(server)
   })
@@ -79,7 +81,7 @@ describe('Test oauth', function () {
     })
 
     it('Should not login with an invalid password', async function () {
-      const user = { username: server.store.user.username, password: 'mew_three' }
+      const user = { username: 'User@example.com', password: 'password' }
       const body = await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       expectInvalidCredentials(body)
@@ -87,6 +89,9 @@ describe('Test oauth', function () {
 
     it('Should be able to login', async function () {
       await server.login.login({ expectedStatus: HttpStatusCode.OK_200 })
+
+      const user = { username: 'User@example.com', password: 'AdvancedPassword' }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.OK_200 })
     })
 
     it('Should be able to login with an insensitive username', async function () {
@@ -98,6 +103,14 @@ describe('Test oauth', function () {
 
       const user3 = { username: 'ROOt', password: server.store.user.password }
       await server.login.login({ user: user3, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should be able to login with an insensitive email when no similar emails exist', async function () {
+      const user = { username: 'ADMIN' + server.internalServerNumber + '@example.com', password: server.store.user.password }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.OK_200 })
+
+      const user2 = { username: 'admin' + server.internalServerNumber + '@example.com', password: server.store.user.password }
+      await server.login.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
