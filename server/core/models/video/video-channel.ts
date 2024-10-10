@@ -1,5 +1,5 @@
 import { forceNumber, pick } from '@peertube/peertube-core-utils'
-import { ActivityPubActor, VideoChannel, VideoChannelSummary } from '@peertube/peertube-models'
+import { ActivityPubActor, VideoChannel, VideoChannelSummary, VideoPrivacy } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountHost } from '@server/types/models/index.js'
@@ -521,6 +521,14 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
           model: ActorModel.unscoped(),
           where: {
             serverId: null
+          }
+        },
+        {
+          attributes: [ 'id' ],
+          model: VideoModel.unscoped(),
+          required: true,
+          where: {
+            privacy: VideoPrivacy.PUBLIC
           }
         }
       ]
