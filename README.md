@@ -26,17 +26,21 @@ Be part of a network of multiple small federated, interoperable video hosting pr
   </a>
 </p>
 
+---
+
 <div align="center">
   
-| Client |
-|:-----------:|
-| <a href="https://automate.browserstack.com/public-build/ZEZqamJQUXFQd1l3cFp3QmxLSVVwdjBGZjNGc3J2M09INFpka296em9VYz0tLUowWVdoemxkY1hBOU9aZzNlY1htZ3c9PQ==--68e0184ce76481d36559d681d9cddc68235ff536"><img src="https://automate.browserstack.com/badge.svg?badge_key=ZEZqamJQUXFQd1l3cFp3QmxLSVVwdjBGZjNGc3J2M09INFpka296em9VYz0tLUowWVdoemxkY1hBOU9aZzNlY1htZ3c9PQ==--68e0184ce76481d36559d681d9cddc68235ff536" alt="BrowserStack Status"></a> <a href="https://weblate.framasoft.org/projects/peertube/angular/"><img src="https://weblate.framasoft.org/widgets/peertube/-/angular/svg-badge.svg" alt="Weblate Status"></a> |
+### Client
 
-| Server |
-|:-----------:|
-| <a href="https://github.com/Chocobozzz/PeerTube/actions?query=workflow%3A%22Test%22+branch%3Adevelop"><img src="https://github.com/Chocobozzz/PeerTube/workflows/Test/badge.svg" alt="GitHub Test Status"></a> <a href="https://standardjs.com/"><img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a> |
+<a href="https://automate.browserstack.com/public-build/ZEZqamJQUXFQd1l3cFp3QmxLSVVwdjBGZjNGc3J2M09INFpka296em9VYz0tLUowWVdoemxkY1hBOU9aZzNlY1htZ3c9PQ==--68e0184ce76481d36559d681d9cddc68235ff536"><img src="https://automate.browserstack.com/badge.svg?badge_key=ZEZqamJQUXFQd1l3cFp3QmxLSVVwdjBGZjNGc3J2M09INFpka296em9VYz0tLUowWVdoemxkY1hBOU9aZzNlY1htZ3c9PQ==--68e0184ce76481d36559d681d9cddc68235ff536" alt="BrowserStack Status"></a> <a href="https://weblate.framasoft.org/projects/peertube/angular/"><img src="https://weblate.framasoft.org/widgets/peertube/-/angular/svg-badge.svg" alt="Weblate Status"></a>
+
+### Server
+
+<a href="https://github.com/Chocobozzz/PeerTube/actions?query=workflow%3A%22Test%22+branch%3Adevelop"><img src="https://github.com/Chocobozzz/PeerTube/workflows/Test/badge.svg" alt="GitHub Test Status"></a> <a href="https://standardjs.com/"><img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
 
 </div>
+
+---
 
 <br />
 
