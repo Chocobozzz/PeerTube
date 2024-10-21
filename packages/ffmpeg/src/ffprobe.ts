@@ -1,6 +1,6 @@
-import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
 import { buildAspectRatio, forceNumber } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
+import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
 
 /**
  *
@@ -114,7 +114,11 @@ async function getVideoStreamDimensionsInfo (path: string, existingProbe?: Ffpro
     }
   }
 
-  if (videoStream.rotation === '90' || videoStream.rotation === '-90') {
+  const rotation = videoStream.rotation
+    ? videoStream.rotation + ''
+    : undefined
+
+  if (rotation === '90' || rotation === '-90') {
     const width = videoStream.width
     videoStream.width = videoStream.height
     videoStream.height = width
@@ -205,16 +209,19 @@ async function getChaptersFromContainer (options: {
 // ---------------------------------------------------------------------------
 
 export {
-  getVideoStreamDimensionsInfo,
-  getChaptersFromContainer,
-  getMaxAudioBitrate,
-  getVideoStream,
-  getVideoStreamDuration,
-  getAudioStream,
-  getVideoStreamFPS,
-  isAudioFile,
   ffprobePromise,
+  getAudioStream,
+  getChaptersFromContainer,
+
+  getMaxAudioBitrate,
+
+  getVideoStream,
   getVideoStreamBitrate,
+  getVideoStreamDimensionsInfo,
+  getVideoStreamDuration,
+  getVideoStreamFPS,
   hasAudioStream,
-  hasVideoStream
+
+  hasVideoStream,
+  isAudioFile
 }
