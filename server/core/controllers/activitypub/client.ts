@@ -104,6 +104,36 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   asyncMiddleware(getAccountVideoRateFactory('dislike'))
 )
 
+// ---------------------------------------------------------------------------
+
+activityPubClientRouter.get('/videos/watch/:id/comments',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
+  asyncMiddleware(videoCommentsController)
+)
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/approve-reply',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentApprovedController)
+)
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentController)
+)
+activityPubClientRouter.get(
+  [ '/videos/watch/:videoId/comments/:commentId', '/w/:videoId([^;]+);threadId=:commentId([0-9]+)' ],
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentController)
+)
+
+// ---------------------------------------------------------------------------
+
 activityPubClientRouter.get(
   [ '/videos/watch/:id', '/w/:id' ],
   executeIfActivityPub,
@@ -141,33 +171,6 @@ activityPubClientRouter.get('/videos/watch/:id/dislikes',
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoDislikesController)
-)
-
-// ---------------------------------------------------------------------------
-
-activityPubClientRouter.get('/videos/watch/:id/comments',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
-  asyncMiddleware(videoCommentsController)
-)
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/approve-reply',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videoCommentGetValidator),
-  asyncMiddleware(videoCommentApprovedController)
-)
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videoCommentGetValidator),
-  asyncMiddleware(videoCommentController)
-)
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videoCommentGetValidator),
-  asyncMiddleware(videoCommentController)
 )
 
 // ---------------------------------------------------------------------------
