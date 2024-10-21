@@ -6,7 +6,7 @@ services:
     # If you don't want to use the official image and build one from sources:
     # build:
     #   context: .
-    #   dockerfile: Dockerfile.nginx
+    #   dockerfile: ./support/docker/production/Dockerfile.nginx
     env_file:
       - .env
     ports:
