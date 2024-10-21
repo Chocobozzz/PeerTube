@@ -44,9 +44,6 @@ async function hasAudioStream (path: string, existingProbe?: FfprobeData) {
 }
 
 async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
-  // without position, ffprobe considers the last input only
-  // we make it consider the first input only
-  // if you pass a file path to pos, then ffprobe acts on that file directly
   const data = existingProbe || await ffprobePromise(videoPath)
 
   if (Array.isArray(data.streams)) {

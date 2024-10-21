@@ -83,7 +83,7 @@ export const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     if (
       !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
-      !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
+      !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddLegacyValidator' }) ||
       !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
     ) {
       return cleanUpReqFiles(req)
