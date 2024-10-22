@@ -41,6 +41,11 @@
 
               <my-video-views-counter *ngIf="displayOptions.views" [video]="video"></my-video-views-counter>
             </span>
+
+            <span class="comment-count" *ngIf="displayOptions.commentCount">
+              <my-global-icon iconName="message-circle"></my-global-icon>
+              <span>{{ video.commentCount }}</span>
+            </span>
           </span>
 
           <a *ngIf="displayOptions.by" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
