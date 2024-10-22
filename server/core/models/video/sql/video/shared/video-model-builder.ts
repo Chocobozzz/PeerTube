@@ -98,9 +98,8 @@ export class VideoModelBuilder {
         this.addStreamingPlaylistFile(row)
       }
 
-      this.addTag(row, videoModel)
-
       if (this.mode === 'get') {
+        this.addTag(row, videoModel)
         this.addTracker(row, videoModel)
         this.setBlacklisted(row, videoModel)
         this.setScheduleVideoUpdate(row, videoModel)
@@ -121,6 +120,10 @@ export class VideoModelBuilder {
 
         if (include & VideoInclude.AUTOMATIC_TAGS) {
           this.addAutoTag(row, videoModel)
+        }
+
+        if (include & VideoInclude.TAGS) {
+          this.addTag(row, videoModel)
         }
       }
     }

@@ -109,7 +109,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
       this.includeAutomaticTags(serverActor.Account.id)
     }
 
-    if (options.includeTags) {
+    if (options.include & VideoInclude.TAGS) {
       this.includeTags()
     }
 

@@ -36,7 +36,6 @@ export type BuildVideosListQueryOptions = {
   isLive?: boolean
   isLocal?: boolean
   include?: VideoIncludeType
-  includeTags?: boolean
 
   categoryOneOf?: number[]
   licenceOneOf?: number[]
