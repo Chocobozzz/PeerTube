@@ -35,8 +35,7 @@ describe('Test index HTML generation', function () {
       passwordProtectedVideoId,
       unlistedVideoId,
       privatePlaylistId,
-      unlistedPlaylistId,
-      instanceDescription
+      unlistedPlaylistId
     } = await prepareClientTests())
   })
 

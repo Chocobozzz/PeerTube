@@ -23,7 +23,8 @@ describe('Test embed HTML generation', function () {
   let unlistedPlaylistId: string
   let playlistName: string
   let playlistDescription: string
-  let instanceDescription: string
+
+  let instanceConfig: { shortDescription: string }
 
   before(async function () {
     this.timeout(120000);
@@ -44,7 +45,7 @@ describe('Test embed HTML generation', function () {
       playlist,
       unlistedPlaylistId,
       privatePlaylistId,
-      instanceDescription
+      instanceConfig
     } = await prepareClientTests())
   })
 
@@ -58,7 +59,7 @@ describe('Test embed HTML generation', function () {
     it('Should have the correct embed html instance tags', async function () {
       const res = await makeHTMLRequest(servers[0].url, '/videos/embed/toto')
 
-      checkIndexTags(res.text, `PeerTube`, instanceDescription, '', config)
+      checkIndexTags(res.text, `PeerTube`, instanceConfig.shortDescription, '', config)
 
       expect(res.text).to.not.contain(`"name":`)
     })

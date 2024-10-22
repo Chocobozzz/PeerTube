@@ -14,6 +14,6 @@ export class CommonEmbedHtml {
     let htmlResult = TagsHtml.addTitleTag(html)
     htmlResult = TagsHtml.addDescriptionTag(htmlResult)
 
-    return TagsHtml.addTags(htmlResult, { indexationPolicy: 'never' }, { playlist, video })
+    return TagsHtml.addTags(htmlResult, { forbidIndexation: true }, { playlist, video })
   }
 }

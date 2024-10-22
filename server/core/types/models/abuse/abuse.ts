@@ -40,7 +40,7 @@ export type MVideoAbuseVideoFull =
 export type MVideoAbuseFormattable =
   MVideoAbuse &
   UseVideoAbuse<'Video', Pick<MVideoAccountLightBlacklistAllFiles,
-  'id' | 'uuid' | 'name' | 'nsfw' | 'getMiniatureStaticPath' | 'isBlacklisted' | 'VideoChannel'>>
+  'id' | 'uuid' | 'name' | 'nsfw' | 'getMiniature' | 'getMiniatureStaticPath' | 'isBlacklisted' | 'VideoChannel' | 'Thumbnails'>>
 
 // ############################################################################
 

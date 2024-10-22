@@ -1838,21 +1838,21 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  hasMiniature (this: MVideoThumbnail) {
+  hasMiniature (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails'>) {
     return !!this.getMiniature()
   }
 
-  getMiniature (this: MVideoThumbnail) {
+  getMiniature (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
   }
 
-  hasPreview (this: MVideoThumbnail) {
+  hasPreview (this: Pick<MVideoThumbnail, 'getPreview' | 'Thumbnails'>) {
     return !!this.getPreview()
   }
 
-  getPreview (this: MVideoThumbnail) {
+  getPreview (this: Pick<MVideoThumbnail, 'Thumbnails'>) {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
@@ -1872,14 +1872,14 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return buildVideoEmbedPath(this)
   }
 
-  getMiniatureStaticPath () {
+  getMiniatureStaticPath (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails'>) {
     const thumbnail = this.getMiniature()
     if (!thumbnail) return null
 
     return thumbnail.getLocalStaticPath()
   }
 
-  getPreviewStaticPath () {
+  getPreviewStaticPath (this: Pick<MVideoThumbnail, 'getPreview' | 'Thumbnails'>) {
     const preview = this.getPreview()
     if (!preview) return null
 

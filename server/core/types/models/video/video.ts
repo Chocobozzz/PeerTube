@@ -217,7 +217,7 @@ export type MVideoForRedundancyAPI =
 // Format for API or AP object
 
 export type MVideoFormattable =
-  MVideo &
+  MVideoThumbnail &
   PickWithOpt<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoChannel', MChannelAccountSummaryFormattable> &
   PickWithOpt<VideoModel, 'ScheduleVideoUpdate', Pick<MScheduleVideoUpdate, 'updateAt' | 'privacy'>> &

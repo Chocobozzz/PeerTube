@@ -84,9 +84,7 @@ export class ActorHtml {
         updatedAt: entity.updatedAt
       },
 
-      indexationPolicy: entity.Actor.isOwned()
-        ? 'always'
-        : 'never'
+      forbidIndexation: !entity.Actor.isOwned()
     }, {})
 
     return customHTML

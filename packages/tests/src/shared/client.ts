@@ -5,7 +5,8 @@ import {
   VideoPlaylistCreateResult,
   Account,
   HTMLServerConfig,
-  ServerConfig
+  ServerConfig,
+  ActorImageType
 } from '@peertube/peertube-models'
 import {
   createMultipleServers,
@@ -43,10 +44,21 @@ export async function prepareClientTests () {
   const servers = await createMultipleServers(2)
 
   await setAccessTokensToServers(servers)
-
   await doubleFollow(servers[0], servers[1])
-
   await setDefaultVideoChannel(servers)
+
+  const instanceConfig = {
+    name: 'super instance title',
+    shortDescription: 'super instance description',
+    avatar: 'avatar.png'
+  }
+
+  await servers[0].config.updateExistingConfig({
+    newConfig: {
+      instance: { name: instanceConfig.name, shortDescription: instanceConfig.shortDescription }
+    }
+  })
+  await servers[0].config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: instanceConfig.avatar })
 
   let account: Account
 
@@ -59,8 +71,6 @@ export async function prepareClientTests () {
   let playlistIds: (string | number)[] = []
   let privatePlaylistId: string
   let unlistedPlaylistId: string
-
-  const instanceDescription = 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
 
   const videoName = 'my super name for server 1'
   const videoDescription = 'my<br> super __description__ for *server* 1<p></p>'
@@ -76,6 +86,8 @@ export async function prepareClientTests () {
     channelName: servers[0].store.channel.name,
     attributes: { description: channelDescription }
   })
+
+  await servers[0].channels.updateImage({ channelName: servers[0].store.channel.name, fixture: 'avatar.png', type: 'avatar' })
 
   // Public video
 
@@ -154,7 +166,7 @@ export async function prepareClientTests () {
   return {
     servers,
 
-    instanceDescription,
+    instanceConfig,
 
     account,
 

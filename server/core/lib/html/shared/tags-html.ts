@@ -7,7 +7,7 @@ import truncate from 'lodash-es/truncate.js'
 import { mdToOneLinePlainText } from '@server/helpers/markdown.js'
 
 type Tags = {
-  indexationPolicy: 'always' | 'never'
+  forbidIndexation: boolean
 
   url?: string
 
@@ -31,8 +31,8 @@ type Tags = {
 
   image?: {
     url: string
-    width?: number
-    height?: number
+    width: number
+    height: number
   }
 
   embed?: {
@@ -76,7 +76,7 @@ export class TagsHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTagsOptions(tagsValues)
     const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
 
-    const { url, escapedTitle, oembedUrl, indexationPolicy } = tagsValues
+    const { url, escapedTitle, oembedUrl, forbidIndexation } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
 
@@ -126,11 +126,11 @@ export class TagsHtml {
     }
 
     // SEO, use origin URL
-    if (indexationPolicy !== 'never' && url) {
+    if (forbidIndexation === true && url) {
       tagsStr += `<link rel="canonical" href="${url}" />`
     }
 
-    if (indexationPolicy === 'never') {
+    if (forbidIndexation === true) {
       tagsStr += `<meta name="robots" content="noindex" />`
     }
 

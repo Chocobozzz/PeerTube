@@ -113,11 +113,11 @@ export class PlaylistHtml {
       escapedTitle: escapeHTML(playlist.name),
       escapedTruncatedDescription,
 
-      indexationPolicy: !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC
-        ? 'never'
-        : 'always',
+      forbidIndexation: !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
 
-      image: { url: playlist.getThumbnailUrl() },
+      image: playlist.Thumbnail
+        ? { url: playlist.getThumbnailUrl(), width: playlist.Thumbnail.width, height: playlist.Thumbnail.height }
+        : undefined,
 
       list,
 

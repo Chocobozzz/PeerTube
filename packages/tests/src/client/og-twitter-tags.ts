@@ -22,11 +22,18 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
   let playlistIds: (string | number)[] = []
 
+  let instanceConfig: {
+    name: string
+    shortDescription: string
+    avatar: string
+  }
+
   before(async function () {
     this.timeout(120000);
 
     ({
       servers,
+      instanceConfig,
       account,
       playlistIds,
       videoIds,
@@ -41,6 +48,20 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
   describe('Open Graph', function () {
 
+    async function indexPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      let url = servers[0].url
+      if (path !== '/') url += path
+
+      expect(text).to.contain(`<meta property="og:title" content="${instanceConfig.name}" />`)
+      expect(text).to.contain(`<meta property="og:description" content="${instanceConfig.shortDescription}" />`)
+      expect(text).to.contain('<meta property="og:type" content="website" />')
+      expect(text).to.contain(`<meta property="og:url" content="${url}`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
+    }
+
     async function accountPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
@@ -49,6 +70,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${account.description}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/a/${servers[0].store.user.username}/video-channels" />`)
+      expect(text).to.not.contain(`<meta property="og:image"`)
     }
 
     async function channelPageTest (path: string) {
@@ -59,6 +81,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/c/${servers[0].store.channel.name}/videos" />`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
 
     async function watchVideoPageTest (path: string) {
@@ -69,6 +92,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${videoDescriptionPlainText}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/${servers[0].store.video.shortUUID}" />`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
 
     async function watchPlaylistPageTest (path: string) {
@@ -79,7 +103,15 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:description" content="${playlistDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="video" />')
       expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/w/p/${playlist.shortUUID}" />`)
+      expect(text).to.contain(`<meta property="og:image" content="${servers[0].url}/`)
     }
+
+    it('Should have valid Open Graph tags on the common page', async function () {
+      await indexPageTest('/about/peertube')
+      await indexPageTest('/videos')
+      await indexPageTest('/homepage')
+      await indexPageTest('/')
+    })
 
     it('Should have valid Open Graph tags on the account page', async function () {
       await accountPageTest('/accounts/' + servers[0].store.user.username)
@@ -135,6 +167,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
       expect(text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      expect(text).to.not.contain(`<meta property="twitter:image"`)
     }
 
     async function channelPageTest (path: string) {
@@ -143,6 +176,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
       expect(text).to.contain('<meta property="twitter:card" content="summary" />')
       expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      expect(text).to.contain(`<meta property="twitter:image" content="${servers[0].url}`)
     }
 
     async function watchVideoPageTest (path: string) {
@@ -151,6 +185,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
       expect(text).to.contain('<meta property="twitter:card" content="player" />')
       expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      expect(text).to.contain(`<meta property="twitter:image" content="${servers[0].url}`)
     }
 
     async function watchPlaylistPageTest (path: string) {
@@ -159,6 +194,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
       expect(text).to.contain('<meta property="twitter:card" content="player" />')
       expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      expect(text).to.contain(`<meta property="twitter:image" content="${servers[0].url}`)
     }
 
     it('Should have valid twitter card on the watch video page', async function () {

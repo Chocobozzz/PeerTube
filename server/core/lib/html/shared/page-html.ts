@@ -1,15 +1,17 @@
-import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '@peertube/peertube-core-utils'
+import { buildFileLocale, escapeHTML, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '@peertube/peertube-core-utils'
+import { ActorImageType, HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
+import { CONFIG } from '@server/initializers/config.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
+import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
+import { pathExists } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { logger } from '../../../helpers/logger.js'
-import { CUSTOM_HTML_TAG_COMMENTS, FILES_CONTENT_HASH, PLUGIN_GLOBAL_CSS_PATH } from '../../../initializers/constants.js'
+import { CUSTOM_HTML_TAG_COMMENTS, FILES_CONTENT_HASH, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER } from '../../../initializers/constants.js'
 import { ServerConfigManager } from '../../server-config-manager.js'
 import { TagsHtml } from './tags-html.js'
-import { pathExists } from 'fs-extra/esm'
-import { HTMLServerConfig } from '@peertube/peertube-models'
-import { CONFIG } from '@server/initializers/config.js'
 
 export class PageHtml {
 
@@ -22,12 +24,32 @@ export class PageHtml {
   }
 
   static async getDefaultHTML (req: express.Request, res: express.Response, paramLang?: string) {
-    const html = paramLang
-      ? await this.getIndexHTML(req, res, paramLang)
-      : await this.getIndexHTML(req, res)
+    const html = await this.getIndexHTML(req, res, paramLang)
+    const serverActor = await getServerActor()
+    const avatar = serverActor.getMaxQualityImage(ActorImageType.AVATAR)
 
     let customHTML = TagsHtml.addTitleTag(html)
     customHTML = TagsHtml.addDescriptionTag(customHTML)
+
+    const url = req.originalUrl === '/'
+      ? WEBSERVER.URL
+      : WEBSERVER.URL + req.originalUrl
+
+    customHTML = await TagsHtml.addTags(customHTML, {
+      url,
+
+      escapedSiteName: escapeHTML(CONFIG.INSTANCE.NAME),
+      escapedTitle: escapeHTML(CONFIG.INSTANCE.NAME),
+      escapedTruncatedDescription: escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION),
+
+      image: avatar
+        ? { url: ActorImageModel.getImageUrl(avatar), width: avatar.width, height: avatar.height }
+        : undefined,
+
+      ogType: 'website',
+      twitterCard: 'summary_large_image',
+      forbidIndexation: false
+    }, {})
 
     return customHTML
   }

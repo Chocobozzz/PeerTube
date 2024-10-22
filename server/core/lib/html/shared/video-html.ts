@@ -7,7 +7,7 @@ import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
 import { MEMOIZE_TTL, WEBSERVER } from '../../../initializers/constants.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { MVideo, MVideoThumbnailBlacklist } from '../../../types/models/index.js'
+import { MVideo, MVideoThumbnail, MVideoThumbnailBlacklist } from '../../../types/models/index.js'
 import { getActivityStreamDuration } from '../../activitypub/activity.js'
 import { isVideoInPrivateDirectory } from '../../video-privacy.js'
 import { CommonEmbedHtml } from './common-embed-html.js'
@@ -78,7 +78,7 @@ export class VideoHtml {
 
   private static buildVideoHTML (options: {
     html: string
-    video: MVideo
+    video: MVideoThumbnail
 
     addOG: boolean
     addTwitterCard: boolean
@@ -111,6 +111,8 @@ export class VideoHtml {
 
     const schemaType = 'VideoObject'
 
+    const preview = video.getPreview()
+
     return TagsHtml.addTags(customHTML, {
       url: WEBSERVER.URL + video.getWatchStaticPath(),
 
@@ -118,11 +120,11 @@ export class VideoHtml {
       escapedTitle: escapeHTML(video.name),
       escapedTruncatedDescription,
 
-      indexationPolicy: video.remote || video.privacy !== VideoPrivacy.PUBLIC
-        ? 'never'
-        : 'always',
+      forbidIndexation: video.remote || video.privacy !== VideoPrivacy.PUBLIC,
 
-      image: { url: WEBSERVER.URL + video.getPreviewStaticPath() },
+      image: preview
+        ? { url: WEBSERVER.URL + video.getPreviewStaticPath(), width: preview.width, height: preview.height }
+        : undefined,
 
       embed,
       oembedUrl: this.getOEmbedUrl(video, currentQuery),
