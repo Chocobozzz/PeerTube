@@ -209,7 +209,8 @@ async function copyOrRegenerateThumbnails (options: {
           inputPath: preview.getPath(),
           video: replayVideo,
           type,
-          automaticallyGenerated: false
+          automaticallyGenerated: false,
+          keepOriginal: true
         })
       })
     )
