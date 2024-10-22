@@ -522,16 +522,13 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
           where: {
             serverId: null
           }
-        },
-        {
-          attributes: [ 'id' ],
-          model: VideoModel.unscoped(),
-          required: true,
-          where: {
-            privacy: VideoPrivacy.PUBLIC
-          }
         }
-      ]
+      ],
+      where: {
+        [Op.and]: [
+          literal(`EXISTS (SELECT 1 FROM "video" WHERE "privacy" = ${VideoPrivacy.PUBLIC} AND "channelId" = "VideoChannelModel"."id")`)
+        ]
+      }
     }
 
     return VideoChannelModel

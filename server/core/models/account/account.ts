@@ -1,6 +1,6 @@
 import { Account, AccountSummary, VideoPrivacy } from '@peertube/peertube-models'
 import { ModelCache } from '@server/models/shared/model-cache.js'
-import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions, literal } from 'sequelize'
 import {
   AfterDestroy,
   AllowNull,
@@ -422,7 +422,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
   }
 
   static listLocalsForSitemap (sort: string): Promise<MAccountHost[]> {
-    const query = {
+    return AccountModel.unscoped().findAll({
       attributes: [ ],
       offset: 0,
       order: getSort(sort),
@@ -438,23 +438,14 @@ export class AccountModel extends SequelizeModel<AccountModel> {
           attributes: [ 'id' ],
           model: VideoChannelModel.unscoped(),
           required: true,
-          include: [
-            {
-              attributes: [ 'id' ],
-              model: VideoModel.unscoped(),
-              required: true,
-              where: {
-                privacy: VideoPrivacy.PUBLIC
-              }
-            }
-          ]
+          where: {
+            [Op.and]: [
+              literal(`EXISTS (SELECT 1 FROM "video" WHERE "privacy" = ${VideoPrivacy.PUBLIC} AND "channelId" = "VideoChannels"."id")`)
+            ]
+          }
         }
       ]
-    }
-
-    return AccountModel
-      .unscoped()
-      .findAll(query)
+    })
   }
 
   toFormattedJSON (this: MAccountFormattable): Account {

@@ -99,7 +99,9 @@ async function getSitemapLocalVideoUrls () {
 
     acc = acc.concat(
       data.map(v => {
-        const contentLoc = v.getHLSPlaylist()?.getMasterPlaylistUrl(v) || v.getMaxQualityFile(VideoFileStream.VIDEO).getFileUrl(v)
+        const contentLoc = v.getHLSPlaylist()?.getMasterPlaylistUrl(v) ||
+          v.getMaxQualityFile(VideoFileStream.VIDEO)?.getFileUrl(v) ||
+          v.getMaxQualityFile(VideoFileStream.AUDIO)?.getFileUrl(v)
 
         return {
           url: WEBSERVER.URL + v.getWatchStaticPath(),
