@@ -13,7 +13,7 @@ import {
 import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { EmbedComponent, EmbedVideoInput } from '@app/shared/shared-main/video/embed.component'
-import { HTMLServerConfig } from '@peertube/peertube-models'
+import { HTMLServerConfig, Video, VideoState } from '@peertube/peertube-models'
 import { imageToDataURL } from '@root-helpers/images'
 import { PeerTubePlayer } from '../../../../../standalone/embed-player-api/player'
 
@@ -34,7 +34,7 @@ import { PeerTubePlayer } from '../../../../../standalone/embed-player-api/playe
 export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
   @ViewChild('embed') embed: EmbedComponent
 
-  @Input() video: EmbedVideoInput
+  @Input() video: EmbedVideoInput & Pick<Video, 'isLive' | 'state'>
 
   imageSrc: string
   allowedExtensionsMessage = ''
@@ -69,6 +69,10 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
   get maxVideoImageSizeInBytes () {
     return this.bytesPipe.transform(this.maxVideoImageSize)
+  }
+
+  canSelectFromVideo () {
+    return this.video && !this.video.isLive && this.video.state.id === VideoState.PUBLISHED
   }
 
   getReactiveFileButtonTooltip () {

@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { HooksService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
-import { TimeDurationFormatterPipe } from '../../../../shared/shared-main/date/time-duration-formatter.pipe'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { DatePipe, NgFor, NgIf } from '@angular/common'
+import { Component, Input, OnChanges } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { NgIf, NgFor, DatePipe } from '@angular/common'
+import { HooksService } from '@app/core'
+import { TimeDurationFormatterPipe } from '@app/shared/shared-main/date/time-duration-formatter.pipe'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 
 type PluginMetadata = {
   label: string
@@ -20,14 +20,14 @@ type PluginMetadata = {
   standalone: true,
   imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, DatePipe, TimeDurationFormatterPipe ]
 })
-export class VideoAttributesComponent implements OnInit {
+export class VideoAttributesComponent implements OnChanges {
   @Input() video: VideoDetails
 
   pluginMetadata: PluginMetadata[] = []
 
   constructor (private hooks: HooksService) { }
 
-  async ngOnInit () {
+  async ngOnChanges () {
     this.pluginMetadata = await this.hooks.wrapObject(
       this.pluginMetadata,
       'video-watch',
