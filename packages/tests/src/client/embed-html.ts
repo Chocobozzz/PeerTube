@@ -24,7 +24,7 @@ describe('Test embed HTML generation', function () {
   let playlistName: string
   let playlistDescription: string
 
-  let instanceConfig: { shortDescription: string }
+  let instanceConfig: { name: string, shortDescription: string }
 
   before(async function () {
     this.timeout(120000);
@@ -59,7 +59,7 @@ describe('Test embed HTML generation', function () {
     it('Should have the correct embed html instance tags', async function () {
       const res = await makeHTMLRequest(servers[0].url, '/videos/embed/toto')
 
-      checkIndexTags(res.text, `PeerTube`, instanceConfig.shortDescription, '', config)
+      checkIndexTags(res.text, instanceConfig.name, instanceConfig.shortDescription, '', config)
 
       expect(res.text).to.not.contain(`"name":`)
     })
@@ -68,7 +68,7 @@ describe('Test embed HTML generation', function () {
       const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, servers[0].store.video.embedPath)
 
-      checkIndexTags(res.text, `${videoName} - PeerTube`, videoDescriptionPlainText, '', config)
+      checkIndexTags(res.text, `${videoName} - ${instanceConfig.name}`, videoDescriptionPlainText, '', config)
 
       expect(res.text).to.contain(`"name":"${videoName}",`)
     })
@@ -77,7 +77,7 @@ describe('Test embed HTML generation', function () {
       const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/video-playlists/embed/' + playlistIds[0])
 
-      checkIndexTags(res.text, `${playlistName} - PeerTube`, playlistDescription, '', config)
+      checkIndexTags(res.text, `${playlistName} - ${instanceConfig.name}`, playlistDescription, '', config)
       expect(res.text).to.contain(`"name":"${playlistName}",`)
     })
   })

@@ -126,7 +126,7 @@ export class TagsHtml {
     }
 
     // SEO, use origin URL
-    if (forbidIndexation === true && url) {
+    if (forbidIndexation !== true && url) {
       tagsStr += `<link rel="canonical" href="${url}" />`
     }
 
@@ -145,11 +145,14 @@ export class TagsHtml {
     const metaTags = {
       'og:type': tags.ogType,
       'og:site_name': tags.escapedSiteName,
-      'og:title': tags.escapedTitle,
-      'og:image': tags.image.url
+      'og:title': tags.escapedTitle
     }
 
-    if (tags.image.width && tags.image.height) {
+    if (tags.image?.url) {
+      metaTags['og:image:url'] = tags.image.url
+    }
+
+    if (tags.image?.width && tags.image?.height) {
       metaTags['og:image:width'] = tags.image.width
       metaTags['og:image:height'] = tags.image.height
     }
@@ -183,11 +186,14 @@ export class TagsHtml {
       'twitter:card': tags.twitterCard,
       'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
       'twitter:title': tags.escapedTitle,
-      'twitter:description': tags.escapedTruncatedDescription,
-      'twitter:image': tags.image.url
+      'twitter:description': tags.escapedTruncatedDescription
     }
 
-    if (tags.image.width && tags.image.height) {
+    if (tags.image?.url) {
+      metaTags['twitter:image:url'] = tags.image.url
+    }
+
+    if (tags.image?.width && tags.image?.height) {
       metaTags['twitter:image:width'] = tags.image.width
       metaTags['twitter:image:height'] = tags.image.height
     }
@@ -219,7 +225,7 @@ export class TagsHtml {
           '@type': 'Person',
           'name': tags.escapedTitle,
           'description': tags.escapedTruncatedDescription,
-          'image': tags.image.url
+          'image': tags.image?.url
         }
       }
 
@@ -231,13 +237,13 @@ export class TagsHtml {
       '@type': tags.schemaType,
       'name': tags.escapedTitle,
       'description': tags.escapedTruncatedDescription,
-      'image': tags.image.url,
+      'image': tags.image?.url,
       'url': tags.url
     }
 
     if (tags.list) {
       schema['numberOfItems'] = tags.list.numberOfItems
-      schema['thumbnailUrl'] = tags.image.url
+      schema['thumbnailUrl'] = tags.image?.url
     }
 
     if (tags.embed) {
@@ -246,7 +252,7 @@ export class TagsHtml {
 
       if (tags.embed.duration) schema['duration'] = tags.embed.duration
 
-      schema['thumbnailUrl'] = tags.image.url
+      schema['thumbnailUrl'] = tags.image?.url
     }
 
     return Hooks.wrapObject(schema, 'filter:html.client.json-ld.result', context)

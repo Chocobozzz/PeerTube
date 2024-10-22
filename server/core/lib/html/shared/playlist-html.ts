@@ -115,7 +115,7 @@ export class PlaylistHtml {
 
       forbidIndexation: !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
 
-      image: playlist.Thumbnail
+      image: playlist.hasThumbnail()
         ? { url: playlist.getThumbnailUrl(), width: playlist.Thumbnail.width, height: playlist.Thumbnail.height }
         : undefined,
 
