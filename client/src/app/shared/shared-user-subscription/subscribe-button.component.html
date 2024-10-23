@@ -4,16 +4,17 @@
 >
 
   <ng-template #userLoggedOut>
-    <span [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
-      <ng-container i18n *ngIf="isSingleSubscribe">Subscribe</ng-container>
+    <div [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
+      @if (isSingleSubscribe) {
+        <ng-container i18n>Subscribe</ng-container>
+      } @else {
+        <div i18n>Subscribe to all channels</div>
 
-      <ng-container *ngIf="!isSingleSubscribe">
-        <span i18n>Subscribe to all channels</span>
-        <span *ngIf="isAtLeastOneChannelSubscribed">{{ subscribeStatus(true).length }}/{{ subscribed.size }}
-          <ng-container i18n>channels subscribed</ng-container>
-        </span>
-      </ng-container>
-    </span>
+        <div class="mt-1 fs-8" *ngIf="isAtLeastOneChannelSubscribed" i18n>
+          {{ subscribeStatus(true).length }}/{{ subscribed.size }} channels subscribed
+        </div>
+      }
+    </div>
 
     <span *ngIf="!isBigButton && displayFollowers && videoChannels.length > 1 && videoChannel.followersCount !== 0" class="followers-count">
       {{ videoChannels[0].followersCount | myNumberFormatter }}
@@ -21,13 +22,15 @@
   </ng-template>
 
   <ng-template #userLoggedIn>
-    <button *ngIf="!isAllChannelsSubscribed" type="button" class="btn" (click)="subscribe()">
-      <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
-    </button>
-
-    <button *ngIf="isAllChannelsSubscribed" type="button" class="btn" role="button" (click)="unsubscribe()">
-      <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
-    </button>
+    @if (isAllChannelsSubscribed) {
+      <button type="button" class="btn" role="button" (click)="unsubscribe()">
+        <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
+      </button>
+    } @else {
+      <button type="button" class="btn" (click)="subscribe()">
+        <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
+      </button>
+    }
   </ng-template>
 
   <ng-container

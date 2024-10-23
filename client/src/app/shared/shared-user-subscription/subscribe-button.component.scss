@@ -15,23 +15,9 @@
     white-space: nowrap;
   }
 
-  &.big {
-    height: 35px;
-
-    > button:first-child {
-      width: max-content;
-      min-width: 175px;
-    }
-
-    button .extra-text {
-      span:first-child {
-        line-height: 80%;
-      }
-
-      span:not(:first-child) {
-        font-size: 75%;
-      }
-    }
+  &.big > button:first-child {
+    width: max-content;
+    min-width: 175px;
   }
 
   // Unlogged
@@ -102,19 +88,5 @@
 
   input {
     @include peertube-input-text(100%);
-  }
-}
-
-.extra-text {
-  display: flex;
-  flex-direction: column;
-
-  span:first-child {
-    line-height: 75%;
-  }
-
-  span:not(:first-child) {
-    font-size: 60%;
-    text-align: start;
   }
 }
