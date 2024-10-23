@@ -420,7 +420,7 @@
 
             <div class="form-group originally-published-at">
               <div class="label-container">
-                <label i18n for="originallyPublishedAt">Original publication date</label>
+                <label i18n class="mb-0" for="originallyPublishedAt">Original publication date</label>
 
                 <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')" *ngIf="hasPublicationDate()">
                   Reset
@@ -443,7 +443,12 @@
             </div>
 
             <div class="form-group mb-4">
-              <label i18n for="commentsPolicy">Comments policy</label>
+              <label i18n class="mb-0" for="commentsPolicy">Comments policy</label>
+
+              <div class="form-group-description" i18n>
+                You can require comments to be approved depending on <a routerLink="/my-account/auto-tag-policies" target="_blank">your auto-tags policies</a>
+              </div>
+
               <my-select-options inputId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy"></my-select-options>
 
               <div *ngIf="formErrors.commentsPolicy" class="form-error" role="alert">

@@ -81,6 +81,7 @@ import { VideoCaptionEditModalContentComponent } from './caption/video-caption-e
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 import { VideoEditType } from './video-edit.type'
+import { RouterLink } from '@angular/router'
 
 type PluginField = {
   pluginInfo: PluginInfo
@@ -94,6 +95,7 @@ type PluginField = {
   templateUrl: './video-edit.component.html',
   standalone: true,
   imports: [
+    RouterLink,
     FormsModule,
     ReactiveFormsModule,
     NgbNav,
