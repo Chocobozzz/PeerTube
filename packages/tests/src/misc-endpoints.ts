@@ -193,15 +193,33 @@ describe('Test misc endpoints', function () {
     it('Should add videos, channel and accounts and get sitemap', async function () {
       this.timeout(35000)
 
-      await server.videos.upload({ attributes: { name: 'video 1', nsfw: false } })
-      await server.videos.upload({ attributes: { name: 'video 2', nsfw: false } })
-      await server.videos.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE } })
+      const { token: user1Token } = await server.users.generate('user1')
+      const { token: user2Token } = await server.users.generate('user2')
+      const { token: user3Token } = await server.users.generate('user3')
 
-      await server.channels.create({ attributes: { name: 'channel1', displayName: 'channel 1' } })
-      await server.channels.create({ attributes: { name: 'channel2', displayName: 'channel 2' } })
+      const { id: channel1Id } = await server.channels.create({
+        attributes: { name: 'channel1', displayName: 'channel 1' },
+        token: user1Token
+      })
+      const { id: channel2Id } = await server.channels.create({
+        attributes: { name: 'channel2', displayName: 'channel 2' },
+        token: user2Token
+      })
+      const { id: channel3Id } = await server.channels.create({
+        attributes: { name: 'channel3', displayName: 'channel 3' },
+        token: user3Token
+      })
 
-      await server.users.create({ username: 'user1', password: 'password' })
-      await server.users.create({ username: 'user2', password: 'password' })
+      const { id: video1Id } = await server.videos.upload({ attributes: { name: 'video 1', nsfw: false }, videoChannelId: channel1Id })
+      await server.videos.upload({ attributes: { name: 'video 2', nsfw: false }, videoChannelId: channel2Id })
+      await server.videos.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE }, videoChannelId: channel3Id })
+
+      await server.videos.update({
+        id: video1Id,
+        attributes: {
+          tags: [ 'fish', 'chips' ]
+        }
+      })
 
       const res = await makeGetRequest({
         url: server.url,
@@ -216,11 +234,25 @@ describe('Test misc endpoints', function () {
       expect(res.text).to.contain('<video:title>video 2</video:title>')
       expect(res.text).to.not.contain('<video:title>video 3</video:title>')
 
+      expect(res.text).to.match(/<video:thumbnail_loc>.*\.jpg<\/video:thumbnail_loc>/)
+      expect(res.text).to.match(/<video:content_loc>.*\.webm<\/video:content_loc>/)
+      expect(res.text).to.match(/<video:player_loc>.*\/videos\/embed\/.*<\/video:player_loc>/)
+      expect(res.text).to.match(/<video:duration>.*<\/video:duration>/)
+      expect(res.text).to.match(/<video:rating>0<\/video:rating>/)
+      expect(res.text).to.match(/<video:view_count>0<\/video:view_count>/)
+      expect(res.text).to.match(/<video:publication_date>.*<\/video:publication_date>/)
+      expect(res.text).to.match(/<video:tag>fish<\/video:tag>/)
+      expect(res.text).to.match(/<video:tag>chips<\/video:tag>/)
+      expect(res.text).to.match(/<video:uploader.*>channel 1<\/video:uploader>/)
+      expect(res.text).to.match(/<video:live>NO<\/video:live>/)
+
       expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel1/videos</loc></url>')
       expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel2/videos</loc></url>')
+      expect(res.text).to.not.contain('<url><loc>' + server.url + '/c/channel3/videos</loc></url>')
 
       expect(res.text).to.contain('<url><loc>' + server.url + '/a/user1/video-channels</loc></url>')
       expect(res.text).to.contain('<url><loc>' + server.url + '/a/user2/video-channels</loc></url>')
+      expect(res.text).to.not.contain('<url><loc>' + server.url + '/a/user3/video-channels</loc></url>')
     })
 
     it('Should not fail with big title/description videos', async function () {

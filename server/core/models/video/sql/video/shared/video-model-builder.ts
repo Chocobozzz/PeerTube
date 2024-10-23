@@ -121,6 +121,10 @@ export class VideoModelBuilder {
         if (include & VideoInclude.AUTOMATIC_TAGS) {
           this.addAutoTag(row, videoModel)
         }
+
+        if (include & VideoInclude.TAGS) {
+          this.addTag(row, videoModel)
+        }
       }
     }
 

@@ -109,6 +109,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
       this.includeAutomaticTags(serverActor.Account.id)
     }
 
+    if (options.include & VideoInclude.TAGS) {
+      this.includeTags()
+    }
+
     const select = this.buildSelect()
 
     this.query = `${select} FROM (${this.innerQuery}) AS "tmp" ${this.joins} ${this.innerSort}`

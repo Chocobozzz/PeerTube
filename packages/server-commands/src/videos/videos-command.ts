@@ -417,14 +417,17 @@ export class VideosCommand extends AbstractCommand {
     mode?: 'legacy' | 'resumable' // default legacy
     waitTorrentGeneration?: boolean // default true
     completedExpectedStatus?: HttpStatusCodeType
+    videoChannelId?: number
   } = {}) {
-    const { mode = 'legacy', waitTorrentGeneration = true } = options
+    const { mode = 'legacy', videoChannelId, waitTorrentGeneration = true } = options
     let defaultChannelId = 1
 
-    try {
-      const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
-      defaultChannelId = videoChannels[0].id
-    } catch (e) { /* empty */ }
+    if (!videoChannelId) {
+      try {
+        const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
+        defaultChannelId = videoChannels[0].id
+      } catch (e) { /* empty */ }
+    }
 
     // Override default attributes
     const attributes = {
@@ -432,7 +435,7 @@ export class VideosCommand extends AbstractCommand {
       category: 5,
       licence: 4,
       language: 'zh',
-      channelId: defaultChannelId,
+      channelId: videoChannelId || defaultChannelId,
       nsfw: true,
       waitTranscoding: false,
       description: 'my super description',

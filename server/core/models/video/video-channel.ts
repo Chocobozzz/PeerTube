@@ -1,5 +1,5 @@
 import { forceNumber, pick } from '@peertube/peertube-core-utils'
-import { ActivityPubActor, VideoChannel, VideoChannelSummary } from '@peertube/peertube-models'
+import { ActivityPubActor, VideoChannel, VideoChannelSummary, VideoPrivacy } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountHost } from '@server/types/models/index.js'
@@ -523,7 +523,12 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
             serverId: null
           }
         }
-      ]
+      ],
+      where: {
+        [Op.and]: [
+          literal(`EXISTS (SELECT 1 FROM "video" WHERE "privacy" = ${VideoPrivacy.PUBLIC} AND "channelId" = "VideoChannelModel"."id")`)
+        ]
+      }
     }
 
     return VideoChannelModel
