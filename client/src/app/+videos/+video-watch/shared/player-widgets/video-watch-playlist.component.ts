@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, ComponentPagination, HooksService, Notifier, SessionStorageService, UserService } from '@app/core'
+import { AuthService, ComponentPagination, hasMoreItems, HooksService, Notifier, SessionStorageService, UserService } from '@app/core'
 import { isInViewport } from '@app/helpers'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
@@ -8,7 +8,7 @@ import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { VideoPlaylistElementMiniatureComponent } from '../../../../shared/shared-video-playlist/video-playlist-element-miniature.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../../../shared/shared-main/common/infinite-scroller.component'
 import { NgIf, NgClass, NgFor } from '@angular/common'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
@@ -19,7 +19,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
   templateUrl: './video-watch-playlist.component.html',
   styleUrls: [ './player-widget.component.scss', './video-watch-playlist.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
 })
 export class VideoWatchPlaylistComponent {
   static SESSION_STORAGE_LOOP_PLAYLIST = 'loop_playlist'
@@ -28,6 +28,9 @@ export class VideoWatchPlaylistComponent {
 
   @Output() videoFound = new EventEmitter<string>()
   @Output() noVideoFound = new EventEmitter<void>()
+
+  hasMoreResults = true
+  isLoading = true
 
   playlistElements: VideoPlaylistElement[] = []
   playlistPagination: ComponentPagination = {
@@ -42,7 +45,7 @@ export class VideoWatchPlaylistComponent {
   loopPlaylist: boolean
   loopPlaylistSwitchText = ''
 
-  noPlaylistVideos = false
+  noPlaylistVideos = true
   currentPlaylistPosition: number
 
   constructor (
@@ -61,6 +64,14 @@ export class VideoWatchPlaylistComponent {
 
     this.loopPlaylist = getBoolOrDefault(this.sessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_LOOP_PLAYLIST), false)
     this.setLoopPlaylistSwitchText()
+  }
+
+  onPageChange () {
+    // Prevent triggering upon initial page load
+    if (this.isLoading) return
+
+    this.playlistElements = []
+    this.loadPlaylistElements(this.playlist, false)
   }
 
   onPlaylistVideosNearOfBottom (position?: number) {
@@ -103,10 +114,13 @@ export class VideoWatchPlaylistComponent {
       'filter:api.video-watch.video-playlist-elements.get.params',
       'filter:api.video-watch.video-playlist-elements.get.result'
     )
+    this.isLoading = true
 
     obs.subscribe(({ total, data: playlistElements }) => {
       this.playlistElements = this.playlistElements.concat(playlistElements)
       this.playlistPagination.totalItems = total
+      this.hasMoreResults = hasMoreItems(this.playlistPagination)
+      this.isLoading = false
 
       const firstAvailableVideo = this.playlistElements.find(e => !!e.video)
       if (!firstAvailableVideo) {

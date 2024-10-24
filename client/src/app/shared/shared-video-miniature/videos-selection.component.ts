@@ -1,4 +1,4 @@
-import { Observable, Subject } from 'rxjs'
+import { Observable } from 'rxjs'
 import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef } from '@angular/core'
 import { ComponentPagination, Notifier, User } from '@app/core'
 import { logger } from '@root-helpers/logger'
@@ -7,7 +7,7 @@ import { ResultList, VideosExistInPlaylists, VideoSortField } from '@peertube/pe
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../shared-main/common/infinite-scroller.component'
 import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
 import { Video } from '../shared-main/video/video.model'
 import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
@@ -19,7 +19,7 @@ export type SelectionType = { [ id: number ]: boolean }
   templateUrl: './videos-selection.component.html',
   styleUrls: [ './videos-selection.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
 })
 export class VideosSelectionComponent implements AfterContentInit {
   @Input() videosContainedInPlaylists: VideosExistInPlaylists
@@ -44,13 +44,13 @@ export class VideosSelectionComponent implements AfterContentInit {
 
   _selection: SelectionType = {}
 
+  hasMoreResults = true
+  isLoading = true
   rowButtonsTemplate: TemplateRef<any>
   globalButtonsTemplate: TemplateRef<any>
 
   videos: Video[] = []
   sort: VideoSortField = '-publishedAt'
-
-  onDataSubject = new Subject<any[]>()
 
   hasDoneFirstQuery = false
 
@@ -88,8 +88,6 @@ export class VideosSelectionComponent implements AfterContentInit {
       const t = this.templates.find(t => t.name === 'globalButtons')
       if (t) this.globalButtonsTemplate = t.template
     }
-
-    this.loadMoreVideos()
   }
 
   getVideosObservable (page: number) {
@@ -108,6 +106,10 @@ export class VideosSelectionComponent implements AfterContentInit {
     return video.id
   }
 
+  onPageChange () {
+    this.loadMoreVideos(true)
+  }
+
   onNearOfBottom () {
     if (this.disabled) return
 
@@ -121,10 +123,12 @@ export class VideosSelectionComponent implements AfterContentInit {
 
   loadMoreVideos (reset = false) {
     if (reset) this.hasDoneFirstQuery = false
+    this.isLoading = true
 
     this.getVideosObservable(this.pagination.currentPage)
       .subscribe({
         next: ({ data }) => {
+          this.hasMoreResults = data.length === this.pagination.itemsPerPage
           this.hasDoneFirstQuery = true
           this.lastQueryLength = data.length
 
@@ -132,7 +136,7 @@ export class VideosSelectionComponent implements AfterContentInit {
           this.videos = this.videos.concat(data)
           this.videosModel = this.videos
 
-          this.onDataSubject.next(data)
+          this.isLoading = false
         },
 
         error: err => {
@@ -146,7 +150,7 @@ export class VideosSelectionComponent implements AfterContentInit {
 
   reloadVideos () {
     this.pagination.currentPage = 1
-    this.loadMoreVideos(true)
+    this.onPageChange()
   }
 
   removeVideoFromArray (video: Video) {

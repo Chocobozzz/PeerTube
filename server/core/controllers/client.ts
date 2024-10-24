@@ -11,6 +11,7 @@ import { currentDir, root } from '@peertube/peertube-node-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants.js'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/html/client-html.js'
 import { asyncMiddleware, buildRateLimiter, embedCSP } from '../middlewares/index.js'
+import { VideosOrderType } from '../lib/html/shared/videos-html.js'
 
 const clientsRouter = express.Router()
 
@@ -27,6 +28,11 @@ const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 clientsRouter.use([ '/w/p/:id', '/videos/watch/playlist/:id' ],
   clientsRateLimiter,
   asyncMiddleware(generateWatchPlaylistHtmlPage)
+)
+
+clientsRouter.get([ '/videos/:type(overview|trending|recently-added|local)', '/' ],
+  clientsRateLimiter,
+  asyncMiddleware(generateVideosHtmlPage)
 )
 
 clientsRouter.use([ '/w/:id', '/videos/watch/:id' ],
@@ -184,6 +190,14 @@ async function generateVideoPlaylistEmbedHtmlPage (req: express.Request, res: ex
   const html = await ClientHtml.getVideoPlaylistEmbedHTML(req.params.id)
 
   return sendHTML(html, res)
+}
+
+async function generateVideosHtmlPage (req: express.Request, res: express.Response) {
+  const { type } = req.params as { type: VideosOrderType }
+
+  const html = await ClientHtml.getVideosHTMLPage(type, req, res, req.params.language)
+
+  return sendHTML(html, res, true)
 }
 
 async function generateWatchHtmlPage (req: express.Request, res: express.Response) {

@@ -6,14 +6,14 @@ import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginServ
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { Subject } from 'rxjs'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import { ReplaySubject, Subject } from 'rxjs'
+import { debounceTime, distinct, distinctUntilChanged, filter } from 'rxjs/operators'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
 import { AutofocusDirective } from '../../../shared/shared-main/common/autofocus.directive'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
 import { PluginCardComponent } from '../shared/plugin-card.component'
+import { InfiniteScrollerComponent } from '../../../shared/shared-main/common/infinite-scroller.component'
 import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 
 @Component({
@@ -26,7 +26,7 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
     NgIf,
     GlobalIconComponent,
     AutofocusDirective,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     PluginCardComponent,
     EditButtonComponent,
@@ -43,17 +43,17 @@ export class PluginSearchComponent implements OnInit {
     totalItems: null
   }
   sort = '-trending'
+  hasMoreResults = true
 
   search = ''
-  isSearching = false
+  isSearching = true
 
   plugins: PeerTubePluginIndex[] = []
   installing: { [name: string]: boolean } = {}
   pluginInstalled = false
 
-  onDataSubject = new Subject<any[]>()
-
   private searchSubject = new Subject<string>()
+  private hasInitialized = new ReplaySubject<boolean>()
 
   constructor (
     private pluginService: PluginService,
@@ -75,10 +75,15 @@ export class PluginSearchComponent implements OnInit {
     this.route.queryParams.subscribe(query => {
       if (!query['pluginType']) return
 
+      const oldSearch = this.search
       this.pluginType = parseInt(query['pluginType'], 10) as PluginType_Type
       this.search = query['search'] || ''
+      this.hasInitialized.next(true)
 
-      this.reloadPlugins()
+      if (oldSearch !== this.search) {
+        this.pagination.currentPage = 1
+        this.onPageChange()
+      }
     })
 
     this.searchSubject.asObservable()
@@ -95,14 +100,7 @@ export class PluginSearchComponent implements OnInit {
     this.searchSubject.next(target.value)
   }
 
-  reloadPlugins () {
-    this.pagination.currentPage = 1
-    this.plugins = []
-
-    this.loadMorePlugins()
-  }
-
-  loadMorePlugins () {
+  loadMorePlugins (reset = false) {
     this.isSearching = true
 
     this.pluginApiService.searchAvailablePlugins(this.pluginType, this.pagination, this.sort, this.search)
@@ -110,10 +108,11 @@ export class PluginSearchComponent implements OnInit {
           next: res => {
             this.isSearching = false
 
+            if (reset) this.plugins = []
+
             this.plugins = this.plugins.concat(res.data)
             this.pagination.totalItems = res.total
-
-            this.onDataSubject.next(res.data)
+            this.hasMoreResults = (this.pagination.itemsPerPage * this.pagination.currentPage) < this.pagination.totalItems
           },
 
           error: err => {
@@ -123,6 +122,14 @@ export class PluginSearchComponent implements OnInit {
             this.notifier.error(message)
           }
         })
+  }
+
+  onPageChange () {
+    this.hasInitialized.pipe(
+      distinct(),
+      filter(val => val)
+    )
+    .subscribe(() => this.loadMorePlugins(true))
   }
 
   onNearOfBottom () {

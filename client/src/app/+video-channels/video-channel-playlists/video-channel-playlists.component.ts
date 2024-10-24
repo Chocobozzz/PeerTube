@@ -1,8 +1,8 @@
-import { Subject, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, HooksService, ScreenService } from '@app/core'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/common/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -14,7 +14,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, VideoPlaylistMiniatureComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, VideoPlaylistMiniatureComponent ]
 })
 export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {
   videoPlaylists: VideoPlaylist[] = []
@@ -24,8 +24,8 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
     itemsPerPage: 20,
     totalItems: null
   }
-
-  onDataSubject = new Subject<any[]>()
+  hasMoreResults = true
+  isLoading = false
 
   private videoChannelSub: Subscription
   private videoChannel: VideoChannel
@@ -46,8 +46,6 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
         this.hooks.runAction('action:video-channel-playlists.video-channel.loaded', 'video-channel', { videoChannel })
 
         this.videoPlaylists = []
-        this.pagination.currentPage = 1
-        this.loadVideoPlaylists()
       })
   }
 
@@ -57,6 +55,10 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
 
   ngOnDestroy () {
     if (this.videoChannelSub) this.videoChannelSub.unsubscribe()
+  }
+
+  onPageChange () {
+    this.loadVideoPlaylists(true)
   }
 
   onNearOfBottom () {
@@ -70,15 +72,19 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
     return this.screenService.isInMobileView()
   }
 
-  private loadVideoPlaylists () {
+  private loadVideoPlaylists (reset = false) {
+    this.isLoading = true
+
     this.videoPlaylistService.listChannelPlaylists(this.videoChannel, this.pagination)
       .subscribe(res => {
+        if (reset) this.videoPlaylists = []
         this.videoPlaylists = this.videoPlaylists.concat(res.data)
         this.pagination.totalItems = res.total
+        this.hasMoreResults = this.videoPlaylists.length < this.pagination.totalItems
 
         this.hooks.runAction('action:video-channel-playlists.playlists.loaded', 'video-channel', { playlists: this.videoPlaylists })
 
-        this.onDataSubject.next(res.data)
+        this.isLoading = false
       })
   }
 }

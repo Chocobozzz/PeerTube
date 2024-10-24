@@ -859,8 +859,8 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   }
 
   // Avoid error when running this method on MAccount... | MChannel...
-  getClientUrl (this: MAccountHost | MChannelHost) {
-    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier() + '/videos'
+  getClientUrl (this: MAccountHost | MChannelHost, page: 'video-playlists' | 'videos' = 'videos') {
+    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier() + '/' + page
   }
 
   getDisplayName () {

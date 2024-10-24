@@ -1,11 +1,11 @@
-import { Subject, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService } from '@app/core'
 import { VideoPlaylistType } from '@peertube/peertube-models'
 import { VideoPlaylistElementMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-element-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/common/infinite-scroller.component'
 import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
@@ -24,7 +24,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
     VideoPlaylistMiniatureComponent,
     GlobalIconComponent,
     ActionDropdownComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     CdkDropList,
     NgFor,
     CdkDrag,
@@ -35,6 +35,8 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
 export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
 
+  hasMoreResults = true
+  isLoading = true
   playlistElements: VideoPlaylistElement[] = []
   playlist: VideoPlaylist
 
@@ -45,8 +47,6 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     itemsPerPage: 10,
     totalItems: null
   }
-
-  onDataSubject = new Subject<any[]>()
 
   private videoPlaylistId: string | number
   private paramsSub: Subscription
@@ -122,6 +122,10 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     this.reorderClientPositions(oldFirst)
   }
 
+  onPageChange () {
+    this.loadElements(true)
+  }
+
   onNearOfBottom () {
     // Last page
     if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
@@ -175,7 +179,9 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     return null
   }
 
-  private loadElements () {
+  private loadElements (reset = false) {
+    this.isLoading = true
+
     this.hooks.wrapObsFun(
       this.videoPlaylistService.getPlaylistVideos.bind(this.videoPlaylistService),
       { videoPlaylistId: this.videoPlaylistId, componentPagination: this.pagination },
@@ -184,10 +190,13 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
       'filter:api.my-library.video-playlist-elements.list.result'
     )
         .subscribe(({ total, data }) => {
+          if (reset) this.playlistElements = []
+
           this.playlistElements = this.playlistElements.concat(data)
           this.pagination.totalItems = total
+          this.hasMoreResults = (this.pagination.itemsPerPage * this.pagination.currentPage) < this.pagination.totalItems
 
-          this.onDataSubject.next(data)
+          this.isLoading = false
         })
   }
 

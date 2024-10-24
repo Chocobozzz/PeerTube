@@ -4,7 +4,14 @@
   {{ getNoResultMessage() }}
 </div>
 
-<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<my-infinite-scroller
+  class="plugins"
+  [(currentPage)]="pagination.currentPage"
+  [isLoading]="isLoading"
+  (nearOfBottom)="onNearOfBottom()"
+  (currentPageChange)="onPageChange()"
+  [hasMore]="hasMoreResults"
+>
   <ng-container *ngFor="let plugin of plugins">
     <my-plugin-card [plugin]="plugin" [version]="plugin.version" [pluginType]="pluginType">
       <div ngProjectAs="buttons">
@@ -27,4 +34,4 @@
       </div>
     </my-plugin-card>
   </ng-container>
-</div>
+</my-infinite-scroller>

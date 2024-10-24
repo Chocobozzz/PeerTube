@@ -1,16 +1,26 @@
-import { fromEvent, Observable, Subscription } from 'rxjs'
+import { fromEvent, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
-import { AfterViewChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { AfterViewChecked, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { PeerTubeRouterService, RouterSetting } from '@app/core'
+import { I18nSelectPipe, NgIf } from '@angular/common'
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router'
 
-@Directive({
-  selector: '[myInfiniteScroller]',
-  standalone: true
+@Component({
+  selector: 'my-infinite-scroller',
+  standalone: true,
+  templateUrl: './infinite-scroller.component.html',
+  styleUrl: './infinite-scroller.component.scss',
+  imports: [
+    NgIf,
+    RouterLink,
+    I18nSelectPipe
+  ]
 })
-export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewChecked {
+export class InfiniteScrollerComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @Input() hasMore: boolean
+  @Input() isLoading: boolean
   @Input() percentLimit = 70
   @Input() onItself = false
-  @Input() dataObservable: Observable<any[]>
 
   // Add angular state in query params to reuse the routed component
   @Input() setAngularState: boolean
@@ -18,37 +28,61 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
 
   @Output() nearOfBottom = new EventEmitter<void>()
 
+  @Input() currentPage!: number
+  @Output() currentPageChange = new EventEmitter<number>()
+
+  private disabled: boolean
+
   private decimalLimit = 0
   private lastCurrentBottom = -1
   private scrollDownSub: Subscription
   private container: HTMLElement
 
-  private checkScroll = false
+  private routeEventSub: Subscription
 
   constructor (
     private peertubeRouter: PeerTubeRouterService,
-    private el: ElementRef
+    private el: ElementRef,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.decimalLimit = this.percentLimit / 100
   }
 
   ngAfterViewChecked () {
-    if (this.checkScroll) {
-      this.checkScroll = false
-
+    if (this.hasMore && !this.isLoading) {
       // Wait HTML update
       setTimeout(() => {
-        if (this.hasScroll() === false) this.nearOfBottom.emit()
+        if (this.hasScroll() === false && !this.disabled) this.nearOfBottom.emit()
       })
     }
   }
 
   ngOnInit () {
+    this.disabled = !!this.route.snapshot.queryParams.page
+
+    this.changePage(+this.route.snapshot.queryParams['page'] || 1)
+
+    this.routeEventSub = this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd)
+      )
+      .subscribe((event: NavigationEnd) => {
+        const search = event.url.split('?')[1]
+        const params = new URLSearchParams(search)
+        const newPage = +params.get('page') || 1
+
+        if (newPage === this.currentPage) return
+
+        this.changePage(newPage)
+      })
+
     this.initialize()
   }
 
   ngOnDestroy () {
     if (this.scrollDownSub) this.scrollDownSub.unsubscribe()
+    if (this.routeEventSub) this.routeEventSub.unsubscribe()
   }
 
   initialize () {
@@ -78,14 +112,13 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
       .subscribe(() => {
         if (this.setAngularState && !this.parentDisabled) this.setScrollRouteParams()
 
-        this.nearOfBottom.emit()
+        if (!this.disabled) this.nearOfBottom.emit()
       })
+  }
 
-    if (this.dataObservable) {
-      this.dataObservable
-          .pipe(filter(d => d.length !== 0))
-          .subscribe(() => this.checkScroll = true)
-    }
+  private changePage (newPage: number) {
+    this.currentPage = newPage
+    this.currentPageChange.emit(newPage)
   }
 
   private getScrollInfo () {

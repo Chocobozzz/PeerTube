@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs'
+import { distinct, filter, ReplaySubject } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
@@ -10,7 +10,7 @@ import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delet
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
 import { PluginCardComponent } from '../shared/plugin-card.component'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../../shared/shared-main/common/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 
@@ -22,7 +22,7 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
   imports: [
     PluginNavigationComponent,
     NgIf,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     NgFor,
     PluginCardComponent,
     EditButtonComponent,
@@ -39,12 +39,14 @@ export class PluginListInstalledComponent implements OnInit {
     totalItems: null
   }
   sort = 'name'
+  hasMoreResults = true
+  isLoading = true
 
   plugins: PeerTubePlugin[] = []
   updating: { [name: string]: boolean } = {}
   uninstalling: { [name: string]: boolean } = {}
 
-  onDataSubject = new Subject<any[]>()
+  private hasInitialized = new ReplaySubject<boolean>()
 
   constructor (
     private pluginService: PluginService,
@@ -68,29 +70,33 @@ export class PluginListInstalledComponent implements OnInit {
 
       this.pluginType = parseInt(query['pluginType'], 10) as PluginType_Type
 
-      this.reloadPlugins()
+      this.hasInitialized.next(true)
     })
   }
 
-  reloadPlugins () {
-    this.pagination.currentPage = 1
-    this.plugins = []
-
-    this.loadMorePlugins()
-  }
-
-  loadMorePlugins () {
+  loadMorePlugins (reset = false) {
+    this.isLoading = true
     this.pluginApiService.getPlugins(this.pluginType, this.pagination, this.sort)
         .subscribe({
           next: res => {
+            if (reset) this.plugins = []
             this.plugins = this.plugins.concat(res.data)
             this.pagination.totalItems = res.total
+            this.hasMoreResults = (this.pagination.itemsPerPage * this.pagination.currentPage) < this.pagination.totalItems
 
-            this.onDataSubject.next(res.data)
+            this.isLoading = false
           },
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  onPageChange () {
+    this.hasInitialized.pipe(
+      distinct(),
+      filter(val => val)
+    )
+    .subscribe(() => this.loadMorePlugins(true))
   }
 
   onNearOfBottom () {

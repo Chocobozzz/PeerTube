@@ -1,4 +1,11 @@
-<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onSearchDataSubject.asObservable()" class="search-result">
+<my-infinite-scroller
+  [(currentPage)]="pagination.currentPage"
+  [isLoading]="isSearching"
+  (nearOfBottom)="onNearOfBottom()"
+  (currentPageChange)="onPageChange()"
+  class="search-result"
+  [hasMore]="hasMoreResults"
+>
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
@@ -79,4 +86,4 @@
     </div>
   </ng-container>
 
-</div>
+</my-infinite-scroller>
