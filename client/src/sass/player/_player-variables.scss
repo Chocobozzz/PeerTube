@@ -15,7 +15,7 @@ $control-bar-slider-top: -15px;
 $control-bar-font-size: 14px;
 $control-bar-play-font-size: 34px;
 $control-bar-next-previous-play-font-size: 14px;
-$control-bar-button-width: 38px;
+$control-bar-button-width: 34px;
 
 $control-bar-total-height: $control-bar-height - $control-bar-slider-top;
 
@@ -24,8 +24,5 @@ $slider-bg-color: color.adjust($primary-background-color, $lightness: 33%);
 $progress-margin: 10px;
 
 $dock-padding: 20px;
-
-$first-control-bar-element-margin-left: 10px;
-$first-control-bar-element-margin-left-small-width: 5px;
 
 $assets-path: '../../assets/' !default;

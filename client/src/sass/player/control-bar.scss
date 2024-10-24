@@ -41,6 +41,8 @@ $chapter-marker-size: 9px;
 }
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
+  --first-last-element-margin: 10px;
+
   z-index: 100;
 
   height: $control-bar-height;
@@ -49,13 +51,12 @@ $chapter-marker-size: 9px;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   transition: visibility 0.3s, opacity 0.3s !important;
 
-  > button:not(.vjs-hidden):first-child,
-  > button.vjs-hidden + button:not(.vjs-hidden) {
-    @include margin-left($first-control-bar-element-margin-left);
+  > button:not(.vjs-hidden):first-child {
+    @include margin-left(var(--first-last-element-margin));
   }
 
   > button:last-child {
-    @include margin-right($first-control-bar-element-margin-left);
+    @include margin-right(var(--first-last-element-margin));
   }
 
   .vjs-progress-control,
@@ -398,7 +399,7 @@ $chapter-marker-size: 9px;
 
   .vjs-settings {
     cursor: pointer;
-    width: $control-bar-button-width - 4px;
+    width: $control-bar-button-width;
 
     @include disable-outline;
 
@@ -437,8 +438,8 @@ $chapter-marker-size: 9px;
     .vjs-icon-placeholder {
       transition: transform 0.2s ease;
       display: inline-block;
-      width: $control-bar-icon-size;
-      height: $control-bar-icon-size;
+      width: $control-bar-icon-size - 4px;
+      height: $control-bar-icon-size - 4px;
       vertical-align: middle;
       background: url('#{$assets-path}/player/images/theater.svg') no-repeat;
       background-size: contain;
@@ -452,7 +453,7 @@ $chapter-marker-size: 9px;
   .vjs-caption-toggle-control {
     // Redefined if the player parent has captions class
     display: none;
-    width: $control-bar-button-width - 4px;
+    width: $control-bar-button-width;
 
     &,
     &:hover {
@@ -476,6 +477,7 @@ $chapter-marker-size: 9px;
 
   .vjs-fullscreen-control {
     width: $control-bar-button-width;
+    margin-inline-start: 2px;
 
     @include disable-outline;
 
@@ -522,7 +524,7 @@ $chapter-marker-size: 9px;
   }
 
   .vjs-mute-control {
-    @include margin(0, 5px, 0, 5px);
+    @include margin(0, 4px, 0, 4px);
   }
 
   .vjs-peertube {
@@ -549,21 +551,15 @@ $chapter-marker-size: 9px;
 }
 
 .video-js.vjs-peertube-skin.vjs-size-350 .vjs-control-bar {
+  --first-last-element-margin: 5px;
+
   .vjs-next-video,
   .vjs-previous-video {
     display: none !important;
   }
 
   .vjs-peertube-link {
-    padding: 0 !important;
-  }
-
-  > button:first-child {
-    @include margin-left($first-control-bar-element-margin-left-small-width);
-  }
-
-  > button:last-child {
-    @include margin-right($first-control-bar-element-margin-left-small-width);
+    display: none !important;
   }
 
   .vjs-play-control {
