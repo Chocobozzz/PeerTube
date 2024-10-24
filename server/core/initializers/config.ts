@@ -396,6 +396,9 @@ const CONFIG = {
       ENABLED: config.get<boolean>('stats.total_admins.enabled')
     }
   },
+  WEBRTC: {
+    STUN_SERVERS: config.get<string[]>('webrtc.stun_servers')
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

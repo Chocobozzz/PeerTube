@@ -17,9 +17,12 @@ import { getRtcConfig, isSameOrigin } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from '../p2p-media-loader/segment-url-builder'
 import { SegmentValidator } from '../p2p-media-loader/segment-validator'
+import debug from 'debug'
+
+const debugLogger = debug('peertube:player:hls')
 
 type ConstructorOptions =
-  Pick<PeerTubePlayerContructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader'> &
+  Pick<PeerTubePlayerContructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader' | 'stunServers'> &
   Pick<PeerTubePlayerLoadOptions, 'videoPassword' | 'requiresUserAuth' | 'videoFileToken' | 'requiresPassword' |
   'isLive' | 'liveOptions' | 'p2pEnabled' | 'hls'>
 
@@ -86,6 +89,8 @@ export class HLSOptionsBuilder {
       }
     }
 
+    debugLogger('Creating HLS player options', { hlsjs, p2pMediaLoader, loaderOptions: p2pMediaLoaderConfig })
+
     return { p2pMediaLoader, hlsjs }
   }
 
@@ -116,7 +121,7 @@ export class HLSOptionsBuilder {
     return {
       loader: {
         trackerAnnounce,
-        rtcConfig: getRtcConfig(),
+        rtcConfig: getRtcConfig(this.options.stunServers),
 
         simultaneousHttpDownloads: 1,
         httpFailedSegmentTimeout: 1000,

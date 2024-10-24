@@ -354,6 +354,10 @@ export interface ServerConfig {
       enabled: boolean
     }
   }
+
+  webrtc: {
+    stunServers: string[]
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

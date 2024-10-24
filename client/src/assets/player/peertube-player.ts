@@ -165,7 +165,7 @@ export class PeerTubePlayer {
 
   private async loadP2PMediaLoader () {
     const hlsOptionsBuilder = new HLSOptionsBuilder({
-      ...pick(this.options, [ 'pluginsManager', 'serverUrl', 'authorizationHeader' ]),
+      ...pick(this.options, [ 'pluginsManager', 'serverUrl', 'authorizationHeader', 'stunServers' ]),
       ...pick(this.currentLoadOptions, [
         'videoPassword',
         'requiresUserAuth',

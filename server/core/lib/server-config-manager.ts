@@ -320,6 +320,10 @@ class ServerConfigManager {
 
       storyboards: {
         enabled: CONFIG.STORYBOARDS.ENABLED
+      },
+
+      webrtc: {
+        stunServers: CONFIG.WEBRTC.STUN_SERVERS
       }
     }
   }

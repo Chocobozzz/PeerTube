@@ -41,6 +41,8 @@ export type PeerTubePlayerContructorOptions = {
 
   pluginsManager: PluginsManager
 
+  stunServers: string[]
+
   autoPlayerRatio?: {
     cssRatioVariable: string
     cssPlayerPortraitModeVariable: string

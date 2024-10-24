@@ -206,6 +206,7 @@ export class PlayerOptionsBuilder {
       theaterButton: false,
 
       serverUrl: getBackendUrl(),
+      stunServers: serverConfig.webrtc.stunServers,
       language: navigator.language,
 
       pluginsManager: this.peertubePlugin.getPluginsManager(),

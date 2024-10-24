@@ -444,6 +444,11 @@ describe('Test config', function () {
 
       expect(data.views.videos.watchingInterval.anonymous).to.equal(5000)
       expect(data.views.videos.watchingInterval.users).to.equal(5000)
+
+      expect(data.webrtc.stunServers).to.have.members([
+        'stun:stunserver2024.stunprotocol.org',
+        'stun:stun.framasoft.org'
+      ])
     })
 
     it('Should have a correct config on a server with registration enabled', async function () {

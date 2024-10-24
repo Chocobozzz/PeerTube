@@ -514,6 +514,12 @@ stats:
   total_admins:
     enabled: true
 
+webrtc:
+  # 1 or 2 STUN servers are sufficient
+  stun_servers:
+    - 'stun:stunserver2024.stunprotocol.org'
+    - 'stun:stun.framasoft.org'
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

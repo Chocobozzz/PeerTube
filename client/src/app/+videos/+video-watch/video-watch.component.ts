@@ -696,6 +696,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       authorizationHeader: () => this.authService.getRequestHeaderValue(),
 
       serverUrl: environment.originServerUrl || window.location.origin,
+      stunServers: this.serverConfig.webrtc.stunServers,
 
       errorNotifier: (message: string) => this.notifier.error(message),
 

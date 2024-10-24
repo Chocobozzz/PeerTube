@@ -37,7 +37,7 @@ class Redis {
     const redisMode = CONFIG.REDIS.SENTINEL.ENABLED ? 'sentinel' : 'standalone'
     logger.info(`Connecting to Redis in "${redisMode}" mode...`, lTags())
 
-    this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }))
+    this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }, true))
     this.client.on('error', err => logger.error('Redis failed to connect', { err, ...lTags() }))
     this.client.on('connect', () => {
       logger.info('Connected to redis.', lTags())
@@ -59,15 +59,17 @@ class Redis {
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
-  static getRedisClientOptions (name?: string, options: RedisOptions = {}): RedisOptions {
+  static getRedisClientOptions (name?: string, options: RedisOptions = {}, logOptions = false): RedisOptions {
     const connectionName = [ 'PeerTube', name ].join('')
     const connectTimeout = 20000 // Could be slow since node use sync call to compile PeerTube
 
     if (CONFIG.REDIS.SENTINEL.ENABLED) {
-      logger.info(
-        `Using sentinel redis options`,
-        { sentinels: CONFIG.REDIS.SENTINEL.SENTINELS, name: CONFIG.REDIS.SENTINEL.MASTER_NAME, ...lTags() }
-      )
+      if (logOptions) {
+        logger.info(
+          `Using sentinel redis options`,
+          { sentinels: CONFIG.REDIS.SENTINEL.SENTINELS, name: CONFIG.REDIS.SENTINEL.MASTER_NAME, ...lTags() }
+        )
+      }
 
       return {
         connectionName,
@@ -80,10 +82,12 @@ class Redis {
       }
     }
 
-    logger.info(
-      `Using standalone redis options`,
-      { db: CONFIG.REDIS.DB, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT, path: CONFIG.REDIS.SOCKET, ...lTags() }
-    )
+    if (logOptions) {
+      logger.info(
+        `Using standalone redis options`,
+        { db: CONFIG.REDIS.DB, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT, path: CONFIG.REDIS.SOCKET, ...lTags() }
+      )
+    }
 
     return {
       connectionName,
