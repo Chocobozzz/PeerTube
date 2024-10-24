@@ -1088,7 +1088,7 @@ p-toast {
     min-width: 200px;
 
     .p-toast-icon-close {
-      opacity: 0;
+      color: pvar(--greyForegroundColor);
       position: absolute;
       right: 5px;
       top: 5px;
@@ -1096,10 +1096,6 @@ p-toast {
       height: 18px;
       background: url('../assets/images/feather/x.svg') no-repeat;
       background-size: contain;
-    }
-
-    &:hover .p-toast-icon-close {
-      opacity: .3;
     }
   }
 
@@ -1117,10 +1113,10 @@ p-toast {
       display: flex;
       align-items: center;
       width: 100%;
-      padding: 10px 20px;
+      padding: 10px;
 
       .message {
-        @include margin-right(20px);
+        @include margin-left(10px);
 
         flex-grow: 1;
 

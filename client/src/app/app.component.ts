@@ -294,12 +294,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Admin modal
     userSub.pipe(
       filter(user => user.role.id === UserRole.ADMINISTRATOR)
-    ).subscribe(user => this.openAdminModalsIfNeeded(user))
+    ).subscribe(user => setTimeout(() => this.openAdminModalsIfNeeded(user))) // Wait deferred modal creation in the view
 
     // Account modal
     userSub.pipe(
       filter(user => user.role.id !== UserRole.ADMINISTRATOR)
-    ).subscribe(user => this.openAccountModalsIfNeeded(user))
+    ).subscribe(user => setTimeout(() => this.openAccountModalsIfNeeded(user))) // Wait deferred modal creation in the view
   }
 
   private openAdminModalsIfNeeded (user: User) {

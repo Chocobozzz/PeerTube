@@ -1,15 +1,14 @@
-import { Hotkey, HotkeysService } from '@app/core'
-import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
-import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
+import { Hotkey, HotkeysService } from '@app/core'
 import { Notifier } from '@app/core/notification/notifier.service'
+import { HttpStatusCode, OAuthClientLocal, User, UserLogin, UserRefreshToken, MyUser as UserServerModel } from '@peertube/peertube-models'
 import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
-import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@peertube/peertube-models'
+import { Observable, of, ReplaySubject, Subject, throwError } from 'rxjs'
+import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
-import { RedirectService } from '../routing'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 
@@ -42,10 +41,9 @@ export class AuthService {
   private clientSecret: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
   private loginChanged: Subject<AuthStatus>
   private user: AuthUser = null
-  private refreshingTokenObservable: Observable<any>
+  private refreshingTokenObservable: Observable<void>
 
   constructor (
-    private redirectService: RedirectService,
     private http: HttpClient,
     private notifier: Notifier,
     private hotkeysService: HotkeysService,
@@ -180,18 +178,20 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
   logout () {
     const authHeaderValue = this.getRequestHeaderValue()
-    const headers = new HttpHeaders().set('Authorization', authHeaderValue)
 
-    this.http.post<{ redirectUrl?: string }>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
-      .subscribe({
-        next: res => {
-          if (res.redirectUrl) {
-            window.location.href = res.redirectUrl
-          }
-        },
+    const obs: Observable<{ redirectUrl?: string }> = authHeaderValue
+      ? this.http.post(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers: new HttpHeaders().set('Authorization', authHeaderValue) })
+      : of({})
 
-        error: err => logger.error(err)
-      })
+    obs.subscribe({
+      next: res => {
+        if (res.redirectUrl) {
+          window.location.href = res.redirectUrl
+        }
+      },
+
+      error: err => logger.error(err)
+    })
 
     this.user = null
 
@@ -200,6 +200,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
   refreshAccessToken () {
     if (this.refreshingTokenObservable) return this.refreshingTokenObservable
+    if (!this.getAccessToken()) return throwError(() => new Error($localize`You need to reconnect`))
 
     logger.info('Refreshing token...')
 
@@ -221,17 +222,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           this.refreshingTokenObservable = null
         }),
         catchError(err => {
-          this.refreshingTokenObservable = null
-
-          logger.error(err)
-          logger.info('Cannot refresh token -> logout...')
+          logger.clientError(err)
           this.logout()
 
-          this.redirectService.redirectToLogin()
+          this.notifier.info($localize`Your authentication has expired, you need to reconnect.`, undefined, undefined, true)
+          this.refreshingTokenObservable = null
 
-          return observableThrowError(() => ({
-            error: $localize`You need to reconnect.`
-          }))
+          return throwError(() => new Error($localize`You need to reconnect`))
         }),
         share()
       )

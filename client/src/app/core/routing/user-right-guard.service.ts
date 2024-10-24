@@ -19,7 +19,11 @@ export class UserRightGuard {
       if (user.hasRight(neededUserRight)) return true
     }
 
-    this.redirectService.redirectToLogin()
+    const err = new Error('') as any
+    err.status = 403
+
+    this.redirectService.replaceBy401(err)
+
     return false
   }
 

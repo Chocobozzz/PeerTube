@@ -14,7 +14,10 @@ export class LoginGuard {
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.auth.isLoggedIn() === true) return true
 
-    this.redirectService.redirectToLogin()
+    const err = new Error('') as any
+    err.status = 401
+
+    this.redirectService.replaceBy401(err)
     return false
   }
 

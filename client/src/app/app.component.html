@@ -60,12 +60,12 @@
 <p-toast position="bottom-right">
   <ng-template let-message pTemplate="message">
     <div class="notification-block">
+      <my-global-icon [iconName]="getNotificationIcon(message)"></my-global-icon>
+
       <div class="message">
         <h3>{{ message.summary }}</h3>
         <p>{{ message.detail }}</p>
       </div>
-
-      <my-global-icon [iconName]="getNotificationIcon(message)"></my-global-icon>
     </div>
   </ng-template>
 </p-toast>

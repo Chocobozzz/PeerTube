@@ -112,6 +112,10 @@ export class RedirectService {
     else this.router.navigate([ '/login' ])
   }
 
+  replaceBy401 (err: Error) {
+    this.router.navigate([ '/401' ], { state: { obj: err }, skipLocationChange: true })
+  }
+
   private doRedirect (redirectUrl: string, fallbackRoute?: string) {
     debugLogger('Redirecting on %s', redirectUrl)
 
