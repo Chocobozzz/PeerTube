@@ -1,5 +1,6 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRightType } from '@peertube/peertube-models'
+import { getUserByEmailPermissive } from '@server/lib/user.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MAccountId, MUserAccountId, MUserDefault } from '@server/types/models/index.js'
@@ -10,8 +11,12 @@ export function checkUserIdExist (idArg: number | string, res: express.Response,
   return checkUserExist(() => UserModel.loadByIdWithChannels(id, withStats), res)
 }
 
-export function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {
-  return checkUserExist(() => UserModel.loadByEmail(email), res, abortResponse)
+export function checkUserEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
+  return checkUserExist(async () => {
+    const users = await UserModel.loadByEmailCaseInsensitive(email)
+
+    return getUserByEmailPermissive(users, email)
+  }, res, abortResponse)
 }
 
 export async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {

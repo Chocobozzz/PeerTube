@@ -4,8 +4,8 @@ import { toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { Redis } from '../../../lib/redis.js'
-import { areValidationErrors, checkUserEmailExist, checkUserIdExist } from '../shared/index.js'
-import { checkRegistrationEmailExist, checkRegistrationIdExist } from './shared/user-registrations.js'
+import { areValidationErrors, checkUserEmailExistPermissive, checkUserIdExist } from '../shared/index.js'
+import { checkRegistrationEmailExistPermissive, checkRegistrationIdExist } from './shared/user-registrations.js'
 
 const usersAskSendVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
@@ -14,8 +14,8 @@ const usersAskSendVerifyEmailValidator = [
     if (areValidationErrors(req, res)) return
 
     const [ userExists, registrationExists ] = await Promise.all([
-      checkUserEmailExist(req.body.email, res, false),
-      checkRegistrationEmailExist(req.body.email, res, false)
+      checkUserEmailExistPermissive(req.body.email, res, false),
+      checkRegistrationEmailExistPermissive(req.body.email, res, false)
     ])
 
     if (!userExists && !registrationExists) {

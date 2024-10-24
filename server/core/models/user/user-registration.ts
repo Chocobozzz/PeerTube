@@ -8,7 +8,7 @@ import { isVideoChannelDisplayNameValid } from '@server/helpers/custom-validator
 import { cryptPassword } from '@server/helpers/peertube-crypto.js'
 import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import { MRegistration, MRegistrationFormattable } from '@server/types/models/index.js'
-import { FindOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
+import { col, FindOptions, fn, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeCreate,
@@ -129,12 +129,16 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     return UserRegistrationModel.findByPk(id)
   }
 
-  static loadByEmail (email: string): Promise<MRegistration> {
+  static loadByEmailCaseInsensitive (email: string): Promise<MRegistration[]> {
     const query = {
-      where: { email }
+      where: where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      )
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
   static loadByEmailOrUsername (emailOrUsername: string): Promise<MRegistration> {
