@@ -127,6 +127,16 @@
   &:focus {
     color: #fff;
     background-color: pvar(--mainColor);
+    border-color: inherit;
+  }
+
+  // Override bootstrap
+  &.btn:active,
+  &.btn:focus-visible,
+  &.btn.show {
+    color: #fff !important;
+    background-color: pvar(--mainColor) !important;
+    border-color: inherit !important;
   }
 
   &:hover {
@@ -157,6 +167,15 @@
   &:focus {
     color: pvar(--mainColor);
     background-color: pvar(--mainBackgroundColor);
+  }
+
+  // Override bootstrap
+  &.btn:active,
+  &.btn:focus-visible,
+  &.btn.show {
+    color: pvar(--mainColor);
+    background-color: pvar(--mainBackgroundColor);
+    border-color: inherit !important;
   }
 
   &:hover {
@@ -204,6 +223,15 @@
     background-color: pvar(--greySecondaryBackgroundColor);
   }
 
+  // Override bootstrap
+  &.btn:active,
+  &.btn:focus-visible,
+  &.btn.show {
+    color: pvar(--greyForegroundColor);
+    background-color: pvar(--greySecondaryBackgroundColor);
+    border-color: inherit !important;
+  }
+
   &[disabled] {
     cursor: default;
   }
@@ -241,8 +269,7 @@
   border: 0;
   font-weight: $font-semibold;
 
-  // Because of primeng that redefines border-radius of all input[type="..."]
-  border-radius: 3px !important;
+  border-radius: 3px;
 
   text-align: center;
   cursor: pointer;

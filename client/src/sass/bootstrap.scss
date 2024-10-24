@@ -56,6 +56,12 @@ body {
   --bs-btn-color: #{pvar(--greyForegroundColor)};
 }
 
+.btn {
+  --bs-btn-active-color: inherit;
+  --bs-btn-active-bg: inherit;
+  --bs-btn-active-border-color: inherit;
+}
+
 .flex-auto {
   flex: auto;
 }
@@ -291,7 +297,6 @@ body {
 
 .btn:not(.btn-sm) {
   font-size: $button-font-size;
-  line-height: 1.2;
 }
 
 .btn-outline-secondary {
