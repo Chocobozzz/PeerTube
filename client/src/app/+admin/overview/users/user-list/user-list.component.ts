@@ -1,5 +1,5 @@
 import { DatePipe, NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, LocalStorageService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
@@ -70,7 +70,7 @@ type UserForList = User & {
     ProgressBarComponent
   ]
 })
-export class UserListComponent extends RestTable <User> implements OnInit {
+export class UserListComponent extends RestTable <User> implements OnInit, OnDestroy {
   private static readonly LOCAL_STORAGE_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
 
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
@@ -139,6 +139,8 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     this.initialize()
     await this.pluginService.ensurePluginsAreLoaded('admin-users')
 
+    this.pluginService.addAction('admin-user-list:load-data', this.reloadDataInternal.bind(this))
+
     const bulkActions: DropdownAction<User[]>[][] = [
       [
         {
@@ -186,6 +188,10 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     ]
 
     this.loadSelectedColumns()
+  }
+
+  ngOnDestroy () {
+    this.pluginService.removeAction('admin-user-list:load-data')
   }
 
   loadSelectedColumns () {
@@ -331,11 +337,13 @@ export class UserListComponent extends RestTable <User> implements OnInit {
   }
 
   protected reloadDataInternal () {
-    this.userAdminService.getUsers({
+    const obs = this.userAdminService.getUsers({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
-    }).subscribe({
+    })
+
+    obs.subscribe({
       next: resultList => {
         this.users = resultList.data.map(u => ({
           ...u,
@@ -358,6 +366,8 @@ export class UserListComponent extends RestTable <User> implements OnInit {
 
       error: err => this.notifier.error(err.message)
     })
+
+    return obs
   }
 
   private loadMutedStatus () {
