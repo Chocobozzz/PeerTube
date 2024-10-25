@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs'
+
 // Data from API hooks: {hookType}:api.{location}.{elementType}.{actionType}.{target}
 // Data in internal functions: {hookType}:{location}.{elementType}.{actionType}.{target}
 
@@ -208,3 +210,13 @@ export type ClientHookName = keyof typeof clientHookObject
 export interface ClientHook {
   runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T>
 }
+
+export const clientDoActionObject = {
+  'application:increment-loader': true,
+  'application:decrement-loader': true
+}
+
+export type ClientDoActionName = keyof typeof clientDoActionObject
+
+export type ClientDoActionCallback = () => Observable<any>
+export type ClientDoAction = (actionName: ClientDoActionName) => Observable<any>

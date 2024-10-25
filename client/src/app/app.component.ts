@@ -1,7 +1,7 @@
-import { delay, forkJoin } from 'rxjs'
+import { delay, forkJoin, from } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, PlatformLocation, NgIf, NgClass } from '@angular/common'
-import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterLink, RouterOutlet } from '@angular/router'
 import {
@@ -65,7 +65,7 @@ import { InstanceService } from './shared/shared-main/instance/instance.service'
     CustomModalComponent
   ]
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'
 
   @ViewChild('accountSetupWarningModal') accountSetupWarningModal: AccountSetupWarningModalComponent
@@ -152,10 +152,26 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
     this.document.documentElement.dir = getLocaleDirection(this.localeId)
+
+    this.pluginService.addAction('application:increment-loader', () => {
+      this.loadingBar.useRef('plugins').start()
+
+      return from([])
+    })
+    this.pluginService.addAction('application:decrement-loader', () => {
+      this.loadingBar.useRef('plugins').complete()
+
+      return from([])
+    })
   }
 
   ngAfterViewInit () {
     this.pluginService.initializeCustomModal(this.customModal)
+  }
+
+  ngOnDestroy () {
+    this.pluginService.removeAction('application:increment-loader')
+    this.pluginService.removeAction('application:decrement-loader')
   }
 
   // ---------------------------------------------------------------------------

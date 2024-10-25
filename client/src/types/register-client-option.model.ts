@@ -1,4 +1,5 @@
 import {
+  ClientDoAction,
   MyUser,
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
@@ -9,6 +10,8 @@ import {
 } from '@peertube/peertube-models'
 
 export type RegisterClientOptions = {
+  doAction: ClientDoAction
+
   registerHook: (options: RegisterClientHookOptions) => void
 
   registerVideoField: (commonOptions: RegisterClientFormFieldOptions, videoFormOptions: RegisterClientVideoFieldOptions) => void
