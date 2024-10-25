@@ -2,7 +2,7 @@ import debug from 'debug'
 import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { AbuseState, AbuseStateType, AdminAbuse } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
@@ -106,13 +106,16 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
-    private markdownRenderer: MarkdownService
+    private markdownRenderer: MarkdownService,
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {
     super()
   }
 
-  ngOnInit () {
-    this.abuseActions = [
+  async ngOnInit () {
+    await this.pluginService.ensurePluginsAreLoaded('admin-comments')
+    const abuseActions: DropdownAction<ProcessedAbuse>[][] = [] = [
       this.buildInternalActions(),
 
       this.buildFlaggedAccountActions(),
@@ -123,6 +126,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
       this.buildAccountActions()
     ]
+    this.abuseActions = await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
 
     this.initialize()
   }

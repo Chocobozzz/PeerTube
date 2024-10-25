@@ -109,7 +109,10 @@ export const clientFilterHookObject = {
   'filter:admin-comment-list.bulk-actions.create.result': true,
 
   // Filter user moderation actions
-  'filter:admin-user-moderation.actions.create.result': true
+  'filter:admin-user-moderation.actions.create.result': true,
+
+  // Filter actions in abuse list
+  'filter:admin-abuse-list.actions.create.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
