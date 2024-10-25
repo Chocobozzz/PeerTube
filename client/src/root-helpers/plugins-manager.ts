@@ -84,7 +84,7 @@ class PluginsManager {
   private readonly onClientRoute: OnClientRoute
 
   constructor (options: {
-    doAction: ClientDoAction
+    doAction?: ClientDoAction
     peertubeHelpersFactory: PeertubeHelpersFactory
     onFormFields?: OnFormFields
     onSettingsScripts?: OnSettingsScripts

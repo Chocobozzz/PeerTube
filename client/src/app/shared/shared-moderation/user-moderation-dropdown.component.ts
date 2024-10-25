@@ -68,8 +68,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
   }
 
-  async ngOnChanges () {
-    await this.pluginService.ensurePluginsAreLoaded('admin-users')
+  ngOnChanges () {
     this.buildActions()
   }
 

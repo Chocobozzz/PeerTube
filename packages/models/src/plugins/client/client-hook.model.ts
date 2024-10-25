@@ -108,7 +108,7 @@ export const clientFilterHookObject = {
   'filter:admin-video-comment-list.actions.create.result': true,
 
   // Filter bulk actions in comment list
-  'filter:admin-comment-list.bulk-actions.create.result': true,
+  'filter:admin-video-comment-list.bulk-actions.create.result': true,
 
   // Filter user moderation actions
   'filter:admin-user-moderation.actions.create.result': true,

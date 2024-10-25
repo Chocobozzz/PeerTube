@@ -1,3 +1,6 @@
+import { MonoTypeOperatorFunction } from 'rxjs/internal/types'
+import { shareReplay } from 'rxjs/operators'
+
 function copyToClipboard (text: string, container?: HTMLElement) {
   if (!container) container = document.body
 
@@ -18,7 +21,12 @@ function wait (ms: number) {
   })
 }
 
+function shortCacheObservable<T> (): MonoTypeOperatorFunction<T> {
+  return shareReplay({ refCount: true, windowTime: 500 })
+}
+
 export {
   copyToClipboard,
+  shortCacheObservable,
   wait
 }

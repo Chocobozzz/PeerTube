@@ -18,6 +18,7 @@ import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
 import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 @Component({
   selector: 'my-video-comment-list-admin-owner',
@@ -77,7 +78,6 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
 
   async ngOnInit () {
     this.initialize()
-    await this.pluginService.ensurePluginsAreLoaded('admin-comments')
     this.pluginService.addAction('admin-video-comment-list:load-data', this.reloadDataInternal.bind(this))
 
     const videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = [
@@ -102,7 +102,11 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         }
       ]
     ]
-    this.videoCommentActions = await this.hooks.wrapObject(videoCommentActions, 'admin-comments', 'filter:admin-video-comment-list.actions.create.result')
+    this.videoCommentActions = await this.hooks.wrapObject(
+      videoCommentActions,
+      'admin-comments',
+      'filter:admin-video-comment-list.actions.create.result'
+    )
 
     const bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = [
       {
@@ -118,7 +122,11 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         iconName: 'tick'
       }
     ]
-    this.bulkActions = await this.hooks.wrapObject(bulkActions, 'admin-comments', 'filter:admin-comment-list.bulk-actions.create.result')
+    this.bulkActions = await this.hooks.wrapObject(
+      bulkActions,
+      'admin-comments',
+      'filter:admin-video-comment-list.bulk-actions.create.result'
+    )
 
     if (this.mode === 'admin') {
       this.inputFilters = [
@@ -181,6 +189,7 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
       : this.videoCommentService.listVideoCommentsOfMyVideos.bind(this.videoCommentService)
 
     const obs = method({ pagination: this.pagination, sort: this.sort, search: this.search })
+    .pipe(shortCacheObservable())
 
     obs.subscribe({
       next: async resultList => {

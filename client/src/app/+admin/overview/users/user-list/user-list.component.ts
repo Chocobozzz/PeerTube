@@ -2,7 +2,16 @@ import { DatePipe, NgClass, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, HooksService, LocalStorageService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
+import {
+  AuthService,
+  ConfirmService,
+  HooksService,
+  LocalStorageService,
+  Notifier,
+  PluginService,
+  RestPagination,
+  RestTable
+} from '@app/core'
 import { formatICU, getAPIHost } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
@@ -29,6 +38,7 @@ import {
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
 import { ProgressBarComponent } from '@app/shared/shared-main/common/progress-bar.component'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -137,7 +147,6 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
 
   async ngOnInit () {
     this.initialize()
-    await this.pluginService.ensurePluginsAreLoaded('admin-users')
 
     this.pluginService.addAction('admin-user-list:load-data', this.reloadDataInternal.bind(this))
 
@@ -342,6 +351,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
       sort: this.sort,
       search: this.search
     })
+    .pipe(shortCacheObservable())
 
     obs.subscribe({
       next: resultList => {

@@ -28,6 +28,7 @@ import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
 import { VideoCommentService } from '../shared-video-comment/video-comment.service'
 import { formatICU } from '@app/helpers'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -114,10 +115,9 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
   }
 
   async ngOnInit () {
-    await this.pluginService.ensurePluginsAreLoaded('admin-comments')
     this.pluginService.addAction('admin-abuse-list:load-data', this.reloadDataInternal.bind(this))
 
-    const abuseActions: DropdownAction<ProcessedAbuse>[][] = [] = [
+    const abuseActions: DropdownAction<ProcessedAbuse>[][] = [
       this.buildInternalActions(),
 
       this.buildFlaggedAccountActions(),
@@ -239,8 +239,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     }
 
     const observable = this.viewType === 'admin'
-      ? this.abuseService.getAdminAbuses(options)
-      : this.abuseService.getUserAbuses(options)
+      ? this.abuseService.getAdminAbuses(options).pipe(shortCacheObservable())
+      : this.abuseService.getUserAbuses(options).pipe(shortCacheObservable())
 
     observable.subscribe({
       next: async resultList => {

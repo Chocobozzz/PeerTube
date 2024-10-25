@@ -16,6 +16,7 @@ import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.compone
 import { LoaderComponent } from '../../../../shared/shared-main/common/loader.component'
 import { VideoCommentAddComponent } from './video-comment-add.component'
 import { VideoCommentComponent } from './video-comment.component'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 @Component({
   selector: 'my-video-comments',
@@ -167,6 +168,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       'filter:api.video-watch.video-threads.list.params',
       'filter:api.video-watch.video-threads.list.result'
     )
+    .pipe(shortCacheObservable())
 
     obs.subscribe({
       next: res => {
