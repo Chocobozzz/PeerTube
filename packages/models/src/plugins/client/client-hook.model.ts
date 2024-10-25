@@ -214,7 +214,8 @@ export interface ClientHook {
 export const clientDoActionObject = {
   'application:increment-loader': true,
   'application:decrement-loader': true,
-  'admin-user-list:load-data': true
+  'admin-user-list:load-data': true,
+  'admin-video-comment-list:load-data': true
 }
 
 export type ClientDoActionName = keyof typeof clientDoActionObject
