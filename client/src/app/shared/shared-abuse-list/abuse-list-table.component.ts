@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { SortMeta, SharedModule } from 'primeng/api'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { AbuseState, AbuseStateType, AdminAbuse } from '@peertube/peertube-models'
@@ -56,7 +56,7 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
     DatePipe
   ]
 })
-export class AbuseListTableComponent extends RestTable implements OnInit {
+export class AbuseListTableComponent extends RestTable implements OnInit, OnDestroy {
   @Input() viewType: 'admin' | 'user'
 
   @ViewChild('abuseMessagesModal', { static: true }) abuseMessagesModal: AbuseMessageModalComponent
@@ -131,6 +131,10 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     this.abuseActions = await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
 
     this.initialize()
+  }
+
+  ngOnDestroy () {
+    this.pluginService.removeAction('admin-abuse-list:load-data')
   }
 
   isAdminView () {
