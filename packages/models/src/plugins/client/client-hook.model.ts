@@ -212,6 +212,7 @@ export interface ClientHook {
 }
 
 export const clientDoActionObject = {
+  'admin-abuse-list:load-data': true,
   'application:increment-loader': true,
   'application:decrement-loader': true,
   'admin-user-list:load-data': true,

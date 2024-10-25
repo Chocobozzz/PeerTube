@@ -115,6 +115,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   async ngOnInit () {
     await this.pluginService.ensurePluginsAreLoaded('admin-comments')
+    this.pluginService.addAction('admin-abuse-list:load-data', this.reloadDataInternal.bind(this))
+
     const abuseActions: DropdownAction<ProcessedAbuse>[][] = [] = [
       this.buildInternalActions(),
 
@@ -240,7 +242,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       ? this.abuseService.getAdminAbuses(options)
       : this.abuseService.getUserAbuses(options)
 
-    return observable.subscribe({
+    observable.subscribe({
       next: async resultList => {
         this.totalRecords = resultList.total
 
@@ -285,6 +287,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
       error: err => this.notifier.error(err.message)
     })
+
+    return observable
   }
 
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {
