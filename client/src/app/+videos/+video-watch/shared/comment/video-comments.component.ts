@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, User, hasMoreItems } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, PluginService, User, hasMoreItems } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication } from '@app/shared/shared-main/feeds/syndication.model'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -78,10 +78,13 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {}
 
   ngOnInit () {
+    this.pluginService.addAction('video-watch-comment-list:load-data', this.loadMoreThreads.bind(this, true))
+
     // Find highlighted comment in params
     this.sub = this.activatedRoute.params.subscribe(
       params => {
@@ -100,6 +103,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy () {
+    this.pluginService.removeAction('video-watch-comment-list:load-data')
     if (this.sub) this.sub.unsubscribe()
   }
 
@@ -145,11 +149,14 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  loadMoreThreads () {
+  loadMoreThreads (reset = false) {
     const params = {
       videoId: this.video.uuid,
       videoPassword: this.videoPassword,
-      componentPagination: this.componentPagination,
+      componentPagination: {
+        ...this.componentPagination,
+        currentPage: reset === true ? 1 : this.componentPagination.currentPage
+      },
       sort: this.sort
     }
 
@@ -163,6 +170,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
     obs.subscribe({
       next: res => {
+        if (reset) this.comments = []
         this.comments = this.comments.concat(res.data)
         this.componentPagination.totalItems = res.total
         this.totalNotDeletedComments = res.totalNotDeletedComments
@@ -174,6 +182,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
       error: err => this.notifier.error(err.message)
     })
+
+    return obs
   }
 
   onCommentThreadCreated (comment: VideoComment) {
