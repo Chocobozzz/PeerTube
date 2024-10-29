@@ -27,8 +27,10 @@
         </button>
       </div>
 
-      <div class="ms-auto">
+      <div class="ms-auto d-flex gap-1">
         <my-advanced-input-filter [filters]="searchFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+
+        <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
       </div>
     </div>
   </ng-template>
