@@ -51,8 +51,15 @@ $chapter-marker-size: 9px;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   transition: visibility 0.3s, opacity 0.3s !important;
 
-  > button:not(.vjs-hidden):first-child {
+  > button:not(.vjs-hidden):first-child,
+  > button.vjs-hidden:first-child + button:not(.vjs-hidden) {
+    // Play button have more padding than fullscreen button
     @include margin-left(var(--first-last-element-margin));
+
+    &.vjs-play-control {
+      // Play button have more padding than fullscreen button
+      @include margin-left(calc(var(--first-last-element-margin) - 4px));
+    }
   }
 
   > button:last-child {
@@ -551,7 +558,7 @@ $chapter-marker-size: 9px;
 }
 
 .video-js.vjs-peertube-skin.vjs-size-350 .vjs-control-bar {
-  --first-last-element-margin: 5px;
+  --first-last-element-margin: 7px;
 
   .vjs-next-video,
   .vjs-previous-video {
