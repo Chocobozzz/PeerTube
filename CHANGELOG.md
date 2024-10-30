@@ -1,5 +1,18 @@
 # Changelog
 
+## v6.3.3
+
+### Bug fixes
+
+ * Fix broken thumbnails on live replay
+ * Fix detecting portrait rotation of some video
+ * Don't allow to select a frame from a live to set the thumbnail
+ * Fix lost video stream with specific transcoding settings and video input
+ * Fix creating playlist without thumbnail when using the REST API
+ * Fix `.mov` video upload on some Windows versions
+ * Fix `video-plugin-metadata.result` client plugin hook
+
+
 ## v6.3.2
 
 ### Bug fixes
