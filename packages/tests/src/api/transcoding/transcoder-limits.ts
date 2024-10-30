@@ -290,6 +290,23 @@ describe('Test video transcoding limits', function () {
       expect(video.files[0].resolution.id).to.equal(720)
       expect(hlsFiles[0].resolution.id).to.equal(720)
     })
+
+    it('Should keep input resolution if only upper resolutions are enabled', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.enableTranscoding({ resolutions: [ 0, 1080 ], keepOriginal: false })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video', fixture: 'video_short.webm' })
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: uuid })
+      const hlsFiles = video.streamingPlaylists[0].files
+
+      expect(video.files).to.have.lengthOf(2)
+      expect(hlsFiles).to.have.lengthOf(2)
+
+      expect(getAllFiles(video).map(f => f.resolution.id)).to.have.members([ 720, 720, 0, 0 ])
+    })
   })
 
   after(async function () {

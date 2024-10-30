@@ -179,7 +179,7 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
     videoPlaylist.VideoChannel = videoChannel
   }
 
-  const thumbnailField = req.files['thumbnailfile']
+  const thumbnailField = req.files?.['thumbnailfile']
   const thumbnailModel = thumbnailField
     ? await updateLocalPlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
@@ -220,7 +220,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
   const wasNotPrivatePlaylist = videoPlaylistInstance.privacy !== VideoPlaylistPrivacy.PRIVATE
 
-  const thumbnailField = req.files['thumbnailfile']
+  const thumbnailField = req.files?.['thumbnailfile']
   const thumbnailModel = thumbnailField
     ? await updateLocalPlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
