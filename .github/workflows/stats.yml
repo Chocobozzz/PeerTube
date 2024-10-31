@@ -1,5 +1,7 @@
 name: Stats
 
+permissions: {}
+
 on:
   push:
     branches:
