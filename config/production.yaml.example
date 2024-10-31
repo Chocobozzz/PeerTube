@@ -551,7 +551,9 @@ contact_form:
 signup:
   enabled: false
 
-  limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  # When the total number of users in your instance reaches this limit, registrations are disabled.
+  # -1 == unlimited
+  limit: 10
 
   minimum_age: 16 # Used to configure the signup form
 

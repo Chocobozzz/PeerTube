@@ -186,6 +186,7 @@
 
               <div [ngClass]="getDisabledSignupClass()">
                 <label i18n for="signupLimit">Signup limit</label>
+                <span i18n class="small muted ms-1">When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</span>
 
                 <div class="number-with-unit">
                   <input
@@ -204,11 +205,11 @@
                 <label i18n for="signupMinimumAge">Minimum required age to create an account</label>
 
                 <div class="number-with-unit">
-                    <input
-                      type="number" min="1" id="signupMinimumAge" class="form-control"
-                      formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors['signup.minimumAge'] }"
-                    >
-                    <span i18n>{form.value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
+                  <input
+                    type="number" min="1" id="signupMinimumAge" class="form-control"
+                    formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors['signup.minimumAge'] }"
+                  >
+                  <span i18n>{form.value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
                 </div>
 
                 <div *ngIf="formErrors.signup.minimumAge" class="form-error" role="alert">{{ formErrors.signup.minimumAge }}</div>
