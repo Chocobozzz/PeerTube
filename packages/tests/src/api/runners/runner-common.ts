@@ -395,6 +395,18 @@ describe('Test runner common actions', function () {
         jobUUID = webVideoJobs[0].uuid
       })
 
+      it('Should filter requested jobs', async function () {
+        {
+          const { availableJobs } = await server.runnerJobs.request({ runnerToken, jobTypes: [ 'vod-web-video-transcoding' ] })
+          expect(availableJobs).to.have.lengthOf(2)
+        }
+
+        {
+          const { availableJobs } = await server.runnerJobs.request({ runnerToken, jobTypes: [ 'vod-hls-transcoding' ] })
+          expect(availableJobs).to.have.lengthOf(0)
+        }
+      })
+
       it('Should have sorted available jobs by priority', async function () {
         const { availableJobs } = await server.runnerJobs.request({ runnerToken })
 

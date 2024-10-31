@@ -237,8 +237,15 @@ export class RunnerServer {
   private async requestJob (server: PeerTubeServer) {
     logger.debug(`Requesting jobs on ${server.url} for runner ${server.runnerName}`)
 
-    const { availableJobs } = await server.runnerJobs.request({ runnerToken: server.runnerToken })
+    const { availableJobs } = await server.runnerJobs.request({
+      runnerToken: server.runnerToken,
 
+      jobTypes: this.enabledJobs.size !== getSupportedJobsList().length
+        ? Array.from(this.enabledJobs)
+        : undefined
+    })
+
+    // FIXME: remove in PeerTube v8: jobTypes has been introduced in PeerTube v7, so do the filter here too
     const filtered = availableJobs.filter(j => isJobSupported(j, this.enabledJobs))
 
     if (filtered.length === 0) {

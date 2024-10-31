@@ -79,30 +79,30 @@ export class RunnerJobsCommand extends AbstractCommand {
       ...options,
 
       path,
-      fields: pick(options, [ 'runnerToken' ]),
+      fields: pick(options, [ 'runnerToken', 'jobTypes' ]),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
   }
 
   async requestVOD (options: OverrideCommandOptions & RequestRunnerJobBody) {
-    const vodTypes = new Set<RunnerJobType>([ 'vod-audio-merge-transcoding', 'vod-hls-transcoding', 'vod-web-video-transcoding' ])
+    const { availableJobs } = await this.request({
+      ...options,
 
-    const { availableJobs } = await this.request(options)
+      jobTypes: [ 'vod-audio-merge-transcoding', 'vod-hls-transcoding', 'vod-web-video-transcoding' ]
+    })
 
-    return {
-      availableJobs: availableJobs.filter(j => vodTypes.has(j.type))
-    } as RequestRunnerJobResult<RunnerJobVODPayload>
+    return { availableJobs } as RequestRunnerJobResult<RunnerJobVODPayload>
   }
 
   async requestLive (options: OverrideCommandOptions & RequestRunnerJobBody) {
-    const vodTypes = new Set<RunnerJobType>([ 'live-rtmp-hls-transcoding' ])
+    const { availableJobs } = await this.request({
+      ...options,
 
-    const { availableJobs } = await this.request(options)
+      jobTypes: [ 'live-rtmp-hls-transcoding' ]
+    })
 
-    return {
-      availableJobs: availableJobs.filter(j => vodTypes.has(j.type))
-    } as RequestRunnerJobResult<RunnerJobLiveRTMPHLSTranscodingPayload>
+    return { availableJobs } as RequestRunnerJobResult<RunnerJobLiveRTMPHLSTranscodingPayload>
   }
 
   // ---------------------------------------------------------------------------

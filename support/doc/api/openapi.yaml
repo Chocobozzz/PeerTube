@@ -6422,6 +6422,11 @@ paths:
               properties:
                 runnerToken:
                   type: string
+                jobTypes:
+                  type: array
+                  description: Filter jobs depending on their types
+                  items:
+                    type: string
               required:
                 - runnerToken
       responses:
