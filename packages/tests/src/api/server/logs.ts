@@ -262,6 +262,14 @@ describe('Test logs', function () {
     })
   })
 
+  describe('With some log options', function () {
+
+    it('Should not crash when enabling `prettify_sql` config', async function () {
+      await server.kill()
+      await server.run({ log: { prettify_sql: true } })
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })
