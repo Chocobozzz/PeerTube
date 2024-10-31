@@ -3888,7 +3888,7 @@
       </trans-unit>
       <trans-unit id="5203899665906572487" datatype="html" xml:space="preserve">
         <source>Add a new segment</source>
-        <target state="translated">新增區段</target>
+        <target state="translated">新增片段</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3896,7 +3896,7 @@
       </trans-unit>
       <trans-unit id="936472574168973902" datatype="html" xml:space="preserve">
         <source>Segment start timestamp</source>
-        <target state="translated">區段開始時間戳</target>
+        <target state="translated">片段開始時間戳</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -3912,7 +3912,7 @@
       </trans-unit>
       <trans-unit id="1031856574257335431" datatype="html" xml:space="preserve">
         <source>Segment end timestamp</source>
-        <target state="translated">區段結束時間戳</target>
+        <target state="translated">片段結束時間戳</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">65,67</context>
@@ -3940,7 +3940,7 @@
       </trans-unit>
       <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
-        <target state="translated">開始區段必須結束區段時間之前</target>
+        <target state="translated">開始片段必須結束片段時間之前</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -3948,7 +3948,7 @@
       </trans-unit>
       <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="translated">區段必須有文字內容</target>
+        <target state="translated">片段必須有文字內容</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">176</context>
@@ -3962,9 +3962,9 @@
           <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912256992541129243" datatype="html">
+      <trans-unit id="6912256992541129243" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel the edition first.</source>
-        <target state="new">A segment is being edited. Save or cancel the edition first.</target>
+        <target state="translated">正在編輯片段。請先儲存或取消編輯。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -4022,9 +4022,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691672602205005718" datatype="html">
+      <trans-unit id="6691672602205005718" datatype="html" xml:space="preserve">
         <source>Use a comma (,) to add a tag</source>
-        <target state="new">Use a comma (,) to add a tag</target>
+        <target state="translated">使用逗號 (,) 新增標籤</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -4474,9 +4474,9 @@
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="304078465800526575" datatype="html">
+      <trans-unit id="304078465800526575" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel edition <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel edition <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> 取消建立 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> 取消編輯 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> 取消刪除 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">198,206</context>
@@ -4708,9 +4708,9 @@
           <context context-type="linenumber">446</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6206893322435329922" datatype="html">
+      <trans-unit id="6206893322435329922" datatype="html" xml:space="preserve">
         <source>You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">您可以根據<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>您的自動標籤政策<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>要求留言必須通過審核</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">449,450</context>
@@ -4904,17 +4904,17 @@
           <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7968397949464882917" datatype="html">
+      <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
-        <target state="new">Are you sure you want to close this modal without saving your changes?</target>
+        <target state="translated">您確定要關閉此模態而不儲存變更嗎？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3783295829532094714" datatype="html">
+      <trans-unit id="3783295829532094714" datatype="html" xml:space="preserve">
         <source>Closing caption edition mocal</source>
-        <target state="new">Closing caption edition mocal</target>
+        <target state="translated">隱藏式字幕編輯模態</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">414</context>
@@ -4960,9 +4960,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6288814204222524322" datatype="html">
+      <trans-unit id="6288814204222524322" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.uploadPercents"/>%</source>
-        <target state="new"><x id="PH" equiv-text="this.uploadPercents"/>%</target>
+        <target state="translated"><x id="PH" equiv-text="this.uploadPercents"/>%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -5201,17 +5201,17 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9106564905888443672" datatype="html">
+      <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="new">We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</target>
+        <target state="translated">我們建議您不要使用 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 使用者發佈影片，因為這是您站台的超級管理員帳號。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4434906642654067529" datatype="html">
+      <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="new">Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</target>
+        <target state="translated">反之，<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>您可以建立專用帳號<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>來上傳您的影片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">41</context>
@@ -5449,9 +5449,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3522196594292220614" datatype="html">
+      <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="new">Playlist URL</target>
+        <target state="translated">播放清單 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -5521,17 +5521,17 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">影片 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7906169354857781172" datatype="html">
+      <trans-unit id="7906169354857781172" datatype="html" xml:space="preserve">
         <source>Video embed URL</source>
-        <target state="new">Video embed URL</target>
+        <target state="translated">影片嵌入 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">149,150</context>
@@ -5573,9 +5573,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5460870961303000256" datatype="html">
+      <trans-unit id="5460870961303000256" datatype="html" xml:space="preserve">
         <source>Playlist embed URL</source>
-        <target state="new">Playlist embed URL</target>
+        <target state="translated">播放清單 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -5869,9 +5869,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4133860569932613370" datatype="html">
+      <trans-unit id="4133860569932613370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </target>
+        <target state="translated">已訂閱 <x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> 個頻道 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -5945,17 +5945,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036346152557749708" datatype="html">
+      <trans-unit id="1036346152557749708" datatype="html" xml:space="preserve">
         <source>Edit this segment</source>
-        <target state="new">Edit this segment</target>
+        <target state="translated">編輯此片段</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6855898148869474963" datatype="html">
+      <trans-unit id="6855898148869474963" datatype="html" xml:space="preserve">
         <source>Delete this segment</source>
-        <target state="new">Delete this segment</target>
+        <target state="translated">刪除此片段</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">106</context>
@@ -7553,9 +7553,9 @@
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9214278301049416708" datatype="html">
+      <trans-unit id="9214278301049416708" datatype="html" xml:space="preserve">
         <source>Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </source>
-        <target state="new">Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </target>
+        <target state="translated">備援策略「<x id="PH" equiv-text="stats.strategy"/>」。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -8797,17 +8797,17 @@
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653926345388884833" datatype="html">
+      <trans-unit id="1653926345388884833" datatype="html" xml:space="preserve">
         <source>Log type</source>
-        <target state="new">Log type</target>
+        <target state="translated">紀錄類型</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="888341446683346521" datatype="html">
+      <trans-unit id="888341446683346521" datatype="html" xml:space="preserve">
         <source>Start date</source>
-        <target state="new">Start date</target>
+        <target state="translated">開始日期</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -8853,9 +8853,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5311176376484381099" datatype="html">
+      <trans-unit id="5311176376484381099" datatype="html" xml:space="preserve">
         <source>Log level</source>
-        <target state="new">Log level</target>
+        <target state="translated">紀錄層級</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -8869,9 +8869,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9053612499880707554" datatype="html">
+      <trans-unit id="9053612499880707554" datatype="html" xml:space="preserve">
         <source>Example: ffmpeg, api</source>
-        <target state="new">Example: ffmpeg, api</target>
+        <target state="translated">範例：ffmpeg, api</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">47,48</context>
@@ -10273,9 +10273,9 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="587451913482781730" datatype="html">
+      <trans-unit id="587451913482781730" datatype="html" xml:space="preserve">
         <source>(-1 for "unlimited")</source>
-        <target state="new">(-1 for "unlimited")</target>
+        <target state="translated">（-1 表示「無限制」）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -10557,17 +10557,17 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4693864826145148757" datatype="html">
+      <trans-unit id="4693864826145148757" datatype="html" xml:space="preserve">
         <source>Max live FPS</source>
-        <target state="new">Max live FPS</target>
+        <target state="translated">最高直播 FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">117,119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6315342359958880564" datatype="html">
+      <trans-unit id="6315342359958880564" datatype="html" xml:space="preserve">
         <source>Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</source>
-        <target state="new">Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</target>
+        <target state="translated">Cap 轉換編碼的直播 FPS。最大解析度串流仍維持原始 FPS。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,121</context>
@@ -10637,17 +10637,17 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2798443406255719006" datatype="html">
+      <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="new">Max video FPS</target>
+        <target state="translated">最大影片 FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145,147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">Cap 轉換編碼的影片 FPS。最大解析度檔案仍維持原始 FPS。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147,149</context>
@@ -11609,9 +11609,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3169881590124056773" datatype="html">
+      <trans-unit id="3169881590124056773" datatype="html" xml:space="preserve">
         <source>Video channel</source>
-        <target state="new">Video channel</target>
+        <target state="translated">影片頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -11819,9 +11819,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591721911243650459" datatype="html">
+      <trans-unit id="2591721911243650459" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated">您有 <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {個訂閱} other {個訂閱}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -11843,9 +11843,9 @@
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6576925333662641838" datatype="html">
+      <trans-unit id="6576925333662641838" datatype="html" xml:space="preserve">
         <source>Your history contains <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new">Your history contains <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated">您的歷史紀錄包含 <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {部影片} other {部影片}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -12015,9 +12015,9 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5882204655221038340" datatype="html">
+      <trans-unit id="5882204655221038340" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {playlist} other {playlists}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {playlist} other {playlists}}</target>
+        <target state="translated">您有 <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {個播放清單} other {個播放清單}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -13795,9 +13795,9 @@
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5693037411428190538" datatype="html">
+      <trans-unit id="5693037411428190538" datatype="html" xml:space="preserve">
         <source>Skip the sub menu</source>
-        <target state="new">Skip the sub menu</target>
+        <target state="translated">略過子選單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -15429,9 +15429,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6250956071546896586" datatype="html">
+      <trans-unit id="6250956071546896586" datatype="html" xml:space="preserve">
         <source>You need to reconnect</source>
-        <target state="new">You need to reconnect</target>
+        <target state="translated">您需要重新連結</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">203</context>
@@ -15441,9 +15441,9 @@
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784250050046176017" datatype="html">
+      <trans-unit id="2784250050046176017" datatype="html" xml:space="preserve">
         <source>Your authentication has expired, you need to reconnect.</source>
-        <target state="new">Your authentication has expired, you need to reconnect.</target>
+        <target state="translated">您的認證已過期，您必須重新連結。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">228</context>
@@ -15857,17 +15857,17 @@
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6715412930390975308" datatype="html">
+      <trans-unit id="6715412930390975308" datatype="html" xml:space="preserve">
         <source>Open table configuration</source>
-        <target state="new">Open table configuration</target>
+        <target state="translated">開啟表格設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">48,49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="13024139774181011" datatype="html">
+      <trans-unit id="13024139774181011" datatype="html" xml:space="preserve">
         <source>Select the columns to display</source>
-        <target state="new">Select the columns to display</target>
+        <target state="translated">選取要顯示的欄位</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">54,56</context>
@@ -16605,17 +16605,17 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1645193489541371451" datatype="html">
+      <trans-unit id="1645193489541371451" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">找不到結果</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5031056422346819348" datatype="html">
+      <trans-unit id="5031056422346819348" datatype="html" xml:space="preserve">
         <source>No items available</source>
-        <target state="new">No items available</target>
+        <target state="translated">無可用項目</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -16737,17 +16737,17 @@
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6184963353282561988" datatype="html">
+      <trans-unit id="6184963353282561988" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></source>
-        <target state="new"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></target>
+        <target state="translated"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {次檢視} other {次檢視}} since <x id="PH_1" equiv-text="data.startDate"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242500900773463993" datatype="html">
+      <trans-unit id="3242500900773463993" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</target>
+        <target state="translated">您有 <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {個頻道} other {個頻道}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -16809,9 +16809,9 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="605831055407176010" datatype="html">
+      <trans-unit id="605831055407176010" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated">您有 <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {位追蹤者} other {位追蹤者}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -17029,9 +17029,9 @@
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1590692896387943509" datatype="html">
+      <trans-unit id="1590692896387943509" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated">您有 <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {部影片} other {部影片}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -17959,9 +17959,9 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2357625293346946918" datatype="html">
+      <trans-unit id="2357625293346946918" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</source>
-        <target state="new"><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</target>
+        <target state="translated"><x id="PH" equiv-text="this.numberOfFilters()"/> 個作用中的過濾器，請開啟過濾器面板</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">276</context>
@@ -18415,17 +18415,17 @@
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3683210116632914190" datatype="html">
+      <trans-unit id="3683210116632914190" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS is required.</source>
-        <target state="new">Transcoding max FPS is required.</target>
+        <target state="translated">轉換編碼最高 FPS 為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4345398192434581438" datatype="html">
+      <trans-unit id="4345398192434581438" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS must be greater or equal to 1.</source>
-        <target state="new">Transcoding max FPS must be greater or equal to 1.</target>
+        <target state="translated">轉換編碼最高 FPS 必須大於等於 1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -19063,9 +19063,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417693714872528491" datatype="html">
+      <trans-unit id="1417693714872528491" datatype="html" xml:space="preserve">
         <source>This field is required.</source>
-        <target state="new">This field is required.</target>
+        <target state="translated">此欄位為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -19655,9 +19655,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4682186700066917562" datatype="html">
+      <trans-unit id="4682186700066917562" datatype="html" xml:space="preserve">
         <source>{1} categories selected</source>
-        <target state="new">{1} categories selected</target>
+        <target state="translated">已選取 {1} 個分類</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">19,21</context>
@@ -20124,9 +20124,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8413618684534157435" datatype="html">
+      <trans-unit id="8413618684534157435" datatype="html" xml:space="preserve">
         <source>{1} languages selected</source>
-        <target state="new">{1} languages selected</target>
+        <target state="translated">已選取 {1} 種語言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">26,27</context>
@@ -21598,9 +21598,9 @@
           <context context-type="linenumber">2,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2607405360701033266" datatype="html">
+      <trans-unit id="2607405360701033266" datatype="html" xml:space="preserve">
         <source>Video file link</source>
-        <target state="new">Video file link</target>
+        <target state="translated">影片檔案連結</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">11,12</context>
@@ -22390,9 +22390,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3386106491172606235" datatype="html">
+      <trans-unit id="3386106491172606235" datatype="html" xml:space="preserve">
         <source>Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></source>
-        <target state="new">Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></target>
+        <target state="translated">影片時長為 <x id="PH" equiv-text="this.video.durationLabel"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -22430,9 +22430,9 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4020649426522537303" datatype="html">
+      <trans-unit id="4020649426522537303" datatype="html" xml:space="preserve">
         <source>You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</source>
-        <target state="new">You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</target>
+        <target state="translated">您已觀看了此影片的 <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">44,45</context>
