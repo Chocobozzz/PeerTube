@@ -1381,7 +1381,7 @@
       </trans-unit>
       <trans-unit id="7523440000124910081" datatype="html" xml:space="preserve">
         <source>Use this frame</source>
-        <target state="translated">Bu çerçeveyi kullan</target>
+        <target state="translated">Use this frame</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/thumbnail-manager/thumbnail-manager.component.html</context>
           <context context-type="linenumber">18</context>
