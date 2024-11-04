@@ -1634,44 +1634,11 @@
     "@formatjs/ecma402-abstract" "2.0.0"
     tslib "^2.4.0"
 
-"@formatjs/intl-enumerator@1.4.7":
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-enumerator/-/intl-enumerator-1.4.7.tgz#6ab697f3f8f18cf0cc6a6b028cb9c40db6001f3d"
-  integrity sha512-03RHnFqfpB4H/jwCwlzC+wkTDk2Fi24JmVIY2PVGvTUpikN2bSr9+8oTXfOC+y7B7VxjCArUnqWXVoctkmy85w==
-  dependencies:
-    tslib "^2.4.0"
-
-"@formatjs/intl-getcanonicallocales@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-getcanonicallocales/-/intl-getcanonicallocales-2.3.0.tgz#b6c6fa1c664e30a61f27fa6399a76159d82a5842"
-  integrity sha512-BOXbLwqQ7nKua/l7tKqDLRN84WupDXFDhGJQMFvsMVA2dKuOdRaWTxWpL3cJ7qPkoNw11Jf+Xpj4OSPBBvW0eQ==
-  dependencies:
-    tslib "^2.4.0"
-
-"@formatjs/intl-locale@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-locale/-/intl-locale-4.0.0.tgz#c111a33078413eba2011e82140466261eb1d67cd"
-  integrity sha512-+4dbMEGsp1bvB3JB3UHH6YTjMnFTifnfdaHp4ROrCCu50NedA69RBsDCG3eivcZkbj57X9ehGhMWjLxlP+gyVw==
-  dependencies:
-    "@formatjs/ecma402-abstract" "2.0.0"
-    "@formatjs/intl-enumerator" "1.4.7"
-    "@formatjs/intl-getcanonicallocales" "2.3.0"
-    tslib "^2.4.0"
-
 "@formatjs/intl-localematcher@0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.5.4.tgz#caa71f2e40d93e37d58be35cfffe57865f2b366f"
   integrity sha512-zTwEpWOzZ2CiKcB93BLngUX59hQkuZjT2+SAQEscSm52peDW/getsawMcWF1rGRpMCX6D7nSJA3CzJ8gn13N/g==
   dependencies:
-    tslib "^2.4.0"
-
-"@formatjs/intl-pluralrules@^5.2.2":
-  version "5.2.14"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-pluralrules/-/intl-pluralrules-5.2.14.tgz#7477bd2aa9bfde9e543d839707eff5460eb08026"
-  integrity sha512-l6Ev7aOGXJSh5EPDEqzsbyufdCCKXZk993QXRQebLsB0TXRhIyF4alqjdMEatLwIigK/Mka8kiVIOLeFP5Cj9Q==
-  dependencies:
-    "@formatjs/ecma402-abstract" "2.0.0"
-    "@formatjs/intl-localematcher" "0.5.4"
     tslib "^2.4.0"
 
 "@humanwhocodes/config-array@^0.11.14":

@@ -23,7 +23,6 @@ import {
   ServerService,
   getCoreProviders
 } from './app/core'
-import { polyfillICU } from './app/helpers'
 import { getMainProviders } from './app/shared/shared-main/main-providers'
 import { environment } from './environments/environment'
 import { logger } from './root-helpers'
@@ -94,11 +93,6 @@ const bootstrap = () => bootstrapApplication(AppComponent, {
       provide: APP_INITIALIZER,
       useFactory: loadConfigFactory,
       deps: [ ServerService, PluginService, RedirectService ],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => polyfillICU,
       multi: true
     }
   ]

@@ -53,8 +53,6 @@
     "@angular/platform-browser-dynamic": "^18.0.4",
     "@angular/router": "^18.0.4",
     "@angular/service-worker": "^18.0.4",
-    "@formatjs/intl-locale": "^4.0.0",
-    "@formatjs/intl-pluralrules": "^5.2.2",
     "@ng-bootstrap/ng-bootstrap": "^17.0.0",
     "@ngx-loading-bar/core": "^6.0.0",
     "@ngx-loading-bar/http-client": "^6.0.0",
