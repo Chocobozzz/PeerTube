@@ -72,6 +72,8 @@ export abstract class AbstractJobBuilder <P> {
 
         // HLS version of max resolution
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
+          const hasSplitAndioTranscoding = CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO && videoFile.hasAudio()
+
           // We had some issues with a web video quick transcoded while producing a HLS version of it
           const copyCodecs = !quickTranscode
 
@@ -79,7 +81,8 @@ export abstract class AbstractJobBuilder <P> {
 
           hlsPayloads.push(
             this.buildHLSJobPayload({
-              deleteWebVideoFiles: !CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO && !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED,
+              deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED && !hasSplitAndioTranscoding,
+
               separatedAudio: CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO,
 
               copyCodecs,
@@ -91,7 +94,7 @@ export abstract class AbstractJobBuilder <P> {
             })
           )
 
-          if (CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO && videoFile.hasAudio()) {
+          if (hasSplitAndioTranscoding) {
             hlsAudioAlreadyGenerated = true
 
             hlsPayloads.push(

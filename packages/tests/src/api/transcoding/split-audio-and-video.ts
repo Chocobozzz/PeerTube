@@ -68,6 +68,17 @@ describe('Test HLS with audio and video splitted', function () {
       })
     })
 
+    it('Should upload a video without audio', async function () {
+      this.timeout(120_000)
+
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'no audio', fixture: 'video_short_no_audio.mp4' } })
+      videoUUIDs.push(uuid)
+
+      await waitJobs(servers)
+
+      await completeCheckHlsPlaylist({ servers, videoUUID: uuid, hlsOnly, hasAudio: false, objectStorageBaseUrl })
+    })
+
     it('Should update the video', async function () {
       this.timeout(30000)
 
