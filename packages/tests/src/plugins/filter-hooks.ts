@@ -525,7 +525,7 @@ describe('Test plugin filter hooks', function () {
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
 
-      expect((body as unknown as PeerTubeProblemDocument).error).to.equal('No jma 2')
+      expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No jma 2')
     })
   })
 

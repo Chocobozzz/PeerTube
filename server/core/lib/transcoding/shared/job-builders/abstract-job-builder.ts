@@ -137,7 +137,7 @@ export abstract class AbstractJobBuilder <P> {
   }
 
   async createTranscodingJobs (options: {
-    transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
+    transcodingType: 'hls' | 'web-video'
     video: MVideoFullLight
     resolutions: number[]
     isNewVideo: boolean
@@ -164,7 +164,7 @@ export abstract class AbstractJobBuilder <P> {
           return this.buildHLSJobPayload({ video, resolution, fps, isNewVideo, separatedAudio })
         }
 
-        if (transcodingType === 'webtorrent' || transcodingType === 'web-video') {
+        if (transcodingType === 'web-video') {
           return this.buildWebVideoJobPayload({ video, resolution, fps, isNewVideo })
         }
 

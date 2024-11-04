@@ -82,18 +82,6 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getDescription (options: OverrideCommandOptions & {
-    descriptionPath: string
-  }) {
-    return this.getRequestBody<{ description: string }>({
-      ...options,
-      path: options.descriptionPath,
-
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.OK_200
-    })
-  }
-
   getFileMetadata (options: OverrideCommandOptions & {
     url: string
   }) {

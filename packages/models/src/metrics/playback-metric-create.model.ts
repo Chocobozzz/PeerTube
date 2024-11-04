@@ -1,7 +1,7 @@
 import { VideoResolutionType } from '../videos/index.js'
 
 export interface PlaybackMetricCreate {
-  playerMode: 'p2p-media-loader' | 'webtorrent' | 'web-video' // FIXME: remove webtorrent player mode not used anymore in PeerTube v6
+  playerMode: 'p2p-media-loader' | 'web-video'
 
   resolution?: VideoResolutionType
   fps?: number

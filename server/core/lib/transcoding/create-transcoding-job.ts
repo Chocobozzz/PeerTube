@@ -15,7 +15,7 @@ export function createOptimizeOrMergeAudioJobs (options: {
 // ---------------------------------------------------------------------------
 
 export function createTranscodingJobs (options: {
-  transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
+  transcodingType: 'hls' | 'web-video'
   video: MVideoFullLight
   resolutions: number[]
   isNewVideo: boolean

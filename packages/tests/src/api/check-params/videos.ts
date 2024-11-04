@@ -457,7 +457,6 @@ describe('Test videos API validator', function () {
         expect(error.title).to.equal('Bad Request')
 
         expect(error.detail).to.equal('Incorrect request parameters: language')
-        expect(error.error).to.equal('Incorrect request parameters: language')
 
         expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
         expect(error['invalid-params'].language).to.exist
@@ -725,7 +724,6 @@ describe('Test videos API validator', function () {
       expect(error.title).to.equal('Bad Request')
 
       expect(error.detail).to.equal('Incorrect request parameters: licence')
-      expect(error.error).to.equal('Incorrect request parameters: licence')
 
       expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
       expect(error['invalid-params'].licence).to.exist
@@ -774,7 +772,6 @@ describe('Test videos API validator', function () {
       expect(error.title).to.equal('Bad Request')
 
       expect(error.detail).to.equal('Incorrect request parameters: id')
-      expect(error.error).to.equal('Incorrect request parameters: id')
 
       expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
       expect(error['invalid-params'].id).to.exist
@@ -880,7 +877,6 @@ describe('Test videos API validator', function () {
       expect(error.title).to.equal('Bad Request')
 
       expect(error.detail).to.equal('Incorrect request parameters: id')
-      expect(error.error).to.equal('Incorrect request parameters: id')
 
       expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
       expect(error['invalid-params'].id).to.exist

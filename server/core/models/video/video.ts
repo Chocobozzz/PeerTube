@@ -1154,7 +1154,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     hasFiles?: boolean // default false
 
-    hasWebtorrentFiles?: boolean // TODO: remove in v7
     hasWebVideoFiles?: boolean
 
     hasHLSFiles?: boolean
@@ -1223,7 +1222,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'user',
         'historyOfUser',
         'hasHLSFiles',
-        'hasWebtorrentFiles',
         'hasWebVideoFiles',
         'search',
         'excludeAlreadyWatched'
@@ -1258,7 +1256,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     user?: MUserAccountId
 
-    hasWebtorrentFiles?: boolean // TODO: remove in v7
     hasWebVideoFiles?: boolean
 
     hasHLSFiles?: boolean
@@ -1311,7 +1308,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'durationMin',
         'durationMax',
         'hasHLSFiles',
-        'hasWebtorrentFiles',
         'hasWebVideoFiles',
         'uuids',
         'search',

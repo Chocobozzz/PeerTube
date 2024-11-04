@@ -233,10 +233,7 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     },
 
     lemmy: 'https://join-lemmy.org/ns#',
-    postingRestrictedToMods: 'lemmy:postingRestrictedToMods',
-
-    // TODO: remove in a few versions, introduced in 4.2
-    icons: 'as:icon'
+    postingRestrictedToMods: 'lemmy:postingRestrictedToMods'
   }),
 
   WatchAction: buildContext({

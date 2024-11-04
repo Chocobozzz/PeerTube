@@ -1,15 +1,13 @@
-import express from 'express'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
-import { doJSONRequest } from '@server/helpers/requests.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { MVideoAccountLight } from '@server/types/models/index.js'
+import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { REMOTE_SCHEME, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants.js'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
@@ -25,7 +23,6 @@ import {
   setDefaultPagination,
   setDefaultVideosSort,
   videosCustomGetValidator,
-  videosGetValidator,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares/index.js'
@@ -33,6 +30,7 @@ import { guessAdditionalAttributesFromQuery } from '../../../models/video/format
 import { VideoModel } from '../../../models/video/video.js'
 import { blacklistRouter } from './blacklist.js'
 import { videoCaptionsRouter } from './captions.js'
+import { videoChaptersRouter } from './chapters.js'
 import { videoCommentRouter } from './comment.js'
 import { filesRouter } from './files.js'
 import { videoImportsRouter } from './import.js'
@@ -49,7 +47,6 @@ import { transcodingRouter } from './transcoding.js'
 import { updateRouter } from './update.js'
 import { uploadRouter } from './upload.js'
 import { viewRouter } from './view.js'
-import { videoChaptersRouter } from './chapters.js'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -102,13 +99,6 @@ videosRouter.get('/',
   optionalAuthenticate,
   commonVideosFiltersValidator,
   asyncMiddleware(listVideos)
-)
-
-// TODO: remove, deprecated in 5.0 now we send the complete description in VideoDetails
-videosRouter.get('/:id/description',
-  openapiOperationDoc({ operationId: 'getVideoDesc' }),
-  asyncMiddleware(videosGetValidator),
-  asyncMiddleware(getVideoDescription)
 )
 
 videosRouter.get('/:id',
@@ -165,16 +155,6 @@ async function getVideo (req: express.Request, res: express.Response) {
   return res.json(video.toFormattedDetailsJSON())
 }
 
-async function getVideoDescription (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
-
-  const description = videoInstance.isOwned()
-    ? videoInstance.description
-    : await fetchRemoteVideoDescription(videoInstance)
-
-  return res.json({ description })
-}
-
 async function listVideos (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
 
@@ -217,16 +197,4 @@ async function removeVideo (req: express.Request, res: express.Response) {
   return res.type('json')
             .status(HttpStatusCode.NO_CONTENT_204)
             .end()
-}
-
-// ---------------------------------------------------------------------------
-
-// FIXME: Should not exist, we rely on specific API
-async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
-  const host = video.VideoChannel.Account.Actor.Server.host
-  const path = video.getDescriptionAPIPath()
-  const url = REMOTE_SCHEME.HTTP + '://' + host + path
-
-  const { body } = await doJSONRequest<any>(url)
-  return body.description || ''
 }

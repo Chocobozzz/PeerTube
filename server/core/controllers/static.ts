@@ -1,7 +1,4 @@
-import cors from 'cors'
-import express from 'express'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { injectQueryToPlaylistUrls } from '@server/lib/hls.js'
 import {
   asyncMiddleware,
@@ -10,9 +7,12 @@ import {
   handleStaticError,
   optionalAuthenticate
 } from '@server/middlewares/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import cors from 'cors'
+import express from 'express'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
 import { CONFIG } from '../initializers/config.js'
-import { DIRECTORIES, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers/constants.js'
+import { DIRECTORIES, STATIC_PATHS } from '../initializers/constants.js'
 import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist.js'
 
 const staticRouter = express.Router()
@@ -69,14 +69,6 @@ staticRouter.use(
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
   express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, { fallthrough: false }),
-  handleStaticError
-)
-
-// FIXME: deprecated in v6, to remove
-const thumbnailsPhysicalPath = CONFIG.STORAGE.THUMBNAILS_DIR
-staticRouter.use(
-  STATIC_PATHS.THUMBNAILS,
-  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }),
   handleStaticError
 )
 

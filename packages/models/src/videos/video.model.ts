@@ -84,9 +84,6 @@ export interface VideoAdditionalAttributes {
 }
 
 export interface VideoDetails extends Video {
-  // TODO: remove, deprecated in 5.0
-  descriptionPath: string
-
   support: string
   channel: VideoChannel
   account: Account

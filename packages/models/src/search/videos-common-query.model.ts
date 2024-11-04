@@ -26,7 +26,6 @@ export interface VideosCommonQuery {
 
   hasHLSFiles?: boolean
 
-  hasWebtorrentFiles?: boolean // TODO: remove in v7
   hasWebVideoFiles?: boolean
 
   skipCount?: boolean

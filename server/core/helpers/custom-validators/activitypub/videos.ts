@@ -47,7 +47,7 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!setValidStoryboard(video)) return fail('preview (storyboard)')
   if (!setValidLicence(video)) return fail('licence')
 
-  // TODO: compat with < 6.1, remove in 7.0
+  // TODO: compat with < 6.1, remove in 8.0
   if (!video.uuid && video['identifier']) video.uuid = video['identifier']
 
   // Default attributes

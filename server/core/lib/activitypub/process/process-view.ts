@@ -57,7 +57,7 @@ function getViewerResultCounter (activity: ActivityView) {
   return counter
 }
 
-// TODO: compat with < 6.1, remove in 7.0
+// TODO: compat with < 6.1, remove in 8.0
 function getExpires (activity: ActivityView) {
   return activity.expires || activity['expiration'] as string
 }

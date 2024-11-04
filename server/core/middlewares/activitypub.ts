@@ -57,7 +57,7 @@ export function executeIfActivityPub (req: Request, res: Response, next: NextFun
 
 async function checkHttpSignature (req: Request, res: Response) {
   return wrapWithSpanAndContext('peertube.activitypub.checkHTTPSignature', async () => {
-    // FIXME: compatibility with http-signature < v1.3
+    // Compatibility with http-signature < v1.3
     const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
     if (sig && sig.startsWith('Signature ') === true) req.headers[HTTP_SIGNATURE.HEADER_NAME] = sig.replace(/^Signature /, '')
 

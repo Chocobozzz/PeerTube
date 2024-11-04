@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, OAuth2ErrorCode, PeerTubeProblemDocument } from '@peertube/peertube-models'
-import { SQLCommand } from '@tests/shared/sql-command.js'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,6 +9,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test oauth', function () {
   let server: PeerTubeServer
@@ -36,7 +36,7 @@ describe('Test oauth', function () {
 
     function expectInvalidClient (body: PeerTubeProblemDocument) {
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
-      expect(body.error).to.contain('client is invalid')
+      expect(body.detail).to.contain('client is invalid')
       expect(body.type.startsWith('https://')).to.be.true
       expect(body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
     }
@@ -66,7 +66,7 @@ describe('Test oauth', function () {
 
     function expectInvalidCredentials (body: PeerTubeProblemDocument) {
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
-      expect(body.error).to.contain('credentials are invalid')
+      expect(body.detail).to.contain('credentials are invalid')
       expect(body.type.startsWith('https://')).to.be.true
       expect(body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
     }

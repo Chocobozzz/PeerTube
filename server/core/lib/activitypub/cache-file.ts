@@ -66,7 +66,7 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
   }
 
   const url = cacheFileObject.url
-  const urlFPS = exists(url.fps) // TODO: compat with < 6.1, remove in 7.0
+  const urlFPS = exists(url.fps) // TODO: compat with < 6.1, remove in 8.0
     ? url.fps
     : url['_:fps']
 
