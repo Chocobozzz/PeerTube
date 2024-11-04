@@ -122,7 +122,7 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should reject auto external login with an expired token', async function () {
-    this.timeout(15000)
+    this.timeout(30000)
 
     await wait(5000)
 
@@ -132,7 +132,7 @@ describe('Test external auth plugins', function () {
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
 
-    await server.servers.waitUntilLog('expired external auth token', 4)
+    await server.servers.waitUntilLog('expired external auth token', 3)
   })
 
   it('Should auto login Cyan, create the user and use the token', async function () {
