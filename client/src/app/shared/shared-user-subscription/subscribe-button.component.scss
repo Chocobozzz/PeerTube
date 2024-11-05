@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .btn-group {
   padding: 0;
@@ -7,6 +8,7 @@
   .peertube-button {
     // Prevent weird border radius blur on chrome
     z-index: unset !important;
+    padding: pvar(--input-y-padding) 10px;
   }
 
   .dropdown-toggle::after {

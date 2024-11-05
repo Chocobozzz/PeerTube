@@ -13,17 +13,22 @@
   align-items: center;
   font-size: inherit;
   padding: 15px 5px 15px 10px;
-  border-bottom: 1px solid $separator-border-color;
+  border-bottom: 1px solid $separator-border-color-on-secondary;
   word-break: break-word;
 
   &.unread {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: pvar(--bg-secondary-400);
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: pvar(--bg-secondary-350);
   }
 
   my-global-icon {
     width: 24px;
+    color: pvar(--secondary-icon-color);
 
-    @include apply-svg-color(#{pvar(--mainForegroundColor)});
     @include margin-right(11px);
     @include margin-left(3px);
   }
@@ -43,12 +48,13 @@
 
     a {
       font-weight: $font-semibold;
+      text-decoration: underline;
     }
   }
 
   .from-date {
     font-size: 0.85em;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
     min-width: 70px;
     text-align: end;
 

@@ -24,7 +24,7 @@ $playlist-menu-width: 350px;
   }
 
   .header {
-    border-bottom: 1px solid $header-border-color;
+    border-bottom: 1px solid #e9eff6;
     padding: 20px 10px;
     display: flex;
     justify-content: space-between;
@@ -92,8 +92,8 @@ $playlist-menu-width: 350px;
 }
 
 .vjs-playlist-icon {
-  mask-image: url('#{$assets-path}/images/feather/list.svg');
-  -webkit-mask-image: url('#{$assets-path}/images/feather/list.svg');
+  mask-image: url('#{$assets-path}/images/feather/playlists.svg');
+  -webkit-mask-image: url('#{$assets-path}/images/feather/playlists.svg');
   mask-size: cover;
   -webkit-mask-size: cover;
 

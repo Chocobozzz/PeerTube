@@ -77,7 +77,7 @@ export class MyAccountPage {
 
   async countVideos (names: string[]) {
     const elements = await $$('.video').filter(async e => {
-      const t = await e.$('.video-miniature-name').getText()
+      const t = await e.$('.video-name').getText()
 
       return names.some(n => t.includes(n))
     })
@@ -140,7 +140,7 @@ export class MyAccountPage {
   private async getVideoElement (name: string) {
     const video = async () => {
       const videos = await $$('.video').filter(async e => {
-        const t = await e.$('.video-miniature-name').getText()
+        const t = await e.$('.video-name').getText()
 
         return t.includes(name)
       })

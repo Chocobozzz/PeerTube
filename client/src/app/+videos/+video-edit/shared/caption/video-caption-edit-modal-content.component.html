@@ -52,7 +52,7 @@
 
                     <my-timestamp-input
                       class="me-1"
-                      inputName="segmentStart" [disableBorder]="false" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
+                      inputName="segmentStart" enableBorder="true" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
                       [(ngModel)]="segment.startMs" [parser]="timestampParser" [formatter]="timestampFormatter"
                     ></my-timestamp-input>
 
@@ -67,7 +67,7 @@
 
                     <my-timestamp-input
                       class="me-1"
-                      inputName="segmentEnd" [disableBorder]="false" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
+                      inputName="segmentEnd" enableBorder="true" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
                       [(ngModel)]="segment.endMs" [parser]="timestampParser" [formatter]="timestampFormatter"
                     ></my-timestamp-input>
 
@@ -121,12 +121,12 @@
 
 <div class="modal-footer inputs">
   <input
-    type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+    type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
     (click)="hide()" (key.enter)="hide()"
   >
 
   <input
-    type="button" i18n-value value="Edit this caption" class="peertube-button orange-button"
+    type="button" i18n-value value="Edit this caption" class="peertube-button primary-button"
     [disabled]="rawEdition && !form.valid" (click)="updateCaption()"
   >
 </div>

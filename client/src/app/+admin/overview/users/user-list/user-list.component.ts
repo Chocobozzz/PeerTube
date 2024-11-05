@@ -71,7 +71,7 @@ type UserForList = User & {
   ]
 })
 export class UserListComponent extends RestTable <User> implements OnInit {
-  private static readonly LOCAL_STORAGE_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
+  private static readonly LS_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
 
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
@@ -184,7 +184,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
   }
 
   loadSelectedColumns () {
-    const result = this.peertubeLocalStorage.getItem(UserListComponent.LOCAL_STORAGE_SELECTED_COLUMNS_KEY)
+    const result = this.peertubeLocalStorage.getItem(UserListComponent.LS_SELECTED_COLUMNS_KEY)
 
     if (result) {
       try {
@@ -201,7 +201,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
   }
 
   saveSelectedColumns () {
-    this.peertubeLocalStorage.setItem(UserListComponent.LOCAL_STORAGE_SELECTED_COLUMNS_KEY, JSON.stringify(this.selectedColumns))
+    this.peertubeLocalStorage.setItem(UserListComponent.LS_SELECTED_COLUMNS_KEY, JSON.stringify(this.selectedColumns))
   }
 
   getIdentifier () {

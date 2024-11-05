@@ -1,13 +1,7 @@
 <div>
-  <div class="sub-menu mb-0" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed }">
-    <a myPluginSelector pluginSelectorId="about-menu-instance" i18n routerLink="instance" routerLinkActive="active" class="sub-menu-entry">Instance</a>
-
-    <a myPluginSelector pluginSelectorId="about-menu-peertube" i18n routerLink="peertube" routerLinkActive="active" class="sub-menu-entry">PeerTube</a>
-
-    <a myPluginSelector pluginSelectorId="about-menu-network" i18n routerLink="follows" routerLinkActive="active" class="sub-menu-entry">Network</a>
+  <div class="margin-content">
+    <my-horizontal-menu [menuEntries]="menuEntries"></my-horizontal-menu>
   </div>
 
-  <div [ngClass]="{ 'sub-menu-offset-content': !isBroadcastMessageDisplayed }">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
 </div>

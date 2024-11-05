@@ -30,6 +30,5 @@ export class CopyButtonComponent {
     this.clipboard.copy(this.value || this.elementContent?.innerText)
 
     if (this.notification) this.notifier.success(this.notification)
-
   }
 }

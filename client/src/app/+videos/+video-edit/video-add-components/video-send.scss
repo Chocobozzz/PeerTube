@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 $width-size: 275px;
 
@@ -12,6 +13,8 @@ $width-size: 275px;
 }
 
 .first-step-block {
+  --input-bg: #{pvar(--bg-secondary-500)};
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,8 +22,7 @@ $width-size: 275px;
   .upload-icon {
     width: 90px;
     margin-bottom: 25px;
-
-    @include apply-svg-color(pvar(--inputBorderColor));
+    color: pvar(--fg-300);
   }
 
   .peertube-select-container {
@@ -49,16 +51,7 @@ $width-size: 275px;
     @include peertube-input-text($width-size);
   }
 
-  input[type=button] {
-    width: $width-size;
-    margin-top: 30px;
-
-    @include peertube-button;
-    @include orange-button;
-  }
-
   .button-file {
-    @include peertube-button-file(max-content);
-    @include orange-button;
+    width: max-content;
   }
 }

@@ -3,7 +3,7 @@
 @use '_miniature' as *;
 
 .comment-html {
-  background-color: #ececec;
+  background-color: pvar(--bg-secondary-400);
   padding: 10px;
 }
 
@@ -17,5 +17,5 @@
 }
 
 my-global-icon[iconName=flag] {
-  width: 15px;
+  @include global-icon-size(15px);
 }

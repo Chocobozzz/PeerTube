@@ -1,8 +1,4 @@
 <div class="margin-content">
-  <h1 i18n class="title-page" *ngIf="pagination.totalItems">
-    Created {pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}
-  </h1>
-
   <div i18n class="no-results" *ngIf="pagination.totalItems === 0">This channel does not have playlists.</div>
 
   <div class="playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">

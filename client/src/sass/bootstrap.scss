@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 @import './_bootstrap-variables';
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
@@ -24,36 +25,51 @@
 @import 'bootstrap/scss/tooltip';
 @import 'bootstrap/scss/popover';
 @import 'bootstrap/scss/spinners';
-@import 'bootstrap/scss/helpers';
+
+/* stylelint-disable-next-line at-rule-empty-line-before */
+@import 'bootstrap/scss/helpers/clearfix';
+@import 'bootstrap/scss/helpers/color-bg';
+// @import 'bootstrap/scss/helpers/colored-links';
+@import 'bootstrap/scss/helpers/focus-ring';
+@import 'bootstrap/scss/helpers/icon-link';
+@import 'bootstrap/scss/helpers/ratio';
+@import 'bootstrap/scss/helpers/position';
+@import 'bootstrap/scss/helpers/stacks';
+@import 'bootstrap/scss/helpers/visually-hidden';
+@import 'bootstrap/scss/helpers/stretched-link';
+@import 'bootstrap/scss/helpers/text-truncation';
+@import 'bootstrap/scss/helpers/vr';
+
+/* stylelint-disable-next-line at-rule-empty-line-before */
 @import 'bootstrap/scss/utilities/api';
 
 body {
-  --bs-border-color-translucent: #{pvar(--inputBorderColor)};
+  --bs-border-color-translucent: #{pvar(--input-border-color)};
 
-  --bs-body-color: #{pvar(--mainForegroundColor)};
-  --bs-body-bg: #{pvar(--mainBackgroundColor)};
+  --bs-body-color: #{pvar(--fg)};
+  --bs-body-bg: #{pvar(--bg)};
 
-  --bs-emphasis-color: #{pvar(--mainForegroundColor)};
+  --bs-emphasis-color: #{pvar(--fg)};
 }
 
 .accordion {
-  --bs-accordion-color: #{pvar(--mainForegroundColor)};
-  --bs-accordion-bg: #{pvar(--mainBackgroundColor)};
+  --bs-accordion-color: #{pvar(--fg)};
+  --bs-accordion-bg: #{pvar(--bg)};
 
   --bs-accordion-btn-color: var(--bs-accordion-color);
   --bs-accordion-btn-bg: var(--bs-accordion-bg);
 }
 
 .popover {
-  --bs-popover-bg: #{pvar(--mainBackgroundColor)};
-  --bs-popover-body-color: #{pvar(--mainForegroundColor)};
-  --bs-popover-header-color: #{pvar(--mainForegroundColor)};
+  --bs-popover-bg: #{pvar(--bg)};
+  --bs-popover-body-color: #{pvar(--fg)};
+  --bs-popover-header-color: #{pvar(--fg)};
 
   font-family: $main-fonts;
 }
 
 .btn-outline-secondary {
-  --bs-btn-color: #{pvar(--greyForegroundColor)};
+  --bs-btn-color: #{pvar(--fg-300)};
 }
 
 .btn {
@@ -75,9 +91,10 @@ body {
 // ---------------------------------------------------------------------------
 
 .dropdown-menu {
-  --bs-dropdown-link-hover-bg: #{pvar(--mainBackgroundHoverColor)};
-  --bs-dropdown-link-color: #{pvar(--mainForegroundColor)};
-  --bs-dropdown-border-color: #{pvar(--inputBorderColor)};
+  --bs-dropdown-link-hover-bg: #{pvar(--bg-secondary-400)};
+  --bs-dropdown-link-color: #{pvar(--fg)};
+  --bs-dropdown-border-color: #{pvar(--input-border-color)};
+  --bs-dropdown-header-color: #{pvar(--fg-350)};
 
   text-align: start;
 
@@ -89,8 +106,8 @@ body {
     padding: 3px 15px;
 
     &.active {
-      color: pvar(--mainBackgroundColor) !important;
-      background-color: pvar(--mainColor);
+      color: pvar(--on-primary) !important;
+      background-color: pvar(--primary);
       font-weight: $font-semibold;
     }
 
@@ -122,6 +139,12 @@ body {
   }
 }
 
+.alert-link {
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Modal
 // ---------------------------------------------------------------------------
@@ -148,7 +171,7 @@ body {
   text-align: center;
 
   .modal-content {
-    background-color: pvar(--mainBackgroundColor);
+    background-color: pvar(--bg);
     word-break: break-word;
   }
 
@@ -191,33 +214,17 @@ body {
   width: 100vw; // Make sure the content fits all the available width
 }
 
-// On touchscreen devices, simply overflow: hidden to avoid detached overlay on scroll
-@media (hover: none) and (pointer: coarse) {
-  .modal-open,
-  .menu-open {
-    overflow: hidden !important;
-  }
-
-  // On touchscreen devices display content overlay when opened menu
-  .menu-open {
-    .main-col {
-      &::before {
-        background-color: #000;
-        width: 100vw;
-        height: 100vh;
-        opacity: 0.75;
-        content: '';
-        display: block;
-        position: fixed;
-        z-index: z(overlay);
-      }
-    }
-  }
-}
-
 // ---------------------------------------------------------------------------
 // Nav
 // ---------------------------------------------------------------------------
+
+.nav:not(.nav-pills) {
+  --bs-nav-link-padding-x: 0;
+
+  .nav-link {
+    @include margin-right(2rem);
+  }
+}
 
 .nav .nav-link {
   display: flex !important;
@@ -241,14 +248,14 @@ body {
   }
 
   a {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
 
     @include disable-default-a-behaviour;
   }
 }
 
 .nav-tabs .nav-link {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   font-weight: $font-semibold;
   border: 0;
   border-bottom: 2px solid transparent;
@@ -257,9 +264,9 @@ body {
   @include disable-default-a-behaviour;
 
   &.active {
-    color: pvar(--mainForegroundColor);
-    background-color: pvar(--mainBackgroundColor) !important;
-    border-bottom-color: pvar(--mainColor);
+    color: pvar(--fg);
+    background-color: pvar(--bg) !important;
+    border-bottom-color: pvar(--border-primary);
   }
 
   &.active,
@@ -275,18 +282,22 @@ body {
 // ---------------------------------------------------------------------------
 
 .card {
-  background-color: pvar(--mainBackgroundColor);
+  background-color: pvar(--bg);
   border-color: #dee2e6;
 }
 
 .accordion-button {
   font-size: 18px;
 
+  my-global-icon {
+    color: pvar(--secondary-icon-color);
+  }
+
   &:not(.collapsed) {
     font-weight: $font-bold;
 
     my-global-icon {
-      color: pvar(--mainColorLighter);
+      color: pvar(--fg);
     }
   }
 }
@@ -300,7 +311,7 @@ body {
 }
 
 .btn-outline-secondary {
-  border-color: pvar(--inputBorderColor);
+  border-color: pvar(--input-border-color);
 
   &:focus-within,
   &:focus,
@@ -310,37 +321,9 @@ body {
   }
 }
 
-.btn-group.select-button {
-  font-weight: $font-semibold;
-
-  .active {
-    @include orange-button;
-  }
-
-  :not(.active) {
-    @include grey-button;
-  }
-
-  > * {
-    box-shadow: none !important;
-
-    @include peertube-button-link;
-
-    &:not(:first-child) {
-      border-top-left-radius: 0 !important;
-      border-bottom-left-radius: 0 !important;
-    }
-
-    &:not(:last-child) {
-      border-top-right-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-    }
-  }
-}
-
 .form-control {
-  color: pvar(--mainForegroundColor);
-  background-color: pvar(--inputBackgroundColor);
+  color: pvar(--fg);
+  background-color: pvar(--input-bg);
   outline: none;
 }
 

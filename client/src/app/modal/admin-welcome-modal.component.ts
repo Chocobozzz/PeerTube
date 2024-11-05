@@ -15,7 +15,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 export class AdminWelcomeModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
-  private LOCAL_STORAGE_KEYS = {
+  private LS_KEYS = {
     NO_WELCOME_MODAL: 'no_welcome_modal'
   }
 
@@ -27,7 +27,7 @@ export class AdminWelcomeModalComponent {
 
   shouldOpen (user: User) {
     if (user.noWelcomeModal === true) return false
-    if (peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_WELCOME_MODAL) === 'true') return false
+    if (peertubeLocalStorage.getItem(this.LS_KEYS.NO_WELCOME_MODAL) === 'true') return false
 
     return true
   }
@@ -42,7 +42,7 @@ export class AdminWelcomeModalComponent {
   }
 
   doNotOpenAgain () {
-    peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_WELCOME_MODAL, 'true')
+    peertubeLocalStorage.setItem(this.LS_KEYS.NO_WELCOME_MODAL, 'true')
 
     this.userService.updateMyProfile({ noWelcomeModal: true })
       .subscribe({

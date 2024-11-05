@@ -1,22 +1,19 @@
-import { delay, forkJoin } from 'rxjs'
-import { filter, first, map } from 'rxjs/operators'
-import { DOCUMENT, getLocaleDirection, PlatformLocation, NgIf, NgClass } from '@angular/common'
+import { DOCUMENT, getLocaleDirection, NgClass, NgIf, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterLink, RouterOutlet } from '@angular/router'
 import {
   AuthService,
+  Hotkey,
+  HotkeysService,
   MarkdownService,
   PeerTubeRouterService,
-  RedirectService,
   ScreenService,
   ScrollService,
   ServerService,
   ThemeService,
   User,
-  UserLocalStorageService,
-  Hotkey,
-  HotkeysService
+  UserLocalStorageService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
@@ -25,21 +22,24 @@ import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.compo
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { LoadingBarService, LoadingBarModule } from '@ngx-loading-bar/core'
+import { LoadingBarModule, LoadingBarService } from '@ngx-loading-bar/core'
 import { getShortLocale } from '@peertube/peertube-core-utils'
 import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { MenuService } from './core/menu/menu.service'
-import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
+import { delay, forkJoin } from 'rxjs'
+import { filter, first, map } from 'rxjs/operators'
+import { MenuService } from './core/menu/menu.service'
+import { HeaderComponent } from './header/header.component'
+import { POP_STATE_MODAL_DISMISS } from './helpers'
+import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.component'
+import { MenuComponent } from './menu/menu.component'
 import { ConfirmComponent } from './modal/confirm.component'
 import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
-import { MenuComponent } from './menu/menu.component'
-import { HeaderComponent } from './header/header.component'
-import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.component'
 import { InstanceService } from './shared/shared-main/instance/instance.service'
+import { ButtonComponent } from './shared/shared-main/buttons/button.component'
 
 @Component({
   selector: 'my-app',
@@ -62,11 +62,12 @@ import { InstanceService } from './shared/shared-main/instance/instance.service'
     AccountSetupWarningModalComponent,
     AdminWelcomeModalComponent,
     InstanceConfigWarningModalComponent,
-    CustomModalComponent
+    CustomModalComponent,
+    ButtonComponent
   ]
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'
+  private static LS_BROADCAST_MESSAGE = 'app-broadcast-message-dismissed'
 
   @ViewChild('accountSetupWarningModal') accountSetupWarningModal: AccountSetupWarningModalComponent
   @ViewChild('adminWelcomeModal') adminWelcomeModal: AdminWelcomeModalComponent
@@ -89,7 +90,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     private pluginService: PluginService,
     private instanceService: InstanceService,
     private domSanitizer: DomSanitizer,
-    private redirectService: RedirectService,
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
     private themeService: ThemeService,
@@ -104,10 +104,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     public menu: MenuService
   ) {
     this.ngbConfig.animation = false
-  }
-
-  get instanceName () {
-    return this.serverConfig.instance.name
   }
 
   ngOnInit () {
@@ -160,28 +156,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   // ---------------------------------------------------------------------------
 
-  getDefaultRoute () {
-    return this.redirectService.getDefaultRoute().split('?')[0]
-  }
-
-  getDefaultRouteQuery () {
-    return this.router.parseUrl(this.redirectService.getDefaultRoute()).queryParams
-  }
-
-  // ---------------------------------------------------------------------------
-
-  getToggleTitle () {
-    if (this.menu.isDisplayed()) return $localize`Close the left menu`
-
-    return $localize`Open the left menu`
-  }
-
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
 
   hideBroadcastMessage () {
-    peertubeLocalStorage.setItem(AppComponent.BROADCAST_MESSAGE_KEY, this.serverConfig.broadcastMessage.message)
+    peertubeLocalStorage.setItem(AppComponent.LS_BROADCAST_MESSAGE, this.serverConfig.broadcastMessage.message)
 
     this.broadcastMessage = null
     this.screenService.isBroadcastMessageDisplayed = false
@@ -216,7 +196,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     eventsObs.pipe(
       filter((e: Event): e is GuardsCheckStart => e instanceof GuardsCheckStart),
       filter(() => this.screenService.isInSmallView() || this.screenService.isInTouchScreen())
-    ).subscribe(() => this.menu.setMenuDisplay(false)) // User clicked on a link in the menu, change the page
+    ).subscribe(() => this.menu.setMenuCollapsed(true)) // User clicked on a link in the menu, change the page
 
     // Handle lazy loaded module
     eventsObs.pipe(
@@ -236,7 +216,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     if (messageConfig.enabled) {
       // Already dismissed this message?
-      if (messageConfig.dismissable && localStorage.getItem(AppComponent.BROADCAST_MESSAGE_KEY) === messageConfig.message) {
+      if (messageConfig.dismissable && localStorage.getItem(AppComponent.LS_BROADCAST_MESSAGE) === messageConfig.message) {
         return
       }
 

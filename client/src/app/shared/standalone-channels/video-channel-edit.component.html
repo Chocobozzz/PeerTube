@@ -1,0 +1,89 @@
+<my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+
+<div class="pt-4">
+  <form (ngSubmit)="formValidated()" [formGroup]="form">
+
+    <div class="pt-two-cols"> <!-- channel grid -->
+      <div class="title-col">
+        @if (isCreation()) {
+          <h2 i18n>NEW CHANNEL</h2>
+        } @else {
+          <h2 i18n>UPDATE CHANNEL</h2>
+        }
+      </div>
+
+      <div class="content-col">
+        <my-actor-banner-edit
+          *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
+          [bannerUrl]="videoChannel?.bannerUrl" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
+        ></my-actor-banner-edit>
+
+        <my-actor-avatar-edit
+          *ngIf="videoChannel" class="d-block mb-4" actorType="channel"
+          [displayName]="videoChannel.displayName" [previewImage]="isCreation()" [avatars]="videoChannel.avatars"
+          [username]="!isCreation() && videoChannel.displayName" [subscribers]="!isCreation() && videoChannel.followersCount"
+          (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
+        ></my-actor-avatar-edit>
+
+        <div class="form-group" *ngIf="isCreation()">
+          <label i18n for="name">Name</label>
+
+          <div class="input-group">
+            <input
+              type="text" id="name" i18n-placeholder placeholder="Example: my_channel"
+              formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }" class="form-control w-auto flex-grow-1 d-block"
+            >
+            <div class="input-group-text">&#64;{{ instanceHost }}</div>
+          </div>
+          <div *ngIf="formErrors['name']" class="form-error" role="alert">
+            {{ formErrors['name'] }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="display-name">Display name</label>
+          <input
+            type="text" id="display-name" class="form-control d-block"
+            formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
+          >
+          <div *ngIf="formErrors['display-name']" class="form-error" role="alert">
+            {{ formErrors['display-name'] }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="description">Description</label>
+          <textarea
+            id="description" formControlName="description" class="form-control d-block"
+            [ngClass]="{ 'input-error': formErrors['description'] }"
+          ></textarea>
+          <div *ngIf="formErrors.description" class="form-error" role="alert">
+            {{ formErrors.description }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="support">Support</label>
+          <my-help
+            helpType="markdownEnhanced" i18n-preHtml preHtml="Short text to tell people how they can support the channel (membership platform...).<br />
+      When a video is uploaded in this channel, the video support field will be automatically filled by this text."
+          ></my-help>
+
+          <my-markdown-textarea
+            inputId="support" formControlName="support" class="d-block"
+            markdownType="enhanced" [formError]="formErrors['support']"
+          ></my-markdown-textarea>
+        </div>
+
+        <div class="form-group" *ngIf="isBulkUpdateVideosDisplayed()">
+          <my-peertube-checkbox
+            inputName="bulkVideosSupportUpdate" formControlName="bulkVideosSupportUpdate"
+            i18n-labelText labelText="Overwrite support field of all videos of this channel"
+          ></my-peertube-checkbox>
+        </div>
+
+        <input type="submit" class="peertube-button primary-button mt-4" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+      </div>
+    </div>
+  </form>
+</div>

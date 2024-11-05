@@ -1,5 +1,6 @@
-::ng-deep {
+:host ::ng-deep {
   svg {
+    vertical-align: bottom;
     width: inherit;
     height: inherit;
   }

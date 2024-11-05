@@ -15,6 +15,7 @@ import { ReactiveFileComponent } from '../../shared/shared-forms/reactive-file.c
 import { TimestampInputComponent } from '../../shared/shared-forms/timestamp-input.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-video-studio-edit',
@@ -29,7 +30,8 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
     ButtonComponent,
     EmbedComponent,
     NgIf,
-    NgFor
+    NgFor,
+    GlobalIconComponent
   ]
 })
 export class VideoStudioEditComponent extends FormReactive implements OnInit {

@@ -1,402 +1,287 @@
 @use 'sass:math';
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
-$menu-link-icon-size: 22px;
-$menu-link-icon-margin-right: 18px;
-$footer-links-base-opacity: .8;
+.menu-container {
+  --co-menu-x-padding: 1.5rem;
 
-ul {
-  margin: 0;
-  padding: 0;
+  z-index: z(menu);
+  width: calc(#{$menu-width} - 2rem);
+  position: fixed;
+  height: calc(100vh - #{pvar(--header-height)});
 
-  li {
-    list-style: none;
+  @include margin-left(pvar(--menu-margin-left));
+
+  &.collapsed {
+    --co-menu-x-padding: 0.25rem;
+
+    width: auto;
+
+    @include margin-left(0);
   }
 }
 
-.footer-bottom {
-  li {
-    width: auto;
-    display: inline-flex;
+.toggle-menu {
+  color: pvar-fallback(--menu-fg, --fg-200);
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
+
+  @include button-with-icon(20px, 0, 0, 1px);
+
+  my-global-icon {
+    margin: auto;
   }
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.menu-container:not(.collapsed) .toggle-menu {
+  position: absolute;
+  top: 22px;
+
+  @include right(24px);
+}
+
+.collapsed .toggle-menu my-global-icon {
+  right: -1px;
+  top: 0;
+}
+
+.main-menu-wrapper {
+  // For the scrollbar
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  max-height: calc(100% - 50px); // Space for links below the menu
+}
+
+.main-menu-scrollbar {
+  overflow-y: auto;
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+  max-height: 100%;
+
+  &:focus,
+  &:hover {
+    scrollbar-color: auto;
+  }
+
+  @media not all and (hover: hover) and (pointer: fine) {
+    border-radius: 0;
+    scrollbar-color: auto;
+  }
+}
+
+.main-menu {
+  position: relative;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-radius: 14px;
+  background-color: pvar-fallback(--menu-bg, --bg-secondary-400);
+}
+
+.menu-link,
+.menu-button,
+.block-title,
+.about .description,
+.about my-button {
+  @include padding-left(var(--co-menu-x-padding));
+  @include padding-right(var(--co-menu-x-padding));
+}
+
+.menu-block:not(:last-child),
+.logged-in .menu-block,
+.collapsed .toggle-menu-container,
+.about-top {
+  &::after {
+    content: '';
+    display: block;
+    height: 2px;
+    margin: 1rem var(--co-menu-x-padding);
+    background: pvar(--bg-secondary-500);
+  }
+}
+
+.collapsed {
+  .menu-block,
+  .toggle-menu-container,
+  .about {
+    &::after {
+      width: 28px;
+      margin: 1rem auto;
+    }
+  }
+}
+
+.collapsed {
+  .main-menu-wrapper {
+    max-height: 100%;
+  }
+
+  .main-menu {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .toggle-menu-container {
+    text-align: center;
+  }
+
+  .menu-link {
+    justify-content: center;
+  }
+}
+
+.block-title {
+  font-weight: $font-bold;
+  color: pvar-fallback(--menu-fg, --fg-350);
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+  max-width: 180px;
+
+  @include ellipsis;
 }
 
 .menu-link {
   display: flex;
   align-items: center;
 
-  color: pvar(--menuForegroundColor);
-  cursor: pointer;
+  color: pvar-fallback(--menu-fg, --fg-400);
   white-space: normal;
   word-break: break-word;
   transition: background-color .1s ease-in-out;
-  line-height: $line-height-normal;
   width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 
   @include disable-default-a-behaviour;
-  @include padding-left($menu-lateral-padding);
-  @include padding-right(20px);
-
-  &.active {
-    background-color: rgba(255, 255, 255, 0.15);
-  }
 
   &:hover,
   &:focus-visible {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: pvar-fallback(--menu-fg, --bg-secondary-450);
+  }
+
+  &.active {
+    background-color: pvar-fallback(--menu-fg, --bg-secondary-500);
   }
 
   my-global-icon {
-    display: flex;
-    width: $menu-link-icon-size;
-    height: $menu-link-icon-size;
-
-    @include apply-svg-color(#808080);
-    @include margin-right($menu-link-icon-margin-right);
-  }
-}
-
-.menu-wrapper {
-  position: fixed;
-  height: calc(100vh - #{$header-height});
-  padding: 0;
-  width: $menu-width;
-  z-index: z(menu);
-  scrollbar-color: pvar(--actionButtonColor) pvar(--menuBackgroundColor);
-}
-
-nav {
-  background-color: pvar(--menuBackgroundColor);
-  color: pvar(--menuForegroundColor);
-
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-
-  @include ellipsis;
-
-  &:focus,
-  &:hover {
-    overflow-y: auto;
-  }
-
-  @media not all and (hover: hover) and (pointer: fine) {
-    overflow-y: auto;
-  }
-
-  &.is-logged-in {
-    .panel-block {
-      margin-bottom: 20px;
-    }
-
-    .block-title {
-      margin-bottom: 15px;
-    }
-  }
-}
-
-.top-menu {
-  flex-grow: 1;
-  width: $menu-width;
-}
-
-.logged-in-block {
-  margin-bottom: 20px;
-  background-color: rgba(255, 255, 255, 0.15);
-
-  > div:first-child {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-  }
-}
-
-my-notification-dropdown {
-  @include margin-left(auto);
-  @include margin-right(15px);
-}
-
-.logged-in-more {
-  flex: 1;
-  min-width: 1px;
-  border-radius: 25px;
-  transition: all .1s ease-in-out;
-  cursor: pointer;
-  line-height: 1;
-
-  @include margin-left(13px);
-
-  @mixin display-hints($is-mobile: false) {
-    background-color: rgba(255, 255, 255, 0.15);
-
-    @if $is-mobile {
-      .dropdown-toggle-indicator {
-        display: inherit !important;
-      }
-    }
-  }
-
-  &.show {
-    background-color: rgba(255, 255, 255, 0.2);
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
-  }
-
-  &:hover {
-    @include display-hints;
-  }
-
-  /* smartphones and touchscreens */
-  @media (hover: none) and (pointer: coarse) {
-    @include display-hints($is-mobile: true);
-  }
-
-  > .dropdown-toggle {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 5px 7px;
-
-    &::after {
-      // Disable bootstrap toggle
-      border: 0;
-    }
-  }
-
-  .dropdown-toggle-indicator {
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
     position: relative;
-    display: none;
-    width: 17px;
+    top: -1px;
+    color: pvar-fallback(--menu-fg, --secondary-icon-color);
 
-    span {
-      position: absolute;
-      top: -8px;
-      color: #808080;
+    + *:not(.visually-hidden) {
+      @include margin-left(12px);
     }
   }
 }
 
-my-actor-avatar {
-  @include margin-right(10px);
+.menu-button {
+  margin-top: 0.5rem;
 }
 
-.logged-in-info {
-  flex-shrink: 1;
-  min-width: 1px;
-}
-
-.logged-in-display-name,
-.logged-in-username {
-  @include ellipsis;
-}
-
-.logged-in-display-name {
-  font-weight: $font-semibold;
-  color: pvar(--menuForegroundColor);
-
-  @include disable-default-a-behaviour;
-}
-
-.logged-in-username {
-  font-size: 13px;
-  color: #C6C6C6;
-  margin-top: 3px;
-}
-
-.logged-in-menu {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border-top: 1px solid var(--greyForegroundColor);
-  line-height: $line-height-normal;
-
-  a {
-    $icon-size: 13px;
-    $additional-margin: math.div($menu-link-icon-size - $icon-size, 2);
-
+.about {
+  .description {
     font-size: 14px;
-    width: 100%;
-    min-height: 35px;
-
-    my-global-icon {
-      width: $icon-size;
-      height: $icon-size;
-
-      // Keep aligned with other icons
-      @include margin-left($additional-margin);
-    }
-
-    &.active,
-    &:hover,
-    &:focus-visible {
-      my-global-icon {
-        @include apply-svg-color(var(--menuForegroundColor));
-      }
-    }
-
-    &.active {
-      $border-left-width: 4px;
-
-      font-weight: $font-semibold;
-      border-left: $border-left-width solid var(--mainColor);
-
-      my-global-icon {
-        @include margin-left($additional-margin - $border-left-width);
-      }
-    }
-  }
-
-  li {
-    width: 100%;
+    color: pvar-fallback(--menu-fg, --fg-200)
   }
 }
 
-.login-buttons-block {
-  margin: 30px 25px 35px;
+my-button[theme=secondary] ::ng-deep my-global-icon {
+  color: pvar(--secondary-icon-color) !important;
 }
 
-.create-account-button {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.25);
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.28);
-  }
+.menu-overlay {
+  background-color: #000;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.75;
+  content: '';
+  display: none;
+  position: fixed;
+  z-index: z(overlay);
 }
 
-.menu-block,
-.footer-block {
-  margin-bottom: 15px;
-
-  .block-container {
-    @include margin-left(26px);
-    @include margin-right(15px);
-    @include ellipsis;
-  }
-
-  .block-title {
-    text-transform: uppercase;
-    font-weight: $font-bold;
-    font-size: 13px;
-  }
-
-  a,
-  button {
-    min-height: 40px;
-  }
-}
-
-.footer {
-  padding-bottom: 15px;
-}
-
-.footer-bottom {
-  padding: 0 $menu-lateral-padding;
-}
-
-.footer-links {
-  a,
-  button {
-    color: pvar(--menuForegroundColor);
-    opacity: $footer-links-base-opacity;
-    white-space: nowrap;
-    font-size: 0.75rem;
-    line-height: 1.4rem;
-    font-weight: $font-semibold;
-
-    @include margin-right(8px);
-    @include disable-default-a-behaviour;
-
-    &:hover {
-      opacity: $footer-links-base-opacity + .2;
-    }
-  }
-}
-
-.footer-copyleft a {
-  color: pvar(--menuForegroundColor);
-  opacity: $footer-links-base-opacity - .2;
-  font-size: 0.85rem;
-
-  @include disable-default-a-behaviour;
-
-  &:hover {
-    opacity: $footer-links-base-opacity;
-  }
-}
-
-.dropdown {
-  z-index: #{z('menu') + 1} !important;
-}
-
-.dropdown-menu {
-  width: calc(100% + 40px);
-
-  // Prevent weird display issue on firefox when global style is not loaded yet
-  &:not(.show) {
-    display: none;
-  }
-}
-
-.dropdown-item {
-  cursor: pointer;
-  display: flex;
+.mobile-controls {
+  display: none;
+  padding: 0 calc(var(--co-menu-x-padding) - 1rem) 2rem var(--co-menu-x-padding);
   align-items: center;
+  justify-content: space-between;
 
-  @include dropdown-with-icon-item;
+  .icon-logo {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    max-width: 48px;
 
-  &:hover {
-    .hover-display-toggle {
-      display: none;
-    }
-
-    .hover-display-toggle[hidden] {
-      display: inherit !important;
-    }
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 }
 
-.more-settings {
-  text-transform: uppercase;
-  font-size: 80%;
-  color: #6c757d;
+@media screen and (max-width: $menu-overlay-view) {
+  // On small screen use a menu overlay
+
+  .menu-container {
+    &:not(.collapsed) {
+      --menu-margin-left: 0;
+
+      border-radius: 0;
+      background-color: pvar-fallback(--menu-bg, --bg-secondary-400);
+      overflow: auto;
+
+      .main-menu-wrapper {
+        height: auto;
+        max-height: unset;
+      }
+    }
+  }
+
+  .menu-overlay:not(.menu-collapsed) {
+    display: block;
+  }
 }
 
 @media screen and (max-width: $mobile-view) {
-  .menu-wrapper {
-    width: 100% !important;
+  .menu-container {
+    height: 100vh;
+    margin-top: calc(#{pvar(--header-height)} * -1);
+    z-index: z(root-header) + 1;
 
-    nav {
-      overflow-y: auto;
+    &.collapsed {
+      display: none;
+    }
+
+    &:not(.collapsed) {
+      width: 100vw !important;
     }
   }
 
-  .top-menu,
-  .footer {
-    width: 100% !important;
+  .main-menu {
+    padding-top: 0.75rem;
   }
 
-  .dropdown-menu {
-    width: calc(100vw - 30px);
-  }
-}
-
-my-global-icon {
-  position: relative;
-  top: -1px;
-
-  .playlist-icon {
-    height: 24px;
-    width: 24px;
-
-    @include margin-right(16px);
+  .menu-overlay {
+    display: none !important;
   }
 
-  &.channel-icon {
-    top: -2px;
+  .mobile-controls {
+    display: flex;
+  }
+
+  .toggle-menu-container {
+    display: none;
   }
 }

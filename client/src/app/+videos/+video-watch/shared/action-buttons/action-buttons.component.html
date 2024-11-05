@@ -6,7 +6,7 @@
     ></my-video-rate>
 
     <button
-      *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button action-button-support"
+      *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button support-button"
       [attr.aria-label]="tooltipSupport" [ngbTooltip]="tooltipSupport" placement="bottom auto"
     >
       <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>

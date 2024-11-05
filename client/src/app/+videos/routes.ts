@@ -1,13 +1,14 @@
-import { UrlSegment } from '@angular/router'
-import { LoginGuard } from '@app/core'
-import { OverviewService, VideosListCommonPageComponent } from './video-list'
-import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
-import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
+import { inject } from '@angular/core'
+import { Routes } from '@angular/router'
+import { LoginGuard, RedirectService } from '@app/core'
+import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
-import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
+import { OverviewService, VideosListAllComponent } from './video-list'
+import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
+import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
 
 export default [
   {
@@ -27,30 +28,44 @@ export default [
         data: {
           meta: {
             title: $localize`Discover videos`
+          },
+          reuse: {
+            enabled: true,
+            key: 'videos-discover'
           }
         }
       },
 
+      // ---------------------------------------------------------------------------
+      // Old URL redirections
+      // ---------------------------------------------------------------------------
       {
-        // Old URL redirection
         path: 'most-liked',
-        redirectTo: 'trending?sort=most-liked'
+        redirectTo: 'browse?scope=federated&sort=-likes'
       },
       {
-        matcher: (url: UrlSegment[]) => {
-          if (url.length === 1 && [ 'recently-added', 'trending', 'local' ].includes(url[0].path)) {
-            return {
-              consumed: url,
-              posParams: {
-                page: new UrlSegment(url[0].path, {})
-              }
-            }
-          }
+        path: 'trending',
+        redirectTo: () => {
+          const redirectService = inject(RedirectService)
 
-          return null
-        },
+          return 'browse?scope=federated&sort=-' + redirectService.getDefaultTrendingSort()
+        }
+      },
+      {
+        path: 'recently-added',
+        redirectTo: 'browse?scope=federated&sort=-publishedAt'
+      },
+      {
+        path: 'local',
+        redirectTo: 'browse?scope=local&sort=-publishedAt'
+      },
 
-        component: VideosListCommonPageComponent,
+      // ---------------------------------------------------------------------------
+
+      {
+        path: 'browse',
+
+        component: VideosListAllComponent,
         data: {
           reuse: {
             enabled: true,
@@ -75,4 +90,4 @@ export default [
       }
     ]
   }
-]
+] satisfies Routes

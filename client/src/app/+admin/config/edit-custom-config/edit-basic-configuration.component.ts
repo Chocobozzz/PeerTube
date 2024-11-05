@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
-import { MenuService, ThemeService } from '@app/core'
+import { ThemeService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { pairwise } from 'rxjs/operators'
@@ -12,7 +12,6 @@ import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
 import { ConfigService } from '../shared/config.service'
 
@@ -34,7 +33,6 @@ import { ConfigService } from '../shared/config.service'
     NgClass,
     UserRealQuotaInfoComponent,
     SelectOptionsComponent,
-    PeerTubeTemplateDirective,
     AlertComponent
   ]
 })
@@ -53,7 +51,6 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   constructor (
     private configService: ConfigService,
-    private menuService: MenuService,
     private themeService: ThemeService
   ) {}
 
@@ -62,7 +59,11 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     this.checkSignupField()
     this.checkImportSyncField()
 
-    this.availableThemes = this.themeService.buildAvailableThemes()
+    this.availableThemes = [
+      this.themeService.getDefaultThemeItem(),
+
+      ...this.themeService.buildAvailableThemes()
+    ]
 
     this.exportExpirationOptions = [
       { id: 1000 * 3600 * 24, label: $localize`1 day` },
@@ -156,17 +157,22 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   buildLandingPageOptions () {
-    this.defaultLandingPageOptions = this.menuService.buildCommonLinks(this.serverConfig)
-      .links
-      .map(o => ({
-        id: o.path,
-        label: o.label,
-        description: o.path
-      }))
-  }
+    let links: { label: string, path: string }[] = []
 
-  getDefaultThemeLabel () {
-    return this.themeService.getDefaultThemeLabel()
+    if (this.serverConfig.homepage.enabled) {
+      links.push({ label: $localize`Home`, path: '/home' })
+    }
+
+    links = links.concat([
+      { label: $localize`Discover`, path: '/videos/overview' },
+      { label: $localize`Browse videos`, path: '/videos/browse' }
+    ])
+
+    this.defaultLandingPageOptions = links.map(o => ({
+      id: o.path,
+      label: o.label,
+      description: o.path
+    }))
   }
 
   private checkImportSyncField () {

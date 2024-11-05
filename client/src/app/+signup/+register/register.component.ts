@@ -7,7 +7,7 @@ import { AuthService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import { ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
+import { PeerTubeProblemDocument, ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
 import { LoaderComponent } from '../../shared/shared-main/common/loader.component'
 import { SignupLabelComponent } from '../../shared/shared-main/users/signup-label.component'
 import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
@@ -213,7 +213,7 @@ export class RegisterComponent implements OnInit {
       },
 
       error: err => {
-        this.signupError = err.message
+        this.signupError = (err.body as PeerTubeProblemDocument)?.detail || err.message
       }
     })
   }

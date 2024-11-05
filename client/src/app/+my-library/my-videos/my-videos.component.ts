@@ -6,6 +6,7 @@ import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenServi
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { formatICU, immutableAssign } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
+import { DeleteButtonComponent } from '@app/shared/shared-main/buttons/delete-button.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live/live-stream-information.component'
@@ -18,8 +19,8 @@ import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
@@ -32,6 +33,7 @@ import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.c
   standalone: true,
   imports: [
     GlobalIconComponent,
+    DeleteButtonComponent,
     NgIf,
     RouterLink,
     AdvancedInputFilterComponent,
@@ -64,7 +66,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     privacyText: true,
     state: true,
     blacklistInfo: true,
-    forceChannelInBy: true
+    forceChannelInBy: true,
+    nsfw: true
   }
   videoDropdownDisplayOptions: VideoActionsDisplayType = {
     playlist: true,
@@ -246,7 +249,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   getTotalTitle () {
     return formatICU(
-      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {video} other {videos}}`,
+      $localize`${this.pagination.totalItems} {total, plural, =1 {video} other {videos}}`,
       { total: this.pagination.totalItems }
     )
   }

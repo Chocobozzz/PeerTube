@@ -22,7 +22,7 @@ export class InstanceConfigWarningModalComponent {
   stopDisplayModal = false
   about: About
 
-  private LOCAL_STORAGE_KEYS = {
+  private LS_KEYS = {
     NO_INSTANCE_CONFIG_WARNING_MODAL: 'no_instance_config_warning_modal'
   }
 
@@ -35,7 +35,7 @@ export class InstanceConfigWarningModalComponent {
 
   shouldOpenByUser (user: User) {
     if (user.noInstanceConfigWarningModal === true) return false
-    if (peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL) === 'true') return false
+    if (peertubeLocalStorage.getItem(this.LS_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL) === 'true') return false
 
     return true
   }
@@ -50,7 +50,7 @@ export class InstanceConfigWarningModalComponent {
   }
 
   show (about: About) {
-    if (this.location.path().startsWith('/admin/config/edit-custom')) return
+    if (this.location.path().startsWith('/admin/settings/config/edit-custom')) return
 
     this.about = about
 
@@ -66,7 +66,7 @@ export class InstanceConfigWarningModalComponent {
   }
 
   private doNotOpenAgain () {
-    peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL, 'true')
+    peertubeLocalStorage.setItem(this.LS_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL, 'true')
 
     this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
         .subscribe({

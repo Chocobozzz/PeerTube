@@ -1,19 +1,20 @@
-import { Subject, Subscription } from 'rxjs'
-import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop'
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService } from '@app/core'
-import { VideoPlaylistType } from '@peertube/peertube-models'
-import { VideoPlaylistElementMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-element-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
-import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
-import { NgIf, NgFor } from '@angular/common'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
-import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { VideoShareComponent } from '@app/shared/shared-share-modal/video-share.component'
+import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { VideoPlaylistType } from '@peertube/peertube-models'
+import { Subject, Subscription } from 'rxjs'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { VideoPlaylistElementMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-element-miniature.component'
+import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
 
 @Component({
   templateUrl: './my-video-playlist-elements.component.html',
@@ -21,6 +22,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
   standalone: true,
   imports: [
     NgIf,
+    ButtonComponent,
     VideoPlaylistMiniatureComponent,
     GlobalIconComponent,
     ActionDropdownComponent,

@@ -1,6 +1,6 @@
 <ng-container *ngIf="plugin">
 
-  <h2>
+  <h2 class="mb-4">
     <ng-container>{{ pluginTypeLabel }}</ng-container>
     {{ plugin.name }}
   </h2>
@@ -10,7 +10,7 @@
       <my-dynamic-form-field [hidden]="isSettingHidden(setting)" [form]="form" [setting]="setting" [formErrors]="formErrors"></my-dynamic-form-field>
     </div>
 
-    <input type="submit" i18n value="Update plugin settings" [disabled]="!form.valid">
+    <input class="peertube-button primary-button mt-3" type="submit" i18n value="Update plugin settings" [disabled]="!form.valid">
   </form>
 
   <div *ngIf="!hasRegisteredSettings()" i18n class="no-settings">

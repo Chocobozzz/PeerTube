@@ -8,9 +8,10 @@
   margin-bottom: 25px;
   flex-wrap: wrap-reverse;
 
-  .title-page {
-    margin-bottom: unset;
+  > h2 {
+    margin-bottom: 0;
     margin-top: 0;
+    font-size: 1.25rem;
 
     @include margin-right(.5rem !important);
   }

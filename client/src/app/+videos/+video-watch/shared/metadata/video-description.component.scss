@@ -29,7 +29,7 @@
   .video-info-description-more {
     cursor: pointer;
     font-weight: $font-semibold;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
     margin-top: 1rem;
 
     @include font-size(14px);

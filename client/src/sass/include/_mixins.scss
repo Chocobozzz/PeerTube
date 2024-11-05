@@ -3,7 +3,28 @@
 @use '_variables' as *;
 @import '_bootstrap-mixins';
 
+@mixin underline-primary {
+  text-decoration: underline !important;
+  text-decoration-color: pvar(--border-primary) !important;
+  text-underline-offset: 0.25em !important;
+  text-decoration-thickness: 0.15em !important;
+}
+
+@mixin section-label {
+  color: pvar(--fg-300);
+  font-size: 14px;
+  margin-bottom: 15px;
+  font-weight: $font-bold;
+  letter-spacing: 1px;
+
+  @media screen and (max-width: $mobile-view) {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+}
+
 @mixin disable-default-a-behaviour {
+  &,
   &:hover,
   &:focus,
   &:active {
@@ -28,7 +49,7 @@
 }
 
 @mixin muted {
-  color: pvar(--greyForegroundColor) !important;
+  color: pvar(--fg-300) !important;
 }
 
 @mixin fade-text ($fade-after, $background-color) {
@@ -73,289 +94,8 @@
   }
 }
 
-@mixin button-focus($color) {
-  &:focus,
-  &:focus-visible {
-    box-shadow: #{$focus-box-shadow-form} $color;
-  }
-}
-
 @mixin rounded-line-height-1-5 ($font-size) {
-  line-height: $font-size + math.round(math.div($font-size, 2));
-}
-
-@mixin peertube-input-text($width, $font-size: $form-input-font-size) {
-  font-size: $font-size;
-
-  padding: 3px 15px;
-  width: $width;
-  max-width: $width;
-  color: pvar(--inputForegroundColor);
-  background-color: pvar(--inputBackgroundColor);
-  border: 1px solid pvar(--inputBorderColor);
-  border-radius: 3px;
-
-  @include rounded-line-height-1-5($font-size);
-
-  &::placeholder {
-    color: pvar(--inputPlaceholderColor);
-  }
-
-  &[readonly] {
-    color: pvar(--greyForegroundColor);
-  }
-
-  @media screen and (max-width: calc(#{$width} + 40px)) {
-    width: 100%;
-  }
-}
-
-@mixin peertube-textarea ($width, $height) {
-  color: pvar(--textareaForegroundColor) !important;
-  background-color: pvar(--textareaBackgroundColor) !important;
-  height: $height;
-  padding: 5px 15px;
-
-  @include peertube-input-text($width);
-}
-
-@mixin orange-button {
-  @include button-focus(pvar(--mainColorLightest));
-
-  &,
-  &:active,
-  &:focus {
-    color: #fff;
-    background-color: pvar(--mainColor);
-    border-color: inherit;
-  }
-
-  // Override bootstrap
-  &.btn:active,
-  &.btn:focus-visible,
-  &.btn.show {
-    color: #fff !important;
-    background-color: pvar(--mainColor) !important;
-    border-color: inherit !important;
-  }
-
-  &:hover {
-    color: #fff;
-    background-color: pvar(--mainHoverColor);
-  }
-
-  &[disabled] {
-    cursor: default;
-    color: #fff;
-    background-color: pvar(--inputBorderColor);
-  }
-
-  my-global-icon {
-    @include apply-svg-color(#fff);
-  }
-}
-
-@mixin orange-button-inverted {
-  padding: 2px 13px;
-  border: 2px solid pvar(--mainColor);
-  font-weight: $font-semibold;
-
-  @include button-focus(pvar(--mainColorLightest));
-
-  &,
-  &:active,
-  &:focus {
-    color: pvar(--mainColor);
-    background-color: pvar(--mainBackgroundColor);
-  }
-
-  // Override bootstrap
-  &.btn:active,
-  &.btn:focus-visible,
-  &.btn.show {
-    color: pvar(--mainColor);
-    background-color: pvar(--mainBackgroundColor);
-    border-color: inherit !important;
-  }
-
-  &:hover {
-    color: pvar(--mainColor);
-    background-color: pvar(--mainColorLightest);
-  }
-
-  &[disabled] {
-    cursor: default;
-    color: pvar(--mainColor);
-    background-color: pvar(--inputBorderColor);
-  }
-
-  my-global-icon {
-    @include apply-svg-color(pvar(--mainColor));
-  }
-}
-
-@mixin tertiary-button {
-  color: pvar(--greyForegroundColor);
-  background-color: transparent;
-
-  @include button-focus($grey-button-outline-color);
-
-  &[disabled] {
-    cursor: default;
-  }
-
-  my-global-icon {
-    @include apply-svg-color(transparent);
-  }
-}
-
-@mixin grey-button {
-  color: pvar(--greyForegroundColor);
-  background-color: pvar(--greyBackgroundColor);
-
-  @include button-focus($grey-button-outline-color);
-
-  &:hover,
-  &:active,
-  &:focus,
-  &[disabled] {
-    color: pvar(--greyForegroundColor);
-    background-color: pvar(--greySecondaryBackgroundColor);
-  }
-
-  // Override bootstrap
-  &.btn:active,
-  &.btn:focus-visible,
-  &.btn.show {
-    color: pvar(--greyForegroundColor);
-    background-color: pvar(--greySecondaryBackgroundColor);
-    border-color: inherit !important;
-  }
-
-  &[disabled] {
-    cursor: default;
-  }
-
-  my-global-icon {
-    @include apply-svg-color(pvar(--greyForegroundColor));
-  }
-}
-
-@mixin danger-button {
-  background-color: pvar(--red);
-  color: pvar(--white);
-
-  @include button-focus(pvar(--red));
-
-  &:hover,
-  &:active,
-  &:focus:not(:focus-visible) {
-    opacity: 0.8;
-  }
-
-  &[disabled] {
-    cursor: default;
-    opacity: 0.7;
-  }
-
-  my-global-icon {
-    @include apply-svg-color(pvar(--white));
-  }
-}
-
-@mixin peertube-button {
-  padding: 4px 13px;
-
-  border: 0;
-  font-weight: $font-semibold;
-
-  border-radius: 3px;
-
-  text-align: center;
-  cursor: pointer;
-
-  font-size: $button-font-size;
-
-  @include rounded-line-height-1-5($button-font-size);
-
-  my-global-icon + * {
-    @include margin-right(4px);
-    @include margin-left(4px);
-  }
-}
-
-@mixin peertube-button-big {
-  height: auto;
-  padding: 10px 25px;
-  font-size: 18px;
-  line-height: 1.2;
-  border: 0;
-  font-weight: $font-semibold;
-
-  // Because of primeng that redefines border-radius of all input[type="..."]
-  border-radius: 3px !important;
-}
-
-@mixin peertube-button-link {
-  display: inline-block;
-
-  @include disable-default-a-behaviour;
-  @include peertube-button;
-}
-
-@mixin peertube-button-big-link {
-  display: inline-block;
-
-  @include disable-default-a-behaviour;
-  @include peertube-button-big;
-}
-
-@mixin peertube-button-outline {
-  display: inline-block;
-  border: 1px solid;
-
-  @include disable-default-a-behaviour;
-  @include peertube-button;
-}
-
-@mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
-  my-global-icon {
-    position: relative;
-    display: inline-block;
-    width: $width;
-    top: $top;
-
-    @include margin-right($margin-right);
-  }
-}
-
-@mixin peertube-file {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-
-  input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    font-size: 100px;
-    text-align: end;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: pvar(--mainBackgroundColor);
-    cursor: inherit;
-    display: block;
-  }
-}
-
-@mixin peertube-button-file ($width) {
-  width: $width;
-
-  @include peertube-file;
-  @include peertube-button;
+  line-height: calc(#{$font-size} + #{math.round(math.div($font-size, 2))});
 }
 
 @mixin icon ($size) {
@@ -368,6 +108,13 @@
   cursor: pointer;
 }
 
+@mixin global-icon-size ($size) {
+  display: inline-block;
+  width: $size;
+  height: $size;
+  line-height: $size;
+}
+
 @mixin responsive-width ($width) {
   width: $width;
 
@@ -376,216 +123,16 @@
   }
 }
 
-@mixin peertube-select-container ($width) {
-  padding: 0;
-  margin: 0;
-  width: $width;
-  border-radius: 3px;
-  color: pvar(--inputForegroundColor);
-  background: pvar(--inputBackgroundColor);
-  position: relative;
-  height: min-content;
-
-  select[disabled] {
-    background-color: #f9f9f9;
-  }
-
-  @media screen and (max-width: $width) {
-    width: 100%;
-  }
-
-  &::after {
-    top: 50%;
-    right: calc(0% + 15px);
-    content: ' ';
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border: 5px solid rgba(0, 0, 0, 0);
-    border-top-color: pvar(--mainForegroundColor);
-    margin-top: -2px;
-    z-index: 100;
-  }
-
-  select {
-    font-size: $form-input-font-size;
-
-    padding: 3px 35px 3px 12px;
-    position: relative;
-    border: 1px solid pvar(--inputBorderColor);
-    background: transparent none;
-    appearance: none;
-    text-overflow: ellipsis;
-    color: pvar(--mainForegroundColor);
-
-    @include rounded-line-height-1-5($form-input-font-size);
-
-    option {
-      color: #000;
-    }
-  }
-
-  &.peertube-select-button {
-    @include grey-button;
-
-    select {
-      font-weight: $font-semibold;
-      color: pvar(--greyForegroundColor);
-      border: 0;
-
-      // No border, add +1 to vertical padding
-      padding: 4px 35px 4px 12px;
-    }
-  }
-}
-
-// Thanks: https://codepen.io/manabox/pen/raQmpL
-@mixin peertube-radio-container {
-  label {
-    font-size: $form-input-font-size;
-  }
-
-  [type=radio]:focus-visible + label::before {
-    outline: 2px solid;
-  }
-
-  [type=radio]:checked,
-  [type=radio]:not(:checked) {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-
-  [type=radio]:checked + label,
-  [type=radio]:not(:checked) + label {
-    position: relative;
-    padding-left: 28px;
-    cursor: pointer;
-    line-height: 20px;
-    display: inline-block;
-    font-weight: $font-regular;
-  }
-
-  [type=radio]:checked + label::before,
-  [type=radio]:not(:checked) + label::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 18px;
-    height: 18px;
-    border: 1px solid pvar(--inputBorderColor);
-    border-radius: 100%;
-    background: #fff;
-  }
-
-  [type=radio]:checked + label::after,
-  [type=radio]:not(:checked) + label::after {
-    content: '';
-    width: 10px;
-    height: 10px;
-    background: pvar(--mainColor);
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    border-radius: 100%;
-    transition: all 0.2s ease;
-  }
-  [type=radio]:not(:checked) + label::after {
-    opacity: 0;
-    transform: scale(0);
-  }
-  [type=radio]:checked + label::after {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .form-group-description {
-    display: block;
-    margin-top: -7px;
-    margin-bottom: 10px;
-    margin-left: 29px;
-  }
-}
-
-@mixin peertube-checkbox ($border-width) {
-  opacity: 0;
-  position: absolute;
-
-  &:focus + span {
-    box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
-  }
-
-  + span {
-    position: relative;
-    width: 18px;
-    min-width: 18px;
-    height: 18px;
-    border: $border-width solid pvar(--inputBorderColor);
-    border-radius: 3px;
-    vertical-align: middle;
-    cursor: pointer;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: calc(2px - #{$border-width});
-      left: 5px;
-      width: 5px;
-      height: 12px;
-      opacity: 0;
-      transform: rotate(45deg) scale(0);
-      border-right: 2px solid pvar(--mainBackgroundColor);
-      border-bottom: 2px solid pvar(--mainBackgroundColor);
-    }
-  }
-
-  &:checked + span {
-    border-color: transparent;
-    background: pvar(--mainColor);
-    animation: jelly 0.6s ease;
-
-    &::after {
-      opacity: 1;
-      transform: rotate(45deg) scale(1);
-    }
-  }
-
-  + span + span {
-    font-weight: $font-regular;
-    cursor: pointer;
-    display: inline;
-
-    @include margin-left(5px);
-  }
-
-  &[disabled] + span,
-  &[disabled] + span + span {
-    opacity: 0.5;
-    cursor: default;
-  }
-}
-
 @mixin actor-counters ($separator-margin: 10px) {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   display: flex;
   align-items: center;
 
   > *:not(:last-child)::after {
     content: '•';
     margin: 0 $separator-margin;
-    color: pvar(--mainColor);
+    color: pvar(--primary);
   }
-}
-
-@mixin in-content-small-title {
-  text-transform: uppercase;
-  color: pvar(--mainColor);
-  font-weight: $font-bold;
-  font-size: 13px;
 }
 
 @mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
@@ -595,7 +142,7 @@
   margin-bottom: 20px;
 
   @if $separator {
-    border-bottom: 1px solid pvar(--inputBorderColor);
+    border-bottom: 1px solid pvar(--input-border-color);
   }
 
   @media screen and (max-width: $small-view) {
@@ -612,7 +159,7 @@
 }
 
 @mixin dropdown-with-icon-item {
-  padding: 6px 15px;
+  padding: pvar(--input-y-padding) 15px;
 
   my-global-icon {
     width: 22px;
@@ -624,7 +171,7 @@
   }
 }
 
-@mixin divider($color: pvar(--submenuBackgroundColor), $background: pvar(--mainBackgroundColor)) {
+@mixin divider($color: pvar(--bg-secondary-400), $background: pvar(--bg)) {
   width: 95%;
   border-top: .05rem solid $color;
   height: .05rem;
@@ -668,57 +215,6 @@
   }
 }
 
-@mixin sub-menu-h1 {
-  ::ng-deep .sub-title-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-
-    border-bottom: 2px solid $grey-background-color;
-    padding-bottom: 15px;
-    margin-bottom: $sub-menu-margin-bottom;
-
-    > * {
-      gap: 0.5rem;
-      display: flex;
-      align-items: center;
-    }
-
-    .sub-title {
-      &,
-      h1 {
-        font-size: 1.3rem;
-      }
-
-      h1 {
-        margin: 0;
-      }
-
-      > my-global-icon {
-        width: 24px;
-        height: 24px;
-
-        svg {
-          vertical-align: initial;
-        }
-      }
-
-      my-feed {
-        display: inline-block;
-        width: 15px;
-
-        my-global-icon svg {
-          vertical-align: initial;
-          position: relative;
-          top: 1px;
-        }
-      }
-    }
-  }
-}
-
 @mixin play-icon ($width, $height) {
   width: 0;
   height: 0;
@@ -731,34 +227,18 @@
   border-top: #{math.div($height, 2)} solid transparent;
   border-bottom: #{math.div($height, 2)} solid transparent;
 
-  border-left: $width solid rgba(255, 255, 255, 0.95);
+  border-left: $width solid #F4F4F5;
 }
 
 @mixin on-small-main-col () {
-  :host-context(.main-col:not(.expanded)) {
-    @media screen and (max-width: #{$small-view + $menu-width}) {
-      @content;
-    }
-  }
-
-  :host-context(.main-col.expanded) {
-    @media screen and (max-width: $small-view) {
-      @content;
-    }
+  @media screen and (max-width: $small-view) {
+    @content;
   }
 }
 
 @mixin on-mobile-main-col () {
-  :host-context(.main-col:not(.expanded)) {
-    @media screen and (max-width: #{$mobile-view + $menu-width}) {
-      @content;
-    }
-  }
-
-  :host-context(.main-col.expanded) {
-    @media screen and (max-width: $mobile-view) {
-      @content;
-    }
+  @media screen and (max-width: $mobile-view) {
+    @content;
   }
 }
 

@@ -24,7 +24,7 @@ export class AccountSetupWarningModalComponent {
 
   user: User
 
-  private LOCAL_STORAGE_KEYS = {
+  private LS_KEYS = {
     NO_ACCOUNT_SETUP_WARNING_MODAL: 'no_account_setup_warning_modal'
   }
 
@@ -49,7 +49,7 @@ export class AccountSetupWarningModalComponent {
 
   shouldOpen (user: User) {
     if (user.noAccountSetupWarningModal === true) return false
-    if (peertubeLocalStorage.getItem(this.LOCAL_STORAGE_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL) === 'true') return false
+    if (peertubeLocalStorage.getItem(this.LS_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL) === 'true') return false
 
     if (this.hasAccountAvatar(user) && this.hasAccountDescription(user)) return false
     if (this.userService.hasSignupInThisSession()) return false
@@ -75,7 +75,7 @@ export class AccountSetupWarningModalComponent {
   }
 
   private doNotOpenAgain () {
-    peertubeLocalStorage.setItem(this.LOCAL_STORAGE_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL, 'true')
+    peertubeLocalStorage.setItem(this.LS_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL, 'true')
 
     this.userService.updateMyProfile({ noAccountSetupWarningModal: true })
         .subscribe({

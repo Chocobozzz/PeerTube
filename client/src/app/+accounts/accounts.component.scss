@@ -4,28 +4,21 @@
 @use '_miniature' as *;
 
 .root {
-  --myFontSize: 1rem;
-  --myGreyFontSize: 1rem;
+  --co-font-size: 1rem;
+  --co-secondary-font-size: 1rem;
 }
 
-.section-label {
-  @include section-label-responsive;
+my-horizontal-menu {
+  flex-grow: 1;
+
+  @include margin-right(3rem);
 }
 
-.links {
+.horizontal-menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  @include grid-videos-miniature-margins;
-
-  &.on-channel-page {
-    max-width: $max-channels-width;
-  }
-
-  simple-search-input {
-    @include margin-left(auto);
-  }
+  flex-wrap: wrap;
 }
 
 my-copy-button {
@@ -36,17 +29,12 @@ my-copy-button {
   grid-template-columns: 1fr min-content;
   grid-template-rows: auto auto;
 
-  background-color: pvar(--submenuBackgroundColor);
-
-  @include grid-videos-miniature-margins(false, 15px);
-  @include padding-top(3.75rem);
-  @include padding-bottom(3.75rem);
   @include margin-bottom(3rem);
   @include font-size(1rem);
 }
 
 .account-avatar-row {
-  @include avatar-row-responsive(2rem, var(--myGreyFontSize));
+  @include avatar-row-responsive(2rem, var(--co-secondary-font-size));
 }
 
 .actor-display-name {
@@ -93,7 +81,7 @@ my-copy-button {
   .description:not(.expanded) {
     max-height: 70px;
 
-    @include fade-text(30px, pvar(--submenuBackgroundColor));
+    @include fade-text(30px, pvar(--bg));
   }
 
   .buttons {
@@ -103,8 +91,8 @@ my-copy-button {
 
 @media screen and (max-width: $mobile-view) {
   .root {
-    --myFontSize: 14px;
-    --myGreyFontSize: 13px;
+    --co-font-size: 14px;
+    --co-secondary-font-size: 13px;
   }
 
   .links {

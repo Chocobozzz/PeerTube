@@ -11,12 +11,12 @@
 
   <div *ngIf="hasCancel() || hasConfirm()" class="modal-footer inputs">
     <input
-      *ngIf="hasCancel()" type="button" role="button" value="{{cancel.value}}" class="peertube-button grey-button"
+      *ngIf="hasCancel()" type="button" role="button" value="{{cancel.value}}" class="peertube-button secondary-button"
       (click)="onCancelClick()" (key.enter)="onCancelClick()"
     >
 
     <input
-      *ngIf="hasConfirm()" type="button" role="button" value="{{confirm.value}}" class="peertube-button orange-button"
+      *ngIf="hasConfirm()" type="button" role="button" value="{{confirm.value}}" class="peertube-button primary-button"
       (click)="onConfirmClick()" (key.enter)="onConfirmClick()"
     >
   </div>

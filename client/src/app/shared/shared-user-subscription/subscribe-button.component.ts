@@ -236,8 +236,8 @@ export class SubscribeButtonComponent implements OnChanges {
   private buildClasses () {
     this.buttonClasses = {
       'peertube-button': true,
-      'orange-button': !this.isAllChannelsSubscribed,
-      'grey-button': this.isAllChannelsSubscribed
+      'primary-button': !this.isAllChannelsSubscribed,
+      'secondary-button': this.isAllChannelsSubscribed
     }
   }
 }

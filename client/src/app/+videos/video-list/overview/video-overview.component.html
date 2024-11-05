@@ -1,52 +1,43 @@
 <h1 class="visually-hidden" i18n>Discover</h1>
-<div class="margin-content">
 
-  <div class="no-results" i18n *ngIf="notResults">No results.</div>
+@if (notResults) {
+  <div class="margin-content no-results" i18n>No results.</div>
+} @else {
+  <div class="margin-content quick-access mt-3">
+    <div #quickAccessContent class="quick-access-links" [ngClass]="{ 'see-all-quick-links': seeAllQuickLinks }">
+      <span class="me-2 fg-100">Quick access:</span>
 
-  <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
-  >
-    <ng-container *ngFor="let overview of overviews">
+      @for (quickAccess of quickAccessLinks; track quickAccess.label) {
+        <a class="me-2" [routerLink]="quickAccess.routerLink" [queryParams]="quickAccess.queryParams">{{ quickAccess.label }}</a>
+      }
+    </div>
 
-      <div class="section videos" *ngFor="let object of overview.categories">
-        <h1 class="section-title">
-          <a class="link-orange" routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
-        </h1>
-
-        <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
-          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true">
-          </my-video-miniature>
-        </div>
-      </div>
-
-      <div class="section videos" *ngFor="let object of overview.tags">
-        <h2 class="section-title">
-          <a class="link-orange" routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
-        </h2>
-
-        <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
-          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true">
-          </my-video-miniature>
-        </div>
-      </div>
-
-      <div class="section channel videos" *ngFor="let object of overview.channels">
-        <div class="section-title">
-          <a class="link-orange" [routerLink]="[ '/c', buildVideoChannelBy(object) ]">
-            <my-actor-avatar [actor]="buildVideoChannel(object)" actorType="channel" size="28"></my-actor-avatar>
-
-            <h2 class="section-title">{{ object.channel.displayName }}</h2>
-          </a>
-        </div>
-
-        <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
-          <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true">
-          </my-video-miniature>
-        </div>
-      </div>
-
-    </ng-container>
-
+    <button *ngIf="!seeAllQuickLinks && quickAccessOverflow" type="button" class="peertube-button tertiary-button" (click)="seeAllQuickLinks = true" i18n>More</button>
   </div>
 
-</div>
+  <div
+    class="margin-content videos-margin-content"
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()"
+    [dataObservable]="onDataSubject.asObservable()" setAngularState="true" [parentDisabled]="disabled"
+  >
+    <div class="section videos" *ngFor="let object of objects">
+
+      <div class="section-header d-flex flex-wrap justify-content-between align-items-start mb-3">
+        <h1 class="section-title">
+          <my-actor-avatar *ngIf="object.channel" size="40px" actorType="channel" [actor]="object.channel"></my-actor-avatar>
+
+          <a class="text-fg border-highlight text-decoration-none" routerLink="/search" [queryParams]="object.queryParams">{{ object.label }}</a>
+
+          <span class="fg-100 fs-7 mx-2">·</span>
+          <span i18n class="fg-100 fs-7">{{ object.type }}</span>
+        </h1>
+
+        <my-button class="ms-2 d-none-mw" theme="primary" [routerLink]="object.routerLink" [queryParams]="object.queryParams">{{ object.buttonLabel }}</my-button>
+      </div>
+
+      <div class="video-wrapper" *ngFor="let video of object.videos">
+        <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true"></my-video-miniature>
+      </div>
+    </div>
+  </div>
+}

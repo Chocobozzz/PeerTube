@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 input:not([type=submit]) {
   @include peertube-input-text(100%);
@@ -9,11 +10,6 @@ input:not([type=submit]) {
     width: auto !important;
     flex-grow: 1;
   }
-}
-
-input[type=submit],
-button {
-  @include peertube-button;
 }
 
 label {

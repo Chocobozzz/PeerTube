@@ -31,7 +31,7 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
     date: true,
     views: true,
     by: true,
-    avatar: false,
+    avatar: true,
     privacyLabel: false,
     privacyText: false,
     state: false,

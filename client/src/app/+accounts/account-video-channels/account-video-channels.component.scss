@@ -9,7 +9,7 @@
 
 .channel {
   max-width: $max-channels-width;
-  background-color: pvar(--channelBackgroundColor);
+  background-color: pvar(--bg-secondary-350);
 
   display: grid;
   grid-template-columns: 1fr auto;
@@ -36,7 +36,7 @@
   }
 
   a {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
 
     @include peertube-word-wrap;
   }
@@ -60,7 +60,7 @@
 
     max-height: 80px;
 
-    @include fade-text(50px, pvar(--channelBackgroundColor));
+    @include fade-text(50px, pvar(--bg-secondary-350));
   }
 }
 
@@ -95,14 +95,9 @@ my-subscribe-button {
   height: 100%;
   position: absolute;
   right: 0;
-  background: linear-gradient(90deg, transparent 0, pvar(--channelBackgroundColor) 45px);
+  background: linear-gradient(90deg, transparent 0, pvar(--bg-secondary-350) 45px);
   padding: (math.div($video-thumbnail-medium-height, 2) - 10px) 15px 0 60px;
   z-index: z(miniature) + 1;
-
-  a {
-    color: pvar(--mainColor);
-    font-weight: $font-semibold;
-  }
 }
 
 .button-show-channel {
@@ -128,11 +123,6 @@ my-subscribe-button {
       grid-row: 3;
       font-size: 14px;
     }
-  }
-
-  .show-channel a {
-    @include peertube-button-link;
-    @include orange-button-inverted;
   }
 
   .videos {

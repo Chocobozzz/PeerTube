@@ -1,1 +1,3 @@
-<my-link i18n internalLink="/login" [href]="getExternalLoginHref()" [className]="className">{{ label }}</my-link>
+<my-link class="d-flex" internalLink="/login" [href]="getExternalLoginHref()" [className]="className" [icon]="icon ? 'sign-in' : undefined">
+  {{ label }}
+</my-link>

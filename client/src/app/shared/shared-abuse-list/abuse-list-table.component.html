@@ -17,7 +17,7 @@
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
       </th>
-      <th scope="col" style="width: 150px;">
+      <th scope="col" style="width: 70px;">
         <span i18n class="visually-hidden">Actions</span>
       </th>
       <th scope="col" *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
@@ -38,7 +38,7 @@
       <td class="action-cell">
         <my-action-dropdown
           [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
+          [actions]="abuseActions" [entry]="abuse" buttonSize="small"
         ></my-action-dropdown>
       </td>
 
@@ -133,7 +133,7 @@
       <td class="abuse-messages">
         <button
           *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)"
-          class="peertube-button grey-button"
+          class="peertube-button secondary-button icon-only"
           [ariaLabel]="getSendMessageButtonLabel(abuse)"
           [title]="getSendMessageButtonLabel(abuse)"
         >

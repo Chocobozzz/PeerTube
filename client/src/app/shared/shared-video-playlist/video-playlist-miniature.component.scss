@@ -49,14 +49,15 @@
 
   .by {
     display: block;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
 
     @include disable-default-a-behaviour;
   }
 
   .privacy-date {
     margin-top: 5px;
-    font-size: 14px;
+    color: pvar(--fg-200);
+    font-size: $miniature-fs-small;
 
     .privacy {
       font-weight: $font-semibold;
@@ -70,7 +71,7 @@
 
   .description {
     margin-top: 10px;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
 
     @include peertube-word-wrap;
   }
@@ -79,6 +80,7 @@
 .miniature:not(.display-as-row) {
 
   .miniature-name {
+    font-size: $miniature-fs-big;
     margin-top: 10px;
     margin-bottom: 5px;
   }
@@ -92,19 +94,23 @@
 }
 
 .miniature.display-as-row {
-  --rowThumbnailWidth: #{$video-thumbnail-width};
-  --rowThumbnailHeight: #{$video-thumbnail-height};
+  --co-row-thumbnail-width: #{$video-thumbnail-width};
+  --co-row-thumbnail-height: #{$video-thumbnail-height};
 
   display: flex;
 
   .miniature-name {
-    font-size: $video-miniature-row-name-font-size;
+    font-size: $miniature-fs-row-big;
+  }
+
+  .privacy-date {
+    font-size: $miniature-fs-row-small;
   }
 
   .miniature-thumbnail {
-    min-width: var(--rowThumbnailWidth);
-    max-width: var(--rowThumbnailWidth);
-    height: var(--rowThumbnailHeight);
+    min-width: var(--co-row-thumbnail-width);
+    max-width: var(--co-row-thumbnail-width);
+    height: var(--co-row-thumbnail-height);
 
     @include margin-right(1rem);
   }
@@ -112,14 +118,22 @@
 
 @include on-small-main-col {
   .miniature.display-as-row {
-    --rowThumbnailWidth: #{$video-thumbnail-medium-width};
-    --rowThumbnailHeight: #{$video-thumbnail-medium-height};
+    --co-row-thumbnail-width: #{$video-thumbnail-medium-width};
+    --co-row-thumbnail-height: #{$video-thumbnail-medium-height};
   }
 }
 
 @include on-mobile-main-col {
   .miniature.display-as-row {
-    --rowThumbnailWidth: #{$video-thumbnail-small-width};
-    --rowThumbnailHeight: #{$video-thumbnail-small-height};
+    --co-row-thumbnail-width: #{$video-thumbnail-small-width};
+    --co-row-thumbnail-height: #{$video-thumbnail-small-height};
+
+    .miniature-name {
+      font-size: $miniature-fs-mobile-big;
+    }
+
+    .privacy-date {
+      font-size: $miniature-fs-mobile-small;
+    }
   }
 }

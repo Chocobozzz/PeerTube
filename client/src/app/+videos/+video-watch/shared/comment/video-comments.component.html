@@ -1,15 +1,16 @@
 <div>
   <div class="title-block">
-    <h2 class="title-page">
+    <h2>
       {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{totalNotDeletedComments}} Comments}}
     </h2>
 
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
-    <div ngbDropdown class="d-inline-block ms-4 dropdown-root">
-      <button class="btn btn-sm btn-outline-secondary" id="dropdown-sort-comments" ngbDropdownToggle i18n>
+    <div ngbDropdown class="d-inline-block ms-auto dropdown-root">
+      <button class="peertube-button tertiary-button" id="dropdown-sort-comments" ngbDropdownToggle i18n>
         SORT BY
       </button>
+
       <div ngbDropdownMenu aria-labelledby="dropdown-sort-comments">
         <button (click)="handleSortChange('-createdAt')" ngbDropdownItem i18n>Most recent first (default)</button>
         <button (click)="handleSortChange('-totalReplies')" ngbDropdownItem i18n>Most replies first</button>

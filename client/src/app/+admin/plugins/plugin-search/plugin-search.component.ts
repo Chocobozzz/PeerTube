@@ -14,7 +14,6 @@ import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-bu
 import { AutofocusDirective } from '../../../shared/shared-main/common/autofocus.directive'
 import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
 import { PluginCardComponent } from '../shared/plugin-card.component'
-import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 
 @Component({
   selector: 'my-plugin-search',
@@ -22,7 +21,6 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
   styleUrls: [ './plugin-search.component.scss' ],
   standalone: true,
   imports: [
-    PluginNavigationComponent,
     NgIf,
     GlobalIconComponent,
     AutofocusDirective,
@@ -138,7 +136,7 @@ export class PluginSearchComponent implements OnInit {
   }
 
   getShowRouterLink (plugin: PeerTubePluginIndex) {
-    return [ '/admin', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, this.pluginType) ]
+    return [ '/admin', 'settings', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, this.pluginType) ]
   }
 
   isThemeSearch () {

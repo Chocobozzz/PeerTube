@@ -7,7 +7,7 @@
   display: block;
   z-index: z(modal);
   width: 100%;
-  background: pvar(--mainBackgroundColor);
+  background: pvar(--bg);
   padding: 1rem;
   text-align: center;
   text-decoration: underline;
@@ -22,93 +22,27 @@
 }
 
 .main-row {
-  min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
+  min-height: calc(100vh - #{pvar(--header-height)} - #{$footer-height} - #{$footer-margin});
 }
 
 .sub-header-container {
-  margin-top: $header-height;
-  background-color: pvar(--mainBackgroundColor);
+  margin-top: pvar(--header-height);
+  background-color: pvar(--bg);
   width: 100%;
 }
 
 .root-header {
-  height: $header-height;
+  height: pvar(--header-height);
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: pvar(--mainBackgroundColor);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
-  display: flex;
-}
-
-.top-left-block {
-  z-index: 1;
-  height: $header-height;
-  display: flex;
-  align-items: center;
-  min-width: 0;
-
-  .icon {
-    @include icon(24px);
-  }
-
-  .icon-menu {
-    mask-image: url('../assets/images/misc/menu.svg');
-    -webkit-mask-image: url('../assets/images/misc/menu.svg');
-
-    background-color: pvar(--mainForegroundColor);
-    margin: 0 18px 0 20px;
-
-    @media screen and (max-width: $mobile-view) {
-      margin: 0 10px;
-    }
-  }
-}
-
-.root-header-right {
-  height: $header-height;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  white-space: nowrap;
-  flex: 1;
-}
-
-.peertube-title {
-  font-size: 20px;
-  font-weight: $font-bold;
-  color: inherit !important;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  padding: 0 0 0 10px;
-
-  @include disable-default-a-behaviour;
-
-  .instance-name {
-    width: 100%;
-
-    @include ellipsis;
-
-    @media screen and (max-width: $mobile-view) {
-      display: none;
-    }
-  }
-
-  .icon.icon-logo {
-    display: inline-block;
-    width: 23px;
-    height: 24px;
-
-    @include margin-right(0.5rem);
-  }
+  background: pvar(--bg);
 }
 
 .broadcast-message {
   min-height: 50px;
   text-align: center;
-  margin-bottom: 0;
-  border-radius: 0;
+  margin-bottom: 2rem;
   display: grid;
   grid-template-columns: 1fr 30px;
   column-gap: 10px;
@@ -120,7 +54,7 @@
     margin: auto;
 
     > my-global-icon {
-      width: 20px;
+      @include global-icon-size(20px);
     }
   }
 }

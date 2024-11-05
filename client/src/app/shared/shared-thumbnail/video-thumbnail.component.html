@@ -27,9 +27,14 @@
   <div class="label-overlay danger"><ng-content select="label-danger"></ng-content></div>
 
   @if (video.isLive) {
-    <div  class="live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }">
-      <ng-container i18n *ngIf="!isLiveEnded()">LIVE</ng-container>
-      <ng-container i18n *ngIf="isLiveEnded()">LIVE ENDED</ng-container>
+    <div  class="live-overlay" [ngClass]="{ 'live-streaming': isLiveStreaming(), 'ended-live': isEndedLive() }">
+      @if (isLiveStreaming()) {
+        <ng-container i18n >LIVE</ng-container>
+      } @else if (isEndedLive()) {
+        <ng-container i18n>LIVE ENDED</ng-container>
+      } @else {
+        <ng-container i18n>WAIT LIVE</ng-container>
+      }
     </div>
   } @else {
     <div class="duration-overlay" [ariaLabel]="getDurationOverlayLabel()">{{ video.durationLabel }}</div>

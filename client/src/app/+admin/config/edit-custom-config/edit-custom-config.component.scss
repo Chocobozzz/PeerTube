@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 $form-base-input-width: 340px;
 $form-max-width: 500px;
@@ -33,8 +34,8 @@ input[type=number] {
 
   input[type=number] + span {
     position: absolute;
-    top: 0.2em;
-    right: 2.5rem;
+    top: 0.4em;
+    right: 3em;
 
     @media screen and (max-width: $mobile-view) {
       display: none;
@@ -42,13 +43,13 @@ input[type=number] {
   }
 
   input[disabled] {
-    background-color: #f9f9f9;
+    opacity: 0.8;
     pointer-events: none;
   }
 }
 
 input[type=checkbox] {
-  @include peertube-checkbox(1px);
+  @include peertube-checkbox;
 }
 
 .peertube-select-container {
@@ -65,8 +66,6 @@ my-select-custom-value {
 input[type=submit] {
   display: flex;
 
-  @include peertube-button;
-  @include orange-button;
   @include margin-left(auto);
 
   + .form-error {
@@ -131,18 +130,6 @@ ngb-tabset:not(.previews) ::ng-deep {
   height: 0;
   width: 100%;
   justify-content: right;
-
-  .callout-link {
-    position: relative;
-    right: 3.3em;
-    top: .3em;
-    font-size: 90%;
-    color: pvar(--mainColor);
-    background-color: pvar(--mainBackgroundColor);
-    padding: 0 .3em;
-
-    @include peertube-button-link;
-  }
 }
 
 my-actor-banner-edit {

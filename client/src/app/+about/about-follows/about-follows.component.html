@@ -11,7 +11,7 @@
         {{ follower.name }}
       </a>
 
-      <button i18n class="peertube-button-link grey-button mt-1" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
+      <button i18n class="peertube-button-link secondary-button mt-1" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
     </div>
 
     <div class="col-xl-6 col-md-12">
@@ -23,7 +23,7 @@
         {{ following.name }}
       </a>
 
-      <button i18n class="peertube-button-link grey-button mt-1" *ngIf="!loadedAllFollowings && canLoadMoreFollowings()" (click)="loadAllFollowings()">Show full list</button>
+      <button i18n class="peertube-button-link secondary-button mt-1" *ngIf="!loadedAllFollowings && canLoadMoreFollowings()" (click)="loadAllFollowings()">Show full list</button>
     </div>
 
   </div>

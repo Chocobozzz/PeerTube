@@ -1,27 +1,24 @@
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, booleanAttribute } from '@angular/core'
-import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
   Notifier,
   PeerTubeRouterService,
   ScreenService,
-  ServerService,
   User,
   UserService
 } from '@app/core'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@peertube/peertube-core-utils'
 import { ResultList, UserRight, VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { Observable, Subject, Subscription, forkJoin, fromEvent, of } from 'rxjs'
 import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
-import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
-import { FeedComponent } from '../shared-main/feeds/feed.component'
+import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
 import { Syndication } from '../shared-main/feeds/syndication.model'
 import { Video } from '../shared-main/video/video.model'
 import { VideoFiltersHeaderComponent } from './video-filters-header.component'
@@ -33,10 +30,7 @@ const debugLogger = debug('peertube:videos:VideosListComponent')
 export type HeaderAction = {
   iconName: GlobalIconName
   label: string
-  justIcon?: boolean
   routerLink?: string
-  href?: string
-  click?: (e: Event) => void
 }
 
 enum GroupDate {
@@ -56,13 +50,9 @@ enum GroupDate {
   standalone: true,
   imports: [
     NgIf,
-    NgbTooltip,
     NgClass,
-    FeedComponent,
     NgFor,
-    RouterLinkActive,
-    RouterLink,
-    NgTemplateOutlet,
+    ButtonComponent,
     ButtonComponent,
     VideoFiltersHeaderComponent,
     InfiniteScrollerDirective,
@@ -73,11 +63,6 @@ enum GroupDate {
 export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() getVideosObservableFunction: (pagination: ComponentPaginationLight, filters: VideoFilters) => Observable<ResultList<Video>>
   @Input() getSyndicationItemsFunction: (filters: VideoFilters) => Promise<Syndication[]> | Syndication[]
-  @Input() baseRouteBuilderFunction: (filters: VideoFilters) => string[]
-
-  @Input() title: string
-  @Input() titleTooltip: string
-  @Input({ transform: booleanAttribute }) displayTitle = true
 
   @Input() defaultSort: VideoSortField
   @Input() defaultScope: VideoFilterScope = 'federated'
@@ -117,7 +102,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     date: true,
     views: true,
     by: true,
-    avatar: false,
+    avatar: true,
     privacyLabel: true,
     privacyText: false,
     state: false,
@@ -151,8 +136,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private route: ActivatedRoute,
     private screenService: ScreenService,
-    private peertubeRouter: PeerTubeRouterService,
-    private serverService: ServerService
+    private peertubeRouter: PeerTubeRouterService
   ) {
 
   }
@@ -213,8 +197,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['displayOptions'] || !this.displayOptions) {
       this.displayOptions = {
         ...this.defaultDisplayOptions,
-        avatar: this.serverService.getHTMLConfig().client.videos.miniature.displayAuthorAvatar,
-        ...changes['displayOptions']
+
+        ...(changes['displayOptions']?.currentValue ?? {})
       }
     }
 
@@ -426,18 +410,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
     debugLogger('Will inject %O in URL query', queryParams)
 
-    const baseRoute = this.baseRouteBuilderFunction
-      ? this.baseRouteBuilderFunction(this.filters)
-      : []
-
-    const pathname = window.location.pathname
-
-    const baseRouteChanged = baseRoute.length !== 0 &&
-                             pathname !== '/' && // Exclude special '/' case, we'll be redirected without component change
-                             baseRoute.length !== 0 && pathname !== baseRoute.join('/')
-
-    if (baseRouteChanged || Object.keys(baseQuery).length !== 0 || customizedByUser) {
-      this.peertubeRouter.silentNavigate(baseRoute, queryParams)
+    if (Object.keys(baseQuery).length !== 0 || customizedByUser) {
+      this.peertubeRouter.silentNavigate([], queryParams)
     }
 
     this.filtersChanged.emit(this.filters)

@@ -39,7 +39,6 @@ export interface ServerConfig {
   client: {
     videos: {
       miniature: {
-        displayAuthorAvatar: boolean
         preferAuthorDisplayName: boolean
       }
       resumableUpload: {
@@ -124,6 +123,9 @@ export interface ServerConfig {
 
   theme: {
     registered: ServerConfigTheme[]
+
+    builtIn: { name: 'peertube-core-light-beige' | 'peertube-core-dark-brown' }[]
+
     default: string
   }
 

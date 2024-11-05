@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .logs {
   font-family: monospace;
@@ -92,7 +93,7 @@
 my-copy-button {
   position: absolute;
   right: 5px;
-  background: pvar(--mainBackgroundHoverColor);
+  background: pvar(--bg-secondary-300);
 }
 
 @include on-small-main-col {

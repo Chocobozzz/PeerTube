@@ -9,7 +9,7 @@
   <div class="modal-body">
     <my-alert i18n type="primary">These settings apply only to your session on this instance.</my-alert>
 
-    <h5 i18n class="mt-4 mb-2">Videos</h5>
+    <h5 i18n class="section-label mt-4 mb-2">VIDEOS</h5>
 
     <my-user-video-settings
       *ngIf="!isUserLoggedIn()"
@@ -17,7 +17,7 @@
     >
     </my-user-video-settings>
 
-    <h5 i18n class="mt-4 mb-2">Interface</h5>
+    <h5 i18n class="section-label mt-4 mb-2">INTERFACE</h5>
 
     <my-user-interface-settings
       *ngIf="!isUserLoggedIn()"

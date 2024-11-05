@@ -5,7 +5,7 @@
     @if (editable) {
       @if (hasAvatar()) {
         <div ngbDropdown placement="right">
-          <button type="button" class="actor-img-edit-button" i18n-arialLabel aria-label="Change your avatar" ngbDropdownToggle>
+          <button type="button" class="actor-img-edit-button button-file primary-button" i18n-arialLabel aria-label="Change your avatar" ngbDropdownToggle>
             <my-global-icon iconName="edit"></my-global-icon>
           </button>
 
@@ -23,7 +23,7 @@
           </div>
         </div>
       } @else {
-        <div class="actor-img-edit-button button-focus-within" [ngbTooltip]="avatarFormat" placement="right" container="body">
+        <div class="actor-img-edit-button button-file primary-button button-focus-within" [ngbTooltip]="avatarFormat" placement="right" container="body">
           <my-global-icon iconName="upload"></my-global-icon>
           <label class="visually-hidden" for="avatarfile" i18n>Upload a new avatar</label>
           <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>

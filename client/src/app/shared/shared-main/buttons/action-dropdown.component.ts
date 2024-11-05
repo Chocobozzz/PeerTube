@@ -24,7 +24,7 @@ export type DropdownAction<T> = {
 }
 
 export type DropdownButtonSize = 'normal' | 'small'
-export type DropdownTheme = 'orange' | 'grey'
+export type DropdownTheme = 'primary' | 'secondary'
 export type DropdownDirection = 'horizontal' | 'vertical'
 
 @Component({
@@ -59,7 +59,7 @@ export class ActionDropdownComponent<T> {
   @Input() buttonStyled = true
 
   @Input() label: string
-  @Input() theme: DropdownTheme = 'grey'
+  @Input() theme: DropdownTheme = 'secondary'
 
   getActions (): DropdownAction<T>[][] {
     if (this.actions.length !== 0 && Array.isArray(this.actions[0])) return this.actions as DropdownAction<T>[][]

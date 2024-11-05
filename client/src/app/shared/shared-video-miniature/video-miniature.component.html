@@ -4,71 +4,75 @@
     [video]="video" [nsfw]="isVideoBlur" [videoRouterLink]="videoRouterLink" [videoHref]="videoHref" [videoTarget]="videoTarget"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"
   >
-    <ng-container ngProjectAs="label-warning" *ngIf="displayOptions.privacyLabel && isUnlistedVideo()" i18n>Unlisted</ng-container>
-    <ng-container ngProjectAs="label-danger" *ngIf="displayOptions.privacyLabel && isPrivateVideo()" i18n>Private</ng-container>
-    <ng-container ngProjectAs="label-danger" *ngIf="displayOptions.privacyLabel && isPasswordProtectedVideo()" i18n>Password protected</ng-container>
+    @if (displayOptions.privacyLabel) {
+      <ng-container ngProjectAs="label-warning" *ngIf="isUnlistedVideo()" i18n>Unlisted</ng-container>
+      <ng-container ngProjectAs="label-danger" *ngIf="isPrivateVideo()" i18n>Private</ng-container>
+      <ng-container ngProjectAs="label-danger" *ngIf="isPasswordProtectedVideo()" i18n>Password protected</ng-container>
+    }
   </my-video-thumbnail>
 
   <div class="video-bottom">
-    <div class="video-miniature-information">
-      <div class="d-flex video-miniature-meta">
-        <my-actor-avatar
-          *ngIf="displayOptions.avatar && displayOwnerVideoChannel() && !displayAsRow" [title]="channelLinkTitle"
-          [actor]="video.channel" actorType="channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
-          size="32"
-        ></my-actor-avatar>
+    <div class="video-info">
+      <div *ngIf="displayOptions.avatar || displayOptions.by" class="owner min-width-0">
+        @if (displayOptions.avatar) {
 
-        <my-actor-avatar
-          *ngIf="displayOptions.avatar && displayOwnerAccount() && !displayAsRow" [title]="channelLinkTitle"
-          [actor]="video.account" actorType="channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
-          size="32"
-        ></my-actor-avatar>
+          @if (displayOwnerVideoChannel()) {
+            <my-actor-avatar
+              [title]="channelLinkTitle" actorType="channel" [size]="actorImageSize"
+              [actor]="video.channel" [internalHref]="[ '/c', video.byVideoChannel ]"
+            ></my-actor-avatar>
+          } @else if (displayOwnerAccount()) {
+            <my-actor-avatar
+              [title]="channelLinkTitle" actorType="account" [size]="actorImageSize"
+              [actor]="video.account"  [internalHref]="[ '/c', video.byVideoChannel ]"
+            ></my-actor-avatar>
+          }
+        }
 
-        <div class="w-100 d-flex flex-column min-width-0">
-          <my-link
-            [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" [inheritParentCSS]="true"
-            [ariaLabel]="getAriaLabel()"
-            [title]="video.name" class="video-miniature-name" className="ellipsis-multiline-2" [ngClass]="{ 'blur-filter': isVideoBlur }"
-          >
-            {{ video.name }}
-          </my-link>
-
-          <span class="video-miniature-created-at-views">
-            <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
-
-            <span class="views" [title]="video.getExactNumberOfViews()">
-              <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
-
-              <my-video-views-counter *ngIf="displayOptions.views" [video]="video"></my-video-views-counter>
-            </span>
-          </span>
-
-          <a *ngIf="displayOptions.by" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
-            <ng-container *ngIf="displayOwnerAccount()">{{ authorAccount }}</ng-container>
-            <ng-container *ngIf="displayOwnerVideoChannel()">{{ authorChannel }}</ng-container>
-          </a>
-
-          <div class="video-info-privacy">
-            <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
-            <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
-            <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
-          </div>
-
-          <div *ngIf="containedInPlaylists" class="contained-in-playlists">
-            <a *ngFor="let playlist of containedInPlaylists" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
-              {{ playlist.playlistDisplayName }}
-            </a>
-          </div>
-        </div>
+        <a *ngIf="displayOptions.by" class="owner-label ellipsis" [routerLink]="[ '/c', video.byVideoChannel ]">
+          @if (displayOwnerAccount()) {
+            {{ authorAccount }}
+          } @else if (displayOwnerVideoChannel()) {
+            {{ authorChannel }}
+          }
+        </a>
       </div>
 
-      <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blocked">
-        <span class="blocked-label" i18n>Blocked</span>
-        <span class="blocked-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+      <my-link
+        [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" [inheritParentCSS]="true"
+        [ariaLabel]="getAriaLabel()"
+        [title]="video.name" class="video-name" className="ellipsis-multiline-2" [ngClass]="{ 'blur-filter': isVideoBlur }"
+      >
+        {{ video.name }}
+      </my-link>
+
+      <div class="date-and-views">
+        <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
+
+        <span class="views" [title]="video.getExactNumberOfViews()">
+          <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
+
+          <my-video-views-counter *ngIf="displayOptions.views" [video]="video"></my-video-views-counter>
+        </span>
       </div>
 
-      <div i18n *ngIf="displayOptions.nsfw && video.nsfw" class="video-info-nsfw">
-        Sensitive
+      <div class="video-info-privacy fw-semibold">
+        <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
+        <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
+        <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
+      </div>
+
+      <div *ngIf="containedInPlaylists" class="badges">
+        <a *ngFor="let playlist of containedInPlaylists" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+          {{ playlist.playlistDisplayName }}
+        </a>
+
+        <span *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="pt-badge badge-danger video-info-blocked">
+          <span class="fw-semibold" i18n>Blocked</span>
+          <span *ngIf="video.blacklistedReason"> - {{ video.blacklistedReason }}</span>
+        </span>
+
+        <span i18n *ngIf="displayOptions.nsfw && video.nsfw" class="pt-badge badge-danger video-info-nsfw">Sensitive</span>
       </div>
     </div>
 

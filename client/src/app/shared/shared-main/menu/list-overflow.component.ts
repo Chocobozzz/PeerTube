@@ -1,29 +1,32 @@
-import { lowerFirst, uniqueId } from 'lodash-es'
-import { take } from 'rxjs/operators'
+import { NgClass, NgTemplateOutlet, SlicePipe } from '@angular/common'
 import {
   AfterViewInit,
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
   Input,
+  OnInit,
   QueryList,
   TemplateRef,
   ViewChild,
   ViewChildren
 } from '@angular/core'
+import { RouterLink, RouterLinkActive } from '@angular/router'
 import { ScreenService } from '@app/core'
-import { NgbDropdown, NgbModal, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { randomInt } from '@peertube/peertube-core-utils'
 import debug from 'debug'
-import { RouterLinkActive, RouterLink } from '@angular/router'
-import { NgFor, NgTemplateOutlet, NgIf, NgClass, SlicePipe } from '@angular/common'
+import { lowerFirst, uniqueId } from 'lodash-es'
 
 const debugLogger = debug('peertube:main:ListOverflowItem')
 
 export interface ListOverflowItem {
   label: string
   routerLink: string | any[]
+  isDisplayed?: () => boolean
 }
 
 @Component({
@@ -33,11 +36,9 @@ export interface ListOverflowItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgFor,
     NgTemplateOutlet,
-    NgIf,
     NgbDropdown,
-    NgbDropdownAnchor,
+    NgbDropdownToggle,
     NgClass,
     NgbDropdownMenu,
     RouterLinkActive,
@@ -45,19 +46,20 @@ export interface ListOverflowItem {
     SlicePipe
   ]
 })
-export class ListOverflowComponent<T extends ListOverflowItem> implements AfterViewInit {
+export class ListOverflowComponent<T extends ListOverflowItem> implements OnInit, AfterViewInit {
   @Input() items: T[]
   @Input() itemTemplate: TemplateRef<{ item: T }>
+  @Input({ transform: booleanAttribute }) hasBorder = false
 
   @ViewChild('modal', { static: true }) modal: ElementRef
   @ViewChild('itemsParent', { static: true }) parent: ElementRef<HTMLDivElement>
   @ViewChildren('itemsRendered') itemsRendered: QueryList<ElementRef>
 
   showItemsUntilIndexExcluded: number
-  active = false
   isInMobileView = false
+  initialized = false
 
-  private openedOnHover = false
+  private randomInt: number
 
   constructor (
     private cdr: ChangeDetectorRef,
@@ -65,8 +67,15 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
     private screenService: ScreenService
   ) {}
 
+  ngOnInit () {
+    this.randomInt = randomInt(1, 2000)
+  }
+
   ngAfterViewInit () {
-    setTimeout(() => this.onWindowResize(), 0)
+    setTimeout(() => {
+      this.onWindowResize()
+      this.initialized = true
+    }, 0)
   }
 
   isMenuDisplayed () {
@@ -85,45 +94,16 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
 
     for (const [ index, el ] of this.itemsRendered.toArray().entries()) {
       accWidth += el.nativeElement.getBoundingClientRect().width
+
       if (showItemsUntilIndexExcluded === undefined) {
         showItemsUntilIndexExcluded = (parentWidth < accWidth) ? index : undefined
       }
-
-      const e = document.getElementById(this.getId(index))
-      const shouldBeVisible = showItemsUntilIndexExcluded ? index < showItemsUntilIndexExcluded : true
-      e.style.visibility = shouldBeVisible ? 'inherit' : 'hidden'
     }
 
     debugLogger('Accumulated children width is %d so exclude index is %d', accWidth, showItemsUntilIndexExcluded)
 
     this.showItemsUntilIndexExcluded = showItemsUntilIndexExcluded
     this.cdr.markForCheck()
-  }
-
-  openDropdownOnHover (dropdown: NgbDropdown) {
-    this.openedOnHover = true
-    dropdown.open()
-
-    // Menu was closed
-    dropdown.openChange
-            .pipe(take(1))
-            .subscribe(() => this.openedOnHover = false)
-  }
-
-  dropdownAnchorClicked (dropdown: NgbDropdown) {
-    if (this.openedOnHover) {
-      this.openedOnHover = false
-      return
-    }
-
-    return dropdown.toggle()
-  }
-
-  closeDropdownIfHovered (dropdown: NgbDropdown) {
-    if (this.openedOnHover === false) return
-
-    dropdown.close()
-    this.openedOnHover = false
   }
 
   toggleModal () {
@@ -135,6 +115,6 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
   }
 
   getId (id: number | string = uniqueId()): string {
-    return lowerFirst(this.constructor.name) + '_' + id
+    return lowerFirst(this.constructor.name) + '_' + this.randomInt + '_' + id
   }
 }

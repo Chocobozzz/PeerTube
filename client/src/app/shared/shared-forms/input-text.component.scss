@@ -1,5 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
+@use '_form-mixins' as *;
 
 input {
   @include peertube-input-text(auto);
@@ -7,13 +9,18 @@ input {
   @include padding-right(15px !important);
 }
 
-.btn {
-  @include button-with-icon(18px);
+.btn,
+my-copy-button ::ng-deep .btn {
+  background-color: var(--bg-secondary-400);
+  border-left: 1px solid var(--bg);
 
-  & {
-    line-height: 18px;
-    top: 0;
+  &:hover {
+    background-color: var(--bg-secondary-450);
   }
+}
+
+.btn {
+  @include button-with-icon(18px, 3px, 0);
 }
 
 .copy-text {

@@ -3,10 +3,10 @@
 
 .avatar {
   // Defined in component
-  width: var(--avatarSize);
-  height: var(--avatarSize);
-  min-width: var(--avatarSize);
-  min-height: var(--avatarSize);
+  width: var(--co-avatar-size);
+  height: var(--co-avatar-size);
+  min-width: var(--co-avatar-size);
+  min-height: var(--co-avatar-size);
 
   &.account {
     object-fit: cover;
@@ -18,8 +18,8 @@
   }
 }
 
-a:hover {
-  text-decoration: none;
+a {
+  @include disable-default-a-behaviour;
 }
 
 .initial {
@@ -28,7 +28,8 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--initialFontSize);
+  // Defined in component
+  font-size: var(--co-font-size);
 
   &.blue {
     background-color: #009FD4;

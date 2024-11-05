@@ -1,10 +1,11 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .segment {
   &.active,
   &:hover {
-    background: pvar(--mainBackgroundHoverColor);
+    background: pvar(--bg-secondary-300);
   }
 }
 

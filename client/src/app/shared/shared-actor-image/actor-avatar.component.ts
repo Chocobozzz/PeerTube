@@ -69,7 +69,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
   private buildClasses () {
     let avatarSize = '100%'
-    let initialFontSize = '22px'
+    let fontSize = '22px'
 
     this.classes = [ 'avatar' ]
 
@@ -77,11 +77,11 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
       avatarSize = `${this.size}px`
 
       if (this.size <= 18) {
-        initialFontSize = '13px'
+        fontSize = '13px'
       } else if (this.size >= 100) {
-        initialFontSize = '40px'
+        fontSize = '40px'
       } else if (this.size >= 120) {
-        initialFontSize = '46px'
+        fontSize = '46px'
       }
     }
 
@@ -98,8 +98,8 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
     }
 
     const elStyle = (this.el.nativeElement as HTMLElement).style
-    elStyle.setProperty('--avatarSize', avatarSize)
-    elStyle.setProperty('--initialFontSize', initialFontSize)
+    elStyle.setProperty('--co-avatar-size', avatarSize)
+    elStyle.setProperty('--co-font-size', fontSize)
   }
 
   private buildDefaultAvatarUrl () {

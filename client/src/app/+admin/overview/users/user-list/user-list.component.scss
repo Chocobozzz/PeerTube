@@ -3,11 +3,6 @@
 @use '_mixins' as *;
 @use 'bootstrap/scss/functions' as *;
 
-.sub-title-container my-global-icon {
-  position: relative;
-  top: -2px;
-}
-
 .banned-info {
   font-style: italic;
 }

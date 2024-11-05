@@ -1,15 +1,9 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
-    <h1 i18n>My playlists</h1>
-    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
-  </div>
-</div>
-
 <my-channels-setup-message></my-channels-setup-message>
 
-<div class="video-playlists-header d-flex justify-content-between gap-2">
+<div class="video-playlists-header d-flex justify-content-between align-items-end gap-2 flex-wrap">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+
+  <span class="total-items" *ngIf="pagination.totalItems"> {{ getTotalTitle() }}</span>
 
   <a class="peertube-create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>

@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router'
+import { VideoChannelCreateComponent } from '@app/shared/standalone-channels/video-channel-create.component'
+import { VideoChannelUpdateComponent } from '@app/shared/standalone-channels/video-channel-update.component'
 import { MyVideoChannelsComponent } from './my-video-channels.component'
 
 export default [
@@ -13,10 +15,20 @@ export default [
   },
   {
     path: 'create',
-    redirectTo: '/manage/create'
+    component: VideoChannelCreateComponent,
+    data: {
+      meta: {
+        title: $localize`Create a new video channel`
+      }
+    }
   },
   {
     path: 'update/:videoChannelName',
-    redirectTo: '/manage/update/:videoChannelName'
+    component: VideoChannelUpdateComponent,
+    data: {
+      meta: {
+        title: $localize`Update video channel`
+      }
+    }
   }
 ] satisfies Routes

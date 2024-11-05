@@ -1,14 +1,15 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
 .dropdown-file {
   @include peertube-file;
 }
 
 .actor-img-edit-button {
-  @include peertube-button-file(31px);
+  width: 31px;
+
   @include button-with-icon(19px, 0);
-  @include orange-button;
 
   & {
     display: flex;

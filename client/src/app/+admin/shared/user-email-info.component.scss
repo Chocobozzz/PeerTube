@@ -2,7 +2,7 @@
 @use '_mixins' as *;
 
 a {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
 
   &:hover {
     text-decoration: underline;

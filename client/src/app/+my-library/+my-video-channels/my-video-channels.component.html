@@ -1,22 +1,9 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
-    <h1 i18n>My channels</h1>
-    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
-  </div>
-
-  <div>
-    <a routerLink="/my-library/video-channel-syncs" class="peertube-button-link grey-button peertube-button-icon">
-      <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
-      <ng-container i18n>My synchronizations</ng-container>
-    </a>
-  </div>
-</div>
-
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
 
-<div class="video-channels-header d-flex justify-content-between gap-2">
+<div class="video-channels-header d-flex justify-content-between align-items-end gap-2 flex-wrap">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+
+  <span *ngIf="pagination.totalItems" class="total-items">{{ getTotalTitle() }}</span>
 
   <a class="peertube-create-button" routerLink="/manage/create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
@@ -43,14 +30,14 @@
         {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
       </a>
 
-      <div class="d-flex">
+      <div class="channel-videos">
         <span i18n>{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</span>
         <span class="mx-1">·</span>
         <span i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>
       </div>
 
       <div class="video-channel-buttons">
-        <my-edit-button label [ptRouterLink]="[ '/manage/update', videoChannel.nameWithHost ]"></my-edit-button>
+        <my-edit-button label [ptRouterLink]="[ '/my-library/video-channels/update', videoChannel.nameWithHost ]"></my-edit-button>
         <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
       </div>
 

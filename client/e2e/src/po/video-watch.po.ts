@@ -199,7 +199,7 @@ export class VideoWatchPage {
 
     await textarea.setValue(comment)
 
-    const confirmButton = await $('.comment-buttons .orange-button')
+    const confirmButton = await $('.comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await confirmButton.click()
 
@@ -218,7 +218,7 @@ export class VideoWatchPage {
     await textarea.waitForClickable()
     await textarea.setValue(comment)
 
-    const confirmButton = await $('my-video-comment .comment-buttons .orange-button')
+    const confirmButton = await $('my-video-comment .comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await confirmButton.click()
 

@@ -1,7 +1,7 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 class="modal-title">
-      <ng-container i18n>Download</ng-container>
+    <div class="d-flex align-items-center me-auto">
+      <h4 class="modal-title" i18n>Download</h4>
 
       <div class="peertube-select-container title-select ms-2">
         <select id="type" name="type" [(ngModel)]="type" class="form-control">
@@ -10,9 +10,9 @@
           <option *ngIf="hasCaptions()" value="subtitle-files" i18n>Subtitle files</option>
         </select>
       </div>
-    </h4>
+    </div>
 
-    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+    <button class="border-0 p-0 align-self-start" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
     </button>
   </div>
@@ -20,7 +20,7 @@
   <div class="modal-body" [ngClass]="{ 'opacity-0': !loaded }">
     <ng-template #cancelBlock>
       <input
-        type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
         (click)="hide()" (key.enter)="hide()"
       >
     </ng-template>

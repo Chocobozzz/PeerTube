@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use 'form-mixins' as *;
 
 .modal-body ::ng-deep {
 
@@ -26,9 +27,6 @@
 }
 
 .peertube-select-container.title-select {
-  display: inline-block;
-  vertical-align: top;
-
   @include peertube-select-container(auto);
 }
 

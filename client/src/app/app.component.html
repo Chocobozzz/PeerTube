@@ -9,34 +9,17 @@
   [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn(), 'hotkeys-modal-opened': hotkeysModalOpened }"
 >
   <header class="root-header">
-
-    <div class="top-left-block">
-      <button
-        class="border-0 p-0" [title]="getToggleTitle()" (click)="menu.toggleMenu()" (keyup.enter)="menu.toggleMenu()"
-        [ariaExpanded]="menu.isMenuDisplayed" aria-controls="left-menu"
-      >
-        <span class="icon icon-menu"></span>
-      </button>
-
-      <a class="peertube-title c-hand" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
-        <span class="icon icon-logo"></span>
-        <span class="instance-name">{{ instanceName }}</span>
-      </a>
-    </div>
-
-    <div class="root-header-right">
-      <my-header class="w-100 d-flex justify-content-end"></my-header>
-    </div>
+    <my-header class="w-100"></my-header>
   </header>
 
   <div class="sub-header-container">
-    <my-menu id="left-menu" role="navigation" aria-label="Main menu" i18n-ariaLabel [hidden]="!menu.isMenuDisplayed"></my-menu>
+    <my-menu id="left-menu" role="navigation" aria-label="Main menu" i18n-ariaLabel></my-menu>
 
-    <main #mainContent tabindex="-1" id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
+    <main #mainContent tabindex="-1" id="content" class="main-col" [ngClass]="{ expanded: menu.isCollapsed() }">
 
       <div class="main-row">
 
-        <div *ngIf="broadcastMessage" class="broadcast-message alert" [ngClass]="broadcastMessage.class">
+        <div *ngIf="broadcastMessage" class="broadcast-message alert margin-content" [ngClass]="broadcastMessage.class">
           <div [innerHTML]="broadcastMessage.message"></div>
 
           <button
@@ -53,7 +36,7 @@
   </div>
 </div>
 
-<ngx-loading-bar [includeSpinner]="false" [color]="'var(--mainColor)'"></ngx-loading-bar>
+<ngx-loading-bar [includeSpinner]="false" color="var(--primary)"></ngx-loading-bar>
 
 <my-confirm></my-confirm>
 

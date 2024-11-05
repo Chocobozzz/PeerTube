@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 input[type=text] {
   @include peertube-input-text(300px);
@@ -7,19 +8,6 @@ input[type=text] {
 
 .peertube-select-container {
   @include peertube-select-container(auto);
-  @include margin-left(0.5rem);
-}
-
-.action-button-delete-selection {
-  display: inline-block;
-
-  @include peertube-button;
-  @include orange-button;
-  @include button-with-icon(21px);
-
-  my-global-icon {
-    @include apply-svg-color(#fff);
-  }
 }
 
 .action-button {
@@ -34,15 +22,6 @@ my-edit-button {
 }
 
 @include on-small-main-col {
-  h1 {
-    flex-direction: column;
-
-    > span,
-    .button-link {
-      margin-bottom: 10px;
-    }
-  }
-
   .action-button {
     margin-top: 10px;
 
@@ -51,18 +30,6 @@ my-edit-button {
 }
 
 @include on-mobile-main-col {
-  .videos-header {
-    flex-direction: column;
-
-    input[type=text] {
-      width: 100%;
-      margin-bottom: 12px;
-    }
-    .peertube-select-container {
-      @include margin-left(0);
-    }
-  }
-
   .action-button {
     @include margin-left(0);
   }

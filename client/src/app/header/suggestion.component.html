@@ -1,12 +1,12 @@
 <a
-  tabindex="-1" class="d-flex flex-auto align-center p-2" [class.focus-visible]="active"
+  tabindex="-1" class="d-flex flex-auto align-items-center p-2" [class.focus-visible]="active"
   [title]="getTitle()"
   [attr.aria-describedby]="describedby"
 >
   <my-global-icon class="me-2" iconName="search"></my-global-icon>
 
   <div
-    class="flex-auto overflow-hidden no-wrap d-flex align-center"
+    class="flex-auto overflow-hidden no-wrap d-flex align-items-center"
     [attr.aria-label]="result.text"
   >
     {{ result.text }}

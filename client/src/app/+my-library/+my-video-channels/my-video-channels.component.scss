@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .sub-title my-global-icon {
   position: relative;
@@ -32,7 +33,7 @@ my-edit-button {
   width: fit-content;
   display: flex;
   align-items: baseline;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
 
   @include disable-default-a-behaviour;
 }
@@ -44,13 +45,14 @@ my-edit-button {
 
 .video-channel-name {
   font-size: 14px;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
 
   @include margin-left(5px);
 }
 
 .video-channel-followers {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
+  text-decoration: none;
 }
 
 .video-channel-buttons {
@@ -69,10 +71,6 @@ my-edit-button {
 }
 
 @media screen and (max-width: $small-view) {
-  .video-channels-header {
-    text-align: center;
-  }
-
   .video-channel {
     padding-bottom: 10px;
 
@@ -101,17 +99,6 @@ my-edit-button {
   }
 }
 
-@media screen and (max-width: $mobile-view) {
-  .video-channels-header {
-    flex-direction: column;
-
-    input[type=text] {
-      width: 100% !important;
-      margin-bottom: 12px;
-    }
-  }
-}
-
 @media screen and (min-width: breakpoint(lg)) {
   :host-context(.main-col:not(.expanded)) {
     .video-channel-buttons {
@@ -121,9 +108,7 @@ my-edit-button {
 }
 
 @media screen and (min-width: $small-view) {
-  :host-context(.expanded) {
-    .video-channel-buttons {
-      float: right;
-    }
+  .video-channel-buttons {
+    float: right;
   }
 }

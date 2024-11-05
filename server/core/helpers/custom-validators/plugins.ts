@@ -93,7 +93,8 @@ function areCSSPathsValid (css: any[]) {
 }
 
 function isThemeNameValid (name: string) {
-  return isPluginNameValid(name)
+  return name && typeof name === 'string' &&
+    (isPluginNameValid(name) || name.startsWith('peertube-core-'))
 }
 
 function isPackageJSONValid (packageJSON: PluginPackageJSON, pluginType: PluginType_Type) {

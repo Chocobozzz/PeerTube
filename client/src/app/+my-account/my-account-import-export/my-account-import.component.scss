@@ -2,8 +2,7 @@
 @use '_mixins' as *;
 
 .button-file {
-  @include peertube-button-file(max-content);
-  @include orange-button;
+  width: max-content;
 }
 
 my-alert {

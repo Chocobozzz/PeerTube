@@ -16,7 +16,6 @@ import { AppComponent } from './app/app.component'
 import routes from './app/app.routes'
 import {
   CustomReuseStrategy,
-  MenuGuards,
   PluginService,
   PreloadSelectedModulesList,
   RedirectService,
@@ -73,7 +72,6 @@ const bootstrap = () => bootstrapApplication(AppComponent, {
     getFormProviders(),
 
     PreloadSelectedModulesList,
-    ...MenuGuards.guards,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
 
     provideRouter(routes,

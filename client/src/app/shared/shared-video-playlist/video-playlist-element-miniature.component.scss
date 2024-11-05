@@ -6,7 +6,7 @@ $thumbnail-width: 130px;
 $thumbnail-height: 72px;
 
 my-timestamp-input {
-  width: 85px;
+  width: 100px;
 }
 
 my-video-thumbnail {
@@ -29,7 +29,7 @@ my-video-thumbnail,
 .video {
   display: grid;
   grid-template-columns: 1fr auto;
-  background-color: pvar(--mainBackgroundColor);
+  background-color: pvar(--bg);
   padding: 10px;
   border-bottom: 1px solid $separator-border-color;
 
@@ -38,12 +38,13 @@ my-video-thumbnail,
   }
 
   a {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
 
     @include disable-default-a-behaviour;
   }
 
   > a {
+    grid-row: 1 / 3;
     display: flex;
     min-width: 0;
     align-items: center;
@@ -51,15 +52,14 @@ my-video-thumbnail,
 
     .position {
       font-weight: $font-semibold;
-      color: pvar(--greyForegroundColor);
+      color: pvar(--fg-300);
       min-width: 25px;
 
       my-global-icon {
         width: 17px;
         position: relative;
         left: -2px;
-
-        @include apply-svg-color(pvar(--greyForegroundColor));
+        color: pvar(--fg-300);
       }
     }
   }
@@ -86,7 +86,7 @@ my-video-thumbnail,
     }
 
     my-global-icon {
-      @include apply-svg-color(pvar(--greyForegroundColor));
+      color: pvar(--fg-300);
     }
   }
 
@@ -140,13 +140,13 @@ my-video-thumbnail,
 
   .video-info-owner,
   .video-info-timestamp {
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
   }
 }
 
 .video-info-owner,
 .video-info-timestamp,
-.video-miniature-created-at-views {
+.date-and-views {
   font-size: 14px;
 }
 
@@ -173,13 +173,6 @@ my-video-thumbnail,
 
     my-peertube-checkbox {
       @include margin-right(5px);
-    }
-
-    input {
-      margin-top: 10px;
-
-      @include peertube-button;
-      @include orange-button;
     }
   }
 }
@@ -231,37 +224,10 @@ my-video-thumbnail,
 }
 
 @media screen and (min-width: $small-view) {
-  :host-context(.expanded) {
-    @include more-dropdown-control();
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  :host-context(.expanded) {
-    @include edit-button-control();
-  }
+  @include more-dropdown-control();
+  @include edit-button-control();
 }
 
 @media screen and (max-width: $mobile-view) {
-  :host-context(.expanded) {
-    @include edit-button-in-mobile-view();
-  }
-}
-
-@media screen and (min-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include more-dropdown-control();
-  }
-}
-
-@media screen and (max-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include edit-button-control();
-  }
-}
-
-@media screen and (max-width: #{$mobile-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include edit-button-in-mobile-view();
-  }
+  @include edit-button-in-mobile-view();
 }

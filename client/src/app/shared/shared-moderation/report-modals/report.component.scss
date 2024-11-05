@@ -1,8 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 my-timestamp-input {
-  width: 85px;
+  width: 100px;
 }
 
 .information {

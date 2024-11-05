@@ -18,6 +18,10 @@ export const clientFilterHookObject = {
   'filter:api.recently-added-videos.videos.list.params': true,
   'filter:api.recently-added-videos.videos.list.result': true,
 
+  // Filter params/result of the function that fetch videos of the browse videos page
+  'filter:api.browse-videos.videos.list.params': true,
+  'filter:api.browse-videos.videos.list.result': true,
+
   // Filter params/result of the function that fetch videos of the user subscription page
   'filter:api.user-subscriptions-videos.videos.list.params': true,
   'filter:api.user-subscriptions-videos.videos.list.result': true,

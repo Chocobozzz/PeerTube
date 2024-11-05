@@ -31,7 +31,7 @@ import { LogsService } from './logs.service'
   ]
 })
 export class LogsComponent implements OnInit {
-  private static LOCAL_STORAGE_LOG_TYPE_CHOICE_KEY = 'admin-logs-log-type-choice'
+  private static LS_LOG_TYPE_CHOICE_KEY = 'admin-logs-log-type-choice'
 
   @ViewChild('logsElement', { static: true }) logsElement: ElementRef<HTMLElement>
   @ViewChild('logsContent', { static: true }) logsContent: ElementRef<HTMLElement>
@@ -69,7 +69,7 @@ export class LogsComponent implements OnInit {
   refresh () {
     this.logs = []
 
-    this.localStorage.setItem(LogsComponent.LOCAL_STORAGE_LOG_TYPE_CHOICE_KEY, this.logType)
+    this.localStorage.setItem(LogsComponent.LS_LOG_TYPE_CHOICE_KEY, this.logType)
 
     this.load()
   }
@@ -175,7 +175,7 @@ export class LogsComponent implements OnInit {
   }
 
   private loadPreviousChoices () {
-    this.logType = this.localStorage.getItem(LogsComponent.LOCAL_STORAGE_LOG_TYPE_CHOICE_KEY)
+    this.logType = this.localStorage.getItem(LogsComponent.LS_LOG_TYPE_CHOICE_KEY)
 
     if (this.logType !== 'standard' && this.logType !== 'audit') this.logType = 'audit'
   }

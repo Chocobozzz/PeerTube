@@ -29,6 +29,8 @@ my-embed {
 
 .right-form {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
 
   > *:not(:last-child) {
     @include margin-right(10px);

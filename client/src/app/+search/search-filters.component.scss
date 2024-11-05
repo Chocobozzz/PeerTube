@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 form {
   margin-top: 40px;
@@ -23,11 +24,6 @@ form {
 
 input[type=text] {
   @include peertube-input-text(100%);
-}
-
-input[type=submit] {
-  @include peertube-button-link;
-  @include orange-button;
 }
 
 .submit-button {

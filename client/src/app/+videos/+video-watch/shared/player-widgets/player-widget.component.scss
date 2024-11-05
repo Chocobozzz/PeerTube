@@ -7,12 +7,12 @@
   width: 25vw;
   max-width: 470px;
   height: 66vh;
-  background-color: pvar(--mainBackgroundColor);
+  background-color: pvar(--bg);
   overflow-y: auto;
   border-bottom: 1px solid $separator-border-color;
 
   .widget-header {
-    background-color: pvar(--submenuBackgroundColor);
+    background-color: pvar(--bg-secondary-400);
     padding: 1rem 2rem;
   }
 

@@ -1,206 +1,87 @@
-<div class="menu-wrapper">
-  <nav [ngClass]="{ 'is-logged-in': isLoggedIn }">
-    <div class="top-menu">
-      <div *ngIf="isLoggedIn" class="logged-in-block">
-        <div>
-          <div
-            class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
-            container="body" (openChange)="onDropdownOpenChange($event)"
-          >
-            <button class="border-0 text-start" ngbDropdownToggle>
-              <my-actor-avatar [actor]="user.account" actorType="account" size="34"></my-actor-avatar>
+<ng-template #moreInfoButton>
+  <my-button i18n class="mt-2 d-block" theme="secondary" icon="help" i18n-ariaLabel aria-label="More info" i18n ptRouterLink="/about" ptRouterLinkActive="active">
+    @if (!collapsed) {
+      More info
+    }
+  </my-button>
+</ng-template>
 
-              <div class="logged-in-info">
-                <div class="logged-in-display-name">{{ user.account?.displayName }}</div>
+<div class="menu-container" [ngClass]="{ collapsed: collapsed, 'logged-in': loggedIn }">
 
-                <div class="logged-in-username">&#64;{{ user.username }}</div>
-              </div>
+  <div class="main-menu-wrapper">
+    <div class="main-menu-scrollbar">
 
-              <div class="dropdown-toggle-indicator">
-                <span class="chevron-down"></span>
-              </div>
+      <div class="main-menu">
+        <div class="mobile-controls">
+          <span class="icon-logo"></span>
+
+          <my-button rounded="true" icon="cross" theme="tertiary" (click)="toggleMenu()"></my-button>
+        </div>
+
+        <div class="toggle-menu-container">
+          @if (collapsed) {
+            <button type="button" class="button-unstyle toggle-menu" i18n-title title="Display the lateral bar" (click)="toggleMenu()">
+              <my-global-icon class="transform-rotate-180" iconName="chevron-left"></my-global-icon>
             </button>
-
-            <div ngbDropdownMenu>
-              <a
-                *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
-                #profile (click)="onActiveLinkScrollToAnchor(profile)"
-              >
-                <my-global-icon iconName="go" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
-              </a>
-
-              <div class="dropdown-divider"></div>
-
-              <button
-                myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
-                ngbDropdownItem class="dropdown-item" (click)="openLanguageChooser()"
-              >
-                <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
-                <span i18n>Interface:</span>
-                <span class="ms-auto muted">{{ currentInterfaceLanguage }}</span>
-              </button>
-
-              <a ngbDropdownItem class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
-                #settingsLanguagesSubtitles (click)="onActiveLinkScrollToAnchor(settingsLanguagesSubtitles)">
-                <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
-                <span i18n>Videos:</span>
-                <span class="ms-auto muted">{{ videoLanguages.join(', ') }}</span>
-              </a>
-
-              <a ngbDropdownItem class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
-                fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
-                (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)"
-              >
-                <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy === 'display'" iconName="eye-open" aria-hidden="true"></my-global-icon>
-                <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy !== 'display'" iconName="eye-close" aria-hidden="true"></my-global-icon>
-                <span i18n>Sensitive:</span>
-                <span class="ms-auto muted">{{ nsfwPolicy }}</span>
-              </a>
-
-              <button class="dropdown-item" (mousedown)="$event.stopPropagation(); toggleUseP2P()" [ariaPressed]="user.p2pEnabled" ngbDropdownItem>
-                <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
-                <ng-container i18n>Help share videos</ng-container>
-
-                <my-input-switch inputName="p2p-enabled" class="ms-auto" [preventUpdate]="true" [checked]="user.p2pEnabled"></my-input-switch>
-              </button>
-
-              <div class="dropdown-divider"></div>
-
-              <button *ngIf="!isInMobileView" ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
-                <my-global-icon iconName="command" aria-hidden="true"></my-global-icon>
-                <ng-container i18n>Keyboard shortcuts</ng-container>
-              </button>
-
-              <button ngbDropdownItem (click)="logout($event)" class="dropdown-item">
-                <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>
-                <ng-container i18n>Log out</ng-container>
-              </button>
-            </div>
-          </div>
-
-          @defer (when isLoggedIn) {
-            <my-notification-dropdown (navigate)="onActiveLinkScrollToAnchor($event)"></my-notification-dropdown>
+          } @else {
+            <button type="button" class="button-unstyle toggle-menu" i18n-title title= "Hide the lateral bar" (click)="toggleMenu()">
+              <my-global-icon iconName="chevron-left"></my-global-icon>
+            </button>
           }
         </div>
 
-        <ul class="logged-in-menu">
-          <li>
-            <a class="menu-link" routerLink="/my-account" routerLinkActive="active" #settingsLink (click)="onActiveLinkScrollToAnchor(settingsLink)">
-              <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>My account</ng-container>
-            </a>
-          </li>
+        <div *ngIf="!loggedIn" class="about about-top">
+          <div i18n [ngClass]="{ 'visually-hidden': collapsed }" class="block-title me-2">{{ instanceName }}</div>
 
-          <li>
-            <a class="menu-link" routerLink="/my-library" routerLinkActive="active" #libraryLink (click)="onActiveLinkScrollToAnchor(libraryLink)">
-              <my-global-icon class="channel-icon" iconName="channel" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>My library</ng-container>
-            </a>
-          </li>
+          <div [ngClass]="{ 'visually-hidden': collapsed }" class="description">{{ shortDescription }}</div>
 
-          <li>
-            <a class="menu-link" *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
-              <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>Administration</ng-container>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <ul *ngIf="!isLoggedIn" class="login-buttons-block">
-        <li>
-          <my-login-link className="peertube-button-link orange-button w-100 text-truncate"></my-login-link>
-        </li>
-
-        <li *ngIf="isRegistrationAllowed()" class="mt-2">
-          <a routerLink="/signup" class="create-account-button peertube-button-link text-truncate d-block">
-            <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
-          </a>
-        </li>
-      </ul>
-
-      <ng-container *ngFor="let menuSection of menuSections" >
-        <ul [ngClass]="[ menuSection.key, 'menu-block' ]">
-          <li i18n class="block-container">
-            <span class="block-title">{{ menuSection.title }}</span>
-
-            <ul class="mt-3">
-              <li *ngFor="let link of menuSection.links">
-                <a class="menu-link ps-0" [routerLink]="link.path" routerLinkActive="active">
-                  <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
-                  <ng-container>{{ link.shortLabel }}</ng-container>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </ng-container>
-    </div>
-
-    <div class="footer">
-      <ul class="footer-block">
-        <li>
-          <button *ngIf="!isLoggedIn" class="menu-link button-unstyle" (click)="openQuickSettings()">
-            <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-            <ng-container i18n>My settings</ng-container>
-          </button>
-        </li>
-
-        <li>
-          <a class="menu-link" routerLink="/about" routerLinkActive="active">
-            <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
-            <ng-container i18n>About</ng-container>
-          </a>
-        </li>
-      </ul>
-
-      <div class="footer-bottom">
-
-        <div class="footer-links">
-          <button *ngIf="isLoggedIn === false" (click)="openLanguageChooser()" class="button-unstyle" i18n>Interface: {{ currentInterfaceLanguage }}</button>
-
-          <ul class="d-flex flex-wrap">
-            <li>
-              <a i18n routerLink="/about/instance">Contact</a>
-            </li>
-
-            <li>
-              <a i18n href="https://joinpeertube.org/help" i18n-title title="Get help using PeerTube" target="_blank" rel="noopener noreferrer">Help</a>
-            </li>
-
-            <li>
-              <a i18n href="https://joinpeertube.org/faq" i18n-title title="FAQ (Frequently Asked Questions) - about PeerTube" target="_blank" rel="noopener noreferrer">FAQ</a>
-            </li>
-
-            <li>
-              <a i18n routerLink="/about/instance" fragment="statistics">Stats</a>
-            </li>
-
-            <li>
-              <a i18n href="https://docs.joinpeertube.org/api-rest-reference.html" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">API</a>
-            </li>
-
-            <li>
-              <button (click)="openHotkeysCheatSheet()" class="button-unstyle" i18n>Keyboard shortcuts</button>
-            </li>
-          </ul>
+          <ng-container *ngTemplateOutlet="moreInfoButton"></ng-container>
         </div>
 
-        <ul class="d-flex footer-copyleft" i18n-title title="powered by PeerTube - CopyLeft 2015-2024">
-          <li>
-            <a href="https://joinpeertube.org" class="me-1" target="_blank" rel="noopener noreferrer" i18n>powered by PeerTube</a>
-          </li>
+        <nav>
+          <ng-container *ngFor="let menuSection of menuSections" >
+            <ul class="ul-unstyle" [ngClass]="[ menuSection.key, 'menu-block' ]">
+              <li i18n>
+                <div class="block-title ellipsis" [ngClass]="{ 'visually-hidden': collapsed }">{{ menuSection.title }}</div>
 
-          <li>
-            <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" target="_blank" rel="noopener noreferrer">
-              <span aria-label="copyleft" class="d-inline-block" style="transform: rotateY(180deg)">&copy;</span> 2015-2024
-            </a>
-          </li>
-        </ul>
+                <ul class="ul-unstyle">
+                  <li *ngFor="let link of menuSection.links">
+                    @if (link.isPrimaryButton === true) {
+                      <my-button class="d-block menu-button" theme="primary" [icon]="link.icon" [ariaLabel]="link.label" [ptRouterLink]="link.path">
+                        @if (!collapsed) {
+                          {{ link.label }}
+                        }
+                      </my-button>
+                    } @else {
+                      <a class="menu-link ellipsis" [routerLink]="link.path" routerLinkActive="active">
+                        <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
+                        <span [ngClass]="{ 'visually-hidden': collapsed }">{{ link.label }}</span>
+                      </a>
+                    }
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </ng-container>
+        </nav>
+
+        <div *ngIf="loggedIn" class="about">
+          <div [ngClass]="{ 'visually-hidden': collapsed }" class="block-title">{{ instanceName }}</div>
+
+          <ng-container *ngTemplateOutlet="moreInfoButton"></ng-container>
+        </div>
       </div>
     </div>
-  </nav>
+  </div>
+
+  <div *ngIf="!collapsed" class="mt-3 mx-4">
+    <div class="fs-8" i18n>
+      Platform powered by <a class="" href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">PeerTube</a>
+    </div>
+
+    <a class="d-block fs-8" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer" i18n>Discover more platforms</a>
+  </div>
 </div>
 
-<my-language-chooser #languageChooserModal></my-language-chooser>
-<my-quick-settings #quickSettingsModal></my-quick-settings>
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events,@angular-eslint/template/interactive-supports-focus -->
+<div class="menu-overlay" [ngClass]="{ 'menu-collapsed': collapsed }" (click)="toggleMenu()"></div>

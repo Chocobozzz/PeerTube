@@ -15,7 +15,6 @@ import { BuildFormArgument } from '@app/shared/form-validators/form-validator.mo
 @Component({
   selector: 'my-plugin-show-installed',
   templateUrl: './plugin-show-installed.component.html',
-  styleUrls: [ './plugin-show-installed.component.scss' ],
   standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgFor, DynamicFormFieldComponent ]
 })

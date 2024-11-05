@@ -1,8 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 my-timestamp-input {
-  width: 85px;
+  width: 100px;
 }
 
 my-input-text {
@@ -32,10 +33,6 @@ my-input-text {
 .alert,
 .embed {
   margin-top: 20px;
-}
-
-.alert-private {
-  margin-top: 0;
 }
 
 .filters {
@@ -74,6 +71,7 @@ my-input-text {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 h5 {

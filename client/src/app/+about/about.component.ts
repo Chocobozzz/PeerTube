@@ -1,22 +1,30 @@
 import { Component } from '@angular/core'
-import { ScreenService } from '@app/core'
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
-import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-selector.directive'
-import { NgClass } from '@angular/common'
+import { RouterOutlet } from '@angular/router'
+import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 
 @Component({
   selector: 'my-about',
   templateUrl: './about.component.html',
   standalone: true,
-  imports: [ NgClass, PluginSelectorDirective, RouterLink, RouterLinkActive, RouterOutlet ]
+  imports: [ RouterOutlet, HorizontalMenuComponent ]
 })
 
 export class AboutComponent {
-  constructor (
-    private screenService: ScreenService
-  ) { }
-
-  get isBroadcastMessageDisplayed () {
-    return this.screenService.isBroadcastMessageDisplayed
-  }
+  menuEntries: HorizontalMenuEntry[] = [
+    {
+      label: $localize`Platform`,
+      routerLink: '/about/instance',
+      pluginSelectorId: 'about-menu-instance'
+    },
+    {
+      label: $localize`PeerTube`,
+      routerLink: '/about/peertube',
+      pluginSelectorId: 'about-menu-peertube'
+    },
+    {
+      label: $localize`Network`,
+      routerLink: '/about/follows',
+      pluginSelectorId: 'about-menu-network'
+    }
+  ]
 }

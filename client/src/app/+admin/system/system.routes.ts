@@ -6,7 +6,7 @@ import { JobsComponent } from './jobs/jobs.component'
 import { LogsComponent } from './logs'
 import { RunnersRoutes } from './runners'
 
-export const SystemRoutes: Routes = [
+export const systemRoutes: Routes = [
   {
     path: 'system',
     children: [

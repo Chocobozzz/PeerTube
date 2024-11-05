@@ -87,12 +87,14 @@ export class MyVideoPlaylistsComponent {
 
   onSearch (search: string) {
     this.search = search
+    this.pagination.currentPage = 1
+
     this.loadVideoPlaylists(true)
   }
 
   getTotalTitle () {
     return formatICU(
-      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {playlist} other {playlists}}`,
+      $localize`${this.pagination.totalItems} {total, plural, =1 {playlist} other {playlists}}`,
       { total: this.pagination.totalItems }
     )
   }

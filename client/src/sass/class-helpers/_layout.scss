@@ -18,11 +18,10 @@
     }
 
     h2 {
-      text-transform: uppercase;
-      color: pvar(--mainColor);
-      font-weight: $font-bold;
       font-size: 1rem;
       margin-bottom: 10px;
+
+      @include section-label;
 
       &.pt-title-danger {
         color: pvar(--red);
@@ -47,4 +46,16 @@
 // See https://css-tricks.com/flexbox-truncated-text/
 .min-width-0 {
   min-width: 0;
+}
+
+.d-none-mw {
+  @include on-mobile-main-col {
+    display: none !important;
+  }
+}
+
+.d-none-sw {
+  @include on-small-main-col {
+    display: none !important;
+  }
 }

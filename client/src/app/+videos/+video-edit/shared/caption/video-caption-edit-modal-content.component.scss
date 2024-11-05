@@ -18,11 +18,11 @@
 
   &.active,
   &:hover {
-    background: pvar(--mainBackgroundHoverColor);
+    background: pvar(--bg-secondary-300);
   }
 }
 
 my-timestamp-input {
-  width: 100px;
+  width: 115px;
   display: inline-block;
 }

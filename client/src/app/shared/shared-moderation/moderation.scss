@@ -48,7 +48,8 @@ my-action-dropdown.show {
 
 .table-comment-link,
 .table-account-link {
-  color: var(--mainForegroundColor);
+  text-decoration: none;
+  color: pvar(--fg);
 
   @include disable-outline;
 

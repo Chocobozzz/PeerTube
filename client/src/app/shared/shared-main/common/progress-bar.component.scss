@@ -1,8 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
 .progress-container {
-  background-color: pvar(--greyBackgroundColor);
+  background-color: pvar(--bg-secondary-500);
   display: flex;
   overflow: hidden;
   height: 2rem;
@@ -13,7 +14,7 @@
 
   span {
     position: absolute;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-400);
     line-height: 2rem;
     margin: 0 12px;
   }
@@ -28,8 +29,8 @@
 
   .progress-bar {
     font-weight: $font-semibold;
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--mainColor);
+    color: pvar(--bg);
+    background-color: pvar(--primary);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -65,5 +66,5 @@
   }
 
   @include disable-outline;
-  @include button-focus(pvar(--mainColorLightest));
+  @include button-focus(pvar(--primary-100));
 }

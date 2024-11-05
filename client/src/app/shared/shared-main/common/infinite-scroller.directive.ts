@@ -1,7 +1,7 @@
+import { AfterViewChecked, booleanAttribute, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { PeerTubeRouterService, RouterSetting } from '@app/core'
 import { fromEvent, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
-import { AfterViewChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { PeerTubeRouterService, RouterSetting } from '@app/core'
 
 @Directive({
   selector: '[myInfiniteScroller]',
@@ -9,11 +9,11 @@ import { PeerTubeRouterService, RouterSetting } from '@app/core'
 })
 export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewChecked {
   @Input() percentLimit = 70
-  @Input() onItself = false
+  @Input({ transform: booleanAttribute }) onItself = false
   @Input() dataObservable: Observable<any[]>
 
   // Add angular state in query params to reuse the routed component
-  @Input() setAngularState: boolean
+  @Input({ transform: booleanAttribute }) setAngularState: boolean
   @Input() parentDisabled = false
 
   @Output() nearOfBottom = new EventEmitter<void>()

@@ -4,15 +4,9 @@
   </div>
 </ng-template>
 
-<h1 class="title-page-v2">
-  <strong class="underline-orange">{{ instanceName }}</strong>
-
-  >
-
-  <ng-container i18n>Login</ng-container>
-</h1>
-
 <div class="margin-content">
+  <h1 class="title-page" i18n>Login on {{ instanceName }}</h1>
+
   <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
 
     <my-alert type="primary">
@@ -22,25 +16,25 @@
 
       @if (signupAllowed) {
         <p i18n>
-          This instance allows registration. However, be careful to check the <a class="link-orange terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
-          You may also search for another instance to match your exact needs at: <a class="link-orange" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+          This instance allows registration. However, be careful to check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
+          You may also search for another instance to match your exact needs at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       } @else {
         <p i18n>
-          Currently this instance doesn't allow for user registration, you may check the <a class="link-orange terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
-          Find yours among multiple instances at: <a class="link-orange" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+          Currently this instance doesn't allow for user registration, you may check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
+          Find yours among multiple instances at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       }
     </my-alert>
 
     <my-alert type="danger" i18n *ngIf="externalAuthError">
-      Sorry but there was an issue with the external login process. Please <a class="link-orange" routerLink="/about">contact an administrator</a>.
+      Sorry but there was an issue with the external login process. Please <a class="link-primary" routerLink="/about">contact an administrator</a>.
     </my-alert>
 
     <my-alert *ngIf="error" type="danger">
       {{ error }}
 
-      <a *ngIf="error === 'User email is not verified.'" class="ms-1 link-orange" i18n routerLink="/verify-account/ask-send-email">
+      <a *ngIf="error === 'User email is not verified.'" class="ms-1 link-primary" i18n routerLink="/verify-account/ask-send-email">
         Request new verification email
       </a>
     </my-alert>
@@ -87,16 +81,16 @@
             ></my-input-text>
           </div>
 
-          <input type="submit" class="peertube-button orange-button w-100" i18n-value value="Login" [disabled]="!form.valid">
+          <input type="submit" class="peertube-button primary-button w-100" i18n-value value="Login" [disabled]="!form.valid">
 
           <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5 text-center">
-            <button type="button" i18n class="button-unstyle link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
+            <button type="button" i18n class="button-unstyle link-primary mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
               I forgot my password
             </button>
 
             <ng-container *ngIf="signupAllowed">
               <span class="lh-1">·</span>
-              <a i18n routerLink="/signup" class="link-orange mx-3">Create an account</a>
+              <a i18n routerLink="/signup" class="link-primary mx-3">Create an account</a>
             </ng-container>
           </div>
         </form>
@@ -158,12 +152,12 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button d-none d-sm-block"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button d-none d-sm-block"
       (click)="hideForgotPasswordModal()" (key.enter)="hideForgotPasswordModal()"
     >
 
     <input
-      type="submit" i18n-value="Password reset button" value="Reset" class="peertube-button orange-button"
+      type="submit" i18n-value="Password reset button" value="Reset" class="peertube-button primary-button"
       (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
     >
   </div>

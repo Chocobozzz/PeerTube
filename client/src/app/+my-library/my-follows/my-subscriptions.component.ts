@@ -55,12 +55,14 @@ export class MySubscriptionsComponent {
 
   onSearch (search: string) {
     this.search = search
+    this.pagination.currentPage = 1
+
     this.loadSubscriptions(false)
   }
 
   getTotalTitle () {
     return formatICU(
-      $localize`You have ${this.pagination.totalItems} {total, plural, =1 {subscription} other {subscriptions}}`,
+      $localize`${this.pagination.totalItems} {total, plural, =1 {subscription} other {subscriptions}}`,
       { total: this.pagination.totalItems }
     )
   }

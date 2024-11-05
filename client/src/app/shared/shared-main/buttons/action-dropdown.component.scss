@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
 .dropdown-divider:last-child {
   display: none;
@@ -8,40 +9,12 @@
 .action-button {
   display: inline-block;
 
-  @include peertube-button;
-
-  &.button-styled {
-
-    &.grey {
-      @include grey-button;
-    }
-
-    &.orange {
-      @include orange-button;
-    }
-
-    &:hover,
-    &:active,
-    &:focus {
-      background-color: $grey-background-color;
-    }
-  }
-
   &::after {
     display: none;
   }
 
-  .more-icon {
-    width: 21px;
-
-    ::ng-deep {
-      @include apply-svg-color(pvar(--actionButtonColor));
-    }
-  }
-
-  &.small {
-    font-size: 14px;
-    padding: 0 10px;
+  &.icon-only {
+    @include button-with-icon(21px, 0, 0);
   }
 }
 

@@ -7,13 +7,14 @@ import { HTMLServerConfig, User, UserUpdateMe } from '@peertube/peertube-models'
 import { SelectOptionsItem } from 'src/types'
 import { NgFor, NgIf } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { SelectOptionsComponent } from '../shared-forms/select/select-options.component'
 
 @Component({
   selector: 'my-user-interface-settings',
   templateUrl: './user-interface-settings.component.html',
   styleUrls: [ './user-interface-settings.component.scss' ],
   standalone: true,
-  imports: [ FormsModule, ReactiveFormsModule, NgFor, NgIf ]
+  imports: [ FormsModule, ReactiveFormsModule, NgFor, NgIf, SelectOptionsComponent ]
 })
 export class UserInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User
@@ -44,7 +45,13 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.availableThemes = this.themeService.buildAvailableThemes()
+    this.availableThemes = [
+      { id: 'instance-default', label: $localize`${this.instanceName} theme`, description: this.getDefaultInstanceThemeLabel() },
+
+      this.themeService.getDefaultThemeItem(),
+
+      ...this.themeService.buildAvailableThemes()
+    ]
 
     this.buildForm({
       theme: null
@@ -64,20 +71,6 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   ngOnDestroy () {
     this.formValuesWatcher?.unsubscribe()
-  }
-
-  getDefaultThemeLabel () {
-    return this.themeService.getDefaultThemeLabel()
-  }
-
-  getDefaultInstanceThemeLabel () {
-    const theme = this.serverConfig.theme.default
-
-    if (theme === 'default') {
-      return this.getDefaultThemeLabel()
-    }
-
-    return theme
   }
 
   updateInterfaceSettings () {
@@ -105,4 +98,15 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
     this.userService.updateMyAnonymousProfile(details)
     if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
   }
+
+  private getDefaultInstanceThemeLabel () {
+    const theme = this.serverConfig.theme.default
+
+    if (theme === 'default') {
+      return this.themeService.getDefaultThemeItem().label
+    }
+
+    return theme
+  }
+
 }

@@ -125,6 +125,7 @@
               <p-calendar
                 id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
                 [firstDayOfWeek]="0" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+                baseZIndex="20000"
               >
               </p-calendar>
 
@@ -243,7 +244,7 @@
             <my-alert type="primary" i18n>
               Chapters can also be set in the video description.
 
-              Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank">in the PeerTube documentation</a>
+              Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank" class="alert-link">in the PeerTube documentation</a>
             </my-alert>
 
             <ng-container *ngFor="let chapterControl of getChaptersFormArray().controls; let i = index">
@@ -261,7 +262,7 @@
                 <div class="position">{{ i + 1 }}</div>
 
                 <my-timestamp-input
-                  class="d-block" [disableBorder]="false" [inputName]="'timecode[' + i + ']'"
+                  class="d-block" enableBorder="true" [inputName]="'timecode[' + i + ']'"
                   [maxTimestamp]="publishedVideo?.duration" formControlName="timecode"
                 ></my-timestamp-input>
 
@@ -434,6 +435,7 @@
               <p-calendar
                 inputId="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
                 [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+                baseZIndex="20000"
               >
               </p-calendar>
 

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core'
+import { sortBy } from '@peertube/peertube-core-utils'
+import { HTMLServerConfig, ServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { capitalizeFirstLetter } from '@root-helpers/string'
 import { UserLocalStorageKeys } from '@root-helpers/users'
-import { HTMLServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
+import { getLuminance, parse, toHSLA } from 'color-bits'
+import debug from 'debug'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
 import { PluginService } from '../plugins/plugin.service'
@@ -10,13 +13,17 @@ import { ServerService } from '../server'
 import { UserService } from '../users/user.service'
 import { LocalStorageService } from '../wrappers/storage.service'
 
+const debugLogger = debug('peertube:theme')
+
 @Injectable()
 export class ThemeService {
-
+  private oldInjectedProperties: string[] = []
   private oldThemeName: string
+
+  private internalThemes: string[] = []
   private themes: ServerConfigTheme[] = []
 
-  private themeFromLocalStorage: ServerConfigTheme
+  private themeFromLocalStorage: Pick<ServerConfigTheme, 'name' | 'version'>
   private themeDOMLinksFromLocalStorage: HTMLLinkElement[] = []
 
   private serverConfig: HTMLServerConfig
@@ -30,10 +37,12 @@ export class ThemeService {
   ) {}
 
   initialize () {
+    this.serverConfig = this.server.getHTMLConfig()
+    this.internalThemes = this.serverConfig.theme.builtIn.map(t => t.name)
+
     // Try to load from local storage first, so we don't have to wait network requests
     this.loadAndSetFromLocalStorage()
 
-    this.serverConfig = this.server.getHTMLConfig()
     const themes = this.serverConfig.theme.registered
 
     this.removeThemeFromLocalStorageIfNeeded(themes)
@@ -42,17 +51,30 @@ export class ThemeService {
     this.listenUserTheme()
   }
 
-  getDefaultThemeLabel () {
-    if (this.hasDarkTheme()) {
-      return $localize`Light/Orange or Dark`
+  getDefaultThemeItem () {
+    return {
+      label: $localize`Light (Beige) or Dark (Brown)`,
+      id: 'default',
+      description: $localize`PeerTube selects the appropriate theme depending on web browser preferences`
     }
-
-    return $localize`Light/Orange`
   }
 
   buildAvailableThemes () {
-    return this.serverConfig.theme.registered
-               .map(t => ({ id: t.name, label: capitalizeFirstLetter(t.name) }))
+    return [
+      ...this.serverConfig.theme.builtIn.map(t => {
+        if (t.name === 'peertube-core-dark-brown') {
+          return { id: t.name, label: $localize`Dark (Brown)` }
+        }
+
+        if (t.name === 'peertube-core-light-beige') {
+          return { id: t.name, label: $localize`Light (Beige)` }
+        }
+
+        return { id: t.name, label: capitalizeFirstLetter(t.name) }
+      }),
+
+      ...this.serverConfig.theme.registered.map(t => ({ id: t.name, label: capitalizeFirstLetter(t.name) }))
+    ]
   }
 
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {
@@ -96,14 +118,14 @@ export class ThemeService {
     if (instanceTheme !== 'default') return instanceTheme
 
     // Default to dark theme if available and wanted by the user
-    if (this.hasDarkTheme() && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark'
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'peertube-core-dark-brown' satisfies ServerConfig['theme']['builtIn'][0]['name']
     }
 
     return instanceTheme
   }
 
-  private loadTheme (name: string) {
+  private loadThemeStyle (name: string) {
     const links = document.getElementsByTagName('link')
     for (let i = 0; i < links.length; i++) {
       const link = links[i]
@@ -111,19 +133,27 @@ export class ThemeService {
         link.disabled = link.getAttribute('title') !== name
       }
     }
+
+    document.body.dataset.ptTheme = name
   }
 
   private updateCurrentTheme () {
-    if (this.oldThemeName) this.removeThemePlugins(this.oldThemeName)
-
     const currentTheme = this.getCurrentTheme()
+    if (this.oldThemeName === currentTheme) return
+
+    if (this.oldThemeName) this.removeThemePlugins(this.oldThemeName)
 
     logger.info(`Enabling ${currentTheme} theme.`)
 
-    this.loadTheme(currentTheme)
+    this.loadThemeStyle(currentTheme)
 
     const theme = this.getTheme(currentTheme)
-    if (theme) {
+
+    if (this.internalThemes.includes(currentTheme)) {
+      logger.info(`Enabling internal theme ${currentTheme}`)
+
+      this.localStorageService.setItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, JSON.stringify({ name: currentTheme }), false)
+    } else if (theme) {
       logger.info(`Adding scripts of theme ${currentTheme}`)
 
       this.pluginService.addPlugin(theme, true)
@@ -135,7 +165,117 @@ export class ThemeService {
       this.localStorageService.removeItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, false)
     }
 
+    setTimeout(() => this.injectColorPalette(), 0)
+
     this.oldThemeName = currentTheme
+  }
+
+  private injectColorPalette () {
+    const rootStyle = document.body.style
+    const computedStyle = getComputedStyle(document.body)
+
+    // FIXME: Remove previously injected properties
+    for (const property of this.oldInjectedProperties) {
+      rootStyle.removeProperty(property)
+    }
+
+    this.oldInjectedProperties = []
+
+    const toProcess: { prefix: string, invertIfDark: boolean, fallbacks?: Record<string, string> }[] = [
+      { prefix: 'primary', invertIfDark: true },
+      { prefix: 'bg-secondary', invertIfDark: true },
+      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' } }
+    ]
+
+    const darkTheme = this.isDarkTheme(computedStyle)
+    if (darkTheme) {
+      debugLogger('Detected dark theme')
+    }
+
+    for (const { prefix, invertIfDark, fallbacks = {} } of toProcess) {
+      const mainColor = computedStyle.getPropertyValue('--' + prefix)
+
+      const darkInverter = invertIfDark && darkTheme
+        ? -1
+        : 1
+
+      if (!mainColor) {
+        console.error(`Cannot create palette of nonexistent "--${prefix}" CSS body variable`)
+        continue
+      }
+
+      const mainColorHSL = toHSLA(parse(mainColor))
+
+      // Inject in alphabetical order for easy debug
+      const toInject: { id: number, key: string, value: string }[] = [
+        { id: 500, key: `--${prefix}-500`, value: this.toHSLStr(mainColorHSL) }
+      ]
+
+      for (const j of [ -1, 1 ]) {
+        let lastColorHSL = { ...mainColorHSL }
+
+        for (let i = 1; i <= 9; i++) {
+          const suffix = 500 + (50 * i * j)
+          const key = `--${prefix}-${suffix}`
+
+          const existingValue = computedStyle.getPropertyValue(key)
+          if (!existingValue || existingValue === '0') {
+            const newLuminance = this.buildNewLuminance(lastColorHSL, j, darkInverter)
+            const newColorHSL = { ...lastColorHSL, l: newLuminance }
+
+            const newColorStr = this.toHSLStr(newColorHSL)
+
+            const value = fallbacks[key]
+              ? `var(${fallbacks[key]}, ${newColorStr})`
+              : newColorStr
+
+            toInject.push({ id: suffix, key, value })
+
+            lastColorHSL = newColorHSL
+
+            debugLogger(`Injected theme palette ${key} -> ${value}`)
+          } else {
+            lastColorHSL = toHSLA(parse(existingValue))
+          }
+        }
+      }
+
+      for (const { key, value } of sortBy(toInject, 'id')) {
+        rootStyle.setProperty(key, value)
+        this.oldInjectedProperties.push(key)
+      }
+    }
+
+    document.body.dataset.bsTheme = darkTheme
+      ? 'dark'
+      : ''
+  }
+
+  private buildNewLuminance (base: { l: number }, factor: number, darkInverter: number) {
+    return Math.max(Math.min(100, Math.round(base.l + (factor * 5 * -1 * darkInverter))), 0)
+  }
+
+  private toHSLStr (c: { h: number, s: number, l: number, a: number }) {
+    return `hsl(${Math.round(c.h)} ${Math.round(c.s)}% ${Math.round(c.l)}% / ${Math.round(c.a)})`
+  }
+
+  private isDarkTheme (computedStyle: CSSStyleDeclaration) {
+    const deprecatedFG = computedStyle.getPropertyValue('--mainForegroundColor')
+    const deprecatedBG = computedStyle.getPropertyValue('--mainBackgroundColor')
+
+    if (computedStyle.getPropertyValue('--is-dark') === '1') {
+      return true
+    } else if (deprecatedFG && deprecatedBG) {
+      try {
+        if (getLuminance(parse(deprecatedBG)) < getLuminance(parse(deprecatedFG))) {
+          return true
+        }
+      } catch (err) {
+        console.error('Cannot parse deprecated CSS variables', err)
+      }
+    }
+
+    return false
   }
 
   private listenUserTheme () {
@@ -163,7 +303,10 @@ export class ThemeService {
       const lastActiveTheme = JSON.parse(lastActiveThemeString)
       this.themeFromLocalStorage = lastActiveTheme
 
-      this.injectThemes([ lastActiveTheme ], true)
+      if (!this.internalThemes.includes(this.themeFromLocalStorage.name)) {
+        this.injectThemes([ lastActiveTheme ], true)
+      }
+
       this.updateCurrentTheme()
     } catch (err) {
       logger.error('Cannot parse last active theme.', err)
@@ -204,9 +347,5 @@ export class ThemeService {
 
   private getTheme (name: string) {
     return this.themes.find(t => t.name === name)
-  }
-
-  private hasDarkTheme () {
-    return this.serverConfig.theme.registered.some(t => t.name === 'dark')
   }
 }

@@ -1,9 +1,12 @@
 <div class="root">
-  <a i18n class="visually-hidden-focusable skip-to-content-sub-menu" href="#my-library-content" (click)="$event.preventDefault(); myLibraryContent.focus()">Skip the sub menu</a>
 
-  <my-top-menu-dropdown [menuEntries]="menuEntries"></my-top-menu-dropdown>
+  <div class="margin-content">
+    <a i18n class="visually-hidden-focusable skip-to-content-sub-menu" href="#my-library-content-content" (click)="$event.preventDefault(); myLibraryContent.focus()">Skip the sub menu</a>
 
-  <div #myLibraryContent tabindex="-1" id="my-library-content" class="margin-content pb-5 outline-0" [ngClass]="{ 'sub-menu-offset-content': !isBroadcastMessageDisplayed }">
+    <my-horizontal-menu i18n-h1 h1="My library" [menuEntries]="menuEntries"></my-horizontal-menu>
+  </div>
+
+  <div #myLibraryContent tabindex="-1" id="my-library-content" class="margin-content pb-5 outline-0">
     <router-outlet></router-outlet>
   </div>
 </div>

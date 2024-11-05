@@ -1,11 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
-    <h1 i18n>My watch history</h1>
-    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary">{{ pagination.totalItems }}</span>
-  </div>
-</div>
-
 <div class="top-buttons">
   <div class="search-wrapper">
     <my-advanced-input-filter [emitOnInit]="false" (search)="onSearch($event)"></my-advanced-input-filter>
@@ -16,10 +8,7 @@
     <label for="track-watch-history" i18n>Track watch history</label>
   </div>
 
-  <button class="delete-history" (click)="clearAllHistory()" i18n>
-    <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
-    Clear all history
-  </button>
+  <my-button icon="delete" (click)="clearAllHistory()" i18n>Clear all history</my-button>
 </div>
 
 <my-videos-selection

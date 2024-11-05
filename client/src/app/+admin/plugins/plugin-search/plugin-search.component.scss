@@ -1,20 +1,23 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .result-and-search {
   font-size: 22px;
   font-weight: 600;
   margin: 30px 0 15px;
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+  justify-content: space-between;
 
   my-global-icon {
+    @include global-icon-size(24px);
     @include margin-right(5px);
   }
 }
 
 .search-bar {
-  @include margin-left(auto);
-
   input {
     @include peertube-input-text(500px);
   }

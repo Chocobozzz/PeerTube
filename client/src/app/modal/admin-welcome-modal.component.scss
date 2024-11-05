@@ -46,7 +46,7 @@ li {
 }
 
 .link-block {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   padding: 10px;
   transition: background-color 0.2s ease-in;
   flex-basis: 33%;

@@ -2,26 +2,21 @@
 @use '_mixins' as *;
 @use '_account-channel-page' as *;
 @use '_miniature' as *;
+@use '_button-mixins' as *;
+
+$owner-block-bg: pvar(--bg-secondary-350);
 
 .root {
-  --myGlobalTopPadding: 60px;
-  --myChannelImgMargin: 30px;
-  --myFontSize: 16px;
-  --myGreyChannelFontSize: 16px;
-  --myGreyOwnerFontSize: 14px;
-}
-
-.section-label {
-  @include section-label-responsive;
-}
-
-.links {
-  @include grid-videos-miniature-margins;
+  --co-channel-img-margin: 30px;
+  --co-font-size: 16px;
+  --co-channel-handle-font-size: 16px;
+  --co-owner-handle-font-size: 14px;
 }
 
 .actor-info {
   min-width: 1px;
   width: 100%;
+  align-items: flex-start;
 
   > h4,
   > .actor-handle {
@@ -34,27 +29,18 @@
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
 
-  background-color: pvar(--channelBackgroundColor);
-  padding-top: var(--myGlobalTopPadding);
-  font-size: var(--myFontSize);
+  font-size: var(--co-font-size);
 
-  // Use the same margin as the videos grid
-  @include grid-videos-miniature-margins(false, 15px);
   @include margin-bottom(3rem);
 }
 
 .channel-avatar-row {
-  @include avatar-row-responsive(var(--myChannelImgMargin), var(--myGreyChannelFontSize));
-}
-
-.support-button {
-  @include button-with-icon(21px, 0, -1px);
+  @include avatar-row-responsive(var(--co-channel-img-margin), var(--co-channel-handle-font-size));
 }
 
 .channel-description {
   grid-column: 1;
   word-break: break-word;
-  padding-bottom: var(--myGlobalTopPadding);
 }
 
 .show-more {
@@ -97,10 +83,11 @@
 }
 
 .owner-block {
-  background-color: pvar(--mainBackgroundColor);
+  background-color: $owner-block-bg;
   padding: 30px;
   width: 300px;
-  font-size: var(--myFontSize);
+  font-size: var(--co-font-size);
+  border-radius: 5px;
 
   .avatar-row {
     display: flex;
@@ -115,13 +102,13 @@
       margin: 0;
 
       a {
-        color: pvar(--mainForegroundColor);
+        color: pvar(--fg);
       }
     }
 
     .actor-handle {
-      font-size: var(--myGreyOwnerFontSize);
-      color: pvar(--greyForegroundColor);
+      font-size: var(--co-owner-handle-font-size);
+      color: pvar(--fg-300);
     }
   }
 
@@ -129,15 +116,8 @@
     max-height: 140px;
     word-break: break-word;
 
-    @include fade-text(120px, pvar(--mainBackgroundColor));
+    @include fade-text(120px, $owner-block-bg);
   }
-}
-
-.view-account.short {
-  margin-top: 30px;
-
-  @include peertube-button-link;
-  @include orange-button-inverted;
 }
 
 .view-account.complete {
@@ -163,8 +143,7 @@ my-copy-button {
 
 @media screen and (max-width: 1100px) {
   .root {
-    --myGlobalTopPadding: 45px;
-    --myChannelImgMargin: 15px;
+    --co-channel-img-margin: 15px;
   }
 
   .channel-info {
@@ -176,7 +155,7 @@ my-copy-button {
   .channel-description:not(.expanded) {
     max-height: 70px;
 
-    @include fade-text(30px, pvar(--channelBackgroundColor));
+    @include fade-text(30px, pvar(--bg));
   }
 
   .show-more {
@@ -199,16 +178,14 @@ my-copy-button {
 
   .bottom-owner {
     display: block;
-    width: 100%;
     border-bottom: 2px solid $separator-border-color;
-    padding: var(--myGlobalTopPadding) 45px;
     margin-bottom: 60px;
   }
 
   .owner-block {
     display: grid;
     width: 100%;
-    padding: 0;
+    padding: 1rem;
 
     .avatar-row {
       grid-column: 1;
@@ -220,7 +197,7 @@ my-copy-button {
       grid-column: 2;
       max-height: 70px;
 
-      @include fade-text(30px, pvar(--mainBackgroundColor));
+      @include fade-text(30px, $owner-block-bg);
     }
 
     .view-account {
@@ -232,7 +209,6 @@ my-copy-button {
     display: block;
     text-align: end;
     margin-top: 10px;
-    color: pvar(--mainColor);
   }
 
   .view-account.short {
@@ -242,10 +218,9 @@ my-copy-button {
 
 @media screen and (max-width: $mobile-view) {
   .root {
-    --myGlobalTopPadding: 15px;
-    --myFontSize: 14px;
-    --myGreyChannelFontSize: 13px;
-    --myGreyOwnerFontSize: 13px;
+    --co-font-size: 14px;
+    --co-channel-handle-font-size: 13px;
+    --co-owner-handle-font-size: 13px;
   }
 
   .links {

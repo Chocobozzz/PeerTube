@@ -21,7 +21,6 @@ export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReus
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
-  title = $localize`Videos`
   defaultSort = '-publishedAt' as VideoSortField
 
   account: Account

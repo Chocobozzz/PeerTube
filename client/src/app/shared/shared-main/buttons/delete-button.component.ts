@@ -5,7 +5,7 @@ import { ButtonComponent } from './button.component'
   selector: 'my-delete-button',
   template: `
     <my-button
-      icon="delete" className="grey-button"
+      icon="delete" theme="secondary"
       [disabled]="disabled" [label]="label" [title]="title"
       [responsiveLabel]="responsiveLabel"
     ></my-button>

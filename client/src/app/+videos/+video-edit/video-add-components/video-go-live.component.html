@@ -29,6 +29,7 @@
     </div>
 
     <input
+      class="peertube-button primary-button"
       [disabled]="firstStepPermanentLive !== true && firstStepPermanentLive !== false"
       type="button" i18n-value value="Go Live" (click)="goLive()"
     />
@@ -57,7 +58,7 @@
 
   <div class="submit-container">
     <my-button
-      theme="orange" i18n-label label="Update" icon="circle-tick"
+      theme="primary" i18n-label label="Update" icon="circle-tick"
       (click)="updateSecondStep()" [disabled]="!form.valid || isUpdatingVideo === true"
     ></my-button>
   </div>

@@ -3,7 +3,7 @@ import { browserSleep, go } from '../utils'
 export class AdminPluginPage {
 
   async navigateToPluginSearch () {
-    await go('/admin/plugins/search')
+    await go('/admin/settings/plugins/search')
 
     await $('my-plugin-search').waitForDisplayed()
   }

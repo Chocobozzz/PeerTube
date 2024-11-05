@@ -66,25 +66,25 @@ export class VideoListPage {
   }
 
   async getVideosListName () {
-    const elems = await $$('.videos .video-miniature .video-miniature-name')
+    const elems = await $$('.videos .video-miniature .video-name')
     const texts = await elems.map(e => e.getText())
 
     return texts.map(t => t.trim())
   }
 
   videoExists (name: string) {
-    return $('.video-miniature-name=' + name).isDisplayed()
+    return $('.video-name=' + name).isDisplayed()
   }
 
   async videoIsBlurred (name: string) {
-    const filter = await $('.video-miniature-name=' + name).getCSSProperty('filter')
+    const filter = await $('.video-name=' + name).getCSSProperty('filter')
 
     return filter.value !== 'none'
   }
 
   async clickOnVideo (videoName: string) {
     const video = async () => {
-      const videos = await $$('.videos .video-miniature .video-miniature-name').filter(async e => {
+      const videos = await $$('.videos .video-miniature .video-name').filter(async e => {
         const t = await e.getText()
 
         return t === videoName
@@ -106,7 +106,7 @@ export class VideoListPage {
 
   async clickOnFirstVideo () {
     const video = () => $('.videos .video-miniature .video-thumbnail')
-    const videoName = () => $('.videos .video-miniature .video-miniature-name')
+    const videoName = () => $('.videos .video-miniature .video-name')
 
     await video().waitForClickable()
 
@@ -119,7 +119,7 @@ export class VideoListPage {
   }
 
   private waitForList () {
-    return $('.videos .video-miniature .video-miniature-name').waitForDisplayed()
+    return $('.videos .video-miniature .video-name').waitForDisplayed()
   }
 
   private waitForTitle (title: string) {

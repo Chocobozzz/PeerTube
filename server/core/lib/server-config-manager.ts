@@ -56,7 +56,6 @@ class ServerConfigManager {
       client: {
         videos: {
           miniature: {
-            displayAuthorAvatar: CONFIG.CLIENT.VIDEOS.MINIATURE.DISPLAY_AUTHOR_AVATAR,
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
           },
           resumableUpload: {
@@ -131,6 +130,7 @@ class ServerConfigManager {
       },
       theme: {
         registered: this.getRegisteredThemes(),
+        builtIn: this.getBuiltInThemes(),
         default: defaultTheme
       },
       email: {
@@ -369,6 +369,17 @@ class ServerConfigManager {
                           css: t.css,
                           clientScripts: t.clientScripts
                         }))
+  }
+
+  getBuiltInThemes () {
+    return [
+      {
+        name: 'peertube-core-dark-brown' as 'peertube-core-dark-brown'
+      },
+      {
+        name: 'peertube-core-light-beige' as 'peertube-core-light-beige'
+      }
+    ]
   }
 
   getRegisteredPlugins () {

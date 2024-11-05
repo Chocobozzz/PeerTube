@@ -10,9 +10,9 @@
   height: 100%;
   top: 0;
   left: 0;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   font-size: 1em;
-  background-color: pvar(--mainBackgroundColor);
+  background-color: pvar(--bg);
 }
 
 .cfp-hotkeys-container.fade {
@@ -43,7 +43,7 @@
   margin: auto;
   width: fit-content;
   list-style: none;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
 }
 
 .cfp-hotkeys-keys,
@@ -57,9 +57,9 @@
 
   > span {
     display: inline-block;
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--mainForegroundColor);
-    border: 1px solid pvar(--mainForegroundColor);
+    color: pvar(--bg);
+    background-color: pvar(--fg);
+    border: 1px solid pvar(--fg);
     border-radius: 5px;
     text-align: center;
     box-shadow: inset 0 1px 0 #666, 0 1px 0 #bbb;

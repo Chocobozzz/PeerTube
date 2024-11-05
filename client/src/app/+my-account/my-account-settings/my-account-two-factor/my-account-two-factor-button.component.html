@@ -2,11 +2,11 @@
   <ng-container *ngIf="!twoFactorEnabled">
     <p i18n>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</p>
 
-    <my-button [ptRouterLink]="[ '/my-account/two-factor-auth' ]" theme="orange" i18n>Enable two-factor authentication</my-button>
+    <my-button [ptRouterLink]="[ '/my-account/two-factor-auth' ]" theme="primary" i18n>Enable two-factor authentication</my-button>
   </ng-container>
 
   <ng-container *ngIf="twoFactorEnabled">
-    <my-button theme="orange" (click)="disableTwoFactor()" i18n>Disable two-factor authentication</my-button>
+    <my-button theme="primary" (click)="disableTwoFactor()" i18n>Disable two-factor authentication</my-button>
   </ng-container>
 
 </div>

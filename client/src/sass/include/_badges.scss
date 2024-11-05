@@ -9,19 +9,21 @@
   font-weight: $font-semibold;
   line-height: 1.1;
   max-width: 100%;
+  white-space: normal;
+  word-break: normal;
 
   &.badge-fs-normal {
     font-size: 100%;
   }
 
   &.badge-primary {
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--mainColor);
+    color: pvar(--on-primary);
+    background-color: pvar(--primary);
   }
 
   &.badge-secondary {
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--greyForegroundColor);
+    color: pvar(--bg);
+    background-color: pvar(--fg-300);
     opacity: 0.7;
   }
 

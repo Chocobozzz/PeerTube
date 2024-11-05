@@ -15,8 +15,11 @@
 
 .middle-title {
   margin-top: 0;
+  text-transform: uppercase;
+  color: pvar(--fg);
+  font-weight: $font-bold;
 
-  @include in-content-small-title;
+  @include font-size(22px);
   @include margin-bottom(1.5rem);
 }
 
@@ -42,9 +45,6 @@
   .middle-title,
   .section-title {
     display: inline-block;
-  }
-
-  .section-title {
-    color: var(--mainForegroundColor);
+    color: pvar(--fg-400);
   }
 }

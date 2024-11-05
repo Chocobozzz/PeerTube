@@ -5,22 +5,35 @@
   width: 100%;
 }
 
-.list-overflow-parent {
+li {
+  // Fix child outline on focus-visible
+  padding-top: 2px;
+}
+
+.root {
   overflow: hidden;
-  display: flex;
-  // For the menu icon
   max-width: calc(100vw - 30px);
+  padding-bottom: 3px;
+}
+
+.list-overflow-parent {
+  display: flex;
+  align-items: center;
+
+  // For the menu icon
+  position: relative;
+
+  &.has-border {
+    border-bottom: 1px solid pvar(--fg-200);
+  }
 }
 
 .list-overflow-menu {
   position: absolute;
-  right: 25px;
+  right: 0;
 }
 
 button {
-  width: 30px;
-  border: 0;
-
   &::after {
     display: none;
   }
@@ -28,19 +41,12 @@ button {
   &.route-active {
     &::after {
       display: inherit;
-      border: 2px solid pvar(--mainColor);
+      border: 2px solid pvar(--primary);
       position: relative;
       right: 95%;
       top: 50%;
     }
   }
-}
-
-::ng-deep .dropdown-menu {
-  margin-top: 0 !important;
-  position: static;
-  right: auto;
-  bottom: auto;
 }
 
 .modal-body {
@@ -57,8 +63,8 @@ button {
     @include disable-default-a-behaviour;
 
     &.active {
-      color: pvar(--mainBackgroundColor) !important;
-      background-color: pvar(--mainHoverColor);
+      color: pvar(--on-primary) !important;
+      background-color: pvar(--primary-450);
       opacity: .9;
     }
   }

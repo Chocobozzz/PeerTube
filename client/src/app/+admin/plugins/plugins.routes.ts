@@ -5,7 +5,7 @@ import { PluginShowInstalledComponent } from '@app/+admin/plugins/plugin-show-in
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
 
-export const PluginsRoutes: Routes = [
+export const pluginsRoutes: Routes = [
   {
     path: 'plugins',
     canActivate: [ UserRightGuard ],
@@ -15,7 +15,7 @@ export const PluginsRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'list-installed',
+        redirectTo: 'list-installed?pluginType=1',
         pathMatch: 'full'
       },
       {

@@ -1,10 +1,11 @@
 import { DatePipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
@@ -15,7 +16,6 @@ import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators
 import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
-import { ListOverflowComponent, ListOverflowItem } from '../shared/shared-main/menu/list-overflow.component'
 import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
 
 @Component({
@@ -32,8 +32,7 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
     CopyButtonComponent,
     NgTemplateOutlet,
     NgClass,
-    RouterLinkActive,
-    ListOverflowComponent,
+    HorizontalMenuComponent,
     RouterOutlet,
     SupportModalComponent,
     DatePipe
@@ -46,7 +45,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   videoChannel: VideoChannel
   ownerAccount: Account
   hotkeys: Hotkey[]
-  links: ListOverflowItem[] = []
+  links: HorizontalMenuEntry[] = []
   isChannelManageable = false
 
   channelVideosCount: number

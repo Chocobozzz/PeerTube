@@ -1,11 +1,12 @@
-import debug from 'debug'
 import { Injectable } from '@angular/core'
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
+import { VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { PluginsManager } from '@root-helpers/plugins-manager'
+import debug from 'debug'
+import { environment } from 'src/environments/environment'
 import { ServerService } from '../server'
 import { SessionStorageService } from '../wrappers/storage.service'
-import { PluginsManager } from '@root-helpers/plugins-manager'
-import { environment } from 'src/environments/environment'
 
 const debugLogger = debug('peertube:router:RedirectService')
 
@@ -14,7 +15,7 @@ export class RedirectService {
   private static SESSION_STORAGE_LATEST_SESSION_URL_KEY = 'redirect-latest-session-url'
 
   // Default route could change according to the instance configuration
-  static INIT_DEFAULT_ROUTE = '/videos/trending'
+  static INIT_DEFAULT_ROUTE = '/videos/browse'
   static INIT_DEFAULT_TRENDING_ALGORITHM = 'most-viewed'
 
   private previousUrl: string
@@ -69,8 +70,23 @@ export class RedirectService {
     return this.defaultRoute
   }
 
-  getDefaultTrendingAlgorithm () {
-    return this.defaultTrendingAlgorithm
+  getDefaultTrendingSort () {
+    const algorithm = this.defaultTrendingAlgorithm
+
+    switch (algorithm) {
+      case 'most-viewed':
+        return '-trending'
+
+      case 'most-liked':
+        return '-likes'
+
+      // We'll automatically apply "best" sort if using "hot" sort with a logged user
+      case 'best':
+        return '-hot'
+
+      default:
+        return '-' + algorithm as VideoSortField
+    }
   }
 
   redirectToLatestSessionRoute () {

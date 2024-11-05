@@ -25,7 +25,7 @@
           <span i18n *ngIf="isVideoPasswordProtected()" class="pt-badge badge-yellow">Password protected</span>
         </div>
 
-        <span class="video-miniature-created-at-views">
+        <span class="date-and-views">
           <my-date-toggle [date]="playlistElement.video.publishedAt"></my-date-toggle>
 
           <span class="views" [title]="playlistElement.video.getExactNumberOfViews()">
@@ -97,7 +97,7 @@
             ></my-timestamp-input>
           </div>
 
-          <input type="submit" i18n-value value="Save" (click)="updateTimestamps(playlistElement)">
+          <input class="peertube-button primary-button mt-2" type="submit" i18n-value value="Save" (click)="updateTimestamps(playlistElement)">
         </div>
       </ng-container>
 

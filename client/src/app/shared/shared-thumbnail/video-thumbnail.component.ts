@@ -46,10 +46,16 @@ export class VideoThumbnailComponent {
     return this.addToWatchLaterText
   }
 
-  isLiveEnded () {
-    if (!this.video.state) return
+  isLiveStreaming () {
+    // In non moderator mode we only display published live
+    // If in moderator mode, the server adds the state info to the object
+    if (!this.video.isLive) return false
 
-    return this.video.state.id === VideoState.LIVE_ENDED
+    return !this.video.state || this.video.state?.id === VideoState.PUBLISHED
+  }
+
+  isEndedLive () {
+    return this.video.state?.id === VideoState.LIVE_ENDED
   }
 
   getImageUrl () {

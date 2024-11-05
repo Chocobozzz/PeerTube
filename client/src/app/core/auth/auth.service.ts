@@ -27,7 +27,7 @@ export class AuthService {
   private static BASE_TOKEN_URL = environment.apiUrl + '/api/v1/users/token'
   private static BASE_REVOKE_TOKEN_URL = environment.apiUrl + '/api/v1/users/revoke-token'
   private static BASE_USER_INFORMATION_URL = environment.apiUrl + '/api/v1/users/me'
-  private static LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
+  private static LS_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
     CLIENT_SECRET: 'client_secret'
   }
@@ -37,8 +37,8 @@ export class AuthService {
   tokensRefreshed = new ReplaySubject<void>(1)
   loggedInHotkeys: Hotkey[]
 
-  private clientId: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
-  private clientSecret: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
+  private clientId: string = peertubeLocalStorage.getItem(AuthService.LS_OAUTH_CLIENT_KEYS.CLIENT_ID)
+  private clientSecret: string = peertubeLocalStorage.getItem(AuthService.LS_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
   private loginChanged: Subject<AuthStatus>
   private user: AuthUser = null
   private refreshingTokenObservable: Observable<void>
@@ -89,8 +89,8 @@ export class AuthService {
             this.clientId = res.client_id
             this.clientSecret = res.client_secret
 
-            peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID, this.clientId)
-            peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET, this.clientSecret)
+            peertubeLocalStorage.setItem(AuthService.LS_OAUTH_CLIENT_KEYS.CLIENT_ID, this.clientId)
+            peertubeLocalStorage.setItem(AuthService.LS_OAUTH_CLIENT_KEYS.CLIENT_SECRET, this.clientSecret)
 
             logger.info('Client credentials loaded.')
           },

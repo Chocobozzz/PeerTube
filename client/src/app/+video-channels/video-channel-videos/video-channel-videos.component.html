@@ -1,10 +1,9 @@
+<h1 class="visually-hidden" i18n>Videos</h1>
+
 <my-videos-list
   #videosList
 
   *ngIf="videoChannel"
-
-  [title]="title"
-  displayTitle="false"
 
   [getVideosObservableFunction]="getVideosObservableFunction"
   [getSyndicationItemsFunction]="getSyndicationItemsFunction"

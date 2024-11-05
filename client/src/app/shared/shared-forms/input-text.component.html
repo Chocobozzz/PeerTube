@@ -7,7 +7,7 @@
     [attr.aria-label]="ariaLabel"
   />
 
-  <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary" [title]="toggleTitle">
+  <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn" [title]="toggleTitle">
     <my-global-icon *ngIf="show" iconName="eye-open"></my-global-icon>
     <my-global-icon *ngIf="!show" iconName="eye-close"></my-global-icon>
   </button>

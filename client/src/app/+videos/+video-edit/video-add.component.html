@@ -1,98 +1,101 @@
 <ng-template #AlertButtons>
   @if (isContactFormEnabled) {
-    <a i18n routerLink="/about/contact" class="peertube-button-link orange-button mt-2">Contact us</a>
+    <a i18n routerLink="/about/contact" class="peertube-button-link primary-button mt-2">Contact us</a>
   } @else {
-    <a i18n routerLink="/about/instance" class="peertube-button-link orange-button mt-2">Read instance rules for help</a>
+    <a i18n routerLink="/about/instance" class="peertube-button-link primary-button mt-2">Read instance rules for help</a>
   }
 </ng-template>
 
-<ng-container *ngIf="user.isUploadDisabled()">
-  <my-alert class="upload-message upload-disabled" type="warning">
-    <div>{{ uploadMessages?.noQuota }}</div>
-    <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
-  </my-alert>
+@if (user.hasUploadDisabled()) {
+  <div class="margin-content">
+    <my-alert class="upload-message upload-disabled" type="warning">
+      <div>{{ uploadMessages?.noQuota }}</div>
+      <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
+    </my-alert>
 
-  <div class="upload-image">
-    <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
+    <div class="upload-image">
+      <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
+    </div>
   </div>
-</ng-container>
+} @else {
+  <div class="margin-content">
+    <my-alert *ngIf="user.isAutoBlocked(serverConfig)" class="upload-message auto-blocked" type="warning">
+      <div>{{ uploadMessages?.autoBlock }}</div>
+      <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft && !hasNoQuotaLeftDaily"></ng-template>
+    </my-alert>
 
-<ng-container *ngIf="!user.isUploadDisabled()">
-  <my-alert rounded="false" *ngIf="user.isAutoBlocked(serverConfig)" class="upload-message auto-blocked" type="warning">
-    <div>{{ uploadMessages?.autoBlock }}</div>
-    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft && !hasNoQuotaLeftDaily"></ng-template>
-  </my-alert>
+    <my-alert *ngIf="hasNoQuotaLeftDaily" class="upload-message quota-daily-left" type="warning">
+      <div>{{ uploadMessages?.quotaLeftDaily }}</div>
+      <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft"></ng-template>
+    </my-alert>
 
-  <my-alert rounded="false" *ngIf="hasNoQuotaLeftDaily" class="upload-message quota-daily-left" type="warning">
-    <div>{{ uploadMessages?.quotaLeftDaily }}</div>
-    <ng-template [ngTemplateOutlet]="AlertButtons" *ngIf="!hasNoQuotaLeft"></ng-template>
-  </my-alert>
+    <my-alert *ngIf="hasNoQuotaLeft" class="upload-message quota-left" type="warning">
+      <div>{{ uploadMessages?.quotaLeft }}</div>
+      <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
+    </my-alert>
 
-  <my-alert rounded="false" *ngIf="hasNoQuotaLeft" class="upload-message quota-left" type="warning">
-    <div>{{ uploadMessages?.quotaLeft }}</div>
-    <ng-template [ngTemplateOutlet]="AlertButtons"></ng-template>
-  </my-alert>
+    <my-alert *ngIf="isRootUser()" class="upload-message root-user root-user root-user" type="warning">
+      <ng-container i18n>We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.</ng-container>
 
-  <my-alert rounded="false" *ngIf="isRootUser()" class="upload-message root-user root-user root-user" type="warning">
-    <ng-container i18n>We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.</ng-container>
+      <br />
 
-    <br />
+      <ng-container i18n>Instead, <a class="text-decoration-underline alert-link" routerLink="/admin/overview/users">create a dedicated account</a> to upload your videos.</ng-container>
+    </my-alert>
 
-    <ng-container i18n>Instead, <a class="text-decoration-underline alert-link" routerLink="/admin/users">create a dedicated account</a> to upload your videos.</ng-container>
-  </my-alert>
-</ng-container>
+    <my-channels-setup-message></my-channels-setup-message>
 
-<div *ngIf="!user.isUploadDisabled()" class="margin-content">
-  <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'"></my-user-quota>
+    <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'"></my-user-quota>
 
-  <div class="title-page" *ngIf="isInSecondStep()">
-    <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>
-    <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
+    <div class="title-page" *ngIf="isInSecondStep()">
+      @if (secondStepType === 'import-url' || secondStepType === 'import-torrent') {
+        <ng-container i18n>Import {{ videoName }}</ng-container>
+      } @else if (secondStepType === 'upload') {
+        <ng-container i18n>Upload {{ videoName }}</ng-container>
+      }
+    </div>
+
+    <div ngbNav #nav="ngbNav" class="nav-tabs video-add-nav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" [ngClass]="{ 'hide-nav': !!secondStepType }">
+      <ng-container ngbNavItem="upload">
+        <a ngbNavLink>
+          <span i18n>Upload a file</span>
+        </a>
+
+        <ng-template ngbNavContent>
+          <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)" (firstStepError)="onError()"></my-video-upload>
+        </ng-template>
+      </ng-container>
+
+      <ng-container ngbNavItem="import-url" *ngIf="isVideoImportHttpEnabled()">
+        <a ngbNavLink>
+          <span i18n>Import with URL</span>
+        </a>
+
+        <ng-template ngbNavContent>
+          <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)" (firstStepError)="onError()"></my-video-import-url>
+        </ng-template>
+      </ng-container>
+
+      <ng-container ngbNavItem="import-torrent" *ngIf="isVideoImportTorrentEnabled()">
+        <a ngbNavLink>
+          <span i18n>Import with torrent</span>
+        </a>
+
+        <ng-template ngbNavContent>
+          <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"></my-video-import-torrent>
+        </ng-template>
+      </ng-container>
+
+      <ng-container ngbNavItem="go-live" *ngIf="isVideoLiveEnabled()">
+        <a ngbNavLink>
+          <span i18n>Go live</span>
+        </a>
+
+        <ng-template ngbNavContent>
+          <my-video-go-live #videoGoLive (firstStepDone)="onFirstStepDone('go-live', $event)" (firstStepError)="onError()"></my-video-go-live>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <div class="nav-content" [ngbNavOutlet]="nav"></div>
   </div>
-
-  <my-channels-setup-message></my-channels-setup-message>
-
-  <div ngbNav #nav="ngbNav" class="nav-tabs video-add-nav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" [ngClass]="{ 'hide-nav': !!secondStepType }">
-    <ng-container ngbNavItem="upload">
-      <a ngbNavLink>
-        <span i18n>Upload a file</span>
-      </a>
-
-      <ng-template ngbNavContent>
-        <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)" (firstStepError)="onError()"></my-video-upload>
-      </ng-template>
-    </ng-container>
-
-    <ng-container ngbNavItem="import-url" *ngIf="isVideoImportHttpEnabled()">
-      <a ngbNavLink>
-        <span i18n>Import with URL</span>
-      </a>
-
-      <ng-template ngbNavContent>
-        <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)" (firstStepError)="onError()"></my-video-import-url>
-      </ng-template>
-    </ng-container>
-
-    <ng-container ngbNavItem="import-torrent" *ngIf="isVideoImportTorrentEnabled()">
-      <a ngbNavLink>
-        <span i18n>Import with torrent</span>
-      </a>
-
-      <ng-template ngbNavContent>
-        <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"></my-video-import-torrent>
-      </ng-template>
-    </ng-container>
-
-    <ng-container ngbNavItem="go-live" *ngIf="isVideoLiveEnabled()">
-      <a ngbNavLink>
-        <span i18n>Go live</span>
-      </a>
-
-      <ng-template ngbNavContent>
-        <my-video-go-live #videoGoLive (firstStepDone)="onFirstStepDone('go-live', $event)" (firstStepError)="onError()"></my-video-go-live>
-      </ng-template>
-    </ng-container>
-  </div>
-
-  <div [ngbNavOutlet]="nav"></div>
-</div>
+}

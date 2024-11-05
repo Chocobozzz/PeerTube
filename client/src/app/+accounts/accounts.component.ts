@@ -7,6 +7,7 @@ import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { AccountReportComponent } from '@app/shared/shared-moderation/report-modals'
@@ -16,7 +17,6 @@ import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
 import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
-import { ListOverflowComponent, ListOverflowItem } from '../shared/shared-main/menu/list-overflow.component'
 import { SimpleSearchInputComponent } from '../shared/shared-main/search/simple-search-input.component'
 import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
 import { UserModerationDropdownComponent } from '../shared/shared-moderation/user-moderation-dropdown.component'
@@ -37,11 +37,12 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
     RouterLink,
     SubscribeButtonComponent,
     RouterLinkActive,
-    ListOverflowComponent,
+    HorizontalMenuComponent,
     SimpleSearchInputComponent,
     RouterOutlet,
     AccountReportComponent,
-    DatePipe
+    DatePipe,
+    HorizontalMenuComponent
   ]
 })
 export class AccountsComponent implements OnInit, OnDestroy {
@@ -52,7 +53,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   videoChannels: VideoChannel[] = []
 
-  links: ListOverflowItem[] = []
+  links: HorizontalMenuEntry[] = []
   hideMenu = false
 
   accountVideosCount: number

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router'
-import { VideoChannelCreateComponent } from './video-channel-edit/video-channel-create.component'
-import { VideoChannelUpdateComponent } from './video-channel-edit/video-channel-update.component'
+import { VideoChannelCreateComponent } from '@app/shared/standalone-channels/video-channel-create.component'
+import { VideoChannelUpdateComponent } from '@app/shared/standalone-channels/video-channel-update.component'
 
 export default [
   {

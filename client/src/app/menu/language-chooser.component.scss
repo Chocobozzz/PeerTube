@@ -1,18 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.help-to-translate {
-  border-radius: 0;
-
-  @include peertube-button-link;
-  @include orange-button;
-
-  &:focus-visible,
-  &:focus {
-    box-shadow: none;
-  }
-}
-
 .modal-body {
   text-align: center;
 

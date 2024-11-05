@@ -938,7 +938,7 @@ instance:
 #    - 17 # Kids
 #    - 18 # Food
 
-  default_client_route: '/videos/trending'
+  default_client_route: '/videos/browse'
 
   # Whether or not the instance is dedicated to NSFW content
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
@@ -1032,7 +1032,6 @@ client:
     miniature:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
-      display_author_avatar: false
 
     resumable_upload:
       # Max size of upload chunks, e.g. '90MB'

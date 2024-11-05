@@ -1,6 +1,7 @@
 @use 'sass:math';
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 $nav-preview-tab-height: 30px;
 $base-padding: 15px;
@@ -11,22 +12,25 @@ $input-border-radius: 3px;
   flex-direction: column;
 
   textarea {
-    background-color: pvar(--markdownTextareaBackgroundColor);
-
-    font-family: monospace;
-    font-size: 13px;
-    border-bottom: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-
     @include peertube-textarea(100%, 150px);
+
+    & {
+      color: pvar(--textarea-fg);
+      background-color: pvar(--textarea-bg);
+
+      font-family: monospace;
+      font-size: 14px;
+      border-bottom: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
 
   .nav-preview {
     padding: 10px 0;
 
-    border: 1px solid pvar(--inputBorderColor);
-    border-top: 1px dashed pvar(--inputBorderColor);
+    border: 1px solid pvar(--input-border-color);
+    border-top: 1px dashed pvar(--input-border-color);
 
     border-bottom-right-radius: $input-border-radius;
     border-bottom-left-radius: $input-border-radius;
@@ -35,7 +39,7 @@ $input-border-radius: 3px;
     flex-grow: 1;
     border-bottom-left-radius: unset;
     border-bottom-right-radius: unset;
-    border-bottom: 2px solid pvar(--mainColor);
+    border-bottom: 2px solid pvar(--primary);
 
     .maximize-button {
       opacity: 0.6;
@@ -67,7 +71,7 @@ $input-border-radius: 3px;
     overflow-y: auto;
     word-wrap: break-word;
 
-    border: 1px solid pvar(--inputBorderColor);
+    border: 1px solid pvar(--input-border-color);
     border-top: 0;
 
     border-bottom-left-radius: $input-border-radius;
@@ -77,26 +81,26 @@ $input-border-radius: 3px;
   &.maximized {
     z-index: #{z(root-header) - 1};
     position: fixed;
-    top: $header-height;
+    top: pvar(--header-height);
     left: $menu-width;
 
     max-height: none !important;
     max-width: none !important;
     width: calc(100% - #{$menu-width});
-    height: calc(100vh - #{$header-height});
+    height: calc(100vh - #{pvar(--header-height)});
 
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr 1fr;
 
-    background-color: pvar(--mainBackgroundColor);
+    background-color: pvar(--bg);
 
     .nav-preview {
       grid-row: 1;
       grid-column: 1 / 3;
 
       border: 0;
-      border-bottom: 2px solid pvar(--mainColor);
+      border-bottom: 2px solid pvar(--primary);
 
       padding: 20px 0;
       width: 100% !important;
@@ -106,7 +110,7 @@ $input-border-radius: 3px;
       grid-column: 1;
 
       border: 0;
-      border-right: 1px dashed pvar(--inputBorderColor);
+      border-right: 1px dashed pvar(--input-border-color);
 
       resize: none;
     }
@@ -120,7 +124,7 @@ $input-border-radius: 3px;
       overflow-y: auto;
       word-wrap: break-word;
 
-      scrollbar-color: pvar(--actionButtonColor) pvar(--mainBackgroundColor);
+      scrollbar-color: pvar(--fg-300) pvar(--bg);
     }
 
     textarea,
@@ -146,7 +150,7 @@ $input-border-radius: 3px;
         grid-row: 2;
         grid-column: 1;
         border: 0;
-        border-bottom: 1px dashed pvar(--inputBorderColor);;
+        border-bottom: 1px dashed pvar(--input-border-color);;
       }
 
       ::ng-deep .tab-content {

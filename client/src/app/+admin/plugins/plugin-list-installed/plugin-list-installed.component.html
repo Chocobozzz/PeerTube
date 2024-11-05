@@ -1,5 +1,3 @@
-<my-plugin-navigation [pluginType]="pluginType"></my-plugin-navigation>
-
 <div class="no-results" *ngIf="pagination.totalItems === 0">
   {{ getNoResultMessage() }}
 </div>
@@ -8,10 +6,10 @@
   <ng-container *ngFor="let plugin of plugins">
     <my-plugin-card [plugin]="plugin" [version]="plugin.version" [pluginType]="pluginType">
       <div ngProjectAs="buttons">
-        <my-edit-button
+        <my-button
           *ngIf="!isTheme(plugin)" [ptRouterLink]="getShowRouterLink(plugin)" label="Settings" i18n-label
-          [responsiveLabel]="true"
-        ></my-edit-button>
+          [responsiveLabel]="true" icon="config"
+        ></my-button>
 
         <my-button
           class="update-button" *ngIf="isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"

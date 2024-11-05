@@ -19,15 +19,10 @@
 }
 
 @media screen and (max-width: $mobile-view) {
-  .title-page {
-    display: block;
-    text-align: center;
-  }
-
   .playlists {
     justify-content: left;
 
-    @include margin-left(pvar(--horizontalMarginContent) !important);
-    @include margin-right(pvar(--horizontalMarginContent) !important);
+    @include margin-left(pvar(--x-margin-content) !important);
+    @include margin-right(pvar(--x-margin-content) !important);
   }
 }

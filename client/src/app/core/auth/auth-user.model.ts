@@ -1,22 +1,17 @@
-import { Observable, of } from 'rxjs'
-import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
 import { hasUserRight } from '@peertube/peertube-core-utils'
 import {
-  MyUser as ServerMyUserModel,
   MyUserSpecialPlaylist,
+  MyUser as ServerMyUserModel,
   User as ServerUserModel,
   UserRightType,
-  UserRole,
-  UserVideoQuota
+  UserRole
 } from '@peertube/peertube-models'
 import { OAuthUserTokens } from '@root-helpers/users'
 
 export class AuthUser extends User implements ServerMyUserModel {
   oauthTokens: OAuthUserTokens
   specialPlaylists: MyUserSpecialPlaylist[]
-
-  canSeeVideosLink = true
 
   constructor (userHash: Partial<ServerMyUserModel>, hashTokens: Partial<OAuthUserTokens>) {
     super(userHash)
@@ -53,27 +48,5 @@ export class AuthUser extends User implements ServerMyUserModel {
 
     // I'm a moderator: I can only manage users
     return user.role.id === UserRole.USER
-  }
-
-  computeCanSeeVideosLink (quotaObservable: Observable<UserVideoQuota>): Observable<boolean> {
-    if (!this.isUploadDisabled()) {
-      this.canSeeVideosLink = true
-      return of(this.canSeeVideosLink)
-    }
-
-    // Check if the user has videos
-    return quotaObservable.pipe(
-      map(({ videoQuotaUsed }) => {
-        if (videoQuotaUsed !== 0) {
-          // User already uploaded videos, so it can see the link
-          this.canSeeVideosLink = true
-        } else {
-          // No videos, no upload so the user don't need to see the videos link
-          this.canSeeVideosLink = false
-        }
-
-        return this.canSeeVideosLink
-      })
-    )
   }
 }

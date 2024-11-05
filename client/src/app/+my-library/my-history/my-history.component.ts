@@ -1,24 +1,26 @@
-import { tap } from 'rxjs/operators'
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
-import { formatICU, immutableAssign } from '@app/helpers'
-import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
-import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
-import { FormsModule } from '@angular/forms'
-import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.component'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { NgIf } from '@angular/common'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { Video } from '@app/shared/shared-main/video/video.model'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
+import { immutableAssign } from '@app/helpers'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { UserHistoryService } from '@app/shared/shared-main/users/user-history.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { VideosSelectionComponent } from '@app/shared/shared-video-miniature/videos-selection.component'
+import { tap } from 'rxjs/operators'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 
 @Component({
   templateUrl: './my-history.component.html',
   styleUrls: [ './my-history.component.scss' ],
   standalone: true,
   imports: [
+    ButtonComponent,
     GlobalIconComponent,
     NgIf,
     AdvancedInputFilterComponent,
@@ -161,12 +163,5 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     }
 
     return $localize`You don't have any video in your watch history yet.`
-  }
-
-  getTotalTitle () {
-    return formatICU(
-      $localize`Your history contains ${this.pagination.totalItems} {total, plural, =1 {video} other {videos}}`,
-      { total: this.pagination.totalItems }
-    )
   }
 }

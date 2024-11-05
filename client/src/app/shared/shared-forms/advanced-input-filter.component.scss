@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .input-group {
   width: fit-content;
@@ -15,6 +16,11 @@ input {
 
 .input-group-text {
   background-color: transparent;
+  transition: 0.3s ease-out;
+
+  &:hover {
+    background-color: pvar(--input-bg);
+  }
 }
 
 .form-control-clear my-global-icon {

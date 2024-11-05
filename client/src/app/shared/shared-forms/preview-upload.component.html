@@ -2,7 +2,7 @@
   <div class="preview-container">
     <my-reactive-file
       [inputName]="inputName" [inputLabel]="inputLabel" [extensions]="videoImageExtensions" [maxFileSize]="maxVideoImageSize" placement="right"
-      icon="edit" (fileChanged)="onFileChanged($event)" [buttonTooltip]="getReactiveFileButtonTooltip()"
+      icon="edit" (fileChanged)="onFileChanged($event)" [buttonTooltip]="getReactiveFileButtonTooltip()" theme="primary"
     ></my-reactive-file>
 
     <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" alt="Preview" i18n-alt />

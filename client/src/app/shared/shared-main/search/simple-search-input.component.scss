@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .root {
   display: flex;
@@ -12,10 +13,10 @@
   my-global-icon {
     height: 28px;
     width: 28px;
-    color: pvar(--mainColor);
+    color: pvar(--fg-400);
 
     &:hover {
-      color: pvar(--mainHoverColor);
+      color: pvar(--fg-300);
     }
   }
 }
@@ -31,4 +32,6 @@ input {
 .form-control-clear my-global-icon {
   width: 20px;
   height: 20px;
+  line-height: 20px;
+  display: inline-block;
 }

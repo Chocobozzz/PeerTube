@@ -12,12 +12,7 @@ export class ScreenService {
     this.refreshWindowInnerWidth()
   }
 
-  isInSmallView (marginLeft = 0) {
-    if (marginLeft > 0) {
-      const contentWidth = this.getWindowInnerWidth() - marginLeft
-      return contentWidth < 800
-    }
-
+  isInSmallView () {
     return this.getWindowInnerWidth() < 800
   }
 
@@ -31,19 +26,6 @@ export class ScreenService {
 
   isInTouchScreen () {
     return !!('ontouchstart' in window || (navigator as any).msMaxTouchPoints)
-  }
-
-  getNumberOfAvailableMiniatures () {
-    const screenWidth = this.getWindowInnerWidth()
-
-    let numberOfVideos = 1
-
-    if (screenWidth > 1850) numberOfVideos = 5
-    else if (screenWidth > 1410) numberOfVideos = 4
-    else if (screenWidth > 1120) numberOfVideos = 3
-    else if (screenWidth > 890) numberOfVideos = 2
-
-    return numberOfVideos
   }
 
   // Cache window inner width, because it's an expensive call

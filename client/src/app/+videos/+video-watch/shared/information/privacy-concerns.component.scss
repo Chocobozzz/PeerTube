@@ -5,10 +5,11 @@
   position: fixed;
   bottom: 0;
 
-  width: calc(100% - #{$menu-width});
+  width: calc(100% - #{$menu-width} - (#{pvar(--x-margin-content)} * 2));
   z-index: z(privacymsg);
 
   padding: 5px 15px;
+  border-radius: 5px 5px 0 0;
 
   display: flex;
   flex-wrap: nowrap;
@@ -16,27 +17,8 @@
   justify-content: space-between;
   background-color: rgba(0, 0, 0, 0.9);
   color: #fff;
-}
 
-// If the view is expanded
-:host-context(.expanded) {
-  .privacy-concerns {
-    width: 100%;
-  }
-}
-
-// Avoid higher z-index when overlay on touchscreens
-:host-context(.menu-open) {
-  .privacy-concerns {
-    z-index: z(overlay) - 1;
-  }
-}
-
-// Or if we are in the small view
-@media screen and (max-width: $small-view) {
-  .privacy-concerns {
-    width: 100%;
-  }
+  @include margin-left(pvar(--x-margin-content));
 }
 
 .privacy-concerns-text {
@@ -44,23 +26,21 @@
 }
 
 a {
-  color: pvar(--mainColor);
-  transition: color 0.3s;
+  color: #fff;
+}
 
-  @include disable-default-a-behaviour;
-
-  &:hover {
-    color: pvar(--mainBackgroundColor);
+:host-context(.main-col.expanded) {
+  .privacy-concerns {
+    width: calc(100% - #{$menu-collapsed-width} - (#{pvar(--x-margin-content)} * 2));
   }
 }
 
-@media screen and (max-width: 1300px) {
+// Or if we are in the small view
+@media screen and (max-width: $mobile-view) {
   .privacy-concerns {
-    font-size: 12px;
-    padding: 2px 5px;
-  }
+    width: 100% !important;
+    border-radius: 0 !important;
 
-  .privacy-concerns-text {
-    margin: 0;
+    @include margin-left(0 !important);
   }
 }

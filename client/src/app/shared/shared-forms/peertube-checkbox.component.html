@@ -1,5 +1,5 @@
 <div class="root flex-column">
-  <div class="d-flex">
+  <div class="d-flex align-items-center">
     <label>
       <input
         type="checkbox"
@@ -31,10 +31,10 @@
       </ng-template>
     </my-help>
 
-    <div *ngIf="recommended" class="recommended" i18n>Recommended</div>
+    <div *ngIf="recommended" class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>
   </div>
 
-  <div class="ms-4 d-flex flex-column">
+  <div class="d-flex flex-column extra-container">
     <div class="wrapper form-group-description" [id]="inputName + '-description'">
       <ng-content select="description"></ng-content>
     </div>

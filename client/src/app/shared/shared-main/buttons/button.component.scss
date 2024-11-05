@@ -1,29 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-
-@mixin responsive-label {
-  .action-button {
-    padding: 0 13px;
-  }
-
-  .button-label {
-    display: none;
-  }
-
-  my-global-icon {
-    margin: 0 !important;
-  }
-}
+@use '_button-mixins' as *;
 
 :host {
   display: inline-block;
-}
-
-a[class$=-button],
-span[class$=-button] {
-  > span {
-    @include margin-left(5px);
-  }
 }
 
 .action-button {
@@ -37,17 +17,21 @@ span[class$=-button] {
     @include margin-right(3px);
   }
 
-  &.has-icon {
-    @include button-with-icon(21px);
-  }
-
-  &.icon-only my-global-icon {
-    margin: 0 !important;
+  &:not(.rounded-icon-button) {
+    &.has-icon {
+      @include button-with-icon(24px, 0);
+    }
   }
 }
 
-.button-label {
-  @include ellipsis;
+@mixin responsive-label {
+  .action-button {
+    padding: pvar(--input-y-padding) 8px !important;
+  }
+
+  .button-label {
+    display: none;
+  }
 }
 
 // In a table, try to minimize the space taken by this button

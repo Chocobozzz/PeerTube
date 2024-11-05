@@ -5,6 +5,4 @@ my-global-icon {
   width: 32px;
   display: inline-block;
   margin-bottom: 0.75rem;
-
-  @include apply-svg-color(pvar(--mainColor));
 }

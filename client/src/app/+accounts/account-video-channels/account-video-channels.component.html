@@ -17,7 +17,7 @@
         ></my-actor-avatar>
 
         <h2 class="fs-5 lh-1 fw-bold m-0">
-          <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
+          <a class="text-decoration-none" [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
             {{ videoChannel.displayName }}
           </a>
         </h2>
@@ -35,7 +35,7 @@
 
       <my-subscribe-button [videoChannels]="[videoChannel]"></my-subscribe-button>
 
-      <a i18n class="button-show-channel peertube-button-link orange-button-inverted" [routerLink]="getVideoChannelLink(videoChannel)">Show this channel</a>
+      <a i18n class="button-show-channel peertube-button-link primary-button" [routerLink]="getVideoChannelLink(videoChannel)">Show this channel</a>
 
       <div class="videos-overflow-workaround">
         <div class="videos">
@@ -47,7 +47,7 @@
           ></my-video-miniature>
 
           <div *ngIf="getTotalVideosOf(videoChannel)" class="miniature-show-channel">
-            <a i18n [routerLink]="getVideoChannelLink(videoChannel)">SHOW THIS CHANNEL ></a>
+            <a class="link-primary" i18n [routerLink]="getVideoChannelLink(videoChannel)">SHOW THIS CHANNEL ></a>
           </div>
         </div>
       </div>

@@ -11,19 +11,19 @@
     <div class="block-documentation">
       <div class="columns">
         <a class="link-block" href="https://docs.joinpeertube.org/maintain/tools" target="_blank" i18n-title title="Go to the CLI documentation">
-          <h5 i18n class="underline-orange">CLI documentation</h5>
+          <h5 i18n class="link-primary">CLI documentation</h5>
 
           <div i18n>Upload or import videos, parse logs, prune storage directories, reset user password...</div>
         </a>
 
         <a class="link-block" href="https://docs.joinpeertube.org/admin/following-instances" target="_blank" i18n-title title="Go to the admin documentation">
-          <h5 i18n class="underline-orange">Admin documentation</h5>
+          <h5 i18n class="link-primary">Admin documentation</h5>
 
           <div i18n>Managing users, following other instances, dealing with spammers...</div>
         </a>
 
         <a class="link-block" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" i18n-title title="Go to the user documentation">
-          <h5 i18n class="underline-orange">User documentation</h5>
+          <h5 i18n class="link-primary">User documentation</h5>
 
           <div i18n>Setup your account, managing video playlists, discover third-party applications...</div>
         </a>
@@ -72,12 +72,12 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Remind me later" class="peertube-button grey-button"
+      type="button" role="button" i18n-value value="Remind me later" class="peertube-button secondary-button"
       (click)="hide()" (key.enter)="hide()"
     >
 
     <a i18n (click)="doNotOpenAgain(); hide()" (key.enter)="doNotOpenAgain(); hide()"
-       class="peertube-button-link orange-button" href="/admin/config/edit-custom" target="_blank"
+       class="peertube-button-link primary-button" href="/admin/settings/config/edit-custom" target="_blank"
        rel="noopener noreferrer" ngbAutofocus>
       Configure my instance
     </a>
