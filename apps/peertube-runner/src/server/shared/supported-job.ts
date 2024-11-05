@@ -46,5 +46,5 @@ export function isJobSupported (job: { type: RunnerJobType, payload: RunnerJobPa
 }
 
 export function getSupportedJobsList () {
-  return Object.keys(supportedMatrix)
+  return Object.keys(supportedMatrix) as unknown as RunnerJobType[]
 }

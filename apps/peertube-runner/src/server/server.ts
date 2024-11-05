@@ -26,18 +26,20 @@ export class RunnerServer {
   private cleaningUp = false
   private initialized = false
 
+  private readonly enabledJobsArray: RunnerJobType[]
+
   private readonly sockets = new Map<PeerTubeServer, Socket>()
 
-  constructor (private readonly enabledJobs?: Set<RunnerJobType>) {}
+  constructor (private readonly enabledJobs?: Set<RunnerJobType>) {
+    this.enabledJobsArray = enabledJobs
+      ? Array.from(enabledJobs)
+      : getSupportedJobsList()
+  }
 
   async run () {
     logger.info('Running PeerTube runner in server mode')
 
-    const enabledJobsArray = this.enabledJobs
-      ? Array.from(this.enabledJobs)
-      : getSupportedJobsList()
-
-    logger.info('Supported and enabled job types: ' + enabledJobsArray.join(', '))
+    logger.info('Supported and enabled job types: ' + this.enabledJobsArray.join(', '))
 
     await ConfigManager.Instance.load()
 
@@ -240,8 +242,8 @@ export class RunnerServer {
     const { availableJobs } = await server.runnerJobs.request({
       runnerToken: server.runnerToken,
 
-      jobTypes: this.enabledJobs.size !== getSupportedJobsList().length
-        ? Array.from(this.enabledJobs)
+      jobTypes: this.enabledJobsArray.length !== getSupportedJobsList().length
+        ? this.enabledJobsArray
         : undefined
     })
 
