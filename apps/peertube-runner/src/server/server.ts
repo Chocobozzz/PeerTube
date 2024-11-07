@@ -259,7 +259,12 @@ export class RunnerServer {
   }
 
   private async tryToExecuteJobAsync (server: PeerTubeServer, jobToAccept: { uuid: string }) {
-    if (!this.canProcessMoreJobs()) return
+    if (!this.canProcessMoreJobs()) {
+      logger.info(
+        `Do not process more jobs (processing ${this.processingJobs.length} / ${ConfigManager.Instance.getConfig().jobs.concurrency})`
+      )
+      return
+    }
 
     const { job } = await server.runnerJobs.accept({ runnerToken: server.runnerToken, jobUUID: jobToAccept.uuid })
 
