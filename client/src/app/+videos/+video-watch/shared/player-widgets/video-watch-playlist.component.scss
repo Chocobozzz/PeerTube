@@ -27,6 +27,10 @@
     }
   }
 
+  ::ng-deep .load-more {
+    margin: 20px 0;
+  }
+
   my-video-playlist-element-miniature {
     ::ng-deep {
       .video {

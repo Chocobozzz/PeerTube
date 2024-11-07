@@ -55,7 +55,25 @@ export class ActorHtml {
     let customHTML = TagsHtml.addTitleTag(html, entity.getDisplayName())
     customHTML = TagsHtml.addDescriptionTag(customHTML, escapedTruncatedDescription)
 
-    const url = entity.getClientUrl()
+    const eventualPage = req.path.split('/').pop()
+    let url
+
+    if (entity instanceof AccountModel) {
+      const page = [ 'video-channels', 'videos' ].includes(eventualPage)
+        ? eventualPage
+        : undefined
+      url = entity.getClientUrl(page as 'video-channels' | 'videos')
+    } else if (entity instanceof VideoChannelModel) {
+      const page = [ 'video-playlists', 'videos' ].includes(eventualPage)
+        ? eventualPage
+        : undefined
+      url = entity.getClientUrl(page as 'video-playlists' | 'videos')
+    }
+
+    if (req.query.page) {
+      url += `?page=${req.query.page}`
+    }
+
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()
 

@@ -62,6 +62,20 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:image:url" content="${servers[0].url}/`)
     }
 
+    async function videosPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      let url = servers[0].url
+      if (path !== '/') url += path
+
+      expect(text).to.match(new RegExp(`<meta property="og:title" content=".* - ${instanceConfig.name}" />`))
+      expect(text).to.contain(`<meta property="og:description" content="${instanceConfig.shortDescription}" />`)
+      expect(text).to.contain('<meta property="og:type" content="website" />')
+      expect(text).to.contain(`<meta property="og:url" content="${url}`)
+      expect(text).to.contain(`<meta property="og:image:url" content="${servers[0].url}/`)
+    }
+
     async function accountPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
@@ -108,9 +122,12 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
     it('Should have valid Open Graph tags on the common page', async function () {
       await indexPageTest('/about/peertube')
-      await indexPageTest('/videos')
       await indexPageTest('/homepage')
-      await indexPageTest('/')
+    })
+
+    it('Should have valid Open Graph tags on the videos page', async function () {
+      await videosPageTest('/videos/local')
+      await videosPageTest('/')
     })
 
     it('Should have valid Open Graph tags on the account page', async function () {

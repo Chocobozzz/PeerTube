@@ -19,7 +19,7 @@ import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { Observable, Subject, Subscription, forkJoin, fromEvent, of } from 'rxjs'
 import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
-import { InfiniteScrollerDirective } from '../shared-main/common/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../shared-main/common/infinite-scroller.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
 import { Syndication } from '../shared-main/feeds/syndication.model'
@@ -65,7 +65,7 @@ enum GroupDate {
     NgTemplateOutlet,
     ButtonComponent,
     VideoFiltersHeaderComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     VideoMiniatureComponent,
     GlobalIconComponent
   ]
@@ -102,6 +102,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() filtersChanged = new EventEmitter<VideoFilters>()
   @Output() videosLoaded = new EventEmitter<Video[]>()
 
+  hasMoreResults = true
   videos: Video[] = []
   highlightedLives: Video[] = []
 
@@ -112,6 +113,11 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   hasDoneFirstQuery = false
 
   userMiniature: User
+
+  pagination: ComponentPaginationLight = {
+    currentPage: 1,
+    itemsPerPage: 25
+  }
 
   private defaultDisplayOptions: MiniatureDisplayOptions = {
     date: true,
@@ -126,11 +132,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private routeSub: Subscription
   private userSub: Subscription
   private resizeSub: Subscription
-
-  private pagination: ComponentPaginationLight = {
-    currentPage: 1,
-    itemsPerPage: 25
-  }
 
   private groupedDateLabels: { [id in GroupDate]: string }
   private groupedDates: { [id: number]: GroupDate } = {}
@@ -191,8 +192,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
           this.loadUserSettings(user)
         }
 
-        this.scheduleOnFiltersChanged(false)
-
         this.subscribeToAnonymousUpdate()
         this.subscribeToSearchChange()
       })
@@ -252,6 +251,10 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     return video.id
   }
 
+  onPageChange () {
+    this.loadMoreVideos(true)
+  }
+
   onNearOfBottom () {
     if (this.disabled) return
 
@@ -292,7 +295,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reloadVideos () {
-    this.pagination.currentPage = 1
     this.loadMoreVideos(true)
   }
 
@@ -484,6 +486,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: ({ videos, highlightedLives, reset }) => {
           this.hasDoneFirstQuery = true
+          this.hasMoreResults = videos.length === this.pagination.itemsPerPage
           this.lastQueryLength = videos.length
 
           if (reset) {

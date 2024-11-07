@@ -9,7 +9,7 @@
 <my-channels-setup-message></my-channels-setup-message>
 
 <div class="video-playlists-header d-flex justify-content-between gap-2">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+  <my-advanced-input-filter [emitOnInit]="false" (search)="onSearch($event)"></my-advanced-input-filter>
 
   <a class="peertube-create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
@@ -17,7 +17,14 @@
   </a>
 </div>
 
-<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<my-infinite-scroller
+  class="video-playlists"
+  [(currentPage)]="pagination.currentPage"
+  [isLoading]="isLoading"
+  (nearOfBottom)="onNearOfBottom()"
+  (currentPageChange)="onPageChange()"
+  [hasMore]="hasMoreResults"
+>
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
     <my-video-playlist-miniature
       [playlist]="playlist" [toManage]="true" [displayChannel]="true"
@@ -30,4 +37,4 @@
       <my-edit-button label [ptRouterLink]="[ 'update', playlist.shortUUID ]"></my-edit-button>
     </div>
   </div>
-</div>
+</my-infinite-scroller>

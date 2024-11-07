@@ -7,12 +7,19 @@
 </div>
 
 <div class="mb-3">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+  <my-advanced-input-filter [emitOnInit]="false" (search)="onSearch($event)"></my-advanced-input-filter>
 </div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">You don't have any subscription yet.</div>
 
-<div class="actors" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<my-infinite-scroller
+  class="actors"
+  [(currentPage)]="pagination.currentPage"
+  [isLoading]="isLoading"
+  (nearOfBottom)="onNearOfBottom()"
+  (currentPageChange)="onPageChange()"
+  [hasMore]="hasMoreResults"
+>
   <div *ngFor="let videoChannel of videoChannels" class="actor">
     <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
 
@@ -33,4 +40,4 @@
 
     <my-subscribe-button [videoChannels]="[videoChannel]"></my-subscribe-button>
   </div>
-</div>
+</my-infinite-scroller>

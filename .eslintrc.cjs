@@ -1,4 +1,4 @@
-{
+module.exports = {
   "extends": "standard-with-typescript",
   "root": true,
   "rules": {
@@ -146,6 +146,7 @@
     "project": [
       "./tsconfig.eslint.json"
     ],
-    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true
+    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true,
+    "tsconfigRootDir": __dirname
   }
 }

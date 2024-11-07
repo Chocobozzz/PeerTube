@@ -4,7 +4,14 @@
 
   <div class="no-results" i18n *ngIf="channelPagination.totalItems === 0">This account does not have channels.</div>
 
-  <div class="channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
+  <my-infinite-scroller
+    class="channels"
+    [(currentPage)]="channelPagination.currentPage"
+    [isLoading]="isLoading"
+    (nearOfBottom)="onNearOfBottom()"
+    (currentPageChange)="onPageChange()"
+    [hasMore]="hasMoreVideoChannels"
+  >
     <div class="channel" *ngFor="let videoChannel of videoChannels">
 
       <div class="channel-avatar-row">
@@ -52,5 +59,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </my-infinite-scroller>
 </div>
