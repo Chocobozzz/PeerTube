@@ -124,6 +124,8 @@ PeerTube supports VOD/Live transcoding and VOD transcription (PeerTube >= 6.2) b
 The runner communicates with the PeerTube instance using HTTP and WebSocket and doesn't need to have a public IP.
 So you can run a runner on a classic server, a non-public server or even on your own computer!
 
+You can read the admin documentation on how to use PeerTube runners on https://docs.joinpeertube.org/admin/remote-runners
+
 ### Runner installation
 
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
