@@ -2129,6 +2129,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }) {
     const { urlParamId, checkBlacklist } = options
 
+    if (checkBlacklist && this.VideoBlacklist) return true
+
     if (this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL) {
       return true
     }
@@ -2138,8 +2140,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
       return false
     }
-
-    if (checkBlacklist && this.VideoBlacklist) return true
 
     if (this.privacy === VideoPrivacy.PUBLIC || this.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
       return false
