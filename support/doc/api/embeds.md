@@ -202,7 +202,7 @@ Default: `0`
 
 ### `ready: Promise<void>`
 
-This promise is resolved when the video is loaded an the player is ready.
+This promise is resolved when the video is loaded and the player is ready.
 
 
 ## Embed methods
