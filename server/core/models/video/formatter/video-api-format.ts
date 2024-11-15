@@ -126,6 +126,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
       ? { currentTime: userHistory.currentTime }
       : undefined,
 
+    commentCount: video.commentCount,
+
     // Can be added by external plugins
     pluginData: (video as any).pluginData,
 
