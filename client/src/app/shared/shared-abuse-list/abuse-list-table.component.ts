@@ -1,8 +1,8 @@
 import debug from 'debug'
 import { SortMeta, SharedModule } from 'primeng/api'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { AbuseState, AbuseStateType, AdminAbuse } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
@@ -28,6 +28,7 @@ import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
 import { VideoCommentService } from '../shared-video-comment/video-comment.service'
 import { formatICU } from '@app/helpers'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -55,7 +56,7 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
     DatePipe
   ]
 })
-export class AbuseListTableComponent extends RestTable implements OnInit {
+export class AbuseListTableComponent extends RestTable implements OnInit, OnDestroy {
   @Input() viewType: 'admin' | 'user'
 
   @ViewChild('abuseMessagesModal', { static: true }) abuseMessagesModal: AbuseMessageModalComponent
@@ -106,13 +107,17 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
-    private markdownRenderer: MarkdownService
+    private markdownRenderer: MarkdownService,
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {
     super()
   }
 
-  ngOnInit () {
-    this.abuseActions = [
+  async ngOnInit () {
+    this.pluginService.addAction('admin-abuse-list:load-data', this.reloadDataInternal.bind(this))
+
+    const abuseActions: DropdownAction<ProcessedAbuse>[][] = [
       this.buildInternalActions(),
 
       this.buildFlaggedAccountActions(),
@@ -123,8 +128,13 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
       this.buildAccountActions()
     ]
+    this.abuseActions = await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
 
     this.initialize()
+  }
+
+  ngOnDestroy () {
+    this.pluginService.removeAction('admin-abuse-list:load-data')
   }
 
   isAdminView () {
@@ -233,10 +243,10 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     }
 
     const observable = this.viewType === 'admin'
-      ? this.abuseService.getAdminAbuses(options)
-      : this.abuseService.getUserAbuses(options)
+      ? this.abuseService.getAdminAbuses(options).pipe(shortCacheObservable())
+      : this.abuseService.getUserAbuses(options).pipe(shortCacheObservable())
 
-    return observable.subscribe({
+    observable.subscribe({
       next: async resultList => {
         this.totalRecords = resultList.total
 
@@ -281,6 +291,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
       error: err => this.notifier.error(err.message)
     })
+
+    return observable
   }
 
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {

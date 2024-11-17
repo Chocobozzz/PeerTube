@@ -12,6 +12,8 @@ import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { getCompleteLocale, getKeys, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
+  ClientDoActionCallback,
+  ClientDoActionName,
   ClientHook,
   ClientHookName,
   PluginClientScope,
@@ -28,6 +30,7 @@ import {
 import { PluginInfo, PluginsManager } from '@root-helpers/plugins-manager'
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
+import { logger } from '@root-helpers/logger'
 
 type FormFields = {
   video: {
@@ -58,6 +61,8 @@ export class PluginService implements ClientHook {
 
   private pluginsManager: PluginsManager
 
+  private actions: { [name in ClientDoActionName]?: ClientDoActionCallback } = {}
+
   constructor (
     private authService: AuthService,
     private notifier: Notifier,
@@ -71,11 +76,20 @@ export class PluginService implements ClientHook {
     this.loadTranslations()
 
     this.pluginsManager = new PluginsManager({
+      doAction: this.doAction.bind(this),
       peertubeHelpersFactory: this.buildPeerTubeHelpers.bind(this),
       onFormFields: this.onFormFields.bind(this),
       onSettingsScripts: this.onSettingsScripts.bind(this),
       onClientRoute: this.onClientRoute.bind(this)
     })
+  }
+
+  addAction (actionName: ClientDoActionName, callback: ClientDoActionCallback) {
+    this.actions[actionName] = callback
+  }
+
+  removeAction (actionName: ClientDoActionName) {
+    delete this.actions[actionName]
   }
 
   initializePlugins () {
@@ -182,6 +196,14 @@ export class PluginService implements ClientHook {
         )
 
     return firstValueFrom(obs)
+  }
+
+  private doAction (actionName: ClientDoActionName) {
+    try {
+      return this.actions[actionName]()
+    } catch (err: any) {
+      logger.warn(`Plugin tried to do unknown action: ${actionName}`)
+    }
   }
 
   private onFormFields (

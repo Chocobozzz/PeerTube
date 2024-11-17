@@ -1,8 +1,17 @@
 import { DatePipe, NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable } from '@app/core'
+import {
+  AuthService,
+  ConfirmService,
+  HooksService,
+  LocalStorageService,
+  Notifier,
+  PluginService,
+  RestPagination,
+  RestTable
+} from '@app/core'
 import { formatICU, getAPIHost } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
@@ -29,6 +38,7 @@ import {
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
 import { ProgressBarComponent } from '@app/shared/shared-main/common/progress-bar.component'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -70,7 +80,7 @@ type UserForList = User & {
     ProgressBarComponent
   ]
 })
-export class UserListComponent extends RestTable <User> implements OnInit {
+export class UserListComponent extends RestTable <User> implements OnInit, OnDestroy {
   private static readonly LOCAL_STORAGE_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
 
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
@@ -114,7 +124,9 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     private auth: AuthService,
     private blocklist: BlocklistService,
     private userAdminService: UserAdminService,
-    private peertubeLocalStorage: LocalStorageService
+    private peertubeLocalStorage: LocalStorageService,
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {
     super()
   }
@@ -133,10 +145,12 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     this.saveSelectedColumns()
   }
 
-  ngOnInit () {
+  async ngOnInit () {
     this.initialize()
 
-    this.bulkActions = [
+    this.pluginService.addAction('admin-user-list:load-data', this.reloadDataInternal.bind(this))
+
+    const bulkActions: DropdownAction<User[]>[][] = [
       [
         {
           label: $localize`Delete`,
@@ -167,6 +181,8 @@ export class UserListComponent extends RestTable <User> implements OnInit {
       ]
     ]
 
+    this.bulkActions = await this.hooks.wrapObject(bulkActions, 'admin-users', 'filter:admin-user-list.bulk-actions.create.result')
+
     this.columns = [
       { id: 'username', label: $localize`Username` },
       { id: 'role', label: $localize`Role` },
@@ -181,6 +197,10 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     ]
 
     this.loadSelectedColumns()
+  }
+
+  ngOnDestroy () {
+    this.pluginService.removeAction('admin-user-list:load-data')
   }
 
   loadSelectedColumns () {
@@ -326,11 +346,14 @@ export class UserListComponent extends RestTable <User> implements OnInit {
   }
 
   protected reloadDataInternal () {
-    this.userAdminService.getUsers({
+    const obs = this.userAdminService.getUsers({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
-    }).subscribe({
+    })
+    .pipe(shortCacheObservable())
+
+    obs.subscribe({
       next: resultList => {
         this.users = resultList.data.map(u => ({
           ...u,
@@ -353,6 +376,8 @@ export class UserListComponent extends RestTable <User> implements OnInit {
 
       error: err => this.notifier.error(err.message)
     })
+
+    return obs
   }
 
   private loadMutedStatus () {

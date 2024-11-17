@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs'
+
 // Data from API hooks: {hookType}:api.{location}.{elementType}.{actionType}.{target}
 // Data in internal functions: {hookType}:{location}.{elementType}.{actionType}.{target}
 
@@ -97,7 +99,22 @@ export const clientFilterHookObject = {
   'filter:internal.player.videojs.options.result': true,
 
   // Filter p2p media loader options built for PeerTube player
-  'filter:internal.player.p2p-media-loader.options.result': true
+  'filter:internal.player.p2p-media-loader.options.result': true,
+
+  // Filter bulk actions in user list
+  'filter:admin-user-list.bulk-actions.create.result': true,
+
+  // Filter actions in comment list
+  'filter:admin-video-comment-list.actions.create.result': true,
+
+  // Filter bulk actions in comment list
+  'filter:admin-video-comment-list.bulk-actions.create.result': true,
+
+  // Filter user moderation actions
+  'filter:admin-user-moderation.actions.create.result': true,
+
+  // Filter actions in abuse list
+  'filter:admin-abuse-list.actions.create.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
@@ -193,3 +210,17 @@ export type ClientHookName = keyof typeof clientHookObject
 export interface ClientHook {
   runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T>
 }
+
+export const clientDoActionObject = {
+  'admin-abuse-list:load-data': true,
+  'application:increment-loader': true,
+  'application:decrement-loader': true,
+  'admin-user-list:load-data': true,
+  'admin-video-comment-list:load-data': true,
+  'video-watch-comment-list:load-data': true
+}
+
+export type ClientDoActionName = keyof typeof clientDoActionObject
+
+export type ClientDoActionCallback = () => Observable<any>
+export type ClientDoAction = (actionName: ClientDoActionName) => Observable<any>

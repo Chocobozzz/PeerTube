@@ -1,7 +1,7 @@
 import { DatePipe, NgClass, NgIf } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoCommentForAdminOrUser } from '@app/shared/shared-video-comment/video-comment.model'
@@ -18,6 +18,7 @@ import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
 import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { shortCacheObservable } from '@root-helpers/utils'
 
 @Component({
   selector: 'my-video-comment-list-admin-owner',
@@ -42,7 +43,7 @@ import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon
     RouterLink
   ]
 })
-export class VideoCommentListAdminOwnerComponent extends RestTable <VideoCommentForAdminOrUser> implements OnInit {
+export class VideoCommentListAdminOwnerComponent extends RestTable <VideoCommentForAdminOrUser> implements OnInit, OnDestroy {
   @Input({ required: true }) mode: 'user' | 'admin'
 
   comments: VideoCommentForAdminOrUser[]
@@ -68,11 +69,18 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private markdownRenderer: MarkdownService,
-    private bulkService: BulkService
+    private bulkService: BulkService,
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {
     super()
+  }
 
-    this.videoCommentActions = [
+  async ngOnInit () {
+    this.initialize()
+    this.pluginService.addAction('admin-video-comment-list:load-data', this.reloadDataInternal.bind(this))
+
+    const videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = [
       [
         {
           label: $localize`Delete this comment`,
@@ -94,12 +102,13 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         }
       ]
     ]
-  }
+    this.videoCommentActions = await this.hooks.wrapObject(
+      videoCommentActions,
+      'admin-comments',
+      'filter:admin-video-comment-list.actions.create.result'
+    )
 
-  ngOnInit () {
-    this.initialize()
-
-    this.bulkActions = [
+    const bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = [
       {
         label: $localize`Delete`,
         handler: comments => this.removeComments(comments),
@@ -113,6 +122,11 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         iconName: 'tick'
       }
     ]
+    this.bulkActions = await this.hooks.wrapObject(
+      bulkActions,
+      'admin-comments',
+      'filter:admin-video-comment-list.bulk-actions.create.result'
+    )
 
     if (this.mode === 'admin') {
       this.inputFilters = [
@@ -149,6 +163,10 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
     }
   }
 
+  ngOnDestroy () {
+    this.pluginService.removeAction('admin-video-comment-list:load-data')
+  }
+
   getIdentifier () {
     return 'VideoCommentListAdminOwnerComponent'
   }
@@ -170,7 +188,10 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
       ? this.videoCommentService.listAdminVideoComments.bind(this.videoCommentService)
       : this.videoCommentService.listVideoCommentsOfMyVideos.bind(this.videoCommentService)
 
-    method({ pagination: this.pagination, sort: this.sort, search: this.search }).subscribe({
+    const obs = method({ pagination: this.pagination, sort: this.sort, search: this.search })
+    .pipe(shortCacheObservable())
+
+    obs.subscribe({
       next: async resultList => {
         this.totalRecords = resultList.total
 
@@ -183,6 +204,8 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
 
       error: err => this.notifier.error(err.message)
     })
+
+    return obs
   }
 
   private approveComments (comments: VideoCommentForAdminOrUser[]) {
