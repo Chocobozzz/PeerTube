@@ -5459,9 +5459,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5485804110353816120" datatype="html">
+      <trans-unit id="5485804110353816120" datatype="html" xml:space="preserve">
         <source>These automatic tags can be used to filter comments and videos.</source>
-        <target state="new">These automatic tags can be used to filter comments and videos.</target>
+        <target state="translated">Þessi sjálfvirku merki má nota til að sía athugasemdir og myndskeið.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6315,9 +6315,9 @@
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6715412930390975308" datatype="html">
+      <trans-unit id="6715412930390975308" datatype="html" xml:space="preserve">
         <source>Open table configuration</source>
-        <target state="new">Open table configuration</target>
+        <target state="translated">Opna stillingar töflu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">48,49</context>
@@ -9275,9 +9275,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5468340957320375738" datatype="html">
+      <trans-unit id="5468340957320375738" datatype="html" xml:space="preserve">
         <source>⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</source>
-        <target state="new">⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</target>
+        <target state="translated">⚠ Ekki er hægt að nota tölvupóstfangið þitt í RSS-streymi fyrir hlaðvarp vegna þess að það hefur ekki verið sannreynt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9875,17 +9875,17 @@
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6184963353282561988" datatype="html">
+      <trans-unit id="6184963353282561988" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></source>
-        <target state="new"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></target>
+        <target state="translated"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {áhorf} other {áhorf}} síðan <x id="PH_1" equiv-text="data.startDate"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242500900773463993" datatype="html">
+      <trans-unit id="3242500900773463993" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</target>
+        <target state="translated">Þú ert með <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {rás} other {rásir}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -9947,9 +9947,9 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="605831055407176010" datatype="html">
+      <trans-unit id="605831055407176010" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated">Þú ert með <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {fylgjanda} other {fylgjendur}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -10011,9 +10011,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591721911243650459" datatype="html">
+      <trans-unit id="2591721911243650459" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated">Þú ert með <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {áskrift} other {áskriftir}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -10111,9 +10111,9 @@
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6576925333662641838" datatype="html">
+      <trans-unit id="6576925333662641838" datatype="html" xml:space="preserve">
         <source>Your history contains <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new">Your history contains <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Ferillinn þinn inniheldur <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {myndskeið} other {myndskeið}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -10863,9 +10863,9 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5882204655221038340" datatype="html">
+      <trans-unit id="5882204655221038340" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {playlist} other {playlists}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {playlist} other {playlists}}</target>
+        <target state="translated">Þú ert með <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {spilunarlista} other {spilunarlista}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -10963,9 +10963,9 @@
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1590692896387943509" datatype="html">
+      <trans-unit id="1590692896387943509" datatype="html" xml:space="preserve">
         <source>You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new">You have <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Þú ert með <x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {myndskeið} other {myndskeið}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -11515,9 +11515,9 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2357625293346946918" datatype="html">
+      <trans-unit id="2357625293346946918" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</source>
-        <target state="new"><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</target>
+        <target state="translated"><x id="PH" equiv-text="this.numberOfFilters()"/> virkar síur, opna síuspjaldið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">276</context>
@@ -13097,33 +13097,33 @@
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5203899665906572487" datatype="html">
+      <trans-unit id="5203899665906572487" datatype="html" xml:space="preserve">
         <source>Add a new segment</source>
-        <target state="new">Add a new segment</target>
+        <target state="translated">Bæta við nýjum hluta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="936472574168973902" datatype="html">
+      <trans-unit id="936472574168973902" datatype="html" xml:space="preserve">
         <source>Segment start timestamp</source>
-        <target state="new">Segment start timestamp</target>
+        <target state="translated">Tímamerki á upphafi hluta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">50,52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2831765880579689127" datatype="html">
+      <trans-unit id="2831765880579689127" datatype="html" xml:space="preserve">
         <source>Use video current time as start time</source>
-        <target state="new">Use video current time as start time</target>
+        <target state="translated">Nota núverandi tíma myndskeiðs sem upphafstíma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1031856574257335431" datatype="html">
+      <trans-unit id="1031856574257335431" datatype="html" xml:space="preserve">
         <source>Segment end timestamp</source>
-        <target state="new">Segment end timestamp</target>
+        <target state="translated">Tímamerki á enda hluta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">65,67</context>
@@ -13133,9 +13133,9 @@
           <context context-type="linenumber">80,82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2534468682040754093" datatype="html">
+      <trans-unit id="2534468682040754093" datatype="html" xml:space="preserve">
         <source>Use video current time as end time</source>
-        <target state="new">Use video current time as end time</target>
+        <target state="translated">Nota núverandi tíma myndskeiðs sem lokatíma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">73</context>
@@ -13149,17 +13149,17 @@
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4592694974533956701" datatype="html">
+      <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
-        <target state="new">Start segment must be before end segment time</target>
+        <target state="translated">Upphafstími hluta verður að vera á undan lokatíma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9131593410297043344" datatype="html">
+      <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="new">Segment must have a text content</target>
+        <target state="translated">Hluti verður að innihalda textaefni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">176</context>
@@ -13173,9 +13173,9 @@
           <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912256992541129243" datatype="html">
+      <trans-unit id="6912256992541129243" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel the edition first.</source>
-        <target state="new">A segment is being edited. Save or cancel the edition first.</target>
+        <target state="translated">Verið er að breyta hluta. Vistaðu fyrst eða hættu við breytingarnar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -13297,9 +13297,9 @@
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1962360936689895737" datatype="html">
+      <trans-unit id="1962360936689895737" datatype="html" xml:space="preserve">
         <source>A subtitle will be automatically generated from your video.</source>
-        <target state="new"> A subtitle will be automatically generated from your video. </target>
+        <target state="translated">Skjátextar verða framleiddir sjálfvirkt út frá myndskeiðinu þínu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">172</context>
@@ -14090,25 +14090,25 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1469816098818043891" datatype="html">
+      <trans-unit id="1469816098818043891" datatype="html" xml:space="preserve">
         <source>One word or group of words per line.</source>
-        <target state="new">One word or group of words per line.</target>
+        <target state="translated">Eitt orð eða hópur orða í hverri línu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2735672321895213785" datatype="html">
+      <trans-unit id="2735672321895213785" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="commonParams.listName"/> updated</source>
-        <target state="new"><x id="PH" equiv-text="commonParams.listName"/> updated</target>
+        <target state="translated"><x id="PH" equiv-text="commonParams.listName"/> uppfærður</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="635757490963150097" datatype="html">
+      <trans-unit id="635757490963150097" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="commonParams.listName"/> created</source>
-        <target state="new"><x id="PH" equiv-text="commonParams.listName"/> created</target>
+        <target state="translated"><x id="PH" equiv-text="commonParams.listName"/> útbúinn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -14242,9 +14242,9 @@
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4434906642654067529" datatype="html">
+      <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="new">Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</target>
+        <target state="translated">Frekar ættirðu að <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>útbúa sérstakan notandaaðgang<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> til að senda inn myndskeiðin þín.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">41</context>
@@ -15360,7 +15360,7 @@
       </trans-unit>
       <trans-unit id="1036346152557749708" datatype="html" xml:space="preserve">
         <source>Edit this segment</source>
-        <target state="translated">Breyta þessum bút</target>
+        <target state="translated">Breyta þessum hluta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">105</context>
@@ -15368,7 +15368,7 @@
       </trans-unit>
       <trans-unit id="6855898148869474963" datatype="html" xml:space="preserve">
         <source>Delete this segment</source>
-        <target state="translated">Eyða þessum bút</target>
+        <target state="translated">Eyða þessum hluta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">106</context>
@@ -15986,9 +15986,9 @@
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784250050046176017" datatype="html">
+      <trans-unit id="2784250050046176017" datatype="html" xml:space="preserve">
         <source>Your authentication has expired, you need to reconnect.</source>
-        <target state="new">Your authentication has expired, you need to reconnect.</target>
+        <target state="translated">Auðkenningin þín er útrunnin, þú þarft að tengjast aftur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">228</context>
@@ -22390,9 +22390,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7698974744701301198" datatype="html">
+      <trans-unit id="7698974744701301198" datatype="html" xml:space="preserve">
         <source>Add watched videos in your video history</source>
-        <target state="new">Add watched videos in your video history</target>
+        <target state="translated">Bæta við áhorfðum myndskeiðum í ferli myndskeiða hjá þér</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">27</context>
