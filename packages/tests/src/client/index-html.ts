@@ -47,7 +47,7 @@ describe('Test index HTML generation', function () {
 
     it('Should have valid index html tags (title, description...)', async function () {
       const config = await servers[0].config.getConfig()
-      const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
+      const res = await makeHTMLRequest(servers[0].url, '/videos/browse')
 
       checkIndexTags(res.text, instanceConfig.name, instanceConfig.shortDescription, '', config)
     })
@@ -71,14 +71,14 @@ describe('Test index HTML generation', function () {
       })
 
       const config = await servers[0].config.getConfig()
-      const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
+      const res = await makeHTMLRequest(servers[0].url, '/videos/browse')
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
     })
 
     it('Should have valid index html updated tags (title, description...)', async function () {
       const config = await servers[0].config.getConfig()
-      const res = await makeHTMLRequest(servers[0].url, '/videos/trending')
+      const res = await makeHTMLRequest(servers[0].url, '/videos/browse')
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
     })
