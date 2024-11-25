@@ -29,6 +29,7 @@
         <button onclick="player.setVolume(1)">Unmute</button>
         <button onclick="player.playNextVideo()">Next video</button>
         <button onclick="player.playPreviousVideo()">Previous video</button>
+        <button onclick="getPlayerStatus()">Get status</button>
       </div>
       <br/>
 
@@ -53,6 +54,11 @@
         <fieldset>
           <legend>Volume</legend>
           <div id="volume"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Status</legend>
+          <div id="player-status"></div>
         </fieldset>
 
         <fieldset>

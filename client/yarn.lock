@@ -2723,13 +2723,6 @@
   dependencies:
     "@types/ms" "*"
 
-"@types/dompurify@^3.0.5":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@types/dompurify/-/dompurify-3.2.0.tgz#56610bf3e4250df57744d61fbd95422e07dfb840"
-  integrity sha512-Fgg31wv9QbLDA0SpTOXO3MaxySc4DKGLi8sna4/Utjo4r3ZRPdCt4UQee8BWr+Q5z21yifghREPJGYaEOEIACg==
-  dependencies:
-    dompurify "*"
-
 "@types/estree@1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.5.tgz#a6ce3e556e00fd9895dd872dd172ad0d4bd687f4"
@@ -5299,7 +5292,7 @@ domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-dompurify@*, dompurify@^3.1.6:
+dompurify@^3.1.6:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.2.1.tgz#d480972aeb1a59eb8ac47cba95558fbd72a0127b"
   integrity sha512-NBHEsc0/kzRYQd+AY6HR6B/IgsqzBABrqJbpCDQII/OK6h7B7LXzweZTDsqSW2LkTRpoxf18YUP+YjGySk6B3w==
