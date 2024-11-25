@@ -106,6 +106,15 @@ export const MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const MAX_SYNC_PER_USER: BuildFormValidator = {
+  VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
+  MESSAGES: {
+    required: $localize`Max synchronizations per user is required.`,
+    min: $localize`Max synchronizations per user must be greater or equal to 1.`,
+    pattern: $localize`Max synchronizations per user must be a number.`
+  }
+}
+
 export const CONCURRENCY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(1) ],
   MESSAGES: {

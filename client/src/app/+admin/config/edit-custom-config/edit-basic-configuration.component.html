@@ -321,6 +321,20 @@
             </ng-container>
             </my-peertube-checkbox>
           </div>
+
+          <div class="form-group">
+            <label i18n for="videoChannelSynchronizationMaxPerUser">Max channel synchronization per user</label>
+
+            <div class="number-with-unit">
+              <input
+                type="number" min="1" id="videoChannelSynchronizationMaxPerUser" class="form-control"
+                formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['import']['videoChannelSynchronization']['maxPerUser'] }"
+              >
+              <span i18n>{form.value['import']['videoChannelSynchronization']['maxPerUser'], plural, =1 {sync} other {syncs}}</span>
+            </div>
+
+            <div *ngIf="formErrors.import.videoChannelSynchronization.maxPerUser" class="form-error" role="alert">{{ formErrors.import.videoChannelSynchronization.maxPerUser }}</div>
+          </div>
         </ng-container>
 
       </ng-container>

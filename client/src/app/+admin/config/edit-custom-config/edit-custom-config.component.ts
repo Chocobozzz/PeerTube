@@ -16,6 +16,7 @@ import {
   INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
   MAX_INSTANCE_LIVES_VALIDATOR,
   MAX_LIVE_DURATION_VALIDATOR,
+  MAX_SYNC_PER_USER,
   MAX_USER_LIVES_VALIDATOR,
   MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR,
   SEARCH_INDEX_URL_VALIDATOR,
@@ -182,7 +183,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           }
         },
         videoChannelSynchronization: {
-          enabled: null
+          enabled: null,
+          maxPerUser: MAX_SYNC_PER_USER
+
         },
         users: {
           enabled: null
