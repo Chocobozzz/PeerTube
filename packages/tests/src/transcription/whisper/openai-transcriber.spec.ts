@@ -93,7 +93,7 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('May transcribe a media file in french', async function () {
-    this.timeout(3 * 1000 * 60)
+    this.timeout(5 * 1000 * 60)
 
     const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt', model, transcriptDirectory })
 

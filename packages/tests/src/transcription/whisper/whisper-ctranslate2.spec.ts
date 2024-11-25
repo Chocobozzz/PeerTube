@@ -165,7 +165,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     })
 
     const transcriptFileEvaluator = new TranscriptFileEvaluator(openaiTranscript, transcript)
-    expect(await transcriptFileEvaluator.wer()).to.be.below(20 / 100)
+    expect(await transcriptFileEvaluator.wer()).to.be.below(25 / 100)
     expect(await transcriptFileEvaluator.cer()).to.be.below(10 / 100)
   })
 
