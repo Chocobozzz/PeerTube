@@ -28,7 +28,6 @@ import {
   VideoTranscodingPayload,
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
-import { parseDurationToMs } from '@server/helpers/core-utils.js'
 import { jobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
@@ -511,14 +510,6 @@ class JobQueue {
   }
 
   // ---------------------------------------------------------------------------
-
-  async removeOldJobs () {
-    for (const key of Object.keys(this.queues)) {
-      const queue: Queue = this.queues[key]
-      await queue.clean(parseDurationToMs('7 days'), 1000, 'completed')
-      await queue.clean(parseDurationToMs('7 days'), 1000, 'failed')
-    }
-  }
 
   private addRepeatableJobs () {
     this.queues['videos-views-stats'].add('job', {}, {

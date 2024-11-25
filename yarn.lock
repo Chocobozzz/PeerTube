@@ -3770,14 +3770,14 @@ builtins@^5.0.1:
   dependencies:
     semver "^7.0.0"
 
-bullmq@^5.3.0:
-  version "5.12.7"
-  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-5.12.7.tgz#69d2f1bc4a3546c32a539e891ba7c45f6e72c932"
-  integrity sha512-xOUUto/ou6TQaAFhoybzeBNImPe6A07bEVB10ybnw/9fZNfu8lZXhex9EInGeq/r2UmYWw7CiNR9sIe5tfOf2w==
+bullmq@^5.29.1:
+  version "5.29.1"
+  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-5.29.1.tgz#9526747baac588e53665bb85a1fbdb544a17c1d3"
+  integrity sha512-TZWiwRlPnpaN+Qwh4D8IQf2cYLpkiDX1LbaaWEabc6y37ojIttWOSynxDewpVHyW233LssSIC4+aLMSvAjtpmg==
   dependencies:
     cron-parser "^4.6.0"
     ioredis "^5.4.1"
-    msgpackr "^1.10.1"
+    msgpackr "^1.11.2"
     node-abort-controller "^3.1.1"
     semver "^7.5.4"
     tslib "^2.0.0"
@@ -7902,10 +7902,10 @@ msgpackr-extract@^3.0.2:
     "@msgpackr-extract/msgpackr-extract-linux-x64" "3.0.3"
     "@msgpackr-extract/msgpackr-extract-win32-x64" "3.0.3"
 
-msgpackr@^1.10.1:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.11.0.tgz#8321d52333048cadc749f56385e3231e65337091"
-  integrity sha512-I8qXuuALqJe5laEBYoFykChhSXLikZmUhccjGsPuSJ/7uPip2TJ7lwdIQwWSAi0jGZDXv4WOP8Qg65QZRuXxXw==
+msgpackr@^1.11.2:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.11.2.tgz#4463b7f7d68f2e24865c395664973562ad24473d"
+  integrity sha512-F9UngXRlPyWCDEASDpTf6c9uNhGPTqnTeLVt7bN+bU1eajoR/8V9ys2BRaV5C/e5ihE6sJ9uPIKaYt6bFuO32g==
   optionalDependencies:
     msgpackr-extract "^3.0.2"
 
