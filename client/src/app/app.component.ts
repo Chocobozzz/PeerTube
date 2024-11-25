@@ -29,7 +29,7 @@ import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
-import { delay, forkJoin } from 'rxjs'
+import { forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { MenuService } from './core/menu/menu.service'
 import { HeaderComponent } from './header/header.component'
@@ -38,8 +38,8 @@ import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.compon
 import { MenuComponent } from './menu/menu.component'
 import { ConfirmComponent } from './modal/confirm.component'
 import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
-import { InstanceService } from './shared/shared-main/instance/instance.service'
 import { ButtonComponent } from './shared/shared-main/buttons/button.component'
+import { InstanceService } from './shared/shared-main/instance/instance.service'
 
 @Component({
   selector: 'my-app',
@@ -144,7 +144,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
 
-    this.openModalsIfNeeded()
+    this.listenUserChangeForModals()
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
     this.document.documentElement.dir = getLocaleDirection(this.localeId)
@@ -264,29 +264,35 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private openModalsIfNeeded () {
-    const userSub = this.authService.userInformationLoaded
-        .pipe(
-          delay(0), // Wait for modals creations
-          map(() => this.authService.getUser())
-        )
+  private listenUserChangeForModals () {
+    this.authService.userInformationLoaded
+        .pipe(map(() => this.authService.getUser()))
+        .subscribe(user => this.openModalsIfNeeded(user))
+  }
 
-    // Admin modal
-    userSub.pipe(
-      filter(user => user.role.id === UserRole.ADMINISTRATOR)
-    ).subscribe(user => setTimeout(() => this.openAdminModalsIfNeeded(user))) // Wait deferred modal creation in the view
+  onModalCreated () {
+    const user = this.authService.getUser()
+    if (!user) return
 
-    // Account modal
-    userSub.pipe(
-      filter(user => user.role.id !== UserRole.ADMINISTRATOR)
-    ).subscribe(user => setTimeout(() => this.openAccountModalsIfNeeded(user))) // Wait deferred modal creation in the view
+    setTimeout(() => this.openModalsIfNeeded(user))
+  }
+
+  private openModalsIfNeeded (user: User) {
+    if (user.role.id === UserRole.ADMINISTRATOR) {
+      this.openAdminModalsIfNeeded(user)
+    } else {
+      this.openAccountModalsIfNeeded(user)
+    }
   }
 
   private openAdminModalsIfNeeded (user: User) {
+    if (!this.adminWelcomeModal) return
+
     if (this.adminWelcomeModal.shouldOpen(user)) {
       return this.adminWelcomeModal.show()
     }
 
+    if (!this.instanceConfigWarningModal) return
     if (!this.instanceConfigWarningModal.shouldOpenByUser(user)) return
 
     forkJoin([
@@ -300,6 +306,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private openAccountModalsIfNeeded (user: User) {
+    if (!this.accountSetupWarningModal) return
+
     if (this.accountSetupWarningModal.shouldOpen(user)) {
       this.accountSetupWarningModal.show(user)
     }

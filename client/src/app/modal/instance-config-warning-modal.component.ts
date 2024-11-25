@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common'
-import { Component, ElementRef, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
@@ -16,8 +16,10 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   standalone: true,
   imports: [ CommonModule, FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
 })
-export class InstanceConfigWarningModalComponent {
+export class InstanceConfigWarningModalComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal: ElementRef
+
+  @Output() created = new EventEmitter<void>()
 
   stopDisplayModal = false
   about: About
@@ -33,7 +35,12 @@ export class InstanceConfigWarningModalComponent {
     private notifier: Notifier
   ) { }
 
+  ngOnInit (): void {
+    this.created.emit()
+  }
+
   shouldOpenByUser (user: User) {
+    if (this.modalService.hasOpenModals()) return false
     if (user.noInstanceConfigWarningModal === true) return false
     if (peertubeLocalStorage.getItem(this.LS_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL) === 'true') return false
 

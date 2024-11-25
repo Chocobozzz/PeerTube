@@ -54,9 +54,10 @@
 </p-toast>
 
 @defer (when isUserLoggedIn()) {
-  <my-account-setup-warning-modal #accountSetupWarningModal></my-account-setup-warning-modal>
-  <my-admin-welcome-modal #adminWelcomeModal></my-admin-welcome-modal>
-  <my-instance-config-warning-modal #instanceConfigWarningModal></my-instance-config-warning-modal>
+  <my-account-setup-warning-modal #accountSetupWarningModal (created)="onModalCreated()"></my-account-setup-warning-modal>
+
+  <my-admin-welcome-modal #adminWelcomeModal (created)="onModalCreated()"></my-admin-welcome-modal>
+  <my-instance-config-warning-modal #instanceConfigWarningModal (created)="onModalCreated()"></my-instance-config-warning-modal>
 }
 
 <my-custom-modal #customModal></my-custom-modal>
