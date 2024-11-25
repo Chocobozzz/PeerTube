@@ -10,7 +10,7 @@ import {
   HLSLoaderClass,
   HLSPluginOptions,
   P2PMediaLoaderPluginOptions,
-  PeerTubePlayerContructorOptions,
+  PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions
 } from '../../types'
 import { getRtcConfig, isSameOrigin } from '../common'
@@ -22,7 +22,7 @@ import debug from 'debug'
 const debugLogger = debug('peertube:player:hls')
 
 type ConstructorOptions =
-  Pick<PeerTubePlayerContructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader' | 'stunServers'> &
+  Pick<PeerTubePlayerConstructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader' | 'stunServers'> &
   Pick<PeerTubePlayerLoadOptions, 'videoPassword' | 'requiresUserAuth' | 'videoFileToken' | 'requiresPassword' |
   'isLive' | 'liveOptions' | 'p2pEnabled' | 'hls'>
 

@@ -49,10 +49,10 @@
       <div class="date-and-views">
         <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
 
-        <span class="views" [title]="video.getExactNumberOfViews()">
+        <span class="views">
           <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
 
-          <my-video-views-counter *ngIf="displayOptions.views" [video]="video"></my-video-views-counter>
+          <my-video-views-counter *ngIf="displayOptions.views" [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
         </span>
       </div>
 

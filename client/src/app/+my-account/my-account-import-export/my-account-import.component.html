@@ -54,7 +54,7 @@
       } @else {
         <my-upload-progress
           [isUploading]="uploadingArchive" [uploadPercents]="uploadPercents" [error]="error" [uploaded]="archiveUploadFinished"
-          [enableRetryAfterError]="enableRetryAfterError" (cancel)="cancelUpload()" (retry)="retryUpload()"
+          [enableRetryAfterError]="enableRetryAfterError" (cancelUpload)="cancelUpload()" (retry)="retryUpload()"
         >
         </my-upload-progress>
 

@@ -43,7 +43,7 @@
           <ng-template #publishedTemplate>
             <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
             •
-            <my-video-views-counter [video]="video"></my-video-views-counter>
+            <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
           </ng-template>
 
           <div class="d-block d-md-none"> <!-- only shown on medium devices, has its counterpart for larger viewports below -->

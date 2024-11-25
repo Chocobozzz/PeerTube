@@ -28,8 +28,8 @@
         <span class="date-and-views">
           <my-date-toggle [date]="playlistElement.video.publishedAt"></my-date-toggle>
 
-          <span class="views" [title]="playlistElement.video.getExactNumberOfViews()">
-            • <my-video-views-counter [video]="playlistElement.video"></my-video-views-counter>
+          <span class="views">
+            • <my-video-views-counter [isLive]="playlistElement.video.isLive" [viewers]="playlistElement.video.viewers" [views]="playlistElement.video.views"></my-video-views-counter>
           </span>
         </span>
 

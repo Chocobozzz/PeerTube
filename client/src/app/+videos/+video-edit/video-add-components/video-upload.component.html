@@ -50,7 +50,7 @@
 
 <my-upload-progress
   [isUploading]="isUploadingVideo" [uploadPercents]="videoUploadPercents" [error]="error" [uploaded]="videoUploaded"
-  [enableRetryAfterError]="enableRetryAfterError" (cancel)="cancelUpload()" (retry)="retryUpload()"
+  [enableRetryAfterError]="enableRetryAfterError" (cancelUpload)="cancelUpload()" (retry)="retryUpload()"
 >
 </my-upload-progress>
 

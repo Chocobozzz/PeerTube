@@ -17,7 +17,7 @@ export class UploadProgressComponent {
   @Input() uploaded: boolean
   @Input() enableRetryAfterError: boolean
 
-  @Output() cancel = new EventEmitter()
+  @Output() cancelUpload = new EventEmitter()
   @Output() retry = new EventEmitter()
 
   getUploadingLabel () {

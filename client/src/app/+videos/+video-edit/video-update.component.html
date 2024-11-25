@@ -3,7 +3,7 @@
 
   <my-upload-progress
     [isUploading]="isReplacingVideoFile" [uploadPercents]="videoUploadPercents" [error]="uploadError" [uploaded]="updateDone"
-    [enableRetryAfterError]="false" (cancel)="cancelUpload()"
+    [enableRetryAfterError]="false" (cancelUpload)="cancelUpload()"
   >
   </my-upload-progress>
 

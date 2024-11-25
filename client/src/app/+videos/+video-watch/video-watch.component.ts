@@ -50,7 +50,7 @@ import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
 import {
   HLSOptions,
   PeerTubePlayer,
-  PeerTubePlayerContructorOptions,
+  PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
   PlayerMode,
   videojs
@@ -662,7 +662,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private buildPeerTubePlayerConstructorOptions (options: {
     urlOptions: URLOptions
-  }): PeerTubePlayerContructorOptions {
+  }): PeerTubePlayerConstructorOptions {
     const { urlOptions } = options
 
     return {

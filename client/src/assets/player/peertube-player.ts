@@ -41,7 +41,7 @@ import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@peert
 import { saveAverageBandwidth } from './peertube-player-local-storage'
 import { ControlBarOptionsBuilder, HLSOptionsBuilder, WebVideoOptionsBuilder } from './shared/player-options-builder'
 import { TranslationsManager } from './translations-manager'
-import { PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions, PlayerNetworkInfo, VideoJSPluginOptions } from './types'
+import { PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerNetworkInfo, VideoJSPluginOptions } from './types'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -69,7 +69,7 @@ export class PeerTubePlayer {
 
   private currentLoadOptions: PeerTubePlayerLoadOptions
 
-  constructor (private options: PeerTubePlayerContructorOptions) {
+  constructor (private options: PeerTubePlayerConstructorOptions) {
     this.pluginsManager = options.pluginsManager
   }
 
