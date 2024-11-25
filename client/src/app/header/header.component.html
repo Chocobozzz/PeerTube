@@ -20,7 +20,10 @@
     } @else {
       <my-notification-dropdown class="margin-button"></my-notification-dropdown>
 
-      <my-button theme="tertiary" rounded="true" class="margin-button" icon="cog" ptRouterLink="/my-account"></my-button>
+      <my-button
+        i18n-title title="Go to the manage your account page"
+        theme="tertiary" rounded="true" class="margin-button" icon="cog" ptRouterLink="/my-account"
+      ></my-button>
 
       <div
         class="logged-in-container" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"

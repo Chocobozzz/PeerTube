@@ -50,6 +50,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   @Input() ptRouterLinkActive = ''
 
   @Input() title: string
+  @Input() tooltip: string
   @Input({ transform: booleanAttribute }) active = false
 
   @Input({ transform: booleanAttribute }) loading = false
