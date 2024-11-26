@@ -127,10 +127,17 @@ export class ThemeService {
 
   private loadThemeStyle (name: string) {
     const links = document.getElementsByTagName('link')
+
     for (let i = 0; i < links.length; i++) {
       const link = links[i]
       if (link.getAttribute('rel').includes('style') && link.getAttribute('title')) {
         link.disabled = link.getAttribute('title') !== name
+
+        if (!link.disabled) {
+          link.onload = () => this.injectColorPalette()
+        } else {
+          link.onload = undefined
+        }
       }
     }
 
