@@ -1,13 +1,13 @@
 @if (ptRouterLink || ptQueryParams) {
   <a
     class="action-button"
-    [ngClass]="classes" [ngbTooltip]="tooltip" [title]="title"
+    [ngClass]="classes" [ngbTooltip]="tooltip" [attr.title]="title"
     [routerLink]="ptRouterLink" [queryParams]="ptQueryParams" [queryParamsHandling]="ptQueryParamsHandling" [routerLinkActive]="ptRouterLinkActive"
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
 } @else {
-  <button type="button" class="action-button" [ngClass]="classes" [disabled]="disabled" [ngbTooltip]="tooltip" [title]="title">
+  <button type="button" class="action-button" [ngClass]="classes" [disabled]="disabled" [ngbTooltip]="tooltip" [attr.title]="title">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
 }

@@ -1,12 +1,11 @@
 import { booleanAttribute, Component, Input } from '@angular/core'
-import { NgIf } from '@angular/common'
 import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-signup-label',
   templateUrl: './signup-label.component.html',
   standalone: true,
-  imports: [ NgIf ]
+  imports: []
 })
 export class SignupLabelComponent {
   @Input({ transform: booleanAttribute }) requiresApproval: boolean

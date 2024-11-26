@@ -70,7 +70,7 @@ $filters-background: pvar(--bg-secondary-400);
 }
 
 .active-filters {
-  > div:not(:last-child)::after {
+  .active-filter:not(:last-child)::after {
     content: '•';
     font-weight: normal;
     display: inline-block;

@@ -10,12 +10,12 @@ function isCheckboxSelected (name: string) {
 }
 
 async function selectCustomSelect (id: string, valueLabel: string) {
-  const wrapper = $(`[formcontrolname=${id}] .ng-arrow-wrapper`)
+  const wrapper = $(`[formcontrolname=${id}] span[role=combobox]`)
 
   await wrapper.waitForClickable()
   await wrapper.click()
 
-  const option = await $$(`[formcontrolname=${id}] .ng-option`).filter(async o => {
+  const option = await $$(`[formcontrolname=${id}] li[role=option]`).filter(async o => {
     const text = await o.getText()
 
     return text.trimStart().startsWith(valueLabel)

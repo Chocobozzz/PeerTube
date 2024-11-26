@@ -76,7 +76,7 @@ export class LoginPage {
   }
 
   async logout () {
-    const loggedInDropdown = $('.logged-in-more .logged-in-info')
+    const loggedInDropdown = $('.logged-in-container .logged-in-info')
 
     await loggedInDropdown.waitForClickable()
     await loggedInDropdown.click()
@@ -87,7 +87,7 @@ export class LoginPage {
     await logout.click()
 
     await browser.waitUntil(() => {
-      return $$('.login-buttons-block, my-error-page a[href="/login"]').some(e => e.isDisplayed())
+      return $$('my-login-link, my-error-page a[href="/login"]').some(e => e.isDisplayed())
     })
   }
 
@@ -98,7 +98,7 @@ export class LoginPage {
   }
 
   private getLoggedInInfoElem () {
-    return $('.logged-in-display-name')
+    return $('.logged-in-info .display-name')
   }
 
   private getSuffix () {

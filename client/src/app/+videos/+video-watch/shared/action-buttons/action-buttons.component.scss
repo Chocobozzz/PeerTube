@@ -15,6 +15,7 @@
     display: inline-block;
     white-space: nowrap;
     text-transform: uppercase;
+    border: 0;
 
     @include peertube-button;
     @include button-with-icon(21px, 0, -1px);

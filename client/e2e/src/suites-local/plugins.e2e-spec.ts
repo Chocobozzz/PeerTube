@@ -13,7 +13,7 @@ describe('Plugins', () => {
   }
 
   async function expectSubmitState ({ disabled }: { disabled: boolean }) {
-    const disabledSubmit = await $('my-button .disabled')
+    const disabledSubmit = await $('my-button [disabled]')
 
     if (disabled) expect(await disabledSubmit.isDisplayed()).toBeTruthy()
     else expect(await disabledSubmit.isDisplayed()).toBeFalsy()

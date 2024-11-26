@@ -2,11 +2,13 @@
 @use '_mixins' as *;
 @use '_button-mixins' as *;
 
+$height: 36px;
+
 .progress-container {
   background-color: pvar(--bg-secondary-500);
   display: flex;
   overflow: hidden;
-  height: 2rem;
+  height: $height;
   font-size: 0.85rem;
   font-weight: $font-semibold;
   border-radius: 0.25rem;
@@ -15,7 +17,7 @@
   span {
     position: absolute;
     color: pvar(--fg-400);
-    line-height: 2rem;
+    line-height: $height;
     margin: 0 12px;
   }
 

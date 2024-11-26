@@ -222,8 +222,9 @@ export class VideoWatchPage {
     await confirmButton.waitForClickable()
     await confirmButton.click()
 
-    const createdComment = await (await $('.is-child .comment-html p')).getText()
+    const createdComment = await $('.is-child .comment-html p')
+    await createdComment.waitForDisplayed()
 
-    return expect(createdComment).toBe(comment)
+    return expect(await createdComment.getTagName()).toBe(comment)
   }
 }

@@ -147,7 +147,6 @@
 
 @mixin peertube-button {
   padding: pvar(--input-y-padding) pvar(--input-x-padding);
-  border: 0;
   font-weight: $font-semibold;
 
   border-radius: 4px;

@@ -3,7 +3,7 @@
   ngbDropdown (openChange)="openChange.emit($event)" [placement]="placement" [container]="container"
 >
   <button
-    class="action-button peertube-button"
+    class="action-button peertube-button border-0"
     [ngClass]="{ 'icon-only': !label, 'peertube-button-small': buttonSize === 'small', 'secondary-button': buttonStyled && theme === 'secondary', 'primary-button': buttonStyled && theme === 'primary' }"
     ngbDropdownToggle aria-label="Open actions" i18n-aria-label
   >

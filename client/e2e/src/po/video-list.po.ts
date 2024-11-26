@@ -11,9 +11,9 @@ export class VideoListPage {
 
     // We did not upload a file on a mobile device
     if (this.isMobileDevice === true || this.isSafari === true) {
-      url = 'https://peertube2.cpy.re/videos/local'
+      url = 'https://peertube2.cpy.re/videos/browse?scope=local'
     } else {
-      url = '/videos/recently-added'
+      url = '/videos/browse'
     }
 
     await go(url)
@@ -24,19 +24,13 @@ export class VideoListPage {
     await this.waitForList()
   }
 
-  async goOnLocal () {
-    await $('.menu-link[href="/videos/local"]').click()
-    await this.waitForTitle('Local videos')
-  }
+  async goOnBrowseVideos () {
+    await $('.menu-link*=Home').click()
 
-  async goOnRecentlyAdded () {
-    await $('.menu-link[href="/videos/recently-added"]').click()
-    await this.waitForTitle('Recently added')
-  }
-
-  async goOnTrending () {
-    await $('.menu-link[href="/videos/trending"]').click()
-    await this.waitForTitle('Trending')
+    const browseVideos = $('a*=Browse videos')
+    await browseVideos.waitForClickable()
+    await browseVideos.click()
+    await this.waitForList()
   }
 
   async goOnHomepage () {
@@ -59,10 +53,11 @@ export class VideoListPage {
     await this.waitForList()
   }
 
-  getNSFWFilter () {
-    return $$('.active-filter').filter(async a => {
-      return (await a.getText()).includes('Sensitive')
-    }).then(f => f[0])
+  async getNSFWFilter () {
+    const el = $('.active-filter*=Sensitive')
+    await el.waitForDisplayed()
+
+    return el
   }
 
   async getVideosListName () {

@@ -52,9 +52,7 @@ describe('Videos list', () => {
   async function checkCommonVideoListPages (policy: NSFWPolicy) {
     const promisesWithFilters = [
       videoListPage.goOnRootAccount.bind(videoListPage),
-      videoListPage.goOnLocal.bind(videoListPage),
-      videoListPage.goOnRecentlyAdded.bind(videoListPage),
-      videoListPage.goOnTrending.bind(videoListPage),
+      videoListPage.goOnBrowseVideos.bind(videoListPage),
       videoListPage.goOnRootChannel.bind(videoListPage)
     ]
 
