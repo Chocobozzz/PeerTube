@@ -47,13 +47,13 @@
                 <ul class="ul-unstyle">
                   <li *ngFor="let link of menuSection.links">
                     @if (link.isPrimaryButton === true) {
-                      <my-button class="d-block menu-button" theme="primary" [icon]="link.icon" [ariaLabel]="link.label" [ptRouterLink]="link.path">
+                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [ariaLabel]="link.label" [ptRouterLink]="link.path">
                         @if (!collapsed) {
                           {{ link.label }}
                         }
                       </my-button>
                     } @else {
-                      <a class="menu-link ellipsis" [routerLink]="link.path" routerLinkActive="active">
+                      <a class="menu-link ellipsis" [routerLink]="link.path" routerLinkActive="active" [ngClass]="link.ngClass">
                         <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
                         <span [ngClass]="{ 'visually-hidden': collapsed }">{{ link.label }}</span>
                       </a>

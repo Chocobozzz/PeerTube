@@ -28,6 +28,8 @@ type MenuLink = {
   path: string
 
   isPrimaryButton?: boolean // default false
+
+  ngClass?: string
 }
 
 type MenuSection = {
@@ -73,11 +75,11 @@ export class MenuComponent implements OnInit, OnDestroy {
   ) { }
 
   get shortDescription () {
-    return this.serverConfig.instance.shortDescription
+    return this.serverService.getHTMLConfig().instance.shortDescription
   }
 
   get instanceName () {
-    return this.serverConfig.instance.name
+    return this.serverService.getHTMLConfig().instance.name
   }
 
   get collapsed () {
@@ -128,7 +130,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   private buildQuickLinks (): MenuSection {
-    return {
+    const base = {
       key: 'quick-access',
       title: $localize`Quick access`,
       links: [
@@ -136,14 +138,19 @@ export class MenuComponent implements OnInit, OnDestroy {
           path: this.redirectService.getDefaultRoute(),
           icon: 'home' as GlobalIconName,
           label: $localize`Home`
-        },
-        {
-          path: '/videos/subscriptions',
-          icon: 'subscriptions' as GlobalIconName,
-          label: $localize`Subscriptions`
         }
       ]
     }
+
+    if (this.loggedIn) {
+      base.links.push({
+        path: '/videos/subscriptions',
+        icon: 'subscriptions' as GlobalIconName,
+        label: $localize`Subscriptions`
+      })
+    }
+
+    return base
   }
 
   private buildLibraryLinks (): MenuSection {
@@ -193,7 +200,8 @@ export class MenuComponent implements OnInit, OnDestroy {
           path: '/videos/upload',
           icon: 'upload' as GlobalIconName,
           label: $localize`Publish`,
-          isPrimaryButton: true
+          isPrimaryButton: true,
+          ngClass: 'publish-button'
         }
       ])
     }
