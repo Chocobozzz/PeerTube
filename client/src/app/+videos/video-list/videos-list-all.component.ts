@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ComponentPaginationLight, DisableForReuseHook, MetaService, ServerService } from '@app/core'
+import { ComponentPaginationLight, DisableForReuseHook, MetaService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoFilterScope, VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
@@ -20,7 +20,6 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
   title: string
-  titleTooltip: string
 
   groupByDate: boolean
 
@@ -36,7 +35,6 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   private routeSub: Subscription
 
   constructor (
-    private server: ServerService,
     private route: ActivatedRoute,
     private videoService: VideoService,
     private hooks: HooksService,
@@ -81,6 +79,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   onFiltersChanged (filters: VideoFilters) {
     this.buildTitle(filters.scope, filters.sort)
     this.updateGroupByDate(filters.sort)
+    this.meta.setTitle(this.title)
   }
 
   disableForReuse () {
@@ -94,7 +93,6 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   update () {
     this.buildTitle()
     this.updateGroupByDate(this.defaultSort)
-
     this.meta.setTitle(this.title)
   }
 
@@ -103,48 +101,20 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   }
 
   private buildTitle (scope: VideoFilterScope = this.defaultScope, sort: VideoSortField = this.defaultSort) {
-    const trendingDays = this.server.getHTMLConfig().trending.videos.intervalDays
     const sanitizedSort = this.getSanitizedSort(sort)
 
     if (scope === 'local') {
       this.title = $localize`Local videos`
-      this.titleTooltip = $localize`Only videos uploaded on this instance are displayed`
       return
     }
 
     if (sanitizedSort === 'publishedAt') {
       this.title = $localize`Recently added`
-      this.titleTooltip = undefined
       return
     }
 
     if ([ 'hot', 'trending', 'likes', 'views' ].includes(sanitizedSort)) {
       this.title = $localize`Trending`
-
-      if (sanitizedSort === 'hot') {
-        this.titleTooltip = $localize`Videos with the most interactions for recent videos`
-        return
-      }
-
-      if (sanitizedSort === 'likes') {
-        this.titleTooltip = $localize`Videos that have the most likes`
-        return
-      }
-
-      if (sanitizedSort === 'views') {
-        this.titleTooltip = undefined
-        return
-      }
-
-      if (sanitizedSort === 'trending') {
-        if (trendingDays === 1) {
-          this.titleTooltip = $localize`Videos with the most views during the last 24 hours`
-          return
-        }
-
-        this.titleTooltip = $localize`Videos with the most views during the last ${trendingDays} days`
-      }
-
       return
     }
   }
