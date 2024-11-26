@@ -1273,9 +1273,9 @@
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6981830104215014781" datatype="html">
+      <trans-unit id="6981830104215014781" datatype="html" xml:space="preserve">
         <source>category</source>
-        <target state="new">category</target>
+        <target state="translated">категория</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -1297,17 +1297,17 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9123510631384754590" datatype="html">
+      <trans-unit id="9123510631384754590" datatype="html" xml:space="preserve">
         <source>View the channel</source>
-        <target state="new">View the channel</target>
+        <target state="translated">Просмотр канала</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="674351509173816083" datatype="html">
+      <trans-unit id="674351509173816083" datatype="html" xml:space="preserve">
         <source>channel</source>
-        <target state="new">channel</target>
+        <target state="translated">канал</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -2151,9 +2151,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019610224237760025" datatype="html">
+      <trans-unit id="4019610224237760025" datatype="html" xml:space="preserve">
         <source>Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Войти <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -2372,9 +2372,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="180660177324430106" datatype="html">
+      <trans-unit id="180660177324430106" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new"> Filters </target>
+        <target state="translated">Фильтр</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">20,21</context>
@@ -2531,9 +2531,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910100497841976407" datatype="html">
+      <trans-unit id="2910100497841976407" datatype="html" xml:space="preserve">
         <source>Go to the CLI documentation</source>
-        <target state="new">Go to the CLI documentation</target>
+        <target state="translated">Перейдите к документации CLI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -2555,17 +2555,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2505792628717602511" datatype="html">
+      <trans-unit id="2505792628717602511" datatype="html" xml:space="preserve">
         <source>Go to the admin documentation</source>
-        <target state="new">Go to the admin documentation</target>
+        <target state="translated">Перейдите к документации администратора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="439770035760298623" datatype="html">
+      <trans-unit id="439770035760298623" datatype="html" xml:space="preserve">
         <source>Admin documentation</source>
-        <target state="new">Admin documentation</target>
+        <target state="translated">Документация администратора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -2579,17 +2579,17 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3937624467365667635" datatype="html">
+      <trans-unit id="3937624467365667635" datatype="html" xml:space="preserve">
         <source>Go to the user documentation</source>
-        <target state="new">Go to the user documentation</target>
+        <target state="translated">Перейдите к документации пользователя</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4582314665808509009" datatype="html">
+      <trans-unit id="4582314665808509009" datatype="html" xml:space="preserve">
         <source>User documentation</source>
-        <target state="new">User documentation</target>
+        <target state="translated">Документация пользователя</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">26,28</context>
@@ -2913,25 +2913,25 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5881042364603327874" datatype="html">
+      <trans-unit id="5881042364603327874" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (!collapsed) {"/> More info <x id="CLOSE_BLOCK_IF" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_IF" equiv-text="@if (!collapsed) {"/> More info <x id="CLOSE_BLOCK_IF" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (!collapsed) {"/> Дополнительная информация <x id="CLOSE_BLOCK_IF" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">3,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2717099775718108713" datatype="html">
+      <trans-unit id="2717099775718108713" datatype="html" xml:space="preserve">
         <source>Display the lateral bar</source>
-        <target state="new">Display the lateral bar</target>
+        <target state="translated">Отобразите боковую панель</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9175440683299119786" datatype="html">
+      <trans-unit id="9175440683299119786" datatype="html" xml:space="preserve">
         <source>Hide the lateral bar</source>
-        <target state="new">Hide the lateral bar</target>
+        <target state="translated">Спрятать боковую панель</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">27</context>
@@ -2945,25 +2945,25 @@
           <context context-type="linenumber">45,64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3433184700415677129" datatype="html">
+      <trans-unit id="3433184700415677129" datatype="html" xml:space="preserve">
         <source>Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Платформа основана на <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">79,82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9205975870261474064" datatype="html">
+      <trans-unit id="9205975870261474064" datatype="html" xml:space="preserve">
         <source>Discover more platforms</source>
-        <target state="new">Discover more platforms</target>
+        <target state="translated">Откройте для себя больше платформ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">82,83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8056406592648751808" datatype="html">
+      <trans-unit id="8056406592648751808" datatype="html" xml:space="preserve">
         <source>Quick access</source>
-        <target state="new">Quick access</target>
+        <target state="translated">Быстрый доступ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -2977,9 +2977,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3266907599760910102" datatype="html">
+      <trans-unit id="3266907599760910102" datatype="html" xml:space="preserve">
         <source>Manage my account</source>
-        <target state="new">Manage my account</target>
+        <target state="translated">Управлять своим аккаунтом</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">53</context>
@@ -3121,9 +3121,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5491172370003945798" datatype="html">
+      <trans-unit id="5491172370003945798" datatype="html" xml:space="preserve">
         <source>Browse videos</source>
-        <target state="new">Browse videos</target>
+        <target state="translated">Просматривайте видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -3261,9 +3261,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3519474815325884386" datatype="html">
+      <trans-unit id="3519474815325884386" datatype="html" xml:space="preserve">
         <source>View all</source>
-        <target state="new"> View all </target>
+        <target state="translated">Посмотреть все</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
           <context context-type="linenumber">74</context>
@@ -3894,9 +3894,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="518619112264710096" datatype="html">
+      <trans-unit id="518619112264710096" datatype="html" xml:space="preserve">
         <source>Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</source>
-        <target state="new">Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</target>
+        <target state="translated">Редактировать подпись "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -3910,33 +3910,33 @@
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5203899665906572487" datatype="html">
+      <trans-unit id="5203899665906572487" datatype="html" xml:space="preserve">
         <source>Add a new segment</source>
-        <target state="new">Add a new segment</target>
+        <target state="translated">Добавьте новый сегмент</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="936472574168973902" datatype="html">
+      <trans-unit id="936472574168973902" datatype="html" xml:space="preserve">
         <source>Segment start timestamp</source>
-        <target state="new">Segment start timestamp</target>
+        <target state="translated">Временная метка начала сегмента</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2831765880579689127" datatype="html">
+      <trans-unit id="2831765880579689127" datatype="html" xml:space="preserve">
         <source>Use video current time as start time</source>
-        <target state="new">Use video current time as start time</target>
+        <target state="translated">Используйте текущее время видео в качестве времени начала</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1031856574257335431" datatype="html">
+      <trans-unit id="1031856574257335431" datatype="html" xml:space="preserve">
         <source>Segment end timestamp</source>
-        <target state="new">Segment end timestamp</target>
+        <target state="translated">Временная метка окончания сегмента</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">66</context>
@@ -3946,9 +3946,9 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2534468682040754093" datatype="html">
+      <trans-unit id="2534468682040754093" datatype="html" xml:space="preserve">
         <source>Use video current time as end time</source>
-        <target state="new">Use video current time as end time</target>
+        <target state="translated">Используйте текущее время видео в качестве времени окончания</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">74</context>
@@ -3962,33 +3962,33 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4592694974533956701" datatype="html">
+      <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
-        <target state="new">Start segment must be before end segment time</target>
+        <target state="translated">Начальный сегмент должен быть раньше времени окончания сегмента</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9131593410297043344" datatype="html">
+      <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="new">Segment must have a text content</target>
+        <target state="translated">Сегмент должен содержать текстовое содержимое</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7846454630805382470" datatype="html">
+      <trans-unit id="7846454630805382470" datatype="html" xml:space="preserve">
         <source>Cannot parse subtitles</source>
-        <target state="new">Cannot parse subtitles</target>
+        <target state="translated">Не удается разобрать субтитры</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912256992541129243" datatype="html">
+      <trans-unit id="6912256992541129243" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel the edition first.</source>
-        <target state="new">A segment is being edited. Save or cancel the edition first.</target>
+        <target state="translated">Редактируется фрагмент. Сначала сохраните или отмените публикацию.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -4046,9 +4046,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691672602205005718" datatype="html">
+      <trans-unit id="6691672602205005718" datatype="html" xml:space="preserve">
         <source>Use a comma (,) to add a tag</source>
-        <target state="new">Use a comma (,) to add a tag</target>
+        <target state="translated">Используйте запятую (,) для добавления тега</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -4894,9 +4894,9 @@
           <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7968397949464882917" datatype="html">
+      <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
-        <target state="new">Are you sure you want to close this modal without saving your changes?</target>
+        <target state="translated">Вы уверены, что хотите закрыть этот режим без сохранения внесенных изменений?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">413</context>
@@ -5451,9 +5451,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3522196594292220614" datatype="html">
+      <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="new">Playlist URL</target>
+        <target state="translated">Плейлист URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -5523,9 +5523,9 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">Видео URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
@@ -5963,17 +5963,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036346152557749708" datatype="html">
+      <trans-unit id="1036346152557749708" datatype="html" xml:space="preserve">
         <source>Edit this segment</source>
-        <target state="new">Edit this segment</target>
+        <target state="translated">Отредактируйте этот сегмент</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6855898148869474963" datatype="html">
+      <trans-unit id="6855898148869474963" datatype="html" xml:space="preserve">
         <source>Delete this segment</source>
-        <target state="new">Delete this segment</target>
+        <target state="translated">Удалите этот сегмент</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">108</context>
