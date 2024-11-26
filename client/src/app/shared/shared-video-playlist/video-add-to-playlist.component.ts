@@ -59,7 +59,6 @@ type PlaylistSummary = {
 export class VideoAddToPlaylistComponent extends FormReactive implements OnInit, OnChanges, OnDestroy, DisableForReuseHook {
   @Input() video: Video
   @Input() currentVideoTimestamp: number
-  @Input() lazyLoad = false
 
   isNewPlaylistBlockOpened = false
 
@@ -104,8 +103,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.videoPlaylistSearchChanged
         .pipe(debounceTime(500))
         .subscribe(() => this.load())
-
-    if (this.lazyLoad === false) this.load()
   }
 
   ngOnChanges (simpleChanges: SimpleChanges) {
@@ -148,12 +145,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
           this.videoPlaylistService.runVideoExistsInPlaylistCheck(this.video.id)
         })
-  }
-
-  openChange (opened: boolean) {
-    if (opened === false) {
-      this.isNewPlaylistBlockOpened = false
-    }
   }
 
   openCreateBlock (event: Event) {

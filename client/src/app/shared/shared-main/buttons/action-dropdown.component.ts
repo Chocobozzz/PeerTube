@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 import { Params, RouterLink } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
@@ -60,6 +60,8 @@ export class ActionDropdownComponent<T> {
 
   @Input() label: string
   @Input() theme: DropdownTheme = 'secondary'
+
+  @Output() openChange = new EventEmitter<boolean>()
 
   getActions (): DropdownAction<T>[][] {
     if (this.actions.length !== 0 && Array.isArray(this.actions[0])) return this.actions as DropdownAction<T>[][]

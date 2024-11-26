@@ -1,4 +1,7 @@
-<div class="dropdown-root" ngbDropdown [placement]="placement" [container]="container" *ngIf="areActionsDisplayed(actions, entry)">
+<div
+  *ngIf="areActionsDisplayed(actions, entry)" class="dropdown-root"
+  ngbDropdown (openChange)="openChange.emit($event)" [placement]="placement" [container]="container"
+>
   <button
     class="action-button peertube-button"
     [ngClass]="{ 'icon-only': !label, 'peertube-button-small': buttonSize === 'small', 'secondary-button': buttonStyled && theme === 'secondary', 'primary-button': buttonStyled && theme === 'primary' }"

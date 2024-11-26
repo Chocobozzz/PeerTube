@@ -300,7 +300,10 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   isWatchLaterPlaylistDisplayed () {
-    return this.displayVideoActions && this.isUserLoggedIn() && this.inWatchLaterPlaylist !== undefined
+    return !this.screenService.isInTouchScreen() &&
+      this.displayVideoActions &&
+      this.isUserLoggedIn() &&
+      this.inWatchLaterPlaylist !== undefined
   }
 
   getClasses () {
@@ -320,7 +323,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   private loadWatchLater () {
-    if (!this.isUserLoggedIn() || this.inWatchLaterPlaylist !== undefined) return
+    if (this.screenService.isInTouchScreen() || !this.displayVideoActions || !this.isUserLoggedIn()) return
 
     this.authService.userInformationLoaded
         .pipe(switchMap(() => this.videoPlaylistService.listenToVideoPlaylistChange(this.video.id)))

@@ -1,21 +1,23 @@
 <ng-container *ngIf="videoActions.length !== 0">
 
   <div
+    *ngIf="isUserLoggedIn() && displayOptions.playlist"
     role="button" aria-label="Open video actions" i18n-aria-label
     class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" autoClose="outside" [placement]="getPlaylistDropdownPlacement()"
-    *ngIf="isUserLoggedIn() && displayOptions.playlist" (openChange)="playlistAdd.openChange($event)"
   >
     <span class="anchor" ngbDropdownAnchor></span>
 
     <div ngbDropdownMenu>
-      <my-video-add-to-playlist #playlistAdd [video]="video" [lazyLoad]="true"></my-video-add-to-playlist>
+      @defer (when dropdownOpened) {
+        <my-video-add-to-playlist #playlistAdd [video]="video"></my-video-add-to-playlist>
+      }
     </div>
   </div>
 
   <my-action-dropdown
-    [actions]="videoActions" [label]="label" [entry]="{ video: video }" (click)="loadDropdownInformation()"
+    [actions]="videoActions" [label]="label" [entry]="{ video: video }"
     [buttonSize]="buttonSize" [placement]="placement" [buttonDirection]="buttonDirection" [buttonStyled]="buttonStyled"
-    container="body"
+    container="body" (openChange)="dropdownOpened = true"
   ></my-action-dropdown>
 
   <my-video-download #videoDownloadModal></my-video-download>
