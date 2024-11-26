@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { booleanAttribute, Component, Input } from '@angular/core'
 import { NgIf, NgStyle } from '@angular/common'
 
 @Component({
@@ -8,7 +8,7 @@ import { NgIf, NgStyle } from '@angular/common'
   imports: [ NgIf, NgStyle ]
 })
 export class LoaderComponent {
-  @Input() loading: boolean
+  @Input({ transform: booleanAttribute }) loading: boolean
   @Input() size: 'sm' | 'xl'
 
   private readonly sizes = {

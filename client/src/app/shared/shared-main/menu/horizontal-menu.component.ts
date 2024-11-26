@@ -90,7 +90,7 @@ export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
     })
 
     if (!entry) {
-      if (this.menuEntries.length !== 0) {
+      if (this.menuEntries.length !== 0 && currentUrl !== '/') {
         logger.info(`Unable to find entry for ${currentUrl} or ${currentComponentPath}`, { menuEntries: this.menuEntries })
       }
 

@@ -24,7 +24,7 @@
 } @else {
   <div
     ngbDropdown autoClose="outside" placement="bottom" container="body" dropdownClass="dropdown-notifications"
-    #dropdown="ngbDropdown" (shown)="onDropdownShown()" (hidden)="onDropdownHidden()"
+    #dropdown="ngbDropdown" (openChange)="$event === true ? onDropdownShown() : onDropdownHidden()"
   >
     <button
       i18n-title title="View your notifications" class="peertube-button tertiary-button rounded-icon-button disable-dropdown-caret notification-inbox-dropdown"
@@ -60,17 +60,19 @@
           </div>
         </div>
 
-        <div *ngIf="!loaded" class="loader mt-4">
-        </div>
+        @defer (when opened) {
+          <div *ngIf="!loaded" class="loader mt-4">
+            <my-loader size="xl" [loading]="loaded"></my-loader>
+          </div>
 
-        @defer (when loaded) {
           <my-user-notifications
             [ignoreLoadingBar]="true" [infiniteScroll]="false" [itemsPerPage]="10"
             [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
           ></my-user-notifications>
         } @placeholder {
-          <my-loader size="xl" [loading]="loaded"></my-loader>
-
+          <div class="loader mt-4">
+            <my-loader size="xl" loading="true"></my-loader>
+          </div>
         }
 
         <div class="all-notifications">

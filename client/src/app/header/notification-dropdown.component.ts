@@ -83,7 +83,6 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   }
 
   onDropdownHidden () {
-    this.loaded = false
     this.opened = false
   }
 
