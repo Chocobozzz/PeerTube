@@ -10,4 +10,10 @@
 
 .activated {
   color: pvar(--fg) !important;
+
+  my-global-icon {
+    color: pvar(--active-icon-color) !important;
+
+    @include fill-svg-color(pvar(--active-icon-bg));
+  }
 }

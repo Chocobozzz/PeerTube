@@ -69,7 +69,8 @@ body {
   --main-col-width: calc(100vw - #{$menu-width});
 
   --secondary-icon-color: #{pvar(--fg-50)};
-  --secondary-fg: #{pvar(--fg-50)};
+  --active-icon-color: #{pvar(--on-primary)};
+  --active-icon-bg: #{pvar(--primary)};
 
   --border-primary: #{pvar(--primary)};
 
@@ -136,6 +137,9 @@ body {
     --alert-primary-fg: #{pvar(--primary-650)};
     --alert-primary-bg: #{pvar(--primary-100)};
     --alert-primary-border-color: #{pvar(--primary-300)};
+
+    --active-icon-color: #{pvar(--fg-450)};
+    --active-icon-bg: #{pvar(--bg-secondary-600)};
   }
 
   & {
