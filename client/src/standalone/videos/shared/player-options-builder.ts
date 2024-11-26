@@ -11,7 +11,7 @@ import {
   VideoState,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
-import { HLSOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
+import { HLSOptions, PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
 import {
   getBoolOrDefault,
   getParamString,
@@ -174,7 +174,7 @@ export class PlayerOptionsBuilder {
   getPlayerConstructorOptions (options: {
     serverConfig: HTMLServerConfig
     authorizationHeader: () => string
-  }): PeerTubePlayerContructorOptions {
+  }): PeerTubePlayerConstructorOptions {
     const { serverConfig, authorizationHeader } = options
 
     return {
