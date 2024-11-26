@@ -77,7 +77,7 @@ module.exports = {
       },
       {
         browserName: 'Safari',
-        browserVersion: '12.1',
+        browserVersion: '13',
 
         ...buildBStackDesktopOptions({ sessionName: 'Safari Desktop', resolution: '1280x1024' })
       },
@@ -102,10 +102,11 @@ module.exports = {
 
         ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 11', osVersion: '13' })
       },
+
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad 7th', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 11 2020', osVersion: '13' })
       }
     ],
 

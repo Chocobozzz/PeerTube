@@ -35,19 +35,7 @@ export class LoginPage {
       await submit.click()
     }
 
-    if (this.isMobileDevice) {
-      const menuToggle = $('.top-left-block button')
-
-      await $('h2=Our content selection').waitForDisplayed()
-
-      await menuToggle.click()
-
-      await this.ensureIsLoggedInAs(displayName)
-
-      await menuToggle.click()
-    } else {
-      await this.ensureIsLoggedInAs(displayName)
-    }
+    await this.ensureIsLoggedInAs(displayName)
   }
 
   async getLoginError (username: string, password: string) {
@@ -92,13 +80,11 @@ export class LoginPage {
   }
 
   async ensureIsLoggedInAs (displayName: string) {
-    await this.getLoggedInInfoElem().waitForExist()
-
-    await expect(this.getLoggedInInfoElem()).toHaveText(displayName)
+    await this.getLoggedInInfoElem(displayName).waitForExist()
   }
 
-  private getLoggedInInfoElem () {
-    return $('.logged-in-info .display-name')
+  private getLoggedInInfoElem (displayName: string) {
+    return $('.logged-in-info').$('.display-name*=' + displayName)
   }
 
   private getSuffix () {
