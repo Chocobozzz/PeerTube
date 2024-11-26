@@ -763,9 +763,10 @@ p-table {
       display: inline-flex;
       align-items: center;
       flex-wrap: wrap;
+      gap: 0.5rem;
 
       .left-buttons {
-        @include padding-left(15px);
+        @include padding-left(1rem);
       }
     }
   }
@@ -1172,14 +1173,9 @@ p-toast {
 @media screen and (max-width: $mobile-view) {
   p-table {
     .p-datatable-header {
-      .caption {
-        flex-wrap: wrap;
-
-        > div {
-          width: 100%;
-          padding: 0 !important;
-          margin-bottom: 5px;
-        }
+      .caption > div {
+        width: 100%;
+        padding: 0 !important;
       }
     }
   }

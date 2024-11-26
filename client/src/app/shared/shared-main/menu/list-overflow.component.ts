@@ -14,7 +14,6 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core'
-import { RouterLink, RouterLinkActive } from '@angular/router'
 import { ScreenService } from '@app/core'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { randomInt } from '@peertube/peertube-core-utils'
@@ -41,14 +40,12 @@ export interface ListOverflowItem {
     NgbDropdownToggle,
     NgClass,
     NgbDropdownMenu,
-    RouterLinkActive,
-    RouterLink,
     SlicePipe
   ]
 })
 export class ListOverflowComponent<T extends ListOverflowItem> implements OnInit, AfterViewInit {
   @Input() items: T[]
-  @Input() itemTemplate: TemplateRef<{ item: T }>
+  @Input() itemTemplate: TemplateRef<{ item: T, dropdown?: boolean, modal?: boolean }>
   @Input({ transform: booleanAttribute }) hasBorder = false
 
   @ViewChild('modal', { static: true }) modal: ElementRef
@@ -108,10 +105,6 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements OnInit
 
   toggleModal () {
     this.modalService.open(this.modal, { centered: true })
-  }
-
-  dismissOtherModals () {
-    this.modalService.dismissAll()
   }
 
   getId (id: number | string = uniqueId()): string {

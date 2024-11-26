@@ -13,18 +13,8 @@ a {
 .admin-sub-header {
   justify-content: flex-end;
 
-  .select-filter-block {
-    &:not(:last-child) {
-      @include margin-right(10px);
-    }
-
-    label {
-      margin-bottom: 2px;
-    }
-
-    .peertube-select-container {
-      @include peertube-select-container(auto);
-    }
+  .peertube-select-container {
+    @include peertube-select-container(auto);
   }
 }
 

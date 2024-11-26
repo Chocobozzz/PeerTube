@@ -53,11 +53,9 @@
 .admin-sub-header {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
-
-  @media screen and (max-width: $small-view) {
-    flex-direction: column;
-  }
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .pt-breadcrumb {

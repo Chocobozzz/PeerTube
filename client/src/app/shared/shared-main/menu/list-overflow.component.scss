@@ -33,39 +33,9 @@ li {
   right: 0;
 }
 
-button {
-  &::after {
-    display: none;
-  }
-
-  &.route-active {
-    &::after {
-      display: inherit;
-      border: 2px solid pvar(--primary);
-      position: relative;
-      right: 95%;
-      top: 50%;
-    }
-  }
-}
-
-.modal-body {
-  a {
-    color: currentColor;
-    box-sizing: border-box;
-    display: block;
-    font-size: 1.2rem;
-    padding: 9px 12px;
-    text-align: initial;
-    text-transform: unset;
-    width: 100%;
-
-    @include disable-default-a-behaviour;
-
-    &.active {
-      color: pvar(--on-primary) !important;
-      background-color: pvar(--primary-450);
-      opacity: .9;
-    }
-  }
+.overflow-button::after {
+  display: none;
+  margin-left: inherit;
+  vertical-align: inherit;
+  border: inherit;
 }

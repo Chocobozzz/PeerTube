@@ -135,6 +135,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   ngOnChanges () {
+    console.log('on changes')
+
     if (this.loaded) {
       this.loaded = false
       if (this.playlistAdd) this.playlistAdd.reload()
