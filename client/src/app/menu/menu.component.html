@@ -1,5 +1,5 @@
 <ng-template #moreInfoButton>
-  <my-button i18n class="mt-2 d-block" theme="secondary" icon="help" i18n-ariaLabel aria-label="More info" i18n ptRouterLink="/about" ptRouterLinkActive="active">
+  <my-button i18n class="mt-2 d-block" theme="secondary" icon="help" i18n-title title="More info" i18n ptRouterLink="/about" ptRouterLinkActive="active">
     @if (!collapsed) {
       More info
     }
@@ -20,11 +20,11 @@
 
         <div class="toggle-menu-container">
           @if (collapsed) {
-            <button type="button" class="button-unstyle toggle-menu" i18n-title title="Display the lateral bar" (click)="toggleMenu()">
+            <button type="button" class="button-unstyle toggle-menu" i18n-title title="Display the lateral menu" (click)="toggleMenu()">
               <my-global-icon class="transform-rotate-180" iconName="chevron-left"></my-global-icon>
             </button>
           } @else {
-            <button type="button" class="button-unstyle toggle-menu" i18n-title title= "Hide the lateral bar" (click)="toggleMenu()">
+            <button type="button" class="button-unstyle toggle-menu" i18n-title title= "Hide the lateral menu" (click)="toggleMenu()">
               <my-global-icon iconName="chevron-left"></my-global-icon>
             </button>
           }
@@ -47,13 +47,13 @@
                 <ul class="ul-unstyle">
                   <li *ngFor="let link of menuSection.links">
                     @if (link.isPrimaryButton === true) {
-                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [ariaLabel]="link.label" [ptRouterLink]="link.path">
+                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [title]="link.label" [ptRouterLink]="link.path">
                         @if (!collapsed) {
                           {{ link.label }}
                         }
                       </my-button>
                     } @else {
-                      <a class="menu-link ellipsis" [routerLink]="link.path" routerLinkActive="active" [ngClass]="link.ngClass">
+                      <a class="menu-link ellipsis" [routerLink]="link.path" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
                         <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
                         <span [ngClass]="{ 'visually-hidden': collapsed }">{{ link.label }}</span>
                       </a>

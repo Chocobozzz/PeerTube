@@ -27,7 +27,7 @@
   width: 24px;
   height: 24px;
   border-radius: 100%;
-  background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
+  background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
 
   @include button-with-icon(20px, 0, 0, 1px);
 
@@ -116,9 +116,7 @@
       margin: 1rem auto;
     }
   }
-}
 
-.collapsed {
   .main-menu-wrapper {
     max-height: 100%;
   }
@@ -137,6 +135,10 @@
 
   .menu-link {
     justify-content: center;
+
+    my-global-icon {
+      color: pvar-fallback(--menu-fg, --fg-400);
+    }
   }
 }
 
@@ -179,7 +181,6 @@
     line-height: 22px;
     position: relative;
     top: -1px;
-    color: pvar-fallback(--menu-fg, --secondary-icon-color);
 
     + *:not(.visually-hidden) {
       @include margin-left(12px);
@@ -198,8 +199,16 @@
   }
 }
 
-my-button[theme=secondary] ::ng-deep my-global-icon {
+my-button[theme=secondary] ::ng-deep my-global-icon,
+.menu-link my-global-icon {
   color: pvar(--secondary-icon-color) !important;
+}
+
+.collapsed {
+  my-button[theme=secondary] ::ng-deep my-global-icon,
+  .menu-link my-global-icon {
+    color: pvar(--fg-200) !important;
+  }
 }
 
 .menu-overlay {

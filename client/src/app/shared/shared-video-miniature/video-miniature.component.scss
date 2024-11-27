@@ -17,8 +17,6 @@ $more-button-width: 40px;
 }
 
 .video-info {
-  width: calc(100% - #{$more-button-width});
-
   display: grid;
 }
 
@@ -91,6 +89,10 @@ $more-button-width: 40px;
   flex-direction: column;
   padding-bottom: 1rem;
   width: 100%;
+
+  .video-info {
+    width: calc(100% - #{$more-button-width});
+  }
 
   my-video-thumbnail {
     margin-bottom: 0.35rem;

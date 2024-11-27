@@ -9,7 +9,10 @@
 
   <div class="d-flex align-items-center buttons-container">
     @if (!loggedIn) {
-      <my-button theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" (click)="openQuickSettings()"></my-button>
+      <my-button
+        i18n-title title="Open settings modal"
+        theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" (click)="openQuickSettings()"
+      ></my-button>
 
       <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link secondary-button w-100 ellipsis margin-button create-account-button">
         <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
