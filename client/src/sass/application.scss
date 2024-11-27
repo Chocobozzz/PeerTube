@@ -207,6 +207,16 @@ label,
   color: pvar(--fg-350);
 }
 
+.pt-label-container {
+  margin-bottom: 0.5rem;
+
+  label {
+    display: inline;
+
+    @include margin-right(0.25rem);
+  }
+}
+
 code {
   background-color: pvar(--bg-secondary-500);
   color: pvar(--fg-400);
