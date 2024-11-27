@@ -238,10 +238,6 @@ a {
     flex-grow: 1;
   }
 
-  .revert-margin-content {
-    margin: 0 calc(#{pvar(--x-margin-content)} * -1);
-  }
-
   .skip-to-content-sub-menu {
     display: block;
     z-index: z(modal);

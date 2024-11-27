@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { NgIf } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { maxBy } from '@peertube/peertube-core-utils'
@@ -13,11 +13,9 @@ import { CustomMarkupComponent } from './shared'
   templateUrl: 'instance-banner-markup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ NgIf, NgClass ]
+  imports: [ NgIf ]
 })
 export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupComponent {
-  @Input() revertHomePaddingTop: boolean
-
   instanceBannerUrl: string
   loaded: undefined
 

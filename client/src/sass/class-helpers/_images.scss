@@ -9,10 +9,6 @@
   }
 }
 
-.revert-margin-content.banner {
-  width: calc(100% + 2 * #{pvar(--x-margin-content)});
-}
-
 .pt-icon {
   @include icon(24px);
 }
