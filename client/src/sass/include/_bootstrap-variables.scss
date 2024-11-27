@@ -61,8 +61,8 @@ $dropdown-link-hover-bg: pvar(--bg-secondary-300);
 $dropdown-color: pvar(--fg);
 $dropdown-bg: pvar(--bg);
 
-$accordion-button-active-bg: pvar(--primary-50);
-$accordion-button-active-color: pvar(--fg);
+$accordion-button-active-bg: pvar(--primary-150);
+$accordion-button-active-color: pvar(--on-primary);
 $accordion-button-focus-border-color: pvar(--primary-100);
 $accordion-button-focus-box-shadow: #{$focus-box-shadow-form};
 $accordion-border-color: pvar(--input-border-color);
