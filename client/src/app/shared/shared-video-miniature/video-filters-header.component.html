@@ -11,7 +11,7 @@
   </div>
 
   <div class="d-flex flex-wrap-reverse align-items-start justify-content-between">
-    <div class="me-3">
+    <div class="gap-3">
       <div class="scope-info" *ngIf="totalFollowing && !hideScope">
         @if (filters.scope === 'local') {
           <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
@@ -20,7 +20,7 @@
         }
       </div>
 
-      <div class="filters-summary d-inline-block">
+      <div class="filters-summary">
         <div class="d-inline-block active-filters">
           @for (filter of filters.getActiveFilters(); track filter.key + (filter.value || '')) {
             @if (filter.key !== 'scope') {

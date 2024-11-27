@@ -51,8 +51,9 @@ $filters-background: pvar(--bg-secondary-400);
   display: flex;
   flex-wrap: wrap;
   background-color: $filters-background;
-  padding: 1.5rem;
   border-radius: 14px;
+
+  @include rfs(1.5rem, padding);
 
   input[type=radio] + label {
     font-weight: $font-regular;
@@ -116,8 +117,9 @@ $filters-background: pvar(--bg-secondary-400);
 }
 
 my-select-languages,
-my-select-categories {
-  width: 300px;
+my-select-categories,
+my-select-options {
+  max-width: 300px;
   display: inline-block;
 }
 
@@ -132,7 +134,19 @@ my-select-categories {
 }
 
 @media screen and (max-width: $small-view) {
-  .filters-row {
+  .filters-toggle {
+    margin-top: 0.5rem;
+
+    @include margin-left(0);
+  }
+
+  .filters-summary {
+    display: flex;
     flex-direction: column;
+  }
+
+  .filters {
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
   }
 }

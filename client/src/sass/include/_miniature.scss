@@ -111,20 +111,14 @@
   color: #E9DFDF;
 }
 
-// Use margin by default, or padding if $margin is false
-@mixin grid-videos-miniature-margins ($margin: true, $min-margin: 0) {
-  --gridVideosMiniatureMargins: #{pvar(--x-videos-margin-content)};
+@mixin grid-videos-miniature-margins {
+  --grid-videos-miniature-margins: #{pvar(--x-margin-content)};
 
-  @if $margin {
-    @include margin-left(var(--gridVideosMiniatureMargins) !important);
-    @include margin-right(var(--gridVideosMiniatureMargins) !important);
-  } @else {
-    @include padding-left(var(--gridVideosMiniatureMargins) !important);
-    @include padding-right(var(--gridVideosMiniatureMargins) !important);
-  }
+  @include margin-left(var(--grid-videos-miniature-margins) !important);
+  @include margin-right(var(--grid-videos-miniature-margins) !important);
 
   @media screen and (max-width: $mobile-view) {
-    --gridVideosMiniatureMargins: #{$min-margin};
+    --grid-videos-miniature-margins: 0;
 
     width: auto;
   }
