@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-home-menu',
@@ -8,8 +9,10 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
   standalone: true,
   imports: [ HorizontalMenuComponent ]
 })
-export class HomeMenuComponent implements OnInit {
+export class HomeMenuComponent implements OnInit, OnDestroy {
   menuEntries: HorizontalMenuEntry[] = []
+
+  private sub: Subscription
 
   constructor (
     private server: ServerService,
@@ -19,6 +22,17 @@ export class HomeMenuComponent implements OnInit {
   }
 
   ngOnInit () {
+    this.buildMenu()
+
+    this.sub = this.authService.loginChangedSource
+      .subscribe(() => this.buildMenu())
+  }
+
+  ngOnDestroy () {
+    if (this.sub) this.sub.unsubscribe()
+  }
+
+  buildMenu () {
     const config = this.server.getHTMLConfig()
     this.menuEntries = []
 
