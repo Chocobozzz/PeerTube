@@ -4,7 +4,7 @@
 .root {
   width: 100%;
 
-  margin-bottom: 2rem;
+  @include rfs(2.5rem, margin-bottom);
 }
 
 h1 {
@@ -97,8 +97,6 @@ h1 {
 
 .children-container {
   margin-top: 1.25rem;
-
-  @include rfs(margin-bottom, 2.5rem);
 
   ::ng-deep li {
     white-space: nowrap;

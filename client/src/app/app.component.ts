@@ -79,6 +79,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   hotkeysModalOpened = false
 
   private serverConfig: HTMLServerConfig
+  private userLoaded = false
 
   constructor (
     @Inject(DOCUMENT) private document: Document,
@@ -267,7 +268,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   private listenUserChangeForModals () {
     this.authService.userInformationLoaded
         .pipe(map(() => this.authService.getUser()))
-        .subscribe(user => this.openModalsIfNeeded(user))
+        .subscribe(user => {
+          this.userLoaded = true
+          this.openModalsIfNeeded(user)
+        })
   }
 
   onModalCreated () {
@@ -278,6 +282,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private openModalsIfNeeded (user: User) {
+    if (!this.userLoaded) return
+
     if (user.role.id === UserRole.ADMINISTRATOR) {
       this.openAdminModalsIfNeeded(user)
     } else {
