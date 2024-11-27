@@ -24,7 +24,7 @@
   >
     <ng-container *ngIf="highlightedLives.length !== 0">
       <h2 class="date-title">
-        <my-global-icon class="pt-icon" iconName="live"></my-global-icon> Current lives
+        <my-global-icon class="pt-icon me-1 top--1px" iconName="live"></my-global-icon> Current lives
       </h2>
 
       <ng-container *ngFor="let live of highlightedLives; trackBy: videoById;">
@@ -39,7 +39,7 @@
       </ng-container>
 
       <h2 *ngIf="!groupByDate" class="date-title">
-        <my-global-icon iconName="videos"></my-global-icon> Videos
+        <my-global-icon class="pt-icon me-1" iconName="videos"></my-global-icon> Videos
       </h2>
     </ng-container>
 

@@ -16,11 +16,13 @@
   }
 
   @if (search && !isSearching) {
-    <my-global-icon iconName="search"></my-global-icon>
+    <div>
+      <my-global-icon iconName="search"></my-global-icon>
 
-    <ng-container i18n>
-      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
-    </ng-container>
+      <ng-container i18n>
+        {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
+      </ng-container>
+    </div>
   }
 
   <div class="search-bar">
