@@ -1,24 +1,25 @@
-import { SortMeta, SharedModule } from 'primeng/api'
-import { switchMap } from 'rxjs/operators'
-import { environment } from 'src/environments/environment'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
-import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
+import { switchMap } from 'rxjs/operators'
+import { environment } from 'src/environments/environment'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
+import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 
 @Component({
   selector: 'my-video-block-list',
@@ -38,7 +39,7 @@ import { VideoBlockService } from '@app/shared/shared-moderation/video-block.ser
     VideoCellComponent,
     AutoColspanDirective,
     EmbedComponent,
-    DatePipe
+    PTDatePipe
   ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit {

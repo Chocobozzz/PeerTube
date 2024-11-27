@@ -1,10 +1,11 @@
-import { DatePipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
@@ -35,7 +36,7 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
     HorizontalMenuComponent,
     RouterOutlet,
     SupportModalComponent,
-    DatePipe
+    PTDatePipe
   ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {

@@ -1,5 +1,5 @@
 <my-alert rounded="false" type="primary" i18n *ngIf="hasVideoScheduledPublication()">
-  This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
+  This video will be published on {{ video.scheduledUpdate.updateAt | ptDate: 'full' }}.
 </my-alert>
 
 <my-alert rounded="false" type="primary" i18n *ngIf="isWaitingForLive()">

@@ -1,4 +1,4 @@
-import { DatePipe, NgClass, NgIf } from '@angular/common'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
@@ -12,11 +12,10 @@ import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
-import { FeedComponent } from '../shared-main/feeds/feed.component'
+import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
+import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
 
 @Component({
@@ -25,8 +24,6 @@ import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
   standalone: true,
   imports: [
-    GlobalIconComponent,
-    FeedComponent,
     TableModule,
     SharedModule,
     NgIf,
@@ -38,7 +35,7 @@ import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon
     NgClass,
     ActorAvatarComponent,
     AutoColspanDirective,
-    DatePipe,
+    PTDatePipe,
     RouterLink
   ]
 })

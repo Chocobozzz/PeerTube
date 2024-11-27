@@ -118,7 +118,7 @@
 
       </ng-container>
 
-      <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
+      <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | ptDate: 'short'  }}</td>
 
       <td class="c-hand abuse-states" [pRowToggler]="abuse">
         <div *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="pt-badge badge-success">

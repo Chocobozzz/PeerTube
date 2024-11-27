@@ -1,8 +1,9 @@
-import { DatePipe, NgIf } from '@angular/common'
+import { NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { ActorFollow } from '@peertube/peertube-models'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
@@ -30,7 +31,7 @@ import { FollowModalComponent } from './follow-modal.component'
     RedundancyCheckboxComponent,
     AutoColspanDirective,
     FollowModalComponent,
-    DatePipe,
+    PTDatePipe,
     ButtonComponent
   ]
 })

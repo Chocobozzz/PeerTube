@@ -1,16 +1,16 @@
-import { DatePipe, NgClass, NgIf } from '@angular/common'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { AutoColspanDirective } from '../../shared/shared-main/common/auto-colspan.directive'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
+import { AutoColspanDirective } from '../../shared/shared-main/common/auto-colspan.directive'
 import { VideoCellComponent } from '../../shared/shared-tables/video-cell.component'
 import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
 
@@ -18,7 +18,6 @@ import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-owne
   templateUrl: './my-ownership.component.html',
   standalone: true,
   imports: [
-    GlobalIconComponent,
     TableModule,
     SharedModule,
     NgbTooltip,
@@ -28,7 +27,7 @@ import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-owne
     NgClass,
     AutoColspanDirective,
     MyAcceptOwnershipComponent,
-    DatePipe,
+    PTDatePipe,
     VideoCellComponent
   ]
 })

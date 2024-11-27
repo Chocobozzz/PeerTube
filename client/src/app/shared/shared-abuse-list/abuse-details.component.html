@@ -44,7 +44,7 @@
 
     <div class="d-flex" *ngIf="abuse.updatedAt">
       <span class="moderation-expanded-label" i18n>Updated</span>
-      <time class="moderation-expanded-text abuse-details-date-updated">{{ abuse.updatedAt | date: 'medium' }}</time>
+      <time class="moderation-expanded-text abuse-details-date-updated">{{ abuse.updatedAt | ptDate: 'medium' }}</time>
     </div>
 
     <!-- report text -->

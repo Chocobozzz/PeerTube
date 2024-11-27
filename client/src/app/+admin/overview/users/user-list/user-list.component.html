@@ -142,9 +142,9 @@
         <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth }}</span>
       </td>
 
-      <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
+      <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | ptDate: 'short' }}</td>
 
-      <td *ngIf="isSelected('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | date: 'short' }}</td>
+      <td *ngIf="isSelected('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | ptDate: 'short' }}</td>
     </tr>
   </ng-template>
 

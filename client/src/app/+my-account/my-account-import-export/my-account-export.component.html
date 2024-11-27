@@ -46,7 +46,7 @@
         </tr>
 
         <tr *ngFor="let export of userExports">
-          <td>{{ export.createdAt | date: 'medium' }}</td>
+          <td>{{ export.createdAt | ptDate: 'medium' }}</td>
           <td>{{ export.state.label }}</td>
 
           <td>
@@ -54,7 +54,7 @@
           </td>
 
           <td>
-            <ng-container *ngIf="export.expiresOn">{{ export.expiresOn | date: 'medium' }}</ng-container>
+            <ng-container *ngIf="export.expiresOn">{{ export.expiresOn | ptDate: 'medium' }}</ng-container>
           </td>
 
           <td>

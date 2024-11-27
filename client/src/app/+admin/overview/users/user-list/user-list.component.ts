@@ -1,14 +1,16 @@
-import { DatePipe, NgClass, NgIf } from '@angular/common'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU, getAPIHost } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { ProgressBarComponent } from '@app/shared/shared-main/common/progress-bar.component'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { UserBanModalComponent } from '@app/shared/shared-moderation/user-ban-modal.component'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
-import { NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { User, UserRole, UserRoleType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { SharedModule, SortMeta } from 'primeng/api'
@@ -18,9 +20,9 @@ import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../s
 import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCheckboxComponent } from '../../../../shared/shared-forms/select/select-checkbox.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
 import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
-import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import {
   AccountMutedStatus,
   UserModerationDisplayType,
@@ -28,7 +30,6 @@ import {
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
-import { ProgressBarComponent } from '@app/shared/shared-main/common/progress-bar.component'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -53,7 +54,6 @@ type UserForList = User & {
     NgbDropdown,
     NgbDropdownToggle,
     NgbDropdownMenu,
-    NgbDropdownItem,
     SelectCheckboxComponent,
     FormsModule,
     PeertubeCheckboxComponent,
@@ -65,7 +65,7 @@ type UserForList = User & {
     UserEmailInfoComponent,
     AutoColspanDirective,
     UserBanModalComponent,
-    DatePipe,
+    PTDatePipe,
     BytesPipe,
     ProgressBarComponent
   ]

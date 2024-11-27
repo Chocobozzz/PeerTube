@@ -63,7 +63,7 @@
         <span *ngIf="follow.state === 'rejected'" class="pt-badge badge-red" i18n>Rejected</span>
       </td>
 
-      <td>{{ follow.createdAt | date: 'short' }}</td>
+      <td>{{ follow.createdAt | ptDate: 'short' }}</td>
       <td>
         <my-redundancy-checkbox
           *ngIf="isInstanceFollowing(follow)"

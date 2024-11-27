@@ -1,4 +1,4 @@
-import { DatePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import {
   ChangeDetectorRef,
   Component,
@@ -12,6 +12,7 @@ import {
   booleanAttribute
 } from '@angular/core'
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 import { ConfirmService, HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
@@ -33,6 +34,7 @@ import {
 import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
 import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
@@ -63,7 +65,6 @@ import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
-import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
@@ -81,7 +82,6 @@ import { VideoCaptionEditModalContentComponent } from './caption/video-caption-e
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 import { VideoEditType } from './video-edit.type'
-import { RouterLink } from '@angular/router'
 
 type PluginField = {
   pluginInfo: PluginInfo
@@ -122,10 +122,9 @@ type PluginField = {
     DeleteButtonComponent,
     EmbedComponent,
     LiveDocumentationLinkComponent,
-    PreviewUploadComponent,
     NgbNavOutlet,
     VideoCaptionAddModalComponent,
-    DatePipe,
+    PTDatePipe,
     ThumbnailManagerComponent,
     EditButtonComponent,
     ButtonComponent,

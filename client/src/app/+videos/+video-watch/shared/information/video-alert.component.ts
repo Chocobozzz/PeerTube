@@ -1,7 +1,8 @@
-import { DatePipe, NgIf } from '@angular/common'
+import { NgIf } from '@angular/common'
 import { Component, Input } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
 
@@ -10,7 +11,7 @@ import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
   templateUrl: './video-alert.component.html',
   standalone: true,
   styles: `my-alert { text-align: center }`,
-  imports: [ NgIf, DatePipe, AlertComponent ]
+  imports: [ NgIf, PTDatePipe, AlertComponent ]
 })
 export class VideoAlertComponent {
   @Input() user: AuthUser

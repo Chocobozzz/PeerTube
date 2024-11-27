@@ -1,7 +1,8 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, Input, OnChanges } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { HooksService } from '@app/core'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { TimeDurationFormatterPipe } from '@app/shared/shared-main/date/time-duration-formatter.pipe'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
@@ -18,7 +19,7 @@ type PluginMetadata = {
   templateUrl: './video-attributes.component.html',
   styleUrls: [ './video-attributes.component.scss' ],
   standalone: true,
-  imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, DatePipe, TimeDurationFormatterPipe ]
+  imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, TimeDurationFormatterPipe, PTDatePipe ]
 })
 export class VideoAttributesComponent implements OnChanges {
   @Input() video: VideoDetails

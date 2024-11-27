@@ -1,17 +1,17 @@
-import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { RunnerRegistrationToken } from '@peertube/peertube-models'
-import { RunnerService } from '../runner.service'
-import { DatePipe } from '@angular/common'
-import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
-import { CopyButtonComponent } from '../../../../shared/shared-main/buttons/copy-button.component'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { TableModule } from 'primeng/table'
-import { RouterLink } from '@angular/router'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { CopyButtonComponent } from '../../../../shared/shared-main/buttons/copy-button.component'
+import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
+import { RunnerService } from '../runner.service'
 
 @Component({
   selector: 'my-runner-registration-token-list',
@@ -28,7 +28,7 @@ import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon
     ActionDropdownComponent,
     CopyButtonComponent,
     AutoColspanDirective,
-    DatePipe
+    PTDatePipe
   ]
 })
 export class RunnerRegistrationTokenListComponent extends RestTable <RunnerRegistrationToken> implements OnInit {

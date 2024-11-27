@@ -1,10 +1,11 @@
-import { DatePipe, NgClass, NgIf } from '@angular/common'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoChannelSync, VideoChannelSyncState, VideoChannelSyncStateType } from '@peertube/peertube-models'
 import { SharedModule, SortMeta } from 'primeng/api'
@@ -27,7 +28,7 @@ import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-mai
     ActionDropdownComponent,
     ActorAvatarComponent,
     NgClass,
-    DatePipe,
+    PTDatePipe,
     AlertComponent
   ]
 })

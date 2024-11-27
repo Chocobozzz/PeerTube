@@ -1,33 +1,34 @@
-import debug from 'debug'
-import { SortMeta, SharedModule } from 'primeng/api'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { formatICU } from '@app/helpers'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { AbuseState, AbuseStateType, AdminAbuse } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { AbuseMessageModalComponent } from './abuse-message-modal.component'
-import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
-import { ProcessedAbuse } from './processed-abuse.model'
-import { AbuseDetailsComponent } from './abuse-details.component'
-import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
-import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { VideoCellComponent } from '../shared-tables/video-cell.component'
-import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
-import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import debug from 'debug'
+import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
-import { Video } from '../shared-main/video/video.model'
-import { Actor } from '../shared-main/account/actor.model'
-import { VideoService } from '../shared-main/video/video.service'
+import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
+import { Actor } from '../shared-main/account/actor.model'
+import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
+import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
+import { PTDatePipe } from '../shared-main/common/date.pipe'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
 import { AbuseService } from '../shared-moderation/abuse.service'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
+import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { VideoCellComponent } from '../shared-tables/video-cell.component'
 import { VideoCommentService } from '../shared-video-comment/video-comment.service'
-import { formatICU } from '@app/helpers'
+import { AbuseDetailsComponent } from './abuse-details.component'
+import { AbuseMessageModalComponent } from './abuse-message-modal.component'
+import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
+import { ProcessedAbuse } from './processed-abuse.model'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -52,7 +53,7 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
     AbuseDetailsComponent,
     ModerationCommentModalComponent,
     AbuseMessageModalComponent,
-    DatePipe
+    PTDatePipe
   ]
 })
 export class AbuseListTableComponent extends RestTable implements OnInit {
