@@ -35,7 +35,7 @@ h1 {
 }
 
 @mixin child-active {
-  color: pvar(--fg-350);
+  color: pvar(--fg-400);
   font-weight: $font-bold;
   background-color: pvar(--bg-secondary-400);
   text-decoration: none;
@@ -57,7 +57,6 @@ h1 {
 
 .parent-container .entry,
 .entry.in-modal {
-  color: pvar(--fg-100);
   display: inline-block;
   font-weight: $font-bold;
   white-space: nowrap;
@@ -65,14 +64,14 @@ h1 {
   @include font-size(22px);
   @include disable-default-a-behaviour;
 
-  &:hover,
-  &:active,
-  &:focus {
+  &:hover {
     color: pvar(--fg);
   }
 }
 
 .parent-container .entry {
+  color: pvar(--fg-100);
+
   @include margin-right(2rem);
 
   &.active,
@@ -84,8 +83,11 @@ h1 {
 }
 
 .entry.in-modal {
+  color: pvar(--fg);
+
   padding: 9px 12px;
   width: 100%;
+  border-radius: 5px;
 
   &.active,
   &.child-active {
@@ -130,9 +132,7 @@ h1 {
       @include child-active;
     }
 
-    &:hover,
-    &:active,
-    &:focus {
+    &:hover {
       color: pvar(--fg);
     }
   }

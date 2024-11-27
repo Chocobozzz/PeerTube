@@ -284,4 +284,8 @@ my-button[theme=secondary] ::ng-deep my-global-icon {
   .toggle-menu-container {
     display: none;
   }
+
+  .block-title {
+    max-width: 90%;
+  }
 }
