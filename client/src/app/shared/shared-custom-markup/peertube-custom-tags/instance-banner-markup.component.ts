@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { maxBy } from '@peertube/peertube-core-utils'
 import { CustomMarkupComponent } from './shared'
