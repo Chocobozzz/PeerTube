@@ -23,5 +23,7 @@
       *ngIf="!isUserLoggedIn()"
       [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"
     ></my-user-interface-settings>
+
+    <my-button class="mt-2" theme="secondary" icon="language" (click)="changeLanguage()">Change interface language</my-button>
   </div>
 </ng-template>

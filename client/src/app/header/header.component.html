@@ -88,4 +88,4 @@
 </div>
 
 <my-language-chooser #languageChooserModal></my-language-chooser>
-<my-quick-settings #quickSettingsModal></my-quick-settings>
+<my-quick-settings #quickSettingsModal (openLanguageModal)="languageChooserModal.show()"></my-quick-settings>
