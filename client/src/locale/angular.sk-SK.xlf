@@ -20006,17 +20006,17 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3911025298999036211" datatype="html">
+      <trans-unit id="3911025298999036211" datatype="html" xml:space="preserve">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="translated">~ {hours, plural, =1 {1 hodina} other {<x id="hours"/> hodín}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 hodina} other {<x id="hours"/> hodiny}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2819927377059070056" datatype="html">
+      <trans-unit id="2819927377059070056" datatype="html" xml:space="preserve">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="translated">~ {minutes, plural, =1 {1 minút} other {<x id="minutes"/> minút}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minúta} other {<x id="minutes"/> minút}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">106</context>
