@@ -188,10 +188,11 @@ export class ThemeService {
 
     this.oldInjectedProperties = []
 
-    const toProcess: { prefix: string, invertIfDark: boolean, fallbacks?: Record<string, string> }[] = [
-      { prefix: 'primary', invertIfDark: true },
-      { prefix: 'bg-secondary', invertIfDark: true },
-      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' } }
+    const toProcess: { prefix: string, invertIfDark: boolean, step: number, fallbacks?: Record<string, string> }[] = [
+      { prefix: 'primary', invertIfDark: true, step: 5 },
+      { prefix: 'on-primary', invertIfDark: true, step: 0 },
+      { prefix: 'bg-secondary', invertIfDark: true, step: 5 },
+      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5 }
     ]
 
     const darkTheme = this.isDarkTheme(computedStyle)
@@ -199,7 +200,7 @@ export class ThemeService {
       debugLogger('Detected dark theme')
     }
 
-    for (const { prefix, invertIfDark, fallbacks = {} } of toProcess) {
+    for (const { prefix, invertIfDark, step, fallbacks = {} } of toProcess) {
       const mainColor = computedStyle.getPropertyValue('--' + prefix)
 
       const darkInverter = invertIfDark && darkTheme
@@ -227,7 +228,7 @@ export class ThemeService {
 
           const existingValue = computedStyle.getPropertyValue(key)
           if (!existingValue || existingValue === '0') {
-            const newLuminance = this.buildNewLuminance(lastColorHSL, j, darkInverter)
+            const newLuminance = this.buildNewLuminance(lastColorHSL, j * step, darkInverter)
             const newColorHSL = { ...lastColorHSL, l: newLuminance }
 
             const newColorStr = this.toHSLStr(newColorHSL)
@@ -259,7 +260,7 @@ export class ThemeService {
   }
 
   private buildNewLuminance (base: { l: number }, factor: number, darkInverter: number) {
-    return Math.max(Math.min(100, Math.round(base.l + (factor * 5 * -1 * darkInverter))), 0)
+    return Math.max(Math.min(100, Math.round(base.l + (factor * -1 * darkInverter))), 0)
   }
 
   private toHSLStr (c: { h: number, s: number, l: number, a: number }) {

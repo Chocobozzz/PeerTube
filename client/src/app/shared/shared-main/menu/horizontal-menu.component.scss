@@ -91,7 +91,7 @@ h1 {
 
   &.active,
   &.child-active {
-    color: pvar(--on-primary) !important;
+    color: pvar(--on-primary-450) !important;
     background-color: pvar(--primary-450);
     opacity: .9;
   }

@@ -54,11 +54,11 @@ textarea {
   &.by-me {
 
     .bubble {
-      color: pvar(--on-primary);
+      color: pvar(--on-primary-400);
       background-color: pvar(--primary-400);
 
       .date {
-        color: pvar(--on-primary);
+        color: pvar(--on-primary-400);
       }
     }
   }

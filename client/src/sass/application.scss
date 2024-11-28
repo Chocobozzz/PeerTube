@@ -74,7 +74,7 @@ body {
 
   --border-primary: #{pvar(--primary)};
 
-  --alert-primary-fg: #{pvar(--on-primary)};
+  --alert-primary-fg: #{pvar(--on-primary-200)};
   --alert-primary-bg: #{pvar(--primary-200)};
   --alert-primary-border-color: #{pvar(--primary-300)};
 
@@ -113,7 +113,7 @@ body {
     --input-check-active-fg: #{pvar(--bg)};
     --input-check-active-bg: #{pvar(--fg-250)};
 
-    --alert-primary-fg: #{pvar(--on-primary)};
+    --alert-primary-fg: #{pvar(--on-primary-200)};
     --alert-primary-bg: #{pvar(--primary-200)};
     --alert-primary-border-color: #{pvar(--primary-300)};
   }
@@ -159,7 +159,7 @@ body {
 }
 
 ::selection {
-  color: pvar(--on-primary);
+  color: pvar(--on-primary-450);
   background-color: pvar(--primary-450);
 }
 

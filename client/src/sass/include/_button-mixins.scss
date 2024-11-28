@@ -4,7 +4,7 @@
 @use '_mixins' as *;
 
 @mixin secondary-button (
-  $fg: pvar(--fg),
+  $fg: inherit,
   $active-bg: pvar(--bg-secondary-500),
   $hover-bg: pvar(--bg-secondary-450),
   $border-color: pvar(--bg-secondary-500)

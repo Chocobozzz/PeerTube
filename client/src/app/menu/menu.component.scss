@@ -168,11 +168,11 @@
 
   &:hover,
   &:focus-visible {
-    background-color: pvar-fallback(--menu-fg, --bg-secondary-450);
+    background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
   }
 
   &.active {
-    background-color: pvar-fallback(--menu-fg, --bg-secondary-500);
+    background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
   }
 
   my-global-icon {
@@ -195,8 +195,12 @@
 .about {
   .description {
     font-size: 14px;
-    color: pvar-fallback(--menu-fg, --fg-200)
+    color: pvar-fallback(--menu-fg, --fg-200);
   }
+}
+
+my-button[theme=secondary]  {
+  color: pvar-fallback(--menu-fg, --fg-400);
 }
 
 my-button[theme=secondary] ::ng-deep my-global-icon,
@@ -207,7 +211,7 @@ my-button[theme=secondary] ::ng-deep my-global-icon,
 .collapsed {
   my-button[theme=secondary] ::ng-deep my-global-icon,
   .menu-link my-global-icon {
-    color: pvar(--fg-200) !important;
+    color: pvar-fallback(--menu-fg, --fg-200) !important;
   }
 }
 
