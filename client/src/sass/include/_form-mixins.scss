@@ -86,7 +86,7 @@
 
       padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} + 23px) pvar(--input-y-padding) pvar(--input-x-padding);
       position: relative;
-      border: 0 !important;
+      border: 1px solid var(--input-border-color) !important;
       appearance: none;
       text-overflow: ellipsis;
 
