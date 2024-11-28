@@ -16653,17 +16653,17 @@
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6184963353282561988" datatype="html">
+      <trans-unit id="6184963353282561988" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></source>
-        <target state="new"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></target>
+        <target state="translated"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {pohľad} other {pohľady}} od <x id="PH_1" equiv-text="data.startDate"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6337200167647767274" datatype="html">
+      <trans-unit id="6337200167647767274" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {kanál} other {kanály}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -16721,9 +16721,9 @@
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="782403351079933650" datatype="html">
+      <trans-unit id="782403351079933650" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {sledovateľ} other {sledovatelia}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -16927,7 +16927,7 @@
       </trans-unit>
       <trans-unit id="705850529168776436" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="needs-translation"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} ostatné {videá}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videá}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">252</context>
@@ -18341,9 +18341,9 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3256383206363817433" datatype="html">
+      <trans-unit id="3256383206363817433" datatype="html" xml:space="preserve">
         <source>Search index URL must be a URL</source>
-        <target state="new">Search index URL must be a URL</target>
+        <target state="translated">Link pre vyhľadávanie indexov musí byť typu URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">136</context>
@@ -21214,25 +21214,25 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="558490183395886693" datatype="html">
+      <trans-unit id="558490183395886693" datatype="html" xml:space="preserve">
         <source>An email will be sent when the import process is complete.</source>
-        <target state="new">An email will be sent when the import process is complete.</target>
+        <target state="translated">Pri dokončení procesu importu Vám zašleme email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5245328363134510565" datatype="html">
+      <trans-unit id="5245328363134510565" datatype="html" xml:space="preserve">
         <source>You can't re-import an archive because you already have an import that is currently being processed by PeerTube.</source>
-        <target state="new"> You can't re-import an archive because you already have an import that is currently being processed by PeerTube. </target>
+        <target state="translated">Nemôžete opätovne importovať archív, pretože už existuje import, ktorý je aktuálne spracovávaný cez PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1473104874710475790" datatype="html">
+      <trans-unit id="1473104874710475790" datatype="html" xml:space="preserve">
         <source>Upload completed. Your archive import will be processed as soon as possible.</source>
-        <target state="new"> Upload completed. Your archive import will be processed as soon as possible. </target>
+        <target state="translated">Nahrávanie dokončené. Importovanie Vášho archívu prebehne čoskoro.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">62</context>
