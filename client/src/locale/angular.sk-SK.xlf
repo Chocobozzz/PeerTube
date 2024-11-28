@@ -15287,7 +15287,7 @@
       </trans-unit>
       <trans-unit id="63077766244971546" datatype="html" xml:space="preserve">
         <source>Comments may require approval depending on your auto tag policies</source>
-        <target state="translated">Komentáre môžu vyžadovať schválenie, záleží to od Vašich pravidiel pre automatické tagy</target>
+        <target state="translated">Komentáre môžu vyžadovať schválenie, záleží to od vašich pravidiel pre automatické označovanie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">117</context>
@@ -15303,7 +15303,7 @@
       </trans-unit>
       <trans-unit id="5217863338130648698" datatype="html" xml:space="preserve">
         <source>Light (Beige) or Dark (Brown)</source>
-        <target state="translated">Svetlý (Béžová) alebo Tmavý (Hnedá)</target>
+        <target state="translated">Svetlá (Béžová) alebo Tmavá (Hnedá)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -15311,7 +15311,7 @@
       </trans-unit>
       <trans-unit id="4012645514712660678" datatype="html" xml:space="preserve">
         <source>PeerTube selects the appropriate theme depending on web browser preferences</source>
-        <target state="translated">PeerTube vyberie vhodnú tému na základe volieb prehliadača</target>
+        <target state="translated">PeerTube vyberie vhodnú tému na základe nastavení prehliadača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -15319,7 +15319,7 @@
       </trans-unit>
       <trans-unit id="8421126018613018698" datatype="html" xml:space="preserve">
         <source>Dark (Brown)</source>
-        <target state="translated">Tmavý (Hnedá)</target>
+        <target state="translated">Tmavá (Hnedá)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -15327,7 +15327,7 @@
       </trans-unit>
       <trans-unit id="258909519768317409" datatype="html" xml:space="preserve">
         <source>Light (Beige)</source>
-        <target state="translated">Svetlý (Béžová)</target>
+        <target state="translated">Svetlá (Béžová)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">70</context>
@@ -15335,7 +15335,7 @@
       </trans-unit>
       <trans-unit id="4070550899383572841" datatype="html" xml:space="preserve">
         <source>Go to the manage your account page</source>
-        <target state="translated">Ísť na stránku spravovania Vášho účtu</target>
+        <target state="translated">Prejsť na stránku spravovania Vášho účtu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -15355,7 +15355,7 @@
       </trans-unit>
       <trans-unit id="6250956071546896586" datatype="html" xml:space="preserve">
         <source>You need to reconnect</source>
-        <target state="translated">Opätovne sa pripojte</target>
+        <target state="translated">Musíte sa znova pripojiť</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">203</context>
