@@ -15769,9 +15769,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="13024139774181011" datatype="html">
+      <trans-unit id="13024139774181011" datatype="html" xml:space="preserve">
         <source>Select the columns to display</source>
-        <target state="new">Select the columns to display</target>
+        <target state="translated">Vyberte stĺpce na zobrazenie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">47</context>
@@ -16105,9 +16105,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7485962171644689376" datatype="html">
+      <trans-unit id="7485962171644689376" datatype="html" xml:space="preserve">
         <source>Clear all history</source>
-        <target state="new">Clear all history</target>
+        <target state="translated">Vymazať všetku históriu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">11</context>
@@ -16237,9 +16237,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5468340957320375738" datatype="html">
+      <trans-unit id="5468340957320375738" datatype="html" xml:space="preserve">
         <source>⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</source>
-        <target state="new">⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</target>
+        <target state="translated">⚠️ Váš email nemôže byť použitý v podcastoch RSS feedov, pretože ešte nebol verifikovaný.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">13</context>
