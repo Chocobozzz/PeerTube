@@ -1059,17 +1059,17 @@
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7427257900193261634" datatype="html">
+      <trans-unit id="7427257900193261634" datatype="html" xml:space="preserve">
         <source>Web Videos:</source>
-        <target state="new">Web Videos:</target>
+        <target state="translated">Online videá:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2501174398701912574" datatype="html">
+      <trans-unit id="2501174398701912574" datatype="html" xml:space="preserve">
         <source>HLS:</source>
-        <target state="new">HLS:</target>
+        <target state="translated">HLS:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">152</context>
@@ -6601,33 +6601,33 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7743206617778542802" datatype="html">
+      <trans-unit id="7743206617778542802" datatype="html" xml:space="preserve">
         <source>A directory containing static files (thumbnails, avatars, video files etc.)</source>
-        <target state="new">A directory containing static files (thumbnails, avatars, video files etc.)</target>
+        <target state="translated">Priečinok obsahuje statické súbory (náhľady, avatary, video súbory a pod.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5507694448548293913" datatype="html">
+      <trans-unit id="5507694448548293913" datatype="html" xml:space="preserve">
         <source>You can only request one archive at a time.</source>
-        <target state="new">You can only request one archive at a time.</target>
+        <target state="translated">Môžete si vyžiadať najviac 1 archív súčasne.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448402358500159809" datatype="html">
+      <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="new">An email will be sent when the export archive is available.</target>
+        <target state="translated">Až bude exportovaný archív dostupný, zašleme Vám email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3973931101896534797" datatype="html">
+      <trans-unit id="3973931101896534797" datatype="html" xml:space="preserve">
         <source>Date</source>
-        <target state="new">Date</target>
+        <target state="translated">Dátum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">41</context>
@@ -7353,9 +7353,9 @@
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867580290622941314" datatype="html">
+      <trans-unit id="5867580290622941314" datatype="html" xml:space="preserve">
         <source>Mutes</source>
-        <target state="new">Mutes</target>
+        <target state="translated">Stlmí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -7397,9 +7397,9 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3755780063671912599" datatype="html">
+      <trans-unit id="3755780063671912599" datatype="html" xml:space="preserve">
         <source>Watched words</source>
-        <target state="new">Watched words</target>
+        <target state="translated">Sledované slová</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -7493,9 +7493,9 @@
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9214278301049416708" datatype="html">
+      <trans-unit id="9214278301049416708" datatype="html" xml:space="preserve">
         <source>Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </source>
-        <target state="new">Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </target>
+        <target state="translated">Stratégia redundancie "<x id="PH" equiv-text="stats.strategy"/>". </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -7681,9 +7681,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8098332505860203521" datatype="html">
+      <trans-unit id="8098332505860203521" datatype="html" xml:space="preserve">
         <source>Only display comments with this tag</source>
-        <target state="new">Only display comments with this tag</target>
+        <target state="translated">Zobraziť len komentáre s týmto tagom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">92</context>
@@ -7729,17 +7729,17 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4759830021629072866" datatype="html">
+      <trans-unit id="4759830021629072866" datatype="html" xml:space="preserve">
         <source>Display comments awaiting your approval</source>
-        <target state="new">Display comments awaiting your approval</target>
+        <target state="translated">Zobraziť komentáre vyžadujúce schválenie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5810973984628060415" datatype="html">
+      <trans-unit id="5810973984628060415" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</source>
-        <target state="new">{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</target>
+        <target state="translated">{count, plural, =1 {Schválený komentár.} ďalšie {<x id="count"/> schválené komentáre.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">196</context>
@@ -8265,9 +8265,9 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3204334247986678419" datatype="html">
+      <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="new">Runners</target>
+        <target state="translated">Runnery</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -8289,9 +8289,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8852490424970169127" datatype="html">
+      <trans-unit id="8852490424970169127" datatype="html" xml:space="preserve">
         <source>Official</source>
-        <target state="new">Official</target>
+        <target state="translated">Oficiálne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44,46</context>
@@ -8429,9 +8429,9 @@
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9093336259390347521" datatype="html">
+      <trans-unit id="9093336259390347521" datatype="html" xml:space="preserve">
         <source>Registration tokens</source>
-        <target state="new">Registration tokens</target>
+        <target state="translated">Registračné tokeny</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -8469,9 +8469,9 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="284741121040858744" datatype="html">
+      <trans-unit id="284741121040858744" datatype="html" xml:space="preserve">
         <source>Approve this comment</source>
-        <target state="new">Approve this comment</target>
+        <target state="translated">Schváliť tento komentár</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">91</context>
