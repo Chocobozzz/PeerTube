@@ -86,7 +86,7 @@ $filters-background: pvar(--bg-secondary-400);
 .filters-toggle {
   padding: pvar(--input-y-padding) 0.5rem calc(#{pvar(--input-y-padding)} + 0.75rem) 0.75rem;
 
-  @include margin-left(0.25rem);
+  @include margin-left(0.75rem);
 
   my-global-icon {
     color: pvar(--secondary-icon-color);

@@ -168,10 +168,17 @@
 
   &:hover,
   &:focus-visible {
+    opacity: 1;
     background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
   }
 
   &.active {
+    &,
+    my-global-icon {
+      color: pvar(--fg) !important;
+    }
+
+    font-weight: $font-bold;
     background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
   }
 
