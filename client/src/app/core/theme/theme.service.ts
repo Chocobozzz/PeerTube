@@ -268,14 +268,14 @@ export class ThemeService {
   }
 
   private isDarkTheme (computedStyle: CSSStyleDeclaration) {
-    const deprecatedFG = computedStyle.getPropertyValue('--mainForegroundColor')
-    const deprecatedBG = computedStyle.getPropertyValue('--mainBackgroundColor')
+    const fg = computedStyle.getPropertyValue('--fg') || computedStyle.getPropertyValue('--mainForegroundColor')
+    const bg = computedStyle.getPropertyValue('--bg') || computedStyle.getPropertyValue('--mainBackgroundColor')
 
     if (computedStyle.getPropertyValue('--is-dark') === '1') {
       return true
-    } else if (deprecatedFG && deprecatedBG) {
+    } else if (fg && bg) {
       try {
-        if (getLuminance(parse(deprecatedBG)) < getLuminance(parse(deprecatedFG))) {
+        if (getLuminance(parse(bg)) < getLuminance(parse(fg))) {
           return true
         }
       } catch (err) {
