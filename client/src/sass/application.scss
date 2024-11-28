@@ -134,9 +134,9 @@ body {
     --bg: hsl(0 14% 7%);
     --bg-secondary: hsl(0 14% 22%);
 
-    --alert-primary-fg: #{pvar(--primary-650)};
-    --alert-primary-bg: #{pvar(--primary-100)};
-    --alert-primary-border-color: #{pvar(--primary-300)};
+    --alert-primary-fg: #{pvar(--on-primary)};
+    --alert-primary-bg: #cd9e7a;
+    --alert-primary-border-color: #{pvar(--primary-600)};
 
     --active-icon-color: #{pvar(--fg-450)};
     --active-icon-bg: #{pvar(--bg-secondary-600)};
