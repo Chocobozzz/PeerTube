@@ -22516,7 +22516,7 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html" xml:space="preserve">
         <source>Hot</source>
-        <target state="translated">Vinsælt</target>
+        <target state="translated">Heitt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">179</context>
