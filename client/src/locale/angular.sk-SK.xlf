@@ -995,17 +995,17 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6228776284010440551" datatype="html">
+      <trans-unit id="6228776284010440551" datatype="html" xml:space="preserve">
         <source>HLS</source>
-        <target state="new">HLS</target>
+        <target state="translated">HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3699875908605792812" datatype="html">
+      <trans-unit id="3699875908605792812" datatype="html" xml:space="preserve">
         <source>Web Videos (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</source>
-        <target state="new">Web Videos (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
+        <target state="translated">Online videá (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">101</context>
@@ -5045,33 +5045,33 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="11546234043677618" datatype="html">
+      <trans-unit id="11546234043677618" datatype="html" xml:space="preserve">
         <source>Save watched words list</source>
-        <target state="new">Save watched words list</target>
+        <target state="translated">Uložiť zoznam sledovaných slov</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1469816098818043891" datatype="html">
+      <trans-unit id="1469816098818043891" datatype="html" xml:space="preserve">
         <source>One word or group of words per line.</source>
-        <target state="new">One word or group of words per line.</target>
+        <target state="translated">Jedno slovo, alebo skupinu slov na riadok.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2735672321895213785" datatype="html">
+      <trans-unit id="2735672321895213785" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="commonParams.listName"/> updated</source>
-        <target state="new"><x id="PH" equiv-text="commonParams.listName"/> updated</target>
+        <target state="translated"><x id="PH" equiv-text="commonParams.listName"/> aktualizované</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="635757490963150097" datatype="html">
+      <trans-unit id="635757490963150097" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="commonParams.listName"/> created</source>
-        <target state="new"><x id="PH" equiv-text="commonParams.listName"/> created</target>
+        <target state="translated"><x id="PH" equiv-text="commonParams.listName"/> vytvorené</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -5157,9 +5157,9 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5187630100687163794" datatype="html">
+      <trans-unit id="5187630100687163794" datatype="html" xml:space="preserve">
         <source>Update <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></source>
-        <target state="new">Update <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></target>
+        <target state="translated">Aktualizovať<x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -5197,17 +5197,17 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9106564905888443672" datatype="html">
+      <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="new">We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</target>
+        <target state="translated">Odporúčame Vám nepoužívať <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> účet na publikovanie Vašich videí, keďže to je super-admin účet Vašej inštancie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4434906642654067529" datatype="html">
+      <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="new">Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</target>
+        <target state="translated">Miesto toho, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>si vytvorte účet určený na<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> nahrávanie Vašich videí.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5445,9 +5445,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3522196594292220614" datatype="html">
+      <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="new">Playlist URL</target>
+        <target state="translated">Link na zoznam skladieb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -5517,17 +5517,17 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">Link na video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7906169354857781172" datatype="html">
+      <trans-unit id="7906169354857781172" datatype="html" xml:space="preserve">
         <source>Video embed URL</source>
-        <target state="new">Video embed URL</target>
+        <target state="translated">Link na vkladanie videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">149,150</context>
@@ -5569,9 +5569,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5460870961303000256" datatype="html">
+      <trans-unit id="5460870961303000256" datatype="html" xml:space="preserve">
         <source>Playlist embed URL</source>
-        <target state="new">Playlist embed URL</target>
+        <target state="translated">Link na vkladanie zoznamu skladieb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -5881,9 +5881,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4133860569932613370" datatype="html">
+      <trans-unit id="4133860569932613370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> kanály prihlásené </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -5913,41 +5913,41 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6690655144509122658" datatype="html">
+      <trans-unit id="6690655144509122658" datatype="html" xml:space="preserve">
         <source>Transcription</source>
-        <target state="new">Transcription</target>
+        <target state="translated">Transkripcia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7274091852247477825" datatype="html">
+      <trans-unit id="7274091852247477825" datatype="html" xml:space="preserve">
         <source>Close transcription widget</source>
-        <target state="new">Close transcription widget</target>
+        <target state="translated">Zavrieť komponent na transkripciu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8990633416780502626" datatype="html">
+      <trans-unit id="8990633416780502626" datatype="html" xml:space="preserve">
         <source>Search transcript</source>
-        <target state="new">Search transcript</target>
+        <target state="translated">Vyhľadať transkripciu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">41,42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3858389380206796447" datatype="html">
+      <trans-unit id="3858389380206796447" datatype="html" xml:space="preserve">
         <source>No results for your search</source>
-        <target state="new">No results for your search</target>
+        <target state="translated">Žiadne výsledky pre Vaše hľadanie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5193080399820584196" datatype="html">
+      <trans-unit id="5193080399820584196" datatype="html" xml:space="preserve">
         <source>Jump to this segment</source>
-        <target state="new">Jump to this segment</target>
+        <target state="translated">Prejsť na tento segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">97</context>
@@ -5957,33 +5957,33 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036346152557749708" datatype="html">
+      <trans-unit id="1036346152557749708" datatype="html" xml:space="preserve">
         <source>Edit this segment</source>
-        <target state="new">Edit this segment</target>
+        <target state="translated">Upraviť tento segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6855898148869474963" datatype="html">
+      <trans-unit id="6855898148869474963" datatype="html" xml:space="preserve">
         <source>Delete this segment</source>
-        <target state="new">Delete this segment</target>
+        <target state="translated">Vymazať tento segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3474117045932203219" datatype="html">
+      <trans-unit id="3474117045932203219" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="c.language.label"/> (automatically generated)</source>
-        <target state="new"><x id="PH" equiv-text="c.language.label"/> (automatically generated)</target>
+        <target state="translated"><x id="PH" equiv-text="c.language.label"/> (generované automaticky)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8383362541941827528" datatype="html">
+      <trans-unit id="8383362541941827528" datatype="html" xml:space="preserve">
         <source>Cannot load transcript: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Cannot load transcript: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Nie je možné nahrať transkripciu: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -6129,10 +6129,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6481633820711333116" datatype="html">
+      <trans-unit id="6481633820711333116" datatype="html" xml:space="preserve">
         <source>This live is not currently streaming.</source>
-        <target state="new"> This live is not currently streaming.
-</target>
+        <target state="translated">Toto živé vysielanie aktuálne nevysiela.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">6,9</context>
@@ -6226,9 +6225,9 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6141356876817135294" datatype="html">
+      <trans-unit id="6141356876817135294" datatype="html" xml:space="preserve">
         <source>Comments are disabled.</source>
-        <target state="new">Comments are disabled.</target>
+        <target state="translated">Komentáre sú vypnuté.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">96</context>
@@ -6354,9 +6353,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3470970355101730705" datatype="html">
+      <trans-unit id="3470970355101730705" datatype="html" xml:space="preserve">
         <source>Pending review</source>
-        <target state="new">Pending review</target>
+        <target state="translated">Čaká sa na kontrolu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6386,9 +6385,9 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3821661153451769620" datatype="html">
+      <trans-unit id="3821661153451769620" datatype="html" xml:space="preserve">
         <source>Approve</source>
-        <target state="new">Approve</target>
+        <target state="translated">Schváliť</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -6442,161 +6441,161 @@
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1131691653475304132" datatype="html">
+      <trans-unit id="1131691653475304132" datatype="html" xml:space="preserve">
         <source>Your automatic tag policies</source>
-        <target state="new">Your automatic tag policies</target>
+        <target state="translated">Vaše automatické pravidlá pre tagy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2742480382106792999" datatype="html">
+      <trans-unit id="2742480382106792999" datatype="html" xml:space="preserve">
         <source>Automatically block comments:</source>
-        <target state="new">Automatically block comments:</target>
+        <target state="translated">Automaticky blokovať komentáre:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4896271345443040077" datatype="html">
+      <trans-unit id="4896271345443040077" datatype="html" xml:space="preserve">
         <source>That contain an external link</source>
-        <target state="new">That contain an external link</target>
+        <target state="translated">To obsahuje externý odkaz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7260030884541952275" datatype="html">
+      <trans-unit id="7260030884541952275" datatype="html" xml:space="preserve">
         <source>That contain any word from your "<x id="PH" equiv-text="tag.name"/>" watched word list</source>
-        <target state="new">That contain any word from your "<x id="PH" equiv-text="tag.name"/>" watched word list</target>
+        <target state="translated">To obsahuje nejaké slovo z Vášho "<x id="PH" equiv-text="tag.name"/>" sledovaného zoznamu slov</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3545282528084392289" datatype="html">
+      <trans-unit id="3545282528084392289" datatype="html" xml:space="preserve">
         <source>Comment policies updated</source>
-        <target state="new">Comment policies updated</target>
+        <target state="translated">Pravidlá pre komentáre boli aktualizované</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3140041890374956085" datatype="html">
+      <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
-        <target state="new">Comments on your videos</target>
+        <target state="translated">Komentáre ku Vašim videám</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7996232964209657116" datatype="html">
+      <trans-unit id="7996232964209657116" datatype="html" xml:space="preserve">
         <source>EXPORT</source>
-        <target state="new">EXPORT</target>
+        <target state="translated">EXPORT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6327599466774745087" datatype="html">
+      <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="new">You can request an archive of your account containing:</target>
+        <target state="translated">Môžete si vyžiadať archív Vášho účtu obsahujúci:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215128747477502320" datatype="html">
+      <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="new">Your account settings with avatar file</target>
+        <target state="translated">Nastavenia Vášho účtu so súborom pre avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189339781940878663" datatype="html">
+      <trans-unit id="4189339781940878663" datatype="html" xml:space="preserve">
         <source>Your channels with banner and avatar files</source>
-        <target state="new">Your channels with banner and avatar files</target>
+        <target state="translated">Váš kanál so súbormi pre banner a avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3569169060435002504" datatype="html">
+      <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="new">Your muted accounts and servers</target>
+        <target state="translated">Vaše stlmené účty a servery</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2084686551517263033" datatype="html">
+      <trans-unit id="2084686551517263033" datatype="html" xml:space="preserve">
         <source>Your comments</source>
-        <target state="new">Your comments</target>
+        <target state="translated">Vaše komentáre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="511089124158737322" datatype="html">
+      <trans-unit id="511089124158737322" datatype="html" xml:space="preserve">
         <source>Your likes and dislikes</source>
-        <target state="new">Your likes and dislikes</target>
+        <target state="translated">Vaše páčenie sa a nepáčenie sa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6661432123838461687" datatype="html">
+      <trans-unit id="6661432123838461687" datatype="html" xml:space="preserve">
         <source>Your subscriptions and followers</source>
-        <target state="new">Your subscriptions and followers</target>
+        <target state="translated">Vaše odoberania a nasledovníci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8728252018840518768" datatype="html">
+      <trans-unit id="8728252018840518768" datatype="html" xml:space="preserve">
         <source>Your video playlists with thumbnail files</source>
-        <target state="new">Your video playlists with thumbnail files</target>
+        <target state="translated">Vaše zoznamy videí so súbormi náhľadov</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6339334908260162420" datatype="html">
+      <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="new">Your videos with thumbnail, caption files. Video files can also be included in the archive</target>
+        <target state="translated">Vaše videá so súbormi náhľadov a nadpisov. Súbory s video môžu byť tiež obsiahnuté v archíve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5019912911402302063" datatype="html">
+      <trans-unit id="5019912911402302063" datatype="html" xml:space="preserve">
         <source>Your video history</source>
-        <target state="new">Your video history</target>
+        <target state="translated">Vaša história videí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4333560211154634761" datatype="html">
+      <trans-unit id="4333560211154634761" datatype="html" xml:space="preserve">
         <source>The exported data will contain multiple directories:</source>
-        <target state="new">The exported data will contain multiple directories:</target>
+        <target state="translated">Exportované údaje budú obsahovať niekoľko priečinkov:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3192985534238875835" datatype="html">
+      <trans-unit id="3192985534238875835" datatype="html" xml:space="preserve">
         <source>A directory containing an export in ActivityPub format, readable by any compliant software</source>
-        <target state="new">A directory containing an export in ActivityPub format, readable by any compliant software</target>
+        <target state="translated">Priečinok obsahujúci export vo formáte ActivityPub, čitateľný akýmkoľvek kompatibilným softvérom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="896330674868470367" datatype="html">
+      <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="new">A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</target>
+        <target state="translated">Priečinok obsahujúci export vo vlastnom PeerTube JSON formáte, ktorý môže byť použitý na opätovné importovanie Vášho účtu na inú inštanciu PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
