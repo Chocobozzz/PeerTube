@@ -1131,17 +1131,17 @@
           <context context-type="linenumber">426</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2376618077234059570" datatype="html">
+      <trans-unit id="2376618077234059570" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video already has captions.} other {<x id="count"/> videos already have captions.}}</source>
-        <target state="new">{count, plural, =1 {1 video already has captions.} other {<x id="count"/> videos already have captions.}}</target>
+        <target state="translated">{count, plural, =1 {1 video už má titulky.} other {<x id="count"/> videá už majú titulky.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">435</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1403418704976301994" datatype="html">
+      <trans-unit id="1403418704976301994" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video is already being transcribed.} other {<x id="count"/> videos are already being transcribed.}}</source>
-        <target state="new">{count, plural, =1 {1 video is already being transcribed.} other {<x id="count"/> videos are already being transcribed.}}</target>
+        <target state="translated">{count, plural, =1 {1 video sa už prepisuje.} other {<x id="count"/> videá sa už prepisujú.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">445</context>
@@ -10437,9 +10437,9 @@
           <context context-type="linenumber">117,119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6315342359958880564" datatype="html">
+      <trans-unit id="6315342359958880564" datatype="html" xml:space="preserve">
         <source>Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</source>
-        <target state="new">Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</target>
+        <target state="translated">Limit FPS videa prekódovaného naživo. Stream v maximálnom rozlíšení si zachováva pôvodné FPS.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,121</context>
@@ -10509,17 +10509,17 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2798443406255719006" datatype="html">
+      <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="new">Max video FPS</target>
+        <target state="translated">Max video FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145,147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">Limit FPS prekódovaného videa. Súbor s max rozlíšením si zachová pôvodné FPS.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147,149</context>
@@ -10663,7 +10663,7 @@
       </trans-unit>
       <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="translated">Automaticky zapne transkódovanie webových videí, pretože najmenej 1 výstupný formát musí byt pri transkódovaní videí zapnutý</target>
+        <target state="translated">Automaticky zapne prekódovanie webových videí, pretože najmenej 1 výstupný formát musí byť pri prekódovaní videí zapnutý</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">139</context>
