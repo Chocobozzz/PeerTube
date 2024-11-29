@@ -12973,9 +12973,9 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8804946818315976118" datatype="html">
+      <trans-unit id="8804946818315976118" datatype="html" xml:space="preserve">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="translated">Vaša IP adresa je verejná takže pri každej návšteve webstránky, je viacero aktorov (okrem samotnej webstránky) ktorí vidia vašu IP adresu vo svojich logoch: ISP/routery/trackery/CDN a ďalší. PeerTube je ohľadom tohoto transparentné: varujeme vás, že ak chcete udržať svoju IP súkromnú, musíte používať VPN alebo Tor Browser. Myslieť si, že odstránenín P2P z PeerTube vám vráti anonymitu nedáva zmysel.</target>
+        <target state="translated">Vaša IP adresa je verejná takže pri každej návšteve webstránky, je viacero aktorov (okrem samotnej webstránky) ktorí vidia vašu IP adresu vo svojich logoch: ISP/routery/trackery/CDN a ďalší. PeerTube je ohľadom tohoto transparentné: varujeme vás, že ak chcete udržať svoju IP súkromnú, musíte používať VPN alebo Tor Browser. Myslieť si, že odstránením P2P z PeerTube vám vráti anonymitu nedáva zmysel.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">135</context>
@@ -13265,9 +13265,9 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4323994782717641395" datatype="html">
+      <trans-unit id="4323994782717641395" datatype="html" xml:space="preserve">
         <source>Go to the next step</source>
-        <target state="translated">Prejsťa na ďalší krok</target>
+        <target state="translated">Prejsť na ďalší krok</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">73</context>
