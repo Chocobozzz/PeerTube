@@ -119,9 +119,9 @@ export class FFmpegImage {
       duration: number
     }
   }) {
-    const { path, destination, sprites } = options
+    const { path, destination, inputFileMutexReleaser, sprites } = options
 
-    const command = this.commandWrapper.buildCommand(path)
+    const command = this.commandWrapper.buildCommand(path, inputFileMutexReleaser)
 
     const filter = [
       // Fix "t" variable with some videos
