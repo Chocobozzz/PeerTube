@@ -1,9 +1,16 @@
 <ng-template #moreInfoButton>
-  <my-button i18n class="mt-2 d-block" theme="secondary" icon="help" i18n-title title="More info" i18n ptRouterLink="/about" ptRouterLinkActive="active">
-    @if (!collapsed) {
-      More info
-    }
-  </my-button>
+  <div class="more-info-btn-container">
+    <a
+      class="more-info-btn peertube-button-link secondary-button peertube-button-icon mt-2 d-block" [ngClass]="{ 'icon-only': collapsed }"
+      routerLink="/about" i18n-title title="More info" routerLinkActive="active"
+    >
+      <my-global-icon iconName="help"></my-global-icon>
+
+      @if (!collapsed) {
+        More info
+      }
+    </a>
+  </div>
 </ng-template>
 
 <div class="menu-container" [ngClass]="{ collapsed: collapsed, 'logged-in': loggedIn }">

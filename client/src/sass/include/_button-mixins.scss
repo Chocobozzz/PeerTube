@@ -211,8 +211,12 @@
     line-height: $width;
     top: $top;
     right: $right;
+  }
 
-    @include margin-right($margin-right);
+  &:not(.icon-only) {
+    my-global-icon {
+      @include margin-right($margin-right);
+    }
   }
 }
 

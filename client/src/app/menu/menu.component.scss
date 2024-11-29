@@ -89,7 +89,7 @@
 .menu-button,
 .block-title,
 .about .description,
-.about my-button {
+.about .more-info-btn-container {
   @include padding-left(var(--co-menu-x-padding));
   @include padding-right(var(--co-menu-x-padding));
 }
@@ -104,6 +104,78 @@
     height: 2px;
     margin: 1rem var(--co-menu-x-padding);
     background: pvar(--bg-secondary-500);
+  }
+}
+
+.block-title {
+  font-weight: $font-bold;
+  color: pvar-fallback(--menu-fg, --fg-350);
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+  max-width: 180px;
+
+  @include ellipsis;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+
+  white-space: normal;
+  word-break: break-word;
+  transition: background-color .1s ease-in-out;
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  @include disable-default-a-behaviour;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
+  }
+
+  my-global-icon {
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    position: relative;
+    top: -1px;
+
+    + *:not(.visually-hidden) {
+      @include margin-left(12px);
+    }
+  }
+}
+
+.menu-button {
+  margin-top: 0.5rem;
+}
+
+.about {
+  .description {
+    font-size: 14px;
+    color: pvar-fallback(--menu-fg, --fg-200);
+  }
+}
+
+.more-info-btn,
+.menu-link {
+  color: pvar-fallback(--menu-fg, --fg-400);
+
+  my-global-icon {
+    color: pvar(--secondary-icon-color);
+  }
+
+  &.active {
+    &,
+    my-global-icon {
+      color: pvar(--fg);
+    }
+
+    font-weight: $font-bold;
+    background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
   }
 }
 
@@ -133,92 +205,16 @@
     text-align: center;
   }
 
-  .menu-link {
+  .menu-link,
+  .more-info-btn {
+    border: 0 !important;
     justify-content: center;
 
-    my-global-icon {
-      color: pvar-fallback(--menu-fg, --fg-400);
+    &:not(.active) {
+      my-global-icon {
+        color: pvar-fallback(--menu-fg, --fg-300);
+      }
     }
-  }
-}
-
-.block-title {
-  font-weight: $font-bold;
-  color: pvar-fallback(--menu-fg, --fg-350);
-  font-size: 14px;
-  margin-bottom: 0.5rem;
-  max-width: 180px;
-
-  @include ellipsis;
-}
-
-.menu-link {
-  display: flex;
-  align-items: center;
-
-  color: pvar-fallback(--menu-fg, --fg-400);
-  white-space: normal;
-  word-break: break-word;
-  transition: background-color .1s ease-in-out;
-  width: 100%;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-
-  @include disable-default-a-behaviour;
-
-  &:hover,
-  &:focus-visible {
-    opacity: 1;
-    background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
-  }
-
-  &.active {
-    &,
-    my-global-icon {
-      color: pvar(--fg) !important;
-    }
-
-    font-weight: $font-bold;
-    background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
-  }
-
-  my-global-icon {
-    width: 22px;
-    height: 22px;
-    line-height: 22px;
-    position: relative;
-    top: -1px;
-
-    + *:not(.visually-hidden) {
-      @include margin-left(12px);
-    }
-  }
-}
-
-.menu-button {
-  margin-top: 0.5rem;
-}
-
-.about {
-  .description {
-    font-size: 14px;
-    color: pvar-fallback(--menu-fg, --fg-200);
-  }
-}
-
-my-button[theme=secondary]  {
-  color: pvar-fallback(--menu-fg, --fg-400);
-}
-
-my-button[theme=secondary] ::ng-deep my-global-icon,
-.menu-link my-global-icon {
-  color: pvar(--secondary-icon-color) !important;
-}
-
-.collapsed {
-  my-button[theme=secondary] ::ng-deep my-global-icon,
-  .menu-link my-global-icon {
-    color: pvar-fallback(--menu-fg, --fg-200) !important;
   }
 }
 
