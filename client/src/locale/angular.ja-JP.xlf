@@ -4906,7 +4906,7 @@
       </trans-unit>
       <trans-unit id="3783295829532094714" datatype="html" xml:space="preserve">
         <source>Closing caption edition mocal</source>
-        <target state="translated">キャプションの編集モーダルを閉じています</target>
+        <target state="translated">キャプションの編集モーダルを閉じようとしています</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">413</context>
