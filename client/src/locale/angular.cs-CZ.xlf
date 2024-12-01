@@ -1269,7 +1269,7 @@
       </trans-unit>
       <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
-        <target state="translated">Procházet  "<x id="PH" equiv-text="value.category.label"/>" videa</target>
+        <target state="translated">Procházet "<x id="PH" equiv-text="value.category.label"/>" videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -2915,7 +2915,7 @@
       </trans-unit>
       <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
-        <target state="translated">Více informací</target>
+        <target state="translated">Více info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">5</context>
@@ -2937,9 +2937,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8069878177741227309" datatype="html">
+      <trans-unit id="8069878177741227309" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div class=&quot;block-title ellipsis&quot; [ngClass]=&quot;{ 'visually-hidden': collapsed }&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ menuSection.title }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul class=&quot;ul-unstyle&quot;&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let link of menuSection.links&quot;&gt;"/><x id="START_BLOCK_IF_1" equiv-text="@if (link.isPrimaryButton === true) {"/><x id="START_TAG_MY_BUTTON" ctype="x-my_button" equiv-text="&lt;my-button class=&quot;d-block menu-button&quot; theme=&quot;primary&quot; [icon]=&quot;link.icon&quot; [ariaLabel]=&quot;link.label&quot; [ptRouterLink]=&quot;link.path&quot;&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (!collapsed) {"/> <x id="INTERPOLATION_1" equiv-text="{{ link.label }}"/> <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="CLOSE_TAG_MY_BUTTON" ctype="x-my_button" equiv-text="&lt;/my-button&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;menu-link ellipsis&quot; [routerLink]=&quot;link.path&quot; routerLinkActive=&quot;active&quot;&gt;"/><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon *ngIf=&quot;link.icon&quot; [iconName]=&quot;link.icon&quot; [ngClass]=&quot;link.iconClass&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span [ngClass]=&quot;{ 'visually-hidden': collapsed }&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ link.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div class=&quot;block-title ellipsis&quot; [ngClass]=&quot;{ 'visually-hidden': collapsed }&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ menuSection.title }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul class=&quot;ul-unstyle&quot;&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let link of menuSection.links&quot;&gt;"/><x id="START_BLOCK_IF_1" equiv-text="@if (link.isPrimaryButton === true) {"/><x id="START_TAG_MY_BUTTON" ctype="x-my_button" equiv-text="&lt;my-button class=&quot;d-block menu-button&quot; theme=&quot;primary&quot; [icon]=&quot;link.icon&quot; [ariaLabel]=&quot;link.label&quot; [ptRouterLink]=&quot;link.path&quot;&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (!collapsed) {"/> <x id="INTERPOLATION_1" equiv-text="{{ link.label }}"/> <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="CLOSE_TAG_MY_BUTTON" ctype="x-my_button" equiv-text="&lt;/my-button&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;menu-link ellipsis&quot; [routerLink]=&quot;link.path&quot; routerLinkActive=&quot;active&quot;&gt;"/><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon *ngIf=&quot;link.icon&quot; [iconName]=&quot;link.icon&quot; [ngClass]=&quot;link.iconClass&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span [ngClass]=&quot;{ 'visually-hidden': collapsed }&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ link.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div class=&quot;block-title ellipsis&quot; [ngClass]=&quot;{ 'visually-hidden': collapsed }&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ menuSection.title }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul class=&quot;ul-unstyle&quot;&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let link of menuSection.links&quot;&gt;"/><x id="START_BLOCK_IF_1" equiv-text="@if (link.isPrimaryButton === true) {"/><x id="START_TAG_MY_BUTTON" ctype="x-my_button" equiv-text="&lt;my-button class=&quot;d-block menu-button&quot; theme=&quot;primary&quot; [icon]=&quot;link.icon&quot; [ariaLabel]=&quot;link.label&quot; [ptRouterLink]=&quot;link.path&quot;&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (!collapsed) {"/> <x id="INTERPOLATION_1" equiv-text="{{ link.label }}"/> <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="CLOSE_TAG_MY_BUTTON" ctype="x-my_button" equiv-text="&lt;/my-button&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;menu-link ellipsis&quot; [routerLink]=&quot;link.path&quot; routerLinkActive=&quot;active&quot;&gt;"/><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon *ngIf=&quot;link.icon&quot; [iconName]=&quot;link.icon&quot; [ngClass]=&quot;link.iconClass&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span [ngClass]=&quot;{ 'visually-hidden': collapsed }&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ link.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">52</context>
@@ -13557,41 +13557,41 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5859845485947900894" datatype="html">
+      <trans-unit id="5859845485947900894" datatype="html" xml:space="preserve">
         <source>Platforms order</source>
-        <target state="new">Platforms order</target>
+        <target state="translated">Pořadí platforem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1541005328084571131" datatype="html">
+      <trans-unit id="1541005328084571131" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platforma odebírá obsah z <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> jiných platforem<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99,101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8603409827386793098" datatype="html">
+      <trans-unit id="8603409827386793098" datatype="html" xml:space="preserve">
         <source>Set your display preferences here.</source>
-        <target state="new">Set your display preferences here.</target>
+        <target state="translated">Zde nastavte předvolby zobrazení.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">101,102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1753457183754409152" datatype="html">
+      <trans-unit id="1753457183754409152" datatype="html" xml:space="preserve">
         <source>Displayed videos</source>
-        <target state="new">Displayed videos</target>
+        <target state="translated">Zobrazená videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">106,108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3029609593829675670" datatype="html">
+      <trans-unit id="3029609593829675670" datatype="html" xml:space="preserve">
         <source>Content type</source>
-        <target state="new">Content type</target>
+        <target state="translated">Typ obsahu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">113,115</context>
@@ -13605,17 +13605,17 @@
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1840036002282013872" datatype="html">
+      <trans-unit id="1840036002282013872" datatype="html" xml:space="preserve">
         <source>All platforms</source>
-        <target state="new">All platforms</target>
+        <target state="translated">Všechny platformy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8317194248349445422" datatype="html">
+      <trans-unit id="8317194248349445422" datatype="html" xml:space="preserve">
         <source>This platform</source>
-        <target state="new">This platform</target>
+        <target state="translated">Tato platforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">160</context>
@@ -13653,17 +13653,17 @@
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019185430150596533" datatype="html">
+      <trans-unit id="4019185430150596533" datatype="html" xml:space="preserve">
         <source>Only lives</source>
-        <target state="new">Only lives</target>
+        <target state="translated">Pouze živé přenosy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="403276015827477743" datatype="html">
+      <trans-unit id="403276015827477743" datatype="html" xml:space="preserve">
         <source>Only VOD</source>
-        <target state="new">Only VOD</target>
+        <target state="translated">Pouze VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">201</context>
@@ -15091,17 +15091,17 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7715366001202984222" datatype="html">
+      <trans-unit id="7715366001202984222" datatype="html" xml:space="preserve">
         <source>Homepage (new window)</source>
-        <target state="new">Homepage (new window)</target>
+        <target state="translated">Úvodní stránka (nové okno)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216768473834595914" datatype="html">
+      <trans-unit id="5216768473834595914" datatype="html" xml:space="preserve">
         <source>NPM page (new window)</source>
-        <target state="new">NPM page (new window)</target>
+        <target state="translated">Stránka NPM (nové okno)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -15319,49 +15319,49 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5217863338130648698" datatype="html">
+      <trans-unit id="5217863338130648698" datatype="html" xml:space="preserve">
         <source>Light (Beige) or Dark (Brown)</source>
-        <target state="new">Light (Beige) or Dark (Brown)</target>
+        <target state="translated">Světlý (béžový) nebo tmavý (hnědý)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4012645514712660678" datatype="html">
+      <trans-unit id="4012645514712660678" datatype="html" xml:space="preserve">
         <source>PeerTube selects the appropriate theme depending on web browser preferences</source>
-        <target state="new">PeerTube selects the appropriate theme depending on web browser preferences</target>
+        <target state="translated">PeerTube vybírá vhodné téma v závislosti na preferencích webového prohlížeče</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8421126018613018698" datatype="html">
+      <trans-unit id="8421126018613018698" datatype="html" xml:space="preserve">
         <source>Dark (Brown)</source>
-        <target state="new">Dark (Brown)</target>
+        <target state="translated">Tmavý (hnědý)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="258909519768317409" datatype="html">
+      <trans-unit id="258909519768317409" datatype="html" xml:space="preserve">
         <source>Light (Beige)</source>
-        <target state="new">Light (Beige)</target>
+        <target state="translated">Světlý (béžový)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5538640554435353258" datatype="html">
+      <trans-unit id="5538640554435353258" datatype="html" xml:space="preserve">
         <source>Open settings modal</source>
-        <target state="new">Open settings modal</target>
+        <target state="translated">Otevřít modální okno nastavení</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">13,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4070550899383572841" datatype="html">
+      <trans-unit id="4070550899383572841" datatype="html" xml:space="preserve">
         <source>Go to the manage your account page</source>
-        <target state="new">Go to the manage your account page</target>
+        <target state="translated">Přejděte na stránku Správa účtu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">27</context>
@@ -16131,9 +16131,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7485962171644689376" datatype="html">
+      <trans-unit id="7485962171644689376" datatype="html" xml:space="preserve">
         <source>Clear all history</source>
-        <target state="new">Clear all history</target>
+        <target state="translated">Vymazat celou historii</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">11</context>
@@ -16571,17 +16571,17 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3931294879857217619" datatype="html">
+      <trans-unit id="3931294879857217619" datatype="html" xml:space="preserve">
         <source>Remote interact</source>
-        <target state="new">Remote interact</target>
+        <target state="translated">Vzdálená interakce</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="432723159292175437" datatype="html">
+      <trans-unit id="432723159292175437" datatype="html" xml:space="preserve">
         <source>Remote subscribe</source>
-        <target state="new">Remote subscribe</target>
+        <target state="translated">Vzdálený odběr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -16687,9 +16687,9 @@
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6337200167647767274" datatype="html">
+      <trans-unit id="6337200167647767274" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {kanál} other {kanálů}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -16747,9 +16747,9 @@
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="782403351079933650" datatype="html">
+      <trans-unit id="782403351079933650" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {sledující} other {sledujících}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -16951,9 +16951,9 @@
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="705850529168776436" datatype="html">
+      <trans-unit id="705850529168776436" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videí}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">252</context>
@@ -17145,9 +17145,9 @@
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3897348120591552265" datatype="html">
+      <trans-unit id="3897348120591552265" datatype="html" xml:space="preserve">
         <source>Manage</source>
-        <target state="new">Manage</target>
+        <target state="translated">Spravovat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -17161,17 +17161,17 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7731752234233950482" datatype="html">
+      <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
-        <target state="new">Synchronizations</target>
+        <target state="translated">Synchronizace</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7607713563510753803" datatype="html">
+      <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
-        <target state="new">Imports</target>
+        <target state="translated">Importy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -18323,25 +18323,25 @@
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6274027958678461128" datatype="html">
+      <trans-unit id="6274027958678461128" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user is required.</source>
-        <target state="new">Max synchronizations per user is required.</target>
+        <target state="translated">Je vyžadována maximální synchronizace na uživatele.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8998234411272282626" datatype="html">
+      <trans-unit id="8998234411272282626" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be greater or equal to 1.</source>
-        <target state="new">Max synchronizations per user must be greater or equal to 1.</target>
+        <target state="translated">Maximální počet synchronizací na uživatele musí být větší nebo roven 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6409680643108400586" datatype="html">
+      <trans-unit id="6409680643108400586" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be a number.</source>
-        <target state="new">Max synchronizations per user must be a number.</target>
+        <target state="translated">Maximální počet synchronizací na uživatele musí být číslo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">114</context>
@@ -20190,25 +20190,25 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2762554571133839421" datatype="html">
+      <trans-unit id="2762554571133839421" datatype="html" xml:space="preserve">
         <source>Go to the login page</source>
-        <target state="new">Go to the login page</target>
+        <target state="translated">Přejít na přihlašovací stránku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/login-link.component.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7941320871431436228" datatype="html">
+      <trans-unit id="7941320871431436228" datatype="html" xml:space="preserve">
         <source>Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Požádejte o účet na <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8545791785518058029" datatype="html">
+      <trans-unit id="8545791785518058029" datatype="html" xml:space="preserve">
         <source>Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Vytvořit účet na <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -21708,25 +21708,25 @@
           <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6941992199451163843" datatype="html">
+      <trans-unit id="6941992199451163843" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Videa na <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3942718333651219385" datatype="html">
+      <trans-unit id="3942718333651219385" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</target>
+        <target state="translated">Videa na <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> dalších platformách</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2247270192251966992" datatype="html">
+      <trans-unit id="2247270192251966992" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -22264,9 +22264,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7570883748440392027" datatype="html">
+      <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
-        <target state="new"><x id="PH" equiv-text="this.instanceName"/> theme</target>
+        <target state="translated"><x id="PH" equiv-text="this.instanceName"/> motiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -22280,9 +22280,9 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="704703576647033533" datatype="html">
+      <trans-unit id="704703576647033533" datatype="html" xml:space="preserve">
         <source>WAIT LIVE</source>
-        <target state="new">WAIT LIVE</target>
+        <target state="translated">ČEKEJTE NA ŽIVÝ PŘENOS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">38</context>
