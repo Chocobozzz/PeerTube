@@ -5,16 +5,8 @@
   scrollbar-color: auto;
 }
 
-.notification-inbox-dropdown.hidden {
-  display: none;
-}
-
 ::ng-deep {
   .dropdown-notifications {
-    max-width: none;
-    top: -6px !important;
-    left: 7px !important;
-
     .dropdown-menu {
       padding: 0;
       font-size: 14px;

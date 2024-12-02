@@ -23,7 +23,7 @@
   </a>
 } @else {
   <div
-    ngbDropdown autoClose="outside" placement="bottom" container="body" dropdownClass="dropdown-notifications"
+    ngbDropdown autoClose="outside" placement="bottom-end auto" container="body" dropdownClass="dropdown-notifications"
     #dropdown="ngbDropdown" (openChange)="$event === true ? onDropdownShown() : onDropdownHidden()"
   >
     <button
