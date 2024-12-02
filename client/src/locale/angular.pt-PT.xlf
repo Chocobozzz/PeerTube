@@ -147,9 +147,9 @@
           <context context-type="linenumber">399</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.progressbar.value" datatype="html">
+      <trans-unit id="ngb.progressbar.value" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="nd so on.    *"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="e por aí adiante.    *"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">65</context>
