@@ -1,11 +1,9 @@
-import { KeyValuePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import {
-  NgbTooltip
-} from '@ng-bootstrap/ng-bootstrap'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getResolutionAndFPSLabel, maxBy } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoResolution, VideoSource } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
@@ -23,11 +21,7 @@ import { VideoDetails } from '../../shared-main/video/video-details.model'
     FormsModule,
     GlobalIconComponent,
     PeertubeCheckboxComponent,
-    NgFor,
-    KeyValuePipe,
     NgbTooltip,
-    NgTemplateOutlet,
-    NgClass,
     BytesPipe
   ]
 })
