@@ -10,9 +10,9 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.carousel.slide-number" datatype="html">
+      <trans-unit id="ngb.carousel.slide-number" datatype="html" xml:space="preserve">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="new"> Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">Slide <x id="INTERPOLATION" equiv-text="get wrap("/> de <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context>
@@ -467,25 +467,25 @@
           <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="731573110355765429" datatype="html">
+      <trans-unit id="731573110355765429" datatype="html" xml:space="preserve">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </source>
-        <target state="new"> Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </target>
+        <target state="translated">O seu video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edição terminou </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1129056994812601216" datatype="html">
+      <trans-unit id="1129056994812601216" datatype="html" xml:space="preserve">
         <source>User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.registrationsUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.registration.username }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wants to register on your instance </source>
-        <target state="new"> User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.registrationsUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.registration.username }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wants to register on your instance </target>
+        <target state="translated">Utilizador <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.registrationsUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.registration.username }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> quer registar na sua instância </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1023647542221598730" datatype="html">
+      <trans-unit id="1023647542221598730" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> está a transmitir em direto em <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">231</context>
@@ -703,17 +703,17 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8397313116126928339" datatype="html">
+      <trans-unit id="8397313116126928339" datatype="html" xml:space="preserve">
         <source>(auto-generated)</source>
-        <target state="new">(auto-generated)</target>
+        <target state="translated">(auto-gerado)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/subtitle-files-download.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3468444992991240326" datatype="html">
+      <trans-unit id="3468444992991240326" datatype="html" xml:space="preserve">
         <source>Subtitle URL</source>
-        <target state="new">Subtitle URL</target>
+        <target state="translated">URL das Legendas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/subtitle-files-download.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -759,17 +759,17 @@
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8585240607880065845" datatype="html">
+      <trans-unit id="8585240607880065845" datatype="html" xml:space="preserve">
         <source>More information/options</source>
-        <target state="new">More information/options</target>
+        <target state="translated">Mais informação/opções</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6712332946289982150" datatype="html">
+      <trans-unit id="6712332946289982150" datatype="html" xml:space="preserve">
         <source>Less information/options</source>
-        <target state="new">Less information/options</target>
+        <target state="translated">Menos informação/opções</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">119</context>
@@ -19702,57 +19702,57 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6950140976689343775">
+      <trans-unit id="6950140976689343775" xml:space="preserve">
         <source>Sunday</source>
-        <target>domingo</target>
+        <target state="translated">Domingo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8739442281958563044">
+      <trans-unit id="8739442281958563044" xml:space="preserve">
         <source>Monday</source>
-        <target>segunda-feira</target>
+        <target state="translated">Segunda-feira</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9176037901730521018">
+      <trans-unit id="9176037901730521018" xml:space="preserve">
         <source>Tuesday</source>
-        <target>terça-feira</target>
+        <target state="translated">Terça-feira</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8798932904948432529">
+      <trans-unit id="8798932904948432529" xml:space="preserve">
         <source>Wednesday</source>
-        <target>quarta-feira</target>
+        <target state="translated">Quarta-feira</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1433683192825895947">
+      <trans-unit id="1433683192825895947" xml:space="preserve">
         <source>Thursday</source>
-        <target>quinta-feira</target>
+        <target state="translated">Quinta-feira</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3730139500618908668">
+      <trans-unit id="3730139500618908668" xml:space="preserve">
         <source>Friday</source>
-        <target>sexta-feira</target>
+        <target state="translated">Sexta-feira</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1830554030016307335">
+      <trans-unit id="1830554030016307335" xml:space="preserve">
         <source>Saturday</source>
-        <target>sábado</target>
+        <target state="translated">Sábado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">16</context>
@@ -19898,97 +19898,97 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Saturday min name</note>
       </trans-unit>
-      <trans-unit id="3913843642962116845">
+      <trans-unit id="3913843642962116845" xml:space="preserve">
         <source>January</source>
-        <target>janeiro</target>
+        <target state="translated">Janeiro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6642324138857419870">
+      <trans-unit id="6642324138857419870" xml:space="preserve">
         <source>February</source>
-        <target>fevereiro</target>
+        <target state="translated">Fevereiro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7918954644624211958">
+      <trans-unit id="7918954644624211958" xml:space="preserve">
         <source>March</source>
-        <target>março</target>
+        <target state="translated">Março</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1809521303476565743">
+      <trans-unit id="1809521303476565743" xml:space="preserve">
         <source>April</source>
-        <target>abril</target>
+        <target state="translated">Abril</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8469692700277617405">
+      <trans-unit id="8469692700277617405" xml:space="preserve">
         <source>May</source>
-        <target>maio</target>
+        <target state="translated">Mio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9055297580745330415">
+      <trans-unit id="9055297580745330415" xml:space="preserve">
         <source>June</source>
-        <target>junho</target>
+        <target state="translated">Junho</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9087113544612471348">
+      <trans-unit id="9087113544612471348" xml:space="preserve">
         <source>July</source>
-        <target>julho</target>
+        <target state="translated">Julho</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3984618989093293779">
+      <trans-unit id="3984618989093293779" xml:space="preserve">
         <source>August</source>
-        <target>agosto</target>
+        <target state="translated">Agosto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5872622085239011307">
+      <trans-unit id="5872622085239011307" xml:space="preserve">
         <source>September</source>
-        <target>setembro</target>
+        <target state="translated">Setembro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1491482705364427867">
+      <trans-unit id="1491482705364427867" xml:space="preserve">
         <source>October</source>
-        <target>outubro</target>
+        <target state="translated">Outubro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1109977718843277527">
+      <trans-unit id="1109977718843277527" xml:space="preserve">
         <source>November</source>
-        <target>novembro</target>
+        <target state="translated">Novembro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="124191049522509365">
+      <trans-unit id="124191049522509365" xml:space="preserve">
         <source>December</source>
-        <target>dezembro</target>
+        <target state="translated">Dezembro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">51</context>
