@@ -82,12 +82,6 @@ p-calendar {
     .p-calendar {
       width: 100%;
     }
-
-    .p-inputtext {
-      color: #000;
-
-      @include peertube-input-text(100%);
-    }
   }
 }
 
@@ -96,6 +90,11 @@ p-calendar {
 
   grid-template-columns: 66% 1fr;
   grid-gap: 30px;
+}
+
+.col-video-edit {
+  max-width: 100%;
+  min-width: 1px;
 }
 
 .hide-chapter-label {
