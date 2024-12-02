@@ -1,13 +1,13 @@
-<div class="root" [hidden]="!loaded || (loggedIn && !user.account)">
+<div class="root">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
 
     <span class="icon-logo"></span>
     <span class="instance-name">{{ instanceName }}</span>
   </a>
 
-  <my-search-typeahead></my-search-typeahead>
+  <my-search-typeahead [hidden]="!isLoaded()"></my-search-typeahead>
 
-  <div class="d-flex align-items-center buttons-container">
+  <div class="d-flex align-items-center buttons-container" [hidden]="!isLoaded()">
     @if (!loggedIn) {
       <my-button
         i18n-title title="Open settings modal"

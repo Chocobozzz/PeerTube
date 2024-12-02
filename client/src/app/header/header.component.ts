@@ -62,8 +62,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentInterfaceLanguage: string
 
-  loaded = false
-
   private serverConfig: ServerConfig
 
   private quickSettingsModalSub: Subscription
@@ -91,6 +89,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   get instanceName () {
     return this.serverService.getHTMLConfig().instance.name
+  }
+
+  isLoaded () {
+    return this.serverConfig && (!this.loggedIn || !!this.user?.account)
   }
 
   isInMobileView () {
@@ -125,8 +127,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.quickSettingsModalSub = this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
-
-    this.loaded = true
   }
 
   ngOnDestroy () {

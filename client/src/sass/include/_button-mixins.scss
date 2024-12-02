@@ -205,12 +205,10 @@
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px, $right: 0) {
   my-global-icon {
     position: relative;
-    display: inline-block;
-    width: $width;
-    height: $width;
-    line-height: $width;
     top: $top;
     right: $right;
+
+    @include global-icon-size($width);
   }
 
   &:not(.icon-only) {

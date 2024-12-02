@@ -25,6 +25,7 @@
   color: inherit !important;
   display: flex;
   align-items: center;
+  min-height: 46px; // Prevent layout shifting when waiting for the right part of the header to load
 
   @include padding-left(18px);
   @include margin-right(0.5rem);
