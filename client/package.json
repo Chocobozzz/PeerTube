@@ -18,8 +18,6 @@
     "lint-scss": "stylelint 'src/**/*.scss'",
     "eslint": "eslint",
     "ng": "ng",
-    "webdriver-manager": "webdriver-manager",
-    "ngx-extractor": "ngx-extractor",
     "stylelint": "stylelint"
   },
   "browser": {
