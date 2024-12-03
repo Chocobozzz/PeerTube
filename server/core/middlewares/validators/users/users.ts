@@ -32,7 +32,7 @@ import { ActorModel } from '../../../models/actor/actor.js'
 import {
   areValidationErrors,
   checkUserCanManageAccount,
-  checkUserEmailExist,
+  checkUserEmailExistPermissive,
   checkUserIdExist,
   checkUserNameOrEmailDoNotAlreadyExist,
   doesVideoChannelIdExist,
@@ -334,7 +334,7 @@ export const usersAskResetPasswordValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const exists = await checkUserEmailExist(req.body.email, res, false)
+    const exists = await checkUserEmailExistPermissive(req.body.email, res, false)
     if (!exists) {
       logger.debug('User with email %s does not exist (asking reset password).', req.body.email)
       // Do not leak our emails

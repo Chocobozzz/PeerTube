@@ -673,6 +673,18 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.findOne(query)
   }
 
+  static loadByEmailCaseInsensitive (email: string): Promise<MUserDefault[]> {
+    const query = {
+      where: where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      )
+    }
+
+    return UserModel.findAll(query)
+  }
+
   static loadByUsernameOrEmail (username: string, email?: string): Promise<MUserDefault> {
     if (!email) email = username
 
@@ -687,6 +699,20 @@ export class UserModel extends SequelizeModel<UserModel> {
     }
 
     return UserModel.findOne(query)
+  }
+
+  static loadByUsernameOrEmailCaseInsensitive (usernameOrEmail: string): Promise<MUserDefault[]> {
+    const query = {
+      where: {
+        [Op.or]: [
+          where(fn('lower', col('username')), fn('lower', usernameOrEmail) as any),
+
+          where(fn('lower', col('email')), fn('lower', usernameOrEmail) as any)
+        ]
+      }
+    }
+
+    return UserModel.findAll(query)
   }
 
   static loadByVideoId (videoId: number): Promise<MUserDefault> {
