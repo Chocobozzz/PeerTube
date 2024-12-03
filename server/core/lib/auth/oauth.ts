@@ -17,6 +17,7 @@ import { sha1 } from '@peertube/peertube-node-utils'
 import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
 import { OTP } from '../../initializers/constants.js'
 import { BypassLogin, getAccessToken, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model.js'
+import { Hooks } from '../plugins/hooks.js'
 
 class MissingTwoFactorError extends Error {
   code = HttpStatusCode.UNAUTHORIZED_401
@@ -135,7 +136,12 @@ async function handlePasswordGrant (options: {
   client: MOAuthClient
   bypassLogin?: BypassLogin
 }) {
-  const { request, client, bypassLogin } = options
+  const { request, client } = options
+  const { bypassLogin, usernameOrEmail, password } = await Hooks.wrapObject({
+    bypassLogin: options.bypassLogin,
+    usernameOrEmail: request.body.username,
+    password: request.body.password
+  }, 'filter:api.login.params')
 
   if (!request.body.username) {
     throw new InvalidRequestError('Missing parameter: `username`')
@@ -145,7 +151,7 @@ async function handlePasswordGrant (options: {
     throw new InvalidRequestError('Missing parameter: `password`')
   }
 
-  const user = await getUser(request.body.username, request.body.password, bypassLogin)
+  const user = await getUser(usernameOrEmail, password, bypassLogin)
   if (!user) {
     const registration = await UserRegistrationModel.loadByEmailOrUsername(request.body.username)
 
