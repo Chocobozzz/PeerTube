@@ -51,6 +51,7 @@ export type CommonVideoParams = {
   isLive?: boolean
   skipCount?: boolean
   nsfw?: BooleanBothQuery
+  search?: string
 }
 
 @Injectable()
@@ -178,14 +179,11 @@ export class VideoService {
 
   getAccountVideos (parameters: CommonVideoParams & {
     account: Pick<Account, 'nameWithHost'>
-    search?: string
   }): Observable<ResultList<Video>> {
-    const { account, search } = parameters
+    const { account } = parameters
 
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, ...parameters })
-
-    if (search) params = params.set('search', search)
 
     return this.authHttp
                .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
@@ -548,7 +546,10 @@ export class VideoService {
       privacyOneOf,
       skipCount,
       isLive,
-      nsfw
+      nsfw,
+      search,
+
+      ...otherOptions
     } = options
 
     const pagination = videoPagination
@@ -566,6 +567,9 @@ export class VideoService {
     if (languageOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
     if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
     if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (search) newParams = newParams.set('search', search)
+
+    newParams = this.restService.addObjectParams(newParams, otherOptions)
 
     return newParams
   }
