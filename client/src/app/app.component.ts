@@ -11,7 +11,6 @@ import {
   ScreenService,
   ScrollService,
   ServerService,
-  ThemeService,
   User,
   UserLocalStorageService
 } from '@app/core'
@@ -93,7 +92,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     private domSanitizer: DomSanitizer,
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
-    private themeService: ThemeService,
     private hooks: HooksService,
     private location: PlatformLocation,
     private modalService: NgbModal,
@@ -115,7 +113,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.hooks.runAction('action:application.init', 'common')
-    this.themeService.initialize()
 
     this.authService.loadClientCredentials()
 

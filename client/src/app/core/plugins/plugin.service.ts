@@ -81,7 +81,7 @@ export class PluginService implements ClientHook {
   initializePlugins () {
     this.pluginsManager.loadPluginsList(this.server.getHTMLConfig())
 
-    this.pluginsManager.ensurePluginsAreLoaded('common')
+    return this.pluginsManager.ensurePluginsAreLoaded('common')
   }
 
   initializeCustomModal (customModal: CustomModalComponent) {
