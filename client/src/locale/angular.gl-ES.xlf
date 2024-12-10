@@ -2921,9 +2921,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3980731018496292351" datatype="html">
+      <trans-unit id="3980731018496292351" datatype="html" xml:space="preserve">
         <source>Display the lateral menu</source>
-        <target state="new">Display the lateral menu</target>
+        <target state="translated">Mostrar o menú lateral</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">30</context>
