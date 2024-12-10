@@ -9,10 +9,10 @@
   }
 
   my-global-icon[iconName=shield] {
-    width: 16px;
     position: relative;
-    top: -2px;
+    top: -1px;
 
+    @include global-icon-size(16px);
     @include margin-left(10px);
   }
 

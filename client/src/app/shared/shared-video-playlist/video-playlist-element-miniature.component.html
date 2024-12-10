@@ -51,8 +51,6 @@
     </div>
   </a>
 
-  <my-edit-button *ngIf="owned && touchScreenEditButton" [ptRouterLink]="[ '/my-library', 'video-playlists', playlist.shortUUID ]"></my-edit-button>
-
   <div
     *ngIf="owned" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
     (openChange)="onDropdownOpenChange()" autoClose="outside" container="body"

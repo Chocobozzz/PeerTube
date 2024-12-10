@@ -11,10 +11,6 @@ button:not(.with-border, .is-input-group) {
 }
 
 my-global-icon {
-  width: 15px;
-  line-height: 15px;
-  height: 15px;
-  display: inline-block;
-
+  @include global-icon-size(15px);
   @include margin-right(5px);
 }

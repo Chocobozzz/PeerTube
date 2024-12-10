@@ -189,7 +189,7 @@ body {
     my-global-icon {
       opacity: 0.5;
 
-      @include icon(22px);
+      @include global-icon-size(22px);
 
       &:hover {
         opacity: 0.8;

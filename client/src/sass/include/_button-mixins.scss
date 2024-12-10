@@ -120,10 +120,6 @@
 @mixin rounded-icon-button {
   padding: 0.5rem !important;
   border-radius: 100% !important;
-
-  my-global-icon {
-    width: 24px;
-  }
 }
 
 @mixin danger-button {
