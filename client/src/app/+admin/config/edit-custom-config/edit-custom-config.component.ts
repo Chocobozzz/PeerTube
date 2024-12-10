@@ -482,7 +482,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     ]).subscribe({
       next: ([ languages, categories ]) => {
         this.languageItems = languages.map(l => ({ label: l.label, id: l.id }))
-        this.categoryItems = categories.map(l => ({ label: l.label, id: l.id + '' }))
+        this.categoryItems = categories.map(l => ({ label: l.label, id: l.id }))
       },
 
       error: err => this.notifier.error(err.message)
