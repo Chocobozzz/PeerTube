@@ -25,6 +25,7 @@
 
 ### Admin config (non-exhaustive)
 
+ * Ensure `instance.default_client_route` (in web admin -> `Configuration` -> `Basic` -> `Landing page`) has a correct path: `/videos/trending`, `/videos/local` and `/videos/recently-added` have been removed in favour of `/videos/browse`
  * Add ability to configure STUN servers IPs: `webrtc.stun_servers`
  * Remove `client.videos.miniature.display_author_avatar` config: author avatars are now always displayed
 
