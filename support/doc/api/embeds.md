@@ -209,7 +209,7 @@ This promise is resolved when the video is loaded and the player is ready.
 
 ### `isPlaying(): Promise<boolean>`
 
-**PeerTube >= 6.3**
+**PeerTube >= 7.0**
 
 Check if the player is playing the media.
 
@@ -223,7 +223,7 @@ Pauses playback.
 
 ### `getCurrentTime(): Promise<number>`
 
-**PeerTube >= 6.3**
+**PeerTube >= 7.0**
 
 Get player current time in seconds.
 
