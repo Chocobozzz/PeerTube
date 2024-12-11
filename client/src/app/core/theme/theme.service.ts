@@ -188,35 +188,36 @@ export class ThemeService {
 
     this.oldInjectedProperties = []
 
-    const globalDarkTheme = this.isDarkTheme({
-      fg: computedStyle.getPropertyValue('--fg') || computedStyle.getPropertyValue('--mainForegroundColor'),
-      bg: computedStyle.getPropertyValue('--bg') || computedStyle.getPropertyValue('--mainBackgroundColor'),
-      isDarkVar: computedStyle.getPropertyValue('--is-dark')
-    })
+    const isGlobalDarkTheme = () => {
+      return this.isDarkTheme({
+        fg: computedStyle.getPropertyValue('--fg') || computedStyle.getPropertyValue('--mainForegroundColor'),
+        bg: computedStyle.getPropertyValue('--bg') || computedStyle.getPropertyValue('--mainBackgroundColor'),
+        isDarkVar: computedStyle.getPropertyValue('--is-dark')
+      })
+    }
 
-    const darkMenuTheme = this.isDarkTheme({
-      fg: computedStyle.getPropertyValue('--menu-fg'),
-      bg: computedStyle.getPropertyValue('--menu-bg'),
-      isDarkVar: computedStyle.getPropertyValue('--is-menu-dark')
-    })
+    const isMenuDarkTheme = () => {
+      return this.isDarkTheme({
+        fg: computedStyle.getPropertyValue('--menu-fg'),
+        bg: computedStyle.getPropertyValue('--menu-bg'),
+        isDarkVar: computedStyle.getPropertyValue('--is-menu-dark')
+      })
+    }
 
-    if (globalDarkTheme) debugLogger('Detected dark theme')
-    if (darkMenuTheme) debugLogger('Detected dark menu theme')
+    const toProcess = [
+      { prefix: 'primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
+      { prefix: 'on-primary', invertIfDark: true, step: 0, darkTheme: isGlobalDarkTheme },
+      { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
+      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: isGlobalDarkTheme },
 
-    const toProcess: { prefix: string, invertIfDark: boolean, step: number, darkTheme: boolean, fallbacks?: Record<string, string> }[] = [
-      { prefix: 'primary', invertIfDark: true, step: 5, darkTheme: globalDarkTheme },
-      { prefix: 'on-primary', invertIfDark: true, step: 0, darkTheme: globalDarkTheme },
-      { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: globalDarkTheme },
-      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: globalDarkTheme },
-
-      { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: darkMenuTheme },
-      { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: darkMenuTheme }
-    ]
+      { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme },
+      { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme }
+    ] as { prefix: string, invertIfDark: boolean, step: number, darkTheme: () => boolean, fallbacks?: Record<string, string> }[]
 
     for (const { prefix, invertIfDark, step, darkTheme, fallbacks = {} } of toProcess) {
       const mainColor = computedStyle.getPropertyValue('--' + prefix)
 
-      const darkInverter = invertIfDark && darkTheme
+      const darkInverter = invertIfDark && darkTheme()
         ? -1
         : 1
 
@@ -267,7 +268,7 @@ export class ThemeService {
       }
     }
 
-    document.body.dataset.bsTheme = globalDarkTheme
+    document.body.dataset.bsTheme = isGlobalDarkTheme()
       ? 'dark'
       : ''
   }
@@ -348,6 +349,7 @@ export class ThemeService {
 
   private removeThemeFromLocalStorageIfNeeded (themes: ServerConfigTheme[]) {
     if (!this.themeFromLocalStorage) return
+    if (this.internalThemes.includes(this.themeFromLocalStorage.name)) return
 
     const loadedTheme = themes.find(t => t.name === this.themeFromLocalStorage.name)
     if (!loadedTheme || loadedTheme.version !== this.themeFromLocalStorage.version) {
