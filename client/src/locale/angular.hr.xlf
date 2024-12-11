@@ -3295,9 +3295,9 @@
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5429376346987783852" datatype="html">
+      <trans-unit id="5429376346987783852" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="translated">Čak i ako je veća od tvoje maksimalne rezolucije</target>
+        <target state="translated">Čak i ako je veća od tvoje maksimalne uključene rezolucije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">153</context>
@@ -3629,15 +3629,15 @@
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html" xml:space="preserve">
         <source>Resolutions to generate</source>
-        <target state="translated">Generiranje rezolucija</target>
+        <target state="translated">Rezolucije za generiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2720128810058691158" datatype="html">
+      <trans-unit id="2720128810058691158" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new">Even if it's above your maximum enabled resolution</target>
+        <target state="translated">Čak i ako je veća od tvoje maksimalne uključene rezolucije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">178</context>
