@@ -188,19 +188,32 @@ export class ThemeService {
 
     this.oldInjectedProperties = []
 
-    const toProcess: { prefix: string, invertIfDark: boolean, step: number, fallbacks?: Record<string, string> }[] = [
-      { prefix: 'primary', invertIfDark: true, step: 5 },
-      { prefix: 'on-primary', invertIfDark: true, step: 0 },
-      { prefix: 'bg-secondary', invertIfDark: true, step: 5 },
-      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5 }
+    const globalDarkTheme = this.isDarkTheme({
+      fg: computedStyle.getPropertyValue('--fg') || computedStyle.getPropertyValue('--mainForegroundColor'),
+      bg: computedStyle.getPropertyValue('--bg') || computedStyle.getPropertyValue('--mainBackgroundColor'),
+      isDarkVar: computedStyle.getPropertyValue('--is-dark')
+    })
+
+    const darkMenuTheme = this.isDarkTheme({
+      fg: computedStyle.getPropertyValue('--menu-fg'),
+      bg: computedStyle.getPropertyValue('--menu-bg'),
+      isDarkVar: computedStyle.getPropertyValue('--is-menu-dark')
+    })
+
+    if (globalDarkTheme) debugLogger('Detected dark theme')
+    if (darkMenuTheme) debugLogger('Detected dark menu theme')
+
+    const toProcess: { prefix: string, invertIfDark: boolean, step: number, darkTheme: boolean, fallbacks?: Record<string, string> }[] = [
+      { prefix: 'primary', invertIfDark: true, step: 5, darkTheme: globalDarkTheme },
+      { prefix: 'on-primary', invertIfDark: true, step: 0, darkTheme: globalDarkTheme },
+      { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: globalDarkTheme },
+      { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: globalDarkTheme },
+
+      { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: darkMenuTheme },
+      { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: darkMenuTheme }
     ]
 
-    const darkTheme = this.isDarkTheme(computedStyle)
-    if (darkTheme) {
-      debugLogger('Detected dark theme')
-    }
-
-    for (const { prefix, invertIfDark, step, fallbacks = {} } of toProcess) {
+    for (const { prefix, invertIfDark, step, darkTheme, fallbacks = {} } of toProcess) {
       const mainColor = computedStyle.getPropertyValue('--' + prefix)
 
       const darkInverter = invertIfDark && darkTheme
@@ -254,7 +267,7 @@ export class ThemeService {
       }
     }
 
-    document.body.dataset.bsTheme = darkTheme
+    document.body.dataset.bsTheme = globalDarkTheme
       ? 'dark'
       : ''
   }
@@ -267,11 +280,14 @@ export class ThemeService {
     return `hsl(${Math.round(c.h)} ${Math.round(c.s)}% ${Math.round(c.l)}% / ${Math.round(c.a)})`
   }
 
-  private isDarkTheme (computedStyle: CSSStyleDeclaration) {
-    const fg = computedStyle.getPropertyValue('--fg') || computedStyle.getPropertyValue('--mainForegroundColor')
-    const bg = computedStyle.getPropertyValue('--bg') || computedStyle.getPropertyValue('--mainBackgroundColor')
+  private isDarkTheme (options: {
+    fg: string
+    bg: string
+    isDarkVar: string
+  }) {
+    const { fg, bg, isDarkVar } = options
 
-    if (computedStyle.getPropertyValue('--is-dark') === '1') {
+    if (isDarkVar === '1') {
       return true
     } else if (fg && bg) {
       try {

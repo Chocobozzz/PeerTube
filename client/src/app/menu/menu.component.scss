@@ -23,11 +23,11 @@
 }
 
 .toggle-menu {
-  color: pvar-fallback(--menu-fg, --fg-200);
+  color: pvar(--menu-fg-300);
   width: 24px;
   height: 24px;
   border-radius: 100%;
-  background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
+  background-color: pvar(--menu-bg-550);
 
   @include button-with-icon(20px, 0, 0, 1px);
 
@@ -82,7 +82,7 @@
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
   border-radius: 14px;
-  background-color: pvar-fallback(--menu-bg, --bg-secondary-400);
+  background-color: pvar(--menu-bg);
 }
 
 .menu-link,
@@ -103,13 +103,13 @@
     display: block;
     height: 2px;
     margin: 1rem var(--co-menu-x-padding);
-    background: pvar(--bg-secondary-500);
+    background: pvar(--menu-bg-600);
   }
 }
 
 .block-title {
   font-weight: $font-bold;
-  color: pvar-fallback(--menu-fg, --fg-350);
+  color: pvar(--menu-fg-450);
   font-size: 14px;
   margin-bottom: 0.5rem;
   max-width: 180px;
@@ -133,7 +133,7 @@
   &:hover,
   &:focus-visible {
     opacity: 1;
-    background-color: pvar-fallback(--menu-bg, --bg-secondary-450);
+    background-color: pvar(--menu-bg-550);
   }
 
   my-global-icon {
@@ -156,13 +156,13 @@
 .about {
   .description {
     font-size: 14px;
-    color: pvar-fallback(--menu-fg, --fg-200);
+    color: pvar(--menu-fg-300);
   }
 }
 
 .more-info-btn,
 .menu-link {
-  color: pvar-fallback(--menu-fg, --fg-400);
+  color: pvar(--menu-fg);
 
   my-global-icon {
     color: pvar(--secondary-icon-color);
@@ -171,11 +171,11 @@
   &.active {
     &,
     my-global-icon {
-      color: pvar(--fg);
+      color: pvar(--menu-fg-600);
     }
 
     font-weight: $font-bold;
-    background-color: pvar-fallback(--menu-bg, --bg-secondary-500);
+    background-color: pvar(--menu-bg-600);
   }
 }
 
@@ -212,7 +212,7 @@
 
     &:not(.active) {
       my-global-icon {
-        color: pvar-fallback(--menu-fg, --fg-300);
+        color: pvar(--menu-fg-400);
       }
     }
   }
@@ -255,7 +255,7 @@
       --menu-margin-left: 0;
 
       border-radius: 0;
-      background-color: pvar-fallback(--menu-bg, --bg-secondary-400);
+      background-color: pvar(--menu-bg);
       overflow: auto;
 
       .main-menu-wrapper {

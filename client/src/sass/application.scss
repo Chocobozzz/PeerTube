@@ -82,6 +82,9 @@ body {
 
   --header-height: #{$header-height};
 
+  --menu-fg: #{pvar(--fg-400)};
+  --menu-bg: #{pvar(--bg-secondary-400)};
+
   @media screen and (max-width: $small-view) {
     --header-height: #{$header-height-small-view};
   }
@@ -106,6 +109,10 @@ body {
     --bg-secondary-450: hsl(0 13% 81%);
     --bg-secondary-400: hsl(0 19% 89%);
     --bg-secondary-350: hsl(0 13% 92%);
+
+    --menu-bg-600: hsl(0 12% 72%);
+    --menu-bg-550: hsl(0 13% 81%);
+    --menu-bg: hsl(0 19% 89%);
 
     --secondary-icon-color: hsl(0, 9%, 51%);
     --input-placeholder: hsl(0, 9%, 51%);
