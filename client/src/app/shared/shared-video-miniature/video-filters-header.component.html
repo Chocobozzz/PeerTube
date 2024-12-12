@@ -12,8 +12,8 @@
 
   <div class="d-flex flex-wrap-reverse align-items-start justify-content-between">
     <div class="gap-3">
-      <div class="scope-info" *ngIf="totalFollowing && !hideScope">
-        @if (filters.scope === 'local') {
+      <div class="scope-info" *ngIf="!hideScope" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
+        @if (filters.scope === 'local' || totalFollowing === 0) {
           <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
         } @else {
           <ng-container i18n>Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> other platforms</ng-container>
