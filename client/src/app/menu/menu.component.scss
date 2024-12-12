@@ -160,21 +160,34 @@
   }
 }
 
+.more-info-btn {
+  @include secondary-button(
+    $fg: pvar(--menu-fg),
+    $active-bg: pvar(--menu-bg-600),
+    $hover-bg: pvar(--menu-bg-550),
+    $border-color: pvar(--menu-bg-600)
+  )
+}
+
 .more-info-btn,
 .menu-link {
-  color: pvar(--menu-fg);
-
   my-global-icon {
     color: pvar(--secondary-icon-color);
   }
 
   &.active {
-    &,
+    font-weight: $font-bold;
+
     my-global-icon {
       color: pvar(--menu-fg-600);
     }
+  }
+}
 
-    font-weight: $font-bold;
+.menu-link {
+  color: pvar(--menu-fg);
+
+  &.active {
     background-color: pvar(--menu-bg-600);
   }
 }
