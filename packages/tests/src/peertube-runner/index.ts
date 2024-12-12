@@ -1,6 +1,7 @@
 export * from './client-cli.js'
 export * from './live-transcoding.js'
 export * from './replace-file.js'
+export * from './shutdown.js'
 export * from './studio-transcoding.js'
 export * from './video-transcription.js'
 export * from './vod-transcoding.js'

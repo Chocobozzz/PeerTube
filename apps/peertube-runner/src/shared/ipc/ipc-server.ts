@@ -4,7 +4,7 @@ import { pick } from '@peertube/peertube-core-utils'
 import { RunnerServer } from '../../server/index.js'
 import { ConfigManager } from '../config-manager.js'
 import { logger } from '../logger.js'
-import { IPCReponse, IPCReponseData, IPCRequest } from './shared/index.js'
+import { IPCResponse, IPCResponseData, IPCRequest } from './shared/index.js'
 
 export class IPCServer {
   private netIPC: NetIPC
@@ -25,10 +25,10 @@ export class IPCServer {
       try {
         const data = await this.process(req)
 
-        this.sendReponse(res, { success: true, data })
+        this.sendResponse(res, { success: true, data })
       } catch (err) {
-        logger.error('Cannot execute RPC call', err)
-        this.sendReponse(res, { success: false, error: err.message })
+        logger.error({ err }, 'Cannot execute RPC call')
+        this.sendResponse(res, { success: false, error: err.message })
       }
     })
   }
@@ -46,14 +46,18 @@ export class IPCServer {
       case 'list-registered':
         return Promise.resolve(this.runnerServer.listRegistered())
 
+      case 'graceful-shutdown':
+        this.runnerServer.requestGracefulShutdown()
+        return undefined
+
       default:
         throw new Error('Unknown RPC call ' + (req as any).type)
     }
   }
 
-  private sendReponse <T extends IPCReponseData> (
+  private sendResponse <T extends IPCResponseData> (
     response: (data: any) => Promise<void>,
-    body: IPCReponse<T>
+    body: IPCResponse<T>
   ) {
     response(body)
       .catch(err => logger.error('Cannot send response after IPC request', err))
