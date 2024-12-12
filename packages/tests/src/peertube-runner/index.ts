@@ -1,4 +1,5 @@
 export * from './client-cli.js'
+export * from './custom-upload.js'
 export * from './live-transcoding.js'
 export * from './replace-file.js'
 export * from './shutdown.js'

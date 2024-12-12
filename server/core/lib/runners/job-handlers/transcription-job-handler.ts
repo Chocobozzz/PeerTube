@@ -60,7 +60,8 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
     const payload: RunnerJobTranscriptionPayload = {
       input: {
         videoFileUrl: generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid)
-      }
+      },
+      output: {}
     }
 
     const privatePayload: RunnerJobTranscriptionPrivatePayload = {

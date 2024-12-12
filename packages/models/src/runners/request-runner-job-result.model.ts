@@ -1,5 +1,5 @@
-import { RunnerJobPayload } from './runner-job-payload.model.js'
-import { RunnerJobType } from './runner-job-type.type.js'
+import { RunnerJobPayload } from './runner-jobs/runner-job-payload.model.js'
+import { RunnerJobType } from './runner-jobs/runner-job-type.type.js'
 
 export interface RequestRunnerJobResult <P extends RunnerJobPayload = RunnerJobPayload> {
   availableJobs: {

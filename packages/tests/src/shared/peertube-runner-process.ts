@@ -1,9 +1,9 @@
+import { RunnerJobType } from '@peertube/peertube-models'
+import { root } from '@peertube/peertube-node-utils'
+import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { ChildProcess, fork, ForkOptions } from 'child_process'
 import { execaNode } from 'execa'
 import { join } from 'path'
-import { root } from '@peertube/peertube-node-utils'
-import { PeerTubeServer } from '@peertube/peertube-server-commands'
-import { RunnerJobType } from '../../../models/src/runners/runner-job-type.type.js'
 
 export class PeerTubeRunnerProcess {
   private app?: ChildProcess

@@ -69,7 +69,8 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
       jobToken: job.jobToken,
       jobUUID: job.uuid,
       runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: payload
     })
   } finally {
     if (inputPath) await remove(inputPath)
