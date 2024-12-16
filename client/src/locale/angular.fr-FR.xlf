@@ -515,9 +515,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7235777177623270068" datatype="html">
+      <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
-        <target state="new">PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</target>
+        <target state="translated">PeerTube considère que la video "<x id="PH" equiv-text="video.name"/>" a déjà été transcodé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">350</context>
@@ -703,17 +703,17 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8397313116126928339" datatype="html">
+      <trans-unit id="8397313116126928339" datatype="html" xml:space="preserve">
         <source>(auto-generated)</source>
-        <target state="new">(auto-generated)</target>
+        <target state="translated">(Généré automatiquement)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/subtitle-files-download.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3468444992991240326" datatype="html">
+      <trans-unit id="3468444992991240326" datatype="html" xml:space="preserve">
         <source>Subtitle URL</source>
-        <target state="new">Subtitle URL</target>
+        <target state="translated">URL de sous-titre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/subtitle-files-download.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -973,9 +973,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3599756099880307592" datatype="html">
+      <trans-unit id="3599756099880307592" datatype="html" xml:space="preserve">
         <source>Only display videos with this tag</source>
-        <target state="new">Only display videos with this tag</target>
+        <target state="translated">Afficher uniquement les vidéos avec cette balise</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">90</context>
@@ -1029,9 +1029,9 @@
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="164330487270229823" datatype="html">
+      <trans-unit id="164330487270229823" datatype="html" xml:space="preserve">
         <source>Download this file</source>
-        <target state="new">Download this file</target>
+        <target state="translated">Télécharger ce fichier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">124</context>
@@ -1125,25 +1125,25 @@
           <context context-type="linenumber">411</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5112667021094836629" datatype="html">
+      <trans-unit id="5112667021094836629" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</source>
-        <target state="new">{count, plural, =1 {1 transcription job created.} other {<x id="count"/> transcription jobs created.}}</target>
+        <target state="translated">{count, plural, =1 {1 transcription job created.} autre {<x id="count"/> transcription jobs created.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2376618077234059570" datatype="html">
+      <trans-unit id="2376618077234059570" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video already has captions.} other {<x id="count"/> videos already have captions.}}</source>
-        <target state="new">{count, plural, =1 {1 video already has captions.} other {<x id="count"/> videos already have captions.}}</target>
+        <target state="translated">{count, plural, =1 {1 video already has captions.} autre {<x id="count"/> videos already have captions.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">436</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1403418704976301994" datatype="html">
+      <trans-unit id="1403418704976301994" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video is already being transcribed.} other {<x id="count"/> videos are already being transcribed.}}</source>
-        <target state="new">{count, plural, =1 {1 video is already being transcribed.} other {<x id="count"/> videos are already being transcribed.}}</target>
+        <target state="translated">{count, plural, =1 {1 video is already being transcribed.} autre {<x id="count"/> videos are already being transcribed.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">446</context>
@@ -1211,9 +1211,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7828808805120058354" datatype="html">
+      <trans-unit id="7828808805120058354" datatype="html" xml:space="preserve">
         <source>Revert</source>
-        <target state="new">Revert</target>
+        <target state="translated">Revenir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">90</context>
@@ -1259,33 +1259,33 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5937251202465808296" datatype="html">
+      <trans-unit id="5937251202465808296" datatype="html" xml:space="preserve">
         <source>More</source>
-        <target state="new">More</target>
+        <target state="translated">Plus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7855115715004732406" datatype="html">
+      <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
-        <target state="new">Browse "<x id="PH" equiv-text="value.category.label"/>" videos</target>
+        <target state="translated">Afficher "<x id="PH" equiv-text="value.category.label"/>" videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6981830104215014781" datatype="html">
+      <trans-unit id="6981830104215014781" datatype="html" xml:space="preserve">
         <source>category</source>
-        <target state="new">category</target>
+        <target state="translated">categorie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8844207666221087270" datatype="html">
+      <trans-unit id="8844207666221087270" datatype="html" xml:space="preserve">
         <source>Browse "#<x id="PH" equiv-text="value.tag"/>" videos</source>
-        <target state="new">Browse "#<x id="PH" equiv-text="value.tag"/>" videos</target>
+        <target state="translated">Afficher "#<x id="PH" equiv-text="value.tag"/>" vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -1299,17 +1299,17 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9123510631384754590" datatype="html">
+      <trans-unit id="9123510631384754590" datatype="html" xml:space="preserve">
         <source>View the channel</source>
-        <target state="new">View the channel</target>
+        <target state="translated">Voir la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="674351509173816083" datatype="html">
+      <trans-unit id="674351509173816083" datatype="html" xml:space="preserve">
         <source>channel</source>
-        <target state="new">channel</target>
+        <target state="translated">chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -1419,9 +1419,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7523440000124910081" datatype="html">
+      <trans-unit id="7523440000124910081" datatype="html" xml:space="preserve">
         <source>Use this frame</source>
-        <target state="new">Use this frame</target>
+        <target state="translated">Utiliser cette image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/thumbnail-manager/thumbnail-manager.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1511,33 +1511,33 @@
           <context context-type="linenumber">378</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6334544592573094529" datatype="html">
+      <trans-unit id="6334544592573094529" datatype="html" xml:space="preserve">
         <source>Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="new">Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Travail de transcodage créé pour "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6323039311444223540" datatype="html">
+      <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="new">Transcription job created for "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Travail de transcription créé pour  "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">402</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890980168396748709" datatype="html">
+      <trans-unit id="8890980168396748709" datatype="html" xml:space="preserve">
         <source>This video is already being transcribed.</source>
-        <target state="new">This video is already being transcribed.</target>
+        <target state="translated">Cette vidéo a déjà été transcripte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">403</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6621122803162844810" datatype="html">
+      <trans-unit id="6621122803162844810" datatype="html" xml:space="preserve">
         <source>This video already has captions.</source>
-        <target state="new">This video already has captions.</target>
+        <target state="translated">Cette vidéo a déjà des sous-titres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">404</context>
@@ -1635,9 +1635,9 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2152404288547034295" datatype="html">
+      <trans-unit id="2152404288547034295" datatype="html" xml:space="preserve">
         <source>Automatic transcription</source>
-        <target state="new">Automatic transcription</target>
+        <target state="translated">Transcription automatique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -2151,9 +2151,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019610224237760025" datatype="html">
+      <trans-unit id="4019610224237760025" datatype="html" xml:space="preserve">
         <source>Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Se connecter à <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -2243,9 +2243,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="921088049695906924" datatype="html">
+      <trans-unit id="921088049695906924" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Actuellement, cette instance ne permet pas l'enregistrement des utilisateurs, vous pouvez vérifier <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour plus de détails ou pour trouver une instance qui vous donne la possibilité de créer un compte et d'y télécharger vos vidéos. Trouvez la vôtre parmi plusieurs instances sur: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2372,9 +2372,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="180660177324430106" datatype="html">
+      <trans-unit id="180660177324430106" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new"> Filters </target>
+        <target state="translated">Filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">20,21</context>
@@ -2531,9 +2531,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910100497841976407" datatype="html">
+      <trans-unit id="2910100497841976407" datatype="html" xml:space="preserve">
         <source>Go to the CLI documentation</source>
-        <target state="new">Go to the CLI documentation</target>
+        <target state="translated">Aller à la documentation CLI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -2555,17 +2555,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2505792628717602511" datatype="html">
+      <trans-unit id="2505792628717602511" datatype="html" xml:space="preserve">
         <source>Go to the admin documentation</source>
-        <target state="new">Go to the admin documentation</target>
+        <target state="translated">Aller à la documentation administrateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="439770035760298623" datatype="html">
+      <trans-unit id="439770035760298623" datatype="html" xml:space="preserve">
         <source>Admin documentation</source>
-        <target state="new">Admin documentation</target>
+        <target state="translated">Documentation administrateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -2579,17 +2579,17 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3937624467365667635" datatype="html">
+      <trans-unit id="3937624467365667635" datatype="html" xml:space="preserve">
         <source>Go to the user documentation</source>
-        <target state="new">Go to the user documentation</target>
+        <target state="translated">Aller à la documentation de l'utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4582314665808509009" datatype="html">
+      <trans-unit id="4582314665808509009" datatype="html" xml:space="preserve">
         <source>User documentation</source>
-        <target state="new">User documentation</target>
+        <target state="translated">Documentation utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">26,28</context>
@@ -2913,25 +2913,25 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5960096873104755868" datatype="html">
+      <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
-        <target state="new">More info</target>
+        <target state="translated">Plus d'info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3980731018496292351" datatype="html">
+      <trans-unit id="3980731018496292351" datatype="html" xml:space="preserve">
         <source>Display the lateral menu</source>
-        <target state="new">Display the lateral menu</target>
+        <target state="translated">Afficher le menu latéral</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1618123054334930952" datatype="html">
+      <trans-unit id="1618123054334930952" datatype="html" xml:space="preserve">
         <source>Hide the lateral menu</source>
-        <target state="new">Hide the lateral menu</target>
+        <target state="translated">Masquer le menu latéral</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">34</context>
@@ -2945,25 +2945,25 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3433184700415677129" datatype="html">
+      <trans-unit id="3433184700415677129" datatype="html" xml:space="preserve">
         <source>Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Plateform alimentée par <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9205975870261474064" datatype="html">
+      <trans-unit id="9205975870261474064" datatype="html" xml:space="preserve">
         <source>Discover more platforms</source>
-        <target state="new">Discover more platforms</target>
+        <target state="translated">Découvrir plus de plateformes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8056406592648751808" datatype="html">
+      <trans-unit id="8056406592648751808" datatype="html" xml:space="preserve">
         <source>Quick access</source>
-        <target state="new">Quick access</target>
+        <target state="translated">Accès rapide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -2977,9 +2977,9 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3266907599760910102" datatype="html">
+      <trans-unit id="3266907599760910102" datatype="html" xml:space="preserve">
         <source>Manage my account</source>
-        <target state="new">Manage my account</target>
+        <target state="translated">Gérer mon compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">59</context>
@@ -3121,9 +3121,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5491172370003945798" datatype="html">
+      <trans-unit id="5491172370003945798" datatype="html" xml:space="preserve">
         <source>Browse videos</source>
-        <target state="new">Browse videos</target>
+        <target state="translated">Afficher les videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -3261,17 +3261,17 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3519474815325884386" datatype="html">
+      <trans-unit id="3519474815325884386" datatype="html" xml:space="preserve">
         <source>View all</source>
-        <target state="new"> View all </target>
+        <target state="translated">Tout voir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5158930137081704296" datatype="html">
+      <trans-unit id="5158930137081704296" datatype="html" xml:space="preserve">
         <source>Search videos, channels…</source>
-        <target state="new">Search videos, channels…</target>
+        <target state="translated">Chercher vidéos, chaînes…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -3552,17 +3552,17 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6323654987364970496" datatype="html">
+      <trans-unit id="6323654987364970496" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in this instance's network</source>
-        <target state="new">Search "<x id="PH" equiv-text="this.result.text"/>" in this instance's network</target>
+        <target state="translated">Chercehr "<x id="PH" equiv-text="this.result.text"/>" dans le réseau de cette instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2820857203884114586" datatype="html">
+      <trans-unit id="2820857203884114586" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in the vidiverse</source>
-        <target state="new">Search "<x id="PH" equiv-text="this.result.text"/>" in the vidiverse</target>
+        <target state="translated">Rechercher "<x id="PH" equiv-text="this.result.text"/>" dans le vidiverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3902,25 +3902,25 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="518619112264710096" datatype="html">
+      <trans-unit id="518619112264710096" datatype="html" xml:space="preserve">
         <source>Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</source>
-        <target state="new">Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</target>
+        <target state="translated">Modifier la légende"<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2086067688023636903" datatype="html">
+      <trans-unit id="2086067688023636903" datatype="html" xml:space="preserve">
         <source>Raw edition</source>
-        <target state="new">Raw edition</target>
+        <target state="translated">Edition brute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5203899665906572487" datatype="html">
+      <trans-unit id="5203899665906572487" datatype="html" xml:space="preserve">
         <source>Add a new segment</source>
-        <target state="new">Add a new segment</target>
+        <target state="translated">Ajouter un nouveau segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">24</context>
