@@ -285,6 +285,7 @@ export interface ServerConfig {
   user: {
     videoQuota: number
     videoQuotaDaily: number
+    playbackAutoStart: boolean
   }
 
   videoChannels: {

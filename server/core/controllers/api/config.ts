@@ -313,7 +313,8 @@ function customConfig (): CustomConfig {
       },
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
-      defaultChannelName: CONFIG.USER.DEFAULT_CHANNEL_NAME
+      defaultChannelName: CONFIG.USER.DEFAULT_CHANNEL_NAME,
+      playbackAutoStart: CONFIG.USER.PLAYBACK_AUTO_START
     },
     videoChannels: {
       maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER

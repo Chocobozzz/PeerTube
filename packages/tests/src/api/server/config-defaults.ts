@@ -236,6 +236,7 @@ describe('Test config defaults', function () {
 
       expect(config.user.videoQuota).to.equal(-1)
       expect(config.user.videoQuotaDaily).to.equal(-1)
+      expect(config.user.playbackAutoStart).to.equal(true)
 
       const user1Token = await server.users.generateUserAndToken('user1')
       const user1 = await server.users.getMyInfo({ token: user1Token })
@@ -263,7 +264,8 @@ describe('Test config defaults', function () {
               }
             },
             videoQuota : 5242881,
-            videoQuotaDaily: 318742
+            videoQuotaDaily: 318742,
+            playbackAutoStart: false
           },
           signup: {
             enabled: true,

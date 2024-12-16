@@ -425,7 +425,8 @@ const CONFIG = {
     },
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) },
-    get DEFAULT_CHANNEL_NAME () { return config.get<string>('user.default_channel_name') }
+    get DEFAULT_CHANNEL_NAME () { return config.get<string>('user.default_channel_name') },
+    get PLAYBACK_AUTO_START () { return config.has('user.playback_auto_start') ? config.get<boolean>('user.playback_auto_start') : true }
   },
   VIDEO_CHANNELS: {
     get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }
