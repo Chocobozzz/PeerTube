@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "7.0.0-rc.1",
+  "version": "7.0.0",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
