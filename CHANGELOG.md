@@ -1,6 +1,6 @@
 # Changelog
 
-## v7.0.0-rc.1
+## v7.0.0
 
 
 ### IMPORTANT NOTES
@@ -57,6 +57,7 @@
    * Add "skip menu" links
    * Improve keyboard navigation
    * Fix various screen readers issues
+ * Add Slovakian language support to the client
  * SEO:
    * Add instance avatar to OpenGraph tags
    * Hide empty accounts/channels from sitemap [#6633](https://github.com/Chocobozzz/PeerTube/pull/6633)
@@ -65,6 +66,7 @@
    * Improve player control bar responsive
    * Add refresh button to following list
    * Clearer signup limit label
+   * Add `0.25` playback rate in player
 
 ### Bug fixes
 
@@ -77,6 +79,10 @@
  * Fix auto blacklisting unlisted videos
  * Fix *ERR_BUFFER_OUT_OF_BOUNDS* error on some node version
  * Add ability to set max channel sync in admin config
+ * Allow plugins to pass client params when listing videos (`filter:api.browse-videos.videos.list.params` hook)
+ * Respect user export expiration admin configuration
+ * Fix studio edition on an audio only file
+ * Fix embed crash on telegram web browser
 
 
 ## v6.3.3
