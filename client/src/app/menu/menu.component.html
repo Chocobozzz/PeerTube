@@ -48,7 +48,7 @@
         <nav>
           <ng-container *ngFor="let menuSection of menuSections" >
             <ul class="ul-unstyle" [ngClass]="[ menuSection.key, 'menu-block' ]">
-              <li i18n>
+              <li>
                 <div class="block-title ellipsis" [ngClass]="{ 'visually-hidden': collapsed }">{{ menuSection.title }}</div>
 
                 <ul class="ul-unstyle">
