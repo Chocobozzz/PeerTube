@@ -3954,9 +3954,9 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2534468682040754093" datatype="html">
+      <trans-unit id="2534468682040754093" datatype="html" xml:space="preserve">
         <source>Use video current time as end time</source>
-        <target state="new">Use video current time as end time</target>
+        <target state="translated">Utiliser le moment actuel de la vidéo comme durée de fin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">74</context>
@@ -3970,33 +3970,33 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4592694974533956701" datatype="html">
+      <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
-        <target state="new">Start segment must be before end segment time</target>
+        <target state="translated">Le segment de départ doit être avant le moment du segment de fin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9131593410297043344" datatype="html">
+      <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="new">Segment must have a text content</target>
+        <target state="translated">Le segment doit avoir un contenu textuel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7846454630805382470" datatype="html">
+      <trans-unit id="7846454630805382470" datatype="html" xml:space="preserve">
         <source>Cannot parse subtitles</source>
-        <target state="new">Cannot parse subtitles</target>
+        <target state="translated">Impossible d'analyser les sous-titres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912256992541129243" datatype="html">
+      <trans-unit id="6912256992541129243" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel the edition first.</source>
-        <target state="new">A segment is being edited. Save or cancel the edition first.</target>
+        <target state="translated">Un segment est en cours d'édition. Sauvegardez ou annulez votre édition d'abord.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -4054,9 +4054,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691672602205005718" datatype="html">
+      <trans-unit id="6691672602205005718" datatype="html" xml:space="preserve">
         <source>Use a comma (,) to add a tag</source>
-        <target state="new">Use a comma (,) to add a tag</target>
+        <target state="translated">Utilisez une virgule (,) pour ajouter une étiquette</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -4492,9 +4492,9 @@
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212436567578143551" datatype="html">
+      <trans-unit id="8212436567578143551" datatype="html" xml:space="preserve">
         <source>Add a caption</source>
-        <target state="new">Add a caption</target>
+        <target state="needs-translation">Ajouter une légende</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">230</context>
@@ -4508,9 +4508,9 @@
           <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5153270828945387960" datatype="html">
+      <trans-unit id="5153270828945387960" datatype="html" xml:space="preserve">
         <source>Chapters can also be set in the video description. Check the format <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>in the PeerTube documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Chapters can also be set in the video description. Check the format <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>in the PeerTube documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Les chapitres peuvent aussi être définis dans la description de la vidéo. Vérifiez le format <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use/create-upload-video#chapters&quot; target=&quot;_blank&quot;&gt;"/>dans la documentation de PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">245</context>
@@ -4700,9 +4700,9 @@
           <context context-type="linenumber">432</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1884781101643439088" datatype="html">
+      <trans-unit id="1884781101643439088" datatype="html" xml:space="preserve">
         <source>Comments policy</source>
-        <target state="new">Comments policy</target>
+        <target state="translated">Conditions d'utilisation des commentaires</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">448</context>
