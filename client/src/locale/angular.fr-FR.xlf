@@ -4702,15 +4702,15 @@
       </trans-unit>
       <trans-unit id="1884781101643439088" datatype="html" xml:space="preserve">
         <source>Comments policy</source>
-        <target state="translated">Conditions d'utilisation des commentaires</target>
+        <target state="translated">Politique de commentaires</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">448</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6206893322435329922" datatype="html">
+      <trans-unit id="6206893322435329922" datatype="html" xml:space="preserve">
         <source>You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Vous pouvez demander que les commentaires soient approuvés en fonction de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>votre politique d'étiquetage automatique <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">451</context>
@@ -4896,17 +4896,17 @@
           <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2656361303537881434" datatype="html">
+      <trans-unit id="2656361303537881434" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="caption.language.label"/> (auto-generated)</source>
-        <target state="new"><x id="PH" equiv-text="caption.language.label"/> (auto-generated)</target>
+        <target state="translated"><x id="PH" equiv-text="caption.language.label"/> (généré automatiquement)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7968397949464882917" datatype="html">
+      <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
-        <target state="new">Are you sure you want to close this modal without saving your changes?</target>
+        <target state="translated">Êtes-vous certain·e de vouloir fermer cette fenêtre modale sans sauvegarder vos modifications ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">412</context>
