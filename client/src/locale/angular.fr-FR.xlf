@@ -4494,7 +4494,7 @@
       </trans-unit>
       <trans-unit id="8212436567578143551" datatype="html" xml:space="preserve">
         <source>Add a caption</source>
-        <target state="needs-translation">Ajouter une légende</target>
+        <target state="needs-translation">Ajouter un sous-titre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">230</context>
@@ -4906,15 +4906,15 @@
       </trans-unit>
       <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
-        <target state="translated">Êtes-vous certain·e de vouloir fermer cette fenêtre modale sans sauvegarder vos modifications ?</target>
+        <target state="translated">Êtes-vous certain·e de vouloir fermer cette fenêtre sans sauvegarder vos modifications ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">412</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3783295829532094714" datatype="html">
+      <trans-unit id="3783295829532094714" datatype="html" xml:space="preserve">
         <source>Closing caption edition mocal</source>
-        <target state="new">Closing caption edition mocal</target>
+        <target state="translated">Fermer la fenêtre d'édition de sous-titres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">413</context>
@@ -4977,17 +4977,17 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1991435285408210532" datatype="html">
+      <trans-unit id="1991435285408210532" datatype="html" xml:space="preserve">
         <source>Create a new list</source>
-        <target state="new">Create a new list</target>
+        <target state="translated">Créer une nouvelle liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7236497327262460139" datatype="html">
+      <trans-unit id="7236497327262460139" datatype="html" xml:space="preserve">
         <source>List name</source>
-        <target state="new">List name</target>
+        <target state="translated">Nom de la liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">31</context>
@@ -4997,9 +4997,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7570842650861337346" datatype="html">
+      <trans-unit id="7570842650861337346" datatype="html" xml:space="preserve">
         <source>Words</source>
-        <target state="new">Words</target>
+        <target state="translated">Mots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5009,81 +5009,81 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8196082206418619267" datatype="html">
+      <trans-unit id="8196082206418619267" datatype="html" xml:space="preserve">
         <source>See all words</source>
-        <target state="new">See all words</target>
+        <target state="translated">Voir tous les mots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7919041130696997387" datatype="html">
+      <trans-unit id="7919041130696997387" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ list.words.length }}"/> words </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ list.words.length }}"/> words </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ list.words.length }}"/> mots </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8561870672350433993" datatype="html">
+      <trans-unit id="8561870672350433993" datatype="html" xml:space="preserve">
         <source>No watched word lists found.</source>
-        <target state="new">No watched word lists found.</target>
+        <target state="translated">Aucune liste de mots surveillés trouvée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3011306880188617431" datatype="html">
+      <trans-unit id="3011306880188617431" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="list.listName"/> list?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="list.listName"/> list?</target>
+        <target state="translated">Êtes-vous certain·e de vouloir supprimer cette <x id="PH" equiv-text="list.listName"/> liste ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6377139538537882652" datatype="html">
+      <trans-unit id="6377139538537882652" datatype="html" xml:space="preserve">
         <source>Delete list</source>
-        <target state="new">Delete list</target>
+        <target state="needs-translation">Supprimer la liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="838517294097512065" datatype="html">
+      <trans-unit id="838517294097512065" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="list.listName"/> removed</source>
-        <target state="new"><x id="PH" equiv-text="list.listName"/> removed</target>
+        <target state="translated"><x id="PH" equiv-text="list.listName"/> supprimée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="11546234043677618" datatype="html">
+      <trans-unit id="11546234043677618" datatype="html" xml:space="preserve">
         <source>Save watched words list</source>
-        <target state="new">Save watched words list</target>
+        <target state="translated">Sauvegarder la liste de mots surveillés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1469816098818043891" datatype="html">
+      <trans-unit id="1469816098818043891" datatype="html" xml:space="preserve">
         <source>One word or group of words per line.</source>
-        <target state="new">One word or group of words per line.</target>
+        <target state="translated">Un mot ou groupe de mots par ligne.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2735672321895213785" datatype="html">
+      <trans-unit id="2735672321895213785" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="commonParams.listName"/> updated</source>
-        <target state="new"><x id="PH" equiv-text="commonParams.listName"/> updated</target>
+        <target state="translated"><x id="PH" equiv-text="commonParams.listName"/> mise à jour</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="635757490963150097" datatype="html">
+      <trans-unit id="635757490963150097" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="commonParams.listName"/> created</source>
-        <target state="new"><x id="PH" equiv-text="commonParams.listName"/> created</target>
+        <target state="translated"><x id="PH" equiv-text="commonParams.listName"/> créée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -5169,9 +5169,9 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5187630100687163794" datatype="html">
+      <trans-unit id="5187630100687163794" datatype="html" xml:space="preserve">
         <source>Update <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></source>
-        <target state="new">Update <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></target>
+        <target state="translated">Mettre à jour <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -5209,17 +5209,17 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9106564905888443672" datatype="html">
+      <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="new">We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</target>
+        <target state="translated">Nous vous recommandons de ne pas utiliser l'utilisateur·ice <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> pour publier vos vidéos, puisque c'est le compte super-administrateur de votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4434906642654067529" datatype="html">
+      <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="new">Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</target>
+        <target state="translated">À la place, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>créez un compte dédié<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour téléverser vos vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5458,9 +5458,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3522196594292220614" datatype="html">
+      <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="new">Playlist URL</target>
+        <target state="translated">URL de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -5530,17 +5530,17 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">URL de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7906169354857781172" datatype="html">
+      <trans-unit id="7906169354857781172" datatype="html" xml:space="preserve">
         <source>Video embed URL</source>
-        <target state="new">Video embed URL</target>
+        <target state="translated">URL d'intégration de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">149,150</context>
@@ -5582,9 +5582,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5460870961303000256" datatype="html">
+      <trans-unit id="5460870961303000256" datatype="html" xml:space="preserve">
         <source>Playlist embed URL</source>
-        <target state="new">Playlist embed URL</target>
+        <target state="translated">URL d'intégration de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -5878,9 +5878,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4133860569932613370" datatype="html">
+      <trans-unit id="4133860569932613370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </target>
+        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> chaînes abonnées </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -5910,41 +5910,41 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6690655144509122658" datatype="html">
+      <trans-unit id="6690655144509122658" datatype="html" xml:space="preserve">
         <source>Transcription</source>
-        <target state="new">Transcription</target>
+        <target state="translated">Transcription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7274091852247477825" datatype="html">
+      <trans-unit id="7274091852247477825" datatype="html" xml:space="preserve">
         <source>Close transcription widget</source>
-        <target state="new">Close transcription widget</target>
+        <target state="needs-translation">Fermer le widget de transcription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8990633416780502626" datatype="html">
+      <trans-unit id="8990633416780502626" datatype="html" xml:space="preserve">
         <source>Search transcript</source>
-        <target state="new">Search transcript</target>
+        <target state="translated">Rechercher une transcription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">41,42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3858389380206796447" datatype="html">
+      <trans-unit id="3858389380206796447" datatype="html" xml:space="preserve">
         <source>No results for your search</source>
-        <target state="new">No results for your search</target>
+        <target state="translated">Aucun résultat pour votre recherche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5193080399820584196" datatype="html">
+      <trans-unit id="5193080399820584196" datatype="html" xml:space="preserve">
         <source>Jump to this segment</source>
-        <target state="new">Jump to this segment</target>
+        <target state="translated">Aller à ce segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">97</context>
@@ -5954,25 +5954,25 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036346152557749708" datatype="html">
+      <trans-unit id="1036346152557749708" datatype="html" xml:space="preserve">
         <source>Edit this segment</source>
-        <target state="new">Edit this segment</target>
+        <target state="translated">Modifier ce segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6855898148869474963" datatype="html">
+      <trans-unit id="6855898148869474963" datatype="html" xml:space="preserve">
         <source>Delete this segment</source>
-        <target state="new">Delete this segment</target>
+        <target state="translated">Supprimer ce segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3474117045932203219" datatype="html">
+      <trans-unit id="3474117045932203219" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="c.language.label"/> (automatically generated)</source>
-        <target state="new"><x id="PH" equiv-text="c.language.label"/> (automatically generated)</target>
+        <target state="translated"><x id="PH" equiv-text="c.language.label"/> (généré automatiquement)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.ts</context>
           <context context-type="linenumber">151</context>
