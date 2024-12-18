@@ -4817,7 +4817,7 @@
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html" xml:space="preserve">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Pots importar qualsevol URL <x id="START_LINK"/>compatible amb youtube-dl<x id="CLOSE_LINK"/> o URL que apunte a un fitxer multimedia. Deus assegurar-te de que tens drets de difusió sobre el contingut a que apunta, o podries causar problemes legals a vostè o a la seua instància. </target>
+        <target state="translated">Podeu importar qualsevol URL <x id="START_LINK"/>compatible amb YouTube<x id="CLOSE_LINK"/> o apuntar a un fitxer multimèdia. Heu d'assegurar-vos que teniu drets de distribució del contingut al qual apunta l'adreça, ja que, en cas contrari, us podria causar problemes legals a vosaltres i a la vostra instància. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">11</context>
@@ -5268,25 +5268,25 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7860848084471862305" datatype="html">
+      <trans-unit id="7860848084471862305" datatype="html" xml:space="preserve">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="new">Cannot create live because this instance have too many created lives</target>
+        <target state="translated">No es pot crear un directe perquè aquesta instància en té en massa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1278564497286613571" datatype="html">
+      <trans-unit id="1278564497286613571" datatype="html" xml:space="preserve">
         <source>Cannot create live because you created too many lives</source>
-        <target state="new">Cannot create live because you created too many lives</target>
+        <target state="translated">No es pot crear el directe perquè ja en tens massa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2621043320678012413" datatype="html">
+      <trans-unit id="2621043320678012413" datatype="html" xml:space="preserve">
         <source>Live published.</source>
-        <target state="translated">Publicat en directe.</target>
+        <target state="translated">Directe publicat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">195</context>
@@ -5324,9 +5324,9 @@
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8218579597782287078" datatype="html">
+      <trans-unit id="8218579597782287078" datatype="html" xml:space="preserve">
         <source>Go Live</source>
-        <target state="new">Go Live</target>
+        <target state="translated">Emetre en directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">34</context>
@@ -5644,9 +5644,9 @@
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3959826834147169200" datatype="html">
+      <trans-unit id="3959826834147169200" datatype="html" xml:space="preserve">
         <source>Muted</source>
-        <target state="new">Muted</target>
+        <target state="translated">Silenciat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">108</context>
