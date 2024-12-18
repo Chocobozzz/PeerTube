@@ -953,7 +953,7 @@
       </trans-unit>
       <trans-unit id="3267631941074558910" datatype="html" xml:space="preserve">
         <source>Cannot fetch information of this remote account</source>
-        <target state="translated">No s'ha pogut recuperar la informació d'aquest conte remot</target>
+        <target state="translated">No s'ha pogut recuperar la informació d'aquest compte remot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -1155,11 +1155,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3044142083883783523" datatype="html">
+      <trans-unit id="3044142083883783523" datatype="html" xml:space="preserve">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target state="translated">Actualitzat 
-          <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/>
-        </target>
+        <target state="translated">Actualitzat <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">32</context>
@@ -1233,11 +1231,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890926675057871150" datatype="html">
+      <trans-unit id="8890926675057871150" datatype="html" xml:space="preserve">
         <source>Delete from <x id="INTERPOLATION"/></source>
-        <target state="translated">Suprimir de 
-          <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/>
-        </target>
+        <target state="translated">Eliminar de <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">104</context>
@@ -2015,9 +2011,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4526499522377118108" datatype="html">
+      <trans-unit id="4526499522377118108" datatype="html" xml:space="preserve">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Bloqueja el vídeo " <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
+        <target state="translated">Blocar el video «<x id="INTERPOLATION"/>»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2147,9 +2143,9 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1758058452376026925" datatype="html">
+      <trans-unit id="1758058452376026925" datatype="html" xml:space="preserve">
         <source>⚠️ Most email addresses do not include capital letters.</source>
-        <target state="translated">⚠️ La majoria de direccions de correu electrònic no inclouen lletres majúscules</target>
+        <target state="translated">⚠️ La majoria d'adreces electròniques no inclouen majúscules.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2287,9 +2283,9 @@
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1190256911880544559" datatype="html">
+      <trans-unit id="1190256911880544559" datatype="html" xml:space="preserve">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">S'enviarà un correu amb les instruccions per restablir la contrasenya a <x id="PH"/>. L'enllaç caducarà al cap d'una hora.</target>
+        <target state="translated">S'enviarà un correu amb les instruccions per restablir la contrasenya a <x id="PH" equiv-text="this.forgotPasswordEmail"/>. L'enllaç caducarà al cap d'una hora.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">183</context>
@@ -2767,9 +2763,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1420294365005204590" datatype="html">
+      <trans-unit id="1420294365005204590" datatype="html" xml:space="preserve">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="translated">Aquestos ajustos només s'apliquen a aquesta sessió en la instància</target>
+        <target state="translated">Aquestos paràmetres només s'apliquen a la vostra sessió en aquesta instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -4386,11 +4382,9 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9012879216268259096">
+      <trans-unit id="9012879216268259096" xml:space="preserve">
         <source>Schedule publication (<x id="INTERPOLATION"/>)</source>
-        <target>Programa la publicació (
-          <x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)
-        </target>
+        <target state="translated">Programar publicación(<x id="INTERPOLATION"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">124</context>
