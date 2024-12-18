@@ -410,7 +410,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       beforeDismiss: () => {
         return this.confirmService.confirm(
           $localize`Are you sure you want to close this modal without saving your changes?`,
-          $localize`Closing caption edition mocal`
+          $localize`Closing caption edition modal`
         )
       }
     })
