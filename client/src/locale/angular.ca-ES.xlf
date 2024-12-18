@@ -1959,49 +1959,49 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="732935381486595265" datatype="html">
+      <trans-unit id="732935381486595265" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">El vostre fitxer <x id="PH" equiv-text="name"/> no s'ha pogut carregar abans que s'esgoti el temps d'espera del servidor intermediari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5950472748615640135" datatype="html">
+      <trans-unit id="5950472748615640135" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large </source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large </target>
+        <target state="translated">El vostre fitxer <x id="PH" equiv-text="name"/> era massa gran </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="232729887013001609" datatype="html">
+      <trans-unit id="232729887013001609" datatype="html" xml:space="preserve">
         <source>(max. size: <x id="PH" equiv-text="maxFileSize"/>)</source>
-        <target state="new"> (max. size: <x id="PH" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">(mida màxima: <x id="PH" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4892001398723483418" datatype="html">
+      <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
-        <target state="new">Enable hotkeys in this web browser</target>
+        <target state="translated">Activa les tecles de drecera en aquest navegador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4831075576673859232" datatype="html">
+      <trans-unit id="4831075576673859232" datatype="html" xml:space="preserve">
         <source>Keyboard Shortcuts</source>
-        <target state="new">Keyboard Shortcuts</target>
+        <target state="translated">Dreceres de teclat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7908493851025027368" datatype="html">
+      <trans-unit id="7908493851025027368" datatype="html" xml:space="preserve">
         <source>A banned user will no longer be able to login.</source>
-        <target state="translated">Un usuari prohibit ja no podrà iniciar la sessió.</target>
+        <target state="translated">Un usuari bandejat ja no podrà iniciar la sessió.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2009,15 +2009,15 @@
       </trans-unit>
       <trans-unit id="4526499522377118108" datatype="html" xml:space="preserve">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Blocar el video «<x id="INTERPOLATION"/>»</target>
+        <target state="translated">Blocar el vídeo «<x id="INTERPOLATION"/>»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2992313729068029516" datatype="html">
+      <trans-unit id="2992313729068029516" datatype="html" xml:space="preserve">
         <source>Block live "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Bloqueja el directe "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Bloca el directe "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2031,41 +2031,41 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9133713232258232158" datatype="html">
+      <trans-unit id="9133713232258232158" datatype="html" xml:space="preserve">
         <source>Unfederate</source>
-        <target state="new">Unfederate</target>
+        <target state="translated">Desfederar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7312374115603954471" datatype="html">
+      <trans-unit id="7312374115603954471" datatype="html" xml:space="preserve">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="new">This will ask remote instances to delete local videos</target>
+        <target state="translated">Això demanarà a les instàncies remotes que suprimeixin vídeos locals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2728722206183105047" datatype="html">
+      <trans-unit id="2728722206183105047" datatype="html" xml:space="preserve">
         <source>This will ask remote instances to delete this video</source>
-        <target state="new">This will ask remote instances to delete this video</target>
+        <target state="translated">Això demanarà a les instàncies remotes que suprimeixin aquest vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3849007546028672808" datatype="html">
+      <trans-unit id="3849007546028672808" datatype="html" xml:space="preserve">
         <source>Blocking a live will automatically terminate the live stream.</source>
-        <target state="new"> Blocking a live will automatically terminate the live stream. </target>
+        <target state="translated">Blocar un directe en finalitza automàticament l'emissió.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="901879091817013957" datatype="html">
+      <trans-unit id="901879091817013957" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="new">{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</target>
+        <target state="translated">{count, plural, =1 {Blocat <x id="videoName"/>.} other {Blocats <x id="count"/> vídeos.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -2079,9 +2079,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8981309282078866700" datatype="html">
+      <trans-unit id="8981309282078866700" datatype="html" xml:space="preserve">
         <source><x id="PH"/>min</source>
-        <target state="translated"><x id="PH"/> min</target>
+        <target state="translated"><x id="PH"/>min</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/time-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -2091,9 +2091,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="350798057497677761" datatype="html">
+      <trans-unit id="350798057497677761" datatype="html" xml:space="preserve">
         <source><x id="PH"/>sec</source>
-        <target state="translated"><x id="PH"/> s</target>
+        <target state="translated"><x id="PH"/>s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/time-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">18</context>
@@ -2107,25 +2107,25 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5418570600695268383" datatype="html">
+      <trans-unit id="5418570600695268383" datatype="html" xml:space="preserve">
         <source>Request new verification email</source>
-        <target state="new"> Request new verification email </target>
+        <target state="translated">Sol·liciteu un correu electrònic de verificació nou</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3997350348765083892">
+      <trans-unit id="3997350348765083892" xml:space="preserve">
         <source>Username or email address</source>
-        <target>Nom d'usuari o adreça de correu electrònic</target>
+        <target state="translated">Identificador o adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="175344056589888866" datatype="html">
+      <trans-unit id="175344056589888866" datatype="html" xml:space="preserve">
         <source>Example: john@example.com</source>
-        <target state="new">Example: john@example.com</target>
+        <target state="translated">Example: joan@exemple.cat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2147,25 +2147,25 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019610224237760025" datatype="html">
+      <trans-unit id="4019610224237760025" datatype="html" xml:space="preserve">
         <source>Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Connecteu-vos a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6512825581399429064" datatype="html">
+      <trans-unit id="6512825581399429064" datatype="html" xml:space="preserve">
         <source>Enter the two-factor code generated by your phone app:</source>
-        <target state="new">Enter the two-factor code generated by your phone app:</target>
+        <target state="translated">Introduïu el codi de verificació generat per l'aplicació al vostre telèfon:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="42685862314953751" datatype="html">
+      <trans-unit id="42685862314953751" datatype="html" xml:space="preserve">
         <source>Two factor authentication token</source>
-        <target state="new">Two factor authentication token</target>
+        <target state="translated">Fitxa d'autenticació de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">75</context>
@@ -2215,9 +2215,9 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7736587919193927267" datatype="html">
+      <trans-unit id="7736587919193927267" datatype="html" xml:space="preserve">
         <source>I forgot my password</source>
-        <target state="new"> I forgot my password </target>
+        <target state="translated">He oblidat la contrasenya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">88</context>
@@ -2231,17 +2231,17 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6584143415159913044" datatype="html">
+      <trans-unit id="6584143415159913044" datatype="html" xml:space="preserve">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Aquesta instància permet el registre. No obstant, consulteu les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Condicions del servei<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Condicions del servei<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> abans de crear un compte. També podeu cercar una altra instància que d'adapti a les vostres necessitats a: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="921088049695906924" datatype="html">
+      <trans-unit id="921088049695906924" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Actualment, aquesta instància no permet el registre d'usuari, podeu consultar les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Condicions del servei<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Condicions del servei<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per obtenir més detalls o trobar una instància que us ofereixi la possibilitat de registrar-vos per obtenir un compte i penjar-hi els vostres vídeos. Trobeu el vostre entre diverses instàncies a: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2255,25 +2255,25 @@
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3238209155172574367">
+      <trans-unit id="3238209155172574367" xml:space="preserve">
         <source>Forgot your password</source>
-        <target>Has oblidat la teva contrasenya</target>
+        <target state="translated">Contrasenya oblidada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="87327320394367488" datatype="html">
+      <trans-unit id="87327320394367488" datatype="html" xml:space="preserve">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">No podem recuperar la vostra contrasenya perquè l'administració de la vostra instància no ha configurat cap sistema de correus de PeerTube.</target>
+        <target state="translated">No podem recuperar la vostra contrasenya perquè l'administració de la vostra instància no ha configurat el sistema de correu electrònic de PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3188014010833256853" datatype="html">
+      <trans-unit id="3188014010833256853" datatype="html" xml:space="preserve">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">Inseriu la vostra adreça de correu electrònic i us enviarem un enllaç per a restablir la contrasenya.</target>
+        <target state="translated">Inseriu la vostra adreça electrònica i us hi enviarem un enllaç per a restablir la contrasenya.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">139</context>
@@ -2287,9 +2287,9 @@
           <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4768749765465246664">
+      <trans-unit id="4768749765465246664" xml:space="preserve">
         <source>Email</source>
-        <target>Correu</target>
+        <target state="translated">Adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">36</context>
@@ -2323,9 +2323,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3967269098753656610">
+      <trans-unit id="3967269098753656610" xml:space="preserve">
         <source>Email address</source>
-        <target>Adreça de correu</target>
+        <target state="translated">Adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">145</context>
@@ -2335,9 +2335,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7808756054397155068" datatype="html">
+      <trans-unit id="7808756054397155068" datatype="html" xml:space="preserve">
         <source>Reset</source>
-        <target state="translated">Restableix</target>
+        <target state="translated">Restablir</target>
         <note priority="1" from="description">Password reset button</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
@@ -2352,9 +2352,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="761579517995454927" datatype="html">
+      <trans-unit id="761579517995454927" datatype="html" xml:space="preserve">
         <source>on the vidiverse</source>
-        <target state="translated">en el vidivers</target>
+        <target state="translated">al vidivers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2368,17 +2368,17 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="180660177324430106" datatype="html">
+      <trans-unit id="180660177324430106" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new"> Filters </target>
+        <target state="translated">Filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3782563238994348625">
+      <trans-unit id="3782563238994348625" xml:space="preserve">
         <source>Confirm password</source>
-        <target>Confirma la contrasenya</target>
+        <target state="translated">Confirmeu la contrasenya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2392,9 +2392,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8547184468496530386">
+      <trans-unit id="8547184468496530386" xml:space="preserve">
         <source>Reset my password</source>
-        <target>Reinicia la meva contrasenya</target>
+        <target state="translated">Restablir la meva contrasenya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2413,25 +2413,25 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1779569416352510488" datatype="html">
+      <trans-unit id="1779569416352510488" datatype="html" xml:space="preserve">
         <source>Why creating an account?</source>
-        <target state="new">Why creating an account?</target>
+        <target state="translated">Per què crear un compte?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4502972592942341883" datatype="html">
+      <trans-unit id="4502972592942341883" datatype="html" xml:space="preserve">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">Com probablement heu notat: no cal crear un compte per mirar vídeos a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Tanmateix, crear un compte a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> us permetrà: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3514732276382852116" datatype="html">
+      <trans-unit id="3514732276382852116" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comentar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">21</context>
