@@ -1513,7 +1513,7 @@
       </trans-unit>
       <trans-unit id="6334544592573094529" datatype="html" xml:space="preserve">
         <source>Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Transkodningsjobb skapat för "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Omkodningsjobb skapat för "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">390</context>
@@ -18460,25 +18460,25 @@
           <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8101376384086436513" datatype="html">
+      <trans-unit id="8101376384086436513" datatype="html" xml:space="preserve">
         <source>Export expiration must be greater or equal to 1.</source>
-        <target state="new">Export expiration must be greater or equal to 1.</target>
+        <target state="translated">Exportens bäst före-datum måste vara 1 eller större.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7568988728218416870" datatype="html">
+      <trans-unit id="7568988728218416870" datatype="html" xml:space="preserve">
         <source>Max user video quota is required.</source>
-        <target state="new">Max user video quota is required.</target>
+        <target state="translated">Maximal videokvot per användare krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6536118679588615245" datatype="html">
+      <trans-unit id="6536118679588615245" datatype="html" xml:space="preserve">
         <source>Max user video video quota must be greater or equal to 1.</source>
-        <target state="new">Max user video video quota must be greater or equal to 1.</target>
+        <target state="translated">Maximal videokvot per användare måste vara 1 eller större.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">151</context>
@@ -18524,9 +18524,9 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3159508433607320799" datatype="html">
+      <trans-unit id="3159508433607320799" datatype="html" xml:space="preserve">
         <source>OTP token is required.</source>
-        <target state="new">OTP token is required.</target>
+        <target state="translated">OTP-token krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -18808,41 +18808,41 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27494409477574248" datatype="html">
+      <trans-unit id="27494409477574248" datatype="html" xml:space="preserve">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">Anledning till registrering krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7602123087076969338" datatype="html">
+      <trans-unit id="7602123087076969338" datatype="html" xml:space="preserve">
         <source>Registration reason must be at least 2 characters long.</source>
-        <target state="new">Registration reason must be at least 2 characters long.</target>
+        <target state="translated">Anledningen till registrering måste vara minst 2 tecken lång.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2092241175249165802" datatype="html">
+      <trans-unit id="2092241175249165802" datatype="html" xml:space="preserve">
         <source>Registration reason cannot be more than 3000 characters long.</source>
-        <target state="new">Registration reason cannot be more than 3000 characters long.</target>
+        <target state="translated">Anledningen till registrering får inte vara mer än 3000 tecken lång.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1089471746995032310" datatype="html">
+      <trans-unit id="1089471746995032310" datatype="html" xml:space="preserve">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form.</source>
-        <target state="new">Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form.</target>
+        <target state="translated">Moderatorer för <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> kommer behöva godkänna din kontoregistreringsbegäran efter att du fyllt i och skickat in formuläret.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036308773059264427" datatype="html">
+      <trans-unit id="1036308773059264427" datatype="html" xml:space="preserve">
         <source>They usually respond within <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</source>
-        <target state="new">They usually respond within <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">De svarar vanligtvis inom <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">7</context>
@@ -18980,9 +18980,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417693714872528491" datatype="html">
+      <trans-unit id="1417693714872528491" datatype="html" xml:space="preserve">
         <source>This field is required.</source>
-        <target state="new">This field is required.</target>
+        <target state="translated">Detta fält är obligatoriskt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -19028,9 +19028,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9145435275110757909" datatype="html">
+      <trans-unit id="9145435275110757909" datatype="html" xml:space="preserve">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">Textningsinnehåll krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -19092,65 +19092,65 @@
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6122525173522570480" datatype="html">
+      <trans-unit id="6122525173522570480" datatype="html" xml:space="preserve">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">Stötta-texten får inte var mer än 1000 tecken lång.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6149476559621965756" datatype="html">
+      <trans-unit id="6149476559621965756" datatype="html" xml:space="preserve">
         <source>Remote channel url is required.</source>
-        <target state="new">Remote channel url is required.</target>
+        <target state="translated">Fjärrkanal-URL krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7820654428820536159" datatype="html">
+      <trans-unit id="7820654428820536159" datatype="html" xml:space="preserve">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="new">External channel URL must begin with "https://" or "http://"</target>
+        <target state="translated">Fjärrkanal-URL:en måste börja med "https://" elller "http://"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5090406837784732474" datatype="html">
+      <trans-unit id="5090406837784732474" datatype="html" xml:space="preserve">
         <source>External channel URL cannot be more than 1000 characters long</source>
-        <target state="new">External channel URL cannot be more than 1000 characters long</target>
+        <target state="translated">Fjärrkanal-URL:en får inte vara mer än 1000 tecken lång</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653315912561885898" datatype="html">
+      <trans-unit id="1653315912561885898" datatype="html" xml:space="preserve">
         <source>A chapter title is required.</source>
-        <target state="new">A chapter title is required.</target>
+        <target state="translated">En kapitelrubrik krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021088770925947810" datatype="html">
+      <trans-unit id="4021088770925947810" datatype="html" xml:space="preserve">
         <source>A chapter title should be more than 2 characters long.</source>
-        <target state="new">A chapter title should be more than 2 characters long.</target>
+        <target state="translated">En kapitelrubrik måste vara mer än 2 tecken lång.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5999631145853755676" datatype="html">
+      <trans-unit id="5999631145853755676" datatype="html" xml:space="preserve">
         <source>A chapter title should be less than 100 characters long.</source>
-        <target state="new">A chapter title should be less than 100 characters long.</target>
+        <target state="translated">En kapitelrubrik måste vara mindre än 100 tecken lång.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3038146146697752093" datatype="html">
+      <trans-unit id="3038146146697752093" datatype="html" xml:space="preserve">
         <source>Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></source>
-        <target state="new">Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></target>
+        <target state="translated">Flera kapitel har samma tidskod <x id="PH" equiv-text="chapter.timecode"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -19324,33 +19324,33 @@
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1018828582442463303" datatype="html">
+      <trans-unit id="1018828582442463303" datatype="html" xml:space="preserve">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">Startade <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6765028278622459314" datatype="html">
+      <trans-unit id="6765028278622459314" datatype="html" xml:space="preserve">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">Slutade <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3424935624805832445" datatype="html">
+      <trans-unit id="3424935624805832445" datatype="html" xml:space="preserve">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">Gå till repris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6989092358991683843" datatype="html">
+      <trans-unit id="6989092358991683843" datatype="html" xml:space="preserve">
         <source>Replay is being processed...</source>
-        <target state="new">Replay is being processed...</target>
+        <target state="translated">Reprisen håller på att bearbetas ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">47</context>
@@ -19396,25 +19396,25 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2340164151654372915" datatype="html">
+      <trans-unit id="2340164151654372915" datatype="html" xml:space="preserve">
         <source>A password should be at least 2 characters long.</source>
-        <target state="new">A password should be at least 2 characters long.</target>
+        <target state="translated">Ett lösenord måste vara minst 2 tecken långt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7699381877503388166" datatype="html">
+      <trans-unit id="7699381877503388166" datatype="html" xml:space="preserve">
         <source>A password should be shorter than 100 characters long.</source>
-        <target state="new">A password should be shorter than 100 characters long.</target>
+        <target state="translated">Ett lösenord måste vara kortare än 100 tecken långt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3116180442048363146" datatype="html">
+      <trans-unit id="3116180442048363146" datatype="html" xml:space="preserve">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="translated">För lösenordsskyddade videor krävs ett lösenord.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -19484,65 +19484,65 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708973013815646385" datatype="html">
+      <trans-unit id="4708973013815646385" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</source>
-        <target state="new"><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</target>
+        <target state="translated"><x id="PH" equiv-text="word"/> är inte giltigt (min 1 tecken/max 100 tecken)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1715587073952235112" datatype="html">
+      <trans-unit id="1715587073952235112" datatype="html" xml:space="preserve">
         <source>There are too much words in the list (max 500 words)</source>
-        <target state="new">There are too much words in the list (max 500 words)</target>
+        <target state="translated">Det är för många ord i listan (max 500 ord)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1391063124784029164" datatype="html">
+      <trans-unit id="1391063124784029164" datatype="html" xml:space="preserve">
         <source>List name is required.</source>
-        <target state="new">List name is required.</target>
+        <target state="translated">Listans namn är obligatoriskt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4341509997126306236" datatype="html">
+      <trans-unit id="4341509997126306236" datatype="html" xml:space="preserve">
         <source>List name must be at least 1 character long.</source>
-        <target state="new">List name must be at least 1 character long.</target>
+        <target state="translated">Listnamnet måste vara minst 1 tecken långt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="55815482589008245" datatype="html">
+      <trans-unit id="55815482589008245" datatype="html" xml:space="preserve">
         <source>List name cannot be more than 100 characters long.</source>
-        <target state="new">List name cannot be more than 100 characters long.</target>
+        <target state="translated">Listans namn får inte vara mer än 100 tecken långt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1312213389883835455" datatype="html">
+      <trans-unit id="1312213389883835455" datatype="html" xml:space="preserve">
         <source>Words are required.</source>
-        <target state="new">Words are required.</target>
+        <target state="translated">Ord krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6677020266490766837" datatype="html">
+      <trans-unit id="6677020266490766837" datatype="html" xml:space="preserve">
         <source>Words entered contain duplicates.</source>
-        <target state="new">Words entered contain duplicates.</target>
+        <target state="translated">Inmatade ord innehåller dubbletter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1048926006551468313" datatype="html">
+      <trans-unit id="1048926006551468313" datatype="html" xml:space="preserve">
         <source>A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</source>
-        <target state="new">A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</target>
+        <target state="translated">Ett ord måste bestå av mellan 1 och 100 tecken och det totala antalet ord får inte överstiga 500 stycken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -19556,9 +19556,9 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5604677701754367707" datatype="html">
+      <trans-unit id="5604677701754367707" datatype="html" xml:space="preserve">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">PeerTube kan inte hantera den här typen av fil. Accepterade filändelser är <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -19572,17 +19572,17 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4682186700066917562" datatype="html">
+      <trans-unit id="4682186700066917562" datatype="html" xml:space="preserve">
         <source>{1} categories selected</source>
-        <target state="new">{1} categories selected</target>
+        <target state="translated">{1} kategorier valda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">19,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8280589137189201687" datatype="html">
+      <trans-unit id="8280589137189201687" datatype="html" xml:space="preserve">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">Du kan inte välja mer än {maxItems, plural, =1 {1 objekt} andra {<x id="maxItems"/> objekt}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-default-all.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -20041,9 +20041,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8413618684534157435" datatype="html">
+      <trans-unit id="8413618684534157435" datatype="html" xml:space="preserve">
         <source>{1} languages selected</source>
-        <target state="new">{1} languages selected</target>
+        <target state="translated">{1} språk valda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">26,27</context>
@@ -20077,49 +20077,49 @@
           <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5769292297914455214" datatype="html">
+      <trans-unit id="5769292297914455214" datatype="html" xml:space="preserve">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">Avaktiverad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2684349290932402590" datatype="html">
+      <trans-unit id="2684349290932402590" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">Kräver godkännande av en moderator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6263183216314915807" datatype="html">
+      <trans-unit id="6263183216314915807" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</source>
-        <target state="new">Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</target>
+        <target state="translated">Kräver godkännande av en moderator (~ <x id="PH" equiv-text="responseTime"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4816216590591222133" datatype="html">
+      <trans-unit id="4816216590591222133" datatype="html" xml:space="preserve">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">Aktiverad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3911025298999036211" datatype="html">
+      <trans-unit id="3911025298999036211" datatype="html" xml:space="preserve">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 timme} andra {<x id="hours"/> timmar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2819927377059070056" datatype="html">
+      <trans-unit id="2819927377059070056" datatype="html" xml:space="preserve">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minut} other {<x id="minutes"/> minuter}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">106</context>
@@ -20155,25 +20155,25 @@
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792453450803202450" datatype="html">
+      <trans-unit id="1792453450803202450" datatype="html" xml:space="preserve">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">Godkända prenumerationsförfrågningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1745310805516417209" datatype="html">
+      <trans-unit id="1745310805516417209" datatype="html" xml:space="preserve">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">Avvisade prenumerationsförfrågningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1810206793608630396" datatype="html">
+      <trans-unit id="1810206793608630396" datatype="html" xml:space="preserve">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">Väntande prenumerationsförfrågningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">154</context>
@@ -20267,49 +20267,49 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2762554571133839421" datatype="html">
+      <trans-unit id="2762554571133839421" datatype="html" xml:space="preserve">
         <source>Go to the login page</source>
-        <target state="new">Go to the login page</target>
+        <target state="translated">Gå till inloggningssidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/login-link.component.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7941320871431436228" datatype="html">
+      <trans-unit id="7941320871431436228" datatype="html" xml:space="preserve">
         <source>Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Begär ett konto på <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8545791785518058029" datatype="html">
+      <trans-unit id="8545791785518058029" datatype="html" xml:space="preserve">
         <source>Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Skapa ett konto på <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7919708461177482031" datatype="html">
+      <trans-unit id="7919708461177482031" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</source>
-        <target state="new">PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</target>
+        <target state="translated">PeerTube anser att videon "<x id="PH" equiv-text="video.name"/>" redan har transkriberats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1574297288544496710" datatype="html">
+      <trans-unit id="1574297288544496710" datatype="html" xml:space="preserve">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</source>
-        <target state="new"> If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcription on this video.</target>
+        <target state="translated">Om du tycker att PeerTube är fel ute (video i trasigt tillstånd efter en krasch etcetera) kan du tvinga transkription av den här videon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1333875259678532637" datatype="html">
+      <trans-unit id="1333875259678532637" datatype="html" xml:space="preserve">
         <source>Force transcription</source>
-        <target state="new">Force transcription</target>
+        <target state="translated">Tvinga omtranskribering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">123</context>
@@ -20323,9 +20323,9 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2836537219160375057" datatype="html">
+      <trans-unit id="2836537219160375057" datatype="html" xml:space="preserve">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="new">Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
+        <target state="translated">Blockera {count, plural, =1 {1 användare} other {<x id="count"/> användare}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -20833,9 +20833,9 @@
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1962360936689895737" datatype="html">
+      <trans-unit id="1962360936689895737" datatype="html" xml:space="preserve">
         <source>A subtitle will be automatically generated from your video.</source>
-        <target state="new"> A subtitle will be automatically generated from your video. </target>
+        <target state="translated">Textning av videon kommer automatiskt att genereras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">173</context>
@@ -20957,9 +20957,9 @@
           <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="929597387091598826" datatype="html">
+      <trans-unit id="929597387091598826" datatype="html" xml:space="preserve">
         <source>Auto tags</source>
-        <target state="new">Auto tags</target>
+        <target state="translated">Automatiska etiketter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">40</context>
@@ -21117,97 +21117,97 @@
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332428159510983797" datatype="html">
+      <trans-unit id="4332428159510983797" datatype="html" xml:space="preserve">
         <source>Expires on</source>
-        <target state="new">Expires on</target>
+        <target state="translated">Bäst före</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931356925707804915" datatype="html">
+      <trans-unit id="8931356925707804915" datatype="html" xml:space="preserve">
         <source>Download your archive</source>
-        <target state="new">Download your archive</target>
+        <target state="translated">Ladda ner ditt arkiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3427300811638138150" datatype="html">
+      <trans-unit id="3427300811638138150" datatype="html" xml:space="preserve">
         <source>Request a new archive</source>
-        <target state="new">Request a new archive</target>
+        <target state="translated">Begär ett nytt arkiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3628699893924130182" datatype="html">
+      <trans-unit id="3628699893924130182" datatype="html" xml:space="preserve">
         <source>User export is not enabled by your administrator.</source>
-        <target state="new">User export is not enabled by your administrator.</target>
+        <target state="translated">Användarexport har inte slagits på av din administratör.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775513643932382075" datatype="html">
+      <trans-unit id="3775513643932382075" datatype="html" xml:space="preserve">
         <source>Archive settings</source>
-        <target state="new">Archive settings</target>
+        <target state="translated">Inställningar för arkiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215687357804737187" datatype="html">
+      <trans-unit id="1215687357804737187" datatype="html" xml:space="preserve">
         <source>You already have an active archive. Requesting a new export archive will remove the current one.</source>
-        <target state="new"> You already have an active archive. Requesting a new export archive will remove the current one. </target>
+        <target state="translated">Du har redan ett aktivt arkiv. Om du begär ett nytt exportarkiv kommer det nuvarande att tas bort.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Inkludera videofiler i arkivfilen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">Du behöver inkluderar videofiler om du vill importera dina videor på en annan PeerTube-plattform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Om du inkluderar videofiler kommer arkivfilen att bli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ungefär <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> stor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">Begär ett arkiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6258670465000264011" datatype="html">
+      <trans-unit id="6258670465000264011" datatype="html" xml:space="preserve">
         <source>Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</source>
-        <target state="new">Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</target>
+        <target state="translated">Videofiler kan inte inkluderas i exporten eftersom du har överskridit den maximala kvoten för video som din administratör tillåter för att exportera det här arkivet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.ts</context>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1930863079234861089" datatype="html">
+      <trans-unit id="1930863079234861089" datatype="html" xml:space="preserve">
         <source>Import/Export</source>
-        <target state="new">Import/Export</target>
+        <target state="translated">Importera/Exportera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -21217,17 +21217,17 @@
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2611126741793124345" datatype="html">
+      <trans-unit id="2611126741793124345" datatype="html" xml:space="preserve">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">IMPORTERA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4737947753130898543" datatype="html">
+      <trans-unit id="4737947753130898543" datatype="html" xml:space="preserve">
         <source>You can import an archive created by another PeerTube website.</source>
-        <target state="new">You can import an archive created by another PeerTube website.</target>
+        <target state="translated">Du kan importera ett arkiv som skapats av en annan PeerTube-plattform.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">10</context>
