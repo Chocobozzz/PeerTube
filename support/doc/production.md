@@ -91,11 +91,11 @@ sudo -u peertube unzip -q peertube-${VERSION}.zip && sudo -u peertube rm peertub
 
 
 Install Peertube:
-
+**Under root only**
 ```bash
 cd /var/www/peertube
-sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
-cd ./peertube-latest && sudo -H -u peertube yarn install --production --pure-lockfile
+sudo -u peertube ln -s versions/peertube-${VERSION}/ peertube-latest
+cd peertube-latest && sudo -H -u peertube yarn install --production --pure-lockfile
 ```
 
 ### :wrench: PeerTube configuration
