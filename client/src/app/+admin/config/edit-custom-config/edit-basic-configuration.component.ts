@@ -165,7 +165,8 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
     links = links.concat([
       { label: $localize`Discover`, path: '/videos/overview' },
-      { label: $localize`Browse videos`, path: '/videos/browse' }
+      { label: $localize`Browse all videos`, path: '/videos/browse' },
+      { label: $localize`Browse local videos`, path: '/videos/browse?scope=local' }
     ])
 
     this.defaultLandingPageOptions = links.map(o => ({

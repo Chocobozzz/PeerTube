@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { RouterLink, RouterLinkActive } from '@angular/router'
+import { Params, RouterLink, RouterLinkActive } from '@angular/router'
 import {
   AuthService,
   AuthStatus,
@@ -14,7 +14,7 @@ import {
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig, UserRight } from '@peertube/peertube-models'
+import { UserRight } from '@peertube/peertube-models'
 import debug from 'debug'
 import { of, Subscription } from 'rxjs'
 import { first, map, switchMap } from 'rxjs/operators'
@@ -26,6 +26,7 @@ type MenuLink = {
   label: string
 
   path: string
+  query?: Params
 
   isPrimaryButton?: boolean // default false
 
@@ -60,8 +61,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   private user: AuthUser
   private canSeeVideoMakerBlock: boolean
-
-  private serverConfig: ServerConfig
 
   private authSub: Subscription
 
@@ -100,9 +99,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
       this.onUserStateChange()
     })
-
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
   }
 
   ngOnDestroy () {
@@ -130,12 +126,13 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   private buildQuickLinks (): MenuSection {
-    const base = {
+    const base: MenuSection = {
       key: 'quick-access',
       title: $localize`Quick access`,
       links: [
         {
           path: this.redirectService.getDefaultRoute(),
+          query: this.redirectService.getDefaultRouteQuery(),
           icon: 'home' as GlobalIconName,
           label: $localize`Home`
         }

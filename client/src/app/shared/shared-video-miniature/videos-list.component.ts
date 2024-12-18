@@ -149,7 +149,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       : []
 
     this.filters = new VideoFilters(this.defaultSort, this.defaultScope, hiddenFilters)
-    this.filters.load({ ...this.route.snapshot.queryParams, scope: this.defaultScope })
+    this.filters.load({ scope: this.defaultScope, ...this.route.snapshot.queryParams })
 
     this.groupedDateLabels = {
       [GroupDate.UNKNOWN]: null,

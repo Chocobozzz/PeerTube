@@ -138,11 +138,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   getDefaultRoute () {
-    return this.redirectService.getDefaultRoute().split('?')[0]
+    return this.redirectService.getDefaultRoute()
   }
 
   getDefaultRouteQuery () {
-    return this.router.parseUrl(this.redirectService.getDefaultRoute()).queryParams
+    return this.redirectService.getDefaultRouteQuery()
   }
 
   // ---------------------------------------------------------------------------
