@@ -5,7 +5,7 @@
 } @else {
   <div class="margin-content quick-access mt-3">
     <div #quickAccessContent class="quick-access-links" [ngClass]="{ 'see-all-quick-links': seeAllQuickLinks }">
-      <span class="me-2 fg-100">Quick access:</span>
+      <span i18n class="me-2 fg-100">Quick access:</span>
 
       @for (quickAccess of quickAccessLinks; track quickAccess.label) {
         <a class="me-2" [routerLink]="quickAccess.routerLink" [queryParams]="quickAccess.queryParams">{{ quickAccess.label }}</a>
