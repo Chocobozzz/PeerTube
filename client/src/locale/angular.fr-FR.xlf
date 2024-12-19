@@ -4146,9 +4146,9 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3059355667050002541" datatype="html">
+      <trans-unit id="3059355667050002541" datatype="html" xml:space="preserve">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="translated">Erreur dans le composant miniature de la chaîne : <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Erreur dans le composant miniature de la liste de lecture : <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">56</context>
