@@ -9688,7 +9688,7 @@
       </trans-unit>
       <trans-unit id="6098767935728651255" datatype="html" xml:space="preserve">
         <source>Enable video storyboards</source>
-        <target state="translated">Slå på video-berättelser</target>
+        <target state="translated">Slå på video-bildmanus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">377</context>
@@ -9696,7 +9696,7 @@
       </trans-unit>
       <trans-unit id="7773354014171617955" datatype="html" xml:space="preserve">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="translated">Skapa berättelser av lokala videor med ffmpeg så tittare kan se förhandsgranskningen av videon när de drar längs tidslinjen</target>
+        <target state="translated">Skapa bildmanus av lokala videor med ffmpeg så tittare kan se förhandsgranskningen av videon när de drar längs tidslinjen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">380</context>
@@ -10796,7 +10796,7 @@
       </trans-unit>
       <trans-unit id="9180372875725189823" datatype="html" xml:space="preserve">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="translated">Antal videoberättelsebilder att behålla i cachen</target>
+        <target state="translated">Antal bildmanusbilder att behålla i cachen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
@@ -10804,7 +10804,7 @@
       </trans-unit>
       <trans-unit id="224402797620080356" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {cachad berättelse} other {cachade berättelser}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {cachat bildmanus} other {cachade bildmanus}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">64</context>
