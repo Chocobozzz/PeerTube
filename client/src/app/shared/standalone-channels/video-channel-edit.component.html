@@ -21,7 +21,7 @@
         <my-actor-avatar-edit
           *ngIf="videoChannel" class="d-block mb-4" actorType="channel"
           [displayName]="videoChannel.displayName" [previewImage]="isCreation()" [avatars]="videoChannel.avatars"
-          [username]="!isCreation() && videoChannel.displayName" [subscribers]="!isCreation() && videoChannel.followersCount"
+          [username]="!isCreation() && videoChannel.name" [subscribers]="!isCreation() && videoChannel.followersCount"
           (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
         ></my-actor-avatar-edit>
 
