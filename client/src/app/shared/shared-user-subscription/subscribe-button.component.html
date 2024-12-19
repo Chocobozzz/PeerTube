@@ -21,7 +21,7 @@
 
   @if (isUserLoggedIn()) {
     @if (isAllChannelsSubscribed) {
-      <button type="button" [ngClass]="buttonClasses" class="btn" (click)="unsubscribe()">
+      <button type="button" [ngClass]="buttonClasses" class="btn last-in-group" (click)="unsubscribe()">
         <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
       </button>
     } @else {

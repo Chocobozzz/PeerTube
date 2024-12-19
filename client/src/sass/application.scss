@@ -57,6 +57,8 @@ body {
   --input-y-padding: 5px;
   --input-x-padding: 20px;
 
+  --input-border-radius: 4px;
+
   --textarea-fg: var(--textareaForegroundColor, #{pvar(--input-fg)});
   --textarea-bg: var(--textareaBackgroundColor, #{pvar(--input-bg)});
 

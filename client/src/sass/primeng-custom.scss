@@ -151,7 +151,7 @@ body .p-dropdown {
   background: pvar(--input-bg);
   border: 1px solid pvar(--input-border-color);
   transition: border-color 0.2s, box-shadow 0.2s;
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
 }
 body .p-dropdown:not(.p-disabled):hover {
   border-color: pvar(--input-border-color);
@@ -527,7 +527,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   background: pvar(--input-bg);
   border: 1px solid pvar(--input-border-color);
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
   font-size: 16px;
 }
 .p-multiselect:not(.p-disabled):hover {
@@ -552,7 +552,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   margin-right: 0.25rem;
   background: pvar(--bg-secondary-500);
   color: pvar(--fg);
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
 }
 .p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
   margin-left: 0.5rem;
@@ -589,7 +589,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   background: pvar(--bg);
   color: pvar(--fg);
   border: 1px solid pvar(--input-border-color);
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
 .p-multiselect-panel .p-multiselect-header {
@@ -702,7 +702,7 @@ p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
   border: 1px solid pvar(--input-border-color);
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   appearance: none;
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
 }
 .p-inputtext:enabled:hover {
   border-color: pvar(--input-border-color);

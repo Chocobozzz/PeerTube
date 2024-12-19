@@ -13,7 +13,7 @@
   color: pvar(--input-fg);
   background-color: pvar(--input-bg);
   border: 1px solid pvar(--input-border-color);
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
 
   @include rounded-line-height-1-5($font-size);
 
@@ -93,7 +93,7 @@
       color: pvar(--input-fg);
       background: pvar(--input-bg);
 
-      border-radius: 4px;
+      border-radius: pvar(--input-border-radius);
     }
 
     &:focus,
