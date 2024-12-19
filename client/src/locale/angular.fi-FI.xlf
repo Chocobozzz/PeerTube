@@ -1674,11 +1674,8 @@ The link will expire within 1 hour.</source>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/menu/language-chooser.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit><trans-unit id="5960096873104755868" datatype="html">
         <source>More info</source><target state="new">More info</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit><trans-unit id="3980731018496292351" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">5</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="3980731018496292351" datatype="html">
         <source>Display the lateral menu</source><target state="new">Display the lateral menu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
