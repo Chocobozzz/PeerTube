@@ -82,7 +82,6 @@ $input-border-radius: 3px;
     z-index: #{z(root-header) - 1};
     position: fixed;
     top: pvar(--header-height);
-    left: $menu-width;
 
     max-height: none !important;
     max-width: none !important;
@@ -94,6 +93,8 @@ $input-border-radius: 3px;
     grid-template-columns: 1fr 1fr;
 
     background-color: pvar(--bg);
+
+    @include left($menu-width);
 
     .nav-preview {
       grid-row: 1;
@@ -113,6 +114,9 @@ $input-border-radius: 3px;
       border-right: 1px dashed pvar(--input-border-color);
 
       resize: none;
+
+      // Prevent "outline" overflow with left menu
+      box-shadow: none !important;
     }
 
     ::ng-deep .tab-content {
@@ -163,7 +167,8 @@ $input-border-radius: 3px;
 
 :host-context(.main-col.expanded) {
   .root.maximized {
-    left: 0;
-    width: 100%;
+    width: calc(100% - #{$menu-collapsed-width});
+
+    @include left($menu-collapsed-width);
   }
 }
