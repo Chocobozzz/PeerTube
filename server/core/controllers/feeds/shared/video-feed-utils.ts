@@ -1,5 +1,5 @@
 import { VideoIncludeType } from '@peertube/peertube-models'
-import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown.js'
+import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -47,7 +47,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
   return {
     title: video.name,
     link: localLink,
-    description: mdToOneLinePlainText(video.getTruncatedDescription()),
+    description: mdToPlainText(video.getTruncatedDescription()),
     content: toSafeHtml(video.description),
 
     date: video.publishedAt,

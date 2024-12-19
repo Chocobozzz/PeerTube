@@ -161,6 +161,7 @@
     "memoizee": "^0.4.14",
     "morgan": "^1.5.3",
     "multer": "^1.4.5-lts.1",
+    "node-html-parser": "^6.1.13",
     "node-media-server": "^2.1.4",
     "nodemailer": "^6.0.0",
     "opentelemetry-instrumentation-sequelize": "^0.41.0",
