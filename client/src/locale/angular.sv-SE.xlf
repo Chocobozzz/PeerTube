@@ -1243,9 +1243,9 @@
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="834805431202576194">
+      <trans-unit id="834805431202576194" xml:space="preserve">
         <source>No results.</source>
-        <target>Inga resultat.</target>
+        <target state="translated">Inget att visa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">4</context>
@@ -3491,9 +3491,9 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4070041848101291003" datatype="html">
+      <trans-unit id="4070041848101291003" datatype="html" xml:space="preserve">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="translated">Resultaten kommer kompletteras med träffar från ett fristående register. Endast data som är nödvändig för sökningen kommer skickas.</target>
+        <target state="translated">Resultaten kommer kompletteras med träffar från ett tredjepartssökindex. Endast data som är nödvändig för sökningen kommer skickas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">36</context>
@@ -6562,7 +6562,7 @@
       </trans-unit>
       <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="translated">Dina inställningar med avatar-fil</target>
+        <target state="translated">Dina inställningar med profilbildsfil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6570,7 +6570,7 @@
       </trans-unit>
       <trans-unit id="4189339781940878663" datatype="html" xml:space="preserve">
         <source>Your channels with banner and avatar files</source>
-        <target state="translated">Dina kanaler med omslagsbild och avatar-fil</target>
+        <target state="translated">Dina kanaler med omslagsbild och profilbildsfil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6658,7 +6658,7 @@
       </trans-unit>
       <trans-unit id="7743206617778542802" datatype="html" xml:space="preserve">
         <source>A directory containing static files (thumbnails, avatars, video files etc.)</source>
-        <target state="translated">En katalog med statiska filer (miniatyrbilder, avatarer, videofiler o s v)</target>
+        <target state="translated">En katalog med statiska filer (miniatyrbilder, profilbilder, videofiler o s v)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">30</context>
@@ -8448,11 +8448,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2722270956157821098">
+      <trans-unit id="2722270956157821098" xml:space="preserve">
         <source>No results.</source>
-        <target>
-  Inga resultat.
-</target>
+        <target state="translated">Inget att visa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">34</context>
@@ -14024,9 +14022,9 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1305357231288135414" datatype="html">
+      <trans-unit id="1305357231288135414" datatype="html" xml:space="preserve">
         <source>Homepage</source>
-        <target state="translated">Hemsida</target>
+        <target state="translated">Startsida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">12</context>
@@ -14064,9 +14062,9 @@
           <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6920964195632624609" datatype="html">
+      <trans-unit id="6920964195632624609" datatype="html" xml:space="preserve">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="translated">INSTANSENS HEMSIDA</target>
+        <target state="translated">INSTANSENS STARTSIDA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -16546,9 +16544,9 @@
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3525866160632851851">
+      <trans-unit id="3525866160632851851" xml:space="preserve">
         <source>Avatar changed.</source>
-        <target>Avataren har uppdaterats.</target>
+        <target state="translated">Profilbilden har uppdaterats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -17864,9 +17862,9 @@
           <context context-type="linenumber">312</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3208627574396957172" datatype="html">
+      <trans-unit id="3208627574396957172" datatype="html" xml:space="preserve">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
-        <target state="translated">Sökregistret kan inte nås. Försöker igen med resultat från den här instansen istället.</target>
+        <target state="translated">Tredjepartssökindexet kan inte nås. Försöker igen med resultat från den här instansen istället.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">192</context>
