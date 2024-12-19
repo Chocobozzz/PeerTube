@@ -42,7 +42,7 @@
 }
 
 @mixin peertube-textarea ($width, $height) {
-  @include peertube-input-text($width, 14px);
+  @include peertube-input-text($width);
 
   & {
     color: pvar(--textarea-fg) !important;
