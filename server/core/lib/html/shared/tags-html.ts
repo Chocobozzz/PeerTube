@@ -1,11 +1,11 @@
 import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
 import { mdToPlainText } from '@server/helpers/markdown.js'
 import truncate from 'lodash-es/truncate.js'
+import { parse } from 'node-html-parser'
 import { CONFIG } from '../../../initializers/config.js'
 import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../../../initializers/constants.js'
 import { MVideo, MVideoPlaylist } from '../../../types/models/index.js'
 import { Hooks } from '../../plugins/hooks.js'
-import { parse } from 'node-html-parser';
 
 type Tags = {
   forbidIndexation: boolean
