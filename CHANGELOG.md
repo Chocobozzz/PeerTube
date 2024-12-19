@@ -5,7 +5,7 @@
 
 ### IMPORTANT NOTES
 
- * Ensure you have `storage.original_video_files` set in your configuration file: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L159.
+ * **Classic install only** (for Docker admins see [v6.3 IMPORTANT NOTES](https://github.com/Chocobozzz/PeerTube/releases/tag/v6.3.0)) Ensure you have `storage.original_video_files` set in your configuration file: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L159.
  If you did not configure this key but have already enabled "Keep a version of the input file" configuration, original files may have been saved in `versions/peertube-v6.x.x/storage/original-video-files/` directories. If this is the case, you must move these files in the new directory location specified by your `storage.original_video_files` configuration
  * Safari desktop versions < 13 are not supported anymore
  * iOS versions < 14.5 are not supported anymore
