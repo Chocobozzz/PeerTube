@@ -3340,9 +3340,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2218100934178971211" datatype="html">
+      <trans-unit id="2218100934178971211" datatype="html" xml:space="preserve">
         <source>Don't show me this anymore</source>
-        <target state="translated">Visa inte mig detta igen</target>
+        <target state="translated">Visa inte detta igen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">25</context>
@@ -13656,7 +13656,7 @@
       </trans-unit>
       <trans-unit id="1753457183754409152" datatype="html" xml:space="preserve">
         <source>Displayed videos</source>
-        <target state="translated">Visade videor</target>
+        <target state="translated">Visa videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">106,108</context>
@@ -13766,9 +13766,9 @@
           <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1833483831276078393" datatype="html">
+      <trans-unit id="1833483831276078393" datatype="html" xml:space="preserve">
         <source>displayed</source>
-        <target state="translated">synlig</target>
+        <target state="translated">visas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">280</context>
@@ -20075,9 +20075,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8929218224642530466">
+      <trans-unit id="8929218224642530466" xml:space="preserve">
         <source>Displayed</source>
-        <target>Synlig</target>
+        <target state="translated">Visas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">67</context>
