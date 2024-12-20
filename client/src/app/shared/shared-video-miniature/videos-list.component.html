@@ -24,7 +24,8 @@
   >
     <ng-container *ngIf="highlightedLives.length !== 0">
       <h2 class="date-title">
-        <my-global-icon class="pt-icon me-1 top--1px" iconName="live"></my-global-icon> Current lives
+        <my-global-icon class="pt-icon me-1 top--1px" iconName="live"></my-global-icon>
+        <ng-container i18n>Current lives</ng-container>
       </h2>
 
       <ng-container *ngFor="let live of highlightedLives; trackBy: videoById;">
