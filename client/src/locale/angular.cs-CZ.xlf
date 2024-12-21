@@ -4588,9 +4588,9 @@
           <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2288513108450439427">
+      <trans-unit id="2288513108450439427" xml:space="preserve">
         <source>Support</source>
-        <target>Podpora</target>
+        <target state="translated">Podpořit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">19</context>
@@ -5629,9 +5629,9 @@
           <context context-type="linenumber">313</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1290987288288099212" datatype="html">
+      <trans-unit id="1290987288288099212" datatype="html" xml:space="preserve">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="translated">Podpora <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
+        <target state="translated">Podpořit <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5829,9 +5829,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1813238393038053050" datatype="html">
+      <trans-unit id="1813238393038053050" datatype="html" xml:space="preserve">
         <source>SUPPORT</source>
-        <target state="translated">PODPORA</target>
+        <target state="translated">PODPOŘIT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">13</context>
@@ -12713,9 +12713,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1970848297295860531" datatype="html">
+      <trans-unit id="1970848297295860531" datatype="html" xml:space="preserve">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target state="translated">ADMINISTRÁTOŘI &amp; UDRŽITELNOST</target>
+        <target state="translated">ADMINISTRÁTOŘI A UDRŽITELNOST</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">37</context>
@@ -13337,9 +13337,9 @@
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2573967459337636542" datatype="html">
+      <trans-unit id="2573967459337636542" datatype="html" xml:space="preserve">
         <source>Administrators &amp; Sustainability</source>
-        <target state="translated">Administrátoři &amp; Udržitelnost</target>
+        <target state="translated">Administrátoři a udržitelnost</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context>
           <context context-type="linenumber">30</context>
