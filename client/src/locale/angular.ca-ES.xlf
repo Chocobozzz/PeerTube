@@ -6274,137 +6274,137 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7163633882758007711" datatype="html">
+      <trans-unit id="7163633882758007711" datatype="html" xml:space="preserve">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="new">Do you really want to delete and re-draft this comment?</target>
+        <target state="translated">Segur que voleu suprimir i modificar aquest comentari?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7364261164248038345" datatype="html">
+      <trans-unit id="7364261164248038345" datatype="html" xml:space="preserve">
         <source>Comment approved</source>
-        <target state="new">Comment approved</target>
+        <target state="translated">Comentari aprovat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="723038562278401061" datatype="html">
+      <trans-unit id="723038562278401061" datatype="html" xml:space="preserve">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder:</target>
+        <target state="translated">Recordatori:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5733075023444401902">
+      <trans-unit id="5733075023444401902" xml:space="preserve">
         <source>Add comment...</source>
-        <target>Afegeix un comentari...</target>
+        <target state="translated">Afegir un comentari...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="982956590420630883" datatype="html">
+      <trans-unit id="982956590420630883" datatype="html" xml:space="preserve">
         <source>Markdown compatible</source>
-        <target state="new">Markdown compatible</target>
+        <target state="translated">Compatible amb Markdown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5793595564950675122" datatype="html">
+      <trans-unit id="5793595564950675122" datatype="html" xml:space="preserve">
         <source>Markdown compatible that supports:</source>
-        <target state="new">Markdown compatible that supports:</target>
+        <target state="translated">Compatible amb Markdown que admet :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8422216333877786919" datatype="html">
+      <trans-unit id="8422216333877786919" datatype="html" xml:space="preserve">
         <source>Auto generated links</source>
-        <target state="new">Auto generated links</target>
+        <target state="translated">Enllaços generats automàticament</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6365822416124232422" datatype="html">
+      <trans-unit id="6365822416124232422" datatype="html" xml:space="preserve">
         <source>Break lines</source>
-        <target state="new">Break lines</target>
+        <target state="translated">Salt de línia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2810844969104710423" datatype="html">
+      <trans-unit id="2810844969104710423" datatype="html" xml:space="preserve">
         <source>bold</source>
-        <target state="new">bold</target>
+        <target state="translated">negreta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8497278965577453274" datatype="html">
+      <trans-unit id="8497278965577453274" datatype="html" xml:space="preserve">
         <source>italic</source>
-        <target state="new">italic</target>
+        <target state="translated">cursiva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7227611412155083002" datatype="html">
+      <trans-unit id="7227611412155083002" datatype="html" xml:space="preserve">
         <source>Emoji shortcuts</source>
-        <target state="new">Emoji shortcuts</target>
+        <target state="translated">Dreceres d'emoji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6608581312644027413" datatype="html">
+      <trans-unit id="6608581312644027413" datatype="html" xml:space="preserve">
         <source>Emoji markup</source>
-        <target state="new">Emoji markup</target>
+        <target state="translated">Marcat d'emoji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="381522038671562286" datatype="html">
+      <trans-unit id="381522038671562286" datatype="html" xml:space="preserve">
         <source>See complete list</source>
-        <target state="new">See complete list</target>
+        <target state="translated">Veure la llista completa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2263890353858735493" datatype="html">
+      <trans-unit id="2263890353858735493" datatype="html" xml:space="preserve">
         <source>You are one step away from commenting</source>
-        <target state="new">You are one step away from commenting</target>
+        <target state="translated">Esteu a un pas de poder comentar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7508177761852352782" datatype="html">
+      <trans-unit id="7508177761852352782" datatype="html" xml:space="preserve">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">Podeu comentar amb un compte a qualsevol instància compatible amb ActivityPub (per exemple PeerTube/Mastodon/Pleroma).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2958389355547305739" datatype="html">
+      <trans-unit id="2958389355547305739" datatype="html" xml:space="preserve">
         <source>Login to comment</source>
-        <target state="new">Login to comment</target>
+        <target state="translated">Inicia sessió per comentar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4817080330698362530" datatype="html">
+      <trans-unit id="4817080330698362530" datatype="html" xml:space="preserve">
         <source>Markdown Emoji List</source>
-        <target state="new">Markdown Emoji List</target>
+        <target state="translated">Llista d'emojis Markdown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">90</context>
@@ -6418,9 +6418,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3470970355101730705" datatype="html">
+      <trans-unit id="3470970355101730705" datatype="html" xml:space="preserve">
         <source>Pending review</source>
-        <target state="new">Pending review</target>
+        <target state="translated">Pendent de revisió</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6430,9 +6430,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4502286564339177240">
+      <trans-unit id="4502286564339177240" xml:space="preserve">
         <source>Reply</source>
-        <target>Respon</target>
+        <target state="translated">Respondre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -6442,17 +6442,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2447932355167015019" datatype="html">
+      <trans-unit id="2447932355167015019" datatype="html" xml:space="preserve">
         <source>This comment has been deleted</source>
-        <target state="new">This comment has been deleted</target>
+        <target state="translated">Aquest comentari s'ha suprimit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3821661153451769620" datatype="html">
+      <trans-unit id="3821661153451769620" datatype="html" xml:space="preserve">
         <source>Approve</source>
-        <target state="new">Approve</target>
+        <target state="translated">Aprovar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -6462,9 +6462,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9031514421077169181" datatype="html">
+      <trans-unit id="9031514421077169181" datatype="html" xml:space="preserve">
         <source>Video redundancies</source>
-        <target state="new">Video redundancies</target>
+        <target state="translated">Redundàncies del vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -6478,16 +6478,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7651712714082200084" datatype="html">
+      <trans-unit id="7651712714082200084" datatype="html" xml:space="preserve">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="new">
-          Your report will be sent to moderators of 
-          <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the comment origin (
-          <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-        
-        </target>
+        <target state="translated">La denúncia s'enviarà a la moderació de <x id="INTERPOLATION"/><x id="START_TAG_NG-CONTAINER"/> i es reenviarà a l'origen del comentari ( <x id="INTERPOLATION_1"/>) també <x id="CLOSE_TAG_NG-CONTAINER"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context>
           <context context-type="linenumber">38</context>
@@ -6497,9 +6490,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658727060940996385" datatype="html">
+      <trans-unit id="658727060940996385" datatype="html" xml:space="preserve">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="new">Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</target>
+        <target state="translated">La renovació de la fitxa impedirà que els clients configurats anteriorment recuperin el flux fins que utilitzin la nova fitxa. Continuar?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">44</context>
