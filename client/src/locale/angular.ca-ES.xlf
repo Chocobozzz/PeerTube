@@ -6850,17 +6850,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8898602327647937914" datatype="html">
+      <trans-unit id="8898602327647937914" datatype="html" xml:space="preserve">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">Obrir pàgina de l'actor en una pestanya nova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7317290694079257887" datatype="html">
+      <trans-unit id="7317290694079257887" datatype="html" xml:space="preserve">
         <source>Accepted</source>
-        <target state="new">Accepted</target>
+        <target state="translated">Acceptat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">57</context>
@@ -6870,9 +6870,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4416413576346763682" datatype="html">
+      <trans-unit id="4416413576346763682" datatype="html" xml:space="preserve">
         <source>Pending</source>
-        <target state="new">Pending</target>
+        <target state="translated">Pendent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">58</context>
@@ -6882,9 +6882,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4188654437346976139" datatype="html">
+      <trans-unit id="4188654437346976139" datatype="html" xml:space="preserve">
         <source>Rejected</source>
-        <target state="new">Rejected</target>
+        <target state="translated">Rebutjat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">59</context>
@@ -6894,9 +6894,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8905995985388209337" datatype="html">
+      <trans-unit id="8905995985388209337" datatype="html" xml:space="preserve">
         <source>Accept</source>
-        <target state="new">Accept</target>
+        <target state="translated">Acceptar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">44</context>
@@ -6914,44 +6914,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8415175881466057254" datatype="html">
+      <trans-unit id="8415175881466057254" datatype="html" xml:space="preserve">
         <source>Refuse</source>
-        <target state="new">Refuse</target>
+        <target state="translated">Rebutjar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6961112234462008319" datatype="html">
+      <trans-unit id="6961112234462008319" datatype="html" xml:space="preserve">
         <source>No follower found matching current filters.</source>
-        <target state="new">No follower found matching current filters.</target>
+        <target state="translated">No s'ha trobat cap subscriptor amb els filtres actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2117404838551056159" datatype="html">
+      <trans-unit id="2117404838551056159" datatype="html" xml:space="preserve">
         <source>Your instance doesn't have any follower.</source>
-        <target state="new">Your instance doesn't have any follower.</target>
+        <target state="translated">La vostra instància no té subscriptors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6571718060636962350" datatype="html">
+      <trans-unit id="6571718060636962350" datatype="html" xml:space="preserve">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="new">Redundancy allowed 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Redundància permesa <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8246779176913476983" datatype="html">
+      <trans-unit id="8246779176913476983" datatype="html" xml:space="preserve">
         <source>Open instance in a new tab</source>
-        <target state="new">Open instance in a new tab</target>
+        <target state="translated">Obrir instància en una pestanya nova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">54</context>
@@ -6965,33 +6962,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9132918641931433659" datatype="html">
+      <trans-unit id="9132918641931433659" datatype="html" xml:space="preserve">
         <source>No host found matching current filters.</source>
-        <target state="new">No host found matching current filters.</target>
+        <target state="translated">No s'ha trobat cap amfitrió amb els criteris actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7274241885665071790" datatype="html">
+      <trans-unit id="7274241885665071790" datatype="html" xml:space="preserve">
         <source>Your instance is not following anyone.</source>
-        <target state="new">Your instance is not following anyone.</target>
+        <target state="translated">La vostra instància no en segueix cap altra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8168516547268350654" datatype="html">
+      <trans-unit id="8168516547268350654" datatype="html" xml:space="preserve">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="new">Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</target>
+        <target state="translated">Segur que voleu deixar de seguir a {count, plural,=1 {<x id="entryName"/>?} other {<x id="count"/> entrades?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9216117865911519658" datatype="html">
+      <trans-unit id="9216117865911519658" datatype="html" xml:space="preserve">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Acció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">36</context>
@@ -7017,33 +7014,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4937132637898470918" datatype="html">
+      <trans-unit id="4937132637898470918" datatype="html" xml:space="preserve">
         <source>My videos duplicated by remote instances</source>
-        <target state="new">My videos duplicated by remote instances</target>
+        <target state="translated">Els meus vídeos duplicats per instàncies remotes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4667534933980942398" datatype="html">
+      <trans-unit id="4667534933980942398" datatype="html" xml:space="preserve">
         <source>Remote videos duplicated by my instance</source>
-        <target state="new">Remote videos duplicated by my instance</target>
+        <target state="translated">Vídeos remots duplicats per la meva instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5893518121808195081" datatype="html">
+      <trans-unit id="5893518121808195081" datatype="html" xml:space="preserve">
         <source>Highlight banned users</source>
-        <target state="new">Highlight banned users</target>
+        <target state="translated">Destacar els comptes bandejats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5248717555542428023">
+      <trans-unit id="5248717555542428023" xml:space="preserve">
         <source>Username</source>
-        <target>Nom d'usuari</target>
+        <target state="translated">Identificador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">90</context>
@@ -7077,9 +7074,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6475711663580561164">
+      <trans-unit id="6475711663580561164" xml:space="preserve">
         <source>mail@example.com</source>
-        <target>correu@exemple.com</target>
+        <target state="translated">correu@exemple.cat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">114</context>
@@ -7089,11 +7086,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8371296837649897723" datatype="html">
+      <trans-unit id="8371296837649897723" datatype="html" xml:space="preserve">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Si deixeu la contrasenya en blanc s'enviarà un correu electrònic.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">129</context>
@@ -7119,9 +7114,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2743014784334706527" datatype="html">
+      <trans-unit id="2743014784334706527" datatype="html" xml:space="preserve">
         <source>Daily video quota</source>
-        <target state="new">Daily video quota</target>
+        <target state="translated">Quota de vídeo diària</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">172</context>
@@ -7135,9 +7130,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2622255144026150901" datatype="html">
+      <trans-unit id="2622255144026150901" datatype="html" xml:space="preserve">
         <source>Auth plugin</source>
-        <target state="new">Auth plugin</target>
+        <target state="translated">Connector d'autenticació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">189</context>
@@ -7151,9 +7146,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="588099657508661970" datatype="html">
+      <trans-unit id="588099657508661970" datatype="html" xml:space="preserve">
         <source>None (local authentication)</source>
-        <target state="new">None (local authentication)</target>
+        <target state="translated">Cap (autenticació local)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">193</context>
@@ -7163,9 +7158,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3141984777339778129" datatype="html">
+      <trans-unit id="3141984777339778129" datatype="html" xml:space="preserve">
         <source>User bypasses video validation by moderators</source>
-        <target state="new">User bypasses video validation by moderators</target>
+        <target state="translated">Els vídeos d'aquest compte obvien la validació de la moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">202</context>
@@ -7175,9 +7170,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8975798495439347971" datatype="html">
+      <trans-unit id="8975798495439347971" datatype="html" xml:space="preserve">
         <source>Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.</source>
-        <target state="new"> Enable this checkbox if this user doesn't need to have its videos reviewed by moderators. </target>
+        <target state="translated">Activeu aquesta casella de selecció si aquesta persona no necessita que els seus vídeos siguin revisats per la moderació.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">205</context>
@@ -7187,9 +7182,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667250632809964191" datatype="html">
+      <trans-unit id="6667250632809964191" datatype="html" xml:space="preserve">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="new">Send a link to reset the password by email to the user</target>
+        <target state="translated">Enviar-li un enllaç per correu electrònic per restablir la seva contrasenya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">231</context>
@@ -7199,9 +7194,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1412406834353485520" datatype="html">
+      <trans-unit id="1412406834353485520" datatype="html" xml:space="preserve">
         <source>Ask for new password</source>
-        <target state="new">Ask for new password</target>
+        <target state="translated">Sol·licitar una nova contrasenya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">232</context>
@@ -7211,9 +7206,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3791201588898094481" datatype="html">
+      <trans-unit id="3791201588898094481" datatype="html" xml:space="preserve">
         <source>Manually set the user password</source>
-        <target state="new">Manually set the user password</target>
+        <target state="translated">Establir manualment la contrasenya del compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">236</context>
@@ -7223,9 +7218,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7217118144256898288" datatype="html">
+      <trans-unit id="7217118144256898288" datatype="html" xml:space="preserve">
         <source>This user has two factor authentication enabled</source>
-        <target state="new">This user has two factor authentication enabled</target>
+        <target state="translated">Aquest compte té activada l'autenticació de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">241</context>
@@ -7235,9 +7230,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1636606892066514698" datatype="html">
+      <trans-unit id="1636606892066514698" datatype="html" xml:space="preserve">
         <source>Disable two factor authentication</source>
-        <target state="new">Disable two factor authentication</target>
+        <target state="translated">Desactivar l'autenticació de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">242</context>
@@ -7283,9 +7278,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7049348886126005391" datatype="html">
+      <trans-unit id="7049348886126005391" datatype="html" xml:space="preserve">
         <source>Batch actions</source>
-        <target state="new">Batch actions</target>
+        <target state="translated">Accions per lots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">12</context>
@@ -7315,17 +7310,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="675721269041534709" datatype="html">
+      <trans-unit id="675721269041534709" datatype="html" xml:space="preserve">
         <source>The user was banned</source>
-        <target state="new">The user was banned</target>
+        <target state="translated">El compte ha estat bandejat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2348557406282409966" datatype="html">
+      <trans-unit id="2348557406282409966" datatype="html" xml:space="preserve">
         <source>Open account in a new tab</source>
-        <target state="new">Open account in a new tab</target>
+        <target state="translated">Obrir el compte en una pestanya nova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -7351,43 +7346,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3111569165173971676" datatype="html">
+      <trans-unit id="3111569165173971676" datatype="html" xml:space="preserve">
         <source>Deleted account</source>
-        <target state="new">
-          Deleted account
-        </target>
+        <target state="translated">Compte suprimit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="242888077027281874" datatype="html">
+      <trans-unit id="242888077027281874" datatype="html" xml:space="preserve">
         <source>Total daily video quota</source>
-        <target state="new">Total daily video quota</target>
+        <target state="translated">Quota total de vídeo diària</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1242902302929086301" datatype="html">
+      <trans-unit id="1242902302929086301" datatype="html" xml:space="preserve">
         <source>Ban reason:</source>
-        <target state="new">Ban reason:</target>
+        <target state="translated">Motiu del bandeig:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6124612368324200166" datatype="html">
+      <trans-unit id="6124612368324200166" datatype="html" xml:space="preserve">
         <source>Banned users</source>
-        <target state="new">Banned users</target>
+        <target state="translated">Comptes bandejats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2049290282534091182" datatype="html">
+      <trans-unit id="2049290282534091182" datatype="html" xml:space="preserve">
         <source>Moderation</source>
-        <target state="new">Moderation</target>
+        <target state="translated">Moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.html</context>
           <context context-type="linenumber">5</context>
@@ -7409,33 +7402,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="17234570072885140" datatype="html">
+      <trans-unit id="17234570072885140" datatype="html" xml:space="preserve">
         <source>Registrations</source>
-        <target state="new">Registrations</target>
+        <target state="translated">Registres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="746099155736913817" datatype="html">
+      <trans-unit id="746099155736913817" datatype="html" xml:space="preserve">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Vídeos blocats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867580290622941314" datatype="html">
+      <trans-unit id="5867580290622941314" datatype="html" xml:space="preserve">
         <source>Mutes</source>
-        <target state="new">Mutes</target>
+        <target state="translated">Silenciaments</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7815838401315213887" datatype="html">
+      <trans-unit id="7815838401315213887" datatype="html" xml:space="preserve">
         <source>Muted accounts</source>
-        <target state="new">Muted accounts</target>
+        <target state="translated">Comptes silenciats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -7453,9 +7446,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668793810321242853" datatype="html">
+      <trans-unit id="5668793810321242853" datatype="html" xml:space="preserve">
         <source>Muted servers</source>
-        <target state="new">Muted servers</target>
+        <target state="translated">Servidors silenciats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">66</context>
