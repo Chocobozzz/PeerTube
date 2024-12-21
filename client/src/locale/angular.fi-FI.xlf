@@ -15409,9 +15409,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6250956071546896586" datatype="html">
+      <trans-unit id="6250956071546896586" datatype="html" xml:space="preserve">
         <source>You need to reconnect</source>
-        <target state="new">You need to reconnect</target>
+        <target state="translated">Sinun täytyy uudelleen kirjautua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">203</context>
@@ -15421,9 +15421,9 @@
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784250050046176017" datatype="html">
+      <trans-unit id="2784250050046176017" datatype="html" xml:space="preserve">
         <source>Your authentication has expired, you need to reconnect.</source>
-        <target state="new">Your authentication has expired, you need to reconnect.</target>
+        <target state="translated">Todennuksesi on vanhentunut, sinun täytyy kirjautua uudelleen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">228</context>
@@ -15445,121 +15445,121 @@
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7716208024960184784" datatype="html">
+      <trans-unit id="7716208024960184784" datatype="html" xml:space="preserve">
         <source>UUID</source>
-        <target state="new">UUID</target>
+        <target state="translated">UUID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1421364405181899930" datatype="html">
+      <trans-unit id="1421364405181899930" datatype="html" xml:space="preserve">
         <source>Priority <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Priority <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">Prioriteetti <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="736603280382549123" datatype="html">
+      <trans-unit id="736603280382549123" datatype="html" xml:space="preserve">
         <source>Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">Edistys <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="492731212914442494" datatype="html">
+      <trans-unit id="492731212914442494" datatype="html" xml:space="preserve">
         <source>Runner</source>
-        <target state="new">Runner</target>
+        <target state="translated">Etäpalvelin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5944078821855011619" datatype="html">
+      <trans-unit id="5944078821855011619" datatype="html" xml:space="preserve">
         <source>Payload:</source>
-        <target state="new">Payload:</target>
+        <target state="translated">Taakka:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1046771510013067927" datatype="html">
+      <trans-unit id="1046771510013067927" datatype="html" xml:space="preserve">
         <source>Private payload:</source>
-        <target state="new">Private payload:</target>
+        <target state="translated">Yksityinen taakka:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6133673901299224277" datatype="html">
+      <trans-unit id="6133673901299224277" datatype="html" xml:space="preserve">
         <source>No runner jobs found.</source>
-        <target state="new">No runner jobs found.</target>
+        <target state="translated">Ei löytynyt etäpalvelimen töitä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7146070362549250677" datatype="html">
+      <trans-unit id="7146070362549250677" datatype="html" xml:space="preserve">
         <source>Completed jobs</source>
-        <target state="new">Completed jobs</target>
+        <target state="translated">Valmistuneet työt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2841995988789172579" datatype="html">
+      <trans-unit id="2841995988789172579" datatype="html" xml:space="preserve">
         <source>Pending jobs</source>
-        <target state="new">Pending jobs</target>
+        <target state="translated">Odottavat työt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6587308737467829649" datatype="html">
+      <trans-unit id="6587308737467829649" datatype="html" xml:space="preserve">
         <source>Jobs that are being processed</source>
-        <target state="new">Jobs that are being processed</target>
+        <target state="translated">Työt joita käsitellään</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2902296494834684511" datatype="html">
+      <trans-unit id="2902296494834684511" datatype="html" xml:space="preserve">
         <source>Failed jobs</source>
-        <target state="new">Failed jobs</target>
+        <target state="translated">Epäonnistuneet työt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2785060445730155276" datatype="html">
+      <trans-unit id="2785060445730155276" datatype="html" xml:space="preserve">
         <source>Cancel this job</source>
-        <target state="new">Cancel this job</target>
+        <target state="translated">Keskeytä tämä työ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="410829478323542752" datatype="html">
+      <trans-unit id="410829478323542752" datatype="html" xml:space="preserve">
         <source>Delete this job</source>
-        <target state="new">Delete this job</target>
+        <target state="translated">Poista tämä työ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="693664545987486839" datatype="html">
+      <trans-unit id="693664545987486839" datatype="html" xml:space="preserve">
         <source>Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</source>
-        <target state="new">Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</target>
+        <target state="translated">Haluatko todella keskeyttää {count, plural, =1 {tämän työn} other {<x id="count"/> nämä työt}}? Kaikki alityöt keskeytetään myos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6494788464560085904" datatype="html">
+      <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="new">{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</target>
+        <target state="translated">{count, plural, =1 {Työ keskeytetty} other {<x id="count"/> työt keskeytetty}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">136</context>
