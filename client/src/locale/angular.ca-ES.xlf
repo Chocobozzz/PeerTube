@@ -7534,35 +7534,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7595922272001217567" datatype="html">
+      <trans-unit id="7595922272001217567" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">
-      No redundancy strategy is enabled on your instance.
-    </target>
+        <target state="translated">No hi ha cap estratègia de redundància activada a la vostra instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4824046935922837124" datatype="html">
+      <trans-unit id="4824046935922837124" datatype="html" xml:space="preserve">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
-        <target state="new">Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
+        <target state="translated">Utilitzat (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5874809640561431793" datatype="html">
+      <trans-unit id="5874809640561431793" datatype="html" xml:space="preserve">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
-        <target state="new">Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
+        <target state="translated">Disponible (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9214278301049416708" datatype="html">
+      <trans-unit id="9214278301049416708" datatype="html" xml:space="preserve">
         <source>Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </source>
-        <target state="new">Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </target>
+        <target state="translated">Estratègia de redundància "<x id="PH" equiv-text="stats.strategy"/>". </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -7592,12 +7590,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7692347838587821095" datatype="html">
+      <trans-unit id="7692347838587821095" datatype="html" xml:space="preserve">
         <source>Date <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Data 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Data <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">27</context>
@@ -7611,17 +7606,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7405580225397904114" datatype="html">
+      <trans-unit id="7405580225397904114" datatype="html" xml:space="preserve">
         <source>No more information is available for this row</source>
-        <target state="new">No more information is available for this row</target>
+        <target state="translated">No hi ha més informació disponible per a aquesta fila</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1451763834047485033" datatype="html">
+      <trans-unit id="1451763834047485033" datatype="html" xml:space="preserve">
         <source>Select this row</source>
-        <target state="new">Select this row</target>
+        <target state="translated">Seleccioneu aquesta fila</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">40</context>
@@ -7651,9 +7646,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4043531994869127329" datatype="html">
+      <trans-unit id="4043531994869127329" datatype="html" xml:space="preserve">
         <source>See full comment</source>
-        <target state="new">See full comment</target>
+        <target state="translated">Veure comentari complet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">53</context>
@@ -7735,185 +7730,185 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8390803680962035202" datatype="html">
+      <trans-unit id="8390803680962035202" datatype="html" xml:space="preserve">
         <source>Follower</source>
-        <target state="new">Follower</target>
+        <target state="translated">Seguidor/a</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4691552465058437520" datatype="html">
+      <trans-unit id="4691552465058437520" datatype="html" xml:space="preserve">
         <source>Commented video</source>
-        <target state="new">Commented video</target>
+        <target state="translated">Vídeo comentat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8098332505860203521" datatype="html">
+      <trans-unit id="8098332505860203521" datatype="html" xml:space="preserve">
         <source>Only display comments with this tag</source>
-        <target state="new">Only display comments with this tag</target>
+        <target state="translated">Mostrar només els comentaris amb aquesta etiqueta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7266085473379376028" datatype="html">
+      <trans-unit id="7266085473379376028" datatype="html" xml:space="preserve">
         <source>No comments found matching current filters.</source>
-        <target state="new">No comments found matching current filters.</target>
+        <target state="translated">No s'ha trobat cap comentari amb els criteris actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2398388496754671928" datatype="html">
+      <trans-unit id="2398388496754671928" datatype="html" xml:space="preserve">
         <source>No comments found.</source>
-        <target state="new">No comments found.</target>
+        <target state="translated">No s'han trobat comentaris.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4604870995665811499" datatype="html">
+      <trans-unit id="4604870995665811499" datatype="html" xml:space="preserve">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Comentaris locals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2721988499779041837" datatype="html">
+      <trans-unit id="2721988499779041837" datatype="html" xml:space="preserve">
         <source>Remote comments</source>
-        <target state="new">Remote comments</target>
+        <target state="translated">Comentaris remots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7483158147658382515" datatype="html">
+      <trans-unit id="7483158147658382515" datatype="html" xml:space="preserve">
         <source>Comments on local videos</source>
-        <target state="new">Comments on local videos</target>
+        <target state="translated">Comentaris en vídeos locals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4759830021629072866" datatype="html">
+      <trans-unit id="4759830021629072866" datatype="html" xml:space="preserve">
         <source>Display comments awaiting your approval</source>
-        <target state="new">Display comments awaiting your approval</target>
+        <target state="translated">Mostrar els comentaris pendents d'aprovació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5810973984628060415" datatype="html">
+      <trans-unit id="5810973984628060415" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</source>
-        <target state="new">{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</target>
+        <target state="translated">{count, plural, =1 {Comentari aprovat.} other {<x id="count"/> comentaris aprovats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1420624050293070194" datatype="html">
+      <trans-unit id="1420624050293070194" datatype="html" xml:space="preserve">
         <source>No abuses found matching current filters.</source>
-        <target state="new">No abuses found matching current filters.</target>
+        <target state="translated">No s'han trobat denúncies amb els criteris actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="639328713281980021" datatype="html">
+      <trans-unit id="639328713281980021" datatype="html" xml:space="preserve">
         <source>No abuses found.</source>
-        <target state="new">No abuses found.</target>
+        <target state="translated">No s'ha trobat cap denúncia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1807029821872995706" datatype="html">
+      <trans-unit id="1807029821872995706" datatype="html" xml:space="preserve">
         <source>Unsolved reports</source>
-        <target state="new">Unsolved reports</target>
+        <target state="translated">Denúncies no resoltes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2570256912317308673" datatype="html">
+      <trans-unit id="2570256912317308673" datatype="html" xml:space="preserve">
         <source>Accepted reports</source>
-        <target state="new">Accepted reports</target>
+        <target state="translated">Denúncies aceptades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4335414817109654558" datatype="html">
+      <trans-unit id="4335414817109654558" datatype="html" xml:space="preserve">
         <source>Refused reports</source>
-        <target state="new">Refused reports</target>
+        <target state="translated">Denúncies rebutjades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5604806676748121035" datatype="html">
+      <trans-unit id="5604806676748121035" datatype="html" xml:space="preserve">
         <source>Reports with blocked videos</source>
-        <target state="new">Reports with blocked videos</target>
+        <target state="translated">Denúncies amb vídeos blocats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5105869928182826553" datatype="html">
+      <trans-unit id="5105869928182826553" datatype="html" xml:space="preserve">
         <source>Reports with deleted videos</source>
-        <target state="new">Reports with deleted videos</target>
+        <target state="translated">Denúncies amb vídeos suprimits</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4678289986918934018" datatype="html">
+      <trans-unit id="4678289986918934018" datatype="html" xml:space="preserve">
         <source>Block reason:</source>
-        <target state="new">Block reason:</target>
+        <target state="translated">Motiu del bloqueig:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8390860433951751429" datatype="html">
+      <trans-unit id="8390860433951751429" datatype="html" xml:space="preserve">
         <source>No blocked video found matching current filters.</source>
-        <target state="new">No blocked video found matching current filters.</target>
+        <target state="translated">No s'ha trobat cap vídeo bloquejat amb els criteris actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5030329587275248535" datatype="html">
+      <trans-unit id="5030329587275248535" datatype="html" xml:space="preserve">
         <source>No blocked video found.</source>
-        <target state="new">No blocked video found.</target>
+        <target state="translated">No s'ha trobat cap vídeo bloquejat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7755288609601798418" datatype="html">
+      <trans-unit id="7755288609601798418" datatype="html" xml:space="preserve">
         <source>Automatic blocks</source>
-        <target state="new">Automatic blocks</target>
+        <target state="translated">Blocs automàtics</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6510868134640657079" datatype="html">
+      <trans-unit id="6510868134640657079" datatype="html" xml:space="preserve">
         <source>Manual blocks</source>
-        <target state="new">Manual blocks</target>
+        <target state="translated">Blocs manuals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1868606282505332204" datatype="html">
+      <trans-unit id="1868606282505332204" datatype="html" xml:space="preserve">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Denúncies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -19062,17 +19057,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1000468652492651683">
+      <trans-unit id="1000468652492651683" xml:space="preserve">
         <source>Report reason is required.</source>
-        <target>Cal un motiu del informe.</target>
+        <target state="translated">Cal un motiu de la denúncia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1109780973109145433">
+      <trans-unit id="1109780973109145433" xml:space="preserve">
         <source>Report reason must be at least 2 characters long.</source>
-        <target>El motiu de l'informe ha de tenir com a mínim 2 caràcters.</target>
+        <target state="translated">El motiu de la denúncia ha de tenir més d'un caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">8</context>
