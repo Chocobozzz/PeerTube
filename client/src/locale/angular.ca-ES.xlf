@@ -8306,147 +8306,145 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8897412584195581488" datatype="html">
+      <trans-unit id="8897412584195581488" datatype="html" xml:space="preserve">
         <source>Search plugins</source>
-        <target state="new">Search plugins</target>
+        <target state="translated">Cercar complements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4994333937800672218" datatype="html">
+      <trans-unit id="4994333937800672218" datatype="html" xml:space="preserve">
         <source>Show plugin</source>
-        <target state="new">Show plugin</target>
+        <target state="translated">Mostrar complement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8259696070728377358" datatype="html">
+      <trans-unit id="8259696070728377358" datatype="html" xml:space="preserve">
         <source>Plugins/Themes</source>
-        <target state="new">Plugins/Themes</target>
+        <target state="translated">Complements/Temes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3204334247986678419" datatype="html">
+      <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="new">Runners</target>
+        <target state="translated">Codificadors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4894835484717268716" datatype="html">
+      <trans-unit id="4894835484717268716" datatype="html" xml:space="preserve">
         <source>Installed</source>
-        <target state="new">Installed</target>
+        <target state="translated">Instal·lat(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7186771264833643704" datatype="html">
+      <trans-unit id="7186771264833643704" datatype="html" xml:space="preserve">
         <source>This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="new">This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</target>
+        <target state="translated">Aquest complement està desenvolupat per Framasoft, l'associació sense ànim de lucre que desenvolupa PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8852490424970169127" datatype="html">
+      <trans-unit id="8852490424970169127" datatype="html" xml:space="preserve">
         <source>Official</source>
-        <target state="new">Official</target>
+        <target state="translated">Oficial</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5976946399792378437" datatype="html">
+      <trans-unit id="5976946399792378437" datatype="html" xml:space="preserve">
         <source>This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="new">This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</target>
+        <target state="translated">Aquest complement està recomanat per Framasoft, l'associació sense ànim de lucre que desenvolupa PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8630916846096019339" datatype="html">
+      <trans-unit id="8630916846096019339" datatype="html" xml:space="preserve">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Les persones usuàries poden resoldre contingut remot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3300472325769888962" datatype="html">
+      <trans-unit id="3300472325769888962" datatype="html" xml:space="preserve">
         <source>Plugins &amp; Themes</source>
-        <target state="new">Plugins &amp; Themes</target>
+        <target state="translated">Complements &amp; Temes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1782375284146839174" datatype="html">
+      <trans-unit id="1782375284146839174" datatype="html" xml:space="preserve">
         <source>Available themes</source>
-        <target state="new">Available themes</target>
+        <target state="translated">Temes disponibles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9205443410527464015" datatype="html">
+      <trans-unit id="9205443410527464015" datatype="html" xml:space="preserve">
         <source>Plugins enabled</source>
-        <target state="new">Plugins enabled</target>
+        <target state="translated">Complements habilitats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5410940035535748578" datatype="html">
+      <trans-unit id="5410940035535748578" datatype="html" xml:space="preserve">
         <source>Close this message</source>
-        <target state="new">Close this message</target>
+        <target state="translated">Tancar aquest missatge</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2006841089844688970" datatype="html">
+      <trans-unit id="2006841089844688970" datatype="html" xml:space="preserve">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="new">
-  To load your new installed plugins or themes, refresh the page.
-</target>
+        <target state="translated">Actualitzeu la pàgina per carregar els vostres nous temes o complements instal·lats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7577430199525157466" datatype="html">
+      <trans-unit id="7577430199525157466" datatype="html" xml:space="preserve">
         <source>Popular plugins</source>
-        <target state="new">Popular plugins</target>
+        <target state="translated">Complements populars</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="830877982972543118" datatype="html">
+      <trans-unit id="830877982972543118" datatype="html" xml:space="preserve">
         <source>Popular themes</source>
-        <target state="new">Popular themes</target>
+        <target state="translated">Temes populars</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1780056719120519633" datatype="html">
+      <trans-unit id="1780056719120519633" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {resultat} other {resultats}}"/> per "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3148804384763272950" datatype="html">
+      <trans-unit id="3148804384763272950" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {result} other {results} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {resultat} other {resultats} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
@@ -8456,127 +8454,121 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2722270956157821098" datatype="html">
+      <trans-unit id="2722270956157821098" datatype="html" xml:space="preserve">
         <source>No results.</source>
-        <target state="new">
-  No results.
-</target>
+        <target state="translated">Cap resultat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2601639465696257054" datatype="html">
+      <trans-unit id="2601639465696257054" datatype="html" xml:space="preserve">
         <source>This <x id="INTERPOLATION"/> does not have settings. </source>
-        <target state="new">
-    This 
-          <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.
-  
-        </target>
+        <target state="translated">Aquest <x id="INTERPOLATION"/> no té configuracions. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="29832309535656200" datatype="html">
+      <trans-unit id="29832309535656200" datatype="html" xml:space="preserve">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">Sistema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2279400024471134535" datatype="html">
+      <trans-unit id="2279400024471134535" datatype="html" xml:space="preserve">
         <source>Remote runners</source>
-        <target state="new">Remote runners</target>
+        <target state="translated">Codificadors remots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7565129593705813435" datatype="html">
+      <trans-unit id="7565129593705813435" datatype="html" xml:space="preserve">
         <source>Runner jobs</source>
-        <target state="new">Runner jobs</target>
+        <target state="translated">Tasques delegades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9093336259390347521" datatype="html">
+      <trans-unit id="9093336259390347521" datatype="html" xml:space="preserve">
         <source>Registration tokens</source>
-        <target state="new">Registration tokens</target>
+        <target state="translated">Fitxes de registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5902504074840207881" datatype="html">
+      <trans-unit id="5902504074840207881" datatype="html" xml:space="preserve">
         <source>Local jobs</source>
-        <target state="new">Local jobs</target>
+        <target state="translated">Tasques locals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8949443215142664126" datatype="html">
+      <trans-unit id="8949443215142664126" datatype="html" xml:space="preserve">
         <source>Delete this comment</source>
-        <target state="new">Delete this comment</target>
+        <target state="translated">Suprimir aquest comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327751240218085797" datatype="html">
+      <trans-unit id="3327751240218085797" datatype="html" xml:space="preserve">
         <source>Delete all comments of this account</source>
-        <target state="new">Delete all comments of this account</target>
+        <target state="translated">Suprimir tots els comentaris d'aquest compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2850960459131251840" datatype="html">
+      <trans-unit id="2850960459131251840" datatype="html" xml:space="preserve">
         <source>Comments are deleted after a few minutes</source>
-        <target state="new">Comments are deleted after a few minutes</target>
+        <target state="translated">Els comentaris s'eliminen al cap d'uns minuts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="284741121040858744" datatype="html">
+      <trans-unit id="284741121040858744" datatype="html" xml:space="preserve">
         <source>Approve this comment</source>
-        <target state="new">Approve this comment</target>
+        <target state="translated">Aprovar aquest comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1271241007621398467" datatype="html">
+      <trans-unit id="1271241007621398467" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</target>
+        <target state="translated">{count, plural, =1 {1 comentari eliminat.} other {<x id="count"/> comentaris eliminats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="379090446060940062" datatype="html">
+      <trans-unit id="379090446060940062" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH"/>?</target>
+        <target state="translated">Segur que voleu suprimir tots els comentaris de <x id="PH"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4539246224625965241" datatype="html">
+      <trans-unit id="4539246224625965241" datatype="html" xml:space="preserve">
         <source>Comments of <x id="PH"/> will be deleted in a few minutes</source>
-        <target state="new">Comments of <x id="PH"/> will be deleted in a few minutes</target>
+        <target state="translated">Els comentaris de <x id="PH"/> se suprimiran d'aquí a uns minuts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3204306399736151644" datatype="html">
+      <trans-unit id="3204306399736151644" datatype="html" xml:space="preserve">
         <source>Comments list</source>
-        <target state="new">Comments list</target>
+        <target state="translated">Llista de comentaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">58</context>
