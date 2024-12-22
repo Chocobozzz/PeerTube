@@ -1269,7 +1269,7 @@
       </trans-unit>
       <trans-unit id="5937251202465808296" datatype="html" xml:space="preserve">
         <source>More</source>
-        <target state="translated">Lisää</target>
+        <target state="translated">Enemmän</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">15,16</context>
@@ -1529,7 +1529,7 @@
       </trans-unit>
       <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="translated">Tekstitystyö luotu videolle  "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Transskriptiotyö luotu videolle "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">402</context>
@@ -2005,7 +2005,7 @@
       </trans-unit>
       <trans-unit id="4831075576673859232" datatype="html" xml:space="preserve">
         <source>Keyboard Shortcuts</source>
-        <target state="translated">Pikanäppäimet</target>
+        <target state="translated">Pika-näppäimet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -4054,9 +4054,9 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4621588014938487698" datatype="html">
+      <trans-unit id="4621588014938487698" datatype="html" xml:space="preserve">
         <source>A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</source>
-        <target state="translated">Aikaleima  (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> esimerkkinä) liitetään automaattisesti linkiksi videon tiettyyn kohtaan,</target>
+        <target state="translated">Aikaleima (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> esimerkkinä) liitetään automaattisesti linkiksi videon tiettyyn kohtaan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -5867,7 +5867,7 @@
       </trans-unit>
       <trans-unit id="2392048495773035896" datatype="html" xml:space="preserve">
         <source>Open the modal to support the video uploader</source>
-        <target state="translated">Avaa malli tukeaksesi videon lataajaa.</target>
+        <target state="translated">Avaa malli tukeaksesi videon lataajaa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -6419,7 +6419,7 @@
       </trans-unit>
       <trans-unit id="3821661153451769620" datatype="html" xml:space="preserve">
         <source>Approve</source>
-        <target state="translated">Hyväksy</target>
+        <target state="translated">Hyväksyntä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -6595,7 +6595,7 @@
       </trans-unit>
       <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="translated">Videosi pikkukuvineen tekstityksineen. Myös videoita voi liittää pakattuun arkistoon.</target>
+        <target state="translated">Videosi pikkukuvineen tekstityksineen. Myös videoita voi liittää pakattuun arkistoon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
@@ -9671,7 +9671,7 @@
       </trans-unit>
       <trans-unit id="7773354014171617955" datatype="html" xml:space="preserve">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="translated">Luo tarinat kaikista paikallisista videoista ffmpegillä jotta käyttäjät näkevät esikatselut kun kelaavat videoita.</target>
+        <target state="translated">Luo tarinat kaikista paikallisista videoista ffmpegillä jotta käyttäjät näkevät esikatselut kun kelaavat videoita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">380</context>
@@ -10039,7 +10039,7 @@
       </trans-unit>
       <trans-unit id="2502039689036410119" datatype="html" xml:space="preserve">
         <source>Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box.</source>
-        <target state="translated">Extra määrittelyt mitkä Twitter/X vaatii. Muut sosiaaliset mediat ovat tuettuja suoraan (Facebook, Mastodon yms.)</target>
+        <target state="translated">Extra määrittelyt mitkä Twitter/X vaatii. Muut sosiaaliset mediat ovat tuettuja suoraan (Facebook, Mastodon yms.).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">714</context>
@@ -10435,7 +10435,7 @@
       </trans-unit>
       <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
-        <target state="translated">Jos tämä on käytössä, syötetiedostoa ei poisteta transkoodauksen jälkeen, vaan se siirretään omistettuun kansioon tai objektisäilöön.</target>
+        <target state="translated">Jos tämä on käytössä, syötetiedostoa ei poisteta transkoodauksen jälkeen, vaan se siirretään omistettuun kansioon tai objektisäilöön</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">75</context>
@@ -10499,7 +10499,7 @@
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Vaatii ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Luo HLS soittolistat ja paloitellut MP4 tiedostot saadaksesi paremman lopputuloksen kuin Web Videolla:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resoluution muutos on pehmeämpi<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Nopeampi toisto varsinkin isojen videoiden kohdalla<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Paljon vakaampi toisto (vähemmän bugeja/loputonta latausta)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Jos otit myös Web Videot käyttöon niin tallennustila 2 kertaistuu<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Vaatii ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Luo HLS soittolistat ja fragmentoidut MP4 tiedostot saadaksesi paljon paremman toiston kuin Web Videoilla:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resoluution vaihto on huomaamaton<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Nopeampi toisto etenkin pitkien videoiden kanssa<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Paljon vakaampi ja bugittomampi<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Jos kuitenkin otit myös Web Videot käyttöön tilantarpeesi kaksinkertaistuu<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">108</context>
@@ -11055,7 +11055,7 @@
       </trans-unit>
       <trans-unit id="246143686312852623" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>fps</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ file.fps }}"/>näyttökuvaa sekunnissa (fps)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">27</context>
@@ -11127,7 +11127,7 @@
       </trans-unit>
       <trans-unit id="3021884317141422270" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected or not yet published)</source>
-        <target state="translated">Näytä kaikki videot (yksityiset, listattomat, salasanalla suojatut tai julkaisemattomat).</target>
+        <target state="translated">Näytä kaikki videot (yksityiset, listattomat, salasanalla suojatut tai julkaisemattomat)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">148</context>
@@ -11151,7 +11151,7 @@
       </trans-unit>
       <trans-unit id="6234119003440125809" datatype="html" xml:space="preserve">
         <source>Recently Added</source>
-        <target state="translated">Viimeksi lisätty</target>
+        <target state="translated">Viimeksi lisättyä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">169</context>
@@ -11159,7 +11159,7 @@
       </trans-unit>
       <trans-unit id="2925767298386605760" datatype="html" xml:space="preserve">
         <source>Original Publication Date</source>
-        <target state="translated">Alkuperäinen julkaisupäivä</target>
+        <target state="translated">Alkuperäinen Julkaisupäivä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -11183,7 +11183,7 @@
       </trans-unit>
       <trans-unit id="3456598716931498601" datatype="html" xml:space="preserve">
         <source>Global Views</source>
-        <target state="translated">Globaalit näytöt</target>
+        <target state="translated">Globaalit katselukerrat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">186</context>
@@ -11869,7 +11869,7 @@
       </trans-unit>
       <trans-unit id="1295676134074258121" datatype="html" xml:space="preserve">
         <source>New video or live from your subscriptions</source>
-        <target state="translated">Uusi video tai live-tapahtuma tilauksistasi.</target>
+        <target state="translated">Uusi video tai live-tapahtuma tilauksistasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -12337,7 +12337,7 @@
       </trans-unit>
       <trans-unit id="7056036938435794110" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Tarkista sähköpostisi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> validoidaksesi tunnuksesi ja jatkaaksesi rekisteröintiä. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Tarkista sähköpostisi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> vahvistaaksesi tunnuksesi ja jatkaaksesi rekisteröintiä. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -13069,7 +13069,7 @@
       </trans-unit>
       <trans-unit id="962765493084218985" datatype="html" xml:space="preserve">
         <source>Platform</source>
-        <target state="translated">Alusta</target>
+        <target state="translated">Videoalusta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -13813,7 +13813,7 @@
       </trans-unit>
       <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
-        <target state="translated">"Ääni ja video on jaettava" -asetuksen täytyy olla käytössä, jotta PeerTube-soitin voi ehdottaa käyttäjille "Vain ääni" -resoluutiota.</target>
+        <target state="translated">"Ääni ja video on jaettava" -asetuksen täytyy olla käytössä, jotta PeerTube-soitin voi ehdottaa käyttäjille "Vain ääni" -resoluutiota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -15495,7 +15495,7 @@
       </trans-unit>
       <trans-unit id="6133673901299224277" datatype="html" xml:space="preserve">
         <source>No runner jobs found.</source>
-        <target state="translated">Ei löytynyt etäpalvelimen töitä</target>
+        <target state="translated">Ei löytynyt etäpalvelimen töitä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">124</context>
@@ -15659,7 +15659,7 @@
       </trans-unit>
       <trans-unit id="2884115244144130373" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </source>
-        <target state="translated"><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hyväksymällä<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> rekisteröinnin luodaan tili ja kanava. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hyväksymällä<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> rekisteröinti luodaan tunnus ja kanava. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">23</context>
@@ -16603,7 +16603,7 @@
       </trans-unit>
       <trans-unit id="3931294879857217619" datatype="html" xml:space="preserve">
         <source>Remote interact</source>
-        <target state="translated">Etävuorovaikutus</target>
+        <target state="translated">Etävuorovaikuttaminen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">11,12</context>
@@ -18409,7 +18409,7 @@
       </trans-unit>
       <trans-unit id="4327605300509435150" datatype="html" xml:space="preserve">
         <source>Export expiration is required.</source>
-        <target state="translated">Viennin erääntymispäivä vaaditaan</target>
+        <target state="translated">Viennin erääntymispäivä vaaditaan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">143</context>
@@ -18765,7 +18765,7 @@
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html" xml:space="preserve">
         <source>Registration reason is required.</source>
-        <target state="translated">Rekisteröinnin syy vaaditaan</target>
+        <target state="translated">Rekisteröinnin syy vaaditaan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -19449,7 +19449,7 @@
       </trans-unit>
       <trans-unit id="1715587073952235112" datatype="html" xml:space="preserve">
         <source>There are too much words in the list (max 500 words)</source>
-        <target state="translated">Listassa on liian monta sanaa (maximi 500 sanaa).</target>
+        <target state="translated">Listassa on liian monta sanaa (maximi 500 sanaa)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">19</context>
@@ -19655,9 +19655,9 @@
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Wednesday short name</note>
       </trans-unit>
-      <trans-unit id="1370330981433231150" datatype="html">
+      <trans-unit id="1370330981433231150" datatype="html" xml:space="preserve">
         <source>Thu</source>
-        <target state="translated">to</target>
+        <target state="translated">To</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -21172,7 +21172,7 @@
       </trans-unit>
       <trans-unit id="7544701838241243416" datatype="html" xml:space="preserve">
         <source>This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </source>
-        <target state="translated">Tämä on  <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tuonti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> -työkalu, ei migraatiotyökalu. Siksi tiedot (kuten kanavat tai videot) kopioidaan, eikä niitä siirretä edelliseltä PeerTube-sivustoltasi. </target>
+        <target state="translated">Tämä on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tuonti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> -työkalu, ei migraatiotyökalu. Siksi tiedot (kuten kanavat tai videot) kopioidaan, eikä niitä siirretä edelliseltä PeerTube-sivustoltasi. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">13</context>
