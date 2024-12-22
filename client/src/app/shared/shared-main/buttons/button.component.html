@@ -6,6 +6,14 @@
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
+} @else if (href) {
+  <a
+    class="action-button"
+    [ngClass]="classes" [ngbTooltip]="tooltip" [attr.title]="title"
+    [href]="href" target="_blank"
+  >
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </a>
 } @else {
   <button type="button" class="action-button" [ngClass]="classes" [disabled]="disabled" [ngbTooltip]="tooltip" [attr.title]="title">
     <ng-container *ngTemplateOutlet="content"></ng-container>

@@ -54,15 +54,23 @@
                 <ul class="ul-unstyle">
                   <li *ngFor="let link of menuSection.links">
                     @if (link.isPrimaryButton === true) {
-                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [title]="link.label" [ptRouterLink]="link.path" [ptQueryParams]="link.query">
+                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [title]="link.label" [ptRouterLink]="link.path" [ptQueryParams]="link.query" [href]="link.url">
                         @if (!collapsed) {
                           {{ link.label }}
                         }
                       </my-button>
                     } @else {
-                      <a class="menu-link ellipsis" [routerLink]="link.path" [queryParams]="link.query" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
+                      <ng-template #linkTemplate>
                         <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
                         <span [ngClass]="{ 'visually-hidden': collapsed }">{{ link.label }}</span>
+                      </ng-template>
+
+                      <a *ngIf="link.path" class="menu-link ellipsis" [routerLink]="link.path" [queryParams]="link.query" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
+                        <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
+                      </a>
+
+                      <a *ngIf="link.url" class="menu-link ellipsis" [href]="link.url" [ngClass]="link.ngClass" [title]="link.label" target="_blank">
+                        <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
                       </a>
                     }
                   </li>
