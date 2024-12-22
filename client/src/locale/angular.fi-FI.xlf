@@ -21770,9 +21770,9 @@
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7896600179187469316" datatype="html">
+      <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</source>
-        <target state="new">{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</target>
+        <target state="translated">{count, plural, =1 {Työ poistettu} other {<x id="count"/> työtä poistettu}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">163</context>
