@@ -8130,9 +8130,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7239750919884229270" datatype="html">
+      <trans-unit id="7239750919884229270" datatype="html" xml:space="preserve">
         <source>Updated</source>
-        <target state="new">Updated</target>
+        <target state="translated">Actualitzat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">46</context>
@@ -8154,12 +8154,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1300704815627663264" datatype="html">
+      <trans-unit id="1300704815627663264" datatype="html" xml:space="preserve">
         <source>Muted at <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="new">Muted at 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Silenciat el<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">19</context>
@@ -8177,9 +8174,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6453471031802119612" datatype="html">
+      <trans-unit id="6453471031802119612" datatype="html" xml:space="preserve">
         <source>Unmute</source>
-        <target state="new">Unmute</target>
+        <target state="translated">Restablir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">26</context>
@@ -8197,9 +8194,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6728985502447585050" datatype="html">
+      <trans-unit id="6728985502447585050" datatype="html" xml:space="preserve">
         <source>No server found matching current filters.</source>
-        <target state="new">No server found matching current filters.</target>
+        <target state="translated">Cap servidor trobat amb els criteris actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">50</context>
@@ -8209,9 +8206,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="299774363533169870" datatype="html">
+      <trans-unit id="299774363533169870" datatype="html" xml:space="preserve">
         <source>No server found.</source>
-        <target state="new">No server found.</target>
+        <target state="translated">Cap servidor trobat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">51</context>
@@ -8221,27 +8218,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4917252294930256268" datatype="html">
+      <trans-unit id="4917252294930256268" datatype="html" xml:space="preserve">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="new">
-      It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
-    </target>
+        <target state="translated">Sembla que el vostre servidor no utilitza el protocol HTTPS. Heu d'habilitar TLS per poder seguir-ne d'altres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2959657578684395250" datatype="html">
+      <trans-unit id="2959657578684395250" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="new">{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</target>
+        <target state="translated">{count, plural, =1 {Sol·licitud de subscripció enviada!} other {Sol·licituds de subscripció enviades!}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4058814854824495833" datatype="html">
+      <trans-unit id="4058814854824495833" datatype="html" xml:space="preserve">
         <source>Mute domains</source>
-        <target state="new">Mute domains</target>
+        <target state="translated">Amagar dominis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">13</context>
@@ -8259,9 +8254,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4086606389696938932" datatype="html">
+      <trans-unit id="4086606389696938932" datatype="html" xml:space="preserve">
         <source>Account</source>
-        <target state="new">Account</target>
+        <target state="translated">Compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">35</context>
@@ -8279,9 +8274,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8564972645418093229" datatype="html">
+      <trans-unit id="8564972645418093229" datatype="html" xml:space="preserve">
         <source>No account found matching current filters.</source>
-        <target state="new">No account found matching current filters.</target>
+        <target state="translated">Cap compte trobat coincident amb els criteris.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">48</context>
@@ -8291,9 +8286,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3819155299647062711" datatype="html">
+      <trans-unit id="3819155299647062711" datatype="html" xml:space="preserve">
         <source>No account found.</source>
-        <target state="new">No account found.</target>
+        <target state="translated">Cap compte trobat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">49</context>
@@ -8303,9 +8298,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2338185419645468935" datatype="html">
+      <trans-unit id="2338185419645468935" datatype="html" xml:space="preserve">
         <source>List installed plugins</source>
-        <target state="new">List installed plugins</target>
+        <target state="translated">Llista de complements instal·lats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context>
           <context context-type="linenumber">26</context>
