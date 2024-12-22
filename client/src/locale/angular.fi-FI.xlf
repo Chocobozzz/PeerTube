@@ -485,7 +485,7 @@
       </trans-unit>
       <trans-unit id="1023647542221598730" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> striimaa livenä <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">231</context>
@@ -1213,7 +1213,7 @@
       </trans-unit>
       <trans-unit id="7828808805120058354" datatype="html" xml:space="preserve">
         <source>Revert</source>
-        <target state="translated">Peruuta</target>
+        <target state="translated">Palauta takaisin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">90</context>
@@ -21778,137 +21778,137 @@
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8527948211896740910" datatype="html">
+      <trans-unit id="8527948211896740910" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">Haluatko todella poistaa tämän etäpalvelimen? Se ei voi prosessoida töitä enään sen jälkeen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1331591430867610406" datatype="html">
+      <trans-unit id="1331591430867610406" datatype="html" xml:space="preserve">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">Poista <x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7401875498720294519" datatype="html">
+      <trans-unit id="7401875498720294519" datatype="html" xml:space="preserve">
         <source>Runner removed.</source>
-        <target state="new">Runner removed.</target>
+        <target state="translated">Etäpalvelin poistettu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3039940756451018621" datatype="html">
+      <trans-unit id="3039940756451018621" datatype="html" xml:space="preserve">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Tokeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5024831045497027714" datatype="html">
+      <trans-unit id="5024831045497027714" datatype="html" xml:space="preserve">
         <source>Associated runners</source>
-        <target state="new">Associated runners</target>
+        <target state="translated">Liitetyt etäpalvelimet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2344549567732505963" datatype="html">
+      <trans-unit id="2344549567732505963" datatype="html" xml:space="preserve">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">Luo tokeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8075170500509574933" datatype="html">
+      <trans-unit id="8075170500509574933" datatype="html" xml:space="preserve">
         <source>Registration token copied</source>
-        <target state="new">Registration token copied</target>
+        <target state="translated">Rekisteröintitokeni kopioitu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="320641639634758368" datatype="html">
+      <trans-unit id="320641639634758368" datatype="html" xml:space="preserve">
         <source>Copy registration token</source>
-        <target state="new">Copy registration token</target>
+        <target state="translated">Kopioi rekisteröintitokeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1952170121636976975" datatype="html">
+      <trans-unit id="1952170121636976975" datatype="html" xml:space="preserve">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="translated">Ei löytynyt rekisteröintitokeneja etäpalvelimille.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8244506587463177080" datatype="html">
+      <trans-unit id="8244506587463177080" datatype="html" xml:space="preserve">
         <source>Remove this token</source>
-        <target state="new">Remove this token</target>
+        <target state="translated">Poista tämä tokeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1188547334387666210" datatype="html">
+      <trans-unit id="1188547334387666210" datatype="html" xml:space="preserve">
         <source>Registration token generated.</source>
-        <target state="new">Registration token generated.</target>
+        <target state="translated">Rekisteröintitokeni luotu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="545462083274995239" datatype="html">
+      <trans-unit id="545462083274995239" datatype="html" xml:space="preserve">
         <source>Do you really want to remove this registration token? All associated runners will also be removed.</source>
-        <target state="new">Do you really want to remove this registration token? All associated runners will also be removed.</target>
+        <target state="translated">Halutko todella poistaa tämän rekisteröintitokenin? Kaikki siihen liitetyt etäpalvelimet poistetaan myös.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4228223651959845668" datatype="html">
+      <trans-unit id="4228223651959845668" datatype="html" xml:space="preserve">
         <source>Remove registration token</source>
-        <target state="new">Remove registration token</target>
+        <target state="translated">Poista rekisteröintitokeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3614410801173225581" datatype="html">
+      <trans-unit id="3614410801173225581" datatype="html" xml:space="preserve">
         <source>Registration token removed.</source>
-        <target state="new">Registration token removed.</target>
+        <target state="translated">Rekisteröintitokeni poistettu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6713730474908011769" datatype="html">
+      <trans-unit id="6713730474908011769" datatype="html" xml:space="preserve">
         <source>List runner jobs</source>
-        <target state="new">List runner jobs</target>
+        <target state="translated">Listaa etäpalvelimen työt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="890886250761175417" datatype="html">
+      <trans-unit id="890886250761175417" datatype="html" xml:space="preserve">
         <source>List remote runners</source>
-        <target state="new">List remote runners</target>
+        <target state="translated">Listaa etäpalvelimet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4255553856349508493" datatype="html">
+      <trans-unit id="4255553856349508493" datatype="html" xml:space="preserve">
         <source>List registration runner tokens</source>
-        <target state="new">List registration runner tokens</target>
+        <target state="translated">Listaa rekisteröintitokenit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">47</context>
@@ -22094,25 +22094,25 @@
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1831940730037919560" datatype="html">
+      <trans-unit id="1831940730037919560" datatype="html" xml:space="preserve">
         <source>Moving to file system</source>
-        <target state="new">Moving to file system</target>
+        <target state="translated">Siiretään tiedostojärjestelmään</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4707274274243790782" datatype="html">
+      <trans-unit id="4707274274243790782" datatype="html" xml:space="preserve">
         <source>Moving to file system failed</source>
-        <target state="new">Moving to file system failed</target>
+        <target state="translated">Siirto tiedostojärjestelmään epäonnistui</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792259951302458040" datatype="html">
+      <trans-unit id="1792259951302458040" datatype="html" xml:space="preserve">
         <source>Moving to external storage</source>
-        <target state="new">Moving to external storage</target>
+        <target state="translated">Siirretään ulkopuoliselle tallennusmedialle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -22158,9 +22158,9 @@
           <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="76275487642696165" datatype="html">
+      <trans-unit id="76275487642696165" datatype="html" xml:space="preserve">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
-        <target state="new">Watch video <x id="PH" equiv-text="this.video.name"/></target>
+        <target state="translated">Katso video <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">245</context>
@@ -22170,49 +22170,49 @@
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4730491486461828294" datatype="html">
+      <trans-unit id="4730491486461828294" datatype="html" xml:space="preserve">
         <source>Today's videos</source>
-        <target state="new">Today's videos</target>
+        <target state="translated">Tämän päivän videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2119901811749731155" datatype="html">
+      <trans-unit id="2119901811749731155" datatype="html" xml:space="preserve">
         <source>Yesterday's videos</source>
-        <target state="new">Yesterday's videos</target>
+        <target state="translated">Eiliset videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6176155005688410697" datatype="html">
+      <trans-unit id="6176155005688410697" datatype="html" xml:space="preserve">
         <source>This week's videos</source>
-        <target state="new">This week's videos</target>
+        <target state="translated">Kuluvan viikon videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1461056025742190110" datatype="html">
+      <trans-unit id="1461056025742190110" datatype="html" xml:space="preserve">
         <source>This month's videos</source>
-        <target state="new">This month's videos</target>
+        <target state="translated">Kuluvan kuukauden videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="929646918212830182" datatype="html">
+      <trans-unit id="929646918212830182" datatype="html" xml:space="preserve">
         <source>Last month's videos</source>
-        <target state="new">Last month's videos</target>
+        <target state="translated">Viimekuun videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8691195592124291757" datatype="html">
+      <trans-unit id="8691195592124291757" datatype="html" xml:space="preserve">
         <source>Older videos</source>
-        <target state="new">Older videos</target>
+        <target state="translated">Vanhemmat videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -22270,25 +22270,25 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3386106491172606235" datatype="html">
+      <trans-unit id="3386106491172606235" datatype="html" xml:space="preserve">
         <source>Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></source>
-        <target state="new">Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></target>
+        <target state="translated">Videon kesto on <x id="PH" equiv-text="this.video.durationLabel"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240556993302961443" datatype="html">
+      <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
-        <target state="new">Save interface settings</target>
+        <target state="translated">Tallenna asetukset</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7570883748440392027" datatype="html">
+      <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
-        <target state="new"><x id="PH" equiv-text="this.instanceName"/> theme</target>
+        <target state="translated"><x id="PH" equiv-text="this.instanceName"/> teema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -22302,17 +22302,17 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="704703576647033533" datatype="html">
+      <trans-unit id="704703576647033533" datatype="html" xml:space="preserve">
         <source>WAIT LIVE</source>
-        <target state="new">WAIT LIVE</target>
+        <target state="translated">ODOTA LIVE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4020649426522537303" datatype="html">
+      <trans-unit id="4020649426522537303" datatype="html" xml:space="preserve">
         <source>You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</source>
-        <target state="new">You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</target>
+        <target state="translated">Katsoit <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/> prosenttia tästä videosta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">51</context>
@@ -22350,9 +22350,9 @@
           <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6173113330681958102" datatype="html">
+      <trans-unit id="6173113330681958102" datatype="html" xml:space="preserve">
         <source>Only users with the appropriate password can see this video</source>
-        <target state="new">Only users with the appropriate password can see this video</target>
+        <target state="translated">Vain käyttäjät, joilla on oikea salasana, voivat nähdä tämän videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">478</context>
@@ -22444,33 +22444,33 @@
           <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3323006969479129148" datatype="html">
+      <trans-unit id="3323006969479129148" datatype="html" xml:space="preserve">
         <source>Your video will also be automatically blocked since video publication requires manual validation by moderators.</source>
-        <target state="new">Your video will also be automatically blocked since video publication requires manual validation by moderators.</target>
+        <target state="translated">Videosi estetään myös automaattisesti, koska videon julkaisulle vaaditaan manuaalinen vahvistus moderaattoreilta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">299</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6552806326413045734" datatype="html">
+      <trans-unit id="6552806326413045734" datatype="html" xml:space="preserve">
         <source>Uploading a new version of your video will completely erase the current version.</source>
-        <target state="new">Uploading a new version of your video will completely erase the current version.</target>
+        <target state="translated">Uuden version lataaminen videostasi poistaa täysin nykyisen version.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">302</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5315061036888228823" datatype="html">
+      <trans-unit id="5315061036888228823" datatype="html" xml:space="preserve">
         <source>&lt;br /&gt;&lt;br /&gt;Do you still want to replace your video file?</source>
-        <target state="new">&lt;br /&gt;&lt;br /&gt;Do you still want to replace your video file?</target>
+        <target state="translated">&lt;br /&gt;&lt;br /&gt;Halutko silti korvata videotiedoston?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5434400211005236230" datatype="html">
+      <trans-unit id="5434400211005236230" datatype="html" xml:space="preserve">
         <source>Replace file warning</source>
-        <target state="new">Replace file warning</target>
+        <target state="translated">Tiedoston vaihdon varoitus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">307</context>
@@ -22576,9 +22576,9 @@
           <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7364261164248038345" datatype="html">
+      <trans-unit id="7364261164248038345" datatype="html" xml:space="preserve">
         <source>Comment approved</source>
-        <target state="new">Comment approved</target>
+        <target state="translated">Kommentti hyväksytty</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">269</context>
@@ -22648,25 +22648,25 @@
           <context context-type="linenumber">435</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6851759241723629925" datatype="html">
+      <trans-unit id="6851759241723629925" datatype="html" xml:space="preserve">
         <source>You need a password to watch this video</source>
-        <target state="new">You need a password to watch this video</target>
+        <target state="translated">Tarvitset salasanan katsoaksesi tämän videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">467</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7116606560384080593" datatype="html">
+      <trans-unit id="7116606560384080593" datatype="html" xml:space="preserve">
         <source>This video is password protected</source>
-        <target state="new">This video is password protected</target>
+        <target state="translated">Tämä video on salasanasuojattu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">468</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6566384659758828708" datatype="html">
+      <trans-unit id="6566384659758828708" datatype="html" xml:space="preserve">
         <source>Incorrect password, please enter a correct password</source>
-        <target state="new">Incorrect password, please enter a correct password</target>
+        <target state="translated">Väärä salasana, syötä oikea salasana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">469</context>
@@ -22916,9 +22916,9 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3093549590814158078" datatype="html">
+      <trans-unit id="3093549590814158078" datatype="html" xml:space="preserve">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">Sinun täytyy olla kirjautuneena arvostellaksesi tämän videon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -22932,17 +22932,17 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9065310971920830281" datatype="html">
+      <trans-unit id="9065310971920830281" datatype="html" xml:space="preserve">
         <source>Sorry, but this video did not load because the remote instance did not respond.</source>
-        <target state="new">Sorry, but this video did not load because the remote instance did not respond.</target>
+        <target state="translated">Pahoittelut, mutta tätä videota ei ladattu, koska etäpalvelin ei vastannut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7621888306128470863" datatype="html">
+      <trans-unit id="7621888306128470863" datatype="html" xml:space="preserve">
         <source>Please try refreshing the page, or try again later.</source>
-        <target state="new">Please try refreshing the page, or try again later.</target>
+        <target state="translated">Yritä päivittää sivu tai yritä uudelleen myöhemmin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">10</context>
@@ -23008,17 +23008,17 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2587910160708766081" datatype="html">
+      <trans-unit id="2587910160708766081" datatype="html" xml:space="preserve">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="new">Toggle this date format to "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">Vaihda aikaformaattia kohteelle "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5912861064428387069" datatype="html">
+      <trans-unit id="5912861064428387069" datatype="html" xml:space="preserve">
         <source>Close syndication dropdown</source>
-        <target state="new">Close syndication dropdown</target>
+        <target state="translated">Sulje syndikaatiovalikko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -23084,9 +23084,9 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1914592173926880968" datatype="html">
+      <trans-unit id="1914592173926880968" datatype="html" xml:space="preserve">
         <source>Skip to main content</source>
-        <target state="new">Skip to main content</target>
+        <target state="translated">Siirry pääsisältöön</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">3</context>
