@@ -7926,27 +7926,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7358611947192442969" datatype="html">
+      <trans-unit id="7358611947192442969" datatype="html" xml:space="preserve">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target state="new">
-        This comment can only be seen by you or the other moderators.
-      </target>
+        <target state="translated">Aquest comentari només el podeu veure vosaltres i altres membres de moderació.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3981851640772035362" datatype="html">
+      <trans-unit id="3981851640772035362" datatype="html" xml:space="preserve">
         <source>Update this comment</source>
-        <target state="new">Update this comment</target>
+        <target state="translated">Editar aquest comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="730589419287534524">
+      <trans-unit id="730589419287534524" xml:space="preserve">
         <source>Reporter</source>
-        <target>Notificador</target>
+        <target state="translated">Denunciant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">7</context>
@@ -7956,9 +7954,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5026011498416291967" datatype="html">
+      <trans-unit id="5026011498416291967" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
-        <target state="new"> <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
+        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 denuncia} other {{{ abuse.countReportsForReporter }} denúncies}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">20</context>
@@ -7992,9 +7990,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2662644497259948010" datatype="html">
+      <trans-unit id="2662644497259948010" datatype="html" xml:space="preserve">
         <source>Comment</source>
-        <target state="new">Comment</target>
+        <target state="translated">Comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">92</context>
