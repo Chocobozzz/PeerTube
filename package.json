@@ -142,7 +142,6 @@
     "got": "^13.0.0",
     "got-ssrf": "^3.0.0",
     "helmet": "^7.0.0",
-    "hpagent": "^1.0.0",
     "http-problem-details": "^0.1.5",
     "ioredis": "^5.2.3",
     "ip-anonymize": "^0.1.0",
