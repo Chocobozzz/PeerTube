@@ -541,31 +541,31 @@ paths:
                 $ref: '#/components/schemas/VideoCommentsForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?scope=local
             application/rss+xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/video-comments.rss?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.rss?scope=local
             text/xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?scope=local
             application/atom+xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/video-comments.atom?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.atom?scope=local
             application/json:
               schema:
                 type: object
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/video-comments.json?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.json?scope=local
         '400':
           x-summary: field inconsistencies
           description: >
@@ -638,31 +638,31 @@ paths:
                 $ref: '#/components/schemas/VideosForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/videos.xml?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/videos.xml?scope=local
             application/rss+xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/videos.rss?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/videos.rss?scope=local
             text/xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/videos.xml?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/videos.xml?scope=local
             application/atom+xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/videos.atom?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/videos.atom?scope=local
             application/json:
               schema:
                 type: object
               examples:
                 nightly:
-                  externalValue: https://peertube2.cpy.re/feeds/videos.json?filter=local
+                  externalValue: https://peertube2.cpy.re/feeds/videos.json?scope=local
         '404':
           description: video channel or account not found
         '406':
