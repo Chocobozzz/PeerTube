@@ -1,13 +1,13 @@
-import { Subject, Subscription } from 'rxjs'
+import { NgFor, NgIf } from '@angular/common'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPagination, hasMoreItems, HooksService, ScreenService } from '@app/core'
-import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
-import { NgIf, NgFor } from '@angular/common'
+import { ComponentPagination, hasMoreItems, HooksService, resetCurrentPage, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { Subject, Subscription } from 'rxjs'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
 
 @Component({
   selector: 'my-video-channel-playlists',
@@ -46,7 +46,7 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
         this.hooks.runAction('action:video-channel-playlists.video-channel.loaded', 'video-channel', { videoChannel })
 
         this.videoPlaylists = []
-        this.pagination.currentPage = 1
+        resetCurrentPage(this.pagination)
         this.loadVideoPlaylists()
       })
   }

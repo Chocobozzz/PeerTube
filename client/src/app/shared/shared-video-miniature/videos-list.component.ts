@@ -3,12 +3,15 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { ActivatedRoute } from '@angular/router'
 import {
   AuthService,
+  ComponentPagination,
   ComponentPaginationLight,
   Notifier,
   PeerTubeRouterService,
   ScreenService,
   User,
-  UserService
+  UserService,
+  resetCurrentPage,
+  updatePaginationOnDelete
 } from '@app/core'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@peertube/peertube-core-utils'
@@ -112,9 +115,10 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private userSub: Subscription
   private resizeSub: Subscription
 
-  private pagination: ComponentPaginationLight = {
+  private pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 25
+    itemsPerPage: 25,
+    totalItems: null
   }
 
   private groupedDateLabels: { [id in GroupDate]: string }
@@ -276,12 +280,17 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reloadVideos () {
-    this.pagination.currentPage = 1
+    resetCurrentPage(this.pagination)
     this.loadMoreVideos(true)
   }
 
   removeVideoFromArray (video: Video) {
-    this.videos = this.videos.filter(v => v.id !== video.id)
+    if (this.videos.some(v => v.id === video.id)) {
+      this.videos = this.videos.filter(v => v.id !== video.id)
+
+      updatePaginationOnDelete(this.pagination)
+    }
+
     this.highlightedLives = this.highlightedLives.filter(v => v.id !== video.id)
   }
 

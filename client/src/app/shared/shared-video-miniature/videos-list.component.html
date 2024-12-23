@@ -33,7 +33,7 @@
           <my-video-miniature
             [video]="live" [user]="userMiniature" [displayAsRow]="displayAsRow"
             [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
-            (videoBlocked)="removeVideoFromArray(live)" (liveRemoved)="removeVideoFromArray(live)"
+            (videoBlocked)="removeVideoFromArray(live)" (videoRemoved)="removeVideoFromArray(live)"
           >
           </my-video-miniature>
         </div>
