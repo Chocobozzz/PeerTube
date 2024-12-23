@@ -62,12 +62,13 @@ async function testAvatarSize (options: {
   // We don't test big GIF avatars
   if (extension === '.gif' && avatar.width > 150) return
 
-  const data = await readFile(buildAbsoluteFixturePath(imageName + extension))
+  const fixturePath = buildAbsoluteFixturePath(imageName + extension)
+  const data = await readFile(fixturePath)
   const minLength = data.length - ((40 * data.length) / 100)
   const maxLength = data.length + ((40 * data.length) / 100)
 
-  expect(body.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
-  expect(body.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
+  expect(body.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture ' + fixturePath)
+  expect(body.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture ' + fixturePath)
 }
 
 async function testImageGeneratedByFFmpeg (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
