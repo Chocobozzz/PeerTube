@@ -65,7 +65,7 @@ function buildUser (options: {
     p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
     videosHistoryEnabled: CONFIG.USER.HISTORY.VIDEOS.ENABLED,
 
-    autoPlayVideo: true,
+    autoPlayVideo: CONFIG.USER.PLAYBACK_AUTO_START,
 
     role,
     emailVerified,

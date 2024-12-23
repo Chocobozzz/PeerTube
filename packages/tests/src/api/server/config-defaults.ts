@@ -287,6 +287,7 @@ describe('Test config defaults', function () {
         expect(user.videosHistoryEnabled).to.be.false
         expect(user.videoQuota).to.equal(5242881)
         expect(user.videoQuotaDaily).to.equal(318742)
+        expect(user.autoPlayVideo).to.equal(false)
       }
     })
 
