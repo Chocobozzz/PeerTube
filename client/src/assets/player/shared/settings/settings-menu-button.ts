@@ -44,7 +44,6 @@ class SettingsButton extends Button {
     this.panelChild = this.panel.addChild('settingsPanelChild')
 
     this.addClass('vjs-settings')
-    this.el().setAttribute('aria-label', 'Settings Button')
 
     // Event handlers
     this.addSettingsItemHandler = this.onAddSettingsItem.bind(this)
