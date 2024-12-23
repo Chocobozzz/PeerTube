@@ -9114,113 +9114,113 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5056489767203690328" datatype="html">
+      <trans-unit id="5056489767203690328" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</target>
+        <target state="translated">Qui modera la instància? Quina política s'aplica als vídeos explícits/adults? Sobre vídeos polítics? etc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2047672753819413550" datatype="html">
+      <trans-unit id="2047672753819413550" datatype="html" xml:space="preserve">
         <source>YOU AND YOUR INSTANCE</source>
-        <target state="new">YOU AND YOUR INSTANCE</target>
+        <target state="translated">VOS I LA VOSTRA INSTÀNCIA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3968335261686887328" datatype="html">
+      <trans-unit id="3968335261686887328" datatype="html" xml:space="preserve">
         <source>Who is behind the instance?</source>
-        <target state="new">Who is behind the instance?</target>
+        <target state="translated">Qui està darrere d'aquesta instància?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7323194786468446482" datatype="html">
+      <trans-unit id="7323194786468446482" datatype="html" xml:space="preserve">
         <source>A single person? A non-profit? A company?</source>
-        <target state="new">A single person? A non-profit? A company?</target>
+        <target state="translated">Una persona? Una organització sense ànim de lucre? Una empresa?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5480243297215266596" datatype="html">
+      <trans-unit id="5480243297215266596" datatype="html" xml:space="preserve">
         <source>Why did you create this instance?</source>
-        <target state="new">Why did you create this instance?</target>
+        <target state="translated">Per què heu creat aquesta instància?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6995481962115300007" datatype="html">
+      <trans-unit id="6995481962115300007" datatype="html" xml:space="preserve">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="new">To share your personal videos? To open registrations and allow people to upload what they want?</target>
+        <target state="translated">Per compartir vídeos personals? Per permetre a altres persones registrar-se i allotjar el que vulguin?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3667968987954856844" datatype="html">
+      <trans-unit id="3667968987954856844" datatype="html" xml:space="preserve">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="new">How long do you plan to maintain this instance?</target>
+        <target state="translated">Quant de temps penseu mantenir aquesta instància?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6722472563287778070" datatype="html">
+      <trans-unit id="6722472563287778070" datatype="html" xml:space="preserve">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="new">It's important to know for users who want to register on your instance</target>
+        <target state="translated">És important que les persones que vulguin registrar-se a la vostra instància ho sàpiguen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8362291348781958428" datatype="html">
+      <trans-unit id="8362291348781958428" datatype="html" xml:space="preserve">
         <source>How will you finance the PeerTube server?</source>
-        <target state="new">How will you finance the PeerTube server?</target>
+        <target state="translated">Com finançareu el servidor PeerTube?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2441006645448216398" datatype="html">
+      <trans-unit id="2441006645448216398" datatype="html" xml:space="preserve">
         <source>With your own funds? With user donations? Advertising?</source>
-        <target state="new">With your own funds? With user donations? Advertising?</target>
+        <target state="translated">Amb fons propis? Subvencions? Donacions particulars? Publicitat?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6853511883515031762" datatype="html">
+      <trans-unit id="6853511883515031762" datatype="html" xml:space="preserve">
         <source>OTHER INFORMATION</source>
-        <target state="new">OTHER INFORMATION</target>
+        <target state="translated">ALTRA INFORMACIÓ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">234</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3447208665089679283" datatype="html">
+      <trans-unit id="3447208665089679283" datatype="html" xml:space="preserve">
         <source>What server/hardware does the instance run on?</source>
-        <target state="new">What server/hardware does the instance run on?</target>
+        <target state="translated">En quin tipus de servidor/maquinari està allotjada la instància?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4739907951373047958" datatype="html">
+      <trans-unit id="4739907951373047958" datatype="html" xml:space="preserve">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="new">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</target>
+        <target state="translated">p. ex. 2vCore 2 GB de RAM, un enllaç a les especificacions del servidor que estàs llogant, etc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8557599287230755359" datatype="html">
+      <trans-unit id="8557599287230755359" datatype="html" xml:space="preserve">
         <source>APPEARANCE</source>
-        <target state="new">APPEARANCE</target>
+        <target state="translated">APARIÈNCIA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">4</context>
