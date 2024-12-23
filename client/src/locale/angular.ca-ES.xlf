@@ -9226,89 +9226,89 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="371306187337992930" datatype="html">
+      <trans-unit id="371306187337992930" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Empreu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>complements &amp; temes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per a canvis més complicats, o afegir lleugeres <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>personalitzacions<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4096396973250090478" datatype="html">
+      <trans-unit id="4096396973250090478" datatype="html" xml:space="preserve">
         <source>Landing page</source>
-        <target state="new">Landing page</target>
+        <target state="translated">Pàgina d'inici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="589280645445401478" datatype="html">
+      <trans-unit id="589280645445401478" datatype="html" xml:space="preserve">
         <source>Default trending algorithm</source>
-        <target state="new">Default trending algorithm</target>
+        <target state="translated">Algorisme de tendències per defecte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">39,41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="554741830445276244" datatype="html">
+      <trans-unit id="554741830445276244" datatype="html" xml:space="preserve">
         <source>Hot videos</source>
-        <target state="new">Hot videos</target>
+        <target state="translated">Vídeos destacats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4046343890883004514" datatype="html">
+      <trans-unit id="4046343890883004514" datatype="html" xml:space="preserve">
         <source>Recent views</source>
-        <target state="new">Recent views</target>
+        <target state="translated">Visualizacions recents</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8177374861384376651" datatype="html">
+      <trans-unit id="8177374861384376651" datatype="html" xml:space="preserve">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">Vídeos amb més «m'agrada»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="297360345401834321" datatype="html">
+      <trans-unit id="297360345401834321" datatype="html" xml:space="preserve">
         <source>Global views</source>
-        <target state="new">Global views</target>
+        <target state="translated">Visualitzacions totals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5862227717871131052" datatype="html">
+      <trans-unit id="5862227717871131052" datatype="html" xml:space="preserve">
         <source>Prefer author display name in video miniature</source>
-        <target state="new">Prefer author display name in video miniature</target>
+        <target state="translated">Preferir el nom de visualització de l'autor/a a la miniatura del vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5444889468197427724" datatype="html">
+      <trans-unit id="5444889468197427724" datatype="html" xml:space="preserve">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
-        <target state="new">Redirect users on single external auth when users click on the login button in menu</target>
+        <target state="translated">Redirigeix a una autenticació externa única quan es fa clic al botó d'inici de sessió al menú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2138469194506455231" datatype="html">
+      <trans-unit id="2138469194506455231" datatype="html" xml:space="preserve">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled.</target>
+        <target state="translated">⚠️ No teniu cap complement d'autenticació extern habilitat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6608125149782412086" datatype="html">
+      <trans-unit id="6608125149782412086" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled.</target>
+        <target state="translated">⚠️ Teniu diversos complements d'autenticació externs habilitats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">77</context>
@@ -9322,65 +9322,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7097094470713539753" datatype="html">
+      <trans-unit id="7097094470713539753" datatype="html" xml:space="preserve">
         <source>Display a message on your instance</source>
-        <target state="new"> Display a message on your instance </target>
+        <target state="translated">Mostrar un missatge a la instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4686199497574248459" datatype="html">
+      <trans-unit id="4686199497574248459" datatype="html" xml:space="preserve">
         <source>Enable broadcast message</source>
-        <target state="new">Enable broadcast message</target>
+        <target state="translated">Activar la salutació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9192050065623241777" datatype="html">
+      <trans-unit id="9192050065623241777" datatype="html" xml:space="preserve">
         <source>Allow users to dismiss the broadcast message</source>
-        <target state="new">Allow users to dismiss the broadcast message </target>
+        <target state="translated">Permetre als visitants tancar el missatge de benvinguda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6582848618760132901" datatype="html">
+      <trans-unit id="6582848618760132901" datatype="html" xml:space="preserve">
         <source>Broadcast message level</source>
-        <target state="new">Broadcast message level</target>
+        <target state="translated">Nivell d'importància de la salutació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8066608938393600549" datatype="html">
+      <trans-unit id="8066608938393600549" datatype="html" xml:space="preserve">
         <source>Message</source>
-        <target state="new">Message</target>
+        <target state="translated">Missatge</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5631159720194597622" datatype="html">
+      <trans-unit id="5631159720194597622" datatype="html" xml:space="preserve">
         <source>NEW USERS</source>
-        <target state="new">NEW USERS</target>
+        <target state="translated">NOUS COMPTES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2669509104300979449" datatype="html">
+      <trans-unit id="2669509104300979449" datatype="html" xml:space="preserve">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </target>
+        <target state="translated">Gestionar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>comptes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> per a establir llurs quotes individualment. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4497115134891299867" datatype="html">
+      <trans-unit id="4497115134891299867" datatype="html" xml:space="preserve">
         <source>Signup requires email verification</source>
-        <target state="new">Signup requires email verification</target>
+        <target state="translated">El registre requereix verificació del correu electrònic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">177</context>
@@ -9394,57 +9394,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1255320588719339650" datatype="html">
+      <trans-unit id="1255320588719339650" datatype="html" xml:space="preserve">
         <source>When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</source>
-        <target state="new">When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</target>
+        <target state="translated">Quan el nombre total de comptes de la instància arriba a aquest límit, els registres es desactiven. -1 == il·limitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">183,185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8497774075394617130" datatype="html">
+      <trans-unit id="8497774075394617130" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {compte} other {comptes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5620049714977547431" datatype="html">
+      <trans-unit id="5620049714977547431" datatype="html" xml:space="preserve">
         <source>Signup won't be limited to a fixed number of users.</source>
-        <target state="new">Signup won't be limited to a fixed number of users.</target>
+        <target state="translated">El registre no es limitarà a un nombre fix de comptes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1663379405062033606" datatype="html">
+      <trans-unit id="1663379405062033606" datatype="html" xml:space="preserve">
         <source>Minimum required age to create an account</source>
-        <target state="new">Minimum required age to create an account</target>
+        <target state="translated">Edat mínima necessària per crear un compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8342879272354516454" datatype="html">
+      <trans-unit id="8342879272354516454" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {year old} other {years old}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {any} other {anys}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">206</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7456307533995141215" datatype="html">
+      <trans-unit id="7456307533995141215" datatype="html" xml:space="preserve">
         <source>Enable Signup</source>
-        <target state="new">Enable Signup</target>
+        <target state="translated">Habilitar registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4555457172864212828">
+      <trans-unit id="4555457172864212828" xml:space="preserve">
         <source>Users</source>
-        <target>Usuaris</target>
+        <target state="translated">Comptes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-overview.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -9458,9 +9458,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3807699453257291879" datatype="html">
+      <trans-unit id="3807699453257291879" datatype="html" xml:space="preserve">
         <source>Comments</source>
-        <target state="new">Comments</target>
+        <target state="translated">Comentaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-overview.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -9474,9 +9474,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8147229944654164397" datatype="html">
+      <trans-unit id="8147229944654164397" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Vídeo} other {Vídeos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -9486,9 +9486,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2068564237394270744" datatype="html">
+      <trans-unit id="2068564237394270744" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Canal} other {Canals} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -9498,9 +9498,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="407487463718398437" datatype="html">
+      <trans-unit id="407487463718398437" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Suscriptor/a} other {Suscriptors/es} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -9510,9 +9510,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9036137946566829282" datatype="html">
+      <trans-unit id="9036137946566829282" datatype="html" xml:space="preserve">
         <source>Incriminated in reports</source>
-        <target state="new">Incriminated in reports</target>
+        <target state="translated">Incriminat/da en denúncies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -9522,9 +9522,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7441750243186193044" datatype="html">
+      <trans-unit id="7441750243186193044" datatype="html" xml:space="preserve">
         <source>Authored reports accepted</source>
-        <target state="new">Authored reports accepted</target>
+        <target state="translated">Denúncies emeses acceptades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -9534,9 +9534,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3094586852616580737" datatype="html">
+      <trans-unit id="3094586852616580737" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comentari} other {Comentaris} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -9546,9 +9546,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7362516430807501858" datatype="html">
+      <trans-unit id="7362516430807501858" datatype="html" xml:space="preserve">
         <source>NEW USER</source>
-        <target state="new">NEW USER</target>
+        <target state="translated">NOU COMPTE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">75</context>
@@ -9558,9 +9558,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3008420115644088420" datatype="html">
+      <trans-unit id="3008420115644088420" datatype="html" xml:space="preserve">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">Configuració</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">61</context>
