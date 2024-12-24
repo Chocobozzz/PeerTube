@@ -4928,9 +4928,9 @@
           <context context-type="linenumber">412</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6462253230140191250" datatype="html">
+      <trans-unit id="6462253230140191250" datatype="html" xml:space="preserve">
         <source>Closing caption edition modal</source>
-        <target state="new">Closing caption edition modal</target>
+        <target state="translated">Fenêtre d'édition des sous-titres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">413</context>
@@ -5059,7 +5059,7 @@
       </trans-unit>
       <trans-unit id="6377139538537882652" datatype="html" xml:space="preserve">
         <source>Delete list</source>
-        <target state="needs-translation">Supprimer la liste</target>
+        <target state="translated">Supprimer la liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -5502,9 +5502,9 @@
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8058748565866023802" datatype="html">
+      <trans-unit id="8058748565866023802" datatype="html" xml:space="preserve">
         <source>Responsive embed</source>
-        <target state="needs-translation">Intégration Responsive</target>
+        <target state="translated">Intégration Responsive</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">93</context>
@@ -5896,7 +5896,7 @@
       </trans-unit>
       <trans-unit id="4133860569932613370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> chaînes abonnées </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> chaînes souscrites </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -6512,7 +6512,7 @@
       </trans-unit>
       <trans-unit id="2742480382106792999" datatype="html" xml:space="preserve">
         <source>Automatically block comments:</source>
-        <target state="needs-translation">Bloquer automatiquement les commentaires :</target>
+        <target state="translated">Bloquer automatiquement les commentaires :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.html</context>
           <context context-type="linenumber">1</context>
@@ -6520,7 +6520,7 @@
       </trans-unit>
       <trans-unit id="4896271345443040077" datatype="html" xml:space="preserve">
         <source>That contain an external link</source>
-        <target state="needs-translation">Qui contient un lien externe</target>
+        <target state="translated">Qui contient un lien externe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -6552,7 +6552,7 @@
       </trans-unit>
       <trans-unit id="7996232964209657116" datatype="html" xml:space="preserve">
         <source>EXPORT</source>
-        <target state="needs-translation">EXPORTER</target>
+        <target state="translated">EXPORTER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">4</context>
@@ -8326,9 +8326,9 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3204334247986678419" datatype="html">
+      <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="new">Runners</target>
+        <target state="translated">Curseurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -8352,7 +8352,7 @@
       </trans-unit>
       <trans-unit id="8852490424970169127" datatype="html" xml:space="preserve">
         <source>Official</source>
-        <target state="needs-translation">Officiel</target>
+        <target state="translated">Officiel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">46</context>
@@ -8430,9 +8430,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1780056719120519633" datatype="html">
+      <trans-unit id="1780056719120519633" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {résultat} other {résultats}}"/> pour "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> pour "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
@@ -9658,7 +9658,7 @@
       </trans-unit>
       <trans-unit id="5239500638742740142" datatype="html" xml:space="preserve">
         <source>Max channel synchronization per user</source>
-        <target state="needs-translation">Maximum de chaînes synchronisées par utilisateur·ice</target>
+        <target state="translated">Nombre maximal de chaînes synchronisées par utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">326,328</context>
@@ -9666,7 +9666,7 @@
       </trans-unit>
       <trans-unit id="7725203429401574666" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {sync} other {syncs}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =1 {synchro} other {synchros}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {sync} other {syncs}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">333</context>
@@ -9850,7 +9850,7 @@
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html" xml:space="preserve">
         <source>USER IMPORT/EXPORT</source>
-        <target state="needs-translation">IMPORT/EXPORT D'UTILISATEUR·iCE</target>
+        <target state="translated">IMPORT/EXPORT D'UTILISATEUR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">530</context>
@@ -10210,7 +10210,7 @@
       </trans-unit>
       <trans-unit id="587451913482781730" datatype="html" xml:space="preserve">
         <source>(-1 for "unlimited")</source>
-        <target state="needs-translation">(-1 for "illimité")</target>
+        <target state="translated">(-1 for "illimité")</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -10574,15 +10574,15 @@
       </trans-unit>
       <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="needs-translation">FPS max de la vidéo</target>
+        <target state="translated">Images par secondes maximum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145,147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">Limiter les FPS des vidéos transcodées. Le fichier avec la résolution maximale conserve néanmoins le taux de FPS d'origine.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147,149</context>
@@ -10718,7 +10718,7 @@
       </trans-unit>
       <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="needs-translation">Active automatiquement l'encodage HLS car au moins 1 format de sortie doit être activé quand l'encodage est activé.</target>
+        <target state="translated">Activer automatiquement le transcodage HLS, car au moins un format de sortie doit être activé lorsque le transcodage est activé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -10726,7 +10726,7 @@
       </trans-unit>
       <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="needs-translation">Active automatiquement l'encodage de Vidéos Web car au moins 1 format de sortie doit être activé lorsque l'encodage est activé</target>
+        <target state="translated">Activer automatiquement le transcodage pour les vidéos web, car au moins un format de sortie doit être activé lorsque le transcodage est activé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -11208,7 +11208,7 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html" xml:space="preserve">
         <source>Hot</source>
-        <target state="needs-translation">Populaire</target>
+        <target state="translated">Populaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -11932,7 +11932,7 @@
       </trans-unit>
       <trans-unit id="3686251233087069053" datatype="html" xml:space="preserve">
         <source>UPDATE PLAYLIST</source>
-        <target state="needs-translation">METTRE À JOUR LA LISTE DE LECTURE</target>
+        <target state="translated">METTRE À JOUR LA LISTE DE LECTURE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12584,7 +12584,7 @@
       </trans-unit>
       <trans-unit id="4257078540065035665" datatype="html" xml:space="preserve">
         <source>UPDATE CHANNEL</source>
-        <target state="needs-translation">METTRE À JOUR LA CHAÎNE</target>
+        <target state="translated">METTRE À JOUR LA CHAÎNE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-edit.component.html</context>
           <context context-type="linenumber">11</context>
@@ -13628,7 +13628,7 @@
       </trans-unit>
       <trans-unit id="5859845485947900894" datatype="html" xml:space="preserve">
         <source>Platforms order</source>
-        <target state="needs-translation">Ordre des plateformes</target>
+        <target state="translated">Ordre des plateformes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">96</context>
@@ -13732,7 +13732,7 @@
       </trans-unit>
       <trans-unit id="403276015827477743" datatype="html" xml:space="preserve">
         <source>Only VOD</source>
-        <target state="needs-translation">Seulement les VOD</target>
+        <target state="translated">Seulement les VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">201</context>
@@ -13792,7 +13792,7 @@
       </trans-unit>
       <trans-unit id="5693037411428190538" datatype="html" xml:space="preserve">
         <source>Skip the sub menu</source>
-        <target state="needs-translation">Passer le sous-menu</target>
+        <target state="translated">Ignorer le sous-menu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -15438,7 +15438,7 @@
       </trans-unit>
       <trans-unit id="4070550899383572841" datatype="html" xml:space="preserve">
         <source>Go to the manage your account page</source>
-        <target state="needs-translation">Aller à la page de gestion de votre compte</target>
+        <target state="translated">Accéder à la gestion de votre compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">27</context>
@@ -15532,9 +15532,9 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1046771510013067927" datatype="html">
+      <trans-unit id="1046771510013067927" datatype="html" xml:space="preserve">
         <source>Private payload:</source>
-        <target state="new">Private payload:</target>
+        <target state="needs-translation">Contenu privé :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">111</context>
