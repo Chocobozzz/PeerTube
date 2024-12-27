@@ -813,7 +813,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 utilisateur banni.} other {<x id="count"/> utilisateurs bannis.}}</target>
+        <target state="translated">{count, plural, =1 {1 utilisateur·ice bannie.} other {<x id="count"/> utilisateur·ices banni·es.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -1813,7 +1813,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html" xml:space="preserve">
         <source>By users on this instance</source>
-        <target state="translated">Par les utilisateurs de cette instance</target>
+        <target state="translated">Par les utilisateur·ices de cette instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1837,7 +1837,7 @@
       </trans-unit>
       <trans-unit id="1670306451865226564" xml:space="preserve">
         <source>users</source>
-        <target state="translated">utilisateurs</target>
+        <target state="translated">utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2557,7 +2557,7 @@
       </trans-unit>
       <trans-unit id="199127249622290422" xml:space="preserve">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="translated">Téléverser ou importer des vidéos, parcourir les journaux, nettoyer les dossiers de stockage, réinitialiser les mots de passe des utilisateurs...</target>
+        <target state="translated">Téléverser ou importer des vidéos, parcourir les journaux, nettoyer les dossiers de stockage, réinitialiser les mots de passe des utilisateur·ices...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -2581,7 +2581,7 @@
       </trans-unit>
       <trans-unit id="5910950876330656326" xml:space="preserve">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="translated">Gérer les utilisateurs, s'abonner à d'autres instances, gérer les spammeurs...</target>
+        <target state="translated">Gérer les utilisateur·ices, s'abonner à d'autres instances, gérer les spammeurs...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2701,7 +2701,7 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html" xml:space="preserve">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">Vous avez activé l'enregistrement des utilisateurs sur votre instance mais n'avez pas configuré les champs suivants :</target>
+        <target state="translated">Vous avez activé l'enregistrement des utilisateur·ices sur votre instance mais n'avez pas configuré les champs suivants :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -3311,7 +3311,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html" xml:space="preserve">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="translated">Aidez les modérateurs et les autres utilisateurs à <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vous identifier<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> avec :</target>
+        <target state="translated">Aidez les modérateur·ices et les autres utilisateur·ices à <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vous identifier<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> avec :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -5460,7 +5460,7 @@
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html" xml:space="preserve">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Cette liste de lecture est privée de sorte que vous ne pourrez pas la partager avec des utilisateurs externes</target>
+        <target state="translated">Cette liste de lecture est privée de sorte que vous ne pourrez pas la partager avec des utilisateur·ices externes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">17</context>
@@ -5524,7 +5524,7 @@
       </trans-unit>
       <trans-unit id="5254843797242866315" datatype="html" xml:space="preserve">
         <source>This video is private so you won't be able to share it with external users</source>
-        <target state="translated">Cette vidéo est privée, vous ne pourrez pas la partager avec des utilisateurs externes</target>
+        <target state="translated">Cette vidéo est privée, vous ne pourrez pas la partager avec des utilisateur·ices externes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">107</context>
@@ -7028,7 +7028,7 @@
       </trans-unit>
       <trans-unit id="5893518121808195081" datatype="html" xml:space="preserve">
         <source>Highlight banned users</source>
-        <target state="translated">Mettre en évidence les utilisateurs bannis</target>
+        <target state="translated">Mettre en évidence les utilisateur·ices banni·es</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">61</context>
@@ -7368,7 +7368,7 @@
       </trans-unit>
       <trans-unit id="6124612368324200166" datatype="html" xml:space="preserve">
         <source>Banned users</source>
-        <target state="translated">Utilisateurs bannis</target>
+        <target state="translated">Utilisateur·ices banni·es</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -8328,7 +8328,7 @@
       </trans-unit>
       <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="translated">Curseurs</target>
+        <target state="translated">Runners</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -8368,7 +8368,7 @@
       </trans-unit>
       <trans-unit id="8630916846096019339" datatype="html" xml:space="preserve">
         <source>Users can resolve distant content</source>
-        <target state="translated">Les utilisateurs peuvent résoudre des contenus distants</target>
+        <target state="translated">Les utilisateur·ices peuvent résoudre des contenus distants</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">145</context>
@@ -9154,7 +9154,7 @@
       </trans-unit>
       <trans-unit id="6995481962115300007" datatype="html" xml:space="preserve">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="translated">Pour partager vos vidéos personnelles ? Pour permettre à des utilisateurs de s'inscrire et héberger ce qu'ils souhaitent ?</target>
+        <target state="translated">Pour partager vos vidéos personnelles ? Pour permettre à des utilisateur·ices de s'inscrire et héberger ce qu'iels souhaitent ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">201</context>
@@ -9170,7 +9170,7 @@
       </trans-unit>
       <trans-unit id="6722472563287778070" datatype="html" xml:space="preserve">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="translated">Il est important aux utilisateurs qui veulent s'inscrire sur votre instance de le savoir</target>
+        <target state="translated">Il est important aux utilisateur·ices qui veulent s'inscrire sur votre instance de le savoir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">211</context>
@@ -9186,7 +9186,7 @@
       </trans-unit>
       <trans-unit id="2441006645448216398" datatype="html" xml:space="preserve">
         <source>With your own funds? With user donations? Advertising?</source>
-        <target state="translated">Avec vos propres fonds ? Avec des donations de la part des utilisateurs ? Avec de la publicité ?</target>
+        <target state="translated">Avec vos propres fonds ? Avec des donations de la part des utilisateur·ices ? Avec de la publicité ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">221</context>
@@ -9290,7 +9290,7 @@
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html" xml:space="preserve">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
-        <target state="translated">Rediriger les utilisateurs vers une authentification externe unique lorsqu'ils cliquent sur le bouton de connexion dans le menu</target>
+        <target state="translated">Rediriger les utilisateur·ices vers une authentification externe unique lorsqu'iels cliquent sur le bouton de connexion dans le menu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">73</context>
@@ -9362,7 +9362,7 @@
       </trans-unit>
       <trans-unit id="5631159720194597622" datatype="html" xml:space="preserve">
         <source>NEW USERS</source>
-        <target state="translated">NOUVEAUX UTILISATEURS</target>
+        <target state="translated">NOUVELLES·AUX UTILISATEUR·ICES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">146</context>
@@ -9386,7 +9386,7 @@
       </trans-unit>
       <trans-unit id="8133107840061687919" xml:space="preserve">
         <source>Signup limit</source>
-        <target state="translated">Nombre maximum d'utilisateurs</target>
+        <target state="translated">Nombre maximum d'utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">182</context>
@@ -9394,7 +9394,7 @@
       </trans-unit>
       <trans-unit id="1255320588719339650" datatype="html" xml:space="preserve">
         <source>When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</source>
-        <target state="translated">Quand le nombre total d'utilisateurs de votre instance atteint cette limite, les inscriptions sont désactivées. -1 == unlimited</target>
+        <target state="translated">Quand le nombre total d'utilisateur·ices de votre instance atteint cette limite, les inscriptions sont désactivées. -1 == unlimited</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">183,185</context>
@@ -9402,7 +9402,7 @@
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {utilisateur} other {utilisateurs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {utilisateur·ice} other {utilisateur·ices}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">190</context>
@@ -9410,7 +9410,7 @@
       </trans-unit>
       <trans-unit id="5620049714977547431" datatype="html" xml:space="preserve">
         <source>Signup won't be limited to a fixed number of users.</source>
-        <target state="translated">L'inscription ne sera pas limitée à un nombre fixe d'utilisateurs.</target>
+        <target state="translated">L'inscription ne sera pas limitée à un nombre fixe d'utilisateur·ices.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">195</context>
@@ -9442,7 +9442,7 @@
       </trans-unit>
       <trans-unit id="4555457172864212828" xml:space="preserve">
         <source>Users</source>
-        <target state="translated">Utilisateurs</target>
+        <target state="translated">Utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-overview.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -9634,7 +9634,7 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html" xml:space="preserve">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="translated">⚠️ Nous ne recommandons pas d'activer cette fonctionnalité si vous n'avez pas une totale confiance en vos utilisateurs</target>
+        <target state="translated">⚠️ Nous ne recommandons pas d'activer cette fonctionnalité si vous n'avez pas une totale confiance en vos utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">304</context>
@@ -9778,7 +9778,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html" xml:space="preserve">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="translated">Permettre aux utilisateurs d'effectuer des recherches à distance sur l'URI/handle</target>
+        <target state="translated">Permettre aux utilisateur·ices d'effectuer des recherches à distance sur l'URI/handle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">452</context>
@@ -9786,7 +9786,7 @@
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Permettez à <x id="START_TAG_STRONG"/>vos utilisateurs<x id="CLOSE_TAG_STRONG"/> de chercher des vidéos/acteurs distants potentiellement non fédérés avec votre instance</target>
+        <target state="translated">Permettez à <x id="START_TAG_STRONG"/>vos utilisateur·ices<x id="CLOSE_TAG_STRONG"/> de chercher des vidéos/acteur·ices distant·es potentiellement non fédéré·es avec votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">455</context>
@@ -9794,7 +9794,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html" xml:space="preserve">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="translated">Permettre à des utilisateurs anonymes de faire des recherches à distance via URI/mot-clé</target>
+        <target state="translated">Permettre à des utilisateur·ices anonymes de faire des recherches à distance via URI/mot-clé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">463</context>
@@ -9802,7 +9802,7 @@
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Permettez à <x id="START_TAG_STRONG"/>des utilisateurs anonymes<x id="CLOSE_TAG_STRONG"/> de chercher des vidéos/acteurs distants potentiellement non fédérés avec votre instance</target>
+        <target state="translated">Permettez à <x id="START_TAG_STRONG"/>des utilisateur·ices anonymes<x id="CLOSE_TAG_STRONG"/> de chercher des vidéos/acteur·ices distant·es potentiellement non fédéré·es avec votre instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">466</context>
@@ -9850,7 +9850,7 @@
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html" xml:space="preserve">
         <source>USER IMPORT/EXPORT</source>
-        <target state="translated">IMPORT/EXPORT D'UTILISATEUR</target>
+        <target state="translated">IMPORT/EXPORT D'UTILISATEUR·iCE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">530</context>
@@ -10154,7 +10154,7 @@
       </trans-unit>
       <trans-unit id="1429138002697017359" datatype="html" xml:space="preserve">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">Permettez aux utilisateurs de votre instance de diffuser en direct.</target>
+        <target state="translated">Permettez aux utilisateur·ices de votre instance de diffuser en direct.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">8</context>
@@ -10162,7 +10162,7 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html" xml:space="preserve">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ L'activation du streaming en direct nécessite une confiance dans vos utilisateurs et un travail de modération supplémentaire</target>
+        <target state="translated">⚠️ L'activation du streaming en direct nécessite une confiance dans vos utilisateur·ices et un travail de modération supplémentaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">23</context>
@@ -10178,7 +10178,7 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html" xml:space="preserve">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">Permettre à vos utilisateurs de mettre automatiquement en ligne une rediffusion de leur direct</target>
+        <target state="translated">Permettre à vos utilisateur·ices de mettre automatiquement en ligne une rediffusion de leur direct</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">32</context>
@@ -10422,7 +10422,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html" xml:space="preserve">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="translated">Permet aux utilisateurs de télécharger des vidéos avec des extensions autres que .mp4, .ogv et .webm (par exemple : .avi, .mov, .mkv, etc.).</target>
+        <target state="translated">Permet aux utilisateur·ices de télécharger des vidéos avec des extensions autres que .mp4, .ogv et .webm (par exemple : .avi, .mov, .mkv, etc.).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">52</context>
@@ -10438,7 +10438,7 @@
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html" xml:space="preserve">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="translated">Permet aux utilisateurs de téléverser des fichiers audio .mp3, .ogg, .wma, .flac, .aac ou .ac3.</target>
+        <target state="translated">Permet aux utilisateur·ices de téléverser des fichiers audio .mp3, .ogg, .wma, .flac, .aac ou .ac3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">63</context>
@@ -10558,7 +10558,7 @@
       </trans-unit>
       <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="translated">Cette option ajoute la possibilité pour le player HLS de proposer la qualité « Audio uniquement » aux utilisateurs.</target>
+        <target state="translated">Cette option ajoute la possibilité pour le player HLS de proposer la qualité « Audio uniquement » aux utilisateur·ices.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132</context>
@@ -10678,7 +10678,7 @@
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html" xml:space="preserve">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="translated">Permet à vos utilisateurs d'éditer leur vidéo (couper, ajouter une intro/outro, ajouter un logo, etc.)</target>
+        <target state="translated">Permet à vos utilisateur·ices d'éditer leur vidéo (couper, ajouter une intro/outro, ajouter un logo, etc.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">256</context>
@@ -12948,7 +12948,7 @@
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html" xml:space="preserve">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTube utilise par défaut le protocole BitTorrent pour partager la bande passante entre les utilisateurs afin de réduire la charge sur le serveur, mais vous laisse ultimement le choix de revenir à la diffusion régulière en continu exclusivement à partir du serveur de la vidéo. Ce qui suit ne s’applique que si vous souhaitez continuer à utiliser le mode P2P de PeerTube.</target>
+        <target state="translated">PeerTube utilise par défaut le protocole BitTorrent pour partager la bande passante entre les utilisateur·ices afin de réduire la charge sur le serveur, mais vous laisse ultimement le choix de revenir à la diffusion régulière en continu exclusivement à partir du serveur de la vidéo. Ce qui suit ne s’applique que si vous souhaitez continuer à utiliser le mode P2P de PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">69</context>
@@ -13416,7 +13416,7 @@
       </trans-unit>
       <trans-unit id="4376397515999418662" datatype="html" xml:space="preserve">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="translated">C'est le nom qui sera visible publiquement par les autres utilisateurs.</target>
+        <target state="translated">C'est le nom qui sera visible publiquement par les autres utilisateur·ices.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">23</context>
@@ -13520,7 +13520,7 @@
       </trans-unit>
       <trans-unit id="7536432216862568979" datatype="html" xml:space="preserve">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="translated">C'est le nom qui sera publiquement visible par les autres utilisateurs.</target>
+        <target state="translated">C'est le nom qui sera publiquement visible par les autres utilisateur·ices.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">12</context>
@@ -13860,7 +13860,7 @@
       </trans-unit>
       <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
-        <target state="translated">« Séparer l'audio et la vidéo » doit être activé pour que le lecteur PeerTube propose la résolution « Audio uniquement » aux utilisateurs</target>
+        <target state="translated">« Séparer l'audio et la vidéo » doit être activé pour que le lecteur PeerTube propose la résolution « Audio uniquement » aux utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -15674,7 +15674,7 @@
       </trans-unit>
       <trans-unit id="2434590176499222618" datatype="html" xml:space="preserve">
         <source>User registrations</source>
-        <target state="translated">Inscriptions des utilisateurs</target>
+        <target state="translated">Inscriptions des utilisateur·ices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">80</context>
@@ -16150,7 +16150,7 @@
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1 utilisateur supprimé.} other {<x id="count"/> utilisateurs supprimés.}}</target>
+        <target state="translated">{count, plural, =1 {1 utilisateur·ice supprimé·e.} other {<x id="count"/> utilisateur·ices supprimé·es.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">298</context>
@@ -16158,7 +16158,7 @@
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {1 email d'utilisateur défini comme vérifié.} other {<x id="count"/> emails d'utilisateurs définis comme vérifiés.}}</target>
+        <target state="translated">{count, plural, =1 {1 email d'utilisateur·ice défini comme vérifié.} other {<x id="count"/> emails d'utilisateur·ices définis comme vérifiés.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">316</context>
@@ -18418,7 +18418,7 @@
       </trans-unit>
       <trans-unit id="6409680643108400586" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be a number.</source>
-        <target state="translated">Les synchronisations maximales par utilisateurs doivent être un nombre.</target>
+        <target state="translated">Les synchronisations maximales par utilisateur·ices doivent être un nombre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">114</context>
@@ -20329,7 +20329,7 @@
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html" xml:space="preserve">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="translated">Bannir {count, plural, =1 {1 utilisateur} other {<x id="count"/> utilisateurs}}</target>
+        <target state="translated">Bannir {count, plural, =1 {1 utilisateur·ice} other {<x id="count"/> utilisateur·ices}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -20687,7 +20687,7 @@
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html" xml:space="preserve">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="translated">Afficher de nouveau le contenu de cette instance pour vous, votre instance et ses utilisateurs.</target>
+        <target state="translated">Afficher de nouveau le contenu de cette instance pour vous, votre instance et ses utilisateur·ices.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -22415,7 +22415,7 @@
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html" xml:space="preserve">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">Seuls les utilisateurs de cette instance peuvent voir cette vidéo</target>
+        <target state="translated">Seul·es les utilisateur·ices de cette instance peuvent voir cette vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">477</context>
