@@ -20059,9 +20059,9 @@
           <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="996392855508119363">
+      <trans-unit id="996392855508119363" xml:space="preserve">
         <source>Hidden</source>
-        <target>Dold</target>
+        <target state="translated">Döljs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">65</context>
