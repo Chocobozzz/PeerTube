@@ -1647,9 +1647,9 @@
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="330610135077253864" datatype="html">
+      <trans-unit id="330610135077253864" datatype="html" xml:space="preserve">
         <source>Live streaming enabled</source>
-        <target state="translated">Emissió en directe activada</target>
+        <target state="translated">Emissió en directe habilitada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">77</context>
@@ -1993,7 +1993,7 @@
       </trans-unit>
       <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
-        <target state="translated">Activa les tecles de drecera en aquest navegador</target>
+        <target state="translated">Habilitar les tecles de drecera en aquest navegador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
@@ -3096,7 +3096,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html" xml:space="preserve">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Si està activat, recomanem fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un seevidor intermediari HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per evitar l'accés a l'URL privat des del vostre servidor PeerTube</target>
+        <target state="translated">⚠️ Si està habilitat, recomanem fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un seevidor intermediari HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per evitar l'accés a l'URL privat des del vostre servidor PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">293</context>
@@ -4740,7 +4740,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html" xml:space="preserve">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="translated">Reduïu la latència a ~ 15 segons desactivant P2P</target>
+        <target state="translated">Reduïu la latència a ~ 15 segons deshabilitant P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -5153,7 +5153,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1138810463037464722" datatype="html" xml:space="preserve">
         <source>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</source>
-        <target state="translated">Els vídeos penjats al servidor es revisen abans de publicar-se per al vostre compte. Si voleu afegir vídeos sense la verificació de moderació, l'administració ha de desactivar el bloqueig automàtic dels vostres vídeos.</target>
+        <target state="translated">Els vídeos penjats al servidor es revisen abans de publicar-se per al vostre compte. Si voleu afegir vídeos sense la verificació de moderació, l'administració ha de deshabilitar el bloqueig automàtic dels vostres vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -6245,7 +6245,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6141356876817135294" datatype="html" xml:space="preserve">
         <source>Comments are disabled.</source>
-        <target state="translated">Els comentaris estan desactivats.</target>
+        <target state="translated">Els comentaris estan deshabilitats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">96</context>
@@ -7221,7 +7221,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7217118144256898288" datatype="html" xml:space="preserve">
         <source>This user has two factor authentication enabled</source>
-        <target state="translated">Aquest compte té activada l'autenticació de dos factors</target>
+        <target state="translated">Aquest compte té habilitada l'autenticació de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">241</context>
@@ -7233,7 +7233,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1636606892066514698" datatype="html" xml:space="preserve">
         <source>Disable two factor authentication</source>
-        <target state="translated">Desactivar l'autenticació de dos factors</target>
+        <target state="translated">Deshabilitar l'autenticació de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">242</context>
@@ -7529,7 +7529,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7292311893283564173" datatype="html" xml:space="preserve">
         <source>Enabled strategies stats</source>
-        <target state="translated">Estadístiques d'estratègies activades</target>
+        <target state="translated">Estadístiques d'estratègies habilitades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">87</context>
@@ -7537,7 +7537,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7595922272001217567" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">No hi ha cap estratègia de redundància activada a la vostra instància.</target>
+        <target state="translated">No hi ha cap estratègia de redundància habilitada a la vostra instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">92</context>
@@ -9333,7 +9333,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4686199497574248459" datatype="html" xml:space="preserve">
         <source>Enable broadcast message</source>
-        <target state="translated">Activar la salutació</target>
+        <target state="translated">Habilitar la salutació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">103</context>
@@ -9691,25 +9691,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">366</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6098767935728651255" datatype="html">
+      <trans-unit id="6098767935728651255" datatype="html" xml:space="preserve">
         <source>Enable video storyboards</source>
-        <target state="new">Enable video storyboards</target>
+        <target state="translated">Habilitar els video-guions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7773354014171617955" datatype="html">
+      <trans-unit id="7773354014171617955" datatype="html" xml:space="preserve">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="new">Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</target>
+        <target state="translated">Generar guions de vídeos locals mitjançant ffmpeg perquè es pugui veure una vista prèvia del vídeo mentre es navega per la línia de temps del reproductor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">380</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2136244827103907557" datatype="html">
+      <trans-unit id="2136244827103907557" datatype="html" xml:space="preserve">
         <source>Enable video transcription</source>
-        <target state="new">Enable video transcription</target>
+        <target state="translated">Habilitar la transcripció dels vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">390</context>
@@ -10391,9 +10391,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4560217482714993155">
+      <trans-unit id="4560217482714993155" xml:space="preserve">
         <source>Transcoding enabled</source>
-        <target>Transcodificació activada</target>
+        <target state="translated">Transcodificació habilitada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">38</context>
