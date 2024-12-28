@@ -9715,9 +9715,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8008057374731814667" datatype="html">
+      <trans-unit id="8008057374731814667" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Automatically create subtitles<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for uploaded/imported VOD videos</source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Automatically create subtitles<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for uploaded/imported VOD videos</target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Crear subtítols automàticament<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per als vídeos sota demanda (VOD) penjats/importats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">393,394</context>
@@ -17905,9 +17905,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2392481201920342009" datatype="html">
+      <trans-unit id="2392481201920342009" datatype="html" xml:space="preserve">
         <source>VOD videos</source>
-        <target state="translated">Vídeos sota demanda</target>
+        <target state="translated">Vídeos VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">34</context>
