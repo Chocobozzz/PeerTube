@@ -2535,9 +2535,9 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1516969129397662377">
+      <trans-unit id="1516969129397662377" xml:space="preserve">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target>Välkommen till PeerTube, kära administratör!</target>
+        <target state="translated">Välkommen som PeerTube-administratör!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3300,9 +3300,9 @@
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5108072242786374364" datatype="html">
+      <trans-unit id="5108072242786374364" datatype="html" xml:space="preserve">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
-        <target state="translated">Välkommen till <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, kära användare!</target>
+        <target state="translated">Välkommen som <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>-användare!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
