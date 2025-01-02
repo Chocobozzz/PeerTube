@@ -20978,9 +20978,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2340556570629614156" datatype="html">
+      <trans-unit id="2340556570629614156" datatype="html" xml:space="preserve">
         <source>Subtitles will be automatically generated from your video.</source>
-        <target state="new"> Subtitles will be automatically generated from your video. </target>
+        <target state="translated">คำบรรยายใต้ภาพจะถูกสร้างขึ้นโดยอัตโนมัติจากวิดีโอของคุณ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">173</context>
