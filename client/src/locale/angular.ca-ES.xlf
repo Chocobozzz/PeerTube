@@ -10351,9 +10351,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5975271795105968425" datatype="html">
+      <trans-unit id="5975271795105968425" datatype="html" xml:space="preserve">
         <source>Live streaming</source>
-        <target state="new">Live streaming</target>
+        <target state="translated">Emissió en directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">47</context>
@@ -10363,17 +10363,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6201638315245239510" datatype="html">
+      <trans-unit id="6201638315245239510" datatype="html" xml:space="preserve">
         <source>Advanced</source>
-        <target state="new">Advanced</target>
+        <target state="translated">Advançat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7911929966701561067" datatype="html">
+      <trans-unit id="7911929966701561067" datatype="html" xml:space="preserve">
         <source>TRANSCODING</source>
-        <target state="new">TRANSCODING</target>
+        <target state="translated">TRANSCODIFICACIÓ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">90</context>
@@ -10383,9 +10383,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212237880239644112" datatype="html">
+      <trans-unit id="8212237880239644112" datatype="html" xml:space="preserve">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="new"> Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some. </target>
+        <target state="translated">Igual que la transcodificació de VOD, transcodifica els directes per a que es puguin reproduir a qualsevol dispositiu. Requereix un processador potent i més.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">92</context>
@@ -10399,25 +10399,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1386306711019304612" datatype="html">
+      <trans-unit id="1386306711019304612" datatype="html" xml:space="preserve">
         <source>Input</source>
-        <target state="new">Input</target>
+        <target state="translated">Entrada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8646250517331978259" datatype="html">
+      <trans-unit id="8646250517331978259" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de VOD. Els executors remots s'han de registrar primer a la vostra instància. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7452751710576287271" datatype="html">
+      <trans-unit id="7452751710576287271" datatype="html" xml:space="preserve">
         <source>Allow additional extensions</source>
-        <target state="new">Allow additional extensions</target>
+        <target state="translated">Permetre extensions addicionals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">49</context>
