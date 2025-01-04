@@ -8,9 +8,18 @@ RUN apt update \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
+# Node images hardcode the node uid to 1000 so that number is not available.
+# The "peertube" user is created as a system account which selects a UID from 
+# the range of SYS_UID_MIN to SYS_UID_MAX (-1 to 1000] and consistently
+# selects 999 given the current image build steps. The same is true for the
+# system group range SYS_GID_MIN and SYS_GID_MAX. It is fine to manually assign
+# them an ID outside of that range.
+DEFAULT_PEERTUBE_UID=999
+DEFAULT_PEERTUBE_GID=999
+
 # Add peertube user
-RUN groupadd -r peertube \
-    && useradd -r -g peertube -m peertube
+RUN groupadd -r -g ${PEERTUBE_GID:-${DEFAULT_PEERTUBE_GID}} peertube \
+    && useradd -r -u ${PEERTUBE_UID:-${DEFAULT_PEERTUBE_UID}} -g peertube -m peertube
 
 # Install PeerTube
 COPY --chown=peertube:peertube . /app
