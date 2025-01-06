@@ -1,7 +1,28 @@
 # Changelog
 
-## v7.0.0
+## v7.0.1
 
+### Features
+
+ * Update translations
+
+### Bug fixes
+
+ * Fix banner/avatar edit buttons
+ * Fix banner margin in channels page
+ * Textarea font size consistency
+ * Fix subscribe button radius
+ * Fix channel avatar info username
+ * Fix maximized markdown textarea
+ * Remove confusing channel message in *My playlists* pages
+ * Fix broken infinite scroll when deleting items (Videos, Channels...)
+ * Fix broadcast message overflow
+ * Fix adding videos in playlist from discover page
+ * Fix my videos edit/delete buttons display
+ * Fix header components overflow in admin log page
+
+
+## v7.0.0
 
 ### IMPORTANT NOTES
 
