@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="6699890091238112345" datatype="html" xml:space="preserve">
         <source>Browse all videos</source>
-        <target state="translated">Bläddra bland alla videor</target>
+        <target state="translated">Bläddra igenom alla videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -3142,7 +3142,7 @@
       </trans-unit>
       <trans-unit id="5174743927852553765" datatype="html" xml:space="preserve">
         <source>Browse local videos</source>
-        <target state="translated">Bläddra bland lokala videor</target>
+        <target state="translated">Bläddra igenom lokala videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">169</context>
@@ -8326,9 +8326,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8259696070728377358">
+      <trans-unit id="8259696070728377358" xml:space="preserve">
         <source>Plugins/Themes</source>
-        <target>Insticksprogram och teman</target>
+        <target state="translated">Tillägg och teman</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -8382,9 +8382,9 @@
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3300472325769888962" datatype="html">
+      <trans-unit id="3300472325769888962" datatype="html" xml:space="preserve">
         <source>Plugins &amp; Themes</source>
-        <target state="translated">Insticksprogram &amp; teman</target>
+        <target state="translated">Tillägg &amp; teman</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">152</context>
@@ -8398,9 +8398,9 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9205443410527464015" datatype="html">
+      <trans-unit id="9205443410527464015" datatype="html" xml:space="preserve">
         <source>Plugins enabled</source>
-        <target state="translated">Aktiverade insticksprogram</target>
+        <target state="translated">Aktiverade tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">165</context>
@@ -8422,9 +8422,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7577430199525157466" datatype="html">
+      <trans-unit id="7577430199525157466" datatype="html" xml:space="preserve">
         <source>Popular plugins</source>
-        <target state="translated">Populära insticksprogram</target>
+        <target state="translated">Populära tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9302,17 +9302,17 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2138469194506455231" datatype="html">
+      <trans-unit id="2138469194506455231" datatype="html" xml:space="preserve">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="translated">⚠️ Du har inget externt auth-insticksprogram aktiverat.</target>
+        <target state="translated">⚠️ Du har inget externt auth-tillägg aktiverat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6608125149782412086" datatype="html">
+      <trans-unit id="6608125149782412086" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="translated">⚠️ Du har flertalet externa auth-insticksprogram aktiverade.</target>
+        <target state="translated">⚠️ Du har flera externa auth-tillägg aktiverade.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">77</context>
@@ -10926,9 +10926,9 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4543888618160534551" datatype="html">
+      <trans-unit id="4543888618160534551" datatype="html" xml:space="preserve">
         <source>TWO-FACTOR AUTHENTICATION</source>
-        <target state="new">TWO-FACTOR AUTHENTICATION</target>
+        <target state="translated">TVÅFAKTORSAUTENTISERING</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">66,67</context>
@@ -15002,9 +15002,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="212615365039028546">
+      <trans-unit id="212615365039028546" xml:space="preserve">
         <source>You don't have plugins installed yet.</source>
-        <target>Du har  inga insticksprogram installerade än.</target>
+        <target state="translated">Du har inga tillägg installerade än.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -15112,17 +15112,17 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3150704904301058778">
+      <trans-unit id="3150704904301058778" xml:space="preserve">
         <source>The plugin index is not available. Please retry later.</source>
-        <target>Listan över insticksprogram är inte tillgänglig. Försök gärna igen senare.</target>
+        <target state="translated">Listan över tillägg är inte tillgänglig. Försök igen senare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1387301493234848481">
+      <trans-unit id="1387301493234848481" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target>Installera enbart insticksprogram eller teman du litar på, då de kan exekvera vilken kod som helst på din instans.</target>
+        <target state="translated">Installera enbart tillägg eller teman du litar på, då de kan exekvera vilken kod som helst på din instans.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -15154,9 +15154,9 @@
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2941409202780782189">
+      <trans-unit id="2941409202780782189" xml:space="preserve">
         <source>plugin</source>
-        <target>insticksprogram</target>
+        <target state="translated">tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -15902,9 +15902,9 @@
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552039423287890133" datatype="html">
+      <trans-unit id="5552039423287890133" datatype="html" xml:space="preserve">
         <source>Update a user</source>
-        <target state="translated">Uppdatera en användare</target>
+        <target state="translated">Uppdatera användaren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">100</context>
@@ -16234,9 +16234,9 @@
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6585766371605707311">
+      <trans-unit id="6585766371605707311" xml:space="preserve">
         <source>Email updated.</source>
-        <target>E-postadress har uppdaterats.</target>
+        <target state="translated">E-postadressen har uppdaterats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -16358,9 +16358,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776289814033837037">
+      <trans-unit id="4776289814033837037" xml:space="preserve">
         <source>Interface settings updated.</source>
-        <target>Gränssnittsinställningar uppdaterade.</target>
+        <target state="translated">Gränssnittsinställningarna uppdaterade.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -16634,9 +16634,9 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3960396487495291449">
+      <trans-unit id="3960396487495291449" xml:space="preserve">
         <source>Video settings updated.</source>
-        <target>Videoinställningar har uppdaterats.</target>
+        <target state="translated">Videoinställningarna har uppdaterats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -16834,9 +16834,9 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6059091237492573541" datatype="html">
+      <trans-unit id="6059091237492573541" datatype="html" xml:space="preserve">
         <source>Update video channel</source>
-        <target state="translated">Uppdatera kanal</target>
+        <target state="translated">Uppdatera kanalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/routes.ts</context>
           <context context-type="linenumber">30</context>
@@ -16922,9 +16922,9 @@
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8869957234869568361" datatype="html">
+      <trans-unit id="8869957234869568361" datatype="html" xml:space="preserve">
         <source>Update playlist</source>
-        <target state="translated">Uppdatera spellista</target>
+        <target state="translated">Uppdatera spellistan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -17560,25 +17560,25 @@
           <context context-type="linenumber">331</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4482153685775394919" datatype="html">
+      <trans-unit id="4482153685775394919" datatype="html" xml:space="preserve">
         <source>Go to the "Discover videos" page</source>
-        <target state="new">Go to the "Discover videos" page</target>
+        <target state="translated">Gå till upptäck videor-sidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">336</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6123131701694052862" datatype="html">
+      <trans-unit id="6123131701694052862" datatype="html" xml:space="preserve">
         <source>Go to the "Browse videos" page</source>
-        <target state="new">Go to the "Browse videos" page</target>
+        <target state="translated">Gå till Bläddra igenom videor-sidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5260039955239962053" datatype="html">
+      <trans-unit id="5260039955239962053" datatype="html" xml:space="preserve">
         <source>Go to the "Publish video" page</source>
-        <target state="new">Go to the "Publish video" page</target>
+        <target state="translated">Gå till Publicera video-sidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">346</context>
