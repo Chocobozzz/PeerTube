@@ -10222,15 +10222,14 @@ The link will expire within 1 hour.</source>
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="3892825090402620438" datatype="html">
-        <source>Two-factor authentication</source>
-        <target state="translated">Autenticação de dois fatores</target>
+      </trans-unit><trans-unit id="4543888618160534551" datatype="html">
+        <source>TWO-FACTOR AUTHENTICATION</source><target state="new">TWO-FACTOR AUTHENTICATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
+      
       <trans-unit id="9012586956848595996" datatype="html">
         <source>EMAIL</source>
         <target state="translated">E-MAIL</target>
@@ -16284,32 +16283,30 @@ The link will expire within 1 hour.</source>
         <source>Toggle the left menu</source>
         <target>Esconder o menu lateral esquerdo</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">331</context></context-group></trans-unit>
-      <trans-unit id="5409372033656550095" datatype="html">
-        <source>Go to the discover videos page</source>
-        <target state="translated">Descubra a página de vídeos</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">336</context></context-group></trans-unit>
-      <trans-unit id="4278050445961255445">
-        <source>Go to the trending videos page</source>
-        <target>Ir à página dos vídeos em alta</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">341</context></context-group></trans-unit>
-      <trans-unit id="3242234958443825475">
-        <source>Go to the recently added videos page</source>
-        <target>Ir à página dos vídeos recentes</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">346</context></context-group></trans-unit>
-      <trans-unit id="2887122197778293919">
-        <source>Go to the local videos page</source>
-        <target>Ir à página dos vídeos locais</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">351</context></context-group></trans-unit>
-      <trans-unit id="8009065619559214982">
-        <source>Go to the videos upload page</source>
-        <target>Ir à página de envio de vídeos</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">356</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">331</context></context-group></trans-unit><trans-unit id="4482153685775394919" datatype="html">
+        <source>Go to the "Discover videos" page</source><target state="new">Go to the "Discover videos" page</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">336</context>
+        </context-group>
+      </trans-unit><trans-unit id="6123131701694052862" datatype="html">
+        <source>Go to the "Browse videos" page</source><target state="new">Go to the "Browse videos" page</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">341</context>
+        </context-group>
+      </trans-unit><trans-unit id="5260039955239962053" datatype="html">
+        <source>Go to the "Publish video" page</source><target state="new">Go to the "Publish video" page</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">346</context>
+        </context-group>
+      </trans-unit>
+      
+      
+      
+      
+      
       <trans-unit id="3779524668013120370">
         <source>Go to my subscriptions</source>
         <target>Ir às minhas inscrições</target>
