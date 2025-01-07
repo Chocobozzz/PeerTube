@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="6699890091238112345" datatype="html" xml:space="preserve">
         <source>Browse all videos</source>
-        <target state="translated">Bläddra igenom alla videor</target>
+        <target state="translated">Nytt och populärt (alla videor)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -3142,7 +3142,7 @@
       </trans-unit>
       <trans-unit id="5174743927852553765" datatype="html" xml:space="preserve">
         <source>Browse local videos</source>
-        <target state="translated">Bläddra igenom lokala videor</target>
+        <target state="translated">Nytt och populärt (lokala videor)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">169</context>
@@ -3150,7 +3150,7 @@
       </trans-unit>
       <trans-unit id="5491172370003945798" datatype="html" xml:space="preserve">
         <source>Browse videos</source>
-        <target state="translated">Bläddra igenom videor</target>
+        <target state="translated">Nytt och populärt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-all.component.html</context>
           <context context-type="linenumber">1</context>
@@ -17570,7 +17570,7 @@
       </trans-unit>
       <trans-unit id="6123131701694052862" datatype="html" xml:space="preserve">
         <source>Go to the "Browse videos" page</source>
-        <target state="translated">Gå till Bläddra igenom videor-sidan</target>
+        <target state="translated">Gå till Nytt och populärt-sidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">341</context>
