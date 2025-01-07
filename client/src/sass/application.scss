@@ -75,6 +75,7 @@ body {
   --active-icon-bg: #{pvar(--primary)};
 
   --border-primary: #{pvar(--primary)};
+  --border-secondary: #{pvar(--bg-secondary-450)};
 
   --alert-primary-fg: #{pvar(--on-primary-200)};
   --alert-primary-bg: #{pvar(--primary-200)};
@@ -104,6 +105,7 @@ body {
     --border-primary: #F2690D;
 
     --fg: hsl(0 14% 2%);
+    --fg-200: hsl(0 14% 29%);
 
     --bg: hsl(250 5% 96%);
     --bg-secondary: hsl(0 12% 72%);

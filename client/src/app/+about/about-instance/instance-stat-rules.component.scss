@@ -1,0 +1,104 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_components' as *;
+
+.root {
+  padding: 1.5rem;
+  border-radius: 14px;
+  background-color: pvar(--bg-secondary-400);
+}
+
+h4 {
+  font-size: 20px;
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+}
+
+.stats-block {
+  .blocks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+.stat {
+  @include stats-card;
+}
+
+.usage-rules-block {
+  @include rfs(1.5rem, margin-top);
+
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .usage-rule {
+    color: pvar(--fg-300);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .usage-rule:nth-child(2n + 1) {
+    background-color: pvar(--bg-secondary-450);
+  }
+
+  .usage-rule:nth-child(2n) {
+    border: 1px solid pvar(--border-secondary);
+  }
+
+  strong {
+    font-weight: $font-bold;
+    color: pvar(--fg-400);
+  }
+
+  .rule-content {
+    @include font-size(14px);
+  }
+
+  .icon-container {
+    position: relative;
+
+    > my-global-icon:first-child {
+      color: pvar(--secondary-icon-color);
+
+      @include global-icon-size(42px);
+    }
+  }
+
+  .icon-status {
+    background-color: pvar(--bg);
+    border-radius: 100%;
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    text-align: center;
+
+    @include global-icon-size(18px);
+
+    my-global-icon {
+      @include global-icon-size(14px);
+    }
+  }
+
+  my-global-icon[iconName=tick] {
+    color: pvar(--green);
+  }
+
+  my-global-icon[iconName=cross] {
+    color: pvar(--red);
+  }
+
+  .icon-info::after {
+    content: '!';
+    display: block;
+    color: pvar(--fg-200);
+    font-size: 14px;
+    font-weight: $font-bold;
+  }
+}

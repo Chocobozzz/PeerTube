@@ -630,6 +630,18 @@ const CONFIG = {
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
 
+    get SERVER_COUNTRY () { return config.get<string>('instance.server_country') },
+
+    SUPPORT: {
+      get TEXT () { return config.get<string>('instance.support.text') }
+    },
+
+    SOCIAL: {
+      get EXTERNAL_LINK () { return config.get<string>('instance.social.external_link') },
+      get MASTODON_LINK () { return config.get<string>('instance.social.mastodon_link') },
+      get BLUESKY () { return config.get<string>('instance.social.bluesky_link') }
+    },
+
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
 
     CUSTOMIZATIONS: {

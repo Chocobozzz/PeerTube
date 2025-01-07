@@ -5,13 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { Notifier } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
+import { URL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
   ADMIN_EMAIL_VALIDATOR,
   CACHE_SIZE_VALIDATOR,
   CONCURRENCY_VALIDATOR,
   EXPORT_EXPIRATION_VALIDATOR,
   EXPORT_MAX_USER_VIDEO_QUOTA_VALIDATOR,
-  INDEX_URL_VALIDATOR,
   INSTANCE_NAME_VALIDATOR,
   INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
   MAX_INSTANCE_LIVES_VALIDATOR,
@@ -19,7 +19,6 @@ import {
   MAX_SYNC_PER_USER,
   MAX_USER_LIVES_VALIDATOR,
   MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR,
-  SEARCH_INDEX_URL_VALIDATOR,
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
   SIGNUP_MINIMUM_AGE_VALIDATOR,
@@ -123,6 +122,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
         categories: null,
         languages: null,
+
+        serverCountry: null,
+        support: {
+          text: null
+        },
+        social: {
+          externalLink: URL_VALIDATOR,
+          mastodonLink: URL_VALIDATOR,
+          blueskyLink: URL_VALIDATOR
+        },
 
         defaultClientRoute: null,
 
@@ -312,7 +321,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           },
           autoFollowIndex: {
             enabled: null,
-            indexUrl: INDEX_URL_VALIDATOR
+            indexUrl: URL_VALIDATOR
           }
         }
       },
@@ -329,7 +338,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         },
         searchIndex: {
           enabled: null,
-          url: SEARCH_INDEX_URL_VALIDATOR,
+          url: URL_VALIDATOR,
           disableLocalSearch: null,
           isDefaultSearch: null
         }

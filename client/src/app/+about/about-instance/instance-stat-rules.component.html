@@ -1,0 +1,163 @@
+<div class="root">
+
+  <div class="stats-block">
+    <h4 i18n>Our platform in figures</h4>
+
+    <div class="blocks" myPluginSelector pluginSelectorId="about-instance-statistics">
+      <div class="stat">
+        <strong>{{ stats.totalModerators + stats.totalAdmins | number }}</strong>
+        <div i18n>moderators</div>
+        <my-global-icon iconName="moderation"></my-global-icon>
+      </div>
+
+      <div class="stat">
+        <strong>{{ stats.totalUsers | number }}</strong>
+        <div i18n>users</div>
+        <my-global-icon iconName="user"></my-global-icon>
+      </div>
+
+      <div class="stat">
+        <strong>{{ stats.totalLocalVideos | number }}</strong>
+        <a routerLink="/videos/browse" [queryParams]="{ scope: 'local' }" i18n>videos</a>
+        <my-global-icon iconName="videos"></my-global-icon>
+      </div>
+
+      <div class="stat">
+        <strong>{{ stats.totalLocalVideoViews | number }}</strong>
+        <div i18n>views</div>
+        <my-global-icon iconName="eye-open"></my-global-icon>
+      </div>
+
+      <div class="stat">
+        <strong>{{ stats.totalLocalVideoComments | number }}</strong>
+        <div i18n>views</div>
+        <my-global-icon iconName="message-circle"></my-global-icon>
+      </div>
+
+      <div class="stat">
+        <strong>{{ stats.totalLocalVideoFilesSize | bytes:1 }}</strong>
+        <div i18n>hosted videos</div>
+        <my-global-icon iconName="film"></my-global-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="usage-rules-block">
+    <h4 i18n>Usage rules</h4>
+
+    <div class="blocks">
+
+      <div class="usage-rule">
+        <div class="icon-container">
+          <my-global-icon iconName="message-circle"></my-global-icon>
+
+          <div class="icon-status">
+            <div class="icon-info"></div>
+          </div>
+        </div>
+
+        <div *ngIf="config.instance.serverCountry">
+          <strong i18n>This platform has been created in {{ config.instance.serverCountry }}</strong>
+          <div class="rule-content">
+            <ng-container i18n>Your content (comments, videos...) must comply with the legislation in force in this country.</ng-container>
+            <ng-container *ngIf="aboutHTML.codeOfConduct" i18n> You must also follow our <a routerLink="/about/instance/moderation">code of conduct</a>.</ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="usage-rule">
+        <div class="icon-container">
+          <my-global-icon iconName="user"></my-global-icon>
+
+          @if (config.signup.allowed && config.signup.allowedForCurrentIP) {
+            <div class="icon-status">
+              <my-global-icon iconName="tick"></my-global-icon>
+            </div>
+          } @else {
+            <div class="icon-status">
+              <my-global-icon iconName="cross"></my-global-icon>
+            </div>
+          }
+        </div>
+
+        <div>
+          @if (config.signup.allowed && config.signup.allowedForCurrentIP) {
+            @if (config.signup.requiresApproval) {
+              <strong i18n>You can <a routerLink="/signup">request an account</a> on our platform</strong>
+
+              @if (stats.averageRegistrationRequestResponseTimeMs) {
+                <div class="rule-content" i18n>Our moderator will validate it within a {{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}.</div>
+              } @else {
+                <div class="rule-content" i18n>Our moderator will validate it within a few days.</div>
+              }
+            } @else {
+              <strong i18n>You can <a routerLink="/signup">create an account</a> on our platform</strong>
+            }
+          } @else {
+            <strong i18n>Public registration on our platform is not allowed</strong>
+          }
+        </div>
+      </div>
+
+      <div class="usage-rule" *ngIf="config.federation.enabled">
+        <div class="icon-container">
+          <my-global-icon iconName="fediverse"></my-global-icon>
+
+          <div class="icon-status">
+            <my-global-icon iconName="tick"></my-global-icon>
+          </div>
+        </div>
+
+        <div>
+          <strong i18n>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</strong>
+
+          <div class="rule-content" i18n>You can use these services to interact with our videos</div>
+        </div>
+      </div>
+
+      <div class="usage-rule">
+        @if (canUpload()) {
+          <div class="icon-container">
+            <my-global-icon iconName="upload"></my-global-icon>
+
+            <div class="icon-status">
+              <my-global-icon iconName="tick"></my-global-icon>
+            </div>
+          </div>
+
+          <div>
+            <strong i18n>Vous pouvez publier des vidéos</strong>
+
+            <div class="rule-content">
+              <ng-container i18n>By default, your account allows you to publish videos.</ng-container>
+
+              <ng-container *ngIf="canPublishLive()" i18n> You can also stream lives.</ng-container>
+            </div>
+          </div>
+        } @else {
+          <div class="icon-container">
+            <my-global-icon iconName="upload"></my-global-icon>
+
+            <div class="icon-status">
+              <my-global-icon iconName="cross"></my-global-icon>
+            </div>
+          </div>
+
+          <div>
+            @if (isContactFormEnabled()) {
+              <strong i18n>Contact us to publish videos</strong>
+            } @else {
+              <strong i18n>You can't publish videos</strong>
+            }
+
+            <div class="rule-content">
+              <ng-container i18n>By default, your account does not allow to publish videos.</ng-container>
+
+              <ng-container *ngIf="isContactFormEnabled()" i18n> If you want to publish videos, <a routerLink="/about/contact">contact us</a>.</ng-container>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

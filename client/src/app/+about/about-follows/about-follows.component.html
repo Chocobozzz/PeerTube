@@ -1,30 +1,81 @@
-<div class="margin-content mt-4">
-  <div class="row">
-    <h1 class="visually-hidden" i18n>Follows</h1>
+<div class="margin-content mt-5">
 
-    <div class="col-xl-6 col-md-12">
-      <h2 i18n class="fs-5-5 mb-4 fw-semibold">Followers of {{ instanceName }} ({{ followersPagination.totalItems }})</h2>
+  <div class="subscriptions me-3 mb-3">
+    <div class="block-header mb-4 d-flex">
+      <div class="flex-grow-1 me-2">
+        <h3 i18n>{{ subscriptionsPagination.totalItems }} {subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}</h3>
 
+        <div i18n class="text-content">
+          This is content to which we have subscribed. This allows us to display their videos directly on {{ instanceName }}.
+        </div>
+      </div>
+
+      <my-subscription-image></my-subscription-image>
+    </div>
+
+    <div class="follows">
+      <div i18n class="no-results" *ngIf="subscriptionsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
+
+      <div *ngFor="let subscription of subscriptions" class="follow-block">
+        <my-actor-avatar [actor]="subscription" actorType="channel" size="32"></my-actor-avatar>
+
+        <div>
+          <a class="follow-name" [href]="subscription.url" target="_blank" rel="noopener noreferrer">{{ subscription.name }}</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center">
+      <my-button *ngIf="canLoadMoreSubscriptions()" class="mt-3 mx-auto" (click)="loadMoreSubscriptions()" theme="secondary" i18n>Show more subscriptions</my-button>
+    </div>
+
+    <div *ngIf="serverStats" class="stats mt-4">
+      <h4 i18n>Our network in figures</h4>
+
+      <div myPluginSelector pluginSelectorId="about-instance-network-statistics">
+        <div class="stat">
+          <strong>{{ serverStats.totalVideos | number }}</strong>
+          <a routerLink="/videos/browse" [queryParams]="{ scope: 'federated' }" i18n>total videos</a>
+          <my-global-icon iconName="videos"></my-global-icon>
+        </div>
+
+        <div class="stat">
+          <strong>{{ serverStats.totalVideoComments | number }}</strong>
+          <div i18n>total comments</div>
+          <my-global-icon iconName="message-circle"></my-global-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="followers">
+    <div class="block-header mb-4 d-flex">
+      <div class="flex-grow-1 me-2">
+        <h3 i18n>{{ followersPagination.totalItems }} {followersPagination.totalItems, plural, =1 {follower} other {followers}}</h3>
+
+        <div i18n class="text-content">
+          Our subscribers automatically display videos of {{ instanceName }} on their platforms.
+        </div>
+      </div>
+
+      <my-follower-image></my-follower-image>
+    </div>
+
+    <div class="follows">
       <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">{{ instanceName }} does not have followers.</div>
 
-      <a *ngFor="let follower of followers" [href]="follower.url" target="_blank" rel="noopener noreferrer">
-        {{ follower.name }}
-      </a>
+      <div *ngFor="let follower of followers" class="follow-block">
+        <my-actor-avatar [actor]="follower" actorType="channel" size="32"></my-actor-avatar>
 
-      <button i18n class="peertube-button-link secondary-button mt-1" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
+        <div>
+          <a class="follow-name" [href]="follower.url" target="_blank" rel="noopener noreferrer">{{ follower.name }}</a>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <my-button *ngIf="canLoadMoreFollowers()" class="mt-3 mx-auto" (click)="loadMoreFollowers()" theme="secondary" i18n>Show more followers</my-button>
+      </div>
     </div>
-
-    <div class="col-xl-6 col-md-12">
-      <h2 i18n class="fs-5-5 mb-4 fw-semibold">Subscriptions of {{ instanceName }} ({{ followingsPagination.totalItems }})</h2>
-
-      <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
-
-      <a *ngFor="let following of followings" [href]="following.url" target="_blank" rel="noopener noreferrer">
-        {{ following.name }}
-      </a>
-
-      <button i18n class="peertube-button-link secondary-button mt-1" *ngIf="!loadedAllFollowings && canLoadMoreFollowings()" (click)="loadAllFollowings()">Show full list</button>
-    </div>
-
   </div>
 </div>

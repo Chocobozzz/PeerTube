@@ -52,6 +52,8 @@ function checkMissedConfig () {
     'defaults.publish.download_enabled', 'defaults.publish.comments_policy', 'defaults.publish.privacy', 'defaults.publish.licence',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
     'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
+    'instance.server_country', 'instance.support.text', 'instance.social.external_link', 'instance.social.mastodon_link',
+    'instance.social.bluesky_link',
     'services.twitter.username',
     'followers.instance.enabled', 'followers.instance.manual_approval',
     'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',

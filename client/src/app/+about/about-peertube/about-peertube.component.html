@@ -1,7 +1,7 @@
-<div class="margin-content mt-4">
-  <h1 i18n class="fs-3 text-center fw-semibold mb-3">
-    This website is powered by PeerTube
-  </h1>
+<div class="margin-content mt-5">
+  <h3 i18n class="fs-3 text-center fw-semibold mb-3">
+    This platform is powered by PeerTube
+  </h3>
 
   <img class="d-block my-4 mx-auto" width="121px" height="147px" src="/client/assets/images/mascot/default.svg" alt="mascot"/>
 
@@ -57,103 +57,5 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="d-flex flex-column">
-    <h2 class="mb-4 mt-5 text-center fs-5 fw-semibold">
-      <div class="anchor" id="privacy"></div> <!-- privacy anchor -->
-      <ng-container i18n>P2P & Privacy</ng-container>
-    </h2>
-
-    <p i18n>
-      PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server,
-      but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What
-      follows applies only if you want to keep using the P2P mode of PeerTube.
-    </p>
-
-    <p i18n>
-      The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent
-      tracker as long as you download or watch the video.
-    </p>
-
-    <h3 i18n class="fs-5">What are the consequences?</h3>
-
-    <p i18n>
-      In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
-      In practice, this is much more difficult because:
-    </p>
-
-    <ul>
-      <li i18n>
-        An HTTP request has to be sent on each tracker for each video to spy.
-        If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-      </li>
-
-      <li i18n>
-        For each request sent, the tracker returns random peers at a limited number.
-        For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-        requests sent to know every peer in the swarm
-      </li>
-
-      <li i18n>
-        Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
-      </li>
-
-      <li i18n>
-        If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the
-        video
-      </li>
-
-      <li i18n>
-        The IP address is a vague information: usually, it regularly changes and can represent many persons or entities
-      </li>
-
-      <li i18n>
-        Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker.
-        When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers
-        to forward the information to.
-        See <a class="link-primary" href="https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst">this document</a> for more information
-      </li>
-    </ul>
-
-    <p i18n>
-      The worst-case scenario of an average person spying on their friends is quite unlikely.
-      There are much more effective ways to get that kind of information.
-    </p>
-
-    <h3 i18n class="p2p-privacy-title">How does PeerTube compare with YouTube?</h3>
-
-    <p i18n>
-      The threats to privacy with YouTube are different from PeerTube's.
-      In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-      Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-    </p>
-
-    <h3 i18n class="p2p-privacy-title">What can I do to limit the exposure of my IP address?</h3>
-
-    <p i18n>
-      Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing
-      your IP in their connection logs: ISP/routers/trackers/CDN and more.
-      PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
-      Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
-    </p>
-
-    <h3 i18n class="p2p-privacy-title">What will be done to mitigate this problem?</h3>
-
-    <p i18n>
-      PeerTube wants to deliver the best countermeasures possible, to give you more choice
-      and render attacks less likely. Here is what we put in place so far:
-    </p>
-
-    <ul>
-      <li i18n>We set a limit to the number of peers sent by the tracker</li>
-      <li i18n>We set a limit on the request frequency received by the tracker</li>
-      <li i18n>Allow instance admins to disable P2P from the administration interface</li>
-    </ul>
-
-    <p i18n>
-      Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
-      WebRTC in your browser.
-    </p>
   </div>
 </div>

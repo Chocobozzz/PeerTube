@@ -460,7 +460,7 @@ body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
 }
 body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item.p-highlight,
 body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item:hover {
-  color: #ffffff;
+  color: pvar(--on-primary);
   background-color: pvar(--primary);
 }
 body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-group {
@@ -648,7 +648,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   margin-top: 0;
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
-  color: pvar(--bg);
+  color: pvar(--on-primary);
   background: pvar(--primary);
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight.p-focus {
@@ -1069,7 +1069,7 @@ p-tablecheckbox:hover div .p-checkbox-box {
 
   .p-checkbox-box {
     &.p-highlight {
-      color: pvar(--bg) !important;
+      color: pvar(--on-primary) !important;
       background-color: pvar(--primary) !important;
       border-color: pvar(--primary) !important;
     }

@@ -30,6 +30,11 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.maintenanceLifetime).to.be.empty
   expect(data.instance.businessModel).to.be.empty
   expect(data.instance.hardwareInformation).to.be.empty
+  expect(data.instance.serverCountry).to.be.empty
+  expect(data.instance.support.text).to.be.empty
+  expect(data.instance.social.externalLink).to.be.empty
+  expect(data.instance.social.blueskyLink).to.be.empty
+  expect(data.instance.social.mastodonLink).to.be.empty
 
   expect(data.instance.languages).to.have.lengthOf(0)
   expect(data.instance.categories).to.have.lengthOf(0)
@@ -164,6 +169,16 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
 
       isNSFW: true,
       defaultNSFWPolicy: 'blur' as 'blur',
+
+      serverCountry: 'France',
+      support: {
+        text: 'My support text'
+      },
+      social: {
+        externalLink: 'https://joinpeertube.org/',
+        mastodonLink: 'https://framapiaf.org/@peertube',
+        blueskyLink: 'https://bsky.app/profile/joinpeertube.org'
+      },
 
       defaultClientRoute: '/videos/recently-added',
 

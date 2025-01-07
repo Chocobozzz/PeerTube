@@ -1,0 +1,19 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_bootstrap-variables' as *;
+@use '_components' as *;
+
+.root {
+  position: relative;
+}
+
+img {
+  width: 30px;
+  height: 30px;
+  border: 1px solid pvar(--bg-secondary-400);
+  border-radius: 8px;
+  position: absolute;
+  right: 36px;
+  bottom: 25px;
+  transform: rotate(18deg);
+}

@@ -104,6 +104,15 @@ class ServerConfigManager {
         isNSFW: CONFIG.INSTANCE.IS_NSFW,
         defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
         defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+        serverCountry: CONFIG.INSTANCE.SERVER_COUNTRY,
+        support: {
+          text: CONFIG.INSTANCE.SUPPORT.TEXT
+        },
+        social: {
+          blueskyLink: CONFIG.INSTANCE.SOCIAL.BLUESKY,
+          mastodonLink: CONFIG.INSTANCE.SOCIAL.MASTODON_LINK,
+          externalLink: CONFIG.INSTANCE.SOCIAL.EXTERNAL_LINK
+        },
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
@@ -289,6 +298,10 @@ class ServerConfigManager {
             indexUrl: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
           }
         }
+      },
+
+      federation: {
+        enabled: CONFIG.FEDERATION.ENABLED
       },
 
       broadcastMessage: {

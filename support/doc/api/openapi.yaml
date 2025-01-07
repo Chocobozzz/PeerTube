@@ -9033,6 +9033,22 @@ components:
               type: boolean
             defaultNSFWPolicy:
               type: string
+            serverCountry:
+              type: string
+            support:
+              type: object
+              properties:
+                text:
+                  type: string
+            social:
+              type: object
+              properties:
+                externalLink:
+                  type: string
+                mastodonLink:
+                  type: string
+                blueskyLink:
+                  type: string
             customizations:
               type: object
               properties:
@@ -9251,6 +9267,11 @@ components:
                     indexUrl:
                       type: string
                       format: url
+        federation:
+          type: object
+          properties:
+            enabled:
+              type: boolean
         homepage:
           type: object
           properties:
@@ -9459,11 +9480,49 @@ components:
               type: string
             terms:
               type: string
-            defaultClientRoute:
+            codeOfConduct:
               type: string
+            creationReason:
+              type: string
+            moderationInformation:
+              type: string
+            administrator:
+              type: string
+            maintenanceLifetime:
+              type: string
+            businessModel:
+              type: string
+            hardwareInformation:
+              type: string
+            languages:
+              type: array
+              items:
+                type: string
+            categories:
+              type: array
+              items:
+                type: number
             isNSFW:
               type: boolean
             defaultNSFWPolicy:
+              type: string
+            serverCountry:
+              type: string
+            support:
+              type: object
+              properties:
+                text:
+                  type: string
+            social:
+              type: object
+              properties:
+                externalLink:
+                  type: string
+                mastodonLink:
+                  type: string
+                blueskyLink:
+                  type: string
+            defaultClientRoute:
               type: string
             customizations:
               type: object

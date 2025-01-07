@@ -1,0 +1,101 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+$container-radius: 14px;
+
+h1 {
+  font-weight: $font-bold;
+
+  @include font-size(2rem);
+  @include rfs(1.5rem, margin-bottom);
+
+  my-global-icon {
+    @include margin-right(0.5rem);
+    @include global-icon-size(24px);
+  }
+}
+
+.instance-info-container {
+  background: pvar(--bg-secondary-400);
+  border-radius: $container-radius;
+
+  @include rfs(2rem, margin-bottom);
+}
+
+.instance-info {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include rfs(1.25rem, gap);
+  @include rfs(1.75rem, padding);
+}
+
+.avatar img {
+  border-radius: 24px;
+
+  width: 110px;
+  height: 110px;
+}
+
+.banner {
+  @include fade-text(73%, #{pvar(--bg-secondary-400)});
+
+  img {
+    border-start-start-radius: $container-radius;
+    border-start-end-radius: $container-radius;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+}
+
+.instance-name {
+  color: pvar(--fg-350);
+  font-weight: $font-bold;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+
+  @include font-size(2.25rem);
+}
+
+.instance-description {
+  color: pvar(--fg-300);
+
+  @include font-size(1.25rem);
+}
+
+.social-buttons {
+
+  .peertube-button-link {
+    @include margin-left(0.5rem);
+  }
+
+  .media {
+    color: pvar(--fg-300);
+    background-color: pvar(--bg-secondary-450);
+    border: 1px solid pvar(--bg-secondary-450);
+
+    &:hover {
+      color: pvar(--fg-300);
+      background-color: pvar(--bg-secondary-400);
+    }
+
+    &:active {
+      background-color: pvar(--bg-secondary-350);
+    }
+  }
+
+  .external-link {
+    color: pvar(--bg-secondary-350);
+    background-color: pvar(--fg-350);
+    border: 1px solid pvar(--fg-350);
+
+    &:hover {
+      background-color: pvar(--fg-400);
+      color: pvar(--bg-secondary-400);
+    }
+
+    &:active {
+      background-color: pvar(--fg-450);
+    }
+  }
+}

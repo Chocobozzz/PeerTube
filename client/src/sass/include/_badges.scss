@@ -22,9 +22,8 @@
   }
 
   &.badge-secondary {
-    color: pvar(--bg);
-    background-color: pvar(--fg-300);
-    opacity: 0.7;
+    color: pvar(--fg-450);
+    background-color: pvar(--bg-secondary-400);
   }
 
   &.badge-banned,
