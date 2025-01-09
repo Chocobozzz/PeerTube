@@ -11291,25 +11291,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2864176699435587977" datatype="html">
+      <trans-unit id="2864176699435587977" datatype="html" xml:space="preserve">
         <source>Only display videos in the following languages/subtitles</source>
-        <target state="new">Only display videos in the following languages/subtitles</target>
+        <target state="translated">Mostra només vídeos en els idiomes/subtítols següents</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1534085756270333258" datatype="html">
+      <trans-unit id="1534085756270333258" datatype="html" xml:space="preserve">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="new">In Recently added, Trending, Local, Most liked and Search pages</target>
+        <target state="translated">A les pàgines Afegits recentment, Tendències, Locals, Més populars i Cerca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2658703380934466003" datatype="html">
+      <trans-unit id="2658703380934466003" datatype="html" xml:space="preserve">
         <source>Add a new language</source>
-        <target state="new">Add a new language</target>
+        <target state="translated">Afegir un idioma nou</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">96</context>
@@ -11319,25 +11319,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="264068562357780835" datatype="html">
+      <trans-unit id="264068562357780835" datatype="html" xml:space="preserve">
         <source>New email</source>
-        <target state="new">New email</target>
+        <target state="translated">Nova adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3000005804987112527" datatype="html">
+      <trans-unit id="3000005804987112527" datatype="html" xml:space="preserve">
         <source>Change email</source>
-        <target state="new">Change email</target>
+        <target state="translated">Canviar l'adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7103588127254721505" datatype="html">
+      <trans-unit id="7103588127254721505" datatype="html" xml:space="preserve">
         <source>Theme</source>
-        <target state="new">Theme</target>
+        <target state="translated">Tema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">15</context>
@@ -11347,49 +11347,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4561174610228620528" datatype="html">
+      <trans-unit id="4561174610228620528" datatype="html" xml:space="preserve">
         <source>Select the next owner</source>
-        <target state="new">Select the next owner</target>
+        <target state="translated">Seleccionar el pròxim propietari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1788875035518441092" datatype="html">
+      <trans-unit id="1788875035518441092" datatype="html" xml:space="preserve">
         <source>Last published first</source>
-        <target state="new">Last published first</target>
+        <target state="translated">Darrera publicació primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4541072509002204177" datatype="html">
+      <trans-unit id="4541072509002204177" datatype="html" xml:space="preserve">
         <source>Last created first</source>
-        <target state="new">Last created first</target>
+        <target state="translated">Darrera creació primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1142493792593089647" datatype="html">
+      <trans-unit id="1142493792593089647" datatype="html" xml:space="preserve">
         <source>Most viewed first</source>
-        <target state="new">Most viewed first</target>
+        <target state="translated">Els més vistos primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8108088952881606566" datatype="html">
+      <trans-unit id="8108088952881606566" datatype="html" xml:space="preserve">
         <source>Most liked first</source>
-        <target state="new">Most liked first</target>
+        <target state="translated">Els més agradats primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2782422473180760140" datatype="html">
+      <trans-unit id="2782422473180760140" datatype="html" xml:space="preserve">
         <source>Longest first</source>
-        <target state="new">Longest first</target>
+        <target state="translated">Els més llargs primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">12</context>
