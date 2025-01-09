@@ -11599,57 +11599,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9049939123029212539" datatype="html">
+      <trans-unit id="9049939123029212539" datatype="html" xml:space="preserve">
         <source>Synchronization created successfully.</source>
-        <target state="new">Synchronization created successfully.</target>
+        <target state="translated">La sincronització s'ha creat correctament.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4247400351982331798" datatype="html">
+      <trans-unit id="4247400351982331798" datatype="html" xml:space="preserve">
         <source>Account settings</source>
-        <target state="new">Account settings</target>
+        <target state="translated">Configuració del compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5863226045830598109" datatype="html">
+      <trans-unit id="5863226045830598109" datatype="html" xml:space="preserve">
         <source>Two factor authentication</source>
-        <target state="new">Two factor authentication</target>
+        <target state="translated">Autenticació de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2864486939135008600" datatype="html">
+      <trans-unit id="2864486939135008600" datatype="html" xml:space="preserve">
         <source>Playlist elements</source>
-        <target state="new">Playlist elements</target>
+        <target state="translated">Elements de la llista de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7000850040589508423" datatype="html">
+      <trans-unit id="7000850040589508423" datatype="html" xml:space="preserve">
         <source>Create video channel</source>
-        <target state="new">Create video channel</target>
+        <target state="translated">Crear canal de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5700655611297335752" datatype="html">
+      <trans-unit id="5700655611297335752" datatype="html" xml:space="preserve">
         <source>No channel found.</source>
-        <target state="new">No channel found.</target>
+        <target state="translated">No s'ha trobat cap canal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="626184983378002054" datatype="html">
+      <trans-unit id="626184983378002054" datatype="html" xml:space="preserve">
         <source>Example: my_channel</source>
-        <target state="new">Example: my_channel</target>
+        <target state="translated">Exemple: el_meu_canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-edit.component.html</context>
           <context context-type="linenumber">33</context>
@@ -11659,9 +11659,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5278589041647101772" datatype="html">
+      <trans-unit id="5278589041647101772" datatype="html" xml:space="preserve">
         <source>Overwrite support field of all videos of this channel</source>
-        <target state="new">Overwrite support field of all videos of this channel</target>
+        <target state="translated">Substituir el camp d'assistència per a tots els vídeos d'aquest canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-edit.component.html</context>
           <context context-type="linenumber">81</context>
@@ -11671,11 +11671,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5500467336262464724" datatype="html">
+      <trans-unit id="5500467336262464724" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers </source>
-        <target state="new">
-          <x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscriptors </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">19</context>
@@ -11689,9 +11687,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="31472093355465024" datatype="html">
+      <trans-unit id="31472093355465024" datatype="html" xml:space="preserve">
         <source>Upload a new avatar</source>
-        <target state="new">Upload a new avatar</target>
+        <target state="translated">Penjar un avatar nou</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context>
           <context context-type="linenumber">15</context>
@@ -11701,33 +11699,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4854396465510517671" datatype="html">
+      <trans-unit id="4854396465510517671" datatype="html" xml:space="preserve">
         <source>Target</source>
-        <target state="new">Target</target>
+        <target state="translated">Objectiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6376690302059877029" datatype="html">
+      <trans-unit id="6376690302059877029" datatype="html" xml:space="preserve">
         <source>This video was deleted</source>
-        <target state="new">This video was deleted</target>
+        <target state="translated">Aquest vídeo s'ha suprimit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8173902679178787744" datatype="html">
+      <trans-unit id="8173902679178787744" datatype="html" xml:space="preserve">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="new">Once you delete your account, there is no going back. You will be asked to confirm this action.</target>
+        <target state="translated">Un cop suprimit el vostre compte no hi ha marxa enrere. Se us demanarà que confirmeu aquesta acció.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4000980858407872649" datatype="html">
+      <trans-unit id="4000980858407872649" datatype="html" xml:space="preserve">
         <source>Channel page</source>
-        <target state="new">Channel page</target>
+        <target state="translated">Pàgina del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">21</context>
@@ -11745,107 +11743,105 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6500762313951857695" datatype="html">
+      <trans-unit id="6500762313951857695" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sense visualitzacions} =1 {1 view} other {<x id="INTERPOLATION"/> visualitzacions}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9131836378905533756">
+      <trans-unit id="9131836378905533756" xml:space="preserve">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target>Creat per 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/>
-        </target>
+        <target state="translated">Creat per <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4546188098867041457" datatype="html">
+      <trans-unit id="4546188098867041457" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscripció} other {subscripcions}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="228548407872312756" datatype="html">
+      <trans-unit id="228548407872312756" datatype="html" xml:space="preserve">
         <source>Owner account page</source>
-        <target state="new">Owner account page</target>
+        <target state="translated">Pàgina del compte de la persona propietària</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4781078006040259916" datatype="html">
+      <trans-unit id="4781078006040259916" datatype="html" xml:space="preserve">
         <source>You don't have any video in your watch history yet.</source>
-        <target state="new">You don't have any video in your watch history yet.</target>
+        <target state="translated">Encara no teniu cap vídeo a l'historial de visualitzacions.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="989169929300254768" datatype="html">
+      <trans-unit id="989169929300254768" datatype="html" xml:space="preserve">
         <source>Delete from history</source>
-        <target state="new">Delete from history</target>
+        <target state="translated">Eliminar de l'historial</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="111295045776045026" datatype="html">
+      <trans-unit id="111295045776045026" datatype="html" xml:space="preserve">
         <source>Video history is enabled</source>
-        <target state="new">Video history is enabled</target>
+        <target state="translated">L'historial de vídeo està habilitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1869266307786648674" datatype="html">
+      <trans-unit id="1869266307786648674" datatype="html" xml:space="preserve">
         <source>Video history is disabled</source>
-        <target state="new">Video history is disabled</target>
+        <target state="translated">L'historial de vídeo està deshabilitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7505147502630555700" datatype="html">
+      <trans-unit id="7505147502630555700" datatype="html" xml:space="preserve">
         <source>Delete video history</source>
-        <target state="new">Delete video history</target>
+        <target state="translated">Suprimir l'historial de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8676027102068252963" datatype="html">
+      <trans-unit id="8676027102068252963" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete all your video history?</source>
-        <target state="new">Are you sure you want to delete all your video history?</target>
+        <target state="translated">Segur que voleu suprimir tot l'historial de vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7708910304029766516" datatype="html">
+      <trans-unit id="7708910304029766516" datatype="html" xml:space="preserve">
         <source>Video history deleted</source>
-        <target state="new">Video history deleted</target>
+        <target state="translated">S'ha suprimit l'historial de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3343758569423394070" datatype="html">
+      <trans-unit id="3343758569423394070" datatype="html" xml:space="preserve">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
-        <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
+        <target state="translated">No s'han trobat vídeos per a "<x id="PH" equiv-text="this.search"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="687236465759862933" datatype="html">
+      <trans-unit id="687236465759862933" datatype="html" xml:space="preserve">
         <source>Open syndication dropdown</source>
-        <target state="new">Open syndication dropdown</target>
+        <target state="translated">Obrir el menú desplegable de sindicació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.ts</context>
           <context context-type="linenumber">24</context>
