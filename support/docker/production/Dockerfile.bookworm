@@ -45,8 +45,8 @@ VOLUME /config
 COPY ./support/docker/production/entrypoint.sh /usr/local/bin/entrypoint.sh
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
-# Expose API and RTMP
-EXPOSE 9000 1935
+# Expose API, RTMP and RTMPS ports
+EXPOSE 9000 1935 1936
 
 # Run the application
 CMD [ "node", "dist/server" ]
