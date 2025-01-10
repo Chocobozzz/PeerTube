@@ -12171,137 +12171,137 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1155438117303179048" datatype="html">
+      <trans-unit id="1155438117303179048" datatype="html" xml:space="preserve">
         <source>Average watch time</source>
-        <target state="new">Average watch time</target>
+        <target state="translated">Temps mitjà de visualització</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">324</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3457644129579531516" datatype="html">
+      <trans-unit id="3457644129579531516" datatype="html" xml:space="preserve">
         <source>Total watch time</source>
-        <target state="new">Total watch time</target>
+        <target state="translated">Temps total de visualització</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">328</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7988517647183541852" datatype="html">
+      <trans-unit id="7988517647183541852" datatype="html" xml:space="preserve">
         <source>Peak viewers</source>
-        <target state="new">Peak viewers</target>
+        <target state="translated">Espectadors màxims</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">332</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8536543691393468142" datatype="html">
+      <trans-unit id="8536543691393468142" datatype="html" xml:space="preserve">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
-        <target state="new">at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
+        <target state="translated">a <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7299658893351817136" datatype="html">
+      <trans-unit id="7299658893351817136" datatype="html" xml:space="preserve">
         <source>Unique viewers</source>
-        <target state="new">Unique viewers</target>
+        <target state="translated">Espectadors únics</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5321335688371682440" datatype="html">
+      <trans-unit id="5321335688371682440" datatype="html" xml:space="preserve">
         <source>An error occurred.</source>
-        <target state="new">An error occurred.</target>
+        <target state="translated">S'ha produït un error.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3458449147454605646" datatype="html">
+      <trans-unit id="3458449147454605646" datatype="html" xml:space="preserve">
         <source>Request a new verification email</source>
-        <target state="new"> Request a new verification email </target>
+        <target state="translated">Sol·licitar un nou correu electrònic de verificació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6001536520193131937" datatype="html">
+      <trans-unit id="6001536520193131937" datatype="html" xml:space="preserve">
         <source>Unable to find verification string in URL query.</source>
-        <target state="new">Unable to find verification string in URL query.</target>
+        <target state="translated">No s'ha pogut trobar la cadena de verificació a la consulta URL.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7264033009244104285" datatype="html">
+      <trans-unit id="7264033009244104285" datatype="html" xml:space="preserve">
         <source>Unable to find user id or registration id in URL query.</source>
-        <target state="new">Unable to find user id or registration id in URL query.</target>
+        <target state="translated">No s'ha pogut trobar l'ID de compte o de registre a la consulta URL.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1949999959792821767" datatype="html">
+      <trans-unit id="1949999959792821767" datatype="html" xml:space="preserve">
         <source>Manage channel</source>
-        <target state="new"> Manage channel </target>
+        <target state="translated">Administrar canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4027779086550572813" datatype="html">
+      <trans-unit id="4027779086550572813" datatype="html" xml:space="preserve">
         <source>Send verification email</source>
-        <target state="new">Send verification email</target>
+        <target state="translated">Enviar un correu electrònic de verificació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8610022770999239699" datatype="html">
+      <trans-unit id="8610022770999239699" datatype="html" xml:space="preserve">
         <source>This instance does not require email verification.</source>
-        <target state="new">This instance does not require email verification.</target>
+        <target state="translated">Aquesta instància no requereix verificació de correu electrònic.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="248731258067914565" datatype="html">
+      <trans-unit id="248731258067914565" datatype="html" xml:space="preserve">
         <source>Verify account via email</source>
-        <target state="new">Verify account via email</target>
+        <target state="translated">Verificar el vostre compte per correu electrònic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6040639330855198542" datatype="html">
+      <trans-unit id="6040639330855198542" datatype="html" xml:space="preserve">
         <source>Ask to send an email to verify your account</source>
-        <target state="new">Ask to send an email to verify your account</target>
+        <target state="translated">Demanar enviar-vos un correu electrònic per verificar el compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5634180635200972996" datatype="html">
+      <trans-unit id="5634180635200972996" datatype="html" xml:space="preserve">
         <source>Email verified!</source>
-        <target state="new">Email verified!</target>
+        <target state="translated">Correu electrònic verificat!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2584956257063845668" datatype="html">
+      <trans-unit id="2584956257063845668" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="new">Your email has been verified and your account request has been sent!</target>
+        <target state="translated">S'ha verificat el correu electrònic i la vostra sol·licitud de compte s'ha enviat!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4255980289409848252" datatype="html">
+      <trans-unit id="4255980289409848252" datatype="html" xml:space="preserve">
         <source>A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.</source>
-        <target state="new"> A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected. </target>
+        <target state="translated">La moderació revisarà la vostra sol·licitud de registre aviat i rebreu un correu electrònic quan sigui acceptada o rebutjada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">10</context>
@@ -12311,17 +12311,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="381800444567495906" datatype="html">
+      <trans-unit id="381800444567495906" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="new">Your email has been verified and your account has been created!</target>
+        <target state="translated">S'ha verificat el correu electrònic i s'ha creat el vostre compte!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2448802938372065840" datatype="html">
+      <trans-unit id="2448802938372065840" datatype="html" xml:space="preserve">
         <source>If you need help using PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> If you need help using PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Si necessiteu ajuda per utilitzar PeerTube, podeu consultar la <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentació<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">18</context>
@@ -12331,25 +12331,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7225513189981158956" datatype="html">
+      <trans-unit id="7225513189981158956" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Benvinguda<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8412827353958624080" datatype="html">
+      <trans-unit id="8412827353958624080" datatype="html" xml:space="preserve">
         <source>Your account request has been sent!</source>
-        <target state="new">Your account request has been sent!</target>
+        <target state="translated">S'ha enviat la vostra sol·licitud de creació de compte!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422394577857179995" datatype="html">
+      <trans-unit id="4422394577857179995" datatype="html" xml:space="preserve">
         <source>Your account has been created!</source>
-        <target state="new">Your account has been created!</target>
+        <target state="translated">S'ha creat el compte!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">14</context>
