@@ -47,7 +47,7 @@
 
     <div class="blocks">
 
-      <div class="usage-rule">
+      <div class="usage-rule" *ngIf="config.instance.serverCountry">
         <div class="icon-container">
           <my-global-icon iconName="message-circle"></my-global-icon>
 
@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <div *ngIf="config.instance.serverCountry">
+        <div>
           <strong i18n>This platform has been created in {{ config.instance.serverCountry }}</strong>
           <div class="rule-content">
             <ng-container i18n>Your content (comments, videos...) must comply with the legislation in force in this country.</ng-container>
