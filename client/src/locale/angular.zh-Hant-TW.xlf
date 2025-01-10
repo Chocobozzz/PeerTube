@@ -20044,9 +20044,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2173989454916398137">
+      <trans-unit id="2173989454916398137" xml:space="preserve">
         <source>Blurred with confirmation request</source>
-        <target>模糊確認請求</target>
+        <target state="translated">模糊化，需要使用者確認才能查看</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">66</context>
