@@ -12053,9 +12053,9 @@
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5864040054093006922" datatype="html">
+      <trans-unit id="5864040054093006922" datatype="html" xml:space="preserve">
         <source>Viewers</source>
-        <target state="translated">Katsojaa</target>
+        <target state="translated">Katsojat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -12913,17 +12913,17 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="442017645619017020" datatype="html">
+      <trans-unit id="442017645619017020" datatype="html" xml:space="preserve">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTube käyttää BitTorrent-protokollaa kaistanleveyden jakamiseen käyttäjien välillä, palvelimen kuormituksen vähentämiseksi. Voit myös halutessasi kytkeä tavallisen streamauksen päälle. Seuraava teksti koskee sinua vain jos käytät vertaisverkkoja.</target>
+        <target state="translated">PeerTube hyödyntää BitTorrent-protokollaa kaistanleveyden jakamiseen käyttäjien kesken, mikä vähentää palvelimen kuormitusta. Halutessasi voit kuitenkin ottaa käyttöön perinteisen suoratoiston. Seuraavat ohjeet koskevat sinua vain, jos käytät vertaisverkkoja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6314880288843792309" datatype="html">
+      <trans-unit id="6314880288843792309" datatype="html" xml:space="preserve">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">Suurin BitTorrenttiin liittyvä uhka yksityisyytellesi on se, että julkinen IP-osoitteesi tallennetaan instanssin BitTorrent träkkerille niin kauan kuin lataat tai katsot videota.</target>
+        <target state="translated">Suurin yksityisyyteen liittyvä riski BitTorrentin käytössä on se, että julkinen IP-osoitteesi tallennetaan instanssin BitTorrent-träkkerille niin kauan kuin lataat tai katsot videota.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">75</context>
@@ -12937,25 +12937,25 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1411398404280870617" datatype="html">
+      <trans-unit id="1411398404280870617" datatype="html" xml:space="preserve">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="translated">Teoriassa joku, jolla on riittävät tekniset taidot, voisi luoda skriptin, joka seuraa, mikä IP lataa mitäkin videota. Käytännössä tämä on paljon vaikeampaa, koska:</target>
+        <target state="translated">Teoriassa joku riittävillä teknisillä taidoilla voisi luoda skriptin, joka seuraa, mikä IP-osoite lataa mitäkin videota. Käytännössä tämä on kuitenkin huomattavasti vaikeampaa, sillä:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6870500454322981404" datatype="html">
+      <trans-unit id="6870500454322981404" datatype="html" xml:space="preserve">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="translated">HTTP-pyyntö on lähetettävä jokaiseen seurantalaitteeseen jokaista vakoilevaa videota varten. Jos haluamme vakoilla kaikkia PeerTuben videoita, meidän on lähetettävä niin monta pyyntöä kuin on videoita (eli mahdollisesti paljon)</target>
+        <target state="translated">Jokaisen vakoiltavan videon osalta täytyy lähettää HTTP-pyyntö jokaiselle seurantalaitteelle. Jos halutaan seurata kaikkia PeerTuben videoita, pyynnöt on lähetettävä jokaisesta videosta erikseen, mikä voi tarkoittaa valtavaa määrää pyyntöjä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4042605201005159699" datatype="html">
+      <trans-unit id="4042605201005159699" datatype="html" xml:space="preserve">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">Jokaisesta lähetetystä pyynnöstä trackeri palauttaa satunnaisia vertaisohjelmia rajoitetussa määrin. Esimerkiksi, jos parvessa on 1000 vertaista ja seurantalaite lähettää vain 20 vertaista jokaista pyyntöä kohden, on lähetettävä vähintään 50 pyyntöä, jotta jokainen parvessa tunnetaan</target>
+        <target state="translated">Trackerit palauttavat jokaisesta pyynnöstä vain rajatun määrän satunnaisia vertaiskäyttäjiä. Esimerkiksi, jos parvessa on 1000 käyttäjää ja seurantalaite palauttaa vain 20 vertaiskäyttäjää per pyyntö, tarvitaan vähintään 50 pyyntöä, jotta kaikki parven käyttäjät tunnistetaan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">93</context>
