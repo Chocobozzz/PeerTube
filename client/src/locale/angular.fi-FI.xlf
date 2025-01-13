@@ -4072,7 +4072,7 @@
       </trans-unit>
       <trans-unit id="6691672602205005718" datatype="html" xml:space="preserve">
         <source>Use a comma (,) to add a tag</source>
-        <target state="translated">Käytä pilkkua (,) lisätäkseei tägin</target>
+        <target state="translated">Käytä pilkkua (,) lisätäksesi tunnisteen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -12865,9 +12865,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8674693181203168033" datatype="html">
+      <trans-unit id="8674693181203168033" datatype="html" xml:space="preserve">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">Tutustu tilin luomiseen, kanavaan, soittolistan luomiseen ja paljon muuta!</target>
+        <target state="translated">Tutustu tilin luomiseen, kanaviin, soittolistojen luomiseen ja paljon muuhun!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">32</context>
@@ -12923,7 +12923,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html" xml:space="preserve">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">Suurin yksityisyyteen liittyvä riski BitTorrentin käytössä on se, että julkinen IP-osoitteesi tallennetaan instanssin BitTorrent-träkkerille niin kauan kuin lataat tai katsot videota.</target>
+        <target state="translated">Suurin yksityisyyteen liittyvä riski BitTorrentin käytössä on se, että julkinen IP-osoitteesi tallennetaan instanssin BitTorrent-seurantapalvelimelle niin kauan kuin lataat tai katsot videota.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">75</context>
@@ -12955,7 +12955,7 @@
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html" xml:space="preserve">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">Trackerit palauttavat jokaisesta pyynnöstä vain rajatun määrän satunnaisia vertaiskäyttäjiä. Esimerkiksi, jos parvessa on 1000 käyttäjää ja seurantalaite palauttaa vain 20 vertaiskäyttäjää per pyyntö, tarvitaan vähintään 50 pyyntöä, jotta kaikki parven käyttäjät tunnistetaan</target>
+        <target state="translated">Seurantapalvelimet palauttavat jokaisesta pyynnöstä vain rajatun määrän satunnaisia vertaiskäyttäjiä. Esimerkiksi, jos parvessa on 1000 käyttäjää ja seurantapalvelin palauttaa vain 20 vertaiskäyttäjää per pyyntö, tarvitaan vähintään 50 pyyntöä, jotta kaikki parven käyttäjät tunnistetaan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">93</context>
@@ -13009,9 +13009,9 @@
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6213340208914097303" datatype="html">
+      <trans-unit id="6213340208914097303" datatype="html" xml:space="preserve">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="translated">YouTuben yksityisyyteen kohdistuvat uhat ovat erilaisia kuin PeerTuben. YouTuben tapauksessa alusta kerää valtavan määrän henkilökohtaisia tietojasi (ei vain IP-osoitettasi) analysoidakseen niitä ja seuratakseen sinua. Lisäksi YouTuben omistaa Google/Alphabet, yritys, joka seuraa sinua useilla verkkosivustoilla (AdSensen tai Google Analyticsin kautta).</target>
+        <target state="translated">YouTuben yksityisyyteen kohdistuvat uhat poikkeavat PeerTuben uhkista. YouTube kerää alustallaan valtavan määrän henkilökohtaisia tietojasi (eikä pelkästään IP-osoitettasi) analysointia ja käyttäjäseurantaa varten. Lisäksi YouTube on Google/Alphabetin omistama palvelu, ja kyseinen yritys seuraa toimintaasi monilla verkkosivustoilla esimerkiksi AdSensen ja Google Analyticsin avulla.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">127</context>
@@ -13025,9 +13025,9 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8804946818315976118" datatype="html">
+      <trans-unit id="8804946818315976118" datatype="html" xml:space="preserve">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="translated">IP-osoitteesi on julkinen, joten aina kun katsot verkkosivustoa, monet toimijat (lopullisen verkkosivuston lisäksi) näkevät IP-osoitteesi yhteyslokeissaan: ISP/reitittimet/seurantalaitteet/CDN ja paljon muuta. PeerTube on läpinäkyvä sen suhteen: varoitamme sinua, että jos haluat pitää IP-osoitteesi yksityisenä, sinun on käytettävä VPN- tai Tor-selainta. Ei ole järkevää ajatella, että vertaisverkon poistaminen PeerTubesta palauttaa anonymiteetin.</target>
+        <target state="translated">IP-osoitteesi on julkinen, joten aina kun vierailet verkkosivustolla, monet tahot (kohdesivuston lisäksi) näkevät IP-osoitteesi yhteyslokeissaan. Näitä tahoja voivat olla esimerkiksi internet-palveluntarjoajasi, reitittimet, seurantajärjestelmät, sisällönjakeluverkostot (CDN) ja monet muut. PeerTube on tässä asiassa avoin: varoitamme käyttäjiä, että jos haluat pitää IP-osoitteesi yksityisenä, sinun on käytettävä VPN:ää tai Tor-selainta. On harhaanjohtavaa kuvitella, että vertaisverkon poistaminen PeerTubesta palauttaisi anonymiteetin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">135</context>
@@ -13041,25 +13041,25 @@
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7404776804526394585" datatype="html">
+      <trans-unit id="7404776804526394585" datatype="html" xml:space="preserve">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="translated">PeerTube haluaa tarjota parhaat mahdolliset vastatoimet antaakseen sinulle enemmän valinnanvaraa ja tehdäkseen hyökkäyksistä vähemmän todennäköisiä. Tässä on se, mitä olemme laittaneet tähän mennessä:</target>
+        <target state="translated">PeerTube pyrkii tarjoamaan parhaat mahdolliset vastatoimet, jotta käyttäjillä olisi enemmän valinnanvaraa ja hyökkäykset olisivat epätodennäköisempiä. Tähän mennessä olemme toteuttaneet seuraavat toimenpiteet:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8635362984201852982" datatype="html">
+      <trans-unit id="8635362984201852982" datatype="html" xml:space="preserve">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="translated">Asetamme rajan seurantalaitteen lähettämien vertaiskäyttäjien lukumäärälle</target>
+        <target state="translated">Olemme asettaneet rajoituksia sille, kuinka monelle vertaiskäyttäjälle seurantapalvelin voi lähettää</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8903417899533541365" datatype="html">
+      <trans-unit id="8903417899533541365" datatype="html" xml:space="preserve">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="translated">Asetamme rajan seurantalaitteen vastaanottamalle pyyntötiheydelle</target>
+        <target state="translated">Asetamme rajan seurantapalvelimen vastaanottamien pyyntöjen tiheydelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">150</context>
@@ -13073,9 +13073,9 @@
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5991790391344625653" datatype="html">
+      <trans-unit id="5991790391344625653" datatype="html" xml:space="preserve">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="translated">Muista, että voit aina poistaa vertaisverkon käytöstä vaihtamalla sen videosoittimessa tai yksinkertaisesti poistamalla WebRTC:n käytöstä selaimessasi.</target>
+        <target state="translated">Muistathan, että voit aina poistaa vertaisverkon käytöstä säätämällä kyseistä asetusta videosoittimessa tai yksinkertaisesti kytkemällä WebRTC:n kokonaan pois päältä selaimestasi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">155</context>
@@ -13565,9 +13565,9 @@
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1097932116708163073" datatype="html">
+      <trans-unit id="1097932116708163073" datatype="html" xml:space="preserve">
         <source>This website is powered by PeerTube</source>
-        <target state="translated">Tämän sivuston moottorina toimii PeerTube</target>
+        <target state="translated">Alustan moottorina toimii PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3</context>
@@ -22358,7 +22358,7 @@
       </trans-unit>
       <trans-unit id="6173113330681958102" datatype="html" xml:space="preserve">
         <source>Only users with the appropriate password can see this video</source>
-        <target state="translated">Vain käyttäjät, joilla on oikea salasana, voivat nähdä tämän videon</target>
+        <target state="translated">Video on katsottavissa vain oikealla salasanalla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">478</context>
