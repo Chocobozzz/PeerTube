@@ -241,10 +241,11 @@ code {
 
 a {
   color: inherit;
+}
 
-  &:hover {
-    opacity: 0.8;
-  }
+my-link:hover,
+a:hover {
+  opacity: 0.8;
 }
 
 .main-col {

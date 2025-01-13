@@ -10,6 +10,11 @@ $more-button-width: 40px;
   --co-fs-big: #{$miniature-fs-big};
 }
 
+.video-name-container {
+  display: flex;
+  min-width: 1px;
+}
+
 .video-name {
   font-size: var(--co-fs-big);
 
@@ -36,16 +41,28 @@ $more-button-width: 40px;
   color: pvar(--fg-200);
 }
 
+.owner-container {
+  display: flex;
+  min-width: 1px;
+}
+
+my-actor-host {
+  max-width: 50%;
+}
+
+
 .owner-label {
-  display: block;
   color: pvar(--fg-300);
 
   @include disable-default-a-behaviour;
-  @include ellipsis;
 
   &:hover {
     color: pvar(--fg);
   }
+}
+
+my-actor-host {
+  @include margin-left(0.25rem);
 }
 
 .video-actions {
@@ -77,11 +94,6 @@ $more-button-width: 40px;
   }
 }
 
-.video-bottom {
-  display: flex;
-  min-width: 1px;
-}
-
 // Grid mode
 // Takes all the width on mobile
 .video-miniature:not(.display-as-row) {
@@ -90,7 +102,7 @@ $more-button-width: 40px;
   padding-bottom: 1rem;
   width: 100%;
 
-  .video-info {
+  .video-name {
     width: calc(100% - #{$more-button-width});
   }
 
@@ -100,11 +112,7 @@ $more-button-width: 40px;
     @include block-ratio($selector: '::ng-deep .video-thumbnail');
   }
 
-  .video-bottom {
-    width: 100%;
-  }
-
-  &.has-avatar .video-bottom {
+  &.has-avatar .video-info {
     @include padding-left(0.75rem);
   }
 
@@ -126,7 +134,7 @@ $more-button-width: 40px;
       border-radius: 5px;
     }
 
-    & + .owner-label {
+    & + .owner-container {
       // Keep 34px in sync with the component
       @include margin-left(calc(0.5rem + 34px));
     }

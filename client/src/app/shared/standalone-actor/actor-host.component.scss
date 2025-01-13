@@ -1,0 +1,77 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.content {
+  background-color: pvar(--bg-secondary-500);
+  border-radius: 14px;
+  max-width: 350px;
+  border: 0;
+
+  @include padding(1.5rem);
+}
+
+.question {
+  color: pvar(--fg-350);
+  font-weight: $font-bold;
+
+  @include font-size(20px);
+}
+
+.secondary-button {
+  border-color: pvar(--secondary-icon-color) !important;
+}
+
+.answer {
+  color: pvar(--fg-300);
+
+  a {
+    color: pvar(--fg-400);
+    font-weight: $font-bold;
+    text-decoration: underline;
+
+    my-global-icon {
+      color: pvar(--fg-400);
+      top: 0;
+    }
+  }
+}
+
+.host {
+  position: relative;
+  max-width: 100%;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  svg {
+    fill: pvar(--bg);
+    z-index: 2;
+    width: auto;
+    height: calc(100% + 2px);;
+    top: -1px;
+    position: absolute;
+
+    &.left {
+      left: -2px;
+    }
+
+    &.right {
+      right: -2px;
+    }
+  }
+}
+
+.host {
+  color: pvar(--fg-450);
+  font-weight: $font-bold;
+  background: linear-gradient(to right, pvar(--bg-secondary-400), pvar(--bg-secondary-500));
+  position: relative;
+  padding: 4px 12px;
+
+  @include font-size(10px);
+
+  &::after {
+    display: none;
+  }
+}
