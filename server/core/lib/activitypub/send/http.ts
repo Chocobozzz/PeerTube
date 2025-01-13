@@ -57,11 +57,10 @@ export async function buildSignedRequestOptions (options: {
     actor = await getServerActor()
   }
 
-  const keyId = actor.url
   return {
     algorithm: HTTP_SIGNATURE.ALGORITHM,
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
-    keyId,
+    keyId: actor.getPublicKeyUrl(),
     key: actor.privateKey,
     headers: options.hasPayload
       ? HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
