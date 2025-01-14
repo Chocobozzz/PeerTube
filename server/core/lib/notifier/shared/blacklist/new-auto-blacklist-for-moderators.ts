@@ -43,7 +43,7 @@ export class NewAutoBlacklistForModerators extends AbstractNotification <MVideoB
   }
 
   async createEmail (to: string) {
-    const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-blocklist'
+    const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-blocks/list'
     const videoUrl = WEBSERVER.URL + this.payload.Video.getWatchStaticPath()
     const channel = await VideoChannelModel.loadAndPopulateAccount(this.payload.Video.channelId)
 

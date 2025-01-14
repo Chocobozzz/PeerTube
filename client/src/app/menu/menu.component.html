@@ -1,7 +1,7 @@
 <ng-template #moreInfoButton>
   <div class="more-info-btn-container">
     <a
-      class="more-info-btn peertube-button-link peertube-button-icon mt-2 d-block" [ngClass]="{ 'icon-only': collapsed }"
+      class="more-info-btn peertube-button-link peertube-button-icon mt-2 d-block ellipsis" [ngClass]="{ 'icon-only': collapsed }"
       routerLink="/about" i18n-title title="More info" routerLinkActive="active"
     >
       <my-global-icon iconName="help"></my-global-icon>
@@ -54,16 +54,26 @@
                 <ul class="ul-unstyle">
                   <li *ngFor="let link of menuSection.links">
                     @if (link.isPrimaryButton === true) {
-                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [title]="link.label" [ptRouterLink]="link.path" [ptQueryParams]="link.query">
+                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [title]="link.label" [ptRouterLink]="link.path" [ptQueryParams]="link.query" [href]="link.url">
                         @if (!collapsed) {
                           {{ link.label }}
                         }
                       </my-button>
                     } @else {
-                      <a class="menu-link ellipsis" [routerLink]="link.path" [queryParams]="link.query" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
+                      <ng-template #linkTemplate>
                         <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
                         <span [ngClass]="{ 'visually-hidden': collapsed }">{{ link.label }}</span>
-                      </a>
+                      </ng-template>
+
+                      @if (link.path) {
+                        <a class="menu-link ellipsis" [routerLink]="link.path" [queryParams]="link.query" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
+                          <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
+                        </a>
+                      } @else {
+                        <a class="menu-link ellipsis" [href]="link.url" [ngClass]="link.ngClass" [title]="link.label" target="_blank">
+                          <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
+                        </a>
+                      }
                     }
                   </li>
                 </ul>
@@ -81,12 +91,12 @@
     </div>
   </div>
 
-  <div *ngIf="!collapsed" class="mt-3 mx-4">
+  <div class="powered-by" *ngIf="!collapsed" class="mt-3 mx-4">
     <div class="fs-8" i18n>
-      Platform powered by <a class="" href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">PeerTube</a>
+      Platform powered by <a class="fw-bold" href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">PeerTube</a>
     </div>
 
-    <a class="d-block fs-8" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer" i18n>Discover more platforms</a>
+    <a class="d-block fs-8 fw-bold" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer" i18n>Discover more platforms</a>
   </div>
 </div>
 

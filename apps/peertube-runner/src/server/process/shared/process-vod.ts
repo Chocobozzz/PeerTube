@@ -71,7 +71,8 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
       jobToken: job.jobToken,
       jobUUID: job.uuid,
       runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: payload
     })
   } finally {
     if (videoInputPath) await remove(videoInputPath)
@@ -139,7 +140,8 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       jobToken: job.jobToken,
       jobUUID: job.uuid,
       runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: payload
     })
   } finally {
     if (videoInputPath) await remove(videoInputPath)
@@ -207,7 +209,8 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
       jobToken: job.jobToken,
       jobUUID: job.uuid,
       runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: payload
     })
   } finally {
     if (audioPath) await remove(audioPath)

@@ -1,4 +1,4 @@
-import { VideoConstant } from '../videos/index.js'
+import { VideoConstant } from '../../videos/index.js'
 import { RunnerJobPayload } from './runner-job-payload.model.js'
 import { RunnerJobPrivatePayload } from './runner-job-private-payload.model.js'
 import { RunnerJobStateType } from './runner-job-state.model.js'

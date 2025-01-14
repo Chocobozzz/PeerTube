@@ -29,7 +29,7 @@ const toSafeHtml = (text: string) => {
   return sanitizeHtml(html, defaultSanitizeOptions)
 }
 
-const mdToOneLinePlainText = (text: string) => {
+const mdToPlainText = (text: string) => {
   if (!text) return ''
 
   markdownItForPlainText.render(text)
@@ -42,7 +42,7 @@ const mdToOneLinePlainText = (text: string) => {
 
 export {
   toSafeHtml,
-  mdToOneLinePlainText
+  mdToPlainText
 }
 
 // ---------------------------------------------------------------------------

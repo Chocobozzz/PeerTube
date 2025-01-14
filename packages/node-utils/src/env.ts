@@ -64,7 +64,3 @@ export function isProdInstance () {
 export function getAppNumber () {
   return process.env.NODE_APP_INSTANCE || ''
 }
-
-export function isUsingViewersFederationV2 () {
-  return process.env.USE_VIEWERS_FEDERATION_V2 === 'true'
-}

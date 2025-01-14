@@ -1,8 +1,6 @@
-import { Component, Input, ViewChild } from '@angular/core'
+import { Component, Input, OnChanges, ViewChild } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoChannel } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({
@@ -11,34 +9,25 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
   standalone: true,
   imports: [ GlobalIconComponent ]
 })
-export class SupportModalComponent {
-  @Input() video: VideoDetails = null
-  @Input() videoChannel: VideoChannel = null
+export class SupportModalComponent implements OnChanges {
+  @Input({ required: true }) name: string
+  @Input({ required: true }) content: string
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   htmlSupport = ''
-  displayName = ''
 
   constructor (
     private markdownService: MarkdownService,
     private modalService: NgbModal
   ) { }
 
+  ngOnChanges () {
+    this.markdownService.enhancedMarkdownToHTML({ markdown: this.content, withEmoji: true, withHtml: true })
+      .then(r => this.htmlSupport = r)
+  }
+
   show () {
-    const modalRef = this.modalService.open(this.modal, { centered: true })
-
-    const support = this.video?.support || this.videoChannel.support
-
-    this.markdownService.enhancedMarkdownToHTML({ markdown: support })
-      .then(r => {
-        this.htmlSupport = r
-      })
-
-    this.displayName = this.video
-      ? this.video.channel.displayName
-      : this.videoChannel.displayName
-
-    return modalRef
+    return this.modalService.open(this.modal, { centered: true })
   }
 }

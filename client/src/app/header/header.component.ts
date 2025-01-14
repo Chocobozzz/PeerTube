@@ -15,8 +15,8 @@ import { NotificationDropdownComponent } from '@app/header/notification-dropdown
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/menu/quick-settings-modal.component'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
-import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
+import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-selector.directive'
 import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
 import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
@@ -35,7 +35,7 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
     CommonModule,
     NotificationDropdownComponent,
     ActorAvatarComponent,
-    InputSwitchComponent,
+    PluginSelectorDirective,
     SignupLabelComponent,
     LoginLinkComponent,
     LanguageChooserComponent,

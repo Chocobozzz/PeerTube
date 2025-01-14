@@ -4,6 +4,7 @@ import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { RouterLink } from '@angular/router'
 import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
+import { Actor } from '../shared-main/account/actor.model'
 
 export type ActorAvatarInput = {
   name: string
@@ -21,7 +22,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   @ViewChild('avatarEl') avatarEl: ElementRef
 
   @Input() actor: ActorAvatarInput
-  @Input() actorType: 'channel' | 'account' | 'unlogged'
+  @Input() actorType: 'channel' | 'account' | 'instance' | 'unlogged'
 
   @Input() previewImage: string
 
@@ -43,6 +44,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
     if (this._title) return this._title
     if (this.isAccount()) return $localize`${this.actor.name} (account page)`
     if (this.isChannel()) return $localize`${this.actor.name} (channel page)`
+    if (this.isInstance()) return $localize`${this.actor.name} (instance page)`
 
     return ''
   }
@@ -87,8 +89,10 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
     if (this.isChannel()) {
       this.classes.push('channel')
-    } else {
+    } else if (this.isAccount()) {
       this.classes.push('account')
+    } else if (this.isInstance()) {
+      this.classes.push('instance')
     }
 
     // No avatar, use actor name initial
@@ -103,6 +107,8 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   }
 
   private buildDefaultAvatarUrl () {
+    // TODO: have a default instance avatar
+
     this.defaultAvatarUrl = this.isChannel()
       ? VideoChannel.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
       : Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
@@ -114,13 +120,8 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
       return
     }
 
-    if (this.isAccount()) {
-      this.avatarUrl = Account.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
-      return
-    }
-
-    if (this.isChannel()) {
-      this.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
+    if (this.isAccount() || this.isChannel() || this.isInstance()) {
+      this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
       return
     }
 
@@ -155,6 +156,10 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
   private isChannel () {
     return this.actorType === 'channel'
+  }
+
+  private isInstance () {
+    return this.actorType === 'instance'
   }
 
   private getSizeNumber () {

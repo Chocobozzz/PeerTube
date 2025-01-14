@@ -1,6 +1,7 @@
 @use 'sass:math';
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_bootstrap-variables' as *;
 
 @mixin miniature-name {
   transition: color 0.2s;
@@ -155,10 +156,6 @@
           min-width: var(--co-miniature-min-width);
           max-width: var(--co-miniature-max-width);
         }
-      }
-
-      @media screen and (min-width: #{breakpoint(xm)}) {
-        column-gap: 15px;
       }
 
       @media screen and (min-width: #{breakpoint(fhd)}) {

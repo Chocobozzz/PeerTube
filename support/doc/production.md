@@ -17,7 +17,7 @@ Follow the steps of the [dependencies guide](/support/doc/dependencies.md).
 Create a `peertube` user with `/var/www/peertube` home:
 
 ```bash
-sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
+sudo useradd -m -d /var/www/peertube -s /usr/sbin/nologin -p peertube peertube
 ```
 
 Set its password:

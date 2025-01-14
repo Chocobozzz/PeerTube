@@ -3,7 +3,8 @@
   <div
     *ngIf="isUserLoggedIn() && displayOptions.playlist"
     role="button" aria-label="Open video actions" i18n-aria-label
-    class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" autoClose="outside" [placement]="getPlaylistDropdownPlacement()"
+    class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" autoClose="outside"
+    container="body" [placement]="getPlaylistDropdownPlacement()"
   >
     <span class="anchor" ngbDropdownAnchor></span>
 

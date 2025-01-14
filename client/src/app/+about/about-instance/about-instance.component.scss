@@ -1,50 +1,23 @@
 @use '_variables' as *;
+@use '_bootstrap-variables' as *;
 @use '_mixins' as *;
 
-.pt-badge {
-  @include margin-right(5px);
-}
-
-.section-title {
-  font-weight: $font-semibold;
-  margin-bottom: 5px;
+.content {
   display: flex;
-  align-items: center;
-  font-size: 1rem;
+
+  @include rfs(4rem, gap);
 }
 
-.middle-title {
-  margin-top: 0;
-  text-transform: uppercase;
-  color: pvar(--fg);
-  font-weight: $font-bold;
-
-  @include font-size(22px);
-  @include margin-bottom(1.5rem);
+my-instance-stat-rules {
+  min-width: 600px;
 }
 
-.block {
-  @include margin-bottom(4.5rem);
-}
-
-.anchor-link {
-  position: relative;
-
-  @include disable-outline;
-
-  &:hover,
-  &:active {
-    &::after {
-      content: '#';
-      display: inline-block;
-
-      @include margin-left(0.2em);
-    }
+@media screen and (max-width: #{breakpoint(xl)}) {
+  .content {
+    flex-wrap: wrap;
   }
 
-  .middle-title,
-  .section-title {
-    display: inline-block;
-    color: pvar(--fg-400);
+  my-instance-stat-rules {
+    min-width: 100%;
   }
 }

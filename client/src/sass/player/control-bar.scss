@@ -31,7 +31,7 @@ $chapter-marker-size: 9px;
   cursor: pointer;
   transition: transform 50ms ease-in-out, border-color 50ms ease-in-out;
   border: 2px solid transparent;
-  z-index: 2; // On top of mouse marker
+  z-index: 101;
 
   &:hover {
     transform: scale(1.5);

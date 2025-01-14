@@ -1,13 +1,85 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_bootstrap-variables' as *;
+@use '_components' as *;
 
-a {
-  display: block;
-  width: fit-content;
-  margin-top: 3px;
+.margin-content {
+  display: flex;
 }
 
-.no-results {
-  justify-content: flex-start;
-  align-items: flex-start;
+.text-content {
+  color: pvar(--fg-300);
+}
+
+.stat {
+  @include stats-card;
+}
+
+.stats > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.followers,
+.subscriptions {
+  flex-basis: 50%;
+  background-color: pvar(--bg-secondary-400);
+  padding: 1.5rem;
+  border-radius: 14px;
+
+  h3 {
+    font-weight: $font-bold;
+    color: pvar(--fg-400);
+
+    @include font-size(2rem);
+  }
+
+  h4 {
+    color: pvar(--fg-300);
+    font-weight: $font-bold;
+
+    @include font-size(1.25rem);
+  }
+}
+
+.follows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.follow-block {
+  width: calc(50% - 1rem);
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: pvar(--bg-secondary-450);
+  display: flex;
+  align-items: center;
+
+  my-actor-avatar {
+    @include margin-right(1rem);
+  }
+}
+
+.follow-name {
+  font-weight: $font-bold;
+  color: pvar(--fg-400);
+}
+
+@media screen and (max-width: #{breakpoint(xl)}) {
+  .margin-content {
+    flex-wrap: wrap;
+  }
+
+  .followers,
+  .subscriptions {
+    flex-basis: 100%;
+  }
+}
+
+@include on-small-main-col {
+  .follow-block {
+    width: 100%;
+  }
 }

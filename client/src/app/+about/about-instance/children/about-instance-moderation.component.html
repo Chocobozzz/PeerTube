@@ -1,0 +1,13 @@
+<div myPluginSelector pluginSelectorId="about-instance-moderation">
+
+  <div class="block moderation-information" *ngIf="aboutHTML.moderationInformation">
+    <h4 i18n class="section-title">Moderation information</h4>
+    <div [innerHTML]="aboutHTML.moderationInformation"></div>
+  </div>
+
+  <div class="block code-of-conduct" *ngIf="aboutHTML.codeOfConduct">
+    <h4 i18n class="section-title">Code of conduct</h4>
+    <div [innerHTML]="aboutHTML.codeOfConduct"></div>
+  </div>
+
+</div>

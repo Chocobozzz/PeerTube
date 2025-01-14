@@ -2,19 +2,10 @@
 @use '_mixins' as *;
 @use '_form-mixins' as *;
 
-.modal-subtitle {
-  line-height: 1rem;
-  margin-bottom: 0;
-}
-
-.modal-body {
-  text-align: left;
-}
-
 input[type=text] {
   @include peertube-input-text(340px);
 }
 
 textarea {
-  @include peertube-textarea(100%, 200px);
+  @include peertube-textarea(500px, 200px);
 }

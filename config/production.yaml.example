@@ -958,13 +958,32 @@ instance:
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
 
+  # PeerTube uses this setting to explain to your users which law they must follow in the "About" instance pages
+  server_country: '' # Example: "France", "United States", "España"
+
+  support:
+    # Explain to your users how to support your instance
+    # If set, PeerTube will display a "Support" button in "About" instance pages
+    text: '' # Supports Markdown
+
+  # If set, PeerTube will display buttons in "About" instance pages
+  social:
+    # Link to your main website
+    external_link: ''
+    # Mastodon
+    mastodon_link: ''
+    # Bluesky
+    bluesky_link: ''
+
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
+
   # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add `/` to `Disallow:`
   robots: |
     User-agent: *
     Disallow:
+
   # /.well-known/security.txt rules. This endpoint is cached, so you may have to wait a few hours before viewing your changes
   # To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt: |

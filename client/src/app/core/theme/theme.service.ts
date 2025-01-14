@@ -227,6 +227,7 @@ export class ThemeService {
       }
 
       const mainColorHSL = toHSLA(parse(mainColor))
+      debugLogger(`Theme main variable ${mainColor} -> ${this.toHSLStr(mainColorHSL)}`)
 
       // Inject in alphabetical order for easy debug
       const toInject: { id: number, key: string, value: string }[] = [

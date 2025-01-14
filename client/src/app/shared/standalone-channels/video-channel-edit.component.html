@@ -43,7 +43,7 @@
         <div class="form-group">
           <label i18n for="display-name">Display name</label>
           <input
-            type="text" id="display-name" class="form-control d-block"
+            type="text" id="display-name" class="form-control"
             formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
           >
           <div *ngIf="formErrors['display-name']" class="form-error" role="alert">
@@ -53,10 +53,15 @@
 
         <div class="form-group">
           <label i18n for="description">Description</label>
-          <textarea
-            id="description" formControlName="description" class="form-control d-block"
-            [ngClass]="{ 'input-error': formErrors['description'] }"
-          ></textarea>
+
+
+          <my-help helpType="markdownText" supportRelMe="true"></my-help>
+
+          <my-markdown-textarea
+            inputId="description" formControlName="description" class="form-control"
+            markdownType="enhanced" [formError]="formErrors['description']" withEmoji="true" withHtml="true"
+          ></my-markdown-textarea>
+
           <div *ngIf="formErrors.description" class="form-error" role="alert">
             {{ formErrors.description }}
           </div>
@@ -70,8 +75,8 @@
           ></my-help>
 
           <my-markdown-textarea
-            inputId="support" formControlName="support" class="d-block"
-            markdownType="enhanced" [formError]="formErrors['support']"
+            inputId="support" formControlName="support" class="form-control"
+            markdownType="enhanced" [formError]="formErrors['support']" withEmoji="true" withHtml="true"
           ></my-markdown-textarea>
         </div>
 

@@ -1,4 +1,4 @@
-import { RunnerJobStateType } from './runner-job-state.model.js'
+import { RunnerJobStateType } from './runner-jobs/runner-job-state.model.js'
 
 export interface ListRunnerJobsQuery {
   start?: number

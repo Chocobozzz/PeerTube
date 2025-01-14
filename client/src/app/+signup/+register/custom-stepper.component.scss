@@ -6,7 +6,7 @@ $index-block-height: 40px;
 
 header {
   width: 100%;
-  background-color: pvar(--primary-150);
+  background-color: pvar(--bg-secondary-400);
   border-radius: 5px;
 
   @include rfs(2rem, margin-bottom);
@@ -30,7 +30,7 @@ header {
   width: $index-block-height;
   height: $index-block-height;
   border-radius: $index-block-height;
-  border: 1px solid pvar(--primary);
+  border: 1px solid pvar(--bg-secondary-500);
   margin-bottom: 10px;
   font-size: 24px;
   position: relative;
@@ -49,15 +49,14 @@ header {
     justify-content: center;
     align-items: center;
     // Better than border color for aliasing
-    box-shadow: 0 0 0 1px pvar(--primary);
+    box-shadow: 0 0 0 1px pvar(--bg-secondary-500);
     overflow: hidden;
 
     my-global-icon {
       display: flex;
       width: 12px;
       height: 12px;
-
-      @include apply-svg-color(pvar(--primary));
+      color: pvar(--green);
     }
   }
 }
@@ -67,27 +66,34 @@ header {
   font-size: 18px;
 }
 
+.step-index,
+.step-label {
+  color: pvar(--fg-200);
+}
+
 .step-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: $index-block-height;
-  opacity: 0.5;
 
   &.active,
   &.completed {
     .step-index {
-      background-color: pvar(--primary);
-      color: pvar(--on-primary);
+      border-color: pvar(--bg-secondary-500);
+      background-color: pvar(--bg-secondary-500);
+      color: pvar(--fg-400);
     }
 
     .step-label {
-      color: pvar(--on-primary);
+      color: pvar(--fg-400);
     }
   }
 
   &.active {
-    opacity: 1;
+    .step-label {
+      font-weight: $font-bold;
+    }
   }
 }
 
@@ -95,7 +101,7 @@ header {
   flex: auto;
   margin: math.div($index-block-height, 2) 10px 0 10px;
   height: 2px;
-  background-color: pvar(--primary);
+  background-color: pvar(--bg-secondary-500);
   opacity: 0.3;
 }
 

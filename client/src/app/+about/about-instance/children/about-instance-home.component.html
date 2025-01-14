@@ -1,0 +1,29 @@
+<div class="block specifics" *ngIf="categories.length !== 0 || languages.length !== 0 || config.instance.isNSFW">
+  <h4 i18n>Specifics</h4>
+
+  <div *ngIf="languages.length !== 0" class="d-inline-block me-2">
+    <span class="text-content top-2px" i18n>Language: </span>
+    <span *ngFor="let language of languages" class="pt-badge badge-primary me-1">{{ language }}</span>
+  </div>
+
+  <div *ngIf="categories.length !== 0" class="d-inline-block mt-2">
+    <span class="text-content top-2px" i18n>Categories: </span>
+    <span *ngFor="let category of categories" class="pt-badge badge-secondary me-1">{{ category }}</span>
+  </div>
+
+  <div i18n *ngIf="config.instance.isNSFW" class="fw-bold text-content mt-3">{{ config.instance.name }} is dedicated to sensitive/NSFW content.</div>
+</div>
+
+<div class="block description">
+  <h4 i18n>Description</h4>
+
+  <my-custom-markup-container class="text-content" [content]="descriptionElement"></my-custom-markup-container>
+</div>
+
+<div class="block terms">
+  <h4 i18n class="section-title">Terms</h4>
+
+  <div class="text-content" [innerHTML]="aboutHTML.terms"></div>
+</div>
+
+<my-support-modal #supportModal [name]="config.instance.name" [content]="config.instance.support.text"></my-support-modal>

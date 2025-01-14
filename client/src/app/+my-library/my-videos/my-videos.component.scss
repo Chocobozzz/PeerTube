@@ -13,6 +13,8 @@ input[type=text] {
 .action-button {
   display: flex;
   align-self: flex-end;
+  min-width: 200px;
+  justify-content: flex-end;
 
   @include margin-left(10px);
 }
@@ -23,14 +25,6 @@ my-edit-button {
 
 @include on-small-main-col {
   .action-button {
-    margin-top: 10px;
-
-    @include margin-left(auto);
-  }
-}
-
-@include on-mobile-main-col {
-  .action-button {
-    @include margin-left(0);
+    margin: 1rem auto 0;
   }
 }

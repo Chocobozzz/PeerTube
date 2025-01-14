@@ -5,6 +5,8 @@ import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
+import { HelpComponent } from '@app/shared/shared-main/buttons/help.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 
 @Component({
@@ -12,7 +14,7 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
   templateUrl: './my-account-profile.component.html',
   styleUrls: [ './my-account-profile.component.scss' ],
   standalone: true,
-  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent, HelpComponent, MarkdownTextareaComponent ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
   @Input() user: User = null

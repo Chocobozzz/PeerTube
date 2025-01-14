@@ -1,7 +1,65 @@
 <div>
   <div class="margin-content">
-    <my-horizontal-menu [menuEntries]="menuEntries"></my-horizontal-menu>
+    <h1>
+      <my-global-icon iconName="help"></my-global-icon>
+
+      <ng-container i18n>About</ng-container>
+    </h1>
+
+    <div class="instance-info-container">
+      <div class="banner" *ngIf="bannerUrl">
+        <img [src]="bannerUrl" alt="">
+      </div>
+
+      <div class="instance-info">
+        <div class="avatar" *ngIf="avatarUrl">
+          <img [src]="avatarUrl" alt="">
+        </div>
+
+        <div>
+          <div class="instance-name">{{ config.instance.name }}</div>
+          <div class="instance-description">{{ config.instance.shortDescription }}</div>
+        </div>
+
+        <div class="ms-auto">
+          <div class="social-buttons d-flex flex-wrap justify-content-end">
+            <a
+              *ngIf="config.instance.social.mastodonLink"
+              class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Mastodon profile"
+              target="_blank" rel="noopener noreferrer" [href]="config.instance.social.mastodonLink"
+              >
+              <my-global-icon iconName="mastodon"></my-global-icon>
+            </a>
+
+            <a
+            *ngIf="config.instance.social.blueskyLink"
+            class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Bluesky profile"
+            target="_blank" rel="noopener noreferrer" [href]="config.instance.social.blueskyLink"
+            >
+            <my-global-icon iconName="bluesky"></my-global-icon>
+          </a>
+
+            <a
+              *ngIf="config.instance.social.externalLink"
+              class="external-link peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the external website"
+              target="_blank" rel="noopener noreferrer" [href]="config.instance.social.externalLink"
+            >
+              <my-global-icon iconName="link"></my-global-icon>
+            </a>
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-end">
+            <my-button *ngIf="isContactFormEnabled()" class="ms-3" theme="primary" ptRouterLink="/about/contact" i18n>Contact us</my-button>
+
+            <my-button *ngIf="config.instance.support.text" class="ms-3" theme="secondary" ptRouterLink="/about/instance/support" i18n>Support</my-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <my-horizontal-menu [menuEntries]="menuEntries" withMarginBottom="false"></my-horizontal-menu>
   </div>
 
   <router-outlet></router-outlet>
 </div>
+

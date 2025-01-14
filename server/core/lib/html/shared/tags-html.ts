@@ -1,10 +1,11 @@
 import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
+import { mdToPlainText } from '@server/helpers/markdown.js'
+import truncate from 'lodash-es/truncate.js'
+import { parse } from 'node-html-parser'
 import { CONFIG } from '../../../initializers/config.js'
 import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../../../initializers/constants.js'
 import { MVideo, MVideoPlaylist } from '../../../types/models/index.js'
 import { Hooks } from '../../plugins/hooks.js'
-import truncate from 'lodash-es/truncate.js'
-import { mdToOneLinePlainText } from '@server/helpers/markdown.js'
 
 type Tags = {
   forbidIndexation: boolean
@@ -28,6 +29,8 @@ type Tags = {
   escapedSiteName?: string
   escapedTitle?: string
   escapedTruncatedDescription?: string
+
+  relMe?: string
 
   image?: {
     url: string
@@ -68,15 +71,25 @@ export class TagsHtml {
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
   }
 
+  static findRelMe (content: string) {
+    if (!content) return undefined
+
+    const html = parse(content)
+
+    return html.querySelector('a[rel=me]')?.getAttribute('href') || undefined
+  }
+
   // ---------------------------------------------------------------------------
 
   static async addTags (htmlStringPage: string, tagsValues: Tags, context: HookContext) {
-    const openGraphMetaTags = this.generateOpenGraphMetaTagsOptions(tagsValues)
-    const standardMetaTags = this.generateStandardMetaTagsOptions(tagsValues)
-    const twitterCardMetaTags = this.generateTwitterCardMetaTagsOptions(tagsValues)
+    const metaTags = {
+      ...this.generateOpenGraphMetaTagsOptions(tagsValues),
+      ...this.generateStandardMetaTagsOptions(tagsValues),
+      ...this.generateTwitterCardMetaTagsOptions(tagsValues)
+    }
     const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
 
-    const { url, escapedTitle, oembedUrl, forbidIndexation } = tagsValues
+    const { url, escapedTitle, oembedUrl, forbidIndexation, relMe } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
 
@@ -90,29 +103,12 @@ export class TagsHtml {
 
     let tagsStr = ''
 
-    // Opengraph
-    Object.keys(openGraphMetaTags).forEach(tagName => {
-      const tagValue = openGraphMetaTags[tagName]
-      if (!tagValue) return
+    for (const tagName of Object.keys(metaTags)) {
+      const tagValue = metaTags[tagName]
+      if (!tagValue) continue
 
       tagsStr += `<meta property="${tagName}" content="${escapeAttribute(tagValue)}" />`
-    })
-
-    // Standard
-    Object.keys(standardMetaTags).forEach(tagName => {
-      const tagValue = standardMetaTags[tagName]
-      if (!tagValue) return
-
-      tagsStr += `<meta property="${tagName}" content="${escapeAttribute(tagValue)}" />`
-    })
-
-    // Twitter card
-    Object.keys(twitterCardMetaTags).forEach(tagName => {
-      const tagValue = twitterCardMetaTags[tagName]
-      if (!tagValue) return
-
-      tagsStr += `<meta property="${tagName}" content="${escapeAttribute(tagValue)}" />`
-    })
+    }
 
     // OEmbed
     for (const oembedLinkTag of oembedLinkTags) {
@@ -123,6 +119,10 @@ export class TagsHtml {
     // Schema.org
     if (schemaTags) {
       tagsStr += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+    }
+
+    if (relMe) {
+      tagsStr += `<link href="${escapeAttribute(relMe)}" rel="me">`
     }
 
     // SEO, use origin URL
@@ -261,6 +261,6 @@ export class TagsHtml {
   // ---------------------------------------------------------------------------
 
   static buildEscapedTruncatedDescription (description: string) {
-    return truncate(mdToOneLinePlainText(description), { length: 200 })
+    return truncate(mdToPlainText(description), { length: 200 })
   }
 }

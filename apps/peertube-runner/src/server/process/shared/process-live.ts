@@ -50,22 +50,23 @@ export class ProcessLiveRTMPHLSTranscoding {
     logger.debug(`Using ${this.outputPath} to process live rtmp hls transcoding job ${options.job.uuid}`)
   }
 
-  process () {
-    const job = this.options.job
-    const payload = job.payload
+  private get payload () {
+    return this.options.job.payload
+  }
 
+  process () {
     return new Promise<void>(async (res, rej) => {
       try {
         await ensureDir(this.outputPath)
 
-        logger.info(`Probing ${payload.input.rtmpUrl}`)
-        const probe = await ffprobePromise(payload.input.rtmpUrl)
-        logger.info({ probe }, `Probed ${payload.input.rtmpUrl}`)
+        logger.info(`Probing ${this.payload.input.rtmpUrl}`)
+        const probe = await ffprobePromise(this.payload.input.rtmpUrl)
+        logger.info({ probe }, `Probed ${this.payload.input.rtmpUrl}`)
 
-        const hasAudio = await hasAudioStream(payload.input.rtmpUrl, probe)
-        const hasVideo = await hasVideoStream(payload.input.rtmpUrl, probe)
-        const bitrate = await getVideoStreamBitrate(payload.input.rtmpUrl, probe)
-        const { ratio } = await getVideoStreamDimensionsInfo(payload.input.rtmpUrl, probe)
+        const hasAudio = await hasAudioStream(this.payload.input.rtmpUrl, probe)
+        const hasVideo = await hasVideoStream(this.payload.input.rtmpUrl, probe)
+        const bitrate = await getVideoStreamBitrate(this.payload.input.rtmpUrl, probe)
+        const { ratio } = await getVideoStreamDimensionsInfo(this.payload.input.rtmpUrl, probe)
 
         const m3u8Watcher = watch(this.outputPath + '/*.m3u8')
         this.fsWatchers.push(m3u8Watcher)
@@ -107,15 +108,15 @@ export class ProcessLiveRTMPHLSTranscoding {
         })
 
         this.ffmpegCommand = await buildFFmpegLive().getLiveTranscodingCommand({
-          inputUrl: payload.input.rtmpUrl,
+          inputUrl: this.payload.input.rtmpUrl,
 
           outPath: this.outputPath,
           masterPlaylistName: 'master.m3u8',
 
-          segmentListSize: payload.output.segmentListSize,
-          segmentDuration: payload.output.segmentDuration,
+          segmentListSize: this.payload.output.segmentListSize,
+          segmentDuration: this.payload.output.segmentDuration,
 
-          toTranscode: payload.output.toTranscode,
+          toTranscode: this.payload.output.toTranscode,
           splitAudioAndVideo: true,
 
           bitrate,
@@ -126,7 +127,7 @@ export class ProcessLiveRTMPHLSTranscoding {
           probe
         })
 
-        logger.info(`Running live transcoding for ${payload.input.rtmpUrl}`)
+        logger.info(`Running live transcoding for ${this.payload.input.rtmpUrl}`)
 
         this.ffmpegCommand.on('error', (err, stdout, stderr) => {
           this.onFFmpegError({ err, stdout, stderr })
@@ -241,7 +242,8 @@ export class ProcessLiveRTMPHLSTranscoding {
       jobToken: this.options.job.jobToken,
       jobUUID: this.options.job.uuid,
       runnerToken: this.options.runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: this.payload
     })
   }
 
@@ -324,7 +326,7 @@ export class ProcessLiveRTMPHLSTranscoding {
     await Promise.all(parallelPromises)
   }
 
-  private async updateWithRetry (payload: CustomLiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
+  private async updateWithRetry (updatePayload: CustomLiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
     if (this.ended || this.errored) return
 
     try {
@@ -332,7 +334,8 @@ export class ProcessLiveRTMPHLSTranscoding {
         jobToken: this.options.job.jobToken,
         jobUUID: this.options.job.uuid,
         runnerToken: this.options.runnerToken,
-        payload: payload as any
+        payload: updatePayload as any,
+        reqPayload: this.payload
       })
     } catch (err) {
       if (currentTry >= 3) throw err
@@ -341,7 +344,7 @@ export class ProcessLiveRTMPHLSTranscoding {
       logger.warn({ err }, 'Will retry update after error')
       await wait(250)
 
-      return this.updateWithRetry(payload, currentTry + 1)
+      return this.updateWithRetry(updatePayload, currentTry + 1)
     }
   }
 

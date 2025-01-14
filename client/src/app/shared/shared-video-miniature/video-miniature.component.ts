@@ -26,6 +26,7 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
 import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
+import { ActorHostComponent } from '../standalone-actor/actor-host.component'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -56,7 +57,8 @@ export type MiniatureDisplayOptions = {
     VideoViewsCounterComponent,
     RouterLink,
     NgFor,
-    VideoActionsDropdownComponent
+    VideoActionsDropdownComponent,
+    ActorHostComponent
   ]
 })
 export class VideoMiniatureComponent implements OnInit {
@@ -134,13 +136,13 @@ export class VideoMiniatureComponent implements OnInit {
   get authorAccount () {
     return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
       ? this.video.account.displayName
-      : this.video.byAccount
+      : this.video.account.name
   }
 
   get authorChannel () {
     return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
       ? this.video.channel.displayName
-      : this.video.byVideoChannel
+      : this.video.channel.name
   }
 
   get isVideoBlur () {

@@ -44,6 +44,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   @Input() theme: 'primary' | 'secondary' | 'tertiary' = 'secondary'
   @Input() icon: GlobalIconName
 
+  @Input() href: string
   @Input() ptRouterLink: string[] | string
   @Input() ptQueryParams: Params
   @Input() ptQueryParamsHandling: QueryParamsHandling
@@ -73,7 +74,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   }
 
   private buildClasses () {
-    const isButtonLink = !!this.ptRouterLink
+    const isButtonLink = !!this.ptRouterLink || !!this.href
 
     this.classes = {
       'active': this.active,

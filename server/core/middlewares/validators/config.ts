@@ -7,12 +7,30 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
 import { areValidationErrors } from './shared/index.js'
+import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists(),
   body('instance.shortDescription').exists(),
   body('instance.description').exists(),
   body('instance.terms').exists(),
+
+  body('instance.codeOfConduct').exists(),
+  body('instance.creationReason').exists(),
+  body('instance.moderationInformation').exists(),
+  body('instance.administrator').exists(),
+  body('instance.maintenanceLifetime').exists(),
+  body('instance.businessModel').exists(),
+  body('instance.hardwareInformation').exists(),
+  body('instance.serverCountry').exists(),
+  body('instance.support.text').exists(),
+  body('instance.social.externalLink').exists(),
+  body('instance.social.mastodonLink').exists(),
+  body('instance.social.blueskyLink').exists(),
+
+  body('instance.isNSFW').isBoolean(),
+  body('instance.languages').custom(isStringArray),
+  body('instance.categories').custom(isNumberArray),
   body('instance.defaultNSFWPolicy').custom(isUserNSFWPolicyValid),
   body('instance.defaultClientRoute').exists(),
   body('instance.customizations.css').exists(),
