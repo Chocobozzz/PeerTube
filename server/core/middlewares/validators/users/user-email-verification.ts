@@ -16,7 +16,7 @@ const usersAskSendVerifyEmailValidator = [
 
     const { email } = await Hooks.wrapObject({
       email: req.body.email
-    }, 'filter:api.email-verification.ask-send-email.params')
+    }, 'filter:api.email-verification.ask-send-verify-email.body')
 
     const [ userExists, registrationExists ] = await Promise.all([
       checkUserEmailExist(email, res, false),

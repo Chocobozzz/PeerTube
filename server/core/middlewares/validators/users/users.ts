@@ -337,7 +337,7 @@ export const usersAskResetPasswordValidator = [
 
     const { email } = await Hooks.wrapObject({
       email: req.body.email
-    }, 'filter:api.users.reset-password.params')
+    }, 'filter:api.users.ask-reset-password.body')
 
     const exists = await checkUserEmailExist(email, res, false)
     if (!exists) {

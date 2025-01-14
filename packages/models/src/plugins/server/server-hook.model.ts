@@ -141,10 +141,11 @@ export const serverFilterHookObject = {
   'filter:feed.podcast.video.create-custom-tags.result': true,
   // Peertube >= 6.1
   'filter:api.user.me.get.result': true,
+
   // Peertube >= 7.1
-  'filter:api.login.params': true,
-  'filter:api.email-verification.ask-send-email.params': true,
-  'filter:api.users.reset-password.params': true
+  'filter:oauth.password-grant.get-user.params': true,
+  'filter:api.email-verification.ask-send-verify-email.body': true,
+  'filter:api.users.ask-reset-password.body': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

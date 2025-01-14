@@ -136,24 +136,25 @@ async function handlePasswordGrant (options: {
   client: MOAuthClient
   bypassLogin?: BypassLogin
 }) {
-  const { request, client } = options
+  const { client } = options
+
   const { bypassLogin, usernameOrEmail, password } = await Hooks.wrapObject({
     bypassLogin: options.bypassLogin,
-    usernameOrEmail: request.body.username,
-    password: request.body.password
-  }, 'filter:api.login.params')
+    usernameOrEmail: options.request.body.username,
+    password: options.request.body.password
+  }, 'filter:oauth.password-grant.get-user.params')
 
-  if (!request.body.username) {
+  if (!options.request.body.username) {
     throw new InvalidRequestError('Missing parameter: `username`')
   }
 
-  if (!bypassLogin && !request.body.password) {
+  if (!bypassLogin && !options.request.body.password) {
     throw new InvalidRequestError('Missing parameter: `password`')
   }
 
   const user = await getUser(usernameOrEmail, password, bypassLogin)
   if (!user) {
-    const registration = await UserRegistrationModel.loadByEmailOrUsername(request.body.username)
+    const registration = await UserRegistrationModel.loadByEmailOrUsername(usernameOrEmail)
 
     if (registration?.state === UserRegistrationState.REJECTED) {
       throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
@@ -165,11 +166,11 @@ async function handlePasswordGrant (options: {
   }
 
   if (user.otpSecret) {
-    if (!request.headers[OTP.HEADER_NAME]) {
+    if (!options.request.headers[OTP.HEADER_NAME]) {
       throw new MissingTwoFactorError('Missing two factor header')
     }
 
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.request.headers[OTP.HEADER_NAME] }) !== true) {
       throw new InvalidTwoFactorError('Invalid two factor header')
     }
   }
