@@ -9933,7 +9933,10 @@ components:
       properties:
         total:
           type: integer
-          example: 1
+          description: Total threads (included deleted ones) on this video
+        totalNotDeletedComments:
+          type: integer
+          description: Total not-deleted threads (included deleted ones) on this video
         data:
           type: array
           maxItems: 100
