@@ -47,11 +47,12 @@ $more-button-width: 40px;
 }
 
 my-actor-host {
-  max-width: 50%;
+  flex-shrink: 1;
+  min-width: 1px;
 }
 
-
 .owner-label {
+  flex-shrink: 1;
   color: pvar(--fg-300);
 
   @include disable-default-a-behaviour;
