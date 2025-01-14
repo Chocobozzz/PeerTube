@@ -359,6 +359,22 @@ sudo -u prunner peertube-runner list-registered
 
 :::
 
+### Graceful shutdown
+
+Ask the runner to shutdown when it has finished all of its current tasks:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner graceful-shutdown
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner graceful-shutdown
+```
+
+:::
+
 ### Update the runner package
 
 You can check if there is a new runner version using:
