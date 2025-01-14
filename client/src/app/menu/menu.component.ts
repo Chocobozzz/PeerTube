@@ -25,7 +25,8 @@ type MenuLink = {
 
   label: string
 
-  path: string
+  path?: string
+  url?: string
   query?: Params
 
   isPrimaryButton?: boolean // default false
