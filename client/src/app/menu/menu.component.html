@@ -65,13 +65,15 @@
                         <span [ngClass]="{ 'visually-hidden': collapsed }">{{ link.label }}</span>
                       </ng-template>
 
-                      <a *ngIf="link.path" class="menu-link ellipsis" [routerLink]="link.path" [queryParams]="link.query" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
-                        <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
-                      </a>
-
-                      <a *ngIf="link.url" class="menu-link ellipsis" [href]="link.url" [ngClass]="link.ngClass" [title]="link.label" target="_blank">
-                        <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
-                      </a>
+                      @if (link.path) {
+                        <a class="menu-link ellipsis" [routerLink]="link.path" [queryParams]="link.query" routerLinkActive="active" [ngClass]="link.ngClass" [title]="link.label">
+                          <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
+                        </a>
+                      } @else {
+                        <a class="menu-link ellipsis" [href]="link.url" [ngClass]="link.ngClass" [title]="link.label" target="_blank">
+                          <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
+                        </a>
+                      }
                     }
                   </li>
                 </ul>
