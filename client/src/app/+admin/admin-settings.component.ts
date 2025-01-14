@@ -72,28 +72,28 @@ export class AdminSettingsComponent implements OnInit {
         },
         children: [
           {
-            label: 'Installed plugins',
+            label: $localize`Installed plugins`,
             routerLink: '/admin/settings/plugins/list-installed',
             queryParams: {
               pluginType: PluginType.PLUGIN
             }
           },
           {
-            label: 'Search plugins',
+            label: $localize`Search plugins`,
             routerLink: '/admin/settings/plugins/search',
             queryParams: {
               pluginType: PluginType.PLUGIN
             }
           },
           {
-            label: 'Installed themes',
+            label: $localize`Installed themes`,
             routerLink: '/admin/settings/plugins/list-installed',
             queryParams: {
               pluginType: PluginType.THEME
             }
           },
           {
-            label: 'Search themes',
+            label: $localize`Search themes`,
             routerLink: '/admin/settings/plugins/search',
             queryParams: {
               pluginType: PluginType.THEME
