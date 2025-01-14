@@ -87,6 +87,9 @@ class ServerConfigManager {
           embed: {
             enabled: CONFIG.DEFAULTS.P2P.EMBED.ENABLED
           }
+        },
+        player: {
+          autoPlay: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY
         }
       },
 

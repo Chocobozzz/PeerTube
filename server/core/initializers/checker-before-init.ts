@@ -50,6 +50,7 @@ function checkMissedConfig () {
     'auto_blacklist.videos.of_users.enabled', 'trending.videos.interval_days',
     'client.videos.miniature.prefer_author_display_name', 'client.menu.login.redirect_on_single_external_auth',
     'defaults.publish.download_enabled', 'defaults.publish.comments_policy', 'defaults.publish.privacy', 'defaults.publish.licence',
+    'defaults.player.auto_play',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
     'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
     'instance.server_country', 'instance.support.text', 'instance.social.external_link', 'instance.social.mastodon_link',

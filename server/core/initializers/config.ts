@@ -104,6 +104,9 @@ const CONFIG = {
       EMBED: {
         ENABLED: config.get<boolean>('defaults.p2p.embed.enabled')
       }
+    },
+    PLAYER: {
+      get AUTO_PLAY () { return config.get<boolean>('defaults.player.auto_play') }
     }
   },
 

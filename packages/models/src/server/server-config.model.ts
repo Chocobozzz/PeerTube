@@ -74,6 +74,10 @@ export interface ServerConfig {
         enabled: boolean
       }
     }
+
+    player: {
+      autoPlay: boolean
+    }
   }
 
   webadmin: {

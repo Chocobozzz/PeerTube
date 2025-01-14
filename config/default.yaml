@@ -150,6 +150,10 @@ defaults:
     embed:
       enabled: true
 
+  player:
+    # By default, playback starts automatically when opening a video
+    auto_play: true
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
