@@ -87,6 +87,9 @@ class ServerConfigManager {
           embed: {
             enabled: CONFIG.DEFAULTS.P2P.EMBED.ENABLED
           }
+        },
+        player: {
+          autoPlay: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY
         }
       },
 
@@ -274,8 +277,7 @@ class ServerConfigManager {
       },
       user: {
         videoQuota: CONFIG.USER.VIDEO_QUOTA,
-        videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
-        playbackAutoStart: CONFIG.USER.PLAYBACK_AUTO_START
+        videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
       },
       videoChannels: {
         maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER

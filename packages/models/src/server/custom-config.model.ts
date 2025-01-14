@@ -121,7 +121,6 @@ export interface CustomConfig {
     videoQuota: number
     videoQuotaDaily: number
     defaultChannelName: string
-    playbackAutoStart: boolean
   }
 
   videoChannels: {

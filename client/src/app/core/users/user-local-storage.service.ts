@@ -107,7 +107,7 @@ export class UserLocalStorageService {
 
     const defaultNSFWPolicy = htmlConfig.instance.defaultNSFWPolicy
     const defaultP2PEnabled = htmlConfig.defaults.p2p.webapp.enabled
-    const defaultPlaybackAutoStart = htmlConfig.user.playbackAutoStart
+    const defaultAutoPlay = htmlConfig.defaults.player.autoPlay
 
     return {
       nsfwPolicy: this.localStorageService.getItem<NSFWPolicyType>(UserLocalStorageKeys.NSFW_POLICY) || defaultNSFWPolicy,
@@ -115,7 +115,7 @@ export class UserLocalStorageService {
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
 
-      autoPlayVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO), defaultPlaybackAutoStart),
+      autoPlayVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO), defaultAutoPlay),
       autoPlayNextVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO), false),
       autoPlayNextVideoPlaylist: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST), true)
     }

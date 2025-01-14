@@ -242,8 +242,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       videoQuota: 5242881,
       videoQuotaDaily: 318742,
-      defaultChannelName: 'Main $1 channel',
-      playbackAutoStart: true
+      defaultChannelName: 'Main $1 channel'
     },
     videoChannels: {
       maxPerUser: 24

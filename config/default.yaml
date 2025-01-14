@@ -150,6 +150,10 @@ defaults:
     embed:
       enabled: true
 
+  player:
+    # By default, playback starts automatically when opening a video
+    auto_play: true
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
@@ -570,9 +574,6 @@ user:
   video_quota_daily: -1
 
   default_channel_name: 'Main $1 channel' # The placeholder $1 is used to represent the user's username
-
-  # By default, playback starts automatically when opening a video for a new user or when anonymous
-  playback_auto_start: true
 
 video_channels:
   max_per_user: 20 # Allows each user to create up to 20 video channels.

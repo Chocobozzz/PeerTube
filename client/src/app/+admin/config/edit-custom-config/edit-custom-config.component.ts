@@ -228,8 +228,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           }
         },
         videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
-        videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR,
-        playbackAutoStart: null
+        videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR
       },
       videoChannels: {
         maxPerUser: MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR
