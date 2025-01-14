@@ -6493,7 +6493,7 @@
       </trans-unit>
       <trans-unit id="4896271345443040077" datatype="html" xml:space="preserve">
         <source>That contain an external link</source>
-        <target state="translated">Se sisältää ulkopuolisen linkin</target>
+        <target state="translated">Sisältää linkkejä ulkopuolelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -11165,7 +11165,7 @@
       </trans-unit>
       <trans-unit id="6234119003440125809" datatype="html" xml:space="preserve">
         <source>Recently Added</source>
-        <target state="translated">Viimeksi lisättyä</target>
+        <target state="translated">Viimeksi lisätyt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">169</context>
@@ -11181,7 +11181,7 @@
       </trans-unit>
       <trans-unit id="7780562759861344168" datatype="html" xml:space="preserve">
         <source>Recent Views</source>
-        <target state="translated">Viimeisimmät näytöt</target>
+        <target state="translated">Viimeksi katseltu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -11431,9 +11431,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2000373220662583633" datatype="html">
+      <trans-unit id="2000373220662583633" datatype="html" xml:space="preserve">
         <source>No ownership change request found.</source>
-        <target state="translated">Omistuksen muutospyyntöä ei löytynyt.</target>
+        <target state="translated">Omistajanmuutospyyntöjä ei löytynyt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context>
           <context context-type="linenumber">55</context>
@@ -11615,9 +11615,9 @@
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7000850040589508423" datatype="html">
+      <trans-unit id="7000850040589508423" datatype="html" xml:space="preserve">
         <source>Create video channel</source>
-        <target state="translated">Luo videokanava</target>
+        <target state="translated">Luo kanava</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">10</context>
@@ -11943,7 +11943,7 @@
       </trans-unit>
       <trans-unit id="2191782228095209497" datatype="html" xml:space="preserve">
         <source>My video space</source>
-        <target state="translated">Videotilani</target>
+        <target state="translated">Videotila</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.html</context>
           <context context-type="linenumber">6</context>
@@ -11961,9 +11961,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7418836785553125957" datatype="html">
+      <trans-unit id="7418836785553125957" datatype="html" xml:space="preserve">
         <source>Create a new video channel</source>
-        <target state="translated">Luo uusi videokanava</target>
+        <target state="translated">Luo uusi kanava</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/routes.ts</context>
           <context context-type="linenumber">21</context>
@@ -16167,9 +16167,9 @@
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3656932706364053858" datatype="html">
+      <trans-unit id="3656932706364053858" datatype="html" xml:space="preserve">
         <source>Track watch history</source>
-        <target state="translated">Seuraa katseluhistoriaa</target>
+        <target state="translated">Pidä katseluhistoriaa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">8</context>
@@ -17139,9 +17139,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5752861278140673787">
+      <trans-unit id="5752861278140673787" xml:space="preserve">
         <source>Ownership changes</source>
-        <target>Omistajuusmuutokset</target>
+        <target state="translated">Omistajanmuutokset</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -18127,7 +18127,7 @@
       </trans-unit>
       <trans-unit id="315406341700403563" datatype="html" xml:space="preserve">
         <source>These automatic tags can be used to filter comments or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>automatically block<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> them.</source>
-        <target state="translated">Nämä automaattiset tunnisteet voivat filteröidä kommentteja tai<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>automaattisesti estää<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ne.</target>
+        <target state="translated">Nämä automaattiset tunnisteet voivat filteröidä kommentteja ta i<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>estää ne automaattisesti<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-watched-words-list/my-watched-words-list.component.html</context>
           <context context-type="linenumber">2</context>
