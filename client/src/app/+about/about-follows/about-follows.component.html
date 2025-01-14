@@ -17,7 +17,7 @@
       <div i18n class="no-results" *ngIf="subscriptionsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
 
       <div *ngFor="let subscription of subscriptions" class="follow-block">
-        <my-actor-avatar [actor]="subscription" actorType="channel" size="32"></my-actor-avatar>
+        <my-actor-avatar [actor]="subscription" actorType="instance" size="32"></my-actor-avatar>
 
         <div>
           <a class="follow-name" [href]="subscription.url" target="_blank" rel="noopener noreferrer">{{ subscription.name }}</a>
@@ -66,7 +66,7 @@
       <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">{{ instanceName }} does not have followers.</div>
 
       <div *ngFor="let follower of followers" class="follow-block">
-        <my-actor-avatar [actor]="follower" actorType="channel" size="32"></my-actor-avatar>
+        <my-actor-avatar [actor]="follower" actorType="instance" size="32"></my-actor-avatar>
 
         <div>
           <a class="follow-name" [href]="follower.url" target="_blank" rel="noopener noreferrer">{{ follower.name }}</a>

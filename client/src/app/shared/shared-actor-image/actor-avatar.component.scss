@@ -16,6 +16,10 @@
   &.channel {
     border-radius: 5px;
   }
+
+  &.instance {
+    border-radius: $instance-img-radius;
+  }
 }
 
 a {

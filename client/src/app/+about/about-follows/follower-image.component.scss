@@ -11,7 +11,7 @@ img {
   width: 30px;
   height: 30px;
   border: 1px solid pvar(--bg-secondary-400);
-  border-radius: 8px;
+  border-radius: $instance-img-radius;
   position: absolute;
   right: 36px;
   bottom: 25px;
