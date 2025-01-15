@@ -523,25 +523,25 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7128109358021057367" datatype="html">
+      <trans-unit id="7128109358021057367" datatype="html" xml:space="preserve">
         <source>What is it?</source>
-        <target state="new">What is it?</target>
+        <target state="translated">Què és?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6548380581349467642" datatype="html">
+      <trans-unit id="6548380581349467642" datatype="html" xml:space="preserve">
         <source>Show all our subscriptions</source>
-        <target state="new">Show all our subscriptions</target>
+        <target state="translated">Mostrar totes les nostres subscripcions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.html</context>
           <context context-type="linenumber">24,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="99339465301704740" datatype="html">
+      <trans-unit id="99339465301704740" datatype="html" xml:space="preserve">
         <source>More <x id="INTERPOLATION" equiv-text="{{ host }}"/> content</source>
-        <target state="new">More <x id="INTERPOLATION" equiv-text="{{ host }}"/> content</target>
+        <target state="translated">Més contingut de <x id="INTERPOLATION" equiv-text="{{ host }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.html</context>
           <context context-type="linenumber">26,27</context>
@@ -549,7 +549,7 @@
       </trans-unit>
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
-        <target state="translated">PeerTube considera que el vídeo "<x id="PH" equiv-text="video.name"/>" ja està sent transcodificat.</target>
+        <target state="translated">PeerTube considera que el vídeo "<x id="PH" equiv-text="video.name"/>" ja està essent transcodificat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">350</context>
