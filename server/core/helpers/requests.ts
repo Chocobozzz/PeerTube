@@ -177,7 +177,14 @@ export function generateRequestStream (url: string, options: PeerTubeRequestOpti
 }
 
 export function getProxyAgent () {
-  if (!isProxyEnabled()) return {}
+  if (!isProxyEnabled()) {
+    return {
+      agent: { // Fix issue https://github.com/node-fetch/node-fetch/issues/1735 with Node 20
+        http: new http.Agent({ keepAlive: false }),
+        https: new https.Agent({ keepAlive: false })
+      }
+    }
+  }
 
   const proxy = getProxy()
 
@@ -230,10 +237,6 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
   return {
     method: options.method,
     dnsCache: true,
-    agent: { // Fix issue https://github.com/node-fetch/node-fetch/issues/1735 with Node 20
-      http: new http.Agent({ keepAlive: false }),
-      https: new https.Agent({ keepAlive: false })
-    },
     timeout: {
       request: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT
     },
