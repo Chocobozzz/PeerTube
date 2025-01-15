@@ -4751,7 +4751,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4964217545822568684" datatype="html" xml:space="preserve">
         <source>Privacy of the new replay</source>
-        <target state="translated">Visibilitat de la nova repetició</target>
+        <target state="translated">Privacitat de la nova repetició</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">355</context>
@@ -4767,7 +4767,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html" xml:space="preserve">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">Publicar automàticament la repetició quan acaba el directe</target>
+        <target state="translated">Publicar automàticament la repetició en acabar el directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">345</context>
@@ -4800,7 +4800,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1037891113581600591" datatype="html" xml:space="preserve">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;
       When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">Un text breu que explica al vostre públic les opcions per donar suport al vostre canal (plataforma de membres...).&lt;br /&gt; Quan es pengi un vídeo nou a aquest canal, el camp «Suport» s'omplirà automàticament amb aquest text.</target>
+        <target state="translated">Un text breu que explica al vostre públic les opcions per donar suport al vostre canal (plataforma de membres...).&lt;br /&gt;
+      Quan es pengi un vídeo nou a aquest canal, el camp «Suport» s'omplirà automàticament amb aquest text.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-edit.component.html</context>
           <context context-type="linenumber">73</context>
