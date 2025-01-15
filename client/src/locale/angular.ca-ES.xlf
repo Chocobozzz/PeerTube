@@ -3601,7 +3601,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8497991113445747319" datatype="html" xml:space="preserve">
         <source>You might need to login to see the video.</source>
-        <target state="translated">És possible que hàgiu d'iniciar sessió per veure el vídeo.</target>
+        <target state="translated">Potser heu d'iniciar sessió per veure el vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">9</context>
@@ -3609,7 +3609,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="250608669543270729" datatype="html" xml:space="preserve">
         <source>You might need to login to see the resource.</source>
-        <target state="translated">És possible que hàgiu d'iniciar sessió per veure el recurs.</target>
+        <target state="translated">Potser heu d'iniciar sessió per veure el recurs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3617,7 +3617,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html" xml:space="preserve">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="translated">És possible que hàgiu de verificar que el vostre compte està autoritzat pel propietari del vídeo o de la instància.</target>
+        <target state="translated">Potser heu de verificar que el vostre compte està autoritzat pel propietari del vídeo o de la instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3625,7 +3625,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html" xml:space="preserve">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="translated">És possible que hàgiu de verificar que el vostre compte està autoritzat pel propietari del recurs o de la instància.</target>
+        <target state="translated">Potser heu de verificar que el vostre compte està autoritzat pel propietari del recurs o de la instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3651,7 +3651,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html" xml:space="preserve">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="translated">El mitjà es massa gran per al servidor. Contacteu amb l'administració si desitgeu augmentar el límit de grandària.</target>
+        <target state="translated">El mitjà es massa gros per al servidor. Contacteu amb l'administració si desitgeu augmentar el límit de grandària.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">120</context>
@@ -3725,17 +3725,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2468689683507870964" datatype="html">
+      <trans-unit id="2468689683507870964" datatype="html" xml:space="preserve">
         <source>In this instance's network</source>
-        <target state="translated">En la xarxa d'aquesta instància</target>
+        <target state="translated">A la xarxa d'aquesta instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4494942989613184609" datatype="html">
+      <trans-unit id="4494942989613184609" datatype="html" xml:space="preserve">
         <source>In the vidiverse</source>
-        <target state="translated">En el vidivers</target>
+        <target state="translated">Al vidivers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">17</context>
@@ -3759,7 +3759,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8151924435547335490" datatype="html" xml:space="preserve">
         <source>Upload failed</source>
-        <target state="translated">La càrrega ha fallat</target>
+        <target state="translated">La pujada ha fallat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">13</context>
@@ -3773,9 +3773,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4540121094340493564" datatype="html">
+      <trans-unit id="4540121094340493564" datatype="html" xml:space="preserve">
         <source>Display only</source>
-        <target state="translated">Sols mostrar</target>
+        <target state="translated">Mostrar només</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3825,9 +3825,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3589238979642505685">
+      <trans-unit id="3589238979642505685" xml:space="preserve">
         <source>Display sensitive content</source>
-        <target>Mostra contingut sensible</target>
+        <target state="translated">Mostrar contingut sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">40</context>
@@ -3961,9 +3961,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="283421392567624698" datatype="html">
+      <trans-unit id="283421392567624698" datatype="html" xml:space="preserve">
         <source>Search target</source>
-        <target state="translated">Buscar objectiu</target>
+        <target state="translated">Cercar objectiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">212</context>
@@ -4065,9 +4065,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="753928283782809091" datatype="html">
+      <trans-unit id="753928283782809091" datatype="html" xml:space="preserve">
         <source>Select the caption file</source>
-        <target state="translated">Trieu un fitxer de subtítols</target>
+        <target state="translated">Trieu l'arxiu de subtítols</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">26</context>
@@ -4099,7 +4099,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2086067688023636903" datatype="html" xml:space="preserve">
         <source>Raw edition</source>
-        <target state="translated">Edició crua</target>
+        <target state="translated">Edició en cru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -4123,7 +4123,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2831765880579689127" datatype="html" xml:space="preserve">
         <source>Use video current time as start time</source>
-        <target state="translated">Utilitzeu l'hora actual del vídeo com a hora d'inici</target>
+        <target state="translated">Fer servir l'hora actual del vídeo com a hora d'inici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">59</context>
@@ -4143,7 +4143,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2534468682040754093" datatype="html" xml:space="preserve">
         <source>Use video current time as end time</source>
-        <target state="translated">Utilitza l'hora actual del vídeo com a hora de finalització</target>
+        <target state="translated">Fer servir l'hora actual del vídeo com a hora de finalització</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">74</context>
@@ -4151,7 +4151,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html" xml:space="preserve">
         <source>Edit this caption</source>
-        <target state="translated">Edita aquest subtítol</target>
+        <target state="translated">Editar aquest subtítol</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">129</context>
@@ -5620,9 +5620,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4619111912751495491" datatype="html">
+      <trans-unit id="4619111912751495491" datatype="html" xml:space="preserve">
         <source>Report this comment</source>
-        <target state="translated">Informar sobre aquest comentari</target>
+        <target state="translated">Denunciar aquest comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">222</context>
@@ -9094,7 +9094,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1702458049569424041" datatype="html" xml:space="preserve">
         <source>Banner is displayed in the about, login and registration pages and be used on your custom homepage.</source>
-        <target state="translated">El bàner es mostra a les pàgines sobre, inici de sessió i registre, i s'utilitza a la vostra pàgina d'inici personalitzada.</target>
+        <target state="translated">El bàner es mostra a les pàgines quant a, inici de sessió i registre, i s'utilitza a la vostra pàgina d'inici personalitzada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">29</context>
@@ -9350,7 +9350,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5056489767203690328" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">Qui modera la instància? Quina política s'aplica als vídeos explícits/adults? Sobre vídeos polítics? etc</target>
+        <target state="translated">Qui modera la instància? Quina política s'aplica als vídeos explícits/adults? A vídeos polítics? etc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">243</context>
@@ -12168,7 +12168,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5511928240200239994" datatype="html" xml:space="preserve">
         <source>Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="translated">Alguns dels teus canals no estan completament configurats.  Feu que siguin acollidors i explícits sobre el que publiqueu afegint un <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>bànner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, un <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i una <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>descripció<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Alguns dels teus canals no estan completament configurats. Feu que siguin acollidors i explícits sobre el que publiqueu afegint un <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>bàner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, un <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i una <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>descripció<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/channels-setup-message.component.html</context>
           <context context-type="linenumber">4</context>
@@ -13288,7 +13288,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html" xml:space="preserve">
         <source>About this instance</source>
-        <target state="translated">Sobre aquesta instància</target>
+        <target state="translated">Quant a aquesta instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.routes.ts</context>
           <context context-type="linenumber">16</context>
@@ -13328,7 +13328,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html" xml:space="preserve">
         <source>About PeerTube</source>
-        <target state="translated">Sobre PeerTube</target>
+        <target state="translated">Quant a PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/routes.ts</context>
           <context context-type="linenumber">34</context>
@@ -13336,7 +13336,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html" xml:space="preserve">
         <source>About this instance's network</source>
-        <target state="translated">Sobre la xarxa d'aquesta instància</target>
+        <target state="translated">Quant a la xarxa d'aquesta instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/routes.ts</context>
           <context context-type="linenumber">44</context>
