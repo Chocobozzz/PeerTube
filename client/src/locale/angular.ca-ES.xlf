@@ -1499,17 +1499,17 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3372646000533908418" datatype="html">
+      <trans-unit id="3372646000533908418" datatype="html" xml:space="preserve">
         <source>Subscribe with a remote account:</source>
-        <target state="translated">Subscriu-te amb un compte remot:</target>
+        <target state="translated">Subscriviu-vos amb un compte remot:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691897331062834756" datatype="html">
+      <trans-unit id="6691897331062834756" datatype="html" xml:space="preserve">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Subscriu-te amb un compte d'aquesta instància</target>
+        <target state="translated">Subscriviu-vos amb un compte d'aquesta instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">48</context>
@@ -1517,7 +1517,7 @@
       </trans-unit>
       <trans-unit id="1740917574463702967" datatype="html" xml:space="preserve">
         <source>Subscribe with your local account</source>
-        <target state="translated">Subscriu-te amb el compte local</target>
+        <target state="translated">Subscriviu-vos amb el compte local</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">46</context>
@@ -1533,7 +1533,7 @@
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html" xml:space="preserve">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="translated">Esteu segur que voleu suprimir els fitxers de "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">Segur que voleu suprimir els fitxers de "<x id="PH" equiv-text="this.video.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">370</context>
@@ -1541,7 +1541,7 @@
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html" xml:space="preserve">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
-        <target state="translated">Elimina els fitxers de "<x id="PH" equiv-text="this.video.name"/>"</target>
+        <target state="translated">Eliminar els fitxers de "<x id="PH" equiv-text="this.video.name"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">372</context>
@@ -1589,7 +1589,7 @@
       </trans-unit>
       <trans-unit id="2949829240129672512" datatype="html" xml:space="preserve">
         <source>Using a syndication feed</source>
-        <target state="translated">Fer ús d'una ristra sindicada - RSS -</target>
+        <target state="translated">Fer ús d'un flux de sindicació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1611,9 +1611,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6462281745850371027" datatype="html">
+      <trans-unit id="6462281745850371027" datatype="html" xml:space="preserve">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Pots subscriure't al canal amb qualsevol instància de fediverse compatible amb ActivityPub (PeerTube, Mastodon o Pleroma, per exemple).</target>
+        <target state="translated">Podeu subscriure-vos al canal amb qualsevol instància de fediverse compatible amb ActivityPub (PeerTube, Mastodon o Pleroma, per exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1621,7 +1621,7 @@
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html" xml:space="preserve">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Pots interactuar amb açò mitjançant qualsevol instància de fediverse compatible amb ActivityPub (PeerTube, Mastodon o Pleroma, per exemple).</target>
+        <target state="translated">Podeu interactuar amb açò mitjançant qualsevol instància de fediverse compatible amb ActivityPub (PeerTube, Mastodon o Pleroma, per exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">28</context>
@@ -1673,7 +1673,7 @@
       </trans-unit>
       <trans-unit id="457567965747150035" datatype="html" xml:space="preserve">
         <source>Transcoding in multiple resolutions</source>
-        <target state="translated">Transcodificació en diverses resolucions.</target>
+        <target state="translated">Transcodificació a múltiples resolucions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">31</context>
