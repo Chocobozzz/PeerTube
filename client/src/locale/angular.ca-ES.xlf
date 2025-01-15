@@ -3096,7 +3096,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3433184700415677129" datatype="html" xml:space="preserve">
         <source>Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Plataforma impulsada per <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">La plataforma funciona amb <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">96</context>
@@ -3172,7 +3172,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6371572688505952303" datatype="html" xml:space="preserve">
         <source>My library</source>
-        <target state="translated">Biblioteca</target>
+        <target state="translated">La meva biblioteca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library.component.html</context>
           <context context-type="linenumber">6</context>
