@@ -2918,9 +2918,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3632214702247906395" datatype="html">
+      <trans-unit id="3632214702247906395" datatype="html" xml:space="preserve">
         <source>Change interface language</source>
-        <target state="new">Change interface language</target>
+        <target state="translated">Canviar idioma de la interfície</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
           <context context-type="linenumber">27</context>
