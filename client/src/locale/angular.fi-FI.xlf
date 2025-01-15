@@ -1987,57 +1987,57 @@
           <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3289656324871037579" datatype="html">
+      <trans-unit id="3289656324871037579" datatype="html" xml:space="preserve">
         <source>Vous pouvez publier des vidéos</source>
-        <target state="new">Vous pouvez publier des vidéos</target>
+        <target state="translated">Voitte julkaista videoita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193674330844209801" datatype="html">
+      <trans-unit id="9193674330844209801" datatype="html" xml:space="preserve">
         <source>By default, your account allows you to publish videos.</source>
-        <target state="new">By default, your account allows you to publish videos.</target>
+        <target state="translated">Oletuksena tilisi sallii sinun julkaista videoita.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7471320952405612533" datatype="html">
+      <trans-unit id="7471320952405612533" datatype="html" xml:space="preserve">
         <source>You can also stream lives.</source>
-        <target state="new"> You can also stream lives.</target>
+        <target state="translated">Voit myös suoratoistaa livelähetyksiä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5303097409974075102" datatype="html">
+      <trans-unit id="5303097409974075102" datatype="html" xml:space="preserve">
         <source>Contact us to publish videos</source>
-        <target state="new">Contact us to publish videos</target>
+        <target state="translated">Ota meihin yhteyttä videoiden julkaisemista varten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">148,149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6096043378628857552" datatype="html">
+      <trans-unit id="6096043378628857552" datatype="html" xml:space="preserve">
         <source>You can't publish videos</source>
-        <target state="new">You can't publish videos</target>
+        <target state="translated">Et voi julkaista videoita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">150,151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7445632181028998943" datatype="html">
+      <trans-unit id="7445632181028998943" datatype="html" xml:space="preserve">
         <source>By default, your account does not allow to publish videos.</source>
-        <target state="new">By default, your account does not allow to publish videos.</target>
+        <target state="translated">Oletuksena tilisi ei salli videoiden julkaisemista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1763989965529610778" datatype="html">
+      <trans-unit id="1763989965529610778" datatype="html" xml:space="preserve">
         <source>If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Jos haluat julkaista videoita, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>ota meihin yhteyttä<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">156</context>
