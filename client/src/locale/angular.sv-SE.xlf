@@ -13308,33 +13308,33 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8806514301719228076" datatype="html">
+      <trans-unit id="8806514301719228076" datatype="html" xml:space="preserve">
         <source>Specifics</source>
-        <target state="new">Specifics</target>
+        <target state="translated">Fokus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4156810045795717114" datatype="html">
+      <trans-unit id="4156810045795717114" datatype="html" xml:space="preserve">
         <source>Language:</source>
-        <target state="new">Language: </target>
+        <target state="translated">Språk:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8047881417431814560" datatype="html">
+      <trans-unit id="8047881417431814560" datatype="html" xml:space="preserve">
         <source>Categories:</source>
-        <target state="new">Categories: </target>
+        <target state="translated">Kategorier:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1381866989532931408" datatype="html">
+      <trans-unit id="1381866989532931408" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> är tillägnad känsligt och oförbehållsamt innehåll.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
