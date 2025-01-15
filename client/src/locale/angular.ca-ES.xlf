@@ -4235,7 +4235,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3265632123453688399" datatype="html" xml:space="preserve">
         <source>Enter a new tag</source>
-        <target state="translated">Introdueix una nova etiqueta</target>
+        <target state="translated">Introduïu una nova etiqueta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -4263,7 +4263,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html" xml:space="preserve">
         <source>Upload a new banner</source>
-        <target state="translated">Puja un bàner nou</target>
+        <target state="translated">Pujar un bàner nou</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">33</context>
@@ -4271,7 +4271,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1117672957968812680" datatype="html" xml:space="preserve">
         <source>Change your banner</source>
-        <target state="translated">Canvia el bàner</target>
+        <target state="translated">Canviar el vostre bàner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">14</context>
@@ -4293,9 +4293,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8797603333570754589" datatype="html">
+      <trans-unit id="8797603333570754589" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.actor.name"/> (instance page)</source>
-        <target state="new"><x id="PH" equiv-text="this.actor.name"/> (instance page)</target>
+        <target state="translated"><x id="PH" equiv-text="this.actor.name"/> (pàgina d'instància)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">47</context>
