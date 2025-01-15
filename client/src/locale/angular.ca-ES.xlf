@@ -1967,81 +1967,81 @@
           <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="707876467820107191" datatype="html">
+      <trans-unit id="707876467820107191" datatype="html" xml:space="preserve">
         <source>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</source>
-        <target state="new">This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</target>
+        <target state="translated">Aquesta plataforma és compatible amb Mastodon, Lemmy, Misskey i altres serveis del Fedivers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">112,114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5640969812017556311" datatype="html">
+      <trans-unit id="5640969812017556311" datatype="html" xml:space="preserve">
         <source>You can use these services to interact with our videos</source>
-        <target state="new">You can use these services to interact with our videos</target>
+        <target state="translated">Podeu fer servir aquests serveis per interactuar amb els nostres vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3289656324871037579" datatype="html">
+      <trans-unit id="3289656324871037579" datatype="html" xml:space="preserve">
         <source>Vous pouvez publier des vidéos</source>
-        <target state="new">Vous pouvez publier des vidéos</target>
+        <target state="translated">Podeu publicar vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193674330844209801" datatype="html">
+      <trans-unit id="9193674330844209801" datatype="html" xml:space="preserve">
         <source>By default, your account allows you to publish videos.</source>
-        <target state="new">By default, your account allows you to publish videos.</target>
+        <target state="translated">De manera predeterminada el vostre compte us permet publicar vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7471320952405612533" datatype="html">
+      <trans-unit id="7471320952405612533" datatype="html" xml:space="preserve">
         <source>You can also stream lives.</source>
-        <target state="new"> You can also stream lives.</target>
+        <target state="translated">També podeu emetre directes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5303097409974075102" datatype="html">
+      <trans-unit id="5303097409974075102" datatype="html" xml:space="preserve">
         <source>Contact us to publish videos</source>
-        <target state="new">Contact us to publish videos</target>
+        <target state="translated">Contacteu amb nosaltres per publicar vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">148,149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6096043378628857552" datatype="html">
+      <trans-unit id="6096043378628857552" datatype="html" xml:space="preserve">
         <source>You can't publish videos</source>
-        <target state="new">You can't publish videos</target>
+        <target state="translated">No podeu publicar vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">150,151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7445632181028998943" datatype="html">
+      <trans-unit id="7445632181028998943" datatype="html" xml:space="preserve">
         <source>By default, your account does not allow to publish videos.</source>
-        <target state="new">By default, your account does not allow to publish videos.</target>
+        <target state="translated">De manera predeterminada el vostre compte no permet publicar vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1763989965529610778" datatype="html">
+      <trans-unit id="1763989965529610778" datatype="html" xml:space="preserve">
         <source>If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Si voleu publicar vídeos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contacteu amb nosaltres<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4301908502265861759" datatype="html">
+      <trans-unit id="4301908502265861759" datatype="html" xml:space="preserve">
         <source>This platform is powered by PeerTube</source>
-        <target state="new"> This platform is powered by PeerTube </target>
+        <target state="translated">Aquesta plataforma funciona amb PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -2113,7 +2113,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="translated">El vostre fitxer <x id="PH" equiv-text="name"/> no s'ha pogut carregar abans que s'esgoti el temps d'espera del servidor intermediari</target>
+        <target state="translated">El vostre fitxer <x id="PH" equiv-text="name"/> no s'ha pogut carregar abans que s'esgotés el temps d'espera del servidor intermediari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
@@ -2223,9 +2223,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1191071088182425837" datatype="html">
+      <trans-unit id="1191071088182425837" datatype="html" xml:space="preserve">
         <source><x id="PH"/>h</source>
-        <target state="translated"><x id="PH"/> h</target>
+        <target state="translated"><x id="PH"/>h</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/time-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">15</context>
@@ -2261,7 +2261,7 @@
       </trans-unit>
       <trans-unit id="5418570600695268383" datatype="html" xml:space="preserve">
         <source>Request new verification email</source>
-        <target state="translated">Sol·liciteu un correu electrònic de verificació nou</target>
+        <target state="translated">Sol·licitar un nou correu electrònic de verificació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">38</context>
