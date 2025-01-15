@@ -30,6 +30,7 @@ import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
 import { shortCacheObservable } from '@root-helpers/utils'
+import { lastValueFrom } from 'rxjs'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -293,7 +294,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
       error: err => this.notifier.error(err.message)
     })
 
-    return observable
+    return lastValueFrom(observable)
   }
 
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {

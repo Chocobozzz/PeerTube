@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs'
-
 // Data from API hooks: {hookType}:api.{location}.{elementType}.{actionType}.{target}
 // Data in internal functions: {hookType}:{location}.{elementType}.{actionType}.{target}
 
@@ -106,16 +104,16 @@ export const clientFilterHookObject = {
   'filter:internal.player.p2p-media-loader.options.result': true,
 
   // Filter bulk actions in user list
-  'filter:admin-user-list.bulk-actions.create.result': true,
+  'filter:admin-users-list.bulk-actions.create.result': true,
 
   // Filter actions in comment list
-  'filter:admin-video-comment-list.actions.create.result': true,
+  'filter:admin-video-comments-list.actions.create.result': true,
 
   // Filter bulk actions in comment list
-  'filter:admin-video-comment-list.bulk-actions.create.result': true,
+  'filter:admin-video-comments-list.bulk-actions.create.result': true,
 
   // Filter user moderation actions
-  'filter:admin-user-moderation.actions.create.result': true,
+  'filter:user-moderation.actions.create.result': true,
 
   // Filter actions in abuse list
   'filter:admin-abuse-list.actions.create.result': true
@@ -226,5 +224,5 @@ export const clientDoActionObject = {
 
 export type ClientDoActionName = keyof typeof clientDoActionObject
 
-export type ClientDoActionCallback = () => Observable<any>
-export type ClientDoAction = (actionName: ClientDoActionName) => Observable<any>
+export type ClientDoActionCallback = () => Promise<any>
+export type ClientDoAction = (actionName: ClientDoActionName) => Promise<any>

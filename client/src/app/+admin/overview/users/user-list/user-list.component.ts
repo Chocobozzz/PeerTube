@@ -40,6 +40,7 @@ import {
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
 import { shortCacheObservable } from '@root-helpers/utils'
+import { lastValueFrom } from 'rxjs'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -181,7 +182,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
       ]
     ]
 
-    this.bulkActions = await this.hooks.wrapObject(bulkActions, 'admin-users', 'filter:admin-user-list.bulk-actions.create.result')
+    this.bulkActions = await this.hooks.wrapObject(bulkActions, 'admin-users', 'filter:admin-users-list.bulk-actions.create.result')
 
     this.columns = [
       { id: 'username', label: $localize`Username` },
@@ -377,7 +378,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
       error: err => this.notifier.error(err.message)
     })
 
-    return obs
+    return lastValueFrom(obs)
   }
 
   private loadMutedStatus () {

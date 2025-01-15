@@ -1,4 +1,4 @@
-import { forkJoin, from } from 'rxjs'
+import { forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, NgClass, NgIf, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core'
@@ -150,12 +150,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pluginService.addAction('application:increment-loader', () => {
       this.loadingBar.useRef('plugins').start()
 
-      return from([])
+      return Promise.resolve()
     })
     this.pluginService.addAction('application:decrement-loader', () => {
       this.loadingBar.useRef('plugins').complete()
 
-      return from([])
+      return Promise.resolve()
     })
   }
 

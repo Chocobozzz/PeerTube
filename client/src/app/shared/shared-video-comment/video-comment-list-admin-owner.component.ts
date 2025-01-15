@@ -18,6 +18,7 @@ import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directi
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
 import { shortCacheObservable } from '@root-helpers/utils'
+import { lastValueFrom } from 'rxjs'
 
 @Component({
   selector: 'my-video-comment-list-admin-owner',
@@ -102,7 +103,7 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
     this.videoCommentActions = await this.hooks.wrapObject(
       videoCommentActions,
       'admin-comments',
-      'filter:admin-video-comment-list.actions.create.result'
+      'filter:admin-video-comments-list.actions.create.result'
     )
 
     const bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = [
@@ -119,11 +120,16 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         iconName: 'tick'
       }
     ]
-    this.bulkActions = await this.hooks.wrapObject(
-      bulkActions,
-      'admin-comments',
-      'filter:admin-video-comment-list.bulk-actions.create.result'
-    )
+
+    if (this.mode === 'admin') {
+      this.bulkActions = await this.hooks.wrapObject(
+        bulkActions,
+        'admin-comments',
+        'filter:admin-video-comments-list.bulk-actions.create.result'
+      )
+    } else {
+      this.bulkActions = bulkActions
+    }
 
     if (this.mode === 'admin') {
       this.inputFilters = [
@@ -202,7 +208,7 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
       error: err => this.notifier.error(err.message)
     })
 
-    return obs
+    return lastValueFrom(obs)
   }
 
   private approveComments (comments: VideoCommentForAdminOrUser[]) {

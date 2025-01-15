@@ -286,7 +286,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     if (myAccountModerationActions.length !== 0) userActions.push(myAccountModerationActions)
     if (instanceModerationActions.length !== 0) userActions.push(instanceModerationActions)
 
-    this.userActions = await this.hooks.wrapObject(userActions, 'admin-users', 'filter:admin-user-moderation.actions.create.result')
+    this.userActions = await this.hooks.wrapObject(userActions, 'moderation', 'filter:user-moderation.actions.create.result')
   }
 
   private buildMyAccountModerationActions () {

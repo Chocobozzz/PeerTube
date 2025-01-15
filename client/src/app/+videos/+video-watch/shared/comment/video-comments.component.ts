@@ -10,7 +10,7 @@ import { VideoComment } from '@app/shared/shared-video-comment/video-comment.mod
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
-import { Subject, Subscription } from 'rxjs'
+import { lastValueFrom, Subject, Subscription } from 'rxjs'
 import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
 import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { LoaderComponent } from '../../../../shared/shared-main/common/loader.component'
@@ -151,13 +151,14 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadMoreThreads (reset = false) {
+    if (reset === true) {
+      this.componentPagination.currentPage = 1
+    }
+
     const params = {
       videoId: this.video.uuid,
       videoPassword: this.videoPassword,
-      componentPagination: {
-        ...this.componentPagination,
-        currentPage: reset === true ? 1 : this.componentPagination.currentPage
-      },
+      componentPagination: this.componentPagination,
       sort: this.sort
     }
 
@@ -185,7 +186,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       error: err => this.notifier.error(err.message)
     })
 
-    return obs
+    return lastValueFrom(obs)
   }
 
   onCommentThreadCreated (comment: VideoComment) {

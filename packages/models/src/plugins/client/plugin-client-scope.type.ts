@@ -11,4 +11,5 @@ export type PluginClientScope =
   'video-channel' |
   'my-account' |
   'admin-users' |
-  'admin-comments'
+  'admin-comments' |
+  'moderation'

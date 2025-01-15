@@ -61,7 +61,7 @@ export class PluginService implements ClientHook {
 
   private pluginsManager: PluginsManager
 
-  private actions: { [name in ClientDoActionName]?: ClientDoActionCallback } = {}
+  private actions = new Map<ClientDoActionName, ClientDoActionCallback>()
 
   constructor (
     private authService: AuthService,
@@ -85,11 +85,11 @@ export class PluginService implements ClientHook {
   }
 
   addAction (actionName: ClientDoActionName, callback: ClientDoActionCallback) {
-    this.actions[actionName] = callback
+    this.actions.set(actionName, callback)
   }
 
   removeAction (actionName: ClientDoActionName) {
-    delete this.actions[actionName]
+    this.actions.delete(actionName)
   }
 
   initializePlugins () {
@@ -199,10 +199,14 @@ export class PluginService implements ClientHook {
   }
 
   private doAction (actionName: ClientDoActionName) {
-    try {
-      return this.actions[actionName]()
-    } catch (err: any) {
+    if (!this.actions.has(actionName)) {
       logger.warn(`Plugin tried to do unknown action: ${actionName}`)
+    }
+
+    try {
+      return this.actions.get(actionName)()
+    } catch (err: any) {
+      logger.warn(`Cannot run action ${actionName}`, err)
     }
   }
 

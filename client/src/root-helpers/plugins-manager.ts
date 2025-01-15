@@ -74,7 +74,8 @@ class PluginsManager {
     'video-channel': new ReplaySubject<boolean>(1),
     'my-account': new ReplaySubject<boolean>(1),
     'admin-users': new ReplaySubject<boolean>(1),
-    'admin-comments': new ReplaySubject<boolean>(1)
+    'admin-comments': new ReplaySubject<boolean>(1),
+    'moderation': new ReplaySubject<boolean>(1)
   }
 
   private readonly doAction: ClientDoAction
