@@ -5564,9 +5564,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7003826819757856838" datatype="html">
+      <trans-unit id="7003826819757856838" datatype="html" xml:space="preserve">
         <source>Upload a file</source>
-        <target state="translated">Puja un fitxer</target>
+        <target state="translated">Pujar un fitxer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">60</context>
@@ -5612,9 +5612,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2738123251363312498" datatype="html">
+      <trans-unit id="2738123251363312498" datatype="html" xml:space="preserve">
         <source>Next video to be played</source>
-        <target state="translated">Vídeo següent</target>
+        <target state="translated">Següent vídeo a reproduir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5650,7 +5650,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html" xml:space="preserve">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Cette liste de lecture est privée de sorte que vous ne pourrez pas la partager avec des utilisateur·ices externes</target>
+        <target state="translated">Aquesta llista de reproducció és privada, de manera que no la podreu compartir externament</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">17</context>
