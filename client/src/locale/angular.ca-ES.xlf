@@ -1697,7 +1697,7 @@
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html" xml:space="preserve">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Transcodificació de directe en diverses resolucions</target>
+        <target state="translated">Transcodificació de directe a múltiples resolucions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">84</context>
@@ -1783,9 +1783,9 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6276792241563504067" datatype="html">
+      <trans-unit id="6276792241563504067" datatype="html" xml:space="preserve">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Podeu importar qualsevol fitxer torrent que apunti a un fitxer multimèdia. Assegureu-vos que teniu els drets de difusió dels continguts a què apunteu, altrament podríeu tenir problemes legals i generar-los a la instància.</target>
+        <target state="translated">Podeu importar qualsevol fitxer torrent que apunti a un fitxer multimèdia. Assegureu-vos que teniu els drets de difusió dels continguts a què apunteu, altrament podríeu tenir problemes legals i crear-los a la instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1887,81 +1887,81 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4574617080493559336" datatype="html">
+      <trans-unit id="4574617080493559336" datatype="html" xml:space="preserve">
         <source>hosted videos</source>
-        <target state="new">hosted videos</target>
+        <target state="translated">vídeos allotjats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5396896586834940621" datatype="html">
+      <trans-unit id="5396896586834940621" datatype="html" xml:space="preserve">
         <source>Usage rules</source>
-        <target state="new">Usage rules</target>
+        <target state="translated">Normes d'ús</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776113937628941635" datatype="html">
+      <trans-unit id="4776113937628941635" datatype="html" xml:space="preserve">
         <source>This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></source>
-        <target state="new">This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
+        <target state="translated">Aquesta plataforma s'ha creat a <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">60,61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6778930185647013602" datatype="html">
+      <trans-unit id="6778930185647013602" datatype="html" xml:space="preserve">
         <source>Your content (comments, videos...) must comply with the legislation in force in this country.</source>
-        <target state="new">Your content (comments, videos...) must comply with the legislation in force in this country.</target>
+        <target state="translated">El teu contingut (comentaris, vídeos...) ha de complir la legislació vigent en aquest país.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5074204504213350982" datatype="html">
+      <trans-unit id="5074204504213350982" datatype="html" xml:space="preserve">
         <source>You must also follow our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>code of conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> You must also follow our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>code of conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">També heu de seguir el nostre <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>codi de conducta<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8295656255868159329" datatype="html">
+      <trans-unit id="8295656255868159329" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="new">You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</target>
+        <target state="translated">Podeu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>demanar un compte<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a la nostra plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">86,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4700057689494115926" datatype="html">
+      <trans-unit id="4700057689494115926" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</source>
-        <target state="new">Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">La nostra moderació el validarà en un <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">89,90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4819914947083527459" datatype="html">
+      <trans-unit id="4819914947083527459" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a few days.</source>
-        <target state="new">Our moderator will validate it within a few days.</target>
+        <target state="translated">La nostra moderació el validarà en uns dies.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7984721141162083495" datatype="html">
+      <trans-unit id="7984721141162083495" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>create an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="new">You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>create an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</target>
+        <target state="translated">Podeu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>crear un compte<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a la nostra plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">94,95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8017622347308758772" datatype="html">
+      <trans-unit id="8017622347308758772" datatype="html" xml:space="preserve">
         <source>Public registration on our platform is not allowed</source>
-        <target state="new">Public registration on our platform is not allowed</target>
+        <target state="translated">No es permet el registre públic a la nostra plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">97,98</context>
