@@ -1785,7 +1785,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html" xml:space="preserve">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Podeu importar qualsevol fitxer torrent que apunti a un fitxer multimèdia. Assegureu-vos que teniu els drets de difusió dels continguts a què apunteu, altrament podríeu tenir problemes legals i crear-los a la instància.</target>
+        <target state="translated">Podeu importar qualsevol fitxer torrent que apunti a un fitxer multimèdia. Assegureu-vos que teniu els drets de difusió dels continguts a què apunteu, altrament podríeu tenir problemes legals i causar-los a la instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5029,7 +5029,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html" xml:space="preserve">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Podeu importar qualsevol URL <x id="START_LINK"/>compatible amb YouTube<x id="CLOSE_LINK"/> o apuntar a un fitxer multimèdia. Heu d'assegurar-vos que teniu drets de distribució del contingut al qual apunta l'adreça, ja que, en cas contrari, us podria causar problemes legals a vosaltres i a la vostra instància. </target>
+        <target state="translated">Podeu importar qualsevol URL <x id="START_LINK"/>compatible amb youtube-dl<x id="CLOSE_LINK"/> o que apunti a un fitxer multimèdia. Heu d'assegurar-vos que teniu drets de distribució del contingut al qual apunta l'adreça, ja que, en cas contrari, us podria causar problemes legals a vosaltres i a la vostra instància. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">11</context>
@@ -5037,7 +5037,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="25952900092483482" datatype="html" xml:space="preserve">
         <source>You can also synchronize a remote channel in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>your library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">També podeu sincronitzar un canal remot a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>la biblioteca<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">També podeu sincronitzar un canal remot a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>la vostra biblioteca<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5095,9 +5095,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">328</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1435317307066082710" datatype="html">
+      <trans-unit id="1435317307066082710" datatype="html" xml:space="preserve">
         <source>Hide the video until a specific date</source>
-        <target state="translated">Oculta el vídeo fins una data específica</target>
+        <target state="translated">Ocultar el vídeo fins una data específica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">329</context>
@@ -5153,7 +5153,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html" xml:space="preserve">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK"/> The chosen image will be definitive and cannot be modified. </source>
-        <target state="translated">La imatge es fusionarà amb el vostre fitxer d’àudio. <x id="LINE_BREAK"/> La imatge escollida serà definitiva i no es podrà modificar. </target>
+        <target state="translated">Imatge que es fusionarà amb el vostre fitxer d’àudio. <x id="LINE_BREAK"/> La imatge escollida serà definitiva i no es podrà modificar. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">33</context>
@@ -5250,7 +5250,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6377139538537882652" datatype="html" xml:space="preserve">
         <source>Delete list</source>
-        <target state="translated">Eliminar llista</target>
+        <target state="translated">Eliminar la llista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -5266,7 +5266,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="11546234043677618" datatype="html" xml:space="preserve">
         <source>Save watched words list</source>
-        <target state="translated">Deseu la llista de mots vigilats</target>
+        <target state="translated">Desar la llista de mots vigilats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5308,17 +5308,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1522676094837508187" datatype="html">
+      <trans-unit id="1522676094837508187" datatype="html" xml:space="preserve">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target state="translated">Felicitats! El teu vídeo ja està disponible a la biblioteca privada.</target>
+        <target state="translated">Felicitats! El vostre vídeo ja està disponible a la biblioteca privada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3768339632235914548">
+      <trans-unit id="3768339632235914548" xml:space="preserve">
         <source>Publish will be available when upload is finished</source>
-        <target>La publicació estarà disponible quan finalitzi la càrrega</target>
+        <target state="translated">La publicació estarà disponible quan finalitzi la pujada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">71</context>
@@ -5370,7 +5370,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6796692581512042469" datatype="html" xml:space="preserve">
         <source>Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.</source>
-        <target state="translated">La vostra quota de vídeo és insuficient. Si voleu afegir més vídeos, l'administració ha d'augmentar la vostra quota.</target>
+        <target state="translated">La vostra quota de vídeo és insuficient, si voleu afegir més vídeos, l'administració ha d'augmentar-la.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -5402,7 +5402,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7225855031009203336" datatype="html" xml:space="preserve">
         <source>Your video is currently being updated. If you leave, your changes will be lost.</source>
-        <target state="translated">El vídeo s'està actualitzant. Si abandoneu la pàgina, els canvis es perdran.</target>
+        <target state="translated">El vídeo s'està actualitzant. Si abandoneu la pàgina els canvis es perdran.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -5418,7 +5418,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="translated">Recomanem que no fue servir el compre de <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> per publicar els vostres vídeos perquè és el compte de super-administració de la instància.</target>
+        <target state="translated">Recomanem que no feu servir el compte de <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> per publicar els vostres vídeos perquè és el compte de super-administració de la instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">38</context>
@@ -5460,9 +5460,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2424051823705402833" datatype="html">
+      <trans-unit id="2424051823705402833" datatype="html" xml:space="preserve">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target state="translated">Enhorabona, el vídeo serà importat amb BitTorrent! Ja pots afegir informació sobre aquest vídeo.</target>
+        <target state="translated">Enhorabona, el vídeo serà importat amb BitTorrent! Ja podeu afegir informació sobre aquest vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">53</context>
