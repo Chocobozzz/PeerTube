@@ -61,7 +61,7 @@ jobs:
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
-          node-version: '18.x'
+          node-version: '20.x'
 
       - uses: './.github/actions/reusable-prepare-peertube-run'
 
