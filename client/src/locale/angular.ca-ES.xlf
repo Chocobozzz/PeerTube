@@ -14107,9 +14107,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2127446333083057097" datatype="html">
+      <trans-unit id="2127446333083057097" datatype="html" xml:space="preserve">
         <source>Domain is required.</source>
-        <target state="new">Domain is required.</target>
+        <target state="translated">Es requereix un domini.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -14119,33 +14119,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7951488350851416577" datatype="html">
+      <trans-unit id="7951488350851416577" datatype="html" xml:space="preserve">
         <source>Hosts entered are invalid.</source>
-        <target state="new">Hosts entered are invalid.</target>
+        <target state="translated">Els hosts introduïts no són vàlids.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1469559036084108672" datatype="html">
+      <trans-unit id="1469559036084108672" datatype="html" xml:space="preserve">
         <source>Hosts entered contain duplicates.</source>
-        <target state="new">Hosts entered contain duplicates.</target>
+        <target state="translated">Els hosts introduïts contenen duplicats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5991533283446904296" datatype="html">
+      <trans-unit id="5991533283446904296" datatype="html" xml:space="preserve">
         <source>Hosts or handles are invalid.</source>
-        <target state="new">Hosts or handles are invalid.</target>
+        <target state="translated">Els hosts o identificadors no són vàlids.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6759198394434886237" datatype="html">
+      <trans-unit id="6759198394434886237" datatype="html" xml:space="preserve">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="new">Hosts or handles contain duplicates.</target>
+        <target state="translated">Els hosts o identificadors contenen duplicats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">83</context>
@@ -14179,9 +14179,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5504952199515017930" datatype="html">
+      <trans-unit id="5504952199515017930" datatype="html" xml:space="preserve">
         <source>None - no upload possible</source>
-        <target state="new">None - no upload possible</target>
+        <target state="translated">Cap: no es pot carregar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -14191,9 +14191,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="616370606803836610" datatype="html">
+      <trans-unit id="616370606803836610" datatype="html" xml:space="preserve">
         <source>100MB</source>
-        <target state="new">100MB</target>
+        <target state="translated">100 Mo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -14203,9 +14203,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9162997081789455476" datatype="html">
+      <trans-unit id="9162997081789455476" datatype="html" xml:space="preserve">
         <source>500MB</source>
-        <target state="new">500MB</target>
+        <target state="translated">500 Mo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -14215,17 +14215,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1541266817985876981" datatype="html">
+      <trans-unit id="1541266817985876981" datatype="html" xml:space="preserve">
         <source>1GB</source>
-        <target state="new">1GB</target>
+        <target state="translated">1 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6075751004411938819" datatype="html">
+      <trans-unit id="6075751004411938819" datatype="html" xml:space="preserve">
         <source>5GB</source>
-        <target state="new">5GB</target>
+        <target state="translated">5 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">27</context>
@@ -14235,9 +14235,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="246811372655482890" datatype="html">
+      <trans-unit id="246811372655482890" datatype="html" xml:space="preserve">
         <source>20GB</source>
-        <target state="new">20GB</target>
+        <target state="translated">20 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">28</context>
@@ -14247,9 +14247,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2491910291056632032" datatype="html">
+      <trans-unit id="2491910291056632032" datatype="html" xml:space="preserve">
         <source>50GB</source>
-        <target state="new">50GB</target>
+        <target state="translated">50 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">29</context>
@@ -14259,65 +14259,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5514849824631859021" datatype="html">
+      <trans-unit id="5514849824631859021" datatype="html" xml:space="preserve">
         <source>100GB</source>
-        <target state="new">100GB</target>
+        <target state="translated">100 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8245180845645676506" datatype="html">
+      <trans-unit id="8245180845645676506" datatype="html" xml:space="preserve">
         <source>200GB</source>
-        <target state="new">200GB</target>
+        <target state="translated">200 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5468089754278798237" datatype="html">
+      <trans-unit id="5468089754278798237" datatype="html" xml:space="preserve">
         <source>500GB</source>
-        <target state="new">500GB</target>
+        <target state="translated">500 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3977630500122496087" datatype="html">
+      <trans-unit id="3977630500122496087" datatype="html" xml:space="preserve">
         <source>10MB</source>
-        <target state="new">10MB</target>
+        <target state="translated">10 Mo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2060593120571755546" datatype="html">
+      <trans-unit id="2060593120571755546" datatype="html" xml:space="preserve">
         <source>50MB</source>
-        <target state="new">50MB</target>
+        <target state="translated">50 Mo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7653028819867308249" datatype="html">
+      <trans-unit id="7653028819867308249" datatype="html" xml:space="preserve">
         <source>2GB</source>
-        <target state="new">2GB</target>
+        <target state="translated">2 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7641416475804061087" datatype="html">
+      <trans-unit id="7641416475804061087" datatype="html" xml:space="preserve">
         <source>10GB</source>
-        <target state="new">10GB</target>
+        <target state="translated">10 Go</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7378878529334768232" datatype="html">
+      <trans-unit id="7378878529334768232" datatype="html" xml:space="preserve">
         <source>Reject</source>
-        <target state="new">Reject</target>
+        <target state="translated">Rebutjar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -14331,9 +14331,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7022070615528435141" datatype="html">
+      <trans-unit id="7022070615528435141" datatype="html" xml:space="preserve">
         <source>Delete</source>
-        <target state="new">Delete</target>
+        <target state="translated">Eliminar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -14447,25 +14447,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3145156821099755377" datatype="html">
+      <trans-unit id="3145156821099755377" datatype="html" xml:space="preserve">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="new">Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
+        <target state="translated">Acceptat {count, plural, =1 {<x id="followerName"/> sol·licitud} other {<x id="count"/> sol·licituds}} de seguiment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8823680466537853782" datatype="html">
+      <trans-unit id="8823680466537853782" datatype="html" xml:space="preserve">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="new">Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</target>
+        <target state="translated">Segur que voleu rebutjar {count, plural, =1 {<x id="followerName"/> sol·licitud} other {<x id="count"/> sol·licituds}} de seguiment?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7182104881582756649" datatype="html">
+      <trans-unit id="7182104881582756649" datatype="html" xml:space="preserve">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="new">Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
+        <target state="translated">Rebutjat {count, plural, =1 {<x id="followerName"/> sol·licitud} other {<x id="count"/> sol·licituds}} de seguiment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">116</context>
