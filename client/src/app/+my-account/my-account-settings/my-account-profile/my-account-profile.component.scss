@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 input#username + .muted {
   margin-top: 5px;
@@ -7,13 +8,6 @@ input#username + .muted {
 
 input[type=text] {
   @include peertube-input-text(340px);
-}
-
-input[type=submit] {
-  margin-top: 15px;
-
-  @include peertube-button;
-  @include orange-button;
 }
 
 textarea {

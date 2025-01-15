@@ -262,7 +262,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   }
 
   getRouterUserEditLink (user: User) {
-    return [ '/admin', 'users', 'update', user.id ]
+    return [ '/admin', 'overview', 'users', 'update', user.id ]
   }
 
   private isMyUser (user: User) {

@@ -1,5 +1,7 @@
 name: Benchmark
 
+permissions: {}
+
 on:
   push:
     branches:

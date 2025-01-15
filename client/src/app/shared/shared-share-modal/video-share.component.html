@@ -16,7 +16,7 @@
       <my-alert *ngIf="isPrivatePlaylist()" class="alert-private" type="warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
 
-        <a i18n class="peertube-button-link orange-button" [routerLink]="[ '/my-library/video-playlists/update', playlist.shortUUID ]" target="_blank" rel="noopener noreferrer">
+        <a i18n class="peertube-button-link primary-button" [routerLink]="[ '/my-library/video-playlists/update', playlist.shortUUID ]" target="_blank" rel="noopener noreferrer">
           Update playlist privacy
         </a>
       </my-alert>
@@ -57,7 +57,7 @@
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-text>
 
-              <my-alert i18n *ngIf="notSecure()" type="warning">
+              <my-alert i18n *ngIf="notSecure()" type="warning" class="mt-3">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </my-alert>
 
@@ -106,7 +106,7 @@
       <my-alert *ngIf="isPrivateVideo()" class="alert-private" type="warning">
         <div i18n>This video is private so you won't be able to share it with external users</div>
 
-        <a i18n class="peertube-button-link orange-button" [routerLink]="[ '/videos/', 'update', video.shortUUID ]" target="_blank" rel="noopener noreferrer">
+        <a i18n class="peertube-button-link primary-button mt-3" [routerLink]="[ '/videos/', 'update', video.shortUUID ]" target="_blank" rel="noopener noreferrer">
           Update video privacy
         </a>
       </my-alert>
@@ -151,7 +151,7 @@
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-text>
 
-              <my-alert i18n *ngIf="notSecure()" type="warning">
+              <my-alert i18n *ngIf="notSecure()" type="warning" class="mt-3">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </my-alert>
 

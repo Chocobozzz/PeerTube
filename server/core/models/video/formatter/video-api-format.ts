@@ -157,7 +157,6 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     ...videoJSON,
 
     support: video.support,
-    descriptionPath: video.getDescriptionAPIPath(),
     channel: video.VideoChannel.toFormattedJSON(),
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,

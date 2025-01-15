@@ -2,6 +2,8 @@
 @use '_mixins' as *;
 @use '_icons' as *;
 
+$hover-bg: pvar(--bg-secondary-400);
+
 /* stylelint-disable */
 @import 'primeng/resources/primeng.css';
 
@@ -56,7 +58,7 @@ body .p-paginator .p-paginator-first,
 body .p-paginator .p-paginator-prev,
 body .p-paginator .p-paginator-next,
 body .p-paginator .p-paginator-last {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   height: 2.286em;
   min-width: 2.286em;
   border: 0 none;
@@ -71,8 +73,8 @@ body .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
 body .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
 body .p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
 body .p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
-  background-color: #e0e0e0;
-  color: #333333;
+  background-color: $hover-bg;
+  color: pvar(--fg);
 }
 body .p-paginator .p-paginator-first:focus,
 body .p-paginator .p-paginator-prev:focus,
@@ -80,19 +82,19 @@ body .p-paginator .p-paginator-next:focus,
 body .p-paginator .p-paginator-last:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 body .p-paginator .p-paginator-current {
-  color: #333333;
+  color: pvar(--fg);
   height: 2.286em;
   min-width: 2.286em;
   line-height: 2.286em;
 }
 body .p-paginator .p-dropdown .p-dropdown-trigger, body .p-paginator .p-dropdown .p-dropdown-label {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
 }
 body .p-paginator .p-dropdown:hover .p-dropdown-trigger, body .p-paginator .p-dropdown:hover .p-dropdown-label {
-  color: #333333;
+  color: pvar(--fg);
 }
 body .p-paginator .p-paginator-first:before {
   position: relative;
@@ -116,7 +118,7 @@ body .p-paginator .p-paginator-pages {
   padding: 0;
 }
 body .p-paginator .p-paginator-pages .p-paginator-page {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   height: 2.286em;
   min-width: 2.286em;
   border: 0 none;
@@ -128,13 +130,13 @@ body .p-paginator .p-paginator-pages .p-paginator-page {
   border-radius: 0;
 }
 body .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
-  background-color: #e0e0e0;
-  color: #333333;
+  background-color: $hover-bg;
+  color: pvar(--fg);
 }
 body .p-paginator .p-paginator-pages .p-paginator-page:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 body .p-paginator .p-dropdown {
   @include margin-left(0.5em);
@@ -146,19 +148,19 @@ body .p-paginator .p-dropdown {
 // Dropdown
 
 body .p-dropdown {
-  background: pvar(--mainBackgroundColor);;
-  border: 1px solid pvar(--inputBorderColor);
+  background: pvar(--input-bg);
+  border: 1px solid pvar(--input-border-color);
   transition: border-color 0.2s, box-shadow 0.2s;
-  border-radius: 3px;
+  border-radius: pvar(--input-border-radius);
 }
 body .p-dropdown:not(.p-disabled):hover {
-  border-color: pvar(--inputBorderColor);
+  border-color: pvar(--input-border-color);
 }
 body .p-dropdown:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
-  border-color: pvar(--inputBorderColor);
+  box-shadow: $focus-box-shadow-form;
+  border-color: pvar(--input-border-color);
 }
 body .p-dropdown.p-dropdown-clearable .p-dropdown-label {
   @include padding-right(0);
@@ -168,7 +170,7 @@ body .p-dropdown .p-dropdown-label {
   border: 0 none;
 }
 body .p-dropdown .p-dropdown-label.p-placeholder {
-  color: pvar(--inputPlaceholderColor);
+  color: pvar(--input-placeholder);
 }
 .p-dropdown .p-dropdown-label:focus, .p-dropdown .p-dropdown-label:enabled:focus {
   outline: 0 none;
@@ -180,26 +182,26 @@ body .p-dropdown .p-dropdown-trigger {
   width: 2rem;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
 }
 body .p-dropdown .p-dropdown-clear-icon {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   right: 2rem;
 }
 body .p-dropdown.p-dropdown-clearable .p-dropdown-label {
   @include padding-right(4em);
 }
 body .p-dropdown-panel {
-  background-color: pvar(--mainBackgroundColor);
-  border: 1px solid pvar(--inputBorderColor);
+  background-color: pvar(--bg);
+  border: 1px solid pvar(--input-border-color);
   border-radius: 6px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .p-dropdown-panel .p-dropdown-header {
   padding: 0.429em 0.857em 0.429em 0.857em;
-  border-bottom: 1px solid pvar(--mainColorVeryLight);
-  color: pvar(--mainForegroundColor);
-  background-color: pvar(--mainBackgroundColor);
+  border-bottom: 1px solid pvar(--primary-100);
+  color: pvar(--fg);
+  background-color: pvar(--bg);
   margin: 0;
 }
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
@@ -211,7 +213,7 @@ body .p-dropdown-panel {
   top: 50%;
   margin-top: -0.5em;
   right: 1.357em;
-  color: pvar(--mainColor);
+  color: pvar(--input-fg);
 }
 body .p-dropdown-panel .p-dropdown-items {
   padding: 0;
@@ -221,7 +223,7 @@ body .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
   margin: 0;
   padding: 8px 16px;
   border: 0 none;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   background-color: transparent;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -231,30 +233,30 @@ body .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
   margin-top: 0;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainColorLightest);
+  color: pvar(--on-primary);
+  background: pvar(--primary);
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus {
-  background: pvar(--mainColorLightest);
+  background: pvar(--primary);
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainColorVeryLight);;
+  color: pvar(--fg);
+  background: pvar(--bg-secondary-500);
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainColorVeryLight);;
+  color: pvar(--fg);
+  background: $hover-bg;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group {
   margin: 0;
   padding: 0.857rem;
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainColorVeryLight);;
+  color: pvar(--fg);
+  background: pvar(--bg-secondary-500);
   font-weight: $font-semibold;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message {
   padding: 8px 16px;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   background: transparent;
 }
 
@@ -268,9 +270,9 @@ body .p-toast .p-toast-message {
 body .p-datepicker {
   padding: 0.857em;
   min-width: 20em;
-  background-color: #ffffff;
-  color: #333333;
-  border: 1px solid #a6a6a6;
+  background-color: pvar(--bg-secondary-400);
+  color: pvar(--fg);
+  border: 1px solid $separator-border-color;
 }
 
 body .p-datepicker:not(.p-datepicker-inline) {
@@ -281,18 +283,12 @@ body .p-datepicker:not(.p-disabled) .p-datepicker-header .p-datepicker-prev:focu
 body .p-datepicker:not(.p-disabled) .p-datepicker-header .p-datepicker-next:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
-}
-body .p-datepicker:not(.p-disabled) table td a:not(.p-highlight):not(.p-highlight):hover {
-  background-color: #eaeaea;
-}
-body .p-datepicker:not(.p-disabled) .p-monthpicker a.p-monthpicker-month:not(.p-highlight):hover {
-  background-color: #eaeaea;
+  box-shadow: $focus-box-shadow-form;
 }
 body .p-datepicker .p-datepicker-header {
   padding: 0.429em 0.857em 0.429em 0.857em;
-  background-color: #ffffff;
-  color: #333333;
+  background-color: pvar(--bg-secondary-400);
+  color: pvar(--fg);
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
@@ -301,7 +297,7 @@ body .p-datepicker .p-datepicker-header .p-datepicker-prev,
 body .p-datepicker .p-datepicker-header .p-datepicker-next {
   cursor: pointer;
   top: 0;
-  color: #a6a6a6;
+  color: pvar(--fg-300);
   transition: color 0.2s, box-shadow 0.2s;
 }
 body .p-datepicker .p-datepicker-header .p-datepicker-title {
@@ -317,7 +313,7 @@ body .p-datepicker .p-datepicker-header .p-datepicker-title select {
 body .p-datepicker .p-datepicker-header .p-datepicker-title select:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 body .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
   @include margin-right(0.5rem);
@@ -330,7 +326,7 @@ body .p-datepicker table th {
   padding: 0.5em;
 }
 body .p-datepicker table th.p-datepicker-weekheader {
-  border-right: 1px solid #a6a6a6;
+  border-right: 1px solid $separator-border-color;
 }
 body .p-datepicker table td {
   padding: 0.5em;
@@ -339,15 +335,15 @@ body .p-datepicker table td > a,
 body .p-datepicker table td > span {
   display: block;
   text-align: center;
-  color: #333333;
+  color: pvar(--fg);
   padding: 0.5em;
   transition: box-shadow 0.2s;
   border-radius: 3px;
 }
 body .p-datepicker table td > a.p-highlight,
 body .p-datepicker table td > span.p-highlight {
-  color: #ffffff;
-  background-color: pvar(--mainColor);
+  color: pvar(--on-primary);
+  background-color: pvar(--primary);
 }
 body .p-datepicker table td > a {
   cursor: pointer;
@@ -355,17 +351,17 @@ body .p-datepicker table td > a {
 body .p-datepicker table td > a:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 body .p-datepicker table td.p-datepicker-today > a,
 body .p-datepicker table td.p-datepicker-today > span {
-  background-color: #d0d0d0;
-  color: #333333;
+  background-color: pvar(--bg-secondary-600);
+  color: pvar(--fg);
 }
 body .p-datepicker table td.p-datepicker-today > a.p-highlight,
 body .p-datepicker table td.p-datepicker-today > span.p-highlight {
-  color: #ffffff;
-  background-color: pvar(--mainColor);
+  color: pvar(--on-primary);
+  background-color: pvar(--primary);
 }
 body .p-datepicker table td.p-datepicker-weeknumber {
   border-right: 1px solid #a6a6a6;
@@ -379,21 +375,21 @@ body .p-datepicker .p-timepicker {
   padding: 0.857em;
 }
 body .p-datepicker .p-timepicker a {
-  color: #333333;
+  color: pvar(--fg);
   font-size: 1.286em;
 }
 body .p-datepicker .p-timepicker a:hover {
-  color: pvar(--mainColor);
+  color: pvar(--primary);
 }
 body .p-datepicker .p-timepicker span {
   font-size: 1.286em;
 }
 body .p-datepicker .p-monthpicker .p-monthpicker-month {
-  color: #333333;
+  color: pvar(--fg);
 }
 body .p-datepicker .p-monthpicker .p-monthpicker-month.p-highlight {
-  color: #ffffff;
-  background-color: pvar(--mainColor);
+  color: pvar(--on-primary);
+  background-color: pvar(--primary);
 }
 body .p-datepicker.p-datepicker-timeonly {
   padding: 0;
@@ -458,19 +454,19 @@ body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
   margin: 0;
   padding: 0.429em 0.857em;
   border: 0 none;
-  color: #333333;
+  color: pvar(--fg);
   background-color: transparent;
   border-radius: 0;
 }
 body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item.p-highlight,
 body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item:hover {
-  color: #ffffff;
-  background-color: pvar(--mainColor);
+  color: pvar(--on-primary);
+  background-color: pvar(--primary);
 }
 body .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-group {
   padding: 0.429em 0.857em;
   background-color: #d8dae2;
-  color: #333333;
+  color: pvar(--fg);
 }
 body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   border: 1px solid #a80000;
@@ -479,27 +475,27 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
 //chips
 
 .p-chips:not(.p-disabled):hover .p-chips-multiple-container {
-  border-color: pvar(--inputBorderColor);
+  border-color: pvar(--input-border-color);
 }
 .p-chips:not(.p-disabled).p-focus .p-chips-multiple-container {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.25rem var(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 .p-chips .p-chips-multiple-container {
-  padding: 3px 15px;
+  padding: pvar(--input-y-padding) pvar(--input-x-padding);
   gap: 0.25rem;
 }
 .p-chips .p-chips-multiple-container .p-chips-token {
   padding: 2px 15px;
   margin-right: 0.5rem;
-  background: pvar(--mainColorLightest);
-  color: pvar(--mainForegroundColor);
-  border-radius: 3px;
+  background: pvar(--bg-secondary-500);
+  color: pvar(--fg);
+  border-radius: 4px;
 }
 .p-chips .p-chips-multiple-container .p-chips-token.p-focus {
-  background: pvar(--mainColorVeryLight);
-  color: pvar(--mainForegroundColor);
+  background: pvar(--bg-secondary-500);
+  color: pvar(--fg);
 }
 .p-chips .p-chips-multiple-container .p-chips-token .p-chips-token-icon {
   margin-left: 0.5rem;
@@ -508,7 +504,7 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   padding: 3px 0;
 }
 .p-chips .p-chips-multiple-container .p-chips-input-token input {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--input-placeholder);
   padding: 0;
   margin: 0;
 }
@@ -521,41 +517,42 @@ p-chips.p-chips-clearable .p-inputtext {
   padding-right: 1.429rem;
 }
 p-chips.p-chips-clearable .p-chips-clear-icon {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   right: 0.429rem;
 }
 
 // multiselect
 
 .p-multiselect {
-  background: pvar(--mainBackgroundColor);
-  border: 1px solid pvar(--inputBorderColor);
+  background: pvar(--input-bg);
+  border: 1px solid pvar(--input-border-color);
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 3px;
-  font-size: 15px;
+  border-radius: pvar(--input-border-radius);
+  font-size: 16px;
 }
 .p-multiselect:not(.p-disabled):hover {
-  border-color: pvar(--inputBorderColor);;
+  border-color: pvar(--input-border-color);
 }
 .p-multiselect:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.25rem var(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 .p-multiselect .p-multiselect-label {
-  padding: 4px 15px;
+  padding: pvar(--input-y-padding) pvar(--input-x-padding);
   line-height: normal;
+  font-weight: normal;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .p-multiselect .p-multiselect-label.p-placeholder {
-  color: pvar(--inputPlaceholderColor);
+  color: pvar(--input-placeholder);
 }
 .p-multiselect.p-multiselect-chip .p-multiselect-token {
   padding: 2px 7px;
   margin-right: 0.25rem;
-  background: pvar(--mainColorLightest);
-  color: pvar(--mainForegroundColor);
-  border-radius: 3px;
+  background: pvar(--bg-secondary-500);
+  color: pvar(--fg);
+  border-radius: pvar(--input-border-radius);
 }
 .p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
   margin-left: 0.5rem;
@@ -567,39 +564,39 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   border-bottom-right-radius: 3px;
 }
 .p-multiselect.p-variant-filled {
-  background: pvar(--mainColorLightest);
+  background: pvar(--bg-secondary-500);
 }
 .p-multiselect.p-variant-filled:not(.p-disabled):hover {
-  background-color: pvar(--mainColorLightest);
+  background-color: $hover-bg;
 }
 .p-multiselect.p-variant-filled:not(.p-disabled).p-focus {
-  background-color: pvar(--mainColorLightest);
+  background-color: pvar(--bg-secondary-500);
 }
 
 .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label {
-  padding: 3px 15px;
+  padding: pvar(--input-y-padding) pvar(--input-x-padding);
 }
 
 .p-multiselect-clearable .p-multiselect-label-container {
   padding-right: 1.429rem;
 }
 .p-multiselect-clearable .p-multiselect-clear-icon {
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   right: 2.357rem;
 }
 
 .p-multiselect-panel {
-  background: pvar(--mainBackgroundColor);
-  color: pvar(--mainForegroundColor);
-  border: 1px solid pvar(--inputBorderColor);
-  border-radius: 3px;
+  background: pvar(--bg);
+  color: pvar(--fg);
+  border: 1px solid pvar(--input-border-color);
+  border-radius: pvar(--input-border-radius);
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
 .p-multiselect-panel .p-multiselect-header {
   padding: 0.429rem 0.857rem;
-  border-bottom: 1px solid pvar(--inputBorderColor);
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainBackgroundColor);
+  border-bottom: 1px solid pvar(--input-border-color);
+  color: pvar(--fg);
+  background: pvar(--bg);
   margin: 0;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
@@ -609,7 +606,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-multiselect-filter-icon {
   right: 0.429rem;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
 }
 .p-multiselect-panel .p-multiselect-header .p-checkbox {
   margin-right: 0.5rem;
@@ -618,30 +615,30 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   margin-left: 0.5rem;
   width: 2rem;
   height: 2rem;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   border: 0 none;
   background: transparent;
   border-radius: 50%;
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .p-multiselect-panel .p-multiselect-header .p-multiselect-close:enabled:hover {
-  color: pvar(--mainColor);
+  color: pvar(--fg-400);
   border-color: transparent;
   background: transparent;
 }
 .p-multiselect-panel .p-multiselect-header .p-multiselect-close:focus-visible {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem pvar(--mainColorVeryLight);
+  box-shadow: $focus-box-shadow-form;
 }
 .p-multiselect-panel .p-multiselect-items {
   padding: 0;
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item {
   margin: 0;
-  padding: 6px 14px;
+  padding: pvar(--input-y-padding) 14px;
   border: 0 none;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   background: transparent;
   transition: background-color 0.2s, box-shadow 0.2s;
   border-radius: 0;
@@ -651,19 +648,19 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   margin-top: 0;
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
-  color: pvar(--mainBackgroundColor);
-  background: pvar(--mainColor);
+  color: pvar(--on-primary);
+  background: pvar(--primary);
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight.p-focus {
-  background: pvar(--mainColor);
+  background: pvar(--primary);
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled).p-focus {
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainColorVeryLight);
+  color: pvar(--fg);
+  background: pvar(--bg-secondary-500);
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainColorVeryLight);
+  color: pvar(--fg);
+  background: pvar(--bg-secondary-500);
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox {
   margin-right: 0.5rem;
@@ -671,24 +668,24 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item-group {
   margin: 0;
   padding: 0.857rem;
-  color: pvar(--mainForegroundColor);
-  background-color: pvar(--mainColorVeryLight);
+  color: pvar(--fg);
+  background-color: pvar(--bg-secondary-500);
   font-weight: $font-semibold;
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-empty-message {
   padding: 0.429rem 0.857rem;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   background: transparent;
 }
 
 .p-input-filled .p-multiselect {
-  background-color: pvar(--mainColorVeryLight);
+  background-color: pvar(--bg-secondary-500);
 }
 .p-input-filled .p-multiselect:not(.p-disabled):hover {
-  background-color: pvar(--mainColorVeryLight);
+  background-color: pvar(--bg-secondary-500);
 }
 .p-input-filled .p-multiselect:not(.p-disabled).p-focus {
-  background-color: pvar(--mainColorVeryLight);
+  background-color: pvar(--bg-secondary-500);
 }
 
 p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
@@ -698,22 +695,22 @@ p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
 // input text (used by p-chips)
 
 .p-inputtext {
-  font-size: 15px;
-  color: pvar(--mainForegroundColor);
-  background: pvar(--mainBackgroundColor);
-  padding: 3px 15px;
-  border: 1px solid pvar(--inputBorderColor);
+  font-size: 16px;
+  color: pvar(--input-fg);
+  background: pvar(--input-bg);
+  padding: pvar(--input-y-padding) pvar(--input-x-padding);
+  border: 1px solid pvar(--input-border-color);
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   appearance: none;
-  border-radius: 3px;
+  border-radius: pvar(--input-border-radius);
 }
 .p-inputtext:enabled:hover {
-  border-color: pvar(--inputBorderColor);
+  border-color: pvar(--input-border-color);
 }
 .p-inputtext:enabled:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.25rem var(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 .p-inputtext.ng-dirty.ng-invalid {
   border-color: pvar(--red);
@@ -758,22 +755,24 @@ p-table {
 
   .p-datatable-header {
     border: none !important;
-    background-color: pvar(--mainBackgroundColor) !important;
+    background-color: pvar(--bg) !important;
 
     .caption {
       min-height: 40px;
       width: 100%;
       display: inline-flex;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
 
       .left-buttons {
-        @include padding-left(15px);
+        @include padding-left(1rem);
       }
     }
   }
 
   th {
-    background-color: pvar(--mainBackgroundColor) !important;
+    background-color: pvar(--bg) !important;
     outline: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -783,7 +782,7 @@ p-table {
   td, th {
     font-family: $main-fonts;
     font-size: 15px;
-    color: pvar(--mainForegroundColor) !important;
+    color: pvar(--fg) !important;
   }
 
   td {
@@ -802,26 +801,26 @@ p-table {
 
   tr {
     outline: 0;
-    background-color: pvar(--mainBackgroundColor) !important;
+    background-color: pvar(--bg) !important;
     height: 46px;
 
     &.p-highlight {
-      background-color: pvar(--submenuBackgroundColor) !important;
+      background-color: pvar(--bg-secondary-400) !important;
 
       td, td > a {
-        color: pvar(--mainForegroundColor) !important;
+        color: pvar(--fg) !important;
       }
     }
 
     &:focus-visible {
-      border: 1px solid pvar(--mainForegroundColor) !important
+      border: 1px solid pvar(--fg) !important
     }
   }
 
   .p-datatable-tbody {
     tr {
       &:hover {
-        background-color: pvar(--submenuBackgroundColor) !important;
+        background-color: $hover-bg !important;
       }
 
       td {
@@ -851,36 +850,36 @@ p-table {
   }
 
   th {
-    @include padding-left(15px);
-    @include padding-right(0px);
+    @include padding-left(1rem);
+    @include padding-right(0.25rem);
 
     padding-top: 5px !important;
     padding-bottom: 5px !important;
 
     border: none !important;
     border-bottom: 1px solid !important;
-    border-color: pvar(--submenuBackgroundColor) !important;
+    border-color: pvar(--bg-secondary-400) !important;
     text-align: start !important;
     font-weight: $font-semibold !important;
-    color: pvar(--mainForegroundColor) !important;
+    color: pvar(--fg) !important;
 
     &.p-sortable-column:hover {
-      background-color: pvar(--submenuBackgroundColor) !important;
+      background-color: $hover-bg !important;
     }
 
     &.p-sortable-column:focus-visible {
-      border: 1px solid pvar(--mainForegroundColor) !important
+      border: 1px solid pvar(--fg) !important
     }
 
     &.p-highlight {
-      background-color: pvar(--submenuBackgroundColor) !important;
+      background-color: pvar(--bg-secondary-400) !important;
 
       .pi-sort-amount-up-alt,
       .pi-sort-amount-down {
         display: inline-block;
         position: relative;
         top: -1px;
-        color: pvar(--mainForegroundColor) !important;
+        color: pvar(--fg) !important;
       }
 
       .pi-sort-amount-up-alt {
@@ -911,11 +910,11 @@ p-table {
 
   p-paginator {
     .p-paginator {
-      background-color: pvar(--mainBackgroundColor) !important;
+      background-color: pvar(--bg) !important;
       position: relative;
       border: none;
       border-top: 1px solid !important;
-      border-color: pvar(--submenuBackgroundColor) !important;
+      border-color: pvar(--bg-secondary-400) !important;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -929,22 +928,22 @@ p-table {
         }
 
         &.p-focus {
-          box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
+          box-shadow: $focus-box-shadow-form;
         }
 
         .p-label {
-          color: pvar(--greyForegroundColor);
+          color: pvar(--fg-300);
         }
       }
 
       .p-dropdown,
       .p-dropdown-trigger {
-        color: pvar(--mainForegroundColor);
-        background-color: pvar(--mainBackgroundColor);
+        color: pvar(--fg);
+        background-color: pvar(--bg);
       }
 
       .p-paginator-current {
-        color: pvar(--greyForegroundColor);
+        color: pvar(--fg-300);
         overflow: visible;
       }
 
@@ -963,11 +962,11 @@ p-table {
         padding: 5px 2px;
         height: 100%;
         outline: none;
-        color: pvar(--mainForegroundColor);
+        color: pvar(--fg);
 
         &.focus-within,
         &:focus {
-          box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
+          box-shadow: $focus-box-shadow-form;
         }
 
         &.p-disabled:hover {
@@ -992,7 +991,7 @@ p-table {
         height: auto !important;
 
         .p-paginator-page {
-          color: pvar(--mainForegroundColor) !important;
+          color: pvar(--fg) !important;
           font-weight: $font-semibold !important;
           margin: 0 5px !important;
           outline: 0 !important;
@@ -1003,13 +1002,13 @@ p-table {
 
           &.focus-within,
           &:focus {
-            box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
+            box-shadow: #{$focus-box-shadow-form} !important;
           }
 
           &.p-highlight {
             &, &:hover, &:active, &:focus {
-              color: #fff !important;
-              background-color: pvar(--mainColor) !important;
+              color: pvar(--fg) !important;
+              background-color: pvar(--bg-secondary-500) !important;
             }
           }
         }
@@ -1070,13 +1069,13 @@ p-tablecheckbox:hover div .p-checkbox-box {
 
   .p-checkbox-box {
     &.p-highlight {
-      color: pvar(--mainBackgroundColor) !important;
-      background-color: pvar(--mainColor) !important;
-      border-color: pvar(--mainColor) !important;
+      color: pvar(--on-primary) !important;
+      background-color: pvar(--primary) !important;
+      border-color: pvar(--primary) !important;
     }
 
     &.p-focus {
-      border: 2px solid pvar(--mainForegroundColor) !important;
+      border: 2px solid pvar(--fg) !important;
     }
   }
 }
@@ -1088,7 +1087,7 @@ p-toast {
     min-width: 200px;
 
     .p-toast-icon-close {
-      opacity: 0;
+      color: pvar(--fg-300);
       position: absolute;
       right: 5px;
       top: 5px;
@@ -1097,16 +1096,12 @@ p-toast {
       background: url('../assets/images/feather/x.svg') no-repeat;
       background-size: contain;
     }
-
-    &:hover .p-toast-icon-close {
-      opacity: .3;
-    }
   }
 
   .p-toast-message {
     font-family: $main-fonts;
-    background-color: pvar(--mainBackgroundColor) !important;
-    color: pvar(--mainForegroundColor) !important;
+    background-color: pvar(--bg) !important;
+    color: pvar(--fg) !important;
     border-radius: 5px;
     box-sizing: border-box;
     border: 1px solid #EBEEF5 !important;
@@ -1117,10 +1112,10 @@ p-toast {
       display: flex;
       align-items: center;
       width: 100%;
-      padding: 10px 20px;
+      padding: 10px;
 
       .message {
-        @include margin-right(20px);
+        @include margin-left(10px);
 
         flex-grow: 1;
 
@@ -1178,14 +1173,9 @@ p-toast {
 @media screen and (max-width: $mobile-view) {
   p-table {
     .p-datatable-header {
-      .caption {
-        flex-wrap: wrap;
-
-        > div {
-          width: 100%;
-          padding: 0 !important;
-          margin-bottom: 5px;
-        }
+      .caption > div {
+        width: 100%;
+        padding: 0 !important;
       }
     }
   }
@@ -1205,7 +1195,7 @@ p-chips {
   }
 
   .p-chips-multiple-container {
-    padding: 1px 15px !important;
+    padding: 4px 20px !important;
     margin-block-end: 0 !important;
     width: 100% !important;
   }
@@ -1233,7 +1223,6 @@ p-chips {
   font-size: 15px;
 
   .p-dropdown-label {
-    padding: 4px 15px;
     line-height: normal;
     min-height: 29px;
   }

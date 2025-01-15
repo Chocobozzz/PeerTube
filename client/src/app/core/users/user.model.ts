@@ -102,7 +102,7 @@ export class User implements UserServerModel {
     else this.account.resetAvatar()
   }
 
-  isUploadDisabled () {
+  hasUploadDisabled () {
     return this.videoQuota === 0 || this.videoQuotaDaily === 0
   }
 

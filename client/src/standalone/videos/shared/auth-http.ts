@@ -3,7 +3,7 @@ import { OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
 import { peertubeLocalStorage } from '../../../root-helpers/peertube-web-storage'
 
 export class AuthHTTP {
-  private readonly LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
+  private readonly LS_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
     CLIENT_SECRET: 'client_secret'
   }
@@ -44,8 +44,8 @@ export class AuthHTTP {
         if (res.status !== HttpStatusCode.UNAUTHORIZED_401) return res
 
         const refreshingTokenPromise = new Promise<void>((resolve, reject) => {
-          const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
-          const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
+          const clientId: string = peertubeLocalStorage.getItem(this.LS_OAUTH_CLIENT_KEYS.CLIENT_ID)
+          const clientSecret: string = peertubeLocalStorage.getItem(this.LS_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
 
           const headers = new Headers()
           headers.set('Content-Type', 'application/x-www-form-urlencoded')

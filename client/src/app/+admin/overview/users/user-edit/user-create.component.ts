@@ -108,7 +108,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${userCreate.username} created.`)
-          this.router.navigate([ '/admin/users/list' ])
+          this.router.navigate([ '/admin/overview/users/list' ])
         },
 
         error: err => {

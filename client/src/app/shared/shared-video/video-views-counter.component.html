@@ -1,9 +1,11 @@
-<span [title]="video.getExactNumberOfViews()">
-  <ng-container i18n *ngIf="!video.isLive">
-    {video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}
-  </ng-container>
-
-  <ng-container i18n *ngIf="video.isLive">
-    {video.viewers, plural, =1 {1 viewer} other {{{ video.viewers | myNumberFormatter }} viewers}}
-  </ng-container>
+<span [title]="getExactNumberOfViews()">
+  @if (isLive) {
+    <ng-container i18n>
+      {viewers, plural, =1 {1 viewer} other {{{ viewers | myNumberFormatter }} viewers}}
+    </ng-container>
+  } @else {
+    <ng-container i18n>
+      {views, plural, =1 {1 view} other {{{ views | myNumberFormatter }} views}}
+    </ng-container>
+  }
 </span>

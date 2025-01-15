@@ -114,7 +114,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
-  private loaded = false
+  dropdownOpened = false
+
   private hasMutedAccount = false
 
   constructor (
@@ -135,24 +136,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   ngOnChanges () {
-    if (this.loaded) {
-      this.loaded = false
-      if (this.playlistAdd) this.playlistAdd.reload()
-    }
+    if (this.playlistAdd) this.playlistAdd.reload()
 
     this.buildActions()
   }
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
-  }
-
-  loadDropdownInformation () {
-    if (this.loaded === true) return
-
-    this.loaded = true
-
-    if (this.displayOptions.playlist) this.playlistAdd.load()
   }
 
   // ---------------------------------------------------------------------------
@@ -424,10 +414,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   getPlaylistDropdownPlacement () {
     if (this.screenService.isInSmallView()) {
-      return 'bottom-right'
+      return 'bottom-right auto'
     }
 
-    return 'bottom-left bottom-right'
+    return 'bottom-left bottom-right auto'
   }
 
   private buildActions () {

@@ -1,4 +1,4 @@
-import { DatePipe, NgClass, NgIf } from '@angular/common'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
@@ -8,9 +8,10 @@ import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
 import { first } from 'rxjs'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
+import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
+import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
 import { WatchedWordsListSaveModalComponent } from './watched-words-list-save-modal.component'
 import { WatchedWordsListService } from './watched-words-list.service'
@@ -29,7 +30,7 @@ import { WatchedWordsListService } from './watched-words-list.service'
     TableExpanderIconComponent,
     NgClass,
     AutoColspanDirective,
-    DatePipe,
+    PTDatePipe,
     NgbTooltip,
     WatchedWordsListSaveModalComponent
   ]

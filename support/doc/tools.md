@@ -124,6 +124,8 @@ PeerTube supports VOD/Live transcoding and VOD transcription (PeerTube >= 6.2) b
 The runner communicates with the PeerTube instance using HTTP and WebSocket and doesn't need to have a public IP.
 So you can run a runner on a classic server, a non-public server or even on your own computer!
 
+You can read the admin documentation on how to use PeerTube runners on https://docs.joinpeertube.org/admin/remote-runners
+
 ### Runner installation
 
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
@@ -357,6 +359,22 @@ sudo -u prunner peertube-runner list-registered
 
 :::
 
+### Graceful shutdown
+
+Ask the runner to shutdown when it has finished all of its current tasks:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner graceful-shutdown
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner graceful-shutdown
+```
+
+:::
+
 ### Update the runner package
 
 You can check if there is a new runner version using:
@@ -533,9 +551,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 **PeerTube >= 6.2**
 
-Use this script after you migrated to another object storage provider so PeerTube updates its internal object URLs (a confirmation will be demanded first).
-
-PeerTube must be stopped.
+Use this script after you migrated to another object storage provider so PeerTube updates its internal object URLs (a confirmation will be demanded first). Restart PeerTube after running the script.
 
 ::: code-group
 

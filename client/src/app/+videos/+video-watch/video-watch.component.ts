@@ -50,7 +50,7 @@ import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
 import {
   HLSOptions,
   PeerTubePlayer,
-  PeerTubePlayerContructorOptions,
+  PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
   PlayerMode,
   videojs
@@ -144,7 +144,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   transcriptionWidgetOpened = false
 
-  private nextRecommendedVideoUUID = ''
+  private nextRecommendedVideoId = ''
   private nextRecommendedVideoTitle = ''
 
   private videoFileToken: string
@@ -243,7 +243,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // The recommended videos's first element should be the next video
     const video = videos[0]
-    this.nextRecommendedVideoUUID = video.uuid
+    this.nextRecommendedVideoId = video.shortUUID
     this.nextRecommendedVideoTitle = video.name
   }
 
@@ -629,8 +629,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         return
       }
 
-      if (this.nextRecommendedVideoUUID) {
-        this.router.navigate([ '/w', this.nextRecommendedVideoUUID ])
+      if (this.nextRecommendedVideoId) {
+        this.router.navigate([ '/w', this.nextRecommendedVideoId ])
       }
     })
   }
@@ -662,7 +662,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private buildPeerTubePlayerConstructorOptions (options: {
     urlOptions: URLOptions
-  }): PeerTubePlayerContructorOptions {
+  }): PeerTubePlayerConstructorOptions {
     const { urlOptions } = options
 
     return {
@@ -696,6 +696,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       authorizationHeader: () => this.authService.getRequestHeaderValue(),
 
       serverUrl: environment.originServerUrl || window.location.origin,
+      stunServers: this.serverConfig.webrtc.stunServers,
 
       errorNotifier: (message: string) => this.notifier.error(message),
 

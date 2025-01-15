@@ -1,0 +1,87 @@
+<ng-template #notificationNumber>
+  <div *ngIf="unreadNotifications > 0 && unreadNotifications < 100" class="unread-notifications">{{ unreadNotifications }}</div>
+  <div *ngIf="unreadNotifications >= 100" class="unread-notifications">99+</div>
+</ng-template>
+
+<ng-template #notificationIcon>
+  @if (unreadNotifications) {
+    <my-global-icon iconName="opened-bell"></my-global-icon>
+  } @else {
+    <my-global-icon iconName="bell"></my-global-icon>
+  }
+</ng-template>
+
+@if (isInMobileView) {
+  <a
+    i18n-title title="View your notifications"
+    class="peertube-button tertiary-button rounded-icon-button notification-inbox-link"
+    routerLink="/my-account/notifications" routerLinkActive="active" #link (click)="onNavigate(link)"
+  >
+    <ng-container *ngTemplateOutlet="notificationNumber"></ng-container>
+
+    <ng-container *ngTemplateOutlet="notificationIcon"></ng-container>
+  </a>
+} @else {
+  <div
+    ngbDropdown autoClose="outside" placement="bottom-end auto" container="body" dropdownClass="dropdown-notifications"
+    #dropdown="ngbDropdown" (openChange)="$event === true ? onDropdownShown() : onDropdownHidden()"
+  >
+    <button
+      i18n-title title="View your notifications" class="peertube-button tertiary-button rounded-icon-button disable-dropdown-caret notification-inbox-dropdown"
+      [ngClass]="{ 'shown': opened, 'hidden': isInMobileView }"
+      ngbDropdownToggle
+    >
+      <ng-container *ngTemplateOutlet="notificationNumber"></ng-container>
+      <ng-container *ngTemplateOutlet="notificationIcon"></ng-container>
+    </button>
+
+    <div ngbDropdownMenu>
+      <div class="content" [ngClass]="{ loaded: loaded }">
+        <div class="notifications-header">
+          <div i18n>Notifications</div>
+
+          <div>
+            <button
+              *ngIf="unreadNotifications"
+              i18n-title title="Mark all as read" class="me-2 peertube-button tertiary-button rounded-icon-button"
+              (click)="markAllAsRead()"
+            >
+              <my-global-icon iconName="tick"></my-global-icon>
+            </button>
+
+            <a
+              class="peertube-button-link tertiary-button rounded-icon-button"
+              i18n-title title="Update your notification preferences"
+              routerLink="/my-account/settings" fragment="notifications"
+              #settingsNotifications (click)="onNavigate(settingsNotifications)"
+            >
+              <my-global-icon iconName="cog"></my-global-icon>
+            </a>
+          </div>
+        </div>
+
+        @defer (when opened) {
+          <div *ngIf="!loaded" class="loader mt-4">
+            <my-loader size="xl" [loading]="loaded"></my-loader>
+          </div>
+
+          <my-user-notifications
+            [ignoreLoadingBar]="true" [infiniteScroll]="false" [itemsPerPage]="10"
+            [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
+          ></my-user-notifications>
+        } @placeholder {
+          <div class="loader mt-4">
+            <my-loader size="xl" loading="true"></my-loader>
+          </div>
+        }
+
+        <div class="all-notifications">
+          <a *ngIf="loaded" class="text-decoration-underline" routerLink="/my-account/notifications" #notifications (click)="onNavigate(notifications)" i18n>
+            View all
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+}

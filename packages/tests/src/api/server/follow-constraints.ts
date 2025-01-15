@@ -152,7 +152,6 @@ describe('Test follow constraints', function () {
         expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
 
         expect(error.detail).to.equal('Cannot get this video regarding follow constraints')
-        expect(error.error).to.equal(error.detail)
 
         expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
 

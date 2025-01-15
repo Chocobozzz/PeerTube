@@ -142,10 +142,6 @@ function buildVideosHelpers () {
       }))
 
       return {
-        webtorrent: { // TODO: remove in v7
-          videoFiles: webVideoFiles
-        },
-
         webVideo: {
           videoFiles: webVideoFiles
         },

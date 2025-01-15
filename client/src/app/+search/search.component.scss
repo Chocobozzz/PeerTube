@@ -38,20 +38,12 @@
         font-weight: $font-semibold;
       }
     }
-
-    .results-filter-button {
-      cursor: pointer;
-
-      .icon.icon-filter {
-        position: relative;
-        top: -1px;
-        background-image: url('../../assets/images/feather/filter.svg');
-
-        @include icon(20px);
-        @include margin-right(5px);
-      }
-    }
   }
+}
+
+.filter-button my-global-icon {
+  @include global-icon-size(20px);
+  @include margin-right(0.5rem);
 }
 
 .entry {
@@ -74,7 +66,7 @@
 .video-channel-names {
   display: flex;
   align-items: baseline;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   width: fit-content;
   flex-wrap: wrap;
 
@@ -83,12 +75,10 @@
 
 .video-channel-display-name {
   font-weight: $font-semibold;
-  font-size: $video-miniature-row-name-font-size;
 }
 
 .video-channel-name {
-  font-size: $video-miniature-row-info-font-size;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
 }
 
 // Use the same breakpoints as in video-miniature
@@ -134,10 +124,10 @@
   }
 
   .video-channel-display-name {
-    font-size: $video-miniature-row-mobile-name-font-size;
+    font-size: $miniature-fs-mobile-big;
   }
 
   .video-channel-name {
-    font-size: $video-miniature-row-mobile-info-font-size;
+    font-size: $miniature-fs-mobile-medium;
   }
 }

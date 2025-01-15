@@ -12,7 +12,7 @@ input {
     text-indent: -9999px;
     width: 35px;
     height: 20px;
-    background: #cccccc;
+    background: pvar(--input-bg);
     display: block;
     border-radius: 100px;
     position: relative;
@@ -25,7 +25,7 @@ input {
       left: 3px;
       width: 14px;
       height: 14px;
-      background: pvar(--mainBackgroundColor);
+      background: pvar(--fg-300);
       border-radius: 50%;
       transition: 0.3s ease-out;
     }
@@ -36,15 +36,16 @@ input {
   }
 
   &:checked + label {
-    background: pvar(--mainColor);
+    background: pvar(--primary);
 
     &::after {
       left: calc(100% - 3px);
       transform: translateX(-100%);
+      background: pvar(--on-primary);
     }
   }
 
   &:focus-visible + label {
-    outline: 2px solid;
+    box-shadow: $focus-box-shadow-form;
   }
 }

@@ -54,7 +54,6 @@ export type BuildVideosListQueryOptions = {
   hasHLSFiles?: boolean
 
   hasWebVideoFiles?: boolean
-  hasWebtorrentFiles?: boolean // TODO: Remove in v7
 
   accountId?: number
   videoChannelId?: number
@@ -188,9 +187,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereFileExists()
     }
 
-    if (exists(options.hasWebtorrentFiles)) {
-      this.whereWebVideoFileExists(options.hasWebtorrentFiles)
-    } else if (exists(options.hasWebVideoFiles)) {
+    if (exists(options.hasWebVideoFiles)) {
       this.whereWebVideoFileExists(options.hasWebVideoFiles)
     }
 

@@ -125,6 +125,7 @@
               <p-calendar
                 id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
                 [firstDayOfWeek]="0" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+                baseZIndex="20000"
               >
               </p-calendar>
 
@@ -169,7 +170,7 @@
       <ng-template ngbNavContent>
         <div class="captions">
           <my-alert type="primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()" i18n>
-            A subtitle will be automatically generated from your video.
+            Subtitles will be automatically generated from your video.
           </my-alert>
 
           <div class="form-group" *ngFor="let videoCaption of videoCaptions">
@@ -211,7 +212,7 @@
                   [href]="videoCaption.captionPath"
                 >{{ getCaptionLabel(videoCaption) }}</a>
 
-                <div i18n class="caption-entry-state">Already uploaded on {{ videoCaption.updatedAt | date }}	&#10004;</div>
+                <div i18n class="caption-entry-state">Already uploaded on {{ videoCaption.updatedAt | ptDate }}	&#10004;</div>
 
                 <my-edit-button i18n-label label="Edit" class="me-2" (click)="openEditCaptionModal(videoCaption)"></my-edit-button>
                 <my-delete-button label (click)="deleteCaption(videoCaption)"></my-delete-button>
@@ -243,7 +244,7 @@
             <my-alert type="primary" i18n>
               Chapters can also be set in the video description.
 
-              Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank">in the PeerTube documentation</a>
+              Check the format <a href="https://docs.joinpeertube.org/use/create-upload-video#chapters" target="_blank" class="alert-link">in the PeerTube documentation</a>
             </my-alert>
 
             <ng-container *ngFor="let chapterControl of getChaptersFormArray().controls; let i = index">
@@ -261,7 +262,7 @@
                 <div class="position">{{ i + 1 }}</div>
 
                 <my-timestamp-input
-                  class="d-block" [disableBorder]="false" [inputName]="'timecode[' + i + ']'"
+                  class="d-block" enableBorder="true" [inputName]="'timecode[' + i + ']'"
                   [maxTimestamp]="publishedVideo?.duration" formControlName="timecode"
                 ></my-timestamp-input>
 
@@ -420,7 +421,7 @@
 
             <div class="form-group originally-published-at">
               <div class="label-container">
-                <label i18n for="originallyPublishedAt">Original publication date</label>
+                <label i18n class="mb-0" for="originallyPublishedAt">Original publication date</label>
 
                 <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')" *ngIf="hasPublicationDate()">
                   Reset
@@ -434,6 +435,7 @@
               <p-calendar
                 inputId="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
                 [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+                baseZIndex="20000"
               >
               </p-calendar>
 
@@ -443,7 +445,12 @@
             </div>
 
             <div class="form-group mb-4">
-              <label i18n for="commentsPolicy">Comments policy</label>
+              <label i18n class="mb-0" for="commentsPolicy">Comments policy</label>
+
+              <div class="form-group-description" i18n>
+                You can require comments to be approved depending on <a routerLink="/my-account/auto-tag-policies" target="_blank">your auto-tags policies</a>
+              </div>
+
               <my-select-options inputId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy"></my-select-options>
 
               <div *ngIf="formErrors.commentsPolicy" class="form-error" role="alert">

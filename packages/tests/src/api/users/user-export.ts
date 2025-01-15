@@ -852,6 +852,7 @@ function runTest (withObjectStorage: boolean) {
 
     await server.userExports.request({ userId: noahId, withVideoFiles: true })
     await server.userExports.waitForCreation({ userId: noahId })
+    await wait(1500)
 
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
@@ -866,6 +867,13 @@ function runTest (withObjectStorage: boolean) {
 
     await checkExportFileExists({ exists: true, server, userExport, withObjectStorage, redirectedUrl })
 
+    // Should not delete the file
+    await server.debug.sendCommand({ body: { command: 'remove-expired-user-exports' } })
+    // File deletion
+    await wait(500)
+
+    await checkExportFileExists({ exists: true, server, userExport, withObjectStorage, redirectedUrl })
+
     await server.config.updateExistingConfig({
       newConfig: {
         export: {
@@ -876,11 +884,7 @@ function runTest (withObjectStorage: boolean) {
       }
     })
 
-    await server.debug.sendCommand({
-      body: {
-        command: 'remove-expired-user-exports'
-      }
-    })
+    await server.debug.sendCommand({ body: { command: 'remove-expired-user-exports' } })
 
     // File deletion
     await wait(500)

@@ -11,10 +11,10 @@
       </div>
 
       <button
-        class="results-filter-button button-unstyle ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed"
+        class="filter-button peertube-button tertiary-button ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed"
         [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="search-results-filter" [title]="getFilterButtonTitle()"
       >
-        <span class="icon icon-filter"></span>
+        <my-global-icon iconName="filter"></my-global-icon>
 
         <ng-container i18n>
           Filters

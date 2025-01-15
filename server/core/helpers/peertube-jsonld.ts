@@ -34,7 +34,7 @@ export async function compactJSONLDAndCheckRSA2017Signature (fromActor: MActor, 
     return false
   }
 
-  // TODO: compat with < 6.1, remove in 7.0
+  // TODO: compat with < 6.1, remove in 8.0
   let safe = true
   if (
     (compacted.type === 'Create' && (compacted?.object?.type === 'WatchAction' || compacted?.object?.type === 'CacheFile')) ||

@@ -13,7 +13,7 @@
       <div *ngIf="formErrors['verify-email-email']" class="form-error" role="alert">{{ formErrors['verify-email-email'] }}</div>
     </div>
 
-    <input class="peertube-button orange-button" type="submit" i18n-value value="Send verification email" [disabled]="!form.valid">
+    <input class="peertube-button primary-button" type="submit" i18n-value value="Send verification email" [disabled]="!form.valid">
   </form>
 
   <ng-template #emailVerificationNotRequired>

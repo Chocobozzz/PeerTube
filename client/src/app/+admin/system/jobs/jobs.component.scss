@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use 'form-mixins' as *;
 
 .select-job-state {
   display: block;
@@ -32,25 +33,10 @@
 }
 
 .admin-sub-header {
-  flex-direction: row !important;
   justify-content: flex-end;
 
-  .select-filter-block {
-    &:not(:last-child) {
-      @include margin-right(10px);
-    }
-
-    label {
-      margin-bottom: 2px;
-    }
-
-    .peertube-select-container {
-      @include peertube-select-container(auto);
-    }
-  }
-
-  .button-filter-block {
-    align-self: flex-end;
+  .peertube-select-container {
+    @include peertube-select-container(auto);
   }
 }
 

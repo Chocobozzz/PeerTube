@@ -35,35 +35,36 @@ $container-max-widths: (
   xl: 1140px
 );
 
-$input-color: pvar(--inputForegroundColor);
-$input-bg: pvar(--inputBackgroundColor);
-$input-focus-color: pvar(--inputForegroundColor);
-$input-focus-bg: pvar(--inputBackgroundColor);
+$input-color: pvar(--input-fg);
+$input-bg: pvar(--input-bg);
+$input-focus-color: pvar(--input-fg);
+$input-focus-bg: pvar(--input-bg);
 $input-btn-focus-width: 0;
 $input-btn-focus-color: inherit;
-$input-focus-border-color: #ced4da;
-$input-focus-box-shadow: 0 0 0 0.25rem pvar(--mainColorLightest);
+$input-focus-border-color: pvar(--input-border-color);
+$input-focus-box-shadow: #{$focus-box-shadow-form};
 
-$input-group-addon-color: pvar(--mainForegroundColor);
-$input-group-addon-bg: pvar(--greyBackgroundColor);
+$input-group-addon-color: pvar(--fg);
+$input-group-addon-bg: pvar(--bg-secondary-500);
+$input-group-addon-border-color: pvar(--input-border-color);
 
-$nav-pills-link-active-bg: pvar(--greySecondaryBackgroundColor);
-$nav-pills-link-active-color: pvar(--mainForegroundColor);
+$nav-pills-link-active-bg: pvar(--bg-secondary-500);
+$nav-pills-link-active-color: pvar(--fg);
 $nav-link-transition: none;
 
 $dropdown-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 $dropdown-border-radius: 3px;
-$dropdown-link-active-color: pvar(--mainForegroundColor);
-$dropdown-link-active-bg: pvar(--mainBackgroundHoverColor);
-$dropdown-link-hover-color: pvar(--mainForegroundColor);
-$dropdown-link-hover-bg: pvar(--mainBackgroundHoverColor);
-$dropdown-color: pvar(--mainForegroundColor);
-$dropdown-bg: pvar(--mainBackgroundColor);
+$dropdown-link-active-color: pvar(--fg);
+$dropdown-link-active-bg: pvar(--bg-secondary-300);
+$dropdown-link-hover-color: pvar(--fg);
+$dropdown-link-hover-bg: pvar(--bg-secondary-300);
+$dropdown-color: pvar(--fg);
+$dropdown-bg: pvar(--bg);
 
-$accordion-button-active-bg: pvar(--mainColorVeryLight);
-$accordion-button-active-color: pvar(--mainForegroundColor);
-$accordion-button-focus-border-color: pvar(--mainColorLightest);
-$accordion-button-focus-box-shadow: 0 0 0 .15rem pvar(--mainColorLightest);
-$accordion-border-color: pvar(--inputBorderColor);
+$accordion-button-active-bg: pvar(--primary-150);
+$accordion-button-active-color: pvar(--on-primary);
+$accordion-button-focus-border-color: pvar(--primary-100);
+$accordion-button-focus-box-shadow: #{$focus-box-shadow-form};
+$accordion-border-color: pvar(--input-border-color);
 
-$card-color: pvar(--mainForegroundColor);
+$card-color: pvar(--fg);

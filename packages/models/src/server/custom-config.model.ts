@@ -34,6 +34,18 @@ export interface CustomConfig {
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
 
+    serverCountry: string
+
+    support: {
+      text: string
+    }
+
+    social: {
+      externalLink: string
+      mastodonLink: string
+      blueskyLink: string
+    }
+
     defaultClientRoute: string
 
     customizations: {

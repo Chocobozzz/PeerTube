@@ -1,0 +1,141 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root {
+  width: 100%;
+
+  &.with-mb {
+    @include rfs(2.5rem, margin-bottom);
+  }
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  color: pvar(--fg-400);
+
+  @include font-size(2rem);
+
+  my-global-icon {
+    @include global-icon-size(28px);
+    @include margin-right(0.5rem);
+  }
+}
+
+@mixin parent-active {
+  color: pvar(--fg);
+
+  &::after {
+    content: '';
+    display: block;
+    height: 4px;
+    background-color: pvar(--border-primary);
+    border-radius: 2px;
+    position: absolute;
+    bottom: -3px;
+    width: 100%;
+  }
+}
+
+@mixin child-active {
+  color: pvar(--fg-400);
+  font-weight: $font-bold;
+  background-color: pvar(--bg-secondary-400);
+  text-decoration: none;
+}
+
+.parent-container my-list-overflow ::ng-deep .overflow-button {
+  &:has(+ * .active),
+  &:has(+ * .child-active) {
+    @include parent-active;
+  }
+}
+
+.children-container my-list-overflow ::ng-deep .overflow-button {
+  &:has(+ * .active),
+  &:has(+ * .child-active) {
+    @include child-active;
+  }
+}
+
+.parent-container .entry,
+.entry.in-modal {
+  display: inline-block;
+  font-weight: $font-bold;
+  white-space: nowrap;
+
+  @include font-size(22px);
+  @include disable-default-a-behaviour;
+
+  &:hover {
+    color: pvar(--fg);
+  }
+}
+
+.parent-container .entry {
+  color: pvar(--fg-100);
+
+  @include margin-right(2rem);
+
+  &.active,
+  &.child-active {
+    position: relative;
+
+    @include parent-active;
+  }
+}
+
+.entry.in-modal {
+  color: pvar(--fg);
+
+  padding: 9px 12px;
+  width: 100%;
+  border-radius: 5px;
+
+  &.active,
+  &.child-active {
+    color: pvar(--on-primary-450) !important;
+    background-color: pvar(--primary-450);
+    opacity: .9;
+  }
+}
+
+.children-container {
+  margin-top: 1.25rem;
+
+  ::ng-deep li {
+    white-space: nowrap;
+
+    &:not(:first-child)::before {
+      content: '•';
+
+      color: pvar(--secondary-icon-color);
+
+      display: inline-block;
+      margin: 0 0.5rem;
+
+      position: relative;
+      top: -1px;
+    }
+  }
+
+  .entry {
+    color: pvar(--fg-250);
+    display: inline-block;
+    white-space: nowrap;
+    padding: 12px 16px;
+    border-radius: 200px;
+    line-height: 1;
+
+    @include font-size(18px);
+
+    &.active {
+      position: relative;
+
+      @include child-active;
+    }
+
+    &:hover {
+      color: pvar(--fg);
+    }
+  }
+}

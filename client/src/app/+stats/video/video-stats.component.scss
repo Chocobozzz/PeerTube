@@ -39,14 +39,15 @@
   height: fit-content;
   min-height: 100px;
   min-width: 200px;
-  background-color: pvar(--submenuBackgroundColor);
+  background-color: pvar(--bg-secondary-400);
   margin-bottom: 15px;
 
   @include margin-right(15px);
 
   .label,
   .more-info {
-    font-size: 14px;
+    font-size: 1rem;
+    font-weight: $font-semibold;
   }
 
   .value {

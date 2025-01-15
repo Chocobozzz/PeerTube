@@ -1,10 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Videos</h1>
-  </div>
-</div>
-
 <p-table
   [value]="videos" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
@@ -16,7 +9,7 @@
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
           [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
@@ -63,7 +56,7 @@
       <td class="action-cell">
         <my-video-actions-dropdown
           placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
-          (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()" (transcodingCreated)="reloadData()"
+          (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()" (transcodingCreated)="reloadData()" buttonSize="small"
         ></my-video-actions-dropdown>
       </td>
 
@@ -113,7 +106,7 @@
       </td>
 
       <td>
-        {{ video.publishedAt | date: 'short' }}
+        {{ video.publishedAt | ptDate: 'short' }}
       </td>
 
     </tr>

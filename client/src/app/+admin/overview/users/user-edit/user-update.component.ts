@@ -126,7 +126,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${this.user.username} updated.`)
-          this.router.navigate([ '/admin/users/list' ])
+          this.router.navigate([ '/admin/overview/users/list' ])
         },
 
         error: err => {

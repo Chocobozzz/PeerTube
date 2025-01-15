@@ -3,7 +3,7 @@
 
 my-timestamp-input {
   display: block;
-  width: 85px;
+  width: 100px;
 }
 
 .grid-container {
@@ -52,18 +52,12 @@ my-timestamp-input {
   }
 }
 
-h1 {
-  font-size: 20px;
-}
-
 h2 {
   font-weight: $font-bold;
   font-size: 16px;
-  color: pvar(--mainColor);
-  background-color: pvar(--mainBackgroundColor);
   padding: 0 5px;
   width: fit-content;
-  margin: -8px 0 0;
+  margin-top: 0.5rem;
 }
 
 .section {
@@ -71,7 +65,8 @@ h2 {
 
   min-width: $min-width;
   margin-bottom: 50px;
-  border: 1px solid $separator-border-color;
+  border: 1px solid transparent;
+  background: pvar(--bg-secondary-400);
   border-radius: 5px;
   width: fit-content;
 
@@ -83,7 +78,7 @@ h2 {
   }
 
   .description {
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
     margin-top: 5px;
     margin-bottom: 15px;
   }

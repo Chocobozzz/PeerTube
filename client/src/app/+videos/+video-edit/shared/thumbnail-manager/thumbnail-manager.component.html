@@ -15,20 +15,20 @@
   <div class="mt-2">
 
     @if (selectingFromVideo) {
-      <button i18n type="button" class="peertube-button orange-button me-2" (click)="selectFrame()">Use this frame</button>
+      <button i18n type="button" class="peertube-button primary-button me-2" (click)="selectFrame()">Use this frame</button>
 
-      <button i18n type="button" i18n class="peertube-button grey-button" (click)="resetSelectFromVideo()">Cancel</button>
+      <button i18n type="button" i18n class="peertube-button secondary-button" (click)="resetSelectFromVideo()">Cancel</button>
     }
     @else {
       <my-reactive-file
         class="d-inline-block"
         inputName="uploadNewThumbnail" inputLabel="Select from your device" [extensions]="videoImageExtensions"
         [maxFileSize]="maxVideoImageSize" placement="right" (fileChanged)="onFileChanged($event)"
-        [buttonTooltip]="getReactiveFileButtonTooltip()">
+        [buttonTooltip]="getReactiveFileButtonTooltip()" theme="primary">
       </my-reactive-file>
 
       @if (canSelectFromVideo()) {
-        <button i18n type="button" class="peertube-button grey-button ms-2" (click)="selectFromVideo()">Select from video</button>
+        <button i18n type="button" class="peertube-button secondary-button ms-2" (click)="selectFromVideo()">Select from video</button>
       }
     }
 

@@ -1,68 +1,63 @@
 <div
-  class="btn-group-subscribe btn-group" role="group"
-  [ngClass]="{'subscribe-button': !isAllChannelsSubscribed, 'unsubscribe-button': isAllChannelsSubscribed, 'big': isBigButton }"
+  class="btn-group" role="group"
+  [ngClass]="{ 'big': isBigButton }"
+  ngbDropdown="dropdown" autoClose="outside" placement="bottom-right bottom-left bottom auto"
+  role="group" aria-label="Multiple ways to subscribe to the current channel" i18n-aria-label
 >
 
-  <ng-template #userLoggedOut>
-    <span [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
-      <ng-container i18n *ngIf="isSingleSubscribe">Subscribe</ng-container>
+  <ng-template #subscribeContent>
+    <div class="d-inline-block" [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
+      @if (isSingleSubscribe) {
+        <ng-container i18n>Subscribe</ng-container>
+      } @else {
+        <div i18n>Subscribe to all channels</div>
 
-      <ng-container *ngIf="!isSingleSubscribe">
-        <span i18n>Subscribe to all channels</span>
-        <span *ngIf="isAtLeastOneChannelSubscribed">{{ subscribeStatus(true).length }}/{{ subscribed.size }}
-          <ng-container i18n>channels subscribed</ng-container>
-        </span>
-      </ng-container>
-    </span>
-
-    <span *ngIf="!isBigButton && displayFollowers && videoChannels.length > 1 && videoChannel.followersCount !== 0" class="followers-count">
-      {{ videoChannels[0].followersCount | myNumberFormatter }}
-    </span>
-  </ng-template>
-
-  <ng-template #userLoggedIn>
-    <button *ngIf="!isAllChannelsSubscribed" type="button" class="btn" (click)="subscribe()">
-      <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
-    </button>
-
-    <button *ngIf="isAllChannelsSubscribed" type="button" class="btn" role="button" (click)="unsubscribe()">
-      <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
-    </button>
-  </ng-template>
-
-  <ng-container
-    *ngIf="isUserLoggedIn(); then userLoggedIn">
-  </ng-container>
-
-  <div
-    class="btn-group" ngbDropdown autoClose="outside" placement="bottom-right bottom-left bottom auto"
-    role="group" aria-label="Multiple ways to subscribe to the current channel" i18n-aria-label
-  >
-    <button class="btn dropdown-toggle-split last-in-group" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-aria-label>
-      <ng-container
-        *ngIf="!isUserLoggedIn(); then userLoggedOut">
-      </ng-container>
-    </button>
-
-    <div class="dropdown-menu" ngbDropdownMenu>
-
-      <h6 class="dropdown-header" i18n>Using an ActivityPub account</h6>
-
-      <button class="dropdown-item" (click)="subscribe()">
-        <span *ngIf="!isUserLoggedIn()" i18n>Subscribe with an account on this instance</span>
-        <span *ngIf="isUserLoggedIn()" i18n>Subscribe with your local account</span>
-      </button>
-
-      <button *ngIf="isRemoteSubscribeAvailable()" class="dropdown-item dropdown-item-neutral">
-        <div class="mb-1" i18n>Subscribe with a remote account:</div>
-        <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
-      </button>
-
-      <div class="dropdown-divider"></div>
-
-      <h6 class="dropdown-header" i18n>Using a syndication feed</h6>
-      <a [href]="rssUri" target="_blank" class="dropdown-item" i18n>Subscribe via RSS</a>
-
+        <div class="fs-8 fw-normal lh-1" *ngIf="isAtLeastOneChannelSubscribed" i18n>
+          {{ subscribeStatus(true).length }}/{{ subscribed.size }} channels subscribed
+        </div>
+      }
     </div>
+  </ng-template>
+
+  @if (isUserLoggedIn()) {
+    @if (isAllChannelsSubscribed) {
+      <button type="button" [ngClass]="buttonClasses" class="btn last-in-group" (click)="unsubscribe()">
+        <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
+      </button>
+    } @else {
+      <button type="button" [ngClass]="buttonClasses" class="btn" (click)="subscribe()">
+        <ng-template [ngTemplateOutlet]="subscribeContent"></ng-template>
+      </button>
+
+      <button type="button" [ngClass]="buttonClasses" class="btn dropdown-toggle-split" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-ariaLabel></button>
+    }
+  } @else {
+    <button ngbDropdownToggle [ngClass]="buttonClasses" type="button" class="btn">
+      <ng-template [ngTemplateOutlet]="subscribeContent"></ng-template>
+    </button>
+  }
+
+  <div class="dropdown-menu" ngbDropdownMenu>
+
+    <h6 class="dropdown-header" i18n>Using an ActivityPub account</h6>
+
+    <button type="button" class="dropdown-item" (click)="subscribe()">
+      @if (isUserLoggedIn()) {
+        <span i18n>Subscribe with your local account</span>
+      } @else {
+        <span i18n>Subscribe with an account on this instance</span>
+      }
+    </button>
+
+    <div type="button" *ngIf="isRemoteSubscribeAvailable()" class="dropdown-item dropdown-item-neutral">
+      <div class="mb-1" i18n>Subscribe with a remote account:</div>
+      <my-remote-subscribe [showHelp]="true" [uri]="uri"></my-remote-subscribe>
+    </div>
+
+    <div class="dropdown-divider"></div>
+
+    <h6 class="dropdown-header" i18n>Using a syndication feed</h6>
+    <a [href]="rssUri" target="_blank" class="dropdown-item" i18n>Subscribe via RSS</a>
+
   </div>
 </div>

@@ -1,0 +1,92 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.content {
+  scrollbar-color: auto;
+}
+
+::ng-deep {
+  .dropdown-notifications {
+    .dropdown-menu {
+      padding: 0;
+      font-size: 14px;
+      font-family: $main-fonts;
+      width: 400px;
+
+      .loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 5px 0;
+      }
+
+      .content {
+        max-height: 150px;
+        transition: max-height 0.15s ease-out;
+        display: flex;
+        height: 500px;
+        flex-direction: column;
+
+        &.loaded {
+          max-height: 500px;
+        }
+
+        > my-user-notifications:nth-child(2) {
+          overflow-y: auto;
+          flex-grow: 1;
+        }
+      }
+
+      .notifications-header {
+        display: flex;
+        justify-content: space-between;
+
+        border-bottom: 1px solid $separator-border-color-on-secondary;
+        align-items: center;
+        padding: 0 12px;
+        font-size: 14px;
+        line-height: normal;
+        font-weight: bold;
+        text-transform: uppercase;
+        min-height: 50px;
+      }
+
+      .all-notifications {
+        border-top: 1px solid $separator-border-color-on-secondary;
+        margin-top: -1px; // To not have 2 borders with the last notification
+        text-align: center;
+        padding: 0.75rem 0;
+      }
+    }
+  }
+}
+
+.notification-inbox-dropdown,
+.notification-inbox-link {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+
+  .unread-notifications {
+    // Use margin left and not start here on purpose
+    margin-left: 20px;
+  }
+
+  .unread-notifications {
+    position: absolute;
+    top: 6px;
+    left: 0;
+
+    background-color: pvar(--primary);
+    color: pvar(--on-primary);
+    font-weight: $font-bold;
+    font-size: 10px;
+
+    border-radius: 16px;
+
+    line-height: 16px;
+    padding: 0 3px;
+    min-width: 16px;
+  }
+}

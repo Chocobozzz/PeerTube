@@ -1,13 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-
-input[type=submit] {
-  display: block;
-  margin-top: 15px;
-
-  @include peertube-button;
-  @include orange-button;
-}
+@use '_button-mixins' as *;
+@use 'form-mixins' as *;
 
 .peertube-select-container {
   margin-bottom: 30px;

@@ -59,7 +59,7 @@ const formatBenchmarkResult = ({ WER, CER, duration, engine, model }: Partial<Be
 
 void (async () => {
   const logger = createLogger()
-  logger.add(new transports.Console({ format: format.printf(log => log.message) }))
+  logger.add(new transports.Console({ format: format.printf(log => log.message as string) }))
 
   const transcribers: TranscriptionEngineName[] = [ 'openai-whisper', 'whisper-ctranslate2' ]
   const models = process.env.MODELS

@@ -11,9 +11,7 @@
           class="chip me-1"
         >
           <my-actor-avatar size="18" [actor]="abuse.reporterAccount" actorType="account"></my-actor-avatar>
-          <div>
-            <span class="muted">{{ abuse.reporterAccount.nameWithHost }}</span>
-          </div>
+          <span class="muted">{{ abuse.reporterAccount.nameWithHost }}</span>
         </a>
 
         <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
@@ -32,9 +30,7 @@
           class="chip me-1"
         >
           <my-actor-avatar size="18" [actor]="abuse.flaggedAccount" actorType="account"></my-actor-avatar>
-          <div>
-            <span class="muted">{{ abuse.flaggedAccount ? abuse.flaggedAccount.nameWithHost : '' }}</span>
-          </div>
+          <span class="muted">{{ abuse.flaggedAccount ? abuse.flaggedAccount.nameWithHost : '' }}</span>
         </a>
 
         <a *ngIf="isAdminView" [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
@@ -48,7 +44,7 @@
 
     <div class="d-flex" *ngIf="abuse.updatedAt">
       <span class="moderation-expanded-label" i18n>Updated</span>
-      <time class="moderation-expanded-text abuse-details-date-updated">{{ abuse.updatedAt | date: 'medium' }}</time>
+      <time class="moderation-expanded-text abuse-details-date-updated">{{ abuse.updatedAt | ptDate: 'medium' }}</time>
     </div>
 
     <!-- report text -->

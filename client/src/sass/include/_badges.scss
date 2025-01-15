@@ -9,20 +9,21 @@
   font-weight: $font-semibold;
   line-height: 1.1;
   max-width: 100%;
+  white-space: normal;
+  word-break: normal;
 
   &.badge-fs-normal {
     font-size: 100%;
   }
 
   &.badge-primary {
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--mainColor);
+    color: pvar(--on-primary);
+    background-color: pvar(--primary);
   }
 
   &.badge-secondary {
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--greyForegroundColor);
-    opacity: 0.7;
+    color: pvar(--fg-450);
+    background-color: pvar(--bg-secondary-400);
   }
 
   &.badge-banned,

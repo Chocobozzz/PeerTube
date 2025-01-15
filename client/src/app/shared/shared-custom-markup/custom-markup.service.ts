@@ -1,17 +1,16 @@
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { logger } from '@root-helpers/logger'
 import {
   ButtonMarkupData,
   ChannelMiniatureMarkupData,
   ContainerMarkupData,
   EmbedMarkupData,
   InstanceAvatarMarkupData,
-  InstanceBannerMarkupData,
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
   VideosListMarkupData
 } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { DynamicElementService } from './dynamic-element.service'
 import {
   ButtonMarkupComponent,
@@ -162,14 +161,7 @@ export class CustomMarkupService {
   }
 
   private instanceBannerBuilder (el: HTMLElement) {
-    const data = el.dataset as InstanceBannerMarkupData
     const { component, loadedPromise } = this.dynamicElementService.createElement(InstanceBannerMarkupComponent)
-
-    const model = {
-      revertHomePaddingTop: this.buildBoolean(data.revertHomePaddingTop) ?? true
-    }
-
-    this.dynamicElementService.setModel(component, model)
 
     return { component, loadedPromise }
   }

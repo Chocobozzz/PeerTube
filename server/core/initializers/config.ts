@@ -77,8 +77,7 @@ const CONFIG = {
   CLIENT: {
     VIDEOS: {
       MINIATURE: {
-        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') },
-        get DISPLAY_AUTHOR_AVATAR () { return config.get<boolean>('client.videos.miniature.display_author_avatar') }
+        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
       },
       RESUMABLE_UPLOAD: {
         get MAX_CHUNK_SIZE () { return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0) }
@@ -105,6 +104,9 @@ const CONFIG = {
       EMBED: {
         ENABLED: config.get<boolean>('defaults.p2p.embed.enabled')
       }
+    },
+    PLAYER: {
+      get AUTO_PLAY () { return config.get<boolean>('defaults.player.auto_play') }
     }
   },
 
@@ -396,6 +398,9 @@ const CONFIG = {
       ENABLED: config.get<boolean>('stats.total_admins.enabled')
     }
   },
+  WEBRTC: {
+    STUN_SERVERS: config.get<string[]>('webrtc.stun_servers')
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -627,6 +632,18 @@ const CONFIG = {
 
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
+
+    get SERVER_COUNTRY () { return config.get<string>('instance.server_country') },
+
+    SUPPORT: {
+      get TEXT () { return config.get<string>('instance.support.text') }
+    },
+
+    SOCIAL: {
+      get EXTERNAL_LINK () { return config.get<string>('instance.social.external_link') },
+      get MASTODON_LINK () { return config.get<string>('instance.social.mastodon_link') },
+      get BLUESKY () { return config.get<string>('instance.social.bluesky_link') }
+    },
 
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
 

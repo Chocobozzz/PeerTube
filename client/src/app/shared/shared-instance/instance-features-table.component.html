@@ -3,13 +3,13 @@
   <table *ngIf="serverConfig">
     <caption i18n>Features found on this instance</caption>
     <tr>
-      <th i18n class="label" scope="row">PeerTube version</th>
+      <th i18n class="t-label" scope="row">PeerTube version</th>
 
       <td class="value">{{ getServerVersionAndCommit() }}</td>
     </tr>
 
     <tr>
-      <th class="label" scope="row">
+      <th class="t-label" scope="row">
         <div i18n>Default NSFW/sensitive videos policy</div>
         <span i18n class="fs-7 fw-normal fst-italic">can be redefined by the users</span>
       </th>
@@ -18,31 +18,31 @@
     </tr>
 
     <tr>
-      <th i18n class="label" scope="row">User registration</th>
+      <th i18n class="t-label" scope="row">User registration</th>
 
       <td class="value">{{ buildRegistrationLabel() }}</td>
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">Video uploads</th>
+      <th i18n class="t-label" colspan="2">Video uploads</th>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Transcoding in multiple resolutions</th>
+      <th i18n class="t-sub-label" scope="row">Transcoding in multiple resolutions</th>
       <td>
         <my-feature-boolean [value]="serverConfig.transcoding.enabledResolutions.length !== 0"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Automatic transcription</th>
+      <th i18n class="t-sub-label" scope="row">Automatic transcription</th>
       <td>
         <my-feature-boolean [value]="serverConfig.videoTranscription.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Video uploads</th>
+      <th i18n class="t-sub-label" scope="row">Video uploads</th>
       <td>
         <span i18n *ngIf="serverConfig.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
         <span i18n *ngIf="!serverConfig.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
@@ -50,7 +50,7 @@
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Video quota</th>
+      <th i18n class="t-sub-label" scope="row">Video quota</th>
 
       <td class="value">
         <ng-container *ngIf="initialUserVideoQuota !== -1">
@@ -70,90 +70,90 @@
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">Live streaming</th>
+      <th i18n class="t-label" colspan="2">Live streaming</th>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Live streaming enabled</th>
+      <th i18n class="t-sub-label" scope="row">Live streaming enabled</th>
       <td>
         <my-feature-boolean [value]="serverConfig.live.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr *ngIf="serverConfig.live.enabled">
-      <th i18n class="sub-label" scope="row">Transcode live video in multiple resolutions</th>
+      <th i18n class="t-sub-label" scope="row">Transcode live video in multiple resolutions</th>
       <td>
         <my-feature-boolean [value]="serverConfig.live.transcoding.enabled && serverConfig.live.transcoding.enabledResolutions.length > 1"></my-feature-boolean>
       </td>
     </tr>
 
     <tr *ngIf="serverConfig.live.enabled">
-      <th i18n class="sub-label" scope="row">Max parallel lives</th>
+      <th i18n class="t-sub-label" scope="row">Max parallel lives</th>
       <td i18n>
         {{ maxUserLives }} per user / {{ maxInstanceLives }} per instance
       </td>
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">Video Import</th>
+      <th i18n class="t-label" colspan="2">Video Import</th>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">HTTP import (YouTube, Vimeo, direct URL...)</th>
+      <th i18n class="t-sub-label" scope="row">HTTP import (YouTube, Vimeo, direct URL...)</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.videos.http.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Torrent import</th>
+      <th i18n class="t-sub-label" scope="row">Torrent import</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.videos.torrent.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Channel synchronization with other platforms (YouTube, Vimeo, ...)</th>
+      <th i18n class="t-sub-label" scope="row">Channel synchronization with other platforms (YouTube, Vimeo, ...)</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.videoChannelSynchronization.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">User Import/Export</th>
+      <th i18n class="t-label" colspan="2">User Import/Export</th>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Users can export their data</th>
+      <th i18n class="t-sub-label" scope="row">Users can export their data</th>
       <td>
         <my-feature-boolean [value]="serverConfig.export.users.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Users can import their data</th>
+      <th i18n class="t-sub-label" scope="row">Users can import their data</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.users.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">Search</th>
+      <th i18n class="t-label" colspan="2">Search</th>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Users can resolve distant content</th>
+      <th i18n class="t-sub-label" scope="row">Users can resolve distant content</th>
       <td>
         <my-feature-boolean [value]="serverConfig.search.remoteUri.users"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">Plugins & Themes</th>
+      <th i18n class="t-label" colspan="2">Plugins & Themes</th>
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Available themes</th>
+      <th i18n class="t-sub-label" scope="row">Available themes</th>
       <td>
         <span class="theme" *ngFor="let theme of serverConfig.theme.registered">
           {{ theme.name }}
@@ -162,7 +162,7 @@
     </tr>
 
     <tr>
-      <th i18n class="sub-label" scope="row">Plugins enabled</th>
+      <th i18n class="t-sub-label" scope="row">Plugins enabled</th>
       <td>
         <span class="plugin" *ngFor="let plugin of serverConfig.plugin.registered">
           {{ plugin.name }}

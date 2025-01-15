@@ -49,7 +49,7 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.42
-        ipv6_address: 2001:db8:2::42
+        ipv6_address: fdab:e4b3:21a2:ef1b::42
     env_file:
       - .env
 

@@ -1,23 +1,16 @@
 import { Routes, UrlMatchResult, UrlSegment } from '@angular/router'
-import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { POSSIBLE_LOCALES } from '@peertube/peertube-core-utils'
 import { MetaGuard } from './core'
 import { EmptyComponent } from './empty.component'
 import { HomepageRedirectComponent } from './homepage-redirect.component'
 import { USER_USERNAME_REGEX_CHARACTERS } from './shared/form-validators/user-validators'
 import { ActorRedirectGuard } from './shared/shared-main/router/actor-redirect-guard.service'
+import { VideosParentComponent } from './videos-parent.component'
 
 const routes: Routes = [
   {
     path: 'admin',
-    canActivate: [ MenuGuards.close() ],
-    canDeactivate: [ MenuGuards.open() ],
     loadChildren: () => import('./+admin/routes'),
-    canActivateChild: [ MetaGuard ]
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./+home/routes'),
     canActivateChild: [ MetaGuard ]
   },
   {
@@ -55,11 +48,19 @@ const routes: Routes = [
     loadChildren: () => import('./+video-channels/routes'),
     canActivateChild: [ MetaGuard ]
   },
+
   {
-    path: 'manage',
-    loadChildren: () => import('./+manage/routes'),
-    canActivateChild: [ MetaGuard ]
+    path: 'manage/create',
+    redirectTo: '/my-library/video-channels/create',
+    pathMatch: 'full'
   },
+
+  {
+    path: 'manage/update/:channel',
+    pathMatch: 'full',
+    redirectTo: '/my-library/video-channels/update/:channel'
+  },
+
   {
     path: 'p',
     loadChildren: () => import('./shared/shared-plugin-pages/routes'),
@@ -131,11 +132,33 @@ const routes: Routes = [
       preload: 5000
     }
   },
+
+  // /home and other /videos routes
   {
-    path: 'videos',
-    loadChildren: () => import('./+videos/routes'),
-    canActivateChild: [ MetaGuard ]
+    matcher: (url): UrlMatchResult => {
+      if (url.length < 1) return null
+
+      const matchResult = url[0].path === 'home' || url[0].path === 'videos'
+      if (!matchResult) return null
+
+      // So the children can detect the appropriate route
+      return { consumed: [] }
+    },
+    component: VideosParentComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () => import('./+home/routes'),
+        canActivateChild: [ MetaGuard ]
+      },
+      {
+        path: 'videos',
+        loadChildren: () => import('./+videos/routes'),
+        canActivateChild: [ MetaGuard ]
+      }
+    ]
   },
+
   {
     path: 'video-playlists/watch',
     redirectTo: 'videos/watch/playlist'

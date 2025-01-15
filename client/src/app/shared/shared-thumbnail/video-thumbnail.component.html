@@ -1,10 +1,12 @@
-<a [ariaLabel]="ariaLabel" *ngIf="!videoHref" [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" class="video-thumbnail" tabindex="-1">
-  <ng-container *ngTemplateOutlet="aContent"></ng-container>
-</a>
-
-<a [ariaLabel]="ariaLabel" *ngIf="videoHref" [href]="videoHref" [target]="videoTarget" class="video-thumbnail" tabindex="-1">
-  <ng-container *ngTemplateOutlet="aContent"></ng-container>
-</a>
+@if (videoHref) {
+  <a [ariaLabel]="ariaLabel" [href]="videoHref" [target]="videoTarget" class="video-thumbnail" tabindex="-1">
+    <ng-container *ngTemplateOutlet="aContent"></ng-container>
+  </a>
+} @else {
+  <a [ariaLabel]="ariaLabel" [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" class="video-thumbnail" tabindex="-1">
+    <ng-container *ngTemplateOutlet="aContent"></ng-container>
+  </a>
+}
 
 <ng-template #aContent>
   <img alt="" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
@@ -27,9 +29,14 @@
   <div class="label-overlay danger"><ng-content select="label-danger"></ng-content></div>
 
   @if (video.isLive) {
-    <div  class="live-overlay" [ngClass]="{ 'live-ended': isLiveEnded() }">
-      <ng-container i18n *ngIf="!isLiveEnded()">LIVE</ng-container>
-      <ng-container i18n *ngIf="isLiveEnded()">LIVE ENDED</ng-container>
+    <div  class="live-overlay" [ngClass]="{ 'live-streaming': isLiveStreaming(), 'ended-live': isEndedLive() }">
+      @if (isLiveStreaming()) {
+        <ng-container i18n>LIVE</ng-container>
+      } @else if (isEndedLive()) {
+        <ng-container i18n>LIVE ENDED</ng-container>
+      } @else {
+        <ng-container i18n>WAIT LIVE</ng-container>
+      }
     </div>
   } @else {
     <div class="duration-overlay" [ariaLabel]="getDurationOverlayLabel()">{{ video.durationLabel }}</div>

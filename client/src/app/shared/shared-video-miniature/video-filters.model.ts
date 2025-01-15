@@ -156,8 +156,8 @@ export class VideoFilters {
       canRemove: false,
       label: $localize`Scope`,
       value: this.scope === 'federated'
-        ? $localize`Federated`
-        : $localize`Local`
+        ? $localize`All platforms`
+        : $localize`This platform`
     })
 
     if (this.languageOneOf && this.languageOneOf.length !== 0) {
@@ -192,13 +192,13 @@ export class VideoFilters {
       this.activeFilters.push({
         key: 'live',
         canRemove: true,
-        label: $localize`Live videos`
+        label: $localize`Only lives`
       })
     } else if (this.live === 'false') {
       this.activeFilters.push({
         key: 'live',
         canRemove: true,
-        label: $localize`VOD videos`
+        label: $localize`Only VOD`
       })
     }
 

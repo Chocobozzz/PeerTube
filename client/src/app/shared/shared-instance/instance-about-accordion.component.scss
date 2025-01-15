@@ -15,8 +15,7 @@
 }
 
 my-global-icon {
-  line-height: 24px;
-
+  @include global-icon-size(24px);
   @include margin-right(15px);
 }
 

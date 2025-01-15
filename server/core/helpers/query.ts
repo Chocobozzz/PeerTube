@@ -23,7 +23,6 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'include',
     'skipCount',
     'hasHLSFiles',
-    'hasWebtorrentFiles', // TODO: Remove in v7
     'hasWebVideoFiles',
     'search',
     'excludeAlreadyWatched',

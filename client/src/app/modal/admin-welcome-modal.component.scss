@@ -6,6 +6,10 @@
   align-items: center;
   justify-content: center;
   margin-top: 50px;
+
+  @include on-small-main-col {
+    flex-wrap: wrap;
+  }
 }
 
 .mascot-fw {
@@ -46,7 +50,7 @@ li {
 }
 
 .link-block {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   padding: 10px;
   transition: background-color 0.2s ease-in;
   flex-basis: 33%;

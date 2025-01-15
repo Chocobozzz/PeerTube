@@ -46,13 +46,15 @@
   </div>
 
   <div class="comment-buttons">
-    <button *ngIf="isAddButtonDisplayed()" class="peertube-button tertiary-button cancel-button" (click)="cancelCommentReply()" type="button" i18n>
-      Cancel
-    </button>
+    @if (isAddButtonDisplayed()) {
+      <button class="peertube-button tertiary-button cancel-button me-2" (click)="cancelCommentReply()" type="button" i18n>
+        Cancel
+      </button>
 
-    <button *ngIf="isAddButtonDisplayed()" class="peertube-button orange-button" [disabled]="!form.valid || addingComment">
-      {{ addingCommentButtonValue }}
-    </button>
+      <button class="peertube-button primary-button" [disabled]="!form.valid || addingComment">
+        {{ addingCommentButtonValue }}
+      </button>
+    }
   </div>
 </form>
 
@@ -75,11 +77,11 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
       (click)="hideModals()" (key.enter)="hideModals()"
     >
 
-    <my-login-link i18n-label label="Login to comment" className="peertube-button-link orange-button"></my-login-link>
+    <my-login-link i18n-label label="Login to comment" className="peertube-button-link primary-button"></my-login-link>
   </div>
 </ng-template>
 

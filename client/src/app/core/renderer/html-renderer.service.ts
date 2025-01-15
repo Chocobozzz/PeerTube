@@ -4,7 +4,7 @@ import {
   getDefaultSanitizedSchemes,
   getDefaultSanitizedTags
 } from '@peertube/peertube-core-utils'
-import DOMPurify, { DOMPurifyI } from 'dompurify'
+import DOMPurify, { DOMPurify as DOMPurifyI } from 'dompurify'
 import { LinkifierService } from './linkifier.service'
 
 @Injectable()
@@ -24,7 +24,7 @@ export class HtmlRendererService {
   }
 
   private addHrefHook (dompurifyInstance: DOMPurifyI) {
-    dompurifyInstance.addHook('afterSanitizeAttributes', node => {
+    dompurifyInstance.addHook('afterSanitizeAttributes', (node: HTMLElement) => {
       if ('target' in node) {
         node.setAttribute('target', '_blank')
 
@@ -40,7 +40,7 @@ export class HtmlRendererService {
   private addCheckSchemesHook (dompurifyInstance: DOMPurifyI, schemes: string[]) {
     const regex = new RegExp(`^(${schemes.join('|')}):`, 'im')
 
-    dompurifyInstance.addHook('afterSanitizeAttributes', node => {
+    dompurifyInstance.addHook('afterSanitizeAttributes', (node: HTMLElement) => {
       const anchor = document.createElement('a')
 
       if (node.hasAttribute('href')) {

@@ -27,6 +27,7 @@ import { NgFor, NgIf } from '@angular/common'
 import { NumberFormatterPipe } from '@app/shared/shared-main/common/number-formatter.pipe'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 
 type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries' | 'regions'
 
@@ -45,9 +46,9 @@ type ChartBuilderResult = {
 
 type Card = { label: string, value: string | number, moreInfo?: string, help?: string }
 
-ChartJSDefaults.backgroundColor = getComputedStyle(document.body).getPropertyValue('--mainBackgroundColor')
-ChartJSDefaults.borderColor = getComputedStyle(document.body).getPropertyValue('--greySecondaryBackgroundColor')
-ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--mainForegroundColor')
+ChartJSDefaults.backgroundColor = getComputedStyle(document.body).getPropertyValue('--bg')
+ChartJSDefaults.borderColor = getComputedStyle(document.body).getPropertyValue('--bg-secondary-500')
+ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--fg')
 
 @Component({
   templateUrl: './video-stats.component.html',
@@ -69,7 +70,8 @@ ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--main
     NgbNavContent,
     ChartModule,
     ButtonComponent,
-    NgbNavOutlet
+    NgbNavOutlet,
+    GlobalIconComponent
   ]
 })
 export class VideoStatsComponent implements OnInit {
@@ -583,7 +585,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private buildChartColor () {
-    return getComputedStyle(document.body).getPropertyValue('--mainColorLighter')
+    return getComputedStyle(document.body).getPropertyValue('--border-primary')
   }
 
   private formatXTick (options: {

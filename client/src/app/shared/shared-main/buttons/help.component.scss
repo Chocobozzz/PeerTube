@@ -4,14 +4,16 @@
 .help-tooltip-button {
   my-global-icon {
     width: 17px;
+    height: 17px;
+    line-height: 17px;
+    display: inline-block;
     position: relative;
     top: -1px;
-
-    @include apply-svg-color(pvar(--greyForegroundColor));
+    color: pvar(--fg-400);
   }
 }
 
-::ng-deep {
+:host ::ng-deep {
   .help-popover {
     min-width: 200px;
     max-width: 300px;

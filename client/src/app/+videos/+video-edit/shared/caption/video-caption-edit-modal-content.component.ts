@@ -330,13 +330,9 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
     this.openedModal.close()
   }
 
-  getSegmentClasses (segment: Segment) {
-    return { active: this.activeSegment === segment, ['segment-' + segment.id]: true }
-  }
-
   private scrollToSegment (segment: Segment) {
     setTimeout(() => {
-      const element = document.querySelector<HTMLElement>('.segment-' + segment.id)
+      const element = document.querySelector<HTMLElement>(`.segments > div:nth-child(${parseInt(segment.id) + 1})`)
       if (!element) return
 
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })

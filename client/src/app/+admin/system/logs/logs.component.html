@@ -1,10 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Logs</h1>
-  </div>
-</div>
-
 <div class="header">
 
   <div>
@@ -23,7 +16,7 @@
 
       <my-select-options inputId="log-start-date" [items]="timeChoices" [(ngModel)]="startDate" (ngModelChange)="refresh()">
         <ng-template ptTemplate="item" let-item>
-          {{ item.label }} ({{ item.id | date: item.dateFormat }} - <span i18n>now</span>)
+          {{ item.label }} ({{ item.id | ptDate: item.dateFormat }} - <span i18n>now</span>)
         </ng-template>
       </my-select-options>
     </div>

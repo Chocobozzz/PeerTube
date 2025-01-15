@@ -2,11 +2,12 @@ import { forkJoin, Observable } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ServerService } from '@app/core'
-import { About, ServerStats } from '@peertube/peertube-models'
+import { About, ServerConfig, ServerStats } from '@peertube/peertube-models'
 import { AboutHTML, InstanceService } from '@app/shared/shared-main/instance/instance.service'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 
 export type ResolverData = {
+  serverConfig: ServerConfig
   serverStats: ServerStats
   about: About
   languages: string[]
@@ -27,14 +28,17 @@ export class AboutInstanceResolver {
   resolve (): Observable<ResolverData> {
     return forkJoin([
       this.buildInstanceAboutObservable(),
-      this.buildInstanceStatsObservable()
+      this.serverService.getServerStats(),
+      this.serverService.getConfig()
     ]).pipe(
       map(([
         [ about, languages, categories, aboutHTML, { rootElement } ],
-        serverStats
+        serverStats,
+        serverConfig
       ]) => {
         return {
           serverStats,
+          serverConfig,
           about,
           languages,
           categories,
@@ -58,9 +62,5 @@ export class AboutInstanceResolver {
           ])
         })
       )
-  }
-
-  private buildInstanceStatsObservable () {
-    return this.serverService.getServerStats()
   }
 }

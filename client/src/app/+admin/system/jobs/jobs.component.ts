@@ -38,10 +38,10 @@ import { JobService } from './job.service'
   ]
 })
 export class JobsComponent extends RestTable implements OnInit {
-  private static LOCAL_STORAGE_STATE = 'jobs-list-state'
-  private static LOCAL_STORAGE_TYPE = 'jobs-list-type'
+  private static LS_STATE = 'jobs-list-state'
+  private static LS_TYPE = 'jobs-list-type'
 
-  jobState?: JobStateClient
+  jobState: JobStateClient = 'all'
   jobStates: JobStateClient[] = [ 'all', 'active', 'completed', 'failed', 'waiting', 'delayed' ]
   jobStateItems: SelectOptionsItem[] = this.jobStates.map(s => ({
     id: s,
@@ -175,15 +175,15 @@ export class JobsComponent extends RestTable implements OnInit {
   }
 
   private loadJobStateAndType () {
-    const state = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_STATE)
-    if (state) this.jobState = state as JobState
+    const state = peertubeLocalStorage.getItem(JobsComponent.LS_STATE)
+    if (state && state !== 'undefined') this.jobState = state as JobState
 
-    const jobType = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_TYPE)
-    if (jobType) this.jobType = jobType as JobType
+    const jobType = peertubeLocalStorage.getItem(JobsComponent.LS_TYPE)
+    if (jobType && jobType !== 'undefined') this.jobType = jobType as JobType
   }
 
   private saveJobStateAndType () {
-    peertubeLocalStorage.setItem(JobsComponent.LOCAL_STORAGE_STATE, this.jobState)
-    peertubeLocalStorage.setItem(JobsComponent.LOCAL_STORAGE_TYPE, this.jobType)
+    peertubeLocalStorage.setItem(JobsComponent.LS_STATE, this.jobState)
+    peertubeLocalStorage.setItem(JobsComponent.LS_TYPE, this.jobType)
   }
 }

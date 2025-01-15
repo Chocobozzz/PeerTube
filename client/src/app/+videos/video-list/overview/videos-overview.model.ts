@@ -16,5 +16,4 @@ export class VideosOverview implements VideosOverviewServer {
     tag: string
     videos: Video[]
   }[]
-  [key: string]: any
 }

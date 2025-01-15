@@ -199,7 +199,7 @@ export class VideoWatchPage {
 
     await textarea.setValue(comment)
 
-    const confirmButton = await $('.comment-buttons .orange-button')
+    const confirmButton = await $('.comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await confirmButton.click()
 
@@ -211,19 +211,21 @@ export class VideoWatchPage {
   async createReply (comment: string) {
     const replyButton = await $('button.comment-action-reply')
     await replyButton.waitForClickable()
-    await replyButton.scrollIntoView()
+    await replyButton.scrollIntoView({ block: 'center' })
     await replyButton.click()
 
     const textarea = await $('my-video-comment my-video-comment-add textarea')
     await textarea.waitForClickable()
     await textarea.setValue(comment)
 
-    const confirmButton = await $('my-video-comment .comment-buttons .orange-button')
+    const confirmButton = await $('my-video-comment .comment-buttons .primary-button')
     await confirmButton.waitForClickable()
+    await replyButton.scrollIntoView({ block: 'center' })
     await confirmButton.click()
 
-    const createdComment = await (await $('.is-child .comment-html p')).getText()
+    const createdComment = await $('.is-child .comment-html p')
+    await createdComment.waitForDisplayed()
 
-    return expect(createdComment).toBe(comment)
+    return expect(await createdComment.getText()).toBe(comment)
   }
 }

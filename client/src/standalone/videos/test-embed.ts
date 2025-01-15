@@ -157,5 +157,18 @@ window.addEventListener('load', async () => {
   }
 
   player.getVolume().then(volume => updateVolume(volume))
-  player.addEventListener('volumeChange', volume => updateVolume(volume))
+  player.addEventListener('volumeChange', volume => updateVolume(volume));
+
+  (window as any).getPlayerStatus = async () => {
+    try {
+      const currentTime = await player.getCurrentTime()
+      const currentStatus = await player.isPlaying()
+        ? 'playing'
+        : 'not playing'
+
+      document.querySelector('#player-status').textContent = currentStatus + ': ' + currentTime + 's'
+    } catch (err) {
+      console.error('Cannot get player status', err)
+    }
+  }
 })

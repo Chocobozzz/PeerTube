@@ -1,18 +1,19 @@
-import { SortMeta, SharedModule } from 'primeng/api'
+import { NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { ActorFollow } from '@peertube/peertube-models'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
-import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgIf, DatePipe } from '@angular/common'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { ActorFollow } from '@peertube/peertube-models'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 
 @Component({
   selector: 'my-followers-list',
@@ -30,7 +31,7 @@ import { InstanceFollowService } from '@app/shared/shared-instance/instance-foll
     ButtonComponent,
     DeleteButtonComponent,
     AutoColspanDirective,
-    DatePipe
+    PTDatePipe
   ]
 })
 export class FollowersListComponent extends RestTable <ActorFollow> implements OnInit {

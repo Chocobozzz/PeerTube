@@ -624,6 +624,14 @@ describe('Test managing runners', function () {
       it('Should fail with an unknown runner token', async function () {
         await server.runnerJobs.request({ runnerToken: badUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       })
+
+      it('Should fail with a bad jobTypes token', async function () {
+        await server.runnerJobs.request({ runnerToken, jobTypes: 'toto' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      })
+
+      it('Should succeed with the correct params', async function () {
+        await server.runnerJobs.request({ runnerToken, jobTypes: [] })
+      })
     })
 
     describe('Accept', function () {

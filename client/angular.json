@@ -17,6 +17,10 @@
             "translation": "src/locale/angular.ar.xlf",
             "baseHref": "/client/ar/"
           },
+          "sk": {
+            "translation": "src/locale/angular.sk-SK.xlf",
+            "baseHref": "/client/sk-SK/"
+          },
           "fa": {
             "translation": "src/locale/angular.fa-IR.xlf",
             "baseHref": "/client/fa-IR/"
@@ -208,11 +212,7 @@
               "is-plain-object",
               "parse-srcset",
               "deepmerge",
-              "core-js/features/reflect",
-              "@formatjs/intl-locale/polyfill",
-              "@formatjs/intl-locale/should-polyfill",
-              "@formatjs/intl-pluralrules/polyfill-force",
-              "@formatjs/intl-pluralrules/should-polyfill"
+              "core-js/features/reflect"
             ],
             "scripts": [],
             "extractLicenses": false,

@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
 .root {
   height: auto;
@@ -7,8 +8,6 @@
   align-items: center;
 
   .button-file {
-    @include peertube-button-file(auto);
-
     &.with-icon {
       @include button-with-icon;
     }

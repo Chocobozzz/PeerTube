@@ -1,22 +1,218 @@
+@use 'sass:math';
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
-.publish-button {
-  @include button-with-icon(21px, 3px, -1px);
-  @include margin-right(25px);
+.root {
+  --co-logo-size: 34px;
+  --co-root-padding: 1.5rem;
 
-  @media screen and (max-width: $mobile-view) {
-    padding-right: 10px;
-    padding-left: 10px;
+  background-color: pvar(--bg);
 
-    @include margin-right(10px);
+  padding: var(--co-root-padding);
+  width: 100%;
 
-    .icon.icon-upload {
-      @include margin-right(0);
-    }
+  display: flex;
+  align-items: center;
+}
 
-    .publish-button-label {
+.peertube-title {
+  flex-shrink: 1;
+  min-width: var(--co-logo-size);
+  flex-grow: 1;
+  font-size: 24px;
+  font-weight: $font-bold;
+  color: inherit !important;
+  display: flex;
+  align-items: center;
+  min-height: 46px; // Prevent layout shifting when waiting for the right part of the header to load
+
+  @include padding-left(18px);
+  @include margin-right(0.5rem);
+  @include disable-default-a-behaviour;
+}
+
+.instance-name {
+  width: 100%;
+
+  @include ellipsis;
+  @include margin-left(10px);
+}
+
+.icon-logo {
+  display: inline-block;
+  width: var(--co-logo-size);
+  height: var(--co-logo-size);
+  min-width: var(--co-logo-size);
+  max-width: var(--co-logo-size);
+
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+my-search-typeahead {
+  max-width: 270px;
+  width: 100%;
+
+  @include margin-right(1.5rem);
+}
+
+.margin-button {
+  @include margin-right(0.75rem);
+}
+
+.menu-button {
+  display: none;
+  justify-self: end;
+}
+
+.dropdown {
+  z-index: #{z('header') + 1} !important;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  @include dropdown-with-icon-item;
+
+  &:hover {
+    .hover-display-toggle {
       display: none;
     }
+
+    .hover-display-toggle[hidden] {
+      display: inherit !important;
+    }
+  }
+}
+
+.logged-in-container {
+  border-radius: 25px;
+  transition: all .1s ease-in-out;
+  cursor: pointer;
+  max-width: 250px;
+  height: 100%;
+
+  .display-name {
+    font-weight: $font-bold;
+    color: pvar(--fg);
+  }
+
+  .username {
+    color: pvar(--fg-300);
+  }
+
+  > .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+
+    &::after {
+      // Disable bootstrap toggle
+      border: 0;
+    }
+  }
+}
+
+my-actor-avatar {
+  width: 34px;
+  height: 34px;
+}
+
+.login-icon {
+  display: none;
+}
+
+@media screen and (max-width: $menu-overlay-view) {
+  .peertube-title {
+    @include padding-left(0);
+  }
+
+  .icon-logo {
+    @include margin-left(0);
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  .root {
+    --co-root-padding: 1rem;
+  }
+
+  my-search-typeahead {
+    @include margin-right(0.5rem);
+  }
+
+  .margin-button[theme=tertiary] {
+    @include margin-right(5px);
+  }
+
+  my-actor-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .dropdown-toggle {
+    @include peertube-button;
+    @include rounded-icon-button;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .logged-in-info {
+    display: none;
+  }
+
+  .login-icon {
+    display: inline-block;
+  }
+
+  .login-label {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .root {
+    --co-logo-size: 48px;
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    row-gap: 0.5rem;
+    justify-content: space-between;
+
+    > * {
+      grid-row: 1;
+    }
+  }
+
+  .buttons-container {
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  .menu-button {
+    display: block;
+    position: relative;
+    right: -10px;
+  }
+
+  my-search-typeahead {
+    grid-row: 2 !important;
+    grid-column: 1 / 4;
+    max-width: 100%;
+
+    @include margin-right(0);
+  }
+
+  .peertube-title {
+    @include margin-right(5px)
+  }
+
+  .instance-name {
+    display: none;
   }
 }

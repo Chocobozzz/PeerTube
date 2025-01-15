@@ -2,7 +2,7 @@ import CliTable3 from 'cli-table3'
 import { ensureDir } from 'fs-extra/esm'
 import { Client as NetIPC } from '@peertube/net-ipc'
 import { ConfigManager } from '../config-manager.js'
-import { IPCReponse, IPCReponseData, IPCRequest } from './shared/index.js'
+import { IPCResponse, IPCResponseData, IPCRequest } from './shared/index.js'
 
 export class IPCClient {
   private netIPC: NetIPC
@@ -39,7 +39,7 @@ export class IPCClient {
       ...options
     }
 
-    const { success, error } = await this.netIPC.request(req) as IPCReponse
+    const { success, error } = await this.netIPC.request(req) as IPCResponse
 
     if (success) console.log('PeerTube instance registered')
     else console.error('Could not register PeerTube instance on runner server side', error)
@@ -54,7 +54,7 @@ export class IPCClient {
       ...options
     }
 
-    const { success, error } = await this.netIPC.request(req) as IPCReponse
+    const { success, error } = await this.netIPC.request(req) as IPCResponse
 
     if (success) console.log('PeerTube instance unregistered')
     else console.error('Could not unregister PeerTube instance on runner server side', error)
@@ -65,7 +65,7 @@ export class IPCClient {
       type: 'list-registered'
     }
 
-    const { success, error, data } = await this.netIPC.request(req) as IPCReponse<IPCReponseData>
+    const { success, error, data } = await this.netIPC.request(req) as IPCResponse<IPCResponseData>
     if (!success) {
       console.error('Could not list registered PeerTube instances', error)
       return
@@ -81,6 +81,19 @@ export class IPCClient {
 
     console.log(table.toString())
   }
+
+  // ---------------------------------------------------------------------------
+
+  async askGracefulShutdown () {
+    const req: IPCRequest = { type: 'graceful-shutdown' }
+
+    const { success, error } = await this.netIPC.request(req) as IPCResponse
+
+    if (success) console.log('Graceful shutdown acknowledged by the runner')
+    else console.error('Could not graceful shutdown runner', error)
+  }
+
+  // ---------------------------------------------------------------------------
 
   stop () {
     this.netIPC.destroy()

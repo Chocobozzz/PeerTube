@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 form {
   max-width: 340px;
@@ -12,11 +13,6 @@ my-input-text {
 
 input[type=email] {
   @include peertube-input-text(100%);
-}
-
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
 }
 
 .pending-email {

@@ -22,7 +22,7 @@ export class InstanceFollowService {
 
   getFollowing (options: {
     pagination: RestPagination
-    sort: SortMeta
+    sort?: SortMeta
     search?: string
     actorType?: ActivityPubActorType
     state?: FollowState

@@ -1,11 +1,11 @@
-import express from 'express'
-import validator from 'validator'
+import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { updateM3U8AndShaPlaylist } from '@server/lib/hls.js'
 import { removeAllWebVideoFiles, removeHLSFile, removeHLSPlaylist, removeWebVideoFile } from '@server/lib/video-file.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
-import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import express from 'express'
+import validator from 'validator'
 import {
   asyncMiddleware,
   authenticate,
@@ -40,15 +40,13 @@ filesRouter.delete('/:id/hls/:videoFileId',
   asyncMiddleware(removeHLSFileController)
 )
 
-filesRouter.delete(
-  [ '/:id/webtorrent', '/:id/web-videos' ], // TODO: remove webtorrent in V7
+filesRouter.delete('/:id/web-videos',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteWebVideoValidator),
   asyncMiddleware(removeAllWebVideoFilesController)
 )
-filesRouter.delete(
-  [ '/:id/webtorrent/:videoFileId', '/:id/web-videos/:videoFileId' ], // TODO: remove webtorrent in V7
+filesRouter.delete('/:id/web-videos/:videoFileId',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
   asyncMiddleware(videoFilesDeleteWebVideoFileValidator),

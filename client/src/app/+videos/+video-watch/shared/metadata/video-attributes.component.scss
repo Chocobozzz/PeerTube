@@ -10,14 +10,14 @@
 .attribute-label {
   min-width: 142px;
   display: inline-block;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
   font-weight: $font-bold;
 
   @include padding-right(5px);
 }
 
 a.attribute-value {
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
 
   @include disable-default-a-behaviour;
 

@@ -3,15 +3,8 @@
   <div class="form-group">
     <label i18n for="theme">Theme</label>
 
-    <div class="peertube-select-container">
-      <select formControlName="theme" id="theme" class="form-control">
-        <option i18n value="instance-default">{{ instanceName }} default theme ({{ getDefaultInstanceThemeLabel() }})</option>
-        <option i18n value="default">{{ getDefaultThemeLabel() }}</option>
-
-        <option *ngFor="let theme of availableThemes" [value]="theme.id">{{ theme.label }}</option>
-      </select>
-    </div>
+    <my-select-options inputId="theme" formControlName="theme" [items]="availableThemes"></my-select-options>
   </div>
 
-  <input *ngIf="!reactiveUpdate" type="submit" class="mt-0" i18n-value value="Save interface settings" [disabled]="!form.valid">
+  <input *ngIf="!reactiveUpdate" type="submit" class="peertube-button primary-button" i18n-value value="Save interface settings" [disabled]="!form.valid">
 </form>

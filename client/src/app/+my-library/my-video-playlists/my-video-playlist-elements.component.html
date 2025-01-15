@@ -7,10 +7,8 @@
     ></my-video-playlist-miniature>
 
     <div class="playlist-buttons">
-      <button (click)="showShareModal()" class="action-button share-button">
-        <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
-        <span class="icon-text" i18n>Share</span>
-      </button>
+
+      <my-button class="me-3" (click)="showShareModal()" i18n icon="share">Share</my-button>
 
       <my-action-dropdown
         *ngIf="isRegularPlaylist(playlist)"

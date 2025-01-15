@@ -1,6 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 @use '_actor' as *;
+@use '_form-mixins' as *;
 
 .followers-header {
   margin-bottom: 30px;

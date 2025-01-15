@@ -1,10 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="peertube-x" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Muted servers</h1>
-  </div>
-</div>
-
 <p-table
   [value]="blockedServers" [paginator]="totalRecords > 0" [totalRecords]="totalRecords"
   [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions" [first]="pagination.start"
@@ -17,7 +10,7 @@
       <div class="left-buttons">
         <button class="peertube-create-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
           <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Mute domain</ng-container>
+          <ng-container i18n>Mute domains</ng-container>
         </button>
       </div>
 
@@ -38,7 +31,7 @@
   <ng-template pTemplate="body" let-serverBlock>
     <tr>
       <td class="action-cell">
-        <button class="peertube-button grey-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
+        <button class="peertube-button secondary-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
       </td>
       <td>
         <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
@@ -46,7 +39,7 @@
           <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
-      <td>{{ serverBlock.createdAt | date: 'short' }}</td>
+      <td>{{ serverBlock.createdAt | ptDate: 'short' }}</td>
     </tr>
   </ng-template>
 

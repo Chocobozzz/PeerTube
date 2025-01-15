@@ -15,16 +15,9 @@ export function bytes (value: number) {
   return [ calc, format.type ]
 }
 
-export function getRtcConfig () {
+export function getRtcConfig (stunServers: string[]) {
   return {
-    iceServers: [
-      {
-        urls: 'stun:stun.stunprotocol.org'
-      },
-      {
-        urls: 'stun:stun.framasoft.org'
-      }
-    ]
+    iceServers: stunServers.map(s => ({ urls: s }))
   }
 }
 

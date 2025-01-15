@@ -1,14 +1,14 @@
-<div class="d-inline-flex position-relative" id="typeahead-container">
+<div class="position-relative" id="typeahead-container">
+  <button class="button-unstyle search-button" title="Search" i18n-title (click)="doSearch()">
+    <my-global-icon iconName="search"></my-global-icon>
+  </button>
+
   <input
     type="search" id="search-video" name="search-video" #searchVideo
-    i18n-ariaLabel aria-label="Search videos, playlists, channels…" i18n-placeholder placeholder="Search videos, playlists, channels…"
+    i18n-ariaLabel aria-label="Search videos, playlists, channels…" i18n-placeholder placeholder="Search videos, channels…"
     [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)"
     autocomplete="off" aria-describedby="typeahead-input-help"
   >
-
-  <button class="border-0 search-button" title="Search" i18n-title (click)="doSearch()">
-    <my-global-icon iconName="search"></my-global-icon>
-  </button>
 
   <div class="position-absolute jump-to-suggestions">
 
@@ -28,7 +28,7 @@
     <!-- suggestion help, not shown until one of the suggestions is selected and specific to that suggestion -->
     <div *ngIf="showSearchGlobalHelp()" id="typeahead-suggestion-help" class="overflow-hidden">
       <div class="d-flex justify-content-between">
-        <div class="small-title mb-2" i18n>GLOBAL SEARCH</div>
+        <div class="section-label mb-2" i18n>GLOBAL SEARCH</div>
 
         <span *ngIf="serverConfig" class="muted" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
       </div>
@@ -39,7 +39,7 @@
     <!-- search instructions, when search input is empty -->
     <div [hidden]="this.search" id="typeahead-input-help" class="overflow-hidden">
       <span class="muted" i18n>Your query will be matched against video names or descriptions, channel names.</span>
-      <div class="mt-3 mb-2 small-title" i18n>ADVANCED SEARCH</div>
+      <div class="mt-3 mb-2 section-label" i18n>ADVANCED SEARCH</div>
 
       <ul>
         <li>

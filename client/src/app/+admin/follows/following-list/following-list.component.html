@@ -1,10 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Subscriptions of your instance</h1>
-  </div>
-</div>
-
 <p-table
   [value]="following" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
@@ -16,7 +9,7 @@
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
           [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
@@ -27,8 +20,10 @@
         </button>
       </div>
 
-      <div class="ms-auto">
+      <div class="ms-auto d-flex gap-2 flex-wrap">
         <my-advanced-input-filter [filters]="searchFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+
+        <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
       </div>
     </div>
   </ng-template>
@@ -68,7 +63,7 @@
         <span *ngIf="follow.state === 'rejected'" class="pt-badge badge-red" i18n>Rejected</span>
       </td>
 
-      <td>{{ follow.createdAt | date: 'short' }}</td>
+      <td>{{ follow.createdAt | ptDate: 'short' }}</td>
       <td>
         <my-redundancy-checkbox
           *ngIf="isInstanceFollowing(follow)"

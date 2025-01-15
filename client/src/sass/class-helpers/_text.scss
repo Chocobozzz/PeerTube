@@ -12,30 +12,88 @@
   color: pvar(--green);
 }
 
-@mixin underline-orange {
-  text-decoration: underline !important;
-  text-decoration-color: pvar(--mainColor) !important;
-  text-underline-offset: 0.25em !important;
-  text-decoration-thickness: 0.15em !important;
+.text-fg {
+  color: pvar(--fg)
 }
 
-.link-orange {
-  color: pvar(--mainForegroundColor);
+.fg-100 {
+  color: pvar(--fg-100)
+}
+
+// ---------------------------------------------------------------------------
+
+.fg-100 {
+  color: pvar(--fg-100)
+}
+
+.fg-150 {
+  color: pvar(--fg-150)
+}
+
+.fg-200 {
+  color: pvar(--fg-200)
+}
+
+.fg-250 {
+  color: pvar(--fg-250)
+}
+
+.fg-300 {
+  color: pvar(--fg-300)
+}
+
+.fg-350 {
+  color: pvar(--fg-350)
+}
+
+.fg-400 {
+  color: pvar(--fg-400)
+}
+
+.fg-450 {
+  color: pvar(--fg-450)
+}
+
+.fg-500 {
+  color: pvar(--fg-500)
+}
+
+// ---------------------------------------------------------------------------
+
+.total-items {
+  color: pvar(--fg-300);
+  font-weight: $font-semibold;
+}
+
+.link-primary {
+  color: pvar(--fg);
   font-weight: $font-semibold;
   line-height: 1.1;
 
-  @include underline-orange;
+  @include underline-primary;
 
   &:hover {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
     opacity: 0.8;
 
-    @include underline-orange;
+    @include underline-primary;
   }
 }
 
-.underline-orange {
-  @include underline-orange;
+.border-highlight {
+  &::after {
+    content: '';
+    display: block;
+    height: 4px;
+    background-color: pvar(--border-primary);
+    border-radius: 2px;
+    position: absolute;
+    width: 20px;
+  }
+}
+
+.section-label {
+  @include section-label;
 }
 
 // ---------------------------------------------------------------------------

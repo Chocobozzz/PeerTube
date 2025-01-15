@@ -1,5 +1,7 @@
 name: Docker
 
+permissions: {}
+
 on:
   push:
     branches:

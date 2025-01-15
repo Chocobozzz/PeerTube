@@ -44,6 +44,7 @@
           ></my-peertube-checkbox>
 
           <my-timestamp-input
+            class="me-2"
             [maxTimestamp]="video.duration"
             [(ngModel)]="element.startTimestamp"
             (inputBlur)="onElementTimestampUpdate(playlist, element)"
@@ -79,6 +80,6 @@
       </div>
     </div>
 
-    <input type="submit" i18n-value value="Create" [disabled]="!form.valid">
+    <input type="submit" class="peertube-button primary-button" i18n-value value="Create" [disabled]="!form.valid">
   </form>
 </div>

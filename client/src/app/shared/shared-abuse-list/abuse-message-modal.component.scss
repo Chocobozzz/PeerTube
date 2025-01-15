@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 form {
   margin: 20px 20px 0 0;
@@ -33,7 +34,7 @@ textarea {
   max-width: 60%;
 
   .author {
-    color: var(--greyForegroundColor);
+    color: pvar(--fg-300);
     font-size: 14px;
     padding: 0 0 3px 10px;
   }
@@ -41,23 +42,23 @@ textarea {
   .bubble {
     border-radius: 10px;
     padding: 5px 10px;
-    color: var(--mainForegroundColor);
-    background-color: var(--greyBackgroundColor);
+    color: pvar(--fg);
+    background-color: pvar(--bg-secondary-400);
 
     .date {
       font-size: 13px;
-      color: var(--greyForegroundColor);
+      color: pvar(--fg-300);
     }
   }
 
   &.by-me {
 
     .bubble {
-      color: var(--mainBackgroundColor);
-      background-color: var(--mainColorLighter);
+      color: pvar(--on-primary-400);
+      background-color: pvar(--primary-400);
 
       .date {
-        color: var(--mainBackgroundColor);
+        color: pvar(--on-primary-400);
       }
     }
   }

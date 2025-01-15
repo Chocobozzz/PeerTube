@@ -207,9 +207,13 @@ export class FFmpegVOD {
         withVideo: !options.separatedAudio || !!options.resolution
       })
     } else {
+      // If we cannot copy codecs, we do not copy them at all to prevent issues like audio desync
+      // See for example https://github.com/Chocobozzz/PeerTube/issues/6438
       await this.buildVODCommand({
         ...options,
 
+        canCopyAudio: false,
+        canCopyVideo: false,
         videoStreamOnly: options.separatedAudio && !!options.resolution
       })
     }

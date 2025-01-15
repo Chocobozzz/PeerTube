@@ -5,7 +5,7 @@ import { PlaylistPluginOptions, VideoJSCaption, VideoJSStoryboard } from './peer
 
 export type PlayerMode = 'web-video' | 'p2p-media-loader'
 
-export type PeerTubePlayerContructorOptions = {
+export type PeerTubePlayerConstructorOptions = {
   playerElement: () => HTMLVideoElement
 
   controls: boolean
@@ -40,6 +40,8 @@ export type PeerTubePlayerContructorOptions = {
   language: string
 
   pluginsManager: PluginsManager
+
+  stunServers: string[]
 
   autoPlayerRatio?: {
     cssRatioVariable: string

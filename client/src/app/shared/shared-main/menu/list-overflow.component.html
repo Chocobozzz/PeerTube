@@ -1,39 +1,52 @@
-<div #itemsParent class="list-overflow-parent">
-  <span [id]="getId(id)" #itemsRendered *ngFor="let item of items; index as id">
-    <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item}"></ng-container>
-  </span>
+<div class="root">
+  <div #itemsParent class="list-overflow-parent" [ngClass]="{ 'opacity-0': !initialized, 'has-border': hasBorder }">
 
-  <ng-container *ngIf="isMenuDisplayed()">
-    <button *ngIf="isInMobileView" class="btn btn-outline-secondary btn-sm list-overflow-menu" (click)="toggleModal()">
-      <span class="chevron-down"></span>
-    </button>
+    <ul class="ul-unstyle d-flex">
+      @for (item of items; track item.label; let id = $index) {
+        @if (!item.isDisplayed || item.isDisplayed()) {
+          <li class="d-inline-block" [id]="getId(id)" #itemsRendered [style]="{ visibility: showItemsUntilIndexExcluded && id >= showItemsUntilIndexExcluded ? 'hidden' : 'inherit' }">
+            <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item}"></ng-container>
+          </li>
+        }
+      }
+    </ul>
 
-    <div
-      *ngIf="!isInMobileView" class="list-overflow-menu"
-      ngbDropdown container="body" #dropdown="ngbDropdown"
-      (mouseleave)="closeDropdownIfHovered(dropdown)" (mouseenter)="openDropdownOnHover(dropdown)"
-    >
-      <button class="btn btn-outline-secondary btn-sm" [ngClass]="{ 'route-active': active }"
-        ngbDropdownAnchor (click)="dropdownAnchorClicked(dropdown)" role="button"
-      >
-        <span class="chevron-down"></span>
-      </button>
+    @if (isMenuDisplayed()) {
+      @if (isInMobileView) {
+        <button type="button" class="peertube-button tertiary-button p-0 list-overflow-menu overflow-button" (click)="toggleModal()">
+          <span class="chevron-down"></span>
+        </button>
+      }
 
-      <div ngbDropdownMenu>
-        <a *ngFor="let item of items | slice:showItemsUntilIndexExcluded:items.length"
-          [routerLink]="item.routerLink" routerLinkActive="active" class="dropdown-item">
-          {{ item.label }}
-        </a>
+      <div [hidden]="isInMobileView" class="list-overflow-menu" ngbDropdown container="body" #dropdown="ngbDropdown">
+        <button class="peertube-button tertiary-button p-0 overflow-button" ngbDropdownToggle type="button">
+          <span class="chevron-down"></span>
+        </button>
+
+        <ul class="ul-unstyle" ngbDropdownMenu>
+          @for (item of items | slice:showItemsUntilIndexExcluded:items.length; track item.label) {
+            @if (!item.isDisplayed || item.isDisplayed()) {
+              <li>
+                <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item, dropdown: true}"></ng-container>
+              </li>
+            }
+          }
+        </ul>
       </div>
-    </div>
-  </ng-container>
-</div >
+    }
+  </div >
 
-<ng-template #modal let-close="close" let-dismiss="dismiss">
-  <div class="modal-body">
-    <a *ngFor="let item of items | slice:showItemsUntilIndexExcluded:items.length"
-       [routerLink]="item.routerLink" routerLinkActive="active" (click)="dismissOtherModals()">
-       {{ item.label }}
-    </a>
-  </div>
-</ng-template>
+  <ng-template #modal let-close="close" let-dismiss="dismiss">
+    <div class="modal-body">
+      <ul class="ul-unstyle">
+        @for (item of items | slice:showItemsUntilIndexExcluded:items.length; track item.label) {
+          @if (!item.isDisplayed || item.isDisplayed()) {
+            <li>
+              <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item, modal: true}"></ng-container>
+            </li>
+          }
+        }
+      </ul>
+    </div>
+  </ng-template>
+</div>

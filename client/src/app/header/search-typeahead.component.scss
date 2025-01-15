@@ -1,35 +1,39 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 #search-video {
   text-overflow: ellipsis;
 
-  @include peertube-input-text($search-input-width, 14px);
-  @include padding-left(10px);
-  @include padding-right(40px); // For the search icon
+  @include peertube-input-text(100%);
+
+  & {
+    padding-inline-start: 42px; // For the search icon
+    padding-inline-end: 20px; // For the search icon
+  }
 
   &::placeholder {
-    color: pvar(--inputPlaceholderColor);
+    color: pvar(--input-placeholder);
   }
 }
 
 .search-button {
-  display: inline-flex;
-  align-self: center;
   position: absolute;
+  top: 0;
+  bottom: 0;
 
-  @include right(5px);
+  @include left(18px);
 
   &:hover {
     opacity: 0.8;
   }
 
   my-global-icon {
-    @include icon(18px);
+    height: 18px;
+    width: 18px;
 
-    & {
-      display: inline-flex;
-    }
+    position: relative;
+    top: -2px;
   }
 }
 
@@ -43,8 +47,8 @@
 #typeahead-suggestion-help,
 #typeahead-input-help,
 .suggestion {
-  border: 1px solid pvar(--mainBackgroundColor);
-  background: pvar(--mainBackgroundColor);
+  border: 1px solid pvar(--bg);
+  background: pvar(--bg-secondary-400);
   transition: .3s ease;
   transition-property: box-shadow;
   cursor: pointer;
@@ -80,30 +84,6 @@
 
 #typeahead-container {
   font-size: 14px;
-  margin: 0 10px;
-
-  input {
-    border: 1px solid pvar(--mainBackgroundColor) !important;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 1px 20px 0;
-    flex-grow: 1;
-    transition: box-shadow .3s ease, width .2s ease;
-  }
-
-  @media screen and (max-width: $small-view) {
-    input {
-      width: 200px;
-    }
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    input {
-      width: 150px;
-    }
-  }
-
-  span {
-    right: 10px;
-  }
 
   > div:last-child {
     // we have to switch the display and not the opacity,
@@ -134,10 +114,6 @@
       }
     }
   }
-}
-
-.small-title {
-  @include in-content-small-title;
 }
 
 my-suggestion {

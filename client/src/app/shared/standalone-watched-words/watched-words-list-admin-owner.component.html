@@ -44,7 +44,7 @@
       <td class="action-cell">
         <my-action-dropdown
           [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
-          i18n-label label="Actions" [actions]="actions" [entry]="list"
+          i18n-label label="Actions" [actions]="actions" [entry]="list" buttonSize="small"
         ></my-action-dropdown>
       </td>
 
@@ -56,7 +56,7 @@
         {{ list.words.length }} words
       </td>
 
-      <td>{{ list.updatedAt | date: 'short' }}</td>
+      <td>{{ list.updatedAt | ptDate: 'short' }}</td>
     </tr>
   </ng-template>
 

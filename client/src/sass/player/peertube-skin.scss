@@ -4,9 +4,9 @@
 @use './_player-variables' as *;
 
 body {
-  --embedForegroundColor: #{$primary-foreground-color};
+  --embed-foreground-color: #{$primary-foreground-color};
 
-  --embedBigPlayBackgroundColor: #{$primary-background-color};
+  --embed-big-play-background-color: #{$primary-background-color};
 }
 
 @mixin big-play-button-triangle-size($triangle-size) {
@@ -18,7 +18,7 @@ body {
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
-  color: pvar(--embedForegroundColor);
+  color: pvar(--embed-foreground-color);
 
   &.disabled {
     cursor: default;
@@ -67,7 +67,7 @@ body {
 
     &:focus-visible,
     &:hover {
-      background-color: var(--mainColor, #696969);
+      background-color: pvar(--primary);
     }
   }
 
@@ -101,7 +101,7 @@ body {
   }
 
   .vjs-big-play-button {
-    background-color: pvar(--embedBigPlayBackgroundColor);
+    background-color: pvar(--embed-big-play-background-color);
   }
 
   .vjs-settings-dialog,

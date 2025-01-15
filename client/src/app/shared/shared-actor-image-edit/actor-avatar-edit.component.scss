@@ -24,7 +24,7 @@
 .actor-info-username {
   position: relative;
   font-size: 14px;
-  color: pvar(--greyForegroundColor);
+  color: pvar(--fg-300);
 }
 
 .actor-info-followers {
@@ -32,7 +32,7 @@
 }
 
 .actor-img-edit-button {
-  border-radius: 50%;
+  padding: 8px 20px;
 
   position: absolute;
   bottom: 5px;
@@ -40,7 +40,7 @@
 }
 
 .button-focus-within:focus-within {
-  box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
+  box-shadow: $focus-box-shadow-form;
 }
 
 .dropdown-item {

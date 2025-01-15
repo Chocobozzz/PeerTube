@@ -376,7 +376,6 @@ describe('Test video passwords validator', function () {
 
     expect(error.code).to.equal(serverCode)
     expect(error.detail).to.equal(message)
-    expect(error.error).to.equal(message)
 
     expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
   }

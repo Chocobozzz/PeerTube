@@ -36,10 +36,6 @@
       border-radius: 2px;
     }
 
-    span {
-      color: pvar(--inputPlaceholderColor);
-    }
-
     .table-video-image-label {
       position: absolute;
       border-radius: 3px;
@@ -58,11 +54,11 @@
     flex-direction: column;
     justify-content: center;
     font-size: 90%;
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
     line-height: 1rem;
 
     div + div {
-      color: var(--greyForegroundColor);
+      color: pvar(--fg-300);
       font-size: 11px;
     }
   }

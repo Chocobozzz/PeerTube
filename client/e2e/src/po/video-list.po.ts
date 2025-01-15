@@ -11,9 +11,9 @@ export class VideoListPage {
 
     // We did not upload a file on a mobile device
     if (this.isMobileDevice === true || this.isSafari === true) {
-      url = 'https://peertube2.cpy.re/videos/local'
+      url = 'https://peertube2.cpy.re/videos/browse?scope=local'
     } else {
-      url = '/videos/recently-added'
+      url = '/videos/browse'
     }
 
     await go(url)
@@ -24,19 +24,13 @@ export class VideoListPage {
     await this.waitForList()
   }
 
-  async goOnLocal () {
-    await $('.menu-link[href="/videos/local"]').click()
-    await this.waitForTitle('Local videos')
-  }
+  async goOnBrowseVideos () {
+    await $('.menu-link*=Home').click()
 
-  async goOnRecentlyAdded () {
-    await $('.menu-link[href="/videos/recently-added"]').click()
-    await this.waitForTitle('Recently added')
-  }
-
-  async goOnTrending () {
-    await $('.menu-link[href="/videos/trending"]').click()
-    await this.waitForTitle('Trending')
+    const browseVideos = $('a*=Browse videos')
+    await browseVideos.waitForClickable()
+    await browseVideos.click()
+    await this.waitForList()
   }
 
   async goOnHomepage () {
@@ -59,32 +53,33 @@ export class VideoListPage {
     await this.waitForList()
   }
 
-  getNSFWFilter () {
-    return $$('.active-filter').filter(async a => {
-      return (await a.getText()).includes('Sensitive')
-    }).then(f => f[0])
+  async getNSFWFilter () {
+    const el = $('.active-filter*=Sensitive')
+    await el.waitForDisplayed()
+
+    return el
   }
 
   async getVideosListName () {
-    const elems = await $$('.videos .video-miniature .video-miniature-name')
+    const elems = await $$('.videos .video-miniature .video-name')
     const texts = await elems.map(e => e.getText())
 
     return texts.map(t => t.trim())
   }
 
   videoExists (name: string) {
-    return $('.video-miniature-name=' + name).isDisplayed()
+    return $('.video-name=' + name).isDisplayed()
   }
 
   async videoIsBlurred (name: string) {
-    const filter = await $('.video-miniature-name=' + name).getCSSProperty('filter')
+    const filter = await $('.video-name=' + name).getCSSProperty('filter')
 
     return filter.value !== 'none'
   }
 
   async clickOnVideo (videoName: string) {
     const video = async () => {
-      const videos = await $$('.videos .video-miniature .video-miniature-name').filter(async e => {
+      const videos = await $$('.videos .video-miniature .video-name').filter(async e => {
         const t = await e.getText()
 
         return t === videoName
@@ -106,7 +101,7 @@ export class VideoListPage {
 
   async clickOnFirstVideo () {
     const video = () => $('.videos .video-miniature .video-thumbnail')
-    const videoName = () => $('.videos .video-miniature .video-miniature-name')
+    const videoName = () => $('.videos .video-miniature .video-name')
 
     await video().waitForClickable()
 
@@ -119,7 +114,7 @@ export class VideoListPage {
   }
 
   private waitForList () {
-    return $('.videos .video-miniature .video-miniature-name').waitForDisplayed()
+    return $('.videos .video-miniature .video-name').waitForDisplayed()
   }
 
   private waitForTitle (title: string) {

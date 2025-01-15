@@ -1,5 +1,124 @@
 # Changelog
 
+## v7.0.1
+
+### Features
+
+ * Update translations
+
+### Bug fixes
+
+ * Fix banner/avatar edit buttons
+ * Fix banner margin in channels page
+ * Textarea font size consistency
+ * Fix subscribe button radius
+ * Fix channel avatar info username
+ * Fix maximized markdown textarea
+ * Remove confusing channel message in *My playlists* pages
+ * Fix broken infinite scroll when deleting items (Videos, Channels...)
+ * Fix broadcast message overflow
+ * Fix adding videos in playlist from discover page
+ * Fix my videos edit/delete buttons display
+ * Fix header components overflow in admin log page
+
+
+## v7.0.0
+
+### IMPORTANT NOTES
+
+ * **Classic install only** (for Docker admins see [v6.3 IMPORTANT NOTES](https://github.com/Chocobozzz/PeerTube/releases/tag/v6.3.0)) Ensure you have `storage.original_video_files` set in your configuration file: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L159.
+ If you did not configure this key but have already enabled "Keep a version of the input file" configuration, original files may have been saved in `versions/peertube-v6.x.x/storage/original-video-files/` directories. If this is the case, you must move these files in the new directory location specified by your `storage.original_video_files` configuration
+ * Safari desktop versions < 13 are not supported anymore
+ * iOS versions < 14.5 are not supported anymore
+ * PeerTube instance requires python >= 3.8 for transcription
+
+### Docker
+
+ * Fix private IPv6 subnet (we used a subnet reserved for examples)
+
+### Plugins/Themes/Embed API
+
+ * Remove client plugin hooks: `filter:api.recently-added-videos.videos.list.{params,result}`, `filter:api.local-videos.videos.list.{params,result}`, `filter:api.trending-videos.videos.list.{params,result}` `filter:api.trending-videos.videos.list.result` in favour of `filter:api.browse-videos.videos.list.{params,result}`
+ * Header logo doesn't have the `.icon` class anymore (it still has the `icon-logo` class)
+ * All CSS variables have been replaced so it's easier to theme PeerTube:
+   * PeerTube generates a color palette based on a few main colors (`primary`, `fg`, `bg`, `bg-secondary`...): https://github.com/Chocobozzz/PeerTube/blob/develop/client/src/sass/application.scss#L27
+   * Some new variables fallback to old variables to limit theme breaks
+
+### Admin config (non-exhaustive)
+
+ * Ensure `instance.default_client_route` (in web admin -> `Configuration` -> `Basic` -> `Landing page`) has a correct path: `/videos/trending`, `/videos/local` and `/videos/recently-added` have been removed in favour of `/videos/browse`
+ * Add ability to configure STUN servers IPs: `webrtc.stun_servers`
+ * Remove `client.videos.miniature.display_author_avatar` config: author avatars are now always displayed
+
+### Features
+
+ * :tada: Global client redesign :tada:
+    * Introduce a new *Light/Beige* theme that replaces the current one (black/orange)
+    * Add a *Dark/Brown* theme directly in PeerTube core
+    * Split *My library* pages into:
+      * *Video Space* pages (that contains account channels, videos...)
+      * *My library* pages (that contains account playlists, subscriptions...)
+    * Split *Administration* pages into:
+      * *Overview* pages (to list instance users, videos...)
+      * *Moderation* pages (to list abuses, blocks, registrations...)
+      * *Settings* pages (instance configuration, list runners...)
+    * Reorganize the header and the left menu:
+      * Account settings and notifications are now in the header
+      * Add instance name and description in the left menu for anonymous users
+    * Merge *Recently Added* and *Trending* and *Local videos* videos pages into a *Browse videos* page that includes quick filters
+    * Improve *Discover videos* page UX
+    * Redesign the left menu, the horizontal menus, form controls, buttons and video filters panel
+    * Replace/remove/add some icons
+ * :tada: Introduce a modal to easily add/edit/remove subtitle segments :tada:
+ * Improve accessibility:
+   * Fix contrast issues
+   * Add missing labels
+   * Fix progress bar, custom select components, tag input components, notification component accessibility
+   * Add underlining to links
+   * Add "skip menu" links
+   * Improve keyboard navigation
+   * Fix various screen readers issues
+ * Add Slovakian language support to the client
+ * SEO:
+   * Add instance avatar to OpenGraph tags
+   * Hide empty accounts/channels from sitemap [#6633](https://github.com/Chocobozzz/PeerTube/pull/6633)
+   * Inject additional video tags to sitemap [#6633](https://github.com/Chocobozzz/PeerTube/pull/6633)
+ * Various UX improvements:
+   * Improve player control bar responsive
+   * Add refresh button to following list
+   * Clearer signup limit label
+   * Add `0.25` playback rate in player
+
+### Bug fixes
+
+ * Fix *My channel* search
+ * Fix channel sync edition/listing
+ * Fix adding video tags on Android
+ * Fix fetching client comment URL using ActivityPub resolver (Mastodon search bar...)
+ * Fix crash when logging SQL requests and enabled prettify option
+ * Correctly delete web videos with hls without audio
+ * Fix auto blacklisting unlisted videos
+ * Fix *ERR_BUFFER_OUT_OF_BOUNDS* error on some node version
+ * Add ability to set max channel sync in admin config
+ * Allow plugins to pass client params when listing videos (`filter:api.browse-videos.videos.list.params` hook)
+ * Respect user export expiration admin configuration
+ * Fix studio edition on an audio only file
+ * Fix embed crash on telegram web browser
+
+
+## v6.3.3
+
+### Bug fixes
+
+ * Fix broken thumbnails on live replay
+ * Fix detecting portrait rotation of some video
+ * Don't allow to select a frame from a live to set the thumbnail
+ * Fix lost video stream with specific transcoding settings and video input
+ * Fix creating playlist without thumbnail when using the REST API
+ * Fix `.mov` video upload on some Windows versions
+ * Fix `video-plugin-metadata.result` client plugin hook
+
+
 ## v6.3.2
 
 ### Bug fixes

@@ -87,6 +87,7 @@
       </span>
 
       <input
+        class="peertube-button primary-button"
         (click)="formValidated()" type="submit" i18n-value value="Update configuration"
         [disabled]="!form.valid || !hasConsistentOptions() || !isUpdateAllowed()"
       >

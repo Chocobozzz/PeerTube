@@ -1,25 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core'
 import { ButtonComponent } from './button.component'
 
 @Component({
   selector: 'my-delete-button',
   template: `
     <my-button
-      icon="delete" className="grey-button"
+      icon="delete" theme="secondary"
       [disabled]="disabled" [label]="label" [title]="title"
       [responsiveLabel]="responsiveLabel"
     ></my-button>
   `,
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ ButtonComponent ]
 })
-export class DeleteButtonComponent implements OnInit {
+export class DeleteButtonComponent implements OnChanges {
   @Input() label: string
   @Input() title: string
   @Input() responsiveLabel = false
   @Input() disabled: boolean
 
-  ngOnInit () {
+  ngOnChanges () {
     if (this.label === undefined && !this.title) {
       this.title = $localize`Delete`
     }

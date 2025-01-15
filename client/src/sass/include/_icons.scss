@@ -82,7 +82,7 @@
   height: 0;
   border-left: $size solid transparent;
   border-right: $size solid transparent;
-  border-bottom: $size solid pvar(--mainForegroundColor);
+  border-bottom: $size solid pvar(--fg);
 }
 
 @mixin arrow-down ($size) {
@@ -90,5 +90,5 @@
   height: 0;
   border-left: $size solid transparent;
   border-right: $size solid transparent;
-  border-top: $size solid pvar(--mainForegroundColor);
+  border-top: $size solid pvar(--fg);
 }

@@ -5,8 +5,8 @@
  * DignifiedSilence
  * Александр
  * T.S
- * Hồ Nhất Duy
  * josé m
+ * Hồ Nhất Duy
  * Jeff Huang
  * Ihor Hordiichuk
  * Filip Bengtsson
@@ -36,10 +36,10 @@
  * John Livingston
  * Hannes Ylä-Jääski
  * Kim
+ * Besnik Bleta
  * Vodoyo Kamal
  * Armin
  * Fontan 030
- * Besnik Bleta
  * Mohamad Reza
  * Quentin PAGÈS
  * Kimsible
@@ -56,12 +56,12 @@
  * Julien Maulny
  * Mark Van den Borre
  * x
+ * Manuel Viens
  * Jorropo
  * Josh Morel
- * Manuel Viens
+ * Renne Rocha
  * BO41
  * Ettore Atalan
- * Renne Rocha
  * vachan
  * Elegant Codes
  * Florian CUNY
@@ -78,6 +78,7 @@
  * Ch
  * J. Lavoie
  * YILDIRIM YAPRAK
+ * alex gabilondo
  * barzofarev2
  * jan Seli
  * 李奕寯
@@ -92,9 +93,9 @@
  * Echo Kilo
  * Erik Guldberg
  * Jan Keromnes
+ * Jiří Podhorecký
  * Luc Didry
  * Siourdakis Thanos
- * alex gabilondo
  * knuxify
  * Agron Selimaj
  * Attila F
@@ -102,6 +103,7 @@
  * David Soh
  * Diazepan Medina
  * Jason Zhou
+ * Kerim Demirkaynak
  * Loukas Stamellos
  * Ms Kimsible
  * NorbiPeti
@@ -115,6 +117,7 @@
  * Lucas Declercq
  * Sirxy
  * matograine
+ * Adrià Martín
  * Ahmed ABERWAG
  * Daniel Santos
  * David Libeau
@@ -132,7 +135,6 @@
  * nexi
  * owiox8+1viroxeaziaxw@sharklasers.com
  * yns bag
- * Adrià Martín
  * Anne-Gaelle Moulun
  * Arman
  * Asier Iturralde Sarasola
@@ -146,7 +148,6 @@
  * Green-Star
  * I_Automne
  * Ilia
- * Kerim Demirkaynak
  * Micah Elizabeth Scott
  * Pierre-Jean
  * Ret Samys
@@ -159,6 +160,7 @@
  * boris joeson
  * frankstrater
  * mater
+ * spf
  * test2a
  * think4web
  * 路过是好事
@@ -171,9 +173,11 @@
  * Cokelat8
  * DontUseGithub
  * Farooq Karimi Zadeh
+ * Frederic Bezies
  * Iñigo
  * Jim Kats
  * Joan Montané
+ * José M
  * Kristoffer Grundström
  * LecygneNoir
  * Lukas
@@ -195,7 +199,6 @@
  * helabasa
  * kaiyou
  * roberto marcolin
- * spf
  * Ahsan Haris Ahmed
  * Alberto Teira
  * Alejandro
@@ -230,6 +233,7 @@
  * Kiro
  * Leopere
  * Linus
+ * Lionel Caylat
  * Lukas Winkler
  * M Z
  * Manuela Silva
@@ -292,13 +296,14 @@
  * HHY
  * Hange
  * Hjalte
+ * HugeFrog24
  * Hugo Peixoto
  * HybridGlucose
  * J C Worm
  * Jan Ainali
+ * Jan Hartig
  * Jan Marsalek
  * Jerguš Fonfer
- * José M
  * Joël Galeran
  * Julien Lemaire
  * Julien Rabier
@@ -309,11 +314,13 @@
  * Mondo Xíbaro
  * Moritz Warning
  * Mostafa Ahangarha
+ * Murat Özalp
  * Neko Nekowazarashi
  * Nicolai Larsen
  * Nojus
  * Olivier Bouillet
  * Pierre Jaury
+ * Piotr Strębski
  * Puryx
  * Quentin
  * ROBERT MCDOWELL
@@ -396,8 +403,10 @@
  * Clément Brizard
  * DLP
  * Daniel Dutra
+ * David Baumgold
  * David Dobryakov
  * DeeJayBro
+ * Deval
  * Dimitri DI GUSTO
  * Dimitrios Glentadakis
  * Durgaraj Karki
@@ -455,6 +464,7 @@
  * JustAnotherArchivist
  * Kent Anderson
  * Kevin Cope
+ * Kevin Pliester
  * Knackie
  * Kody
  * Konstantinos Agiannis
@@ -490,7 +500,6 @@
  * Mikel Gartzia Santamaria
  * Milo van der Linden
  * MrGiga
- * Murat Özalp
  * Mélanie Pin
  * Nataly Rocha
  * Nathanaël J
@@ -558,6 +567,7 @@
  * Vagelis F
  * Varik Valefor
  * Vegard Fjeldberg
+ * VeryREAL
  * Vik
  * Vincent Stakenburg
  * WhiredPlanck

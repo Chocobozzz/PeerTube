@@ -1,27 +1,31 @@
 <div class="margin-content">
-  <h1 class="title-page" i18n>Studio for {{ video.name }}</h1>
+  <h1 class="title-page">
+    <my-global-icon iconName="film"></my-global-icon>
+
+    <ng-container i18n>Studio for {{ video.name }}</ng-container>
+  </h1>
 
   <div class="grid-container">
     <form [formGroup]="form">
 
       <div class="section cut" formGroupName="cut">
-        <h2 i18n>CUT VIDEO</h2>
+        <h2 class="section-label" i18n>CUT VIDEO</h2>
 
         <div i18n class="description">Set a new start/end.</div>
 
         <div class="form-group">
           <label i18n for="cutStart">New start</label>
-          <my-timestamp-input inputName="cutStart" [disableBorder]="false" [maxTimestamp]="video.duration" formControlName="start"></my-timestamp-input>
+          <my-timestamp-input inputName="cutStart" enableBorder="true" [maxTimestamp]="video.duration" formControlName="start"></my-timestamp-input>
         </div>
 
         <div class="form-group">
           <label i18n for="cutEnd">New end</label>
-          <my-timestamp-input inputName="cutEnd" [disableBorder]="false" [maxTimestamp]="video.duration" formControlName="end"></my-timestamp-input>
+          <my-timestamp-input inputName="cutEnd" enableBorder="true" [maxTimestamp]="video.duration" formControlName="end"></my-timestamp-input>
         </div>
       </div>
 
       <div class="section" formGroupName="add-intro">
-        <h2 i18n>ADD INTRO</h2>
+        <h2 class="section-label" i18n>ADD INTRO</h2>
 
         <div i18n class="description">Concatenate a file at the beginning of the video.</div>
 
@@ -35,7 +39,7 @@
       </div>
 
       <div class="section" formGroupName="add-outro">
-        <h2 i18n>ADD OUTRO</h2>
+        <h2 class="section-label" i18n>ADD OUTRO</h2>
 
         <div i18n class="description">Concatenate a file at the end of the video.</div>
 
@@ -49,7 +53,7 @@
       </div>
 
       <div class="section" formGroupName="add-watermark">
-        <h2 i18n>ADD WATERMARK</h2>
+        <h2 class="section-label" i18n>ADD WATERMARK</h2>
 
         <div i18n class="description">Add a watermark image to the video.</div>
 
@@ -63,7 +67,7 @@
       </div>
 
       <my-button
-        theme="orange" i18n-label label="Run video edition" icon="circle-tick"
+        theme="primary" i18n-label label="Run video edition" icon="circle-tick"
         (click)="runEdition()" (keydown.enter)="runEdition()"
         [disabled]="!form.valid || isRunningEdition || noEdition()"
       ></my-button>

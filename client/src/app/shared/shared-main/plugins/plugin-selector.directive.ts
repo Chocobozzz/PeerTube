@@ -16,6 +16,8 @@ export class PluginSelectorDirective implements OnInit {
   }
 
   ngOnInit () {
+    if (!this.pluginSelectorId) return
+
     const id = this.hostElement.nativeElement.getAttribute('id')
     if (id) throw new Error('Cannot set id on element that already has an id')
 

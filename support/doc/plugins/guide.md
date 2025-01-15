@@ -127,6 +127,8 @@ body#custom-css {
 }
 ```
 
+See the [CSS variables section](#css-variables) to also have details on how to easily theme PeerTube.
+
 ### Server API (only for plugins)
 
 #### Settings
@@ -859,6 +861,37 @@ async function register (...) {
 ```
 
 See the complete list on https://docs.joinpeertube.org/api/plugins
+
+#### CSS variables
+
+PeerTube can be easily themed using built-in CSS variables. The full list is available in [client/src/sass/include/_variables.scss](https://github.com/Chocobozzz/PeerTube/blob/develop/client/src/sass/include/_variables.scss).
+
+PeerTube creates gradients of some CSS variables so you don't have to specify all variables yourself. For example, just specify `--bg-secondary` and PeerTube will generate `--bg-secondary-450`, `--bg-secondary-400` and so on.
+
+You can take inspiration from core PeerTube themes in [client/src/sass/application.scss](https://github.com/Chocobozzz/PeerTube/blob/develop/client/src/sass/application.scss) file:
+
+```css
+body {
+  --primary: #FD9C50;
+  --on-primary: #111;
+  --border-primary: #F2690D;
+
+  --input-bg: var(--bg-secondary-450);
+  --input-bg-in-secondary: var(--bg-secondary-500);
+
+  --fg: hsl(0 10% 96%);
+
+  --bg: hsl(0 14% 7%);
+  --bg-secondary: hsl(0 14% 22%);
+
+  --alert-primary-fg: var(--on-primary);
+  --alert-primary-bg: #cd9e7a;
+  --alert-primary-border-color: var(--primary-600);
+
+  --active-icon-color: var(--fg-450);
+  --active-icon-bg: var(--bg-secondary-600);
+}
+```
 
 #### Add/remove left menu links
 

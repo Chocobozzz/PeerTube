@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { sortObjectComparator } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@peertube/peertube-models'
+import { HttpStatusCode, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType, VideoPrivacy } from '@peertube/peertube-models'
 import {
   BlacklistCommand,
   cleanupTests,
   createMultipleServers,
-  doubleFollow, makeActivityPubGetRequest, PeerTubeServer,
+  doubleFollow, makeActivityPubGetRequest,
+  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { expect } from 'chai'
 
 describe('Test video blacklist', function () {
   let servers: PeerTubeServer[] = []
@@ -93,6 +94,7 @@ describe('Test video blacklist', function () {
   })
 
   describe('When listing manually blacklisted videos', function () {
+
     it('Should display all the blacklisted videos', async function () {
       const body = await command.list()
       expect(body.total).to.equal(2)
@@ -163,6 +165,7 @@ describe('Test video blacklist', function () {
   })
 
   describe('When updating blacklisted videos', function () {
+
     it('Should change the reason', async function () {
       await command.update({ videoId, reason: 'my super reason updated' })
 
@@ -323,9 +326,15 @@ describe('Test video blacklist', function () {
     let userWithFlag: string
     let channelOfUserWithoutFlag: number
 
-    before(async function () {
-      this.timeout(20000)
+    async function checkBlacklist (videoUUID: string, password?: string) {
+      await servers[0].videos.get({ id: videoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
 
+      if (password) {
+        await servers[0].videos.getWithPassword({ id: videoUUID, password, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      }
+    }
+
+    before(async function () {
       await servers[0].config.enableAutoBlacklist()
 
       {
@@ -358,27 +367,56 @@ describe('Test video blacklist', function () {
       await waitJobs(servers)
     })
 
-    it('Should auto blacklist a video on upload', async function () {
-      await servers[0].videos.upload({ token: userWithoutFlag, attributes: { name: 'blacklisted' } })
+    it('Should auto blacklist a public video on upload', async function () {
+      const video = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'blacklisted 1' })
 
-      const body = await command.list({ type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(1)
-      expect(body.data[0].video.name).to.equal('blacklisted')
+      expect(body.data[0].video.name).to.equal('blacklisted 1')
+
+      await checkBlacklist(video.uuid)
+    })
+
+    it('Should auto blacklist an unlisted video on upload', async function () {
+      const video = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'blacklisted 2', privacy: VideoPrivacy.UNLISTED })
+
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      expect(body.total).to.equal(2)
+      expect(body.data[0].video.name).to.equal('blacklisted 2')
+
+      await checkBlacklist(video.uuid)
+    })
+
+    it('Should auto blacklist a password protected video on upload', async function () {
+      const video = await servers[0].videos.upload({
+        token: userWithoutFlag,
+        attributes: {
+          name: 'blacklisted 3',
+          privacy: VideoPrivacy.PASSWORD_PROTECTED,
+          videoPasswords: [ 'toto' ]
+        }
+      })
+
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      expect(body.total).to.equal(3)
+      expect(body.data[0].video.name).to.equal('blacklisted 3')
+
+      await checkBlacklist(video.uuid, 'toto')
     })
 
     it('Should auto blacklist a video on URL import', async function () {
-      this.timeout(15000)
-
       const attributes = {
         targetUrl: FIXTURE_URLS.goodVideo,
         name: 'URL import',
         channelId: channelOfUserWithoutFlag
       }
-      await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
+      const { video } = await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
 
-      const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
-      expect(body.total).to.equal(2)
-      expect(body.data[1].video.name).to.equal('URL import')
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      expect(body.total).to.equal(4)
+      expect(body.data[0].video.name).to.equal('URL import')
+
+      await checkBlacklist(video.uuid)
     })
 
     it('Should auto blacklist a video on torrent import', async function () {
@@ -387,18 +425,20 @@ describe('Test video blacklist', function () {
         name: 'Torrent import',
         channelId: channelOfUserWithoutFlag
       }
-      await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
+      const { video } = await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
 
-      const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
-      expect(body.total).to.equal(3)
-      expect(body.data[2].video.name).to.equal('Torrent import')
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      expect(body.total).to.equal(5)
+      expect(body.data[0].video.name).to.equal('Torrent import')
+
+      await checkBlacklist(video.uuid)
     })
 
     it('Should not auto blacklist a video on upload if the user has the bypass blacklist flag', async function () {
       await servers[0].videos.upload({ token: userWithFlag, attributes: { name: 'not blacklisted' } })
 
       const body = await command.list({ type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
-      expect(body.total).to.equal(3)
+      expect(body.total).to.equal(5)
     })
   })
 

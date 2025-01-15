@@ -8,7 +8,7 @@ export class AdminConfigPage {
       'basic-configuration': 'APPEARANCE',
       'instance-information': 'INSTANCE'
     }
-    await go('/admin/config/edit-custom#' + tab)
+    await go('/admin/settings/config/edit-custom#' + tab)
 
     await $('h2=' + waitTitles[tab]).waitForDisplayed()
   }

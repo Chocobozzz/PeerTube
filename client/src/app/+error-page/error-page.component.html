@@ -1,58 +1,74 @@
 <div class="root">
-  <div *ngIf="status !== 401 && status !== 403 && status !== 418" class="box">
-    <strong>{{ status }}.</strong>
-    <span class="ms-1 muted" i18n>That's an error.</span>
+  @if (status === 401) {
+    <div class="box">
+      <strong>{{ status }}.</strong>
+      <span class="ms-1 muted" i18n>You are not authorized here.</span>
 
-    <div class="text mt-4">
-      <ng-container *ngIf="type === 'video'" i18n>We couldn't find any video tied to the URL {{ pathname }} you were looking for.</ng-container>
-      <ng-container *ngIf="type !== 'video'" i18n>We couldn't find any resource tied to the URL {{ pathname }} you were looking for.</ng-container>
+      <div class="text mt-4">
+        @if (type === 'video') {
+          <ng-container i18n>You might need to login to see the video.</ng-container>
+        } @else {
+          <ng-container i18n>You might need to login to see the resource.</ng-container>
+        }
+      </div>
+
+      <my-login-link className="peertube-button-big-link primary-button mt-5"></my-login-link>
     </div>
+  } @else if (status === 403) {
+    <div class="box">
+      <strong>{{ status }}.</strong>
+      <span class="ms-1 muted" i18n>You are not authorized here.</span>
 
-    <div class="muted mt-4">
-      <span i18n="Possible reasons preceding a list of reasons a `Not Found` error page may occur">Possible reasons:</span>
-
-      <ul>
-        <li i18n>You may have used an outdated or broken link</li>
-        <li>
-          <ng-container *ngIf="type === 'video'" i18n>The video may have been moved or deleted</ng-container>
-          <ng-container *ngIf="type !== 'video'" i18n>The resource may have been moved or deleted</ng-container>
-        </li>
-        <li i18n>You may have typed the address or URL incorrectly</li>
-      </ul>
+      <div class="text mt-4">
+        @if (type === 'video') {
+          <ng-container i18n>You might need to check your account is allowed by the video or instance owner.</ng-container>
+        } @else {
+          <ng-container i18n>You might need to check your account is allowed by the resource or instance owner.</ng-container>
+        }
+      </div>
     </div>
-  </div>
+  } @else if (status === 418) {
+    <div class="box">
+      <strong>{{ status }}.</strong>
+      <span class="ms-1 muted">I'm a teapot.</span>
 
-  <div *ngIf="status === 401" class="box">
-    <strong>{{ status }}.</strong>
-    <span class="ms-1 muted" i18n>You are not authorized here.</span>
-
-    <div class="text mt-4">
-      <ng-container *ngIf="type === 'video'" i18n>You might need to login to see the video.</ng-container>
-      <ng-container *ngIf="type !== 'video'" i18n>You might need to login to see the resource.</ng-container>
+      <div class="text mt-4" i18n="Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request">
+        The requested entity body blends sweet bits with a mellow earthiness.
+      </div>
+      <div class="muted" i18n="This is about Sepia's tea">Sepia seems to like it.</div>
     </div>
+  } @else {
+    <div class="box">
+      <strong>{{ status }}.</strong>
+      <span class="ms-1 muted" i18n>That's an error.</span>
 
-    <my-login-link className="peertube-button-big-link orange-button mt-5"></my-login-link>
-  </div>
+      <div class="text mt-4">
+        @if (type === 'video') {
+          <ng-container i18n>We couldn't find any video tied to the URL {{ pathname }} you were looking for.</ng-container>
+        } @else {
+          <ng-container i18n>We couldn't find any resource tied to the URL {{ pathname }} you were looking for.</ng-container>
+        }
+      </div>
 
-  <div *ngIf="status === 403" class="box">
-    <strong>{{ status }}.</strong>
-    <span class="ms-1 muted" i18n>You are not authorized here.</span>
+      <div class="muted mt-4">
+        <span i18n="Possible reasons preceding a list of reasons a `Not Found` error page may occur">Possible reasons:</span>
 
-    <div class="text mt-4">
-      <ng-container *ngIf="type === 'video'" i18n>You might need to check your account is allowed by the video or instance owner.</ng-container>
-      <ng-container *ngIf="type !== 'video'" i18n>You might need to check your account is allowed by the resource or instance owner.</ng-container>
+        <ul>
+          <li i18n>You may have used an outdated or broken link</li>
+
+          <li>
+            @if (type === 'video') {
+              <ng-container i18n>The video may have been moved or deleted</ng-container>
+            } @else {
+              <ng-container i18n>The resource may have been moved or deleted</ng-container>
+            }
+          </li>
+
+          <li i18n>You may have typed the address or URL incorrectly</li>
+        </ul>
+      </div>
     </div>
-  </div>
-
-  <div *ngIf="status === 418" class="box">
-    <strong>{{ status }}.</strong>
-    <span class="ms-1 muted">I'm a teapot.</span>
-
-    <div class="text mt-4" i18n="Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request">
-      The requested entity body blends sweet bits with a mellow earthiness.
-    </div>
-    <div class="muted" i18n="This is about Sepia's tea">Sepia seems to like it.</div>
-  </div>
+  }
 
   <img src='/client/assets/images/mascot/{{ getMascotName() }}.svg' alt='{{ status }} mascot' class="mb-4 h-auto">
 </div>

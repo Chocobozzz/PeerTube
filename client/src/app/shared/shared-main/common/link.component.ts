@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { booleanAttribute, Component, Input, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
+import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-link',
   styleUrls: [ './link.component.scss' ],
   templateUrl: './link.component.html',
   standalone: true,
-  imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet ]
+  imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet, GlobalIconComponent ]
 })
 export class LinkComponent implements OnInit {
   @Input() internalLink?: string | any[]
@@ -18,19 +19,26 @@ export class LinkComponent implements OnInit {
   @Input() title?: string
 
   @Input() className?: string
-  @Input() inheritParentCSS = false
+  @Input({ transform: booleanAttribute }) inheritParentStyle = false
+  @Input({ transform: booleanAttribute }) inheritParentDimension = false
 
   @Input() tabindex: string | number
 
   @Input() ariaLabel: string
+
+  @Input() icon: GlobalIconName
 
   builtClasses: string
 
   ngOnInit () {
     this.builtClasses = this.className || ''
 
-    if (!this.builtClasses || this.inheritParentCSS) {
-      this.builtClasses += ' inherit-parent'
+    if (this.inheritParentStyle) {
+      this.builtClasses += ' inherit-parent-style'
+    }
+
+    if (this.inheritParentDimension) {
+      this.builtClasses += ' inherit-parent-dimension'
     }
   }
 }

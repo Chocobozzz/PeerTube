@@ -1,12 +1,6 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="subscriptions" aria-hidden="true"></my-global-icon>
-    <h1 i18n>My subscriptions</h1>
-    <span *ngIf="pagination.totalItems" [title]="getTotalTitle()" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
-  </div>
-</div>
+<div class="mb-4 d-flex justify-content-between align-items-end gap-2 flex-wrap">
+  <span class="total-items" *ngIf="pagination.totalItems"> {{ getTotalTitle() }}</span>
 
-<div class="mb-3">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 </div>
 

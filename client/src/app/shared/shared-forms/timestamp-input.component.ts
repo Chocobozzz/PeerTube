@@ -23,7 +23,7 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   @Input() timestamp: number
 
   @Input({ transform: booleanAttribute }) disabled = false
-  @Input({ transform: booleanAttribute }) disableBorder = true
+  @Input({ transform: booleanAttribute }) enableBorder = false
 
   @Input() inputName: string
   @Input() mask = '99:99:99'

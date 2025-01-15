@@ -5,7 +5,7 @@ import { UserRight } from '@peertube/peertube-models'
 import { FollowersListComponent } from './followers-list'
 import { FollowingListComponent } from './following-list/following-list.component'
 
-export const FollowsRoutes: Routes = [
+export const followsRoutes: Routes = [
   {
     path: 'follows',
     canActivate: [ UserRightGuard ],

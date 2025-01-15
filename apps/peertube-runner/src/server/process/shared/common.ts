@@ -61,8 +61,12 @@ export function scheduleTranscodingProgress (options: {
     : 60000
 
   const update = () => {
-    server.runnerJobs.update({ jobToken: job.jobToken, jobUUID: job.uuid, runnerToken, progress: progressGetter() })
-      .catch(err => logger.error({ err }, 'Cannot send job progress'))
+    server.runnerJobs.update({
+      jobToken: job.jobToken,
+      jobUUID: job.uuid,
+      runnerToken,
+      progress: progressGetter()
+    }).catch(err => logger.error({ err }, 'Cannot send job progress'))
   }
 
   const interval = setInterval(() => {

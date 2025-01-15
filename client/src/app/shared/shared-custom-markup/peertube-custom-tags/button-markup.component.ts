@@ -32,8 +32,8 @@ export class ButtonMarkupComponent implements CustomMarkupComponent {
 
   getClasses () {
     const additionalClass = this.theme === 'primary'
-      ? 'orange-button'
-      : 'grey-button'
+      ? 'primary-button'
+      : 'secondary-button'
 
     return [ 'peertube-button-link', additionalClass ]
   }

@@ -6,6 +6,7 @@ import { logger } from '../../../helpers/logger.js'
 import { Redis } from '../../../lib/redis.js'
 import { areValidationErrors, checkUserEmailExist, checkUserIdExist } from '../shared/index.js'
 import { checkRegistrationEmailExist, checkRegistrationIdExist } from './shared/user-registrations.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 
 const usersAskSendVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
@@ -13,13 +14,17 @@ const usersAskSendVerifyEmailValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
+    const { email } = await Hooks.wrapObject({
+      email: req.body.email
+    }, 'filter:api.email-verification.ask-send-verify-email.body')
+
     const [ userExists, registrationExists ] = await Promise.all([
-      checkUserEmailExist(req.body.email, res, false),
-      checkRegistrationEmailExist(req.body.email, res, false)
+      checkUserEmailExist(email, res, false),
+      checkRegistrationEmailExist(email, res, false)
     ])
 
     if (!userExists && !registrationExists) {
-      logger.debug('User or registration with email %s does not exist (asking verify email).', req.body.email)
+      logger.debug('User or registration with email %s does not exist (asking verify email).', email)
       // Do not leak our emails
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }

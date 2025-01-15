@@ -11,6 +11,10 @@
   @include font-size(14px);
 }
 
+.fs-8 {
+  @include font-size(12px);
+}
+
 // Handle dynamically RTL layouts
 
 .text-start {

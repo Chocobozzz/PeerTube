@@ -8,7 +8,7 @@
 
   <input
     *ngIf="uploaded === false"
-    type="button" class="peertube-button grey-button ms-1" i18n-value="Cancel ongoing upload" value="Cancel" (click)="cancel.emit()"
+    type="button" class="peertube-button secondary-button ms-1" i18n-value="Cancel ongoing upload" value="Cancel" (click)="cancelUpload.emit()"
   />
 </div>
 
@@ -19,8 +19,8 @@
   >
   </my-progress-bar>
 
-  <input type="button" class="peertube-button grey-button ms-1" i18n-value="Retry failed upload" value="Retry" (click)="retry.emit()" />
-  <input type="button" class="peertube-button grey-button ms-1" i18n-value="Cancel ongoing upload" value="Cancel" (click)="cancel.emit()" />
+  <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Retry failed upload" value="Retry" (click)="retry.emit()" />
+  <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Cancel ongoing upload" value="Cancel" (click)="cancelUpload.emit()" />
 </div>
 
 <my-alert *ngIf="error && !enableRetryAfterError" type="danger">

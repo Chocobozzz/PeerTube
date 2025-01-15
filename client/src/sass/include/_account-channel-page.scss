@@ -1,28 +1,12 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-
-@mixin section-label-responsive {
-  color: pvar(--mainColor);
-  font-size: 12px;
-  margin-bottom: 15px;
-  font-weight: $font-bold;
-  letter-spacing: 2.5px;
-
-  @media screen and (max-width: $mobile-view) {
-    font-size: 10px;
-    letter-spacing: 2.1px;
-    margin-bottom: 5px;
-  }
-}
+@use '_button-mixins' as *;
 
 @mixin show-more-description {
-  color: pvar(--mainColor);
-  cursor: pointer;
-
   @include margin(10px, auto, 45px);
 }
 
-@mixin avatar-row-responsive ($img-margin, $grey-font-size) {
+@mixin avatar-row-responsive ($img-margin, $actor-handle-font-size) {
   display: flex;
   grid-column: 1;
 
@@ -63,14 +47,14 @@
 
   .actor-handle,
   .actor-counters {
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
 
-    @include font-size($grey-font-size);
+    @include font-size($actor-handle-font-size);
   }
 
   .actor-counters > *:not(:last-child)::after {
     content: '•';
     margin: 0 10px;
-    color: pvar(--mainColor);
+    color: pvar(--primary);
   }
 }

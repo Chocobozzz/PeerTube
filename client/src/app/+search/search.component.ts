@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
 import { validateHost } from '@app/shared/form-validators/host-validators'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -40,7 +41,8 @@ import { SearchFiltersComponent } from './search-filters.component'
     VideoMiniatureComponent,
     VideoPlaylistMiniatureComponent,
     NumberFormatterPipe,
-    AlertComponent
+    AlertComponent,
+    GlobalIconComponent
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
@@ -52,6 +54,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     currentPage: 1,
     totalItems: null as number
   }
+  deletedVideos = 0
+
   advancedSearch: AdvancedSearch = new AdvancedSearch()
   isSearchFilterCollapsed = true
   currentSearch: string
@@ -60,7 +64,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     date: true,
     views: true,
     by: true,
-    avatar: false,
+    avatar: true,
     privacyLabel: false,
     privacyText: false,
     state: false,
@@ -220,7 +224,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   // Add VideoChannel/VideoPlaylist for typings, but the template already checks "video" argument is a video
   removeVideoFromArray (video: Video | VideoChannel | VideoPlaylist) {
+    const previous = this.results
     this.results = this.results.filter(r => !this.isVideo(r) || r.id !== video.id)
+
+    if (previous.length !== this.results.length) this.deletedVideos++
   }
 
   getLinkType (): LinkType {
@@ -279,6 +286,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private resetPagination () {
     this.pagination.currentPage = 1
     this.pagination.totalItems = null
+    this.deletedVideos = 0
 
     this.results = []
   }
@@ -303,7 +311,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private getVideosObs () {
     const params = {
       search: this.currentSearch,
-      componentPagination: immutableAssign(this.pagination, { itemsPerPage: 10 }),
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: 10, itemsRemoved: this.deletedVideos }),
       advancedSearch: this.advancedSearch
     }
 

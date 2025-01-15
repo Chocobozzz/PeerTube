@@ -1,5 +1,5 @@
 <div *ngIf="account" class="root">
-  <div class="account-info d-md-grid d-block">
+  <div class="margin-content account-info d-md-grid d-block">
 
     <div class="account-avatar-row">
       <my-actor-avatar [size]="getAccountAvatarSize()" actorType="account" [actor]="account"></my-actor-avatar>
@@ -10,7 +10,7 @@
         <div class="actor-info">
           <div>
             <div class="actor-display-name align-items-center">
-              <h1 i18n-title [title]="'Created on ' + (account.createdAt | date)">{{ account.displayName }}</h1>
+              <h1 i18n-title [title]="'Created on ' + (account.createdAt | ptDate)">{{ account.displayName }}</h1>
 
               <my-user-moderation-dropdown
                 class="mx-3" [prependActions]="prependModerationActions"
@@ -48,7 +48,7 @@
       <div class="description-html" [innerHTML]="accountDescriptionHTML"></div>
     </div>
 
-    <button *ngIf="hasShowMoreDescription()" class="show-more d-md-none d-block button-unstyle"
+    <button *ngIf="hasShowMoreDescription()" class="show-more peertube-button-like-link d-md-none d-block"
       (click)="accountDescriptionExpanded = !accountDescriptionExpanded"
       title="Show the complete description" i18n-title i18n
     >
@@ -56,7 +56,7 @@
     </button>
 
     <div class="buttons">
-      <a *ngIf="isManageable()" routerLink="/my-account" class="peertube-button-link orange-button" i18n>
+      <a *ngIf="isManageable()" routerLink="/my-account" class="peertube-button-link primary-button" i18n>
         Manage account
       </a>
 
@@ -64,14 +64,15 @@
     </div>
   </div>
 
-  <div class="links" [ngClass]="{ 'on-channel-page': isOnChannelPage() }">
+  <div class="margin-content horizontal-menu mb-3">
     <ng-template #linkTemplate let-item="item">
       <a [routerLink]="item.routerLink" routerLinkActive="active" class="sub-menu-entry">{{ item.label }}</a>
     </ng-template>
 
-    <my-list-overflow [hidden]="hideMenu" [items]="links" [itemTemplate]="linkTemplate"></my-list-overflow>
+    <my-horizontal-menu [hidden]="hideMenu" [menuEntries]="links"></my-horizontal-menu>
 
     <my-simple-search-input
+      class="ms-auto"
       [alwaysShow]="!isInSmallView()" (searchChanged)="searchChanged($event)"
       (inputDisplayChanged)="onSearchInputDisplayChanged($event)" name="search-videos"
       i18n-iconTitle icon-title="Search account videos"

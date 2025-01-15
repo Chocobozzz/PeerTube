@@ -25,11 +25,11 @@
           <span i18n *ngIf="isVideoPasswordProtected()" class="pt-badge badge-yellow">Password protected</span>
         </div>
 
-        <span class="video-miniature-created-at-views">
+        <span class="date-and-views">
           <my-date-toggle [date]="playlistElement.video.publishedAt"></my-date-toggle>
 
-          <span class="views" [title]="playlistElement.video.getExactNumberOfViews()">
-            • <my-video-views-counter [video]="playlistElement.video"></my-video-views-counter>
+          <span class="views">
+            • <my-video-views-counter [isLive]="playlistElement.video.isLive" [viewers]="playlistElement.video.viewers" [views]="playlistElement.video.views"></my-video-views-counter>
           </span>
         </span>
 
@@ -50,8 +50,6 @@
       </span>
     </div>
   </a>
-
-  <my-edit-button *ngIf="owned && touchScreenEditButton" [ptRouterLink]="[ '/my-library', 'video-playlists', playlist.shortUUID ]"></my-edit-button>
 
   <div
     *ngIf="owned" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
@@ -97,7 +95,7 @@
             ></my-timestamp-input>
           </div>
 
-          <input type="submit" i18n-value value="Save" (click)="updateTimestamps(playlistElement)">
+          <input class="peertube-button primary-button mt-2" type="submit" i18n-value value="Save" (click)="updateTimestamps(playlistElement)">
         </div>
       </ng-container>
 

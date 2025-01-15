@@ -9,7 +9,6 @@
 
 .playlist-info {
   grid-column: 1;
-  background-color: pvar(--submenuBackgroundColor);
   margin-top: -$sub-menu-margin-bottom;
 
   padding: 15px;
@@ -17,25 +16,12 @@
   display: flex;
   flex-direction: column;
 
-  @include margin-left(calc(#{pvar(--horizontalMarginContent)} * -1));
-
-  /* fix ellipsis dots background color */
-  ::ng-deep .miniature-name::after {
-    background-color: pvar(--submenuBackgroundColor) !important;
-  }
+  @include margin-left(calc(#{pvar(--x-margin-content)} * -1));
 }
 
 .playlist-buttons {
   display: flex;
   margin: 30px 0 10px;
-
-  .share-button {
-    @include peertube-button;
-    @include button-with-icon(17px, 3px, -1px);
-    @include grey-button;
-    @include apply-svg-color(pvar(--actionButtonColor));
-    @include margin-right(10px);
-  }
 }
 
 // Thanks Angular CDK <3 https://material.angular.io/cdk/drag-drop/examples
@@ -84,7 +70,7 @@ my-video-playlist-miniature {
   }
 
   .playlist-info {
-    width: calc(100% + (2 * var(--horizontalMarginContent)));
+    width: calc(100% + (2 * pvar(--x-margin-content)));
     padding-top: 20px;
     margin-bottom: 10px;
   }

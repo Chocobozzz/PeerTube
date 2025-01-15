@@ -5,6 +5,7 @@ import {
   HttpStatusCode,
   ListRunnerJobsQuery,
   LiveRTMPHLSTranscodingUpdatePayload,
+  RequestRunnerJobBody,
   RequestRunnerJobResult,
   RunnerJobState,
   RunnerJobSuccessBody,
@@ -158,7 +159,8 @@ export {
 
 async function requestRunnerJob (req: express.Request, res: express.Response) {
   const runner = res.locals.runner
-  const availableJobs = await RunnerJobModel.listAvailableJobs()
+  const body = req.body as RequestRunnerJobBody
+  const availableJobs = await RunnerJobModel.listAvailableJobs(body.jobTypes)
 
   logger.debug('Runner %s requests for a job.', runner.name, { availableJobs, ...lTags(runner.name) })
 

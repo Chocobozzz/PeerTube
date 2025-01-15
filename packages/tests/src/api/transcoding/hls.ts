@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { join } from 'path'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -15,6 +14,7 @@ import {
 import { DEFAULT_AUDIO_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
 import { checkDirectoryIsEmpty, checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { join } from 'path'
 
 describe('Test HLS videos', function () {
   let servers: PeerTubeServer[] = []
@@ -47,6 +47,17 @@ describe('Test HLS videos', function () {
       await waitJobs(servers)
 
       await completeCheckHlsPlaylist({ servers, videoUUID: uuid, hlsOnly, objectStorageBaseUrl })
+    })
+
+    it('Should upload a video without audio', async function () {
+      this.timeout(120_000)
+
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'no audio', fixture: 'video_short_no_audio.mp4' } })
+      videoUUIDs.push(uuid)
+
+      await waitJobs(servers)
+
+      await completeCheckHlsPlaylist({ servers, videoUUID: uuid, hlsOnly, hasAudio: false, objectStorageBaseUrl })
     })
 
     it('Should upload an audio file and transcode it to HLS', async function () {

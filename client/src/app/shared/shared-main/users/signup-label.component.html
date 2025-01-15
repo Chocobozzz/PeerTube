@@ -1,2 +1,13 @@
-<ng-container i18n *ngIf="requiresApproval">Request an account</ng-container>
-<ng-container i18n *ngIf="!requiresApproval">Create an account</ng-container>
+@if (withInstanceName) {
+  @if (requiresApproval) {
+    <ng-container i18n>Request an account on {{ instanceName }}</ng-container>
+  } @else {
+    <ng-container i18n>Create an account on {{ instanceName }}</ng-container>
+  }
+} @else {
+  @if (requiresApproval) {
+    <ng-container i18n>Request an account</ng-container>
+  } @else {
+    <ng-container i18n>Create an account</ng-container>
+  }
+}

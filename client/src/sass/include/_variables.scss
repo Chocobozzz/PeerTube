@@ -11,48 +11,25 @@ $font-semibold: 600;
 $font-bold: 700;
 $line-height-normal: 1.2;
 
-$grey-background-color: #E5E5E5;
-$grey-background-hover-color: #EFEFEF;
-$grey-foreground-color: #585858;
-$grey-foreground-hover-color: #303030;
-$grey-button-outline-color: color.scale($grey-foreground-color, $alpha: -95%);
-
-$main-color: hsl(24, 90%, 50%);
-$main-color-lighter: color.adjust($main-color, $lightness: 10%);
-$main-color-lightest: color.adjust($main-color, $lightness: 40%);
-$main-color-very-light: #fff5eb;
-
-$main-hover-color: color.adjust($main-color, $lightness: 5%);
-$main-background-hover-color: #e9ecef;
-
 $support-button: inherit;
 $support-button-heart: #e83e8c;
-
-$bg-color: #fff;
-$fg-color: #212529;
 
 $red: #dc3545;
 $green: #198754;
 $white: #fff;
 
-$expanded-horizontal-margins: 150px;
-$not-expanded-horizontal-margins: 30px;
+$button-font-size: 1rem;
 
-$button-font-size: 15px;
+$header-height: 94px;
+$header-height-small-view: 74px;
+$header-height-mobile-view: 124px;
 
-$header-height: 50px;
-$header-border-color: #e9eff6;
-$search-input-width: 375px;
+$menu-width: 248px;
+$menu-collapsed-width: 50px;
+$menu-margin-left: 2rem;
+$menu-overlay-view: 1200px;
 
-$menu-background: #000;
-$menu-color: #fff;
-$menu-width: 240px;
-$menu-lateral-padding: 26px;
-
-$sub-menu-background-color: #F7F7F7;
 $sub-menu-height: 81px;
-
-$channel-background-color: #f6ede8;
 
 $banner-inverted-ratio: math.div(1, 6);
 
@@ -61,15 +38,19 @@ $max-channels-width: 1200px;
 $footer-height: 30px;
 $footer-margin: 30px;
 
-$separator-border-color: rgba(0, 0, 0, 0.1);
+// ---------------------------------------------------------------------------
 
-$video-miniature-margin-bottom: 15px;
+$miniature-fs-small: 0.75rem;
+$miniature-fs-medium: 0.875rem;
+$miniature-fs-big: 1rem;
 
-$video-miniature-row-name-font-size: 1.3em;
-$video-miniature-row-mobile-name-font-size: 14px;
+$miniature-fs-row-small: 0.875rem;
+$miniature-fs-row-medium: 1rem;
+$miniature-fs-row-big: 1.25rem;
 
-$video-miniature-row-info-font-size: 14px;
-$video-miniature-row-mobile-info-font-size: 12px;
+$miniature-fs-mobile-small: 0.875rem;
+$miniature-fs-mobile-medium: 0.875rem;
+$miniature-fs-mobile-big: 1rem;
 
 $video-thumbnail-height: 153px;
 $video-thumbnail-width: 280px;
@@ -78,82 +59,157 @@ $video-thumbnail-medium-width: 201px;
 $video-thumbnail-small-height: 71px;
 $video-thumbnail-small-width: 125px;
 
+// ---------------------------------------------------------------------------
+
+$instance-img-radius: 31%;
+
+// ---------------------------------------------------------------------------
+
 $theater-bottom-space: 115px;
 $player-portrait-bottom-space: 50px;
-
-$input-foreground-color: $fg-color;
-$input-background-color: $bg-color;
-$input-placeholder-color: #797676;
-$input-border-color: #C6C6C6;
-
-$textarea-foreground-color: $fg-color;
-$textarea-background-color: $bg-color;
-$markdown-textarea-background-color: $grey-background-hover-color;
 
 $sub-menu-margin-bottom: 30px;
 $sub-menu-margin-bottom-small-view: 10px;
 
-$activated-action-button-color: #212529;
+$focus-box-shadow-dimensions: 0 0 0 .2rem;
 
-$focus-box-shadow-form: 0 0 0 .2rem;
-$form-input-font-size: 15px;
+$form-input-font-size: 16px;
 
 $video-watch-info-margin-left: 44px;
 
 $primeng-breakpoint: 960px;
 
-/*** map theme ***/
+// ---------------------------------------------------------------------------
+// Theme variables with key check using pvar() function
+// ---------------------------------------------------------------------------
 
-// pass variables into a sass map,
-// to be warned of non-existing variables
 $variables: (
+  --embed-foreground-color: var(--embed-foreground-color),
+  --embed-big-play-background-color: var(--embed-big-play-background-color),
+
+  --x-margin-content: var(--x-margin-content),
+  --main-col-width: var(--main-col-width),
+  --header-height: var(--header-height),
+
+  --fg: var(--fg),
+  --bg: var(--bg),
+
   --red: var(--red),
+  --on-red: var(--on-red),
+
   --green: var(--green),
-  --white: var(--white),
 
-  --mainColor: var(--mainColor),
-  --mainColorLighter: var(--mainColorLighter),
-  --mainColorLightest: var(--mainColorLightest),
-  --mainColorVeryLight: var(--mainColorVeryLight),
+  --input-fg: var(--input-fg),
+  --input-bg: var(--input-bg),
 
-  --mainHoverColor: var(--mainHoverColor),
-  --mainBackgroundHoverColor: var(--mainBackgroundHoverColor),
+  --input-placeholder: var(--input-placeholder),
+  --input-border-color: var(--input-border-color),
+  --input-bg-in-secondary: var(--input-bg-in-secondary),
+  --input-border-radius: var(--input-border-radius),
 
-  --mainBackgroundColor: var(--mainBackgroundColor),
-  --mainForegroundColor: var(--mainForegroundColor),
+  --input-check-active-fg: var(--input-check-active-fg),
+  --input-check-active-bg: var(--input-check-active-bg),
 
-  --greyForegroundColor: var(--greyForegroundColor),
-  --greyBackgroundColor: var(--greyBackgroundColor),
-  --greySecondaryBackgroundColor: var(--greySecondaryBackgroundColor),
+  --input-x-padding: var(--input-x-padding),
+  --input-y-padding: var(--input-y-padding),
 
-  --menuBackgroundColor: var(--menuBackgroundColor),
-  --menuForegroundColor: var(--menuForegroundColor),
+  --textarea-fg: var(--textarea-fg),
+  --textarea-bg: var(--textarea-bg),
 
-  --submenuBackgroundColor: var(--submenuBackgroundColor),
-  --channelBackgroundColor: var(--channelBackgroundColor),
+  --support-btn-bg: var(--support-btn-bg),
+  --support-btn-fg: var(--support-btn-fg),
+  --support-btn-heart-bg: var(--support-btn-heart-bg),
 
-  --inputForegroundColor: var(--inputForegroundColor),
-  --inputBackgroundColor: var(--inputBackgroundColor),
-  --inputPlaceholderColor: var(--inputPlaceholderColor),
-  --inputBorderColor: var(--inputBorderColor),
+  --secondary-icon-color: var(--secondary-icon-color),
+  --active-icon-color: var(--active-icon-color),
+  --active-icon-bg: var(--active-icon-bg),
 
-  --textareaForegroundColor: var(--textareaForegroundColor),
-  --textareaBackgroundColor: var(--textareaBackgroundColor),
-  --markdownTextareaBackgroundColor: var(--markdownTextareaBackgroundColor),
+  --fg-500: var(--fg-500),
+  --fg-450: var(--fg-450),
+  --fg-400: var(--fg-400),
+  --fg-350: var(--fg-350),
+  --fg-300: var(--fg-300),
+  --fg-250: var(--fg-250),
+  --fg-200: var(--fg-200),
+  --fg-150: var(--fg-150),
+  --fg-100: var(--fg-100),
+  --fg-50: var(--fg-50),
 
-  --actionButtonColor: var(--actionButtonColor),
-  --activatedActionButtonColor: var(--activatedActionButtonColor),
+  --bg-secondary-600: var(--bg-secondary-600),
+  --bg-secondary-550: var(--bg-secondary-550),
+  --bg-secondary-500: var(--bg-secondary-500),
+  --bg-secondary-450: var(--bg-secondary-450),
+  --bg-secondary-400: var(--bg-secondary-400),
+  --bg-secondary-350: var(--bg-secondary-350),
+  --bg-secondary-300: var(--bg-secondary-300),
+  --bg-secondary-250: var(--bg-secondary-250),
+  --bg-secondary-200: var(--bg-secondary-200),
 
-  --supportButtonColor: var(--supportButtonColor),
-  --supportButtonBackgroundColor: var(--supportButtonBackgroundColor),
-  --supportButtonHeartColor: var(--supportButtonHeartColor),
+  --menu-fg: var(--menu-fg),
+  --menu-fg-600: var(--menu-fg-600),
+  --menu-fg-550: var(--menu-fg-550),
+  --menu-fg-500: var(--menu-fg-500),
+  --menu-fg-450: var(--menu-fg-450),
+  --menu-fg-400: var(--menu-fg-400),
+  --menu-fg-350: var(--menu-fg-350),
+  --menu-fg-300: var(--menu-fg-300),
+  --menu-fg-250: var(--menu-fg-250),
+  --menu-fg-200: var(--menu-fg-200),
+  --menu-fg-150: var(--menu-fg-150),
+  --menu-fg-100: var(--menu-fg-100),
+  --menu-fg-50: var(--menu-fg-50),
 
-  --embedForegroundColor: var(--embedForegroundColor),
-  --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor),
+  --menu-bg: var(--menu-bg),
+  --menu-bg-600: var(--menu-bg-600),
+  --menu-bg-550: var(--menu-bg-550),
+  --menu-bg-500: var(--menu-bg-500),
+  --menu-bg-450: var(--menu-bg-450),
+  --menu-bg-400: var(--menu-bg-400),
+  --menu-bg-350: var(--menu-bg-350),
+  --menu-bg-300: var(--menu-bg-300),
+  --menu-bg-250: var(--menu-bg-250),
+  --menu-bg-200: var(--menu-bg-200),
 
-  --horizontalMarginContent: var(--horizontalMarginContent),
-  --videosHorizontalMarginContent: var(--videosHorizontalMarginContent),
-  --mainColWidth: var(--mainColWidth)
+  --on-primary: var(--on-primary),
+  --on-primary-700: var(--on-primary-700),
+  --on-primary-650: var(--on-primary-650),
+  --on-primary-600: var(--on-primary-600),
+  --on-primary-550: var(--on-primary-550),
+  --on-primary-500: var(--on-primary-500),
+  --on-primary-450: var(--on-primary-450),
+  --on-primary-400: var(--on-primary-400),
+  --on-primary-350: var(--on-primary-350),
+  --on-primary-300: var(--on-primary-300),
+  --on-primary-250: var(--on-primary-250),
+  --on-primary-200: var(--on-primary-200),
+  --on-primary-150: var(--on-primary-150),
+  --on-primary-100: var(--on-primary-100),
+  --on-primary-50: var(--on-primary-50),
+
+  --primary: var(--primary),
+  --primary-700: var(--primary-700),
+  --primary-650: var(--primary-650),
+  --primary-600: var(--primary-600),
+  --primary-550: var(--primary-550),
+  --primary-500: var(--primary-500),
+  --primary-450: var(--primary-450),
+  --primary-400: var(--primary-400),
+  --primary-350: var(--primary-350),
+  --primary-300: var(--primary-300),
+  --primary-250: var(--primary-250),
+  --primary-200: var(--primary-200),
+  --primary-150: var(--primary-150),
+  --primary-100: var(--primary-100),
+  --primary-50: var(--primary-50),
+
+  --border-primary: var(--border-primary),
+  --border-secondary: var(--border-secondary),
+
+  --alert-primary-fg: var(--alert-primary-fg),
+  --alert-primary-bg: var(--alert-primary-bg),
+  --alert-primary-border-color: var(--alert-primary-border-color),
+
+  --menu-margin-left: var(--menu-margin-left),
 );
 
 // SASS type check our CSS variables
@@ -165,11 +221,20 @@ $variables: (
   }
 }
 
-/*** z-index groups ***/
+@function pvar-fallback($variable, $fallback) {
+  @if map.has-key($variables, $variable) and map.has-key($variables, $fallback) {
+    @return var($variable, map.get($variables, $fallback));
+  } @else {
+    @error 'ERROR: Variable #{$variable} or #{$fallback} does not exist';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// z-index groups
+// ---------------------------------------------------------------------------
 
 $zindex: (
   miniature       :    10,
-  sub-menu        : 12500,
   overlay         : 12550,
   menu            : 12600,
   search-typeahead: 12650,
@@ -188,3 +253,11 @@ $zindex: (
 @function z($label) {
   @return map.get($zindex, $label);
 }
+
+// ---------------------------------------------------------------------------
+// Other variables that use pvar()
+// ---------------------------------------------------------------------------
+
+$separator-border-color: pvar(--bg-secondary-400);
+$separator-border-color-on-secondary: pvar(--bg-secondary-450);
+$focus-box-shadow-form: #{$focus-box-shadow-dimensions} #{pvar(--fg-100)};

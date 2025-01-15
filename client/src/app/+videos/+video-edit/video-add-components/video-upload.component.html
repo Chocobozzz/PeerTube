@@ -2,7 +2,7 @@
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
 
-    <div class="button-file form-control" [ngbTooltip]="'(extensions: ' + getVideoExtensions() + ')'">
+    <div class="button-file primary-button form-control" [ngbTooltip]="'(extensions: ' + getVideoExtensions() + ')'">
       <span i18n>Select the file to upload</span>
       <input
         aria-label="Select the file to upload"
@@ -42,7 +42,7 @@
       </div>
 
       <div class="form-group upload-audio-button">
-        <my-button theme="orange" [label]="getAudioUploadLabel()" icon="upload" (click)="uploadAudio()"></my-button>
+        <my-button theme="primary" [label]="getAudioUploadLabel()" icon="upload" (click)="uploadAudio()"></my-button>
       </div>
     </ng-container>
   </div>
@@ -50,7 +50,7 @@
 
 <my-upload-progress
   [isUploading]="isUploadingVideo" [uploadPercents]="videoUploadPercents" [error]="error" [uploaded]="videoUploaded"
-  [enableRetryAfterError]="enableRetryAfterError" (cancel)="cancelUpload()" (retry)="retryUpload()"
+  [enableRetryAfterError]="enableRetryAfterError" (cancelUpload)="cancelUpload()" (retry)="retryUpload()"
 >
 </my-upload-progress>
 
@@ -71,7 +71,7 @@
     <div i18n *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
 
     <my-button
-      theme="orange" i18n-label label="Publish" icon="circle-tick"
+      theme="primary" i18n-label label="Publish" icon="circle-tick"
       (click)="updateSecondStep()" (keydown.enter)="updateSecondStep()" [disabled]="isPublishingButtonDisabled()"
     ></my-button>
   </div>

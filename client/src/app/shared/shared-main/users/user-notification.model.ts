@@ -243,11 +243,11 @@ export class UserNotification implements UserNotificationServer {
           break
 
         case UserNotificationType.NEW_INSTANCE_FOLLOWER:
-          this.instanceFollowUrl = '/admin/follows/followers-list'
+          this.instanceFollowUrl = '/admin/settings/follows/followers-list'
           break
 
         case UserNotificationType.AUTO_INSTANCE_FOLLOWING:
-          this.instanceFollowUrl = '/admin/follows/following-list'
+          this.instanceFollowUrl = '/admin/settings/follows/following-list'
           break
 
         case UserNotificationType.NEW_PEERTUBE_VERSION:
@@ -255,7 +255,7 @@ export class UserNotification implements UserNotificationServer {
           break
 
         case UserNotificationType.NEW_PLUGIN_VERSION:
-          this.pluginUrl = `/admin/plugins/list-installed`
+          this.pluginUrl = `/admin/settings/plugins/list-installed`
           this.pluginQueryParams.pluginType = this.plugin.type + ''
           break
 

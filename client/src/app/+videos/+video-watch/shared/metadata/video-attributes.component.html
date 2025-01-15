@@ -20,12 +20,12 @@
 
 <div *ngIf="!!video.inputFileUpdatedAt" class="attribute attribute-re-uploaded-on">
   <span i18n class="attribute-label">Video re-upload</span>
-  <span class="attribute-value">{{ video.inputFileUpdatedAt | date: 'short' }}</span>
+  <span class="attribute-value">{{ video.inputFileUpdatedAt | ptDate: 'short' }}</span>
 </div>
 
 <div *ngIf="!!video.originallyPublishedAt" class="attribute attribute-originally-published-at">
   <span i18n class="attribute-label">Originally published</span>
-  <span class="attribute-value">{{ video.originallyPublishedAt | date: 'shortDate' }}</span>
+  <span class="attribute-value">{{ video.originallyPublishedAt | ptDate: 'shortDate' }}</span>
 </div>
 
 <div class="attribute attribute-category">

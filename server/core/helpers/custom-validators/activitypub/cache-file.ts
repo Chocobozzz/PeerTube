@@ -20,7 +20,7 @@ function isPlaylistRedundancyUrlValid (url: any) {
     isActivityPubUrlValid(url.href)
 }
 
-// TODO: compat with < 6.1, use isRemoteVideoUrlValid instead in 7.0
+// TODO: compat with < 6.1, use isRemoteVideoUrlValid instead in 8.0
 function isRedundancyUrlVideoValid (url: any) {
   const size = url.size || url['_:size']
   const fps = url.fps || url['_fps']

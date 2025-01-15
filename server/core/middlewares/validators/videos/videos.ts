@@ -472,10 +472,6 @@ export const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid hasHLSFiles boolean'),
-  query('hasWebtorrentFiles') // TODO: remove in v7
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid hasWebtorrentFiles boolean'),
   query('hasWebVideoFiles')
     .optional()
     .customSanitizer(toBooleanOrNull)

@@ -1,23 +1,23 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, formatICU, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath, getAllFiles, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ActorImage,
   HTMLServerConfig,
   UserRight,
-  Video as VideoServerModel,
   VideoConstant,
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
   VideoScheduleUpdate,
+  Video as VideoServerModel,
+  VideoSource,
   VideoState,
   VideoStateType,
   VideoStreamingPlaylist,
-  VideoStreamingPlaylistType,
-  VideoSource
+  VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
 
 export class Video implements VideoServerModel {
@@ -325,13 +325,5 @@ export class Video implements VideoServerModel {
       user &&
       this.isLocal === true &&
       (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
-  }
-
-  getExactNumberOfViews () {
-    if (this.isLive) {
-      return formatICU($localize`{viewers, plural, =0 {No viewers} =1 {1 viewer} other {{viewers} viewers}}`, { viewers: this.viewers })
-    }
-
-    return formatICU($localize`{views, plural, =0 {No view} =1 {1 view} other {{views} views}}`, { views: this.views })
   }
 }

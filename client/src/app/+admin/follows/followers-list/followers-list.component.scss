@@ -1,22 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-a {
-  display: inline-block;
-
-  @include disable-default-a-behaviour;
-
-  &,
-  &:hover {
-    color: pvar(--mainForegroundColor);
-  }
-
-  span {
-    font-size: 80%;
-    color: pvar(--inputPlaceholderColor);
-  }
-}
-
 .action-cell {
   my-button:first-child {
     @include margin-right(10px);

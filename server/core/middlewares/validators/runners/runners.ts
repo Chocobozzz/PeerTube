@@ -74,6 +74,7 @@ const deleteRunnerValidator = [
 
 const getRunnerFromTokenValidator = [
   body('runnerToken').custom(isRunnerTokenValid),
+  body('jobTypes').optional().isArray(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return

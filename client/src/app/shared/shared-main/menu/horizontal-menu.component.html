@@ -1,0 +1,28 @@
+<div class="root" [ngClass]="{ 'with-mb': withMarginBottom }">
+  <h1 *ngIf="h1">
+    <my-global-icon *ngIf="h1Icon" [iconName]="h1Icon"></my-global-icon>
+
+    {{ h1 }}
+  </h1>
+
+  <ng-template #entryTemplate let-item="item" let-dropdown="dropdown" let-modal="modal">
+    <a
+      myPluginSelector [pluginSelectorId]="item.pluginSelectorId"
+      [routerLink]="item.routerLink" [queryParams]="item.queryParams" routerLinkActive="active" class="entry"
+      [ngClass]="{ 'child-active': activeParent === item, 'dropdown-item': dropdown, 'in-modal': modal }"
+      (click)="onLinkClick(modal)"
+    >
+      {{ item.label }}
+    </a>
+  </ng-template>
+
+  <div [ngClass]="{ 'children-container': areChildren, 'parent-container': !areChildren }">
+    <my-list-overflow [items]="menuEntries" [itemTemplate]="entryTemplate" [hasBorder]="!areChildren"></my-list-overflow>
+  </div>
+
+  @if (children && children.length !== 0) {
+    <div class="children-container">
+      <my-list-overflow [items]="children" [itemTemplate]="entryTemplate"></my-list-overflow>
+    </div>
+  }
+</div>

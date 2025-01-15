@@ -15,7 +15,7 @@ my-global-icon {
   }
 
   a {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
 
     @include ellipsis;
   }
@@ -47,6 +47,8 @@ my-global-icon {
 
 .right-form {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
 
   > *:not(:last-child) {
     @include margin-right(10px);

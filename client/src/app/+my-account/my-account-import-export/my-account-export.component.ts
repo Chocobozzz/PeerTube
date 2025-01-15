@@ -1,8 +1,9 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, UserExport, UserExportState } from '@peertube/peertube-models'
 import { concatMap, from, of, switchMap, toArray } from 'rxjs'
@@ -16,7 +17,7 @@ import { UserImportExportService } from './user-import-export.service'
   templateUrl: './my-account-export.component.html',
   styleUrls: [ './my-account-export.component.scss' ],
   standalone: true,
-  imports: [ NgIf, NgFor, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, DatePipe, BytesPipe, AlertComponent ]
+  imports: [ NgIf, NgFor, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, PTDatePipe, BytesPipe, AlertComponent ]
 })
 export class MyAccountExportComponent implements OnInit {
   @ViewChild('exportModal', { static: true }) exportModal: NgbModal

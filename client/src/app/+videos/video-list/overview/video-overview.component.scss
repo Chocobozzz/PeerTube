@@ -2,53 +2,72 @@
 @use '_mixins' as *;
 @use '_miniature' as *;
 
-.section-title {
+.section-header {
   // make the element span a full grid row within .videos grid
   grid-column: 1 / -1;
 }
 
-.margin-content {
-  @include grid-videos-miniature-layout-with-margins;
+.section-title,
+.section-header {
+  display: flex;
+  align-items: center
+}
+
+.section-title {
+  @include font-size(1.5rem);
+  @include margin-bottom(2rem);
+}
+
+.margin-content.videos-margin-content {
+  @include grid-videos-miniature-layout-with-margins($rows-limit: 2);
+}
+
+.quick-access {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  white-space: nowrap;
+}
+
+.quick-access-links {
+
+  a {
+    color: pvar(--fg-300);
+    text-decoration: underline;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &:not(.see-all-quick-links) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.see-all-quick-links {
+  white-space: normal;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .section {
-  &:first-child {
-    padding-top: 15px;
-
-    .section-title {
-      border-top: 0 !important;
-    }
-  }
-
-  .section-title {
-    @include font-size(1.5rem);
-    @include padding-top(1.25rem);
-    @include margin-bottom(2rem);
-
-    &:not(h2) {
-      border-top: 1px solid $separator-border-color;
-    }
-
-    a > h2 {
-      margin-bottom: 0;
-      display: inline-block;
-      font-weight: $font-bold;
-    }
-
-    my-actor-avatar {
-      display: inline-block;
-      vertical-align: text-top;
-
-      @include margin-right(8px);
-    }
-  }
+  @include rfs(2.5rem, margin-top);
 
   @media screen and (max-width: $mobile-view) {
     max-height: initial;
     overflow: initial;
 
     .section-title {
-      @include margin-left(10px);
+      @include margin-left(pvar(--x-margin-content));
     }
   }
+}
+
+my-actor-avatar {
+  width: 40px;
+  height: 40px;
+
+  @include margin-right(10px);
 }

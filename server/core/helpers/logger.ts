@@ -18,8 +18,8 @@ const consoleLoggerFormat = format.printf(info => {
 
   if (info.sql) {
     if (CONFIG.LOG.PRETTIFY_SQL) {
-      additionalInfos += '\n' + sqlFormat(info.sql, {
-        language: 'sql',
+      additionalInfos += '\n' + sqlFormat(info.sql as string, {
+        language: 'postgresql',
         tabWidth: 2
       })
     } else {

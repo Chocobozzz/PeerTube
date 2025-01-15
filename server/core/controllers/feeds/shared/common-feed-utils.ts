@@ -2,7 +2,7 @@ import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, Person } from '@peertube/feed/lib/typings/index.js'
 import { maxBy, pick } from '@peertube/peertube-core-utils'
 import { ActorImageType } from '@peertube/peertube-models'
-import { mdToOneLinePlainText } from '@server/helpers/markdown.js'
+import { mdToPlainText } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -35,7 +35,7 @@ export function initFeed (parameters: {
 
   return new Feed({
     title: name,
-    description: mdToOneLinePlainText(description),
+    description: mdToPlainText(description),
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: link || webserverUrl,
     link: link || webserverUrl,

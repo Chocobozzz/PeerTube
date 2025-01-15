@@ -1,12 +1,9 @@
 <div class="margin-content">
-  <div class="title-page">
-    <span class="me-1" i18n>Update</span>
-    <a [routerLink]="getVideoUrl()">{{ videoDetails?.name }}</a>
-  </div>
+  <h1 class="title-page" i18n>Update {{ videoDetails?.name }}</h1>
 
   <my-upload-progress
     [isUploading]="isReplacingVideoFile" [uploadPercents]="videoUploadPercents" [error]="uploadError" [uploaded]="updateDone"
-    [enableRetryAfterError]="false" (cancel)="cancelUpload()"
+    [enableRetryAfterError]="false" (cancelUpload)="cancelUpload()"
   >
   </my-upload-progress>
 
@@ -44,7 +41,7 @@
 
     <div class="submit-container">
       <my-button
-        theme="orange" i18n-label label="Update" icon="circle-tick" (click)="update()" (keydown.enter)="update()"
+        theme="primary" i18n-label label="Update" icon="circle-tick" (click)="update()" (keydown.enter)="update()"
         [disabled]="!form.valid || isUpdatingVideo === true"
       ></my-button>
     </div>

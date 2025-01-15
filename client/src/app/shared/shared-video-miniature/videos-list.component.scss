@@ -10,41 +10,9 @@ $margin-top: 2rem;
   display: grid;
   grid-template-columns: auto 1fr auto;
 
-  .title,
-  .title-subscription {
-    grid-column: 1;
-  }
-
-  .title {
-    font-size: 18px;
-    color: pvar(--mainForegroundColor);
-    display: inline-block;
-    font-weight: $font-semibold;
-  }
-
-  .title-subscription {
-    grid-row: 2;
-    font-size: 14px;
-    color: pvar(--greyForegroundColor);
-
-    &.no-title {
-      margin-top: 10px;
-    }
-  }
-
   .action-block {
     grid-column: 3;
     grid-row: 1/3;
-  }
-
-  my-feed {
-    display: inline-block;
-    width: 16px;
-    color: pvar(--mainColor);
-    position: relative;
-    top: -2px;
-
-    @include margin-left(5px);
   }
 }
 
@@ -68,17 +36,12 @@ $margin-top: 2rem;
 }
 
 .display-as-row.videos {
-  @include margin-left(pvar(--horizontalMarginContent));
-  @include margin-right(pvar(--horizontalMarginContent));
+  @include margin-left(pvar(--x-margin-content));
+  @include margin-right(pvar(--x-margin-content));
 
   .video-wrapper {
     margin-bottom: 1rem;
   }
-}
-
-my-global-icon[iconname=live] {
-  position: relative;
-  top: -1px;
 }
 
 @media screen and (max-width: $mobile-view) {

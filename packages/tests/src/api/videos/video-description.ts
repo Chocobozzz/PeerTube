@@ -68,15 +68,6 @@ describe('Test video description', function () {
     }
   })
 
-  it('Should fetch long description on each server', async function () {
-    for (const server of servers) {
-      const video = await server.videos.get({ id: videoUUID })
-
-      const { description } = await server.videos.getDescription({ descriptionPath: video.descriptionPath })
-      expect(description).to.equal(longDescription)
-    }
-  })
-
   it('Should update with a short description', async function () {
     const attributes = {
       description: 'short description'
@@ -91,9 +82,6 @@ describe('Test video description', function () {
       const video = await server.videos.get({ id: videoUUID })
 
       expect(video.description).to.equal('short description')
-
-      const { description } = await server.videos.getDescription({ descriptionPath: video.descriptionPath })
-      expect(description).to.equal('short description')
     }
   })
 

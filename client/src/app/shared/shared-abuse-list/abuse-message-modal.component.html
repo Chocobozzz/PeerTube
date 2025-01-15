@@ -21,7 +21,7 @@
 
         <div class="bubble">
           <div class="content" [innerHTML]="message.messageHtml"></div>
-          <div class="date">{{ message.createdAt | date }}</div>
+          <div class="date">{{ message.createdAt | ptDate }}</div>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="form-group inputs">
-        <input type="submit" i18n-value value="Add a message" class="peertube-button orange-button" [disabled]="!form.valid || sendingMessage">
+        <input type="submit" i18n-value value="Add a message" class="peertube-button primary-button" [disabled]="!form.valid || sendingMessage">
       </div>
     </form>
 

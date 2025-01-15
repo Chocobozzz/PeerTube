@@ -272,8 +272,8 @@ describe('Test users', function () {
       }
     })
 
-    it('Should be able to update my avatar with a gif, and then a png', async function () {
-      for (const extension of [ '.png', '.gif' ]) {
+    it('Should be able to update my avatar with a gif, a webp and a png', async function () {
+      for (const extension of [ '.png', '.gif', '.webp' ]) {
         const fixture = 'avatar' + extension
 
         await server.users.updateMyAvatar({ token: userToken, fixture })

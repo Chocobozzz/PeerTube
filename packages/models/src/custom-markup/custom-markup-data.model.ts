@@ -59,10 +59,6 @@ export type ContainerMarkupData = {
   justifyContent?: 'space-between' | 'normal' // default to 'space-between'
 }
 
-export type InstanceBannerMarkupData = {
-  revertHomePaddingTop?: StringBoolean // default to 'true'
-}
-
 export type InstanceAvatarMarkupData = {
   size: string // size in pixels
 }

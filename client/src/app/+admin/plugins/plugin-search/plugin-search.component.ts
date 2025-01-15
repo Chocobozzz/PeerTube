@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -14,7 +14,6 @@ import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-bu
 import { AutofocusDirective } from '../../../shared/shared-main/common/autofocus.directive'
 import { InfiniteScrollerDirective } from '../../../shared/shared-main/common/infinite-scroller.directive'
 import { PluginCardComponent } from '../shared/plugin-card.component'
-import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 
 @Component({
   selector: 'my-plugin-search',
@@ -22,7 +21,6 @@ import { PluginNavigationComponent } from '../shared/plugin-navigation.component
   styleUrls: [ './plugin-search.component.scss' ],
   standalone: true,
   imports: [
-    PluginNavigationComponent,
     NgIf,
     GlobalIconComponent,
     AutofocusDirective,
@@ -96,7 +94,7 @@ export class PluginSearchComponent implements OnInit {
   }
 
   reloadPlugins () {
-    this.pagination.currentPage = 1
+    resetCurrentPage(this.pagination)
     this.plugins = []
 
     this.loadMorePlugins()
@@ -138,7 +136,7 @@ export class PluginSearchComponent implements OnInit {
   }
 
   getShowRouterLink (plugin: PeerTubePluginIndex) {
-    return [ '/admin', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, this.pluginType) ]
+    return [ '/admin', 'settings', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, this.pluginType) ]
   }
 
   isThemeSearch () {

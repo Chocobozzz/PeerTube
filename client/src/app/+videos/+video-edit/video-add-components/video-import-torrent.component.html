@@ -2,7 +2,7 @@
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
 
-    <div class="button-file form-control" [ngbTooltip]="'(extensions: .torrent)'">
+    <div class="button-file primary-button form-control" [ngbTooltip]="'(extensions: .torrent)'">
       <span i18n>Select the torrent to import</span>
       <input
         aria-label="Select the torrent to import" i18n-aria-label
@@ -37,7 +37,7 @@
     </div>
 
     <input
-      type="button" i18n-value value="Import"
+      type="button" i18n-value value="Import" class="peertube-button primary-button"
       [disabled]="!isMagnetUrlValid() || isImportingVideo" (click)="importVideo()"
     />
   </div>
@@ -64,7 +64,7 @@
 
   <div class="submit-container">
     <my-button
-      theme="orange" i18n-label label="Update" icon="circle-tick" (click)="updateSecondStep()"
+      theme="primary" i18n-label label="Update" icon="circle-tick" (click)="updateSecondStep()"
       [disabled]="!form.valid || isUpdatingVideo === true"
     ></my-button>
   </div>

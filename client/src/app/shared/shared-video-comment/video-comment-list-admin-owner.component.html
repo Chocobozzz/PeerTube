@@ -9,7 +9,7 @@
     <div class="caption">
       <div>
         <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
           [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
@@ -31,7 +31,7 @@
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
       </th>
-      <th scope="col" style="width: 150px;">
+      <th scope="col" style="width: 70px;">
         <span i18n class="visually-hidden">Actions</span>
       </th>
       <th scope="col" i18n>Account</th>
@@ -56,7 +56,7 @@
       <td class="action-cell">
         <my-action-dropdown
           [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
-          i18n-label label="Actions" [actions]="videoCommentActions" [entry]="videoComment"
+          [actions]="videoCommentActions" [entry]="videoComment" buttonSize="small"
         ></my-action-dropdown>
       </td>
 
@@ -64,7 +64,7 @@
         <a [href]="videoComment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
             <my-actor-avatar [actor]="videoComment.account" actorType="account" size="32"></my-actor-avatar>
-          <div>
+            <div>
               {{ videoComment.account.displayName }}
               <span>{{ videoComment.by }}</span>
             </div>
@@ -75,7 +75,7 @@
       <td class="video">
         <em i18n>Commented video</em>
 
-        <a [href]="videoComment.localUrl" target="_blank" rel="noopener noreferrer">{{ videoComment.video.name }}</a>
+        <a [href]="videoComment.localUrl" target="_blank" rel="noopener noreferrer" class="text-decoration-none">{{ videoComment.video.name }}</a>
       </td>
 
       <td class="c-hand comment-content-cell" [pRowToggler]="videoComment">
@@ -96,7 +96,7 @@
         }
       </td>
 
-      <td class="c-hand" [pRowToggler]="videoComment">{{ videoComment.createdAt | date: 'short' }}</td>
+      <td class="c-hand" [pRowToggler]="videoComment">{{ videoComment.createdAt | ptDate: 'short' }}</td>
     </tr>
   </ng-template>
 

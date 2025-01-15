@@ -26,14 +26,18 @@
 
   <div class="form-group">
     <label i18n for="description">Description</label>
-    <textarea
-      id="description" formControlName="description" class="form-control"
-      [ngClass]="{ 'input-error': formErrors['description'] }"
-    ></textarea>
+
+    <my-help helpType="markdownText" supportRelMe="true"></my-help>
+
+    <my-markdown-textarea
+      inputId="description" formControlName="description" class="form-control"
+      markdownType="enhanced" [formError]="formErrors['description']" withEmoji="true" withHtml="true"
+    ></my-markdown-textarea>
+
     <div *ngIf="formErrors.description" class="form-error" role="alert">
       {{ formErrors.description }}
     </div>
   </div>
 
-  <input type="submit" i18n-value value="Save profile" [disabled]="!form.valid">
+  <input class="mt-3 peertube-button primary-button" type="submit" i18n-value value="Save profile" [disabled]="!form.valid">
 </form>

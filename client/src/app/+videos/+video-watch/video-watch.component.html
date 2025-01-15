@@ -1,37 +1,39 @@
 <div class="root" [ngClass]="{ 'theater-enabled': theaterEnabled }" [hidden]="!playlist && !video">
-  <!-- We need the video container for videojs so we just hide it -->
-  <div id="video-wrapper">
-    <div *ngIf="remoteServerDown" class="remote-server-down">
-      <ng-container i18n>Sorry, but this video did not load because the remote instance did not respond.</ng-container>
+  <div class="margin-content player-margin-content">
+    <!-- We need the video container for videojs so we just hide it -->
+    <div id="video-wrapper">
+      <div *ngIf="remoteServerDown" class="remote-server-down">
+        <ng-container i18n>Sorry, but this video did not load because the remote instance did not respond.</ng-container>
 
-      <br />
+        <br />
 
-      <ng-container i18n>Please try refreshing the page, or try again later.</ng-container>
+        <ng-container i18n>Please try refreshing the page, or try again later.</ng-container>
+      </div>
+
+      <div id="videojs-wrapper">
+        <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
+      </div>
+
+      <div class="player-widget-component">
+        <my-video-watch-playlist
+          #videoWatchPlaylist [playlist]="playlist"
+          [hidden]="transcriptionWidgetOpened"
+          (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
+        ></my-video-watch-playlist>
+
+        @if (transcriptionWidgetOpened) {
+          <my-video-transcription
+            [video]="video" [captions]="videoCaptions" [currentTime]="getCurrentTime()"
+            (segmentClicked)="handleTimestampClicked($event)" (closeTranscription)="transcriptionWidgetOpened = false"
+          ></my-video-transcription>
+        }
+      </div>
+
+      <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
     </div>
 
-    <div id="videojs-wrapper">
-      <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
-    </div>
-
-    <div class="player-widget-component">
-      <my-video-watch-playlist
-        #videoWatchPlaylist [playlist]="playlist"
-        [hidden]="transcriptionWidgetOpened"
-        (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
-      ></my-video-watch-playlist>
-
-      @if (transcriptionWidgetOpened) {
-        <my-video-transcription
-          [video]="video" [captions]="videoCaptions" [currentTime]="getCurrentTime()"
-          (segmentClicked)="handleTimestampClicked($event)" (closeTranscription)="transcriptionWidgetOpened = false"
-        ></my-video-transcription>
-      }
-    </div>
-
-    <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
+    <my-video-alert [video]="video" [user]="user" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
   </div>
-
-  <my-video-alert [video]="video" [user]="user" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
@@ -41,7 +43,7 @@
           <ng-template #publishedTemplate>
             <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
             •
-            <my-video-views-counter [video]="video"></my-video-views-counter>
+            <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
           </ng-template>
 
           <div class="d-block d-md-none"> <!-- only shown on medium devices, has its counterpart for larger viewports below -->
@@ -105,7 +107,7 @@
       <my-video-attributes [video]="video"></my-video-attributes>
 
       <my-video-comments
-        class="border-top"
+        class="border-top pt-3"
         [video]="video"
         [videoPassword]="videoPassword"
         [user]="user"

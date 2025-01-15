@@ -1,6 +1,8 @@
 @use 'sass:math';
 @use '_variables' as *;
 @use '_mixins' as *;
+@use 'form-mixins' as *;
+@use '_button-mixins' as *;
 
 $form-base-input-width: 340px;
 
@@ -54,7 +56,7 @@ my-select-custom-value {
     > a,
     > div {
       padding: 20px;
-      background: pvar(--submenuBackgroundColor);
+      background: pvar(--bg-secondary-400);
       border-radius: 4px;
       box-sizing: border-box;
       height: 100%;
@@ -65,14 +67,14 @@ my-select-custom-value {
   .dashboard-text {
     text-align: center;
     font-size: 130%;
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
     line-height: 30px;
     margin-bottom: 20px;
   }
 
   .dashboard-label {
     font-size: 90%;
-    color: pvar(--inputPlaceholderColor);
+    color: pvar(--fg-300);
     text-align: center;
   }
 }

@@ -5,7 +5,7 @@
   border: 0;
   padding: 0;
   opacity: 0.7;
-  color: pvar(--mainForegroundColor);
+  color: pvar(--fg);
   display: inline-block;
   font-weight: $font-semibold;
   border-bottom: 2px solid transparent;
@@ -16,13 +16,13 @@
   @include margin-right(55px);
 
   &.active {
-    border-bottom-color: pvar(--mainColor);
+    border-bottom-color: pvar(--border-primary);
   }
 
   &:hover,
   &:active,
   &:focus {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
   }
 
   &.active,
@@ -38,47 +38,24 @@
   }
 }
 
-.title-page-v2 {
-  font-weight: normal;
-  font-size: 15px;
-  padding: 35px 25px;
-}
-
 .title-page {
-  margin-top: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 1.5rem;
+  color: pvar(--fg-400);
 
-  color: pvar(--mainForegroundColor);
-  display: inline-block;
-  font-weight: $font-semibold;
-  font-size: 1.25rem;
+  @include font-size(2rem);
 
-  @include margin-right(55px);
-
-  a {
-    color: inherit;
-
-    @include disable-default-a-behaviour;
-
-    &:hover {
-      color: inherit;
-      opacity: 0.8;
-    }
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    @include margin-left(15px);
+  my-global-icon {
+    @include global-icon-size(28px);
+    @include margin-right(0.5rem);
   }
 }
 
 .admin-sub-header {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
-
-  @media screen and (max-width: $small-view) {
-    flex-direction: column;
-  }
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .pt-breadcrumb {
@@ -92,8 +69,13 @@
   .breadcrumb-item {
     display: flex;
 
+    &,
     a {
-      color: pvar(--mainColor);
+      color: pvar(--fg-400);
+    }
+
+    a:hover {
+      color: pvar(--fg-300);
     }
 
     + .breadcrumb-item {
@@ -101,15 +83,10 @@
 
       &::before {
         display: inline-block;
-        color: #6c757d;
         content: '/';
 
         @include padding-right(0.5rem);
       }
-    }
-
-    &.active {
-      color: #6c757d;
     }
   }
 }

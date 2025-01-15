@@ -11,36 +11,42 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { ToastModule } from 'primeng/toast'
-import { tap } from 'rxjs/operators'
+import { switchMap } from 'rxjs/operators'
 import { AppComponent } from './app/app.component'
 import routes from './app/app.routes'
 import {
   CustomReuseStrategy,
-  MenuGuards,
   PluginService,
   PreloadSelectedModulesList,
   RedirectService,
   ServerService,
+  ThemeService,
   getCoreProviders
 } from './app/core'
-import { polyfillICU } from './app/helpers'
 import { getMainProviders } from './app/shared/shared-main/main-providers'
 import { environment } from './environments/environment'
 import { logger } from './root-helpers'
 
 registerLocaleData(localeOc, 'oc')
 
-export function loadConfigFactory (server: ServerService, pluginService: PluginService, redirectService: RedirectService) {
+export function loadConfigFactory (
+  server: ServerService,
+  pluginService: PluginService,
+  themeService: ThemeService,
+  redirectService: RedirectService
+) {
   const initializeServices = () => {
     redirectService.init()
-    pluginService.initializePlugins()
+    themeService.initialize()
+
+    return pluginService.initializePlugins()
   }
 
   return () => {
     const result = server.loadHTMLConfig()
-    if (result) return result.pipe(tap(() => initializeServices()))
+    if (result) return result.pipe(switchMap(() => initializeServices()))
 
-    initializeServices()
+    return initializeServices()
   }
 }
 
@@ -74,7 +80,6 @@ const bootstrap = () => bootstrapApplication(AppComponent, {
     getFormProviders(),
 
     PreloadSelectedModulesList,
-    ...MenuGuards.guards,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
 
     provideRouter(routes,
@@ -93,12 +98,7 @@ const bootstrap = () => bootstrapApplication(AppComponent, {
     {
       provide: APP_INITIALIZER,
       useFactory: loadConfigFactory,
-      deps: [ ServerService, PluginService, RedirectService ],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => polyfillICU,
+      deps: [ ServerService, PluginService, ThemeService, RedirectService ],
       multi: true
     }
   ]

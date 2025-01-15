@@ -5,12 +5,12 @@
 
       <span class="plugin-version">{{ version }}</span>
 
-      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin.homepage" i18n-title title="Plugin homepage (new window)">
+      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin.homepage" i18n-title title="Homepage (new window)">
         <my-global-icon iconName="home"></my-global-icon>
       </a>
 
-      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="getPluginOrThemeHref(plugin.name)" i18n-title title="Plugin homepage (new window)">
-        <my-global-icon iconName="npm"></my-global-icon>
+      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="getPluginOrThemeHref(plugin.name)" i18n-title title="NPM page (new window)">
+        <my-global-icon iconName="registry"></my-global-icon>
       </a>
 
       <ng-content select="badges"></ng-content>

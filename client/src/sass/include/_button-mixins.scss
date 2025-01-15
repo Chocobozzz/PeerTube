@@ -1,0 +1,244 @@
+@use 'sass:math';
+@use 'sass:color';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@mixin secondary-button (
+  $fg: inherit,
+  $active-bg: pvar(--bg-secondary-500),
+  $hover-bg: pvar(--bg-secondary-450),
+  $border-color: pvar(--bg-secondary-500)
+) {
+  & {
+    color: $fg;
+    background-color: transparent;
+    border: 1px solid $border-color !important;
+  }
+
+  &:active,
+  &.active,
+  &:focus,
+  &:focus-visible {
+    color: $fg;
+    background-color: $active-bg;
+    border-color: $border-color;
+  }
+
+  // Override bootstrap
+  &.btn:active,
+  &.btn:focus-visible,
+  &.btn.show {
+    color: $fg !important;
+    background-color: $active-bg !important;
+    border-color: $border-color !important;
+  }
+
+  &:hover {
+    color: $fg;
+    background-color: $hover-bg;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  &:not(.icon-only) my-global-icon {
+    color: pvar(--secondary-icon-color);
+  }
+}
+
+
+@mixin primary-button {
+  @include button-focus(pvar(--primary-350));
+
+  &,
+  &:active,
+  &.active,
+  &:focus {
+    color: pvar(--on-primary);
+    background-color: pvar(--primary);
+    border: 1px solid pvar(--primary);
+  }
+
+  // Override bootstrap
+  &.btn:active,
+  &.btn:focus-visible,
+  &.btn.show {
+    color: pvar(--on-primary) !important;
+    background-color: pvar(--primary) !important;
+    border: 1px solid pvar(--primary) !important;
+  }
+
+  &:hover {
+    color: pvar(--on-primary);
+    background-color: pvar(--primary-400);
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  my-global-icon {
+    color: pvar(--on-primary);
+  }
+}
+
+@mixin tertiary-button {
+  color: pvar(--fg-200);
+  background-color: transparent;
+  border: 1px solid transparent;
+
+  &:hover {
+    color: pvar(--fg-200);
+    background-color: pvar(--bg-secondary-400);
+  }
+
+  &[disabled] {
+    cursor: default;
+  }
+
+  &:active {
+    background-color: pvar(--bg-secondary-450);
+  }
+
+  &.show {
+    border-color: pvar(--fg-200);
+  }
+
+  // Override bootstrap
+  &.btn:active {
+    background-color: transparent !important;
+  }
+
+  &.btn.show {
+    border-color: pvar(--fg-200) !important;
+  }
+}
+
+@mixin rounded-icon-button {
+  padding: 0.5rem !important;
+  border-radius: 100% !important;
+}
+
+@mixin danger-button {
+  background-color: pvar(--red);
+  color: pvar(--on-red);
+
+  @include button-focus(pvar(--red));
+
+  &:hover,
+  &:active,
+  &.active,
+  &:focus:not(:focus-visible) {
+    opacity: 0.8;
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.7;
+  }
+}
+
+@mixin peertube-button {
+  padding: pvar(--input-y-padding) pvar(--input-x-padding);
+  font-weight: $font-bold;
+
+  border-radius: pvar(--input-border-radius);
+
+  text-align: center;
+  cursor: pointer;
+
+  font-size: $button-font-size;
+  line-height: 1.5;
+
+  my-global-icon + *:not(:empty) {
+    @include margin-left(8px);
+  }
+
+  &.icon-only {
+    padding: pvar(--input-y-padding) 8px;
+  }
+
+  &:is(input[type=button]) {
+    // Because of primeng that redefines border-radius of all input[type="..."]
+    border-radius: pvar(--input-border-radius) !important;
+  }
+}
+
+@mixin peertube-button-big {
+  height: auto;
+  padding: 10px 25px;
+  font-size: 18px;
+  line-height: 1.2;
+  border: 0;
+  font-weight: $font-semibold;
+
+  // Because of primeng that redefines border-radius of all input[type="..."]
+  border-radius: pvar(--input-border-radius) !important;
+}
+
+@mixin peertube-button-small {
+  padding: 0 10px !important;
+  font-size: 14px !important;
+}
+
+@mixin peertube-button-link {
+  display: inline-block;
+
+  @include disable-default-a-behaviour;
+  @include peertube-button;
+}
+
+@mixin peertube-button-big-link {
+  display: inline-block;
+
+  @include disable-default-a-behaviour;
+  @include peertube-button-big;
+}
+
+@mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px, $right: 0) {
+  my-global-icon {
+    position: relative;
+    top: $top;
+    right: $right;
+
+    @include global-icon-size($width);
+  }
+
+  &:not(.icon-only) {
+    my-global-icon {
+      @include margin-right($margin-right);
+    }
+  }
+}
+
+@mixin button-focus($color) {
+  &:focus,
+  &:focus-visible {
+    box-shadow: #{$focus-box-shadow-dimensions} $color;
+  }
+}
+
+@mixin peertube-file {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 100px;
+    text-align: end;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: pvar(--bg);
+    cursor: inherit;
+    display: block;
+  }
+}

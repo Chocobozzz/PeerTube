@@ -22,7 +22,6 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
-  title = $localize`Videos`
   defaultSort = '-publishedAt' as VideoSortField
 
   displayOptions: MiniatureDisplayOptions = {

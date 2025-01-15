@@ -1,5 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.peertube-radio-container {
+  @include peertube-radio-container;
+}
 
 .pt-input-text {
   @include peertube-input-text(100%);
@@ -42,7 +47,7 @@
   +*+.form-error,
   // Markdown textarea
   +*+*+.form-error {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
   }
 }
 
@@ -65,20 +70,3 @@ label + .form-group-description,
   margin-bottom: 10px;
   margin-top: 0;
 }
-
-.reset-button {
-  height: auto;
-
-  @include peertube-button;
-  @include grey-button;
-
-  &.reset-button-small {
-    font-size: 80%;
-    padding: 2px 5px;
-    margin: 0 0.25rem;
-    height: fit-content;
-    line-height: initial;
-  }
-}
-
-

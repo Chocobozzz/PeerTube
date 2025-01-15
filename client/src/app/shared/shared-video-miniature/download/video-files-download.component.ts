@@ -1,15 +1,10 @@
-import { KeyValuePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
+import { KeyValuePipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import {
   NgbCollapse,
-  NgbNav,
-  NgbNavContent,
-  NgbNavItem,
-  NgbNavLink,
-  NgbNavLinkBase,
-  NgbNavOutlet,
+  NgbNavModule,
   NgbTooltip
 } from '@ng-bootstrap/ng-bootstrap'
 import { objectKeysTyped, pick } from '@peertube/peertube-core-utils'
@@ -38,18 +33,12 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
     FormsModule,
     GlobalIconComponent,
     NgFor,
-    NgbNav,
-    NgbNavItem,
-    NgbNavLink,
-    NgbNavLinkBase,
-    NgbNavContent,
+    NgbNavModule,
     InputTextComponent,
-    NgbNavOutlet,
     NgbCollapse,
     KeyValuePipe,
     NgbTooltip,
     NgTemplateOutlet,
-    NgClass,
     AlertComponent
   ]
 })

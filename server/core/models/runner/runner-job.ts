@@ -185,16 +185,24 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     return RunnerJobModel.findOne<MRunnerJobRunner>(query)
   }
 
-  static listAvailableJobs () {
-    const query = {
+  static listAvailableJobs (jobTypes?: string[]) {
+    const jobTypesWhere = jobTypes
+      ? {
+        type: {
+          [Op.in]: jobTypes
+        }
+      }
+      : {}
+
+    return RunnerJobModel.findAll<MRunnerJob>({
       limit: 10,
       order: getSort('priority'),
       where: {
-        state: RunnerJobState.PENDING
-      }
-    }
+        state: RunnerJobState.PENDING,
 
-    return RunnerJobModel.findAll<MRunnerJob>(query)
+        ...jobTypesWhere
+      }
+    })
   }
 
   static listStalledJobs (options: {

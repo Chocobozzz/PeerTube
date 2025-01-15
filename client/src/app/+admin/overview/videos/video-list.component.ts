@@ -1,8 +1,9 @@
-import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
@@ -19,10 +20,10 @@ import { TableModule, TableRowExpandEvent } from 'primeng/table'
 import { finalize } from 'rxjs/operators'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
-import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
+import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
@@ -54,7 +55,7 @@ import { VideoAdminService } from './video-admin.service'
     NgFor,
     EmbedComponent,
     VideoBlockComponent,
-    DatePipe,
+    PTDatePipe,
     RouterLink,
     BytesPipe
   ]

@@ -7,7 +7,7 @@ import { isActivityPubVideoDurationValid, isObjectValid } from './misc.js'
 function isWatchActionObjectValid (action: WatchActionObject) {
   if (!action || action.type !== 'WatchAction') return false
 
-  // TODO: compat with < 6.1, remove in 7.0
+  // TODO: compat with < 6.1, remove in 8.0
   if (!action.uuid && action['identifier']) action.uuid = action['identifier']
 
   if (action['_:actionStatus'] && !action.actionStatus) action.actionStatus = action['_:actionStatus']
@@ -43,7 +43,7 @@ function isLocationValid (location: any) {
 
 function areWatchSectionsValid (sections: WatchActionObject['watchSections']) {
   return Array.isArray(sections) && sections.every(s => {
-    // TODO: compat with < 6.1, remove in 7.0
+    // TODO: compat with < 6.1, remove in 8.0
     if (s['_:endTimestamp'] && !s.endTimestamp) s.endTimestamp = s['_:endTimestamp']
 
     return isVideoTimeValid(s.startTimestamp) && isVideoTimeValid(s.endTimestamp)

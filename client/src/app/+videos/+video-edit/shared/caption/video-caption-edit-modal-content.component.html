@@ -42,72 +42,78 @@
       </div>
 
       <div class="text-start segments pe-2 ps-2" [hidden]="rawEdition">
-        <div class="pt-1 pb-1 mb-3" *ngFor="let segment of segments">
-          @if (segmentToUpdate === segment) {
-            <div role="form">
-              <div class="d-flex flex-wrap ">
-                <div>
-                  <label class="visually-hidden" i18n for="segmentStart">Segment start timestamp</label>
+        @for (segment of segments; track segment.id) {
+          <div class="pt-1 pb-1 mb-3">
+            @if (segmentToUpdate === segment) {
+              <div role="form">
+                <div class="d-flex flex-wrap ">
+                  <div>
+                    <label class="visually-hidden" i18n for="segmentStart">Segment start timestamp</label>
 
-                  <my-timestamp-input
-                    class="me-1"
-                    inputName="segmentStart" [disableBorder]="false" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
-                    [(ngModel)]="segment.startMs" [parser]="timestampParser" [formatter]="timestampFormatter"
-                  ></my-timestamp-input>
+                    <my-timestamp-input
+                      class="me-1"
+                      inputName="segmentStart" enableBorder="true" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
+                      [(ngModel)]="segment.startMs" [parser]="timestampParser" [formatter]="timestampFormatter"
+                    ></my-timestamp-input>
 
-                  <my-button *ngIf="publishedVideo" icon="clock-arrow-down" i18n-title title="Use video current time as start time" (click)="videoTimeForSegmentStart(segment)">
-                  </my-button>
+                    <my-button *ngIf="publishedVideo" icon="clock-arrow-down" i18n-title title="Use video current time as start time" (click)="videoTimeForSegmentStart(segment)">
+                    </my-button>
+                  </div>
+
+                  <my-global-icon class="d-inline-block ms-2 me-2" iconName="move-right"></my-global-icon>
+
+                  <div>
+                    <label class="visually-hidden" i18n for="segmentEnd">Segment end timestamp</label>
+
+                    <my-timestamp-input
+                      class="me-1"
+                      inputName="segmentEnd" enableBorder="true" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
+                      [(ngModel)]="segment.endMs" [parser]="timestampParser" [formatter]="timestampFormatter"
+                    ></my-timestamp-input>
+
+                    <my-button *ngIf="publishedVideo" icon="clock-arrow-down" i18n-title title="Use video current time as end time" (click)="videoTimeForSegmentEnd(segment)">
+                    </my-button>
+                  </div>
                 </div>
 
-                <my-global-icon class="d-inline-block ms-2 me-2" iconName="move-right"></my-global-icon>
+                <div class="d-flex mt-2">
+                  <div class="form-group w-100">
+                    <label class="visually-hidden" i18n for="segment-edition">Segment end timestamp</label>
 
-                <div>
-                  <label class="visually-hidden" i18n for="segmentEnd">Segment end timestamp</label>
+                    <textarea  id="segment-edition" name="segment-edition" class="form-control fs-7" [(ngModel)]="segment.text"></textarea>
 
-                  <my-timestamp-input
-                    class="me-1"
-                    inputName="segmentEnd" [disableBorder]="false" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
-                    [(ngModel)]="segment.endMs" [parser]="timestampParser" [formatter]="timestampFormatter"
-                  ></my-timestamp-input>
+                    <div *ngIf="segmentEditionError" class="form-error" role="alert">{{ segmentEditionError }}</div>
+                  </div>
 
-                  <my-button *ngIf="publishedVideo" icon="clock-arrow-down" i18n-title title="Use video current time as end time" (click)="videoTimeForSegmentEnd(segment)">
-                  </my-button>
+                  <div class="d-flex flex-column ms-3">
+                    <my-button i18n-title title="Save" icon="tick" (click)="onEditionSaved(segment)"></my-button>
+                    <my-button class="mt-3" i18n-title title="Revert" icon="undo" (click)="onEditionCanceled(segment)"></my-button>
+                  </div>
                 </div>
               </div>
-
-              <div class="d-flex mt-2">
-                <div class="form-group w-100">
-                  <label class="visually-hidden" i18n for="segment-edition">Segment end timestamp</label>
-
-                  <textarea  id="segment-edition" name="segment-edition" class="form-control fs-7" [(ngModel)]="segment.text"></textarea>
-
-                  <div *ngIf="segmentEditionError" class="form-error" role="alert">{{ segmentEditionError }}</div>
+            } @else {
+              <div class="d-flex">
+                <div
+                  class="flex-grow-1 segment-text ps-1 pe-1" role="button" tabindex="0" i18n-title title="Jump to this segment"
+                  (keyup.enter)="onSegmentClick($event, segment)" (click)="onSegmentClick($event, segment)"
+                  [ngClass]="{ active: segment === activeSegment }"
+                >
+                  <strong class="segment-start me-2 d-block">{{ segment.startFormatted }} -> {{ segment.endFormatted }}</strong>
+                  <span class="segment-text fs-7">{{ segment.text }}</span>
                 </div>
 
-                <div class="d-flex flex-column ms-3">
-                  <my-button i18n-title title="Save" icon="tick" (click)="onEditionSaved(segment)"></my-button>
-                  <my-button class="mt-3" i18n-title title="Revert" icon="undo" (click)="onEditionCanceled(segment)"></my-button>
-                </div>
+                <div class="d-flex flex-column ms-3" [ngClass]="{ 'opacity-0': !!segmentToUpdate }">
+                    @defer (on viewport) {
+                      <my-edit-button i18n-title title="Edit this segment" (click)="updateSegment(segment)"></my-edit-button>
+                      <my-delete-button class="mt-1" i18n-title title="Delete this segment" (click)="deleteSegment(segment)"></my-delete-button>
+                    } @placeholder {
+                      <div style="height: 100%; width: 40px"></div>
+                    }
+                  </div>
               </div>
-            </div>
-          } @else {
-            <div class="d-flex">
-              <div
-                class="flex-grow-1 segment-text ps-1 pe-1" role="button" tabindex="0" i18n-title title="Jump to this segment"
-                (keyup.enter)="onSegmentClick($event, segment)" (click)="onSegmentClick($event, segment)"
-                [ngClass]="getSegmentClasses(segment)"
-              >
-                <strong class="segment-start me-2 d-block">{{ segment.startFormatted }} -> {{ segment.endFormatted }}</strong>
-                <span class="segment-text fs-7" [innerHTML]="segment.text | nl2br"></span>
-              </div>
-
-              <div class="d-flex flex-column ms-3" [ngClass]="{ 'opacity-0': !!segmentToUpdate }">
-                <my-edit-button i18n-title title="Edit this segment" (click)="updateSegment(segment)"></my-edit-button>
-                <my-delete-button class="mt-1" i18n-title title="Delete this segment" (click)="deleteSegment(segment)"></my-delete-button>
-              </div>
-            </div>
-          }
-        </div>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -115,12 +121,12 @@
 
 <div class="modal-footer inputs">
   <input
-    type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+    type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
     (click)="hide()" (key.enter)="hide()"
   >
 
   <input
-    type="button" i18n-value value="Edit this caption" class="peertube-button orange-button"
+    type="button" i18n-value value="Edit this caption" class="peertube-button primary-button"
     [disabled]="rawEdition && !form.valid" (click)="updateCaption()"
   >
 </div>

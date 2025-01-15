@@ -3,10 +3,8 @@ import { getCheckbox } from '../utils'
 export class AnonymousSettingsPage {
 
   async openSettings () {
-    const link = await $$('.menu-link').filter(async i => {
-      return await i.getText() === 'My settings'
-    }).then(links => links[0])
-
+    const link = await $('my-header .settings-button')
+    await link.waitForClickable()
     await link.click()
 
     await $('my-user-video-settings').waitForDisplayed()

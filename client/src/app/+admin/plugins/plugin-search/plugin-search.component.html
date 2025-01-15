@@ -1,23 +1,29 @@
-<my-plugin-navigation [pluginType]="pluginType"></my-plugin-navigation>
-
 <my-alert class="mt-3" type="primary" i18n *ngIf="pluginInstalled">
   To load your new installed plugins or themes, refresh the page.
 </my-alert>
 
 <div class="result-and-search">
-  <ng-container *ngIf="!search">
-    <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
-    <ng-container *ngIf="!isThemeSearch()" i18n>Popular plugins</ng-container>
-    <ng-container *ngIf="isThemeSearch()" i18n>Popular themes</ng-container>
-  </ng-container>
+  @if (!search) {
+    <div>
+      <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
 
-  <ng-container *ngIf="search && !isSearching">
-    <my-global-icon iconName="search"></my-global-icon>
+      @if (isThemeSearch()) {
+        <ng-container i18n>Popular themes</ng-container>
+      } @else {
+        <ng-container i18n>Popular plugins</ng-container>
+      }
+    </div>
+  }
 
-    <ng-container i18n>
-      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
-    </ng-container>
-  </ng-container>
+  @if (search && !isSearching) {
+    <div>
+      <my-global-icon iconName="search"></my-global-icon>
+
+      <ng-container i18n>
+        {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
+      </ng-container>
+    </div>
+  }
 
   <div class="search-bar">
     <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..." myAutofocus />
@@ -34,13 +40,15 @@
       <div ngProjectAs="badges">
         <span i18n *ngIf="plugin.installed" class="pt-badge badge-success">Installed</span>
 
-        <span *ngIf="plugin.official" class="pt-badge badge-primary" i18n i18n-title title="This plugin is developed by Framasoft, the not-for-profit that develops PeerTube">
-          Official
-        </span>
+        <span
+          *ngIf="plugin.official" class="pt-badge badge-primary"
+          i18n i18n-title title="This plugin is developed by Framasoft, the not-for-profit that develops PeerTube"
+        >Official</span>
 
-        <span *ngIf="plugin.recommended" class="pt-badge badge-primary" i18n i18n-title title="This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube">
-          Recommended
-        </span>
+        <span
+          *ngIf="plugin.recommended" class="pt-badge badge-primary"
+          i18n i18n-title title="This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube"
+        >Recommended</span>
       </div>
 
       <div ngProjectAs="buttons">

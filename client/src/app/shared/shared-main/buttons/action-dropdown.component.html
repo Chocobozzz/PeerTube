@@ -1,12 +1,19 @@
-<div class="dropdown-root" ngbDropdown [placement]="placement" [container]="container" *ngIf="areActionsDisplayed(actions, entry)">
+<div
+  *ngIf="areActionsDisplayed(actions, entry)" class="dropdown-root"
+  ngbDropdown (openChange)="openChange.emit($event)" [placement]="placement" [container]="container"
+>
   <button
-    class="action-button" [ngClass]="{ small: buttonSize === 'small', grey: theme === 'grey', orange: theme === 'orange', 'button-styled': buttonStyled }"
+    class="action-button peertube-button border-0"
+    [ngClass]="{ 'icon-only': !label, 'peertube-button-small': buttonSize === 'small', 'secondary-button': buttonStyled && theme === 'secondary', 'primary-button': buttonStyled && theme === 'primary' }"
     ngbDropdownToggle aria-label="Open actions" i18n-aria-label
   >
-    <my-global-icon *ngIf="!label && buttonDirection === 'horizontal'" class="more-icon" iconName="more-horizontal"></my-global-icon>
-    <my-global-icon *ngIf="!label && buttonDirection === 'vertical'" class="more-icon" iconName="more-vertical"></my-global-icon>
-
-    <span *ngIf="label" class="dropdown-toggle">{{ label }}</span>
+    @if (label) {
+      <span class="dropdown-toggle">{{ label }}</span>
+    } @else if (buttonDirection === 'horizontal') {
+      <my-global-icon class="more-icon" iconName="more-horizontal"></my-global-icon>
+    } @else if (buttonDirection === 'vertical') {
+      <my-global-icon class="more-icon" iconName="more-vertical"></my-global-icon>
+    }
   </button>
 
   <div ngbDropdownMenu class="dropdown-menu">
@@ -33,27 +40,30 @@
             </div>
           </ng-template>
 
-          <a
-            *ngIf="action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [queryParams]="getQueryParams(action, entry)" [title]="action.title || ''"
-          >
-            <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-          </a>
-
-          <span
-            *ngIf="!action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="custom-action dropdown-item" tabindex="0" role="button" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
-          >
-            <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-          </span>
-
-          <h6
-            *ngIf="!action.linkBuilder && action.isHeader && areActionsDisplayed(actions, entry)" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-header" [title]="action.title || ''"
-          >
-            <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
-          </h6>
-
+          @if (action.linkBuilder) {
+            @if (!action.isHeader) {
+              <a
+                [ngClass]="{ 'with-icon': !!action.iconName }"
+                class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [queryParams]="getQueryParams(action, entry)" [title]="action.title || ''"
+              >
+                <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+              </a>
+            }
+          } @else {
+            @if (!action.isHeader) {
+              <span
+                [ngClass]="{ 'with-icon': !!action.iconName }"
+                class="custom-action dropdown-item" tabindex="0" role="button" [title]="action.title || ''"
+                (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
+              >
+                <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+              </span>
+            } @else if (areActionsDisplayed(actions, entry)) {
+              <h6 [ngClass]="{ 'with-icon': !!action.iconName }" class="dropdown-header" [title]="action.title || ''">
+                <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+              </h6>
+            }
+          }
         </div>
       </ng-container>
 

@@ -3,8 +3,12 @@
 
 .banner {
   @include block-ratio('img', $banner-inverted-ratio);
+
+  img {
+    border-radius: 15px;
+  }
 }
 
-.revert-margin-content.banner {
-  width: calc(100% + 2 * #{pvar(--horizontalMarginContent)});
+.pt-icon {
+  @include icon(24px);
 }

@@ -77,6 +77,7 @@ export class RestExtractor {
   }
 
   private buildErrorMessage (err: any) {
+    console.log(err)
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       const errorMessage = err.error.detail || err.error.title
@@ -115,10 +116,6 @@ export class RestExtractor {
         .join('. ')
     }
 
-    if (err.error?.error) {
-      return err.error.error
-    }
-
     if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
       return $localize`Media is too large for the server. Please contact you administrator if you want to increase the limit size.`
     }
@@ -142,6 +139,6 @@ export class RestExtractor {
       return $localize`Server is unavailable. Please retry later.`
     }
 
-    return $localize`Unknown server error`
+    return err.error?.error || err.error?.detail || err.error?.title || $localize`Unknown server error`
   }
 }

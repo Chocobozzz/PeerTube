@@ -42,7 +42,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
     date: false,
     views: true,
     by: true,
-    avatar: false,
+    avatar: true,
     privacyLabel: false,
     privacyText: false,
     state: false,

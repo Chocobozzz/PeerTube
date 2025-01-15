@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 .logs {
   font-family: monospace;
@@ -51,6 +52,7 @@
 .header {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   margin-bottom: 10px;
 
   .peertube-select-container {
@@ -63,6 +65,8 @@
   }
 
   > * {
+    margin-bottom: 10px;
+
     @include margin-left(10px);
   }
 }
@@ -92,7 +96,7 @@
 my-copy-button {
   position: absolute;
   right: 5px;
-  background: pvar(--mainBackgroundHoverColor);
+  background: pvar(--bg-secondary-300);
 }
 
 @include on-small-main-col {
@@ -101,7 +105,6 @@ my-copy-button {
 
     > * {
       width: 100% !important;
-      margin-bottom: 10px !important;
 
       @include margin-left(0 !important);
     }

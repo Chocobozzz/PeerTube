@@ -2,9 +2,9 @@
 @use '_mixins' as *;
 @use 'nav' as *;
 
-$border-width: 3px;
+$border-width: 0;
 $border-type: solid;
-$border-color: #EAEAEA;
+$border-color: #fff;
 $nav-link-height: 40px;
 
 .upload-message {
@@ -37,25 +37,21 @@ $nav-link-height: 40px;
   }
 }
 
-.margin-content {
-  padding-top: 20px;
-}
-
-::ng-deep .video-add-nav {
+:host ::ng-deep .video-add-nav {
   @include peertube-nav-tabs($border-width, $border-type, $border-color, $nav-link-height);
 
   a.nav-link {
     &.active {
-      background-color: pvar(--submenuBackgroundColor) !important;
+      background-color: pvar(--bg-secondary-400) !important;
     }
   }
 }
 
-::ng-deep .upload-video-container {
+:host ::ng-deep .upload-video-container {
   border: $border-width $border-type $border-color;
   border-top: transparent;
 
-  background-color: pvar(--submenuBackgroundColor);
+  background-color: pvar(--bg-secondary-400);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   width: 100%;
@@ -66,7 +62,7 @@ $nav-link-height: 40px;
   padding-top: 20px;
 
   &.dragover {
-    border: 3px dashed pvar(--mainColor);
+    border: 3px dashed pvar(--primary);
   }
 }
 
@@ -80,7 +76,7 @@ $nav-link-height: 40px;
     /* Hide active tab style to not have a moving tab effect */
     a.nav-link.active {
       border-color: transparent;
-      background-color: pvar(--mainBackgroundColor) !important;
+      background-color: pvar(--bg) !important;
     }
   }
 }
@@ -88,10 +84,4 @@ $nav-link-height: 40px;
 /* Make .video-add-nav tabs scrollable on small devices */
 @media screen and (max-width: $small-view) {
   @include nav-scroll();
-}
-
-@media screen and (max-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include nav-scroll();
-  }
 }

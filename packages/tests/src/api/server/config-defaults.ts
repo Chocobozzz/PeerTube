@@ -212,7 +212,50 @@ describe('Test config defaults', function () {
     })
   })
 
+  describe('Default player value', function () {
+
+    before(async function () {
+      const overrideConfig = {
+        defaults: {
+          player: {
+            auto_play: false
+          }
+        },
+        signup: {
+          limit: 15
+        }
+      }
+
+      await server.kill()
+      await server.run(overrideConfig)
+    })
+
+    it('Should have appropriate autoplay config', async function () {
+      const config = await server.config.getConfig()
+
+      expect(config.defaults.player.autoPlay).to.be.false
+    })
+
+    it('Should create a user with this default setting', async function () {
+      await server.users.create({ username: 'user_autoplay_1' })
+      const userToken = await server.login.getAccessToken('user_autoplay_1')
+
+      const { autoPlayVideo } = await server.users.getMyInfo({ token: userToken })
+      expect(autoPlayVideo).to.be.false
+    })
+
+    it('Should register a user with this default setting', async function () {
+      await server.registrations.register({ username: 'user_autoplay_2' })
+
+      const userToken = await server.login.getAccessToken('user_autoplay_2')
+
+      const { autoPlayVideo } = await server.users.getMyInfo({ token: userToken })
+      expect(autoPlayVideo).to.be.false
+    })
+  })
+
   describe('Default user attributes', function () {
+
     it('Should create a user and register a user with the default config', async function () {
       await server.config.updateExistingConfig({
         newConfig: {

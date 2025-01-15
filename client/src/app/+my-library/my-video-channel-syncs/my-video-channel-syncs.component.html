@@ -1,12 +1,5 @@
 <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
 
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="refresh" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>My synchronizations</ng-container>
-  </div>
-</div>
-
 <div *ngIf="!syncEnabled()">
   <p class="muted" i18n>⚠️ The instance doesn't allow channel synchronization</p>
 </div>
@@ -46,8 +39,8 @@
     <tr>
       <td class="action-cell">
         <my-action-dropdown
-           container="body"
-          [actions]="videoChannelSyncActions" [entry]="videoChannelSync"
+          container="body" [actions]="videoChannelSyncActions" [entry]="videoChannelSync"
+          buttonSize="small"
         ></my-action-dropdown>
       </td>
 
@@ -77,8 +70,18 @@
         </span>
       </td>
 
-      <td>{{ videoChannelSync.createdAt | date: 'short' }}</td>
-      <td>{{ videoChannelSync.lastSyncAt | date: 'short' }}</td>
+      <td>{{ videoChannelSync.createdAt | ptDate: 'short' }}</td>
+      <td>{{ videoChannelSync.lastSyncAt | ptDate: 'short' }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td myAutoColspan>
+        <div class="no-results">
+          <ng-container i18n>You don't have channel synchronisation configured.</ng-container>
+        </div>
+      </td>
     </tr>
   </ng-template>
 </p-table>

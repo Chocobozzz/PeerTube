@@ -1,62 +1,15 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
+@use '_form-mixins' as *;
 
 .header {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-bottom: 1.25rem;
-
-  a {
-    @include button-with-icon(18px, 3px, -1px);
-  }
-
-  button {
-    @include button-with-icon(20px, 3px, -1px);
-  }
 
   .peertube-select-container {
     @include peertube-select-container(auto);
-  }
-}
-
-@media screen and (max-width: $mobile-view) {
-  .header {
-    flex-direction: column;
-
-    > :first-child,
-    .peertube-select-container {
-      margin-bottom: 15px;
-    }
-
-    .peertube-select-container {
-      @include margin-left(0 !important);
-    }
-  }
-}
-
-@media screen and (min-width: $mobile-view) and (max-width: $small-view) {
-  .header {
-    a {
-      font-size: 0;
-      padding: 0 13px;
-    }
-
-    .peertube-select-container {
-      width: auto !important;
-    }
-  }
-}
-
-@media screen and (min-width: $mobile-view) and (max-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    .header {
-      a {
-        font-size: 0;
-        padding: 0 13px;
-      }
-
-      .peertube-select-container {
-        width: auto !important;
-      }
-    }
   }
 }

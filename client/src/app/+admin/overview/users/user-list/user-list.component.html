@@ -1,10 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Users</h1>
-  </div>
-</div>
-
 <p-table
   [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
@@ -15,12 +8,12 @@
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
           [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
 
-        <a *ngIf="!isInSelectionMode()" class="peertube-create-button" routerLink="/admin/users/create">
+        <a *ngIf="!isInSelectionMode()" class="peertube-create-button" routerLink="/admin/overview/users/create">
           <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Create user</ng-container>
         </a>
@@ -97,7 +90,7 @@
       <td class="action-cell">
         <my-user-moderation-dropdown
           *ngIf="!isInSelectionMode()" [user]="user" [account]="user.accountMutedStatus" [displayOptions]="userModerationDisplayOptions"
-          container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+          container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()" buttonSize="small">
         </my-user-moderation-dropdown>
       </td>
 
@@ -149,9 +142,9 @@
         <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth }}</span>
       </td>
 
-      <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
+      <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | ptDate: 'short' }}</td>
 
-      <td *ngIf="isSelected('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | date: 'short' }}</td>
+      <td *ngIf="isSelected('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | ptDate: 'short' }}</td>
     </tr>
   </ng-template>
 

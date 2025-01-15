@@ -41,8 +41,8 @@
         <span i18n class="pt-badge badge-success" *ngIf="!getErrorLabel(session)">Success</span>
         <span class="pt-badge badge-danger" *ngIf="getErrorLabel(session)">{{ getErrorLabel(session) }}</span>
 
-        <span i18n>Started on {{ session.startDate | date:'medium' }}</span>
-        <span i18n *ngIf="session.endDate">Ended on {{ session.endDate | date:'medium' }}</span>
+        <span i18n>Started on {{ session.startDate | ptDate:'medium' }}</span>
+        <span i18n *ngIf="session.endDate">Ended on {{ session.endDate | ptDate:'medium' }}</span>
         <a i18n *ngIf="session.replayVideo" [routerLink]="getVideoUrl(session.replayVideo)" target="_blank">Go to replay</a>
         <span i18n *ngIf="isReplayBeingProcessed(session)">Replay is being processed...</span>
       </div>
@@ -51,7 +51,7 @@
 
   <div class="modal-footer">
     <div class="form-group inputs">
-      <input type="button" role="button" i18n-value value="Close" class="peertube-button grey-button" (click)="dismiss()" />
+      <input type="button" role="button" i18n-value value="Close" class="peertube-button secondary-button" (click)="dismiss()" />
 
       <my-edit-button
         i18n-label label="Update live settings"

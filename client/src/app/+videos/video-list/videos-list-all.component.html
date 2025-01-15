@@ -1,0 +1,22 @@
+<h1 class="visually-hidden" i18n>Browse videos</h1>
+
+<my-videos-list
+  [getVideosObservableFunction]="getVideosObservableFunction"
+  [getSyndicationItemsFunction]="getSyndicationItemsFunction"
+
+  [defaultSort]="defaultSort"
+  [defaultScope]="defaultScope"
+
+  displayFilters="true"
+  displayModerationBlock="true"
+
+  loadUserVideoPreferences="true"
+  [groupByDate]="groupByDate"
+
+  highlightLives="true"
+
+  [disabled]="disabled"
+
+  (filtersChanged)="onFiltersChanged($event)"
+>
+</my-videos-list>

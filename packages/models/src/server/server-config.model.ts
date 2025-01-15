@@ -39,7 +39,6 @@ export interface ServerConfig {
   client: {
     videos: {
       miniature: {
-        displayAuthorAvatar: boolean
         preferAuthorDisplayName: boolean
       }
       resumableUpload: {
@@ -75,6 +74,10 @@ export interface ServerConfig {
         enabled: boolean
       }
     }
+
+    player: {
+      autoPlay: boolean
+    }
   }
 
   webadmin: {
@@ -90,6 +93,19 @@ export interface ServerConfig {
     shortDescription: string
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
+
+    serverCountry: string
+
+    support: {
+      text: string
+    }
+
+    social: {
+      externalLink: string
+      mastodonLink: string
+      blueskyLink: string
+    }
+
     defaultClientRoute: string
     customizations: {
       javascript: string
@@ -124,6 +140,9 @@ export interface ServerConfig {
 
   theme: {
     registered: ServerConfigTheme[]
+
+    builtIn: { name: 'peertube-core-light-beige' | 'peertube-core-dark-brown' }[]
+
     default: string
   }
 
@@ -311,6 +330,10 @@ export interface ServerConfig {
     }
   }
 
+  federation: {
+    enabled: boolean
+  }
+
   broadcastMessage: {
     enabled: boolean
     message: string
@@ -353,6 +376,10 @@ export interface ServerConfig {
     remoteRunners: {
       enabled: boolean
     }
+  }
+
+  webrtc: {
+    stunServers: string[]
   }
 }
 

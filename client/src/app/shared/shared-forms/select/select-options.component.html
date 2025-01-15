@@ -24,10 +24,10 @@
     @if (customItemTemplate) {
       <ng-template [ngTemplateOutlet]="customItemTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
     } @else {
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center item-label">
         <img *ngIf="item.imageUrl" alt="" class="me-2" [src]="item.imageUrl" />
 
-        <span [ngClass]="item.classes">{{ item.label }}</span>
+        <span class="ellipsis" [ngClass]="item.classes">{{ item.label }}</span>
       </div>
 
       <span *ngIf="description" class="muted">{{ description }}</span>

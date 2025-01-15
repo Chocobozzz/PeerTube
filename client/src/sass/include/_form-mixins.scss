@@ -1,0 +1,261 @@
+@use 'sass:math';
+@use 'sass:color';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_button-mixins' as *;
+
+@mixin peertube-input-text($width, $font-size: $form-input-font-size) {
+  font-size: $font-size;
+
+  padding: pvar(--input-y-padding) pvar(--input-x-padding);
+  width: $width;
+  max-width: $width;
+  color: pvar(--input-fg);
+  background-color: pvar(--input-bg);
+  border: 1px solid pvar(--input-border-color);
+  border-radius: pvar(--input-border-radius);
+
+  @include rounded-line-height-1-5($font-size);
+
+  &::placeholder {
+    color: pvar(--input-placeholder);
+    font-size: 14px;
+  }
+
+  &[readonly] {
+    color: pvar(--fg-300);
+  }
+
+  &:focus,
+  &:focus-visible {
+    box-shadow: $focus-box-shadow-form;
+    outline: 0;
+  }
+
+  &[disabled] {
+    opacity: 0.4;
+  }
+
+  @media screen and (max-width: calc(#{$width} + 40px)) {
+    width: 100%;
+  }
+}
+
+@mixin peertube-textarea ($width, $height) {
+  @include peertube-input-text($width);
+
+  & {
+    color: pvar(--textarea-fg) !important;
+    background-color: pvar(--textarea-bg) !important;
+    height: $height;
+    padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2);
+  }
+}
+
+@mixin peertube-select-container ($width) {
+  padding: 0;
+  margin: 0;
+  width: $width;
+  position: relative;
+  height: min-content;
+
+  @media screen and (max-width: $width) {
+    width: 100%;
+  }
+
+  &::after {
+    top: 50%;
+    right: calc(0% + 15px);
+    content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border: 5px solid rgba(0, 0, 0, 0);
+    border-top-color: pvar(--fg-300);
+    margin-top: -2px;
+    z-index: 100;
+  }
+
+  select {
+    @include secondary-button;
+    @include rounded-line-height-1-5($form-input-font-size);
+
+    & {
+      font-size: $form-input-font-size;
+
+      padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} + 23px) pvar(--input-y-padding) pvar(--input-x-padding);
+      position: relative;
+      border: 1px solid var(--input-border-color) !important;
+      appearance: none;
+      text-overflow: ellipsis;
+
+      color: pvar(--input-fg);
+      background: pvar(--input-bg);
+
+      border-radius: pvar(--input-border-radius);
+    }
+
+    &:focus,
+    &:focus-visible {
+      box-shadow: $focus-box-shadow-form;
+    }
+
+    &[disabled] {
+      opacity: 0.4;
+    }
+  }
+}
+
+// Thanks: https://codepen.io/manabox/pen/raQmpL
+@mixin peertube-radio-container {
+  &[disabled] {
+    opacity: 0.4;
+  }
+
+  label {
+    font-size: $form-input-font-size;
+  }
+
+  [type=radio]:focus-visible,[type=radio]:focus {
+    & + label::before {
+      box-shadow: $focus-box-shadow-form;
+    }
+  }
+
+  [type=radio]:checked,
+  [type=radio]:not(:checked) {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  [type=radio]:checked + label,
+  [type=radio]:not(:checked) + label {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+    font-weight: $font-regular;
+    color: pvar(--fg);
+  }
+
+  [type=radio]:checked + label::before,
+  [type=radio]:not(:checked) + label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid pvar(--fg-300);
+    border-radius: 100%;
+  }
+
+  [type=radio]:checked + label::after,
+  [type=radio]:not(:checked) + label::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: pvar(--input-check-active-bg);
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    border-radius: 100%;
+    transition: all 0.2s ease;
+  }
+  [type=radio]:not(:checked) + label::after {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  [type=radio]:checked + label::before {
+    border: 2px solid pvar(--fg);
+  }
+
+  [type=radio]:checked + label::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .form-group-description {
+    display: block;
+    margin-top: -7px;
+    margin-bottom: 10px;
+    margin-left: 29px;
+  }
+}
+
+@mixin peertube-checkbox {
+  $border-width: 2px;
+
+  opacity: 0;
+  position: absolute;
+
+  &:focus + span {
+    box-shadow: $focus-box-shadow-form;
+  }
+
+  + span {
+    position: relative;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    border: $border-width solid pvar(--fg-400);
+    border-radius: 2px;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      width: 5px;
+      height: 7px;
+      opacity: 0;
+      transform: rotate(45deg) scale(0);
+      border-right: 2px solid pvar(--input-check-active-fg);
+      border-bottom: 2px solid pvar(--input-check-active-fg);
+    }
+  }
+
+  &:checked + span {
+    background: pvar(--input-check-active-bg);
+    animation: jelly 0.6s ease;
+
+    &::before {
+      content: '';
+      width: 100%;
+      height: 100%;
+      background: pvar(--input-check-active-bg);
+      position: absolute;
+      left: 0;
+      transition: all 0.2s ease;
+      border: 2px solid pvar(--input-check-active-fg);
+      border-radius: 2px;
+    }
+
+    &::after {
+      opacity: 1;
+      transform: rotate(45deg) scale(1);
+    }
+  }
+
+  + span + span {
+    font-weight: $font-regular;
+    cursor: pointer;
+    display: inline;
+
+    @include margin-left(8px);
+  }
+
+  &[disabled] + span,
+  &[disabled] + span + span {
+    opacity: 0.4;
+    cursor: default;
+  }
+}

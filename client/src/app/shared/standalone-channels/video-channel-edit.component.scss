@@ -1,0 +1,27 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+my-actor-banner-edit {
+  max-width: 500px;
+}
+
+input[type=text] {
+  @include peertube-input-text(340px);
+}
+
+input[type=submit] {
+  @include margin-left(auto);
+}
+
+textarea {
+  @include peertube-textarea(500px, 150px);
+}
+
+my-markdown-textarea {
+  max-width: 500px;
+}
+
+.peertube-select-container {
+  @include peertube-select-container(340px);
+}

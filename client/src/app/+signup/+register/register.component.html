@@ -1,16 +1,10 @@
-<div>
+<div class="margin-content">
 
-  <div class="margin-content signup-disabled" *ngIf="signupDisabled">
+  <div class="signup-disabled" *ngIf="signupDisabled">
     <my-alert type="warning" i18n>Signup is not enabled on this instance.</my-alert>
   </div>
 
   <ng-container *ngIf="!signupDisabled">
-    <h1 class="title-page-v2">
-      <strong class="underline-orange">{{ instanceName }}</strong>
-      >
-      <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
-    </h1>
-
     <div class="register-content">
       <my-custom-stepper linear>
 
@@ -26,11 +20,11 @@
           <my-register-step-about [serverStats]="serverStats" [requiresApproval]="requiresApproval" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-about>
 
           <div class="step-buttons">
-            <a i18n class="skip-step underline-orange" routerLink="/login">
+            <a i18n class="skip-step link-primary fw-normal" routerLink="/login">
               <strong>I already have an account</strong>, I log in
             </a>
 
-            <button cdkStepperNext>
+            <button class="peertube-button-big primary-button" cdkStepperNext>
               <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
             </button>
           </div>
@@ -56,8 +50,8 @@
           ></my-register-step-terms>
 
           <div class="step-buttons">
-            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
-            <button cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">{{ defaultNextStepButtonLabel }}</button>
+            <button class="peertube-button-big secondary-button" cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+            <button class="peertube-button-big primary-button" cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">{{ defaultNextStepButtonLabel }}</button>
           </div>
         </cdk-step>
 
@@ -73,8 +67,8 @@
           ></my-register-step-user>
 
           <div class="step-buttons">
-            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
-            <button cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid" (click)="videoUploadDisabled && signup()">{{ stepUserButtonLabel }}</button>
+            <button class="peertube-button-big secondary-button" cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+            <button class="peertube-button-big primary-button" cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid" (click)="videoUploadDisabled && signup()">{{ stepUserButtonLabel }}</button>
           </div>
         </cdk-step>
 
@@ -90,17 +84,17 @@
           ></my-register-step-channel>
 
           <div class="step-buttons">
-            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+            <button class="peertube-button-big secondary-button" cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
 
             <div class="skip-step">
-              <button class="underline-orange button-unstyle" (click)="skipChannelCreation()">
+              <button class="link-primary button-unstyle" (click)="skipChannelCreation()">
                 <strong i18n>I don't want to create a channel</strong>
               </button>
 
               <div class="skip-step-description" i18n>You will be able to create a channel later</div>
             </div>
 
-            <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()">
+            <button class="peertube-button-big primary-button" cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()">
               <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
             </button>
           </div>
@@ -122,7 +116,7 @@
           ></my-signup-success-before-email>
 
           <div *ngIf="signupError" class="step-buttons">
-            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+            <button class="peertube-button-big secondary-button" cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
           </div>
         </cdk-step>
       </my-custom-stepper>

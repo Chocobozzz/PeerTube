@@ -1,17 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon class="top--1px" iconName="globe" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Runner jobs</h1>
-  </div>
-
-  <div>
-    <a routerLink="/admin/system/runners/runners-list" class="peertube-button-link peertube-button-icon grey-button">
-      <my-global-icon iconName="codesandbox" aria-hidden="true"></my-global-icon>
-      <ng-container i18n>Remote runners</ng-container>
-    </a>
-  </div>
-</div>
-
 <p-table
   [value]="runnerJobs" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
@@ -46,13 +32,13 @@
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
           [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
       </div>
 
-      <div class="ms-auto d-flex">
+      <div class="ms-auto d-flex flex-wrap gap-2">
         <my-advanced-input-filter class="me-2" [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
 
         <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
@@ -73,7 +59,7 @@
       <td class="action-cell">
         <my-action-dropdown
           placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="actions" [entry]="runnerJob"
+          i18n-label label="Actions" [actions]="actions" [entry]="runnerJob" buttonSize="small"
         ></my-action-dropdown>
       </td>
 

@@ -150,6 +150,10 @@ defaults:
     embed:
       enabled: true
 
+  player:
+    # By default, playback starts automatically when opening a video
+    auto_play: true
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
@@ -514,6 +518,12 @@ stats:
   total_admins:
     enabled: true
 
+webrtc:
+  # 1 or 2 STUN servers are sufficient
+  stun_servers:
+    - 'stun:stunserver2024.stunprotocol.org'
+    - 'stun:stun.framasoft.org'
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
@@ -535,7 +545,9 @@ contact_form:
 signup:
   enabled: false
 
-  limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  # When the total number of users in your instance reaches this limit, registrations are disabled.
+  # -1 == unlimited
+  limit: 10
 
   minimum_age: 16 # Used to configure the signup form
 
@@ -930,7 +942,7 @@ instance:
 #    - 17 # Kids
 #    - 18 # Food
 
-  default_client_route: '/videos/trending'
+  default_client_route: '/videos/browse'
 
   # Whether or not the instance is dedicated to NSFW content
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
@@ -940,13 +952,32 @@ instance:
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
 
+  # PeerTube uses this setting to explain to your users which law they must follow in the "About" instance pages
+  server_country: '' # Example: "France", "United States", "España"
+
+  support:
+    # Explain to your users how to support your instance
+    # If set, PeerTube will display a "Support" button in "About" instance pages
+    text: '' # Supports Markdown
+
+  # If set, PeerTube will display buttons in "About" instance pages
+  social:
+    # Link to your main website
+    external_link: ''
+    # Mastodon
+    mastodon_link: ''
+    # Bluesky
+    bluesky_link: ''
+
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
+
   # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add `/` to `Disallow:`
   robots: |
     User-agent: *
     Disallow:
+
   # /.well-known/security.txt rules. This endpoint is cached, so you may have to wait a few hours before viewing your changes
   # To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt: |
@@ -1024,7 +1055,6 @@ client:
     miniature:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
-      display_author_avatar: false
 
     resumable_upload:
       # Max size of upload chunks, e.g. '90MB'

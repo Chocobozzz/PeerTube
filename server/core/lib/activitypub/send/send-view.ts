@@ -1,12 +1,11 @@
-import { Transaction } from 'sequelize'
+import { ActivityAudience, ActivityView } from '@peertube/peertube-models'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
-import { ActivityAudience, ActivityView } from '@peertube/peertube-models'
+import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { audiencify, getAudience } from '../audience.js'
 import { getLocalVideoViewActivityPubUrl } from '../url.js'
 import { sendVideoRelatedActivity } from './shared/send-utils.js'
-import { isUsingViewersFederationV2 } from '@peertube/peertube-node-utils'
 
 async function sendView (options: {
   byActor: MActorLight
@@ -61,12 +60,10 @@ function buildViewActivity (options: {
 
     expires: new Date(VideoViewsManager.Instance.buildViewerExpireTime()).toISOString(),
 
-    result: isUsingViewersFederationV2()
-      ? {
-        interactionType: 'WatchAction',
-        type: 'InteractionCounter',
-        userInteractionCount: viewersCount
-      }
-      : undefined
+    result: {
+      interactionType: 'WatchAction',
+      type: 'InteractionCounter',
+      userInteractionCount: viewersCount
+    }
   }, audience)
 }

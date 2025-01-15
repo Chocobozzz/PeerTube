@@ -16,16 +16,19 @@
 }
 
 .title-block {
-  .title-page {
-    @include margin-right(0);
+  > h2 {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+
+    @include font-size(1.25rem);
   }
 
   my-feed {
     display: inline-block;
     transition: ease-in .2s opacity;
     width: 12px;
-    position: relative;
-    top: -3px;
+    height: 12px;
+    line-height: 12px;
 
     @include margin-left(5px);
   }

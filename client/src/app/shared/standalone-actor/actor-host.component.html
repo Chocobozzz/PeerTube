@@ -1,0 +1,28 @@
+<div
+  ngbDropdown autoClose="outside" placement="bottom-end auto" container="body"
+  #dropdown="ngbDropdown"
+>
+  <button class="host button-unstyle ellipsis" ngbDropdownToggle i18n-title title="Get more information" type="button">
+    <svg class="left" width="8" height="19" viewBox="0 0 8 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 19V0L7.45757 8.85586C7.77102 9.22809 7.77102 9.77191 7.45757 10.1441L0 19Z"/>
+    </svg>
+
+    {{ host }}
+
+    <svg class="right" width="9" height="19" viewBox="0 0 9 19" xmlns="http://www.w3.org/2000/svg">
+      <path d="m 8.0900763,0 h -7.08835 C 0.19446632,0 -0.28009268,0.907181 0.18029632,1.5703 L 5.4485063,9.15841 c 0.24316,0.35023 0.23751,0.81611 -0.01406,1.16039 L 0.25209632,17.41 c -0.482855,0.6607 -0.01097,1.59 0.80737998,1.59 h 7.0306 z"/>
+    </svg>
+  </button>
+
+  <div ngbDropdownMenu class="content">
+    <strong class="question mb-3" i18n>What is it?</strong>
+
+    <div class="answer mb-3">
+      This video comes from <a [href]="'https://' + host" target="_blank" rel="noopener noreferrer">{{ host }} <my-global-icon iconName="external-link"></my-global-icon></a> platform, to which we have subscribed.
+    </div>
+
+    <a i18n class="mt-3 mb-3 d-block peertube-button-link secondary-button" routerLink="/about/follows">Show all our subscriptions</a>
+
+    <my-button i18n class="d-block" theme="primary" ptRouterLink="/search" [ptQueryParams]="{ 'host': host }">More {{ host }} content</my-button>
+  </div>
+</div>

@@ -33,7 +33,7 @@
     </div>
 
     <input
-      type="button" i18n-value value="Import"
+      type="button" i18n-value value="Import" class="peertube-button primary-button"
       [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
     />
   </div>
@@ -62,7 +62,7 @@
 
   <div class="submit-container">
     <my-button
-      theme="orange" i18n-label label="Update" icon="circle-tick" (click)="updateSecondStep()"
+      theme="primary" i18n-label label="Update" icon="circle-tick" (click)="updateSecondStep()"
       [disabled]="!form.valid || isUpdatingVideo === true"
     ></my-button>
   </div>

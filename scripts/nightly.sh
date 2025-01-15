@@ -17,6 +17,7 @@ trap "shutdown" SIGINT SIGTERM
 today=$(date '+%F')
 directory_name="peertube-nightly-$today"
 tar_name="peertube-nightly-$today.tar.xz"
+peertube_directory=$(basename $(pwd))
 
 npm run build -- --source-map
 
@@ -50,9 +51,9 @@ sed -i 's/"version": "\([^"]\+\)"/"version": "\1-'"$nightly_version"'"/' ./packa
 
   # temporary setup
   cd ..
-  ln -s "PeerTube" "$directory_name"
+  ln -s "$peertube_directory" "$directory_name"
 
-  XZ_OPT=-e9 tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
+  XZ_OPT=-e9 tar cfJ "$peertube_directory/$tar_name" "${directories_to_archive[@]}"
 
   # temporary setup destruction
   rm "$directory_name"

@@ -94,6 +94,8 @@ export class SelectOptionsComponent implements AfterContentInit, ControlValueAcc
       return
     }
 
+    this.wroteValue = undefined
+
     this.propagateChange(this.selectedId)
   }
 

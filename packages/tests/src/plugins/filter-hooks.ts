@@ -202,13 +202,13 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.video.update-file.accept.result', async function () {
-      const res = await servers[0].videos.replaceSourceFile({
+      const body = await servers[0].videos.replaceSourceFile({
         videoId: videoUUID,
         fixture: 'video_short1.webm',
         completedExpectedStatus: HttpStatusCode.FORBIDDEN_403
       })
 
-      expect((res as any)?.error).to.equal('no webm')
+      expect((body as PeerTubeProblemDocument)?.detail).to.equal('no webm')
     })
 
     it('Should run filter:api.live-video.create.accept.result', async function () {
@@ -499,7 +499,7 @@ describe('Test plugin filter hooks', function () {
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
 
-      expect(res.body.error).to.equal('No jma 1')
+      expect((res.body as PeerTubeProblemDocument).detail).to.equal('No jma 1')
     })
   })
 
@@ -525,7 +525,7 @@ describe('Test plugin filter hooks', function () {
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
 
-      expect((body as unknown as PeerTubeProblemDocument).error).to.equal('No jma 2')
+      expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No jma 2')
     })
   })
 
@@ -556,7 +556,7 @@ describe('Test plugin filter hooks', function () {
 
     it('Should run filter:api.download.torrent.allowed.result', async function () {
       const res = await makeRawRequest({ url: downloadVideos[0].files[0].torrentDownloadUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-      expect(res.body.error).to.equal('Liu Bei')
+      expect((res.body as PeerTubeProblemDocument).detail).to.equal('Liu Bei')
 
       await makeRawRequest({ url: downloadVideos[1].files[0].torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
       await makeRawRequest({ url: downloadVideos[2].files[0].torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
@@ -571,7 +571,7 @@ describe('Test plugin filter hooks', function () {
         ]
 
         const res = await makeRawRequest({ url: refused, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        expect(res.body.error).to.equal('Cao Cao')
+        expect((res.body as PeerTubeProblemDocument).detail).to.equal('Cao Cao')
 
         for (const url of allowed) {
           await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
@@ -590,7 +590,7 @@ describe('Test plugin filter hooks', function () {
 
         // Only streaming playlist is refuse
         const res = await makeRawRequest({ url: refused, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-        expect(res.body.error).to.equal('Sun Jian')
+        expect((res.body as PeerTubeProblemDocument).detail).to.equal('Sun Jian')
 
         // But not we there is a user in res
         await makeRawRequest({ url: refused, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })

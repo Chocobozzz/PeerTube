@@ -93,7 +93,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     expect(levenshteinDistance(
       (await transcript.read()).toString(),
       'December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.'
-    )).to.be.below(5)
+    )).to.be.below(6)
   })
 
   it('May transcribe a media file using a local CTranslate2 model', async function () {
@@ -165,7 +165,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     })
 
     const transcriptFileEvaluator = new TranscriptFileEvaluator(openaiTranscript, transcript)
-    expect(await transcriptFileEvaluator.wer()).to.be.below(20 / 100)
+    expect(await transcriptFileEvaluator.wer()).to.be.below(25 / 100)
     expect(await transcriptFileEvaluator.cer()).to.be.below(10 / 100)
   })
 

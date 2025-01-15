@@ -62,8 +62,8 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
   buildClasses () {
     this.classes = {
       'with-icon': !!this.icon,
-      'orange-button': this.theme === 'primary',
-      'grey-button': this.theme === 'secondary'
+      'primary-button': this.theme === 'primary',
+      'secondary-button': this.theme === 'secondary'
     }
   }
 

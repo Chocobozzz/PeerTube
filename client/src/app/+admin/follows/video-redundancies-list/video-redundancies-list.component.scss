@@ -1,20 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 a {
-  display: inline-block;
-
-  @include disable-default-a-behaviour;
-
-  &,
-  &:hover {
-    color: pvar(--mainForegroundColor);
-  }
-
-  span {
-    font-size: 80%;
-    color: pvar(--inputPlaceholderColor);
-  }
+  color: pvar(--fg);
 }
 
 .expansion-block {
@@ -24,18 +13,8 @@ a {
 .admin-sub-header {
   justify-content: flex-end;
 
-  .select-filter-block {
-    &:not(:last-child) {
-      @include margin-right(10px);
-    }
-
-    label {
-      margin-bottom: 2px;
-    }
-
-    .peertube-select-container {
-      @include peertube-select-container(auto);
-    }
+  .peertube-select-container {
+    @include peertube-select-container(auto);
   }
 }
 

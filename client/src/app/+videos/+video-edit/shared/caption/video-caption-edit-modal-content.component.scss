@@ -14,13 +14,15 @@
 }
 
 .segment-text {
+  white-space: pre-wrap;
+
   &.active,
   &:hover {
-    background: pvar(--mainBackgroundHoverColor);
+    background: pvar(--bg-secondary-300);
   }
 }
 
 my-timestamp-input {
-  width: 100px;
+  width: 130px;
   display: inline-block;
 }

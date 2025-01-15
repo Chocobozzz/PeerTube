@@ -4,7 +4,7 @@
       <h2 i18n>APPEARANCE</h2>
 
       <div i18n class="inner-form-description">
-        Use <a class="link-orange" routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-orange" routerLink="/admin/config/edit-custom" fragment="advanced-configuration">customizations</a>.
+        Use <a class="link-primary" routerLink="/admin/settings/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-primary" routerLink="/admin/settings/config/edit-custom" fragment="advanced-configuration">customizations</a>.
       </div>
     </div>
 
@@ -14,13 +14,7 @@
         <div class="form-group">
           <label i18n for="themeDefault">Theme</label>
 
-          <div class="peertube-select-container">
-            <select formControlName="default" id="themeDefault" class="form-control">
-              <option i18n value="default">{{ getDefaultThemeLabel() }}</option>
-
-              <option *ngFor="let theme of availableThemes" [value]="theme.id">{{ theme.label }}</option>
-            </select>
-          </div>
+          <my-select-options formControlName="default" inputId="themeDefault" [items]="availableThemes"></my-select-options>
         </div>
       </ng-container>
 
@@ -42,7 +36,7 @@
       <div class="form-group" formGroupName="trending">
         <ng-container formGroupName="videos">
           <ng-container formGroupName="algorithms">
-            <label i18n for="trendingVideosAlgorithmsDefault">Default trending page</label>
+            <label i18n for="trendingVideosAlgorithmsDefault">Default trending algorithm</label>
 
             <div class="peertube-select-container">
               <select id="trendingVideosAlgorithmsDefault" formControlName="default" class="form-control">
@@ -151,7 +145,7 @@
     <div class="title-col">
       <h2 i18n>NEW USERS</h2>
       <div i18n class="inner-form-description">
-        Manage <a class="link-orange" routerLink="/admin/users">users</a> to set their quota individually.
+        Manage <a class="link-primary" routerLink="/admin/overview/users">users</a> to set their quota individually.
       </div>
     </div>
 
@@ -186,6 +180,7 @@
 
               <div [ngClass]="getDisabledSignupClass()">
                 <label i18n for="signupLimit">Signup limit</label>
+                <span i18n class="small muted ms-1">When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</span>
 
                 <div class="number-with-unit">
                   <input
@@ -204,11 +199,11 @@
                 <label i18n for="signupMinimumAge">Minimum required age to create an account</label>
 
                 <div class="number-with-unit">
-                    <input
-                      type="number" min="1" id="signupMinimumAge" class="form-control"
-                      formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors['signup.minimumAge'] }"
-                    >
-                    <span i18n>{form.value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
+                  <input
+                    type="number" min="1" id="signupMinimumAge" class="form-control"
+                    formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors['signup.minimumAge'] }"
+                  >
+                  <span i18n>{form.value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
                 </div>
 
                 <div *ngIf="formErrors.signup.minimumAge" class="form-error" role="alert">{{ formErrors.signup.minimumAge }}</div>
@@ -295,7 +290,7 @@
               i18n-labelText labelText="Allow import with HTTP URL (e.g. YouTube)"
             >
               <ng-container ngProjectAs="description">
-                <span i18n>⚠️ If enabled, we recommend to use <a class="link-orange" href="https://docs.joinpeertube.org/maintain/configuration#security">a HTTP proxy</a> to prevent private URL access from your PeerTube server</span>
+                <span i18n>⚠️ If enabled, we recommend to use <a class="link-primary" href="https://docs.joinpeertube.org/maintain/configuration#security">a HTTP proxy</a> to prevent private URL access from your PeerTube server</span>
               </ng-container>
             </my-peertube-checkbox>
           </div>
@@ -325,6 +320,20 @@
               </span>
             </ng-container>
             </my-peertube-checkbox>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="videoChannelSynchronizationMaxPerUser">Max channel synchronization per user</label>
+
+            <div class="number-with-unit">
+              <input
+                type="number" min="1" id="videoChannelSynchronizationMaxPerUser" class="form-control"
+                formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['import']['videoChannelSynchronization']['maxPerUser'] }"
+              >
+              <span i18n>{form.value['import']['videoChannelSynchronization']['maxPerUser'], plural, =1 {sync} other {syncs}}</span>
+            </div>
+
+            <div *ngIf="formErrors.import.videoChannelSynchronization.maxPerUser" class="form-error" role="alert">{{ formErrors.import.videoChannelSynchronization.maxPerUser }}</div>
           </div>
         </ng-container>
 
@@ -381,7 +390,7 @@
             i18n-labelText labelText="Enable video transcription"
           >
             <ng-container ngProjectAs="description">
-              <span i18n>Automatically create a subtitle file of uploaded/imported VOD videos</span>
+              <span i18n><a href="https://docs.joinpeertube.org/admin/configuration#automatic-transcription" target="_blank">Automatically create subtitles</a> for uploaded/imported VOD videos</span>
             </ng-container>
 
             <ng-container ngProjectAs="extra">
@@ -392,7 +401,7 @@
                 >
                   <ng-container ngProjectAs="description">
                     <span i18n>
-                      Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process transcription tasks.
+                      Use <a routerLink="/admin/settings/system/runners/runners-list">remote runners</a> to process transcription tasks.
                       Remote runners has to register on your instance first.
                     </span>
                   </ng-container>
@@ -471,7 +480,7 @@
                 <div i18n>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</div>
 
                 <div i18n>
-                  You should only use moderated search indexes in production, or <a class="link-orange" href="https://framagit.org/framasoft/peertube/search-index">host your own</a>.
+                  You should only use moderated search indexes in production, or <a class="link-primary" href="https://framagit.org/framasoft/peertube/search-index">host your own</a>.
                 </div>
               </ng-container>
 
@@ -594,7 +603,7 @@
     <div class="title-col">
       <h2 i18n>FEDERATION</h2>
       <div i18n class="inner-form-description">
-        Manage <a class="link-orange" routerLink="/admin/follows">relations</a> with other instances.
+        Manage <a class="link-primary" routerLink="/admin/settings/follows">relations</a> with other instances.
       </div>
     </div>
 
@@ -645,7 +654,7 @@
                   <div i18n>⚠️ This functionality requires a lot of attention and extra moderation.</div>
 
                   <span i18n>
-                    See <a class="link-orange" href="https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
+                    See <a class="link-primary" href="https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
                   </span>
                 </ng-container>
 

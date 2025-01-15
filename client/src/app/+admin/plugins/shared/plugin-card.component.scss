@@ -3,7 +3,7 @@
 
 .plugin {
   margin: 15px 0;
-  background-color: pvar(--submenuBackgroundColor);
+  background-color: pvar(--bg-secondary-400);
 }
 
 .first-row {
@@ -25,10 +25,10 @@
     @include margin-left(10px);
 
     my-global-icon {
-      @include apply-svg-color(pvar(--greyForegroundColor));
+      color: pvar(--fg-400);
 
       &[iconName=npm] {
-        @include fill-svg-color(pvar(--greyForegroundColor));
+        @include fill-svg-color(pvar(--fg-400));
       }
     }
   }
@@ -49,11 +49,6 @@
   .description {
     opacity: 0.8;
   }
-}
-
-.action-button {
-  @include peertube-button-link;
-  @include button-with-icon(21px, 0, -2px);
 }
 
 @media screen and (max-width: $small-view) {

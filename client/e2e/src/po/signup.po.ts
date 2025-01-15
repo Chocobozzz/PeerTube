@@ -6,7 +6,7 @@ export class SignupPage {
     return $('.create-account-button')
   }
 
-  async clickOnRegisterInMenu () {
+  async clickOnRegisterButton () {
     const button = this.getRegisterMenuButton()
 
     await button.waitForClickable()
@@ -74,7 +74,7 @@ export class SignupPage {
       name: string
     }
   }) {
-    await this.clickOnRegisterInMenu()
+    await this.clickOnRegisterButton()
     await this.validateStep()
     await this.checkTerms()
     await this.validateStep()

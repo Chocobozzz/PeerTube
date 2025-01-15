@@ -1,10 +1,3 @@
-<div class="sub-title-container">
-  <div class="sub-title">
-    <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
-    <h1 i18n>Registration requests</h1>
-  </div>
-</div>
-
 <p-table
   [value]="registrations" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
@@ -16,7 +9,7 @@
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
           [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
@@ -62,7 +55,7 @@
       <td class="action-cell">
         <my-action-dropdown
           [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="registrationActions" [entry]="registration"
+          i18n-label label="Actions" [actions]="registrationActions" [entry]="registration" buttonSize="small"
         ></my-action-dropdown>
       </td>
 
@@ -107,7 +100,7 @@
         {{ registration.moderationResponse }}
       </td>
 
-      <td class="c-hand" [pRowToggler]="registration">{{ registration.createdAt | date: 'short'  }}</td>
+      <td class="c-hand" [pRowToggler]="registration">{{ registration.createdAt | ptDate: 'short'  }}</td>
     </tr>
   </ng-template>
 

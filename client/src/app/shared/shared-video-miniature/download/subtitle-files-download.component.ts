@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { InputTextComponent } from '../../shared-forms/input-text.component'
@@ -13,12 +13,7 @@ import { InputTextComponent } from '../../shared-forms/input-text.component'
     NgIf,
     NgFor,
     InputTextComponent,
-    NgbNav,
-    NgbNavItem,
-    NgbNavLink,
-    NgbNavLinkBase,
-    NgbNavContent,
-    NgbNavOutlet
+    NgbNavModule
   ]
 })
 export class SubtitleFilesDownloadComponent implements OnInit {

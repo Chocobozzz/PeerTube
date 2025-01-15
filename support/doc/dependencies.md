@@ -9,7 +9,7 @@ Main dependencies supported by PeerTube:
  * `postgres` >=10.x
  * `redis-server` >=6.x
  * `ffmpeg` >=4.3 (using a ffmpeg static build [is not recommended](https://github.com/Chocobozzz/PeerTube/issues/6308))
- * `python` >=3.x
+ * `python` >=3.8
  * `pip`
 
 
@@ -55,7 +55,7 @@ On Ubuntu >= focal (20.04 LTS) or Debian >= Bullseye:
 ```sh
 sudo apt update
 sudo apt install python3-dev python3-pip python-is-python3
-python --version # Should be >= 3.x
+python --version # Should be >= 3.8
 ```
 
 6. Install common dependencies:

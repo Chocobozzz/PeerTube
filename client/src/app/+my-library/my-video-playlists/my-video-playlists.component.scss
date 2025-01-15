@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 input[type=text] {
   @include peertube-input-text(300px);
@@ -46,15 +47,6 @@ my-delete-button {
 }
 
 @include on-mobile-main-col {
-  .video-playlists-header {
-    flex-direction: column;
-
-    input[type=text] {
-      width: 100% !important;
-      margin-bottom: 12px;
-    }
-  }
-
   .action-button {
     @include margin-left(0);
   }

@@ -1,18 +1,20 @@
-import { SortMeta, SharedModule } from 'primeng/api'
+import { NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { ActorFollow } from '@peertube/peertube-models'
-import { FollowModalComponent } from './follow-modal.component'
 import { formatICU } from '@app/helpers'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
+import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { ActorFollow } from '@peertube/peertube-models'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 import { RedundancyCheckboxComponent } from '../shared/redundancy-checkbox.component'
-import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgIf, DatePipe } from '@angular/common'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
+import { FollowModalComponent } from './follow-modal.component'
 
 @Component({
   templateUrl: './following-list.component.html',
@@ -29,7 +31,8 @@ import { InstanceFollowService } from '@app/shared/shared-instance/instance-foll
     RedundancyCheckboxComponent,
     AutoColspanDirective,
     FollowModalComponent,
-    DatePipe
+    PTDatePipe,
+    ButtonComponent
   ]
 })
 export class FollowingListComponent extends RestTable <ActorFollow> implements OnInit {

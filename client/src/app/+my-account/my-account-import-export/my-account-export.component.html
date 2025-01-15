@@ -46,7 +46,7 @@
         </tr>
 
         <tr *ngFor="let export of userExports">
-          <td>{{ export.createdAt | date: 'medium' }}</td>
+          <td>{{ export.createdAt | ptDate: 'medium' }}</td>
           <td>{{ export.state.label }}</td>
 
           <td>
@@ -54,18 +54,18 @@
           </td>
 
           <td>
-            <ng-container *ngIf="export.expiresOn">{{ export.expiresOn | date: 'medium' }}</ng-container>
+            <ng-container *ngIf="export.expiresOn">{{ export.expiresOn | ptDate: 'medium' }}</ng-container>
           </td>
 
           <td>
-            <a i18n *ngIf="export.privateDownloadUrl" [href]="export.privateDownloadUrl" class="peertube-button-link grey-button">Download your archive</a>
+            <a i18n *ngIf="export.privateDownloadUrl" [href]="export.privateDownloadUrl" class="peertube-button-link secondary-button">Download your archive</a>
           </td>
         </tr>
       </table>
 
       <div class="mt-3">
         <input
-          class="peertube-button orange-button"
+          class="peertube-button primary-button"
           [disabled]="isRequestArchiveDisabled()"
           (click)="openNewArchiveModal()"
           type="submit" i18n-value value="Request a new archive"
@@ -109,12 +109,12 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
       (click)="hide()" (key.enter)="hide()"
     >
 
     <input
-      type="submit" i18n-value value="Request an archive" class="peertube-button orange-button"
+      type="submit" i18n-value value="Request an archive" class="peertube-button primary-button"
       (click)="requestNewArchive()"
     />
   </div>

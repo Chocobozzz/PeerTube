@@ -16,7 +16,7 @@
     width: fit-content;
     display: flex;
     align-items: baseline;
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
 
     @include disable-default-a-behaviour;
   }
@@ -28,13 +28,13 @@
 
   .actor-name {
     font-size: 14px;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
 
     @include margin-left(5px);
   }
 
   .actor-owner {
-    color: pvar(--mainForegroundColor);
+    color: pvar(--fg);
     display: flex;
     align-items: center;
 

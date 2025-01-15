@@ -31,13 +31,13 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
       (click)="dismiss()" (key.enter)="dismiss()"
     >
 
     <input
       ngbAutofocus
-      type="submit" [value]="confirmButtonText" class="peertube-button orange-button" [disabled]="isConfirmationDisabled()"
+      type="submit" [value]="confirmButtonText" class="peertube-button primary-button" [disabled]="isConfirmationDisabled()"
       (click)="close()" (key.enter)="confirm()"
     >
   </div>

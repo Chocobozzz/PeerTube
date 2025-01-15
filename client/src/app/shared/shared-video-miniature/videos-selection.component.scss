@@ -2,25 +2,16 @@
 @use '_mixins' as *;
 
 .action-selection-mode {
-  display: flex;
-  justify-content: flex-end;
-  flex-grow: 1;
-}
-
-.action-selection-mode-child {
   position: fixed;
-  display: flex;
+  bottom: 1rem;
+
+  @include right(#{pvar(--x-margin-content)});
 
   .action-button {
     display: block;
 
     @include margin-left(55px);
   }
-}
-
-.action-button-cancel-selection {
-  @include peertube-button;
-  @include grey-button;
 }
 
 .video {
@@ -44,16 +35,16 @@
   }
 }
 
-@include on-mobile-main-col {
+@include on-small-main-col {
   .video {
     flex-wrap: wrap;
   }
 
   .checkbox-container {
-    display: none;
+    display: none !important;
   }
 
   .action-selection-mode {
-    display: none; // disable for small screens
+    display: none !important; // disable for small screens
   }
 }

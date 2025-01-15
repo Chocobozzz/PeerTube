@@ -1,121 +1,125 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+$filters-background: pvar(--bg-secondary-400);
+
 .root {
-  margin-bottom: 45px;
+  margin-bottom: 1rem;
+
+  // Prevent layout shift
+  min-height: 140px;
 }
 
-.first-row {
-  display: flex;
-  justify-content: space-between;
+.scope-info {
+  font-size: 20px;
+  color: pvar(--fg-350);
 }
 
-.active-filters {
-  display: flex;
-  flex-wrap: wrap;
+.select-label {
+  font-weight: normal;
+  margin-bottom: 0;
+  color: pvar(--fg-200);
+  font-size: 1rem;
+
+  @include margin-right(0.5rem);
+}
+
+.section {
+  @include margin-right(3rem);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: $font-bold;
+  color: pvar(--fg-300);
+  margin-bottom: 0.5rem;
+
+  .with-description {
+    font-size: 14px;
+    font-weight: normal;
+
+    a {
+      color: inherit;
+    }
+  }
 }
 
 .filters {
+  --input-bg: #{pvar(--input-bg-in-secondary)};
+  --input-border-color: #{pvar(--input-bg-in-secondary)};
+
   display: flex;
   flex-wrap: wrap;
-  margin-top: 25px;
+  background-color: $filters-background;
+  border-radius: 14px;
 
-  border-bottom: 1px solid $separator-border-color;
+  @include rfs(1.5rem, padding);
 
   input[type=radio] + label {
     font-weight: $font-regular;
   }
 
-  .form-group > label:first-child {
-    display: block;
-
-    &.with-description {
-      margin-bottom: 0;
-    }
-
-    &:not(.with-description) {
-      margin-bottom: 10px;
-    }
-  }
-
   .form-group {
-    @include margin-right(30px);
+    margin-bottom: 1.5rem;
+
+    > label:not(.select-label) {
+      display: block;
+      color: pvar(--fg-300);
+      font-size: 18px;
+    }
   }
 }
 
-.pastille {
-  border-radius: 24px;
-  padding: 4px 15px;
-  margin-bottom: 15px;
-  cursor: pointer;
-
-  @include margin-right(15px);
-
-  &:focus-visible {
-    outline: pvar(--mainColor) auto 1px;
+.active-filters {
+  .active-filter:not(:last-child)::after {
+    content: '•';
+    font-weight: normal;
+    display: inline-block;
+    margin: 0 5px;
   }
+}
+
+.filters-summary {
+  color: pvar(--fg-200);
 }
 
 .filters-toggle {
-  border: 2px solid pvar(--mainForegroundColor);
+  padding: pvar(--input-y-padding) 0.5rem calc(#{pvar(--input-y-padding)} + 0.75rem) 0.75rem;
+
+  @include margin-left(0.75rem);
 
   my-global-icon {
+    color: pvar(--secondary-icon-color);
+
     @include margin-left(5px);
   }
 
-  &.active my-global-icon {
-    position: relative;
-    top: -1px;
-  }
-
-  &:not(.active) {
-    my-global-icon ::ng-deep svg {
-      transform: rotate(180deg);
-    }
-  }
-}
-
-// Than have an icon
-.filters-toggle,
-.active-filter.can-remove {
-  padding: 4px 11px 4px 15px;
-}
-
-.active-filter {
-  background-color: pvar(--channelBackgroundColor);
-  display: flex;
-  align-items: center;
-
-  &:not(.can-remove) {
-    cursor: default;
-  }
-
-  &.can-remove:hover {
-    opacity: 0.9;
-  }
-
-  > .remove-button {
-    border: 0;
-    padding: 0;
-
-    @include margin-left(10px);
+  &.active {
+    background-color: $filters-background;
+    border-start-start-radius: 14px;
+    border-start-end-radius: 14px;
 
     my-global-icon {
-      width: 16px;
-      color: pvar(--greyForegroundColor);
+      position: relative;
+      top: -1px;
     }
+  }
+
+  &:not(.active) my-global-icon ::ng-deep svg {
+    transform: rotate(180deg);
   }
 }
 
-.sort {
+.scope-select {
   min-width: 250px;
   max-width: 300px;
   height: min-content;
 }
 
 my-select-languages,
-my-select-categories {
-  width: 300px;
+my-select-categories,
+my-select-options {
+  max-width: 300px;
   display: inline-block;
 }
 
@@ -124,13 +128,25 @@ my-select-categories {
   margin-bottom: 10px;
 
   a {
-    color: pvar(--mainColor);
+    color: pvar(--primary);
     text-decoration: underline;
   }
 }
 
 @media screen and (max-width: $small-view) {
-  .first-row {
+  .filters-toggle {
+    margin-top: 0.5rem;
+
+    @include margin-left(0);
+  }
+
+  .filters-summary {
+    display: flex;
     flex-direction: column;
+  }
+
+  .filters {
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
   }
 }

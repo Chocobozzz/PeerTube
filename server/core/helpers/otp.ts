@@ -1,6 +1,7 @@
-import { Secret, TOTP } from 'otpauth'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { Secret, TOTP } from 'otpauth'
+import { logger } from './logger.js'
 import { decrypt } from './peertube-crypto.js'
 
 async function isOTPValid (options: {
@@ -9,22 +10,28 @@ async function isOTPValid (options: {
 }) {
   const { token, encryptedSecret } = options
 
-  const secret = await decrypt(encryptedSecret, CONFIG.SECRETS.PEERTUBE)
+  try {
+    const secret = await decrypt(encryptedSecret, CONFIG.SECRETS.PEERTUBE)
 
-  const totp = new TOTP({
-    ...baseOTPOptions(),
+    const totp = new TOTP({
+      ...baseOTPOptions(),
 
-    secret
-  })
+      secret
+    })
 
-  const delta = totp.validate({
-    token,
-    window: 1
-  })
+    const delta = totp.validate({
+      token,
+      window: 1
+    })
 
-  if (delta === null) return false
+    if (delta === null) return false
 
-  return true
+    return true
+  } catch (err) {
+    logger.error('Cannot decrypt/validate OTP', { err })
+
+    return false
+  }
 }
 
 function generateOTPSecret (email: string) {
@@ -42,8 +49,7 @@ function generateOTPSecret (email: string) {
 }
 
 export {
-  isOTPValid,
-  generateOTPSecret
+  generateOTPSecret, isOTPValid
 }
 
 // ---------------------------------------------------------------------------

@@ -1,8 +1,9 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_form-mixins' as *;
 
 my-timestamp-input {
-  width: 60px;
+  width: 100px;
 }
 
 .header,
@@ -32,7 +33,7 @@ my-timestamp-input {
 }
 
 .playlists {
-  max-height: 180px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -69,6 +70,7 @@ my-timestamp-input {
     margin: 0;
     font-weight: $font-regular;
     cursor: pointer;
+    font-size: 1rem;
   }
 
   .optional-row-icon {
@@ -84,8 +86,8 @@ my-timestamp-input {
       top: 1px;
       width: 19px;
       height: 19px;
+      color: pvar(--fg-400);
 
-      @include apply-svg-color(#333);
       @include margin-right(0);
     }
 
@@ -97,7 +99,7 @@ my-timestamp-input {
 
 .optional-rows {
   display: grid;
-  grid-template-columns: 35px 80px 80px;
+  grid-template-columns: 35px 105px 105px;
   row-gap: 3px;
   column-gap: 10px;
   align-items: center;
@@ -108,7 +110,7 @@ my-timestamp-input {
 
   .header-label {
     font-size: 13px;
-    color: pvar(--greyForegroundColor);
+    color: pvar(--fg-300);
     padding-left: 2px;
 
     &:nth-child(1) {
@@ -136,17 +138,14 @@ my-timestamp-input {
     top: -1px;
     width: 21px;
     height: 21px;
+    line-height: 21px;
+    display: inline-block;
+    color: pvar(--fg-400);
 
-    @include apply-svg-color(#333);
-    @include margin-right(4px);
+    @include margin-right(13px);
   }
 }
 
 input[type=text] {
   @include peertube-input-text(200px);
-}
-
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
 }

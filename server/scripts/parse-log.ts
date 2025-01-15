@@ -39,7 +39,7 @@ const loggerFormat = winston.format.printf((info) => {
 
   if (info.sql) {
     if (CONFIG.LOG.PRETTIFY_SQL) {
-      additionalInfos += '\n' + sqlFormat(info.sql, {
+      additionalInfos += '\n' + sqlFormat(info.sql as string, {
         language: 'sql',
         tabWidth: 2
       })
@@ -48,7 +48,7 @@ const loggerFormat = winston.format.printf((info) => {
     }
   }
 
-  return `[${info.label}] ${toTimeFormat(info.timestamp)} ${info.level}: ${info.message}${additionalInfos}`
+  return `[${info.label}] ${toTimeFormat(info.timestamp as string)} ${info.level}: ${info.message}${additionalInfos}`
 })
 
 const logger = winston.createLogger({

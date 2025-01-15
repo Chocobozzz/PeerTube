@@ -845,9 +845,6 @@ export const USER_EXPORT_FILE_PREFIX = 'user-export-'
 
 // Express static paths (router)
 export const STATIC_PATHS = {
-  // TODO: deprecated in v6, to remove
-  THUMBNAILS: '/static/thumbnails/',
-
   // Need to keep this legacy path for previously generated torrents
   LEGACY_WEB_VIDEOS: '/static/webseed/',
   WEB_VIDEOS: '/static/web-videos/',

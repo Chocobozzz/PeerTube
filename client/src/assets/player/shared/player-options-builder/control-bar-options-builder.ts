@@ -1,13 +1,13 @@
 import {
   NextPreviousVideoButtonOptions,
   PeerTubeLinkButtonOptions,
-  PeerTubePlayerContructorOptions,
+  PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
   TheaterButtonOptions
 } from '../../types'
 
 type ControlBarOptionsBuilderConstructorOptions =
-  Pick<PeerTubePlayerContructorOptions, 'peertubeLink' | 'instanceName' | 'theaterButton'> &
+  Pick<PeerTubePlayerConstructorOptions, 'peertubeLink' | 'instanceName' | 'theaterButton'> &
   {
     videoShortUUID: () => string
     p2pEnabled: () => boolean

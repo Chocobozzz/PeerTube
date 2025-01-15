@@ -1,4 +1,4 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -8,6 +8,7 @@ import { InputTextComponent } from '../shared-forms/input-text.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { EditButtonComponent } from '../shared-main/buttons/edit-button.component'
 import { AlertComponent } from '../shared-main/common/alert.component'
+import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
 import { LiveVideoService } from './live-video.service'
 
@@ -24,7 +25,7 @@ import { LiveVideoService } from './live-video.service'
     NgFor,
     RouterLink,
     EditButtonComponent,
-    DatePipe,
+    PTDatePipe,
     AlertComponent
   ],
   providers: [ LiveVideoService ]

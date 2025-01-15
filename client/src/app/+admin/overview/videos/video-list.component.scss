@@ -15,10 +15,10 @@ my-embed {
   display: flex;
 
   my-global-icon {
-    width: 16px;
     position: relative;
     top: -2px;
 
+    @include global-icon-size(16px);
     @include margin-left(3px);
   }
 }
@@ -29,6 +29,8 @@ my-embed {
 
 .right-form {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
 
   > *:not(:last-child) {
     @include margin-right(10px);

@@ -1,0 +1,11 @@
+<div class="root">
+  <a i18n class="visually-hidden-focusable skip-to-content-sub-menu" href="#admin-overview-content" (click)="$event.preventDefault(); adminContent.focus()">Skip the sub menu</a>
+
+  <div class="margin-content">
+    <my-horizontal-menu i18n-h1 h1="Overview" h1Icon="overview" [menuEntries]="menuEntries"></my-horizontal-menu>
+  </div>
+
+  <div #adminContent tabindex="-1" id="admin-overview-content" class="margin-content outline-0">
+    <router-outlet></router-outlet>
+  </div>
+</div>

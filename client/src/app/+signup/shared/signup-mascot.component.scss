@@ -7,5 +7,7 @@
 }
 
 div ::ng-deep svg {
-  color: pvar(--mainColor);
+  color: pvar(--primary);
+  width: inherit;
+  height: inherit;
 }

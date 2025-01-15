@@ -25,12 +25,12 @@
   <div class="modal-footer">
     <div class="inputs">
       <input
-        type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button"
         (click)="dismiss()" (key.enter)="dismiss()"
       >
 
       <input
-        type="submit" i18n-value value="Submit" class="peertube-button orange-button"
+        type="submit" i18n-value value="Submit" class="peertube-button primary-button"
         [disabled]="!form.valid" (click)="close()"
       />
     </div>

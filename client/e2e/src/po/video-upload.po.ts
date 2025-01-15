@@ -3,7 +3,7 @@ import { getCheckbox, selectCustomSelect } from '../utils'
 
 export class VideoUploadPage {
   async navigateTo () {
-    const publishButton = await $('.root-header .publish-button')
+    const publishButton = await $('.publish-button > a')
 
     await publishButton.waitForClickable()
     await publishButton.click()
@@ -28,7 +28,7 @@ export class VideoUploadPage {
     // Wait for the upload to finish
     await browser.waitUntil(async () => {
       const warning = await $('=Publish will be available when upload is finished').isDisplayed()
-      const progress = await $('.progress-bar=100%').isDisplayed()
+      const progress = await $('.progress-container=100%').isDisplayed()
 
       return !warning && progress
     })

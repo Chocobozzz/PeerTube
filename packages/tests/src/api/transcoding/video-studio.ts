@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getAllFiles } from '@peertube/peertube-core-utils'
+import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
 import { VideoStudioTask } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -96,6 +96,41 @@ describe('Test video studio', function () {
     it('Should cut start/end of the video', async function () {
       this.timeout(120_000)
       await renewVideo('video_short1.webm') // 10 seconds video duration
+
+      await createTasks([
+        {
+          name: 'cut',
+          options: {
+            start: 2,
+            end: 6
+          }
+        }
+      ])
+
+      for (const server of servers) {
+        await checkVideoDuration(server, videoUUID, 4)
+      }
+    })
+
+    it('Should cut start/end of the audio', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.enableMinimumTranscoding({ splitAudioAndVideo: true })
+      await renewVideo('video_short1.webm')
+      await servers[0].config.enableMinimumTranscoding()
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      for (const file of video.files) {
+        if (file.resolution.id === 0) continue
+
+        await servers[0].videos.removeWebVideoFile({ fileId: file.id, videoId: videoUUID })
+      }
+
+      for (const file of getHLS(video).files) {
+        if (file.resolution.id === 0) continue
+
+        await servers[0].videos.removeHLSFile({ fileId: file.id, videoId: videoUUID })
+      }
 
       await createTasks([
         {
@@ -261,6 +296,7 @@ describe('Test video studio', function () {
   })
 
   describe('Complex tasks', function () {
+
     it('Should run a complex task', async function () {
       this.timeout(240_000)
       await renewVideo()

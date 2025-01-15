@@ -6,7 +6,7 @@
 .video-js.vjs-peertube-skin {
 
   .peertube-dock {
-    --avatarSize: 48px;
+    --dock-avatar-size: 48px;
 
     transition: opacity 0.1s;
 
@@ -28,10 +28,10 @@
   .peertube-dock-avatar {
     border-radius: 50%;
     margin-right: 10px;
-    min-width: var(--avatarSize);
-    min-height: var(--avatarSize);
-    max-height: var(--avatarSize);
-    max-height: var(--avatarSize);
+    min-width: var(--dock-avatar-size);
+    min-height: var(--dock-avatar-size);
+    max-height: var(--dock-avatar-size);
+    max-height: var(--dock-avatar-size);
   }
 
   .peertube-dock-title-description {
@@ -70,7 +70,7 @@
 
 .video-js.vjs-peertube-skin.vjs-size-750 {
   .peertube-dock-avatar {
-    --avatarSize: 40px;
+    --dock-avatar-size: 40px;
   }
 
   .peertube-dock {
@@ -85,7 +85,7 @@
 
 .video-js.vjs-peertube-skin.vjs-size-570 {
   .peertube-dock-avatar {
-    --avatarSize: 35px;
+    --dock-avatar-size: 35px;
   }
 
   .peertube-dock {
@@ -95,7 +95,7 @@
 
 .video-js.vjs-peertube-skin.vjs-size-350 {
   .peertube-dock-avatar {
-    --avatarSize: 30px;
+    --dock-avatar-size: 30px;
   }
 
   .peertube-dock {

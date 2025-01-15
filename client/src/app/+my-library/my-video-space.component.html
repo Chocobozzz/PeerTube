@@ -1,0 +1,12 @@
+<div class="root">
+
+  <div class="margin-content">
+    <a i18n class="visually-hidden-focusable skip-to-content-sub-menu" href="#my-video-space-content" (click)="$event.preventDefault(); myVideoSpaceContent.focus()">Skip the sub menu</a>
+
+    <my-horizontal-menu i18n-h1 h1="My video space" [menuEntries]="menuEntries"></my-horizontal-menu>
+  </div>
+
+  <div #myVideoSpaceContent tabindex="-1" id="my-video-space-content" class="margin-content pb-5 outline-0">
+    <router-outlet></router-outlet>
+  </div>
+</div>

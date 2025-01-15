@@ -1,27 +1,20 @@
-import { NgClass } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
-import { AuthUser, PluginService, ScreenService } from '@app/core'
-import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/menu/top-menu-dropdown.component'
+import { AuthUser, PluginService } from '@app/core'
+import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 
 @Component({
   templateUrl: './my-account.component.html',
-  styleUrls: [ './my-account.component.scss' ],
   standalone: true,
-  imports: [ TopMenuDropdownComponent, NgClass, RouterOutlet ]
+  imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class MyAccountComponent implements OnInit {
-  menuEntries: TopMenuDropdownParam[] = []
+  menuEntries: HorizontalMenuEntry[] = []
   user: AuthUser
 
   constructor (
-    private pluginService: PluginService,
-    private screenService: ScreenService
+    private pluginService: PluginService
   ) { }
-
-  get isBroadcastMessageDisplayed () {
-    return this.screenService.isBroadcastMessageDisplayed
-  }
 
   ngOnInit (): void {
     this.pluginService.ensurePluginsAreLoaded('my-account')
@@ -54,36 +47,19 @@ export class MyAccountComponent implements OnInit {
 
       {
         label: $localize`Moderation`,
+        routerLink: '/my-account/blocklist/accounts',
         children: [
           {
             label: $localize`Muted accounts`,
-            routerLink: '/my-account/blocklist/accounts',
-            iconName: 'user-x'
+            routerLink: '/my-account/blocklist/accounts'
           },
           {
             label: $localize`Muted servers`,
-            routerLink: '/my-account/blocklist/servers',
-            iconName: 'peertube-x'
+            routerLink: '/my-account/blocklist/servers'
           },
           {
             label: $localize`Abuse reports`,
-            routerLink: '/my-account/abuses',
-            iconName: 'flag'
-          },
-          {
-            label: $localize`Comments on your videos`,
-            routerLink: '/my-account/videos/comments',
-            iconName: 'message-circle'
-          },
-          {
-            label: $localize`Watched words`,
-            routerLink: '/my-account/watched-words/list',
-            iconName: 'eye-open'
-          },
-          {
-            label: $localize`Auto tag policies`,
-            routerLink: '/my-account/auto-tag-policies',
-            iconName: 'no'
+            routerLink: '/my-account/abuses'
           }
         ]
       },

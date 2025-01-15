@@ -1,6 +1,91 @@
-<my-search-typeahead class="w-100 d-flex justify-content-center"></my-search-typeahead>
+<div class="root">
+  <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
 
-<a class="peertube-button-link orange-button publish-button" routerLink="/videos/upload">
-  <my-global-icon iconName="upload" aria-hidden="true"></my-global-icon>
-  <span i18n class="publish-button-label">Publish</span>
-</a>
+    <span class="icon-logo"></span>
+    <span class="instance-name">{{ instanceName }}</span>
+  </a>
+
+  <my-search-typeahead [hidden]="!isLoaded()"></my-search-typeahead>
+
+  <div class="d-flex align-items-center buttons-container" [hidden]="!isLoaded()">
+    @if (!loggedIn) {
+      <my-button
+        i18n-title title="Open settings modal"
+        theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" (click)="openQuickSettings()"
+      ></my-button>
+
+      <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link secondary-button w-100 ellipsis margin-button create-account-button">
+        <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
+      </a>
+
+      <my-login-link class="login-label" className="peertube-button-link primary-button w-100 ellipsis"></my-login-link>
+      <my-login-link class="login-icon" className="peertube-button-link primary-button icon-only w-100 ellipsis" icon="true" label=""></my-login-link>
+    } @else {
+      <my-notification-dropdown class="margin-button"></my-notification-dropdown>
+
+      <my-button
+        i18n-title title="Go to the manage your account page"
+        theme="tertiary" rounded="true" class="margin-button settings-button" icon="cog" ptRouterLink="/my-account"
+      ></my-button>
+
+      <div
+        class="logged-in-container" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
+        container="body"
+      >
+        <button class="tertiary-button" ngbDropdownToggle>
+          <my-actor-avatar [actor]="user.account" actorType="account" size="34" responseSize="true"></my-actor-avatar>
+
+          <div class="logged-in-info text-start ms-2">
+            <div class="display-name ellipsis">{{ user.account?.displayName }}</div>
+
+            <div class="username ellipsis fs-8">&#64;{{ user.username }}</div>
+          </div>
+        </button>
+
+        <div ngbDropdownMenu>
+          <a
+            *ngIf="user.account" ngbDropdownItem class="dropdown-item" [routerLink]="[ '/a', user.account.nameWithHost ]"
+            #profile
+          >
+            <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Public profile</ng-container>
+          </a>
+
+          <div class="dropdown-divider"></div>
+
+          <a
+            *ngIf="user.account" ngbDropdownItem class="dropdown-item" routerLink="/my-account"
+            #manageAccount
+          >
+            <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon> <ng-container i18n>Manage my account</ng-container>
+          </a>
+
+          <div class="dropdown-divider"></div>
+
+          <button
+            myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
+            ngbDropdownItem class="dropdown-item" (click)="openLanguageChooser()"
+          >
+            <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
+            <span i18n>Interface:</span>
+            <span class="ms-auto ps-2 muted">{{ currentInterfaceLanguage }}</span>
+          </button>
+
+          <button *ngIf="!isInMobileView" ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
+            <my-global-icon iconName="keyboard" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>Keyboard shortcuts</ng-container>
+          </button>
+
+          <button ngbDropdownItem (click)="logout($event)" class="dropdown-item">
+            <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>
+            <ng-container i18n>Log out</ng-container>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <my-button theme="tertiary" rounded="true" class="menu-button margin-button" icon="menu" (click)="toggleMenu()"></my-button>
+</div>
+
+<my-language-chooser #languageChooserModal></my-language-chooser>
+<my-quick-settings #quickSettingsModal (openLanguageModal)="languageChooserModal.show()"></my-quick-settings>

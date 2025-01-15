@@ -1,5 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
+@use '_form-mixins' as *;
 
 $markdown-icon-height: 18px;
 $markdown-icon-width: 30px;
@@ -26,7 +28,6 @@ form {
     min-height: calc(#{$peertube-textarea-height} - 15px * 2);
 
     @include peertube-textarea(100%, $peertube-textarea-height);
-    @include button-focus(pvar(--mainColorLightest));
     @include padding-right($markdown-icon-width + 15px !important);
 
     @media screen and (max-width: 600px) {
@@ -52,24 +53,17 @@ form {
 
   ::ng-deep .help-tooltip-button {
     my-global-icon {
+      color: pvar(--input-placeholder);
       height: $markdown-icon-height;
       width: $markdown-icon-width;
 
       svg {
-        color: pvar(--inputBorderColor);
-        fill: pvar(--inputBorderColor);
         border-radius: 3px;
       }
     }
 
-    &:focus,
-    &:active,
-    &:hover {
-      my-global-icon svg {
-        background-color: pvar(--inputBorderColor);
-        color: pvar(--mainBackgroundColor);
-        fill: pvar(--mainBackgroundColor);
-      }
+    &:focus my-global-icon {
+      color: pvar(--input-fg);
     }
   }
 }

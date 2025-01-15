@@ -13,7 +13,7 @@ import { NgIf } from '@angular/common'
   imports: [ NgIf ]
 })
 export class PrivacyConcernsComponent implements OnInit {
-  private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
+  private static LS_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
   @Input() video: Video
 
@@ -34,7 +34,7 @@ export class PrivacyConcernsComponent implements OnInit {
   }
 
   acceptedPrivacyConcern () {
-    peertubeLocalStorage.setItem(PrivacyConcernsComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
+    peertubeLocalStorage.setItem(PrivacyConcernsComponent.LS_PRIVACY_CONCERN_KEY, 'true')
 
     this.display = false
   }
@@ -46,6 +46,6 @@ export class PrivacyConcernsComponent implements OnInit {
   }
 
   private alreadyAccepted () {
-    return peertubeLocalStorage.getItem(PrivacyConcernsComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
+    return peertubeLocalStorage.getItem(PrivacyConcernsComponent.LS_PRIVACY_CONCERN_KEY) === 'true'
   }
 }

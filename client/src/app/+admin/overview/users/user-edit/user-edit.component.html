@@ -1,15 +1,15 @@
 <nav aria-label="breadcrumb">
   <ol class="pt-breadcrumb">
     <li class="breadcrumb-item">
-      <a routerLink="/admin/users" i18n>Users</a>
+      <a routerLink="/admin/overview/users" i18n>Users</a>
     </li>
 
     @if (isCreation()) {
-      <li class="breadcrumb-item active" i18n>Create</li>
+      <li class="breadcrumb-item" i18n>Create</li>
     } @else {
-      <li class="breadcrumb-item active" i18n>Edit</li>
+      <li class="breadcrumb-item" i18n>Edit</li>
 
-      <li class="breadcrumb-item active" aria-current="page">
+      <li class="breadcrumb-item" aria-current="page">
         <a *ngIf="user" [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
       </li>
     }
@@ -207,7 +207,7 @@
           </my-peertube-checkbox>
         </div>
 
-        <input class="peertube-button orange-button" type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+        <input class="peertube-button primary-button" type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
       </form>
 
       <div class="d-none d-xxl-block col-7">

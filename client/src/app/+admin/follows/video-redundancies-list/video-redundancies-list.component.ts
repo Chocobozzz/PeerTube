@@ -39,7 +39,7 @@ import { VideoRedundancyInformationComponent } from './video-redundancy-informat
   ]
 })
 export class VideoRedundanciesListComponent extends RestTable implements OnInit {
-  private static LOCAL_STORAGE_DISPLAY_TYPE = 'video-redundancies-list-display-type'
+  private static LS_DISPLAY_TYPE = 'video-redundancies-list-display-type'
 
   videoRedundancies: VideoRedundancy[] = []
   totalRecords = 0
@@ -211,12 +211,12 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   private loadSelectLocalStorage () {
-    const displayType = peertubeLocalStorage.getItem(VideoRedundanciesListComponent.LOCAL_STORAGE_DISPLAY_TYPE)
+    const displayType = peertubeLocalStorage.getItem(VideoRedundanciesListComponent.LS_DISPLAY_TYPE)
     if (displayType) this.displayType = displayType as VideoRedundanciesTarget
   }
 
   private saveSelectLocalStorage () {
-    peertubeLocalStorage.setItem(VideoRedundanciesListComponent.LOCAL_STORAGE_DISPLAY_TYPE, this.displayType)
+    peertubeLocalStorage.setItem(VideoRedundanciesListComponent.LS_DISPLAY_TYPE, this.displayType)
   }
 
   private bytesToHuman (bytes: number) {

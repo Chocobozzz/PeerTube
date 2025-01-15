@@ -1,6 +1,6 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 i18n class="modal-title">Support {{ displayName }}</h4>
+    <h4 i18n class="modal-title">Support {{ name }}</h4>
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
     </button>
@@ -10,7 +10,7 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Close" class="peertube-button grey-button"
+      type="button" role="button" i18n-value value="Close" class="peertube-button secondary-button"
       (click)="hide()" (key.enter)="hide()"
     >
   </div>

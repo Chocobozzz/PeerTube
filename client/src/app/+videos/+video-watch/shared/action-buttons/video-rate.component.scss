@@ -3,13 +3,17 @@
 
 .action-button-like,
 .action-button-dislike {
-  filter: brightness(120%);
-
   .count {
     margin: 0 5px;
   }
 }
 
 .activated {
-  color: pvar(--activatedActionButtonColor) !important;
+  color: pvar(--fg) !important;
+
+  my-global-icon {
+    color: pvar(--active-icon-color) !important;
+
+    @include fill-svg-color(pvar(--active-icon-bg));
+  }
 }
