@@ -139,7 +139,7 @@
     "flat": "^6.0.1",
     "fluent-ffmpeg": "^2.1.0",
     "fs-extra": "^11.1.0",
-    "got": "^13.0.0",
+    "got": "^14.4.5",
     "got-ssrf": "^3.0.0",
     "helmet": "^7.0.0",
     "http-problem-details": "^0.1.5",

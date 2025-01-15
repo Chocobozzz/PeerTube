@@ -4,6 +4,8 @@ import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
 import got, { CancelableRequest, OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBody, RequestError, Response } from 'got'
 import { gotSsrf } from 'got-ssrf'
+import http from 'http'
+import https from 'https'
 import { HttpProxyAgent, HttpsProxyAgent } from '../helpers/hpagent.js'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants.js'
 import { pipelinePromise } from './core-utils.js'
@@ -228,6 +230,10 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
   return {
     method: options.method,
     dnsCache: true,
+    agent: { // Fix issue https://github.com/node-fetch/node-fetch/issues/1735 with Node 20
+      http: new http.Agent({ keepAlive: false }),
+      https: new https.Agent({ keepAlive: false })
+    },
     timeout: {
       request: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT
     },
