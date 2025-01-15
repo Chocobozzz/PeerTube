@@ -581,7 +581,7 @@
       </trans-unit>
       <trans-unit id="8411430224810427392" datatype="html" xml:space="preserve">
         <source>Remove avatar</source>
-        <target state="translated">Llevar avatar</target>
+        <target state="translated">Eliminar avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context>
           <context context-type="linenumber">21</context>
@@ -845,7 +845,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 usuari bandejat.} other {<x id="count"/> usuaris bandejats.}}</target>
+        <target state="translated">{count, plural, =1 {1 compte bandejat.} other {<x id="count"/> comptes bandejats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -895,9 +895,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5108124319304980502" datatype="html">
+      <trans-unit id="5108124319304980502" datatype="html" xml:space="preserve">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Denuncia el vídeo "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Denunciar el vídeo "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context>
           <context context-type="linenumber">3</context>
@@ -921,7 +921,7 @@
       </trans-unit>
       <trans-unit id="2466846716878254816" datatype="html" xml:space="preserve">
         <source>Element <x id="PH" equiv-text="param"/> not found</source>
-        <target state="translated">Element <x id="PH" equiv-text="param"/> no trobat</target>
+        <target state="translated">No s'ha trobat l'element <x id="PH" equiv-text="param"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-search/find-in-bulk.service.ts</context>
           <context context-type="linenumber">86</context>
@@ -977,7 +977,7 @@
       </trans-unit>
       <trans-unit id="459680083614731900" datatype="html" xml:space="preserve">
         <source>Total uploaded</source>
-        <target state="translated">Total carregat</target>
+        <target state="translated">Total pujat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1005,7 +1005,7 @@
       </trans-unit>
       <trans-unit id="3599756099880307592" datatype="html" xml:space="preserve">
         <source>Only display videos with this tag</source>
-        <target state="translated">Mostra només vídeos amb aquesta «etiquetag»</target>
+        <target state="translated">Mostra només vídeos amb aquesta etiqueta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">90</context>
@@ -1013,7 +1013,7 @@
       </trans-unit>
       <trans-unit id="6760514632035173460" datatype="html" xml:space="preserve">
         <source>Original file</source>
-        <target state="translated">Arxiu original</target>
+        <target state="translated">Fitxer original</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">99</context>
@@ -1053,7 +1053,7 @@
       </trans-unit>
       <trans-unit id="5628330255179054134" datatype="html" xml:space="preserve">
         <source>Original file:</source>
-        <target state="translated">Arxiu original:</target>
+        <target state="translated">Fitxer original:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">120</context>
@@ -1287,9 +1287,9 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5439080010715965293" datatype="html">
+      <trans-unit id="5439080010715965293" datatype="html" xml:space="preserve">
         <source>Quick access:</source>
-        <target state="new">Quick access:</target>
+        <target state="translated">Accés ràpid:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -1329,7 +1329,7 @@
       </trans-unit>
       <trans-unit id="6402703264596649214" datatype="html" xml:space="preserve">
         <source>tag</source>
-        <target state="translated">etiquetag</target>
+        <target state="translated">etiqueta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">156</context>
@@ -1431,9 +1431,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8994207260868115497" datatype="html">
+      <trans-unit id="8994207260868115497" datatype="html" xml:space="preserve">
         <source>&lt;a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer"&gt;Mastodon verification link&lt;/a&gt; is also supported.</source>
-        <target state="new">&lt;a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer"&gt;Mastodon verification link&lt;/a&gt; is also supported.</target>
+        <target state="translated">&lt;a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer"&gt;L'enllaç de verificació de Mastodon&lt;/a&gt; també està suportat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/help.component.ts</context>
           <context context-type="linenumber">97</context>
