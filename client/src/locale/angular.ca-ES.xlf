@@ -2664,7 +2664,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2236371857137398396" xml:space="preserve">
         <source>No results found</source>
-        <target state="translated">Cap resultat trobat</target>
+        <target state="translated">No hi ha resultats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">35</context>
@@ -2704,7 +2704,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2505792628717602511" datatype="html" xml:space="preserve">
         <source>Go to the admin documentation</source>
-        <target state="translated">Anar a la documentació d'administrador</target>
+        <target state="translated">Anar a la documentació d'administració</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -2712,7 +2712,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="439770035760298623" datatype="html" xml:space="preserve">
         <source>Admin documentation</source>
-        <target state="translated">Documentació d'administrador</target>
+        <target state="translated">Documentació d'administració</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -2720,7 +2720,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5910950876330656326" datatype="html" xml:space="preserve">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="translated">Administrar comptes, seguir altres instàncies, tractar els enviaments brossa (spam)...</target>
+        <target state="translated">Administrar comptes, seguir altres instàncies, tractar amb els enviadors de brossa (spam)...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2728,7 +2728,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3937624467365667635" datatype="html" xml:space="preserve">
         <source>Go to the user documentation</source>
-        <target state="translated">Anar a la documentació d'utilització</target>
+        <target state="translated">Anar a la documentació d'ús</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">25,26</context>
@@ -2736,7 +2736,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4582314665808509009" datatype="html" xml:space="preserve">
         <source>User documentation</source>
-        <target state="translated">Documentació d'utilització</target>
+        <target state="translated">Documentació d'ús</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">26,28</context>
@@ -2784,7 +2784,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html" xml:space="preserve">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Trieu el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nom de la vostra instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>definir una descripció<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, especificar <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>qui sou<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, per què <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>heu creat la instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>per quant de temps<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> penseu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintenir-la<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> és molt important que els vostres visitants entenguin en quin tipus d'instància es troben. </target>
+        <target state="translated">Triar el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nom de la vostra instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>definir una descripció<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, especificar <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>qui sou<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, per què <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>heu creat la instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>per quant de temps<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> penseu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintenir-la<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> és molt important que els vostres visitants entenguin en quin tipus d'instància es troben. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">59</context>
@@ -2840,7 +2840,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html" xml:space="preserve">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">Hau habilitat el registre de comptes en la instància però no heu configurat el següents camps:</target>
+        <target state="translated">Heu habilitat el registre de comptes en la instància però no heu configurat els següents camps:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
