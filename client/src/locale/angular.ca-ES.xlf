@@ -4211,7 +4211,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="354332809647287722" datatype="html" xml:space="preserve">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="translated">Es poden utilitzar etiquetes per a sugerir recomanacions relevants. <x id="LINE_BREAK"/> Hi ha un màxim de 5 etiquetes. <x id="LINE_BREAK"/> Apreta <x id="START_TAG_KBD"/> Enter <x id="CLOSE_TAG_KBD"/> per a afegir una nova etiqueta. </target>
+        <target state="translated">Es poden utilitzar etiquetes per a sugerir recomanacions relevants. <x id="LINE_BREAK"/> Hi ha un màxim de 5 etiquetes. <x id="LINE_BREAK"/> Premeu <x id="START_TAG_KBD"/>Enter <x id="CLOSE_TAG_KBD"/> per a afegir una nova etiqueta. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">30</context>
