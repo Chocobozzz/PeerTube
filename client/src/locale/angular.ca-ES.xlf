@@ -3530,17 +3530,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3343007694071351756" datatype="html">
+      <trans-unit id="3343007694071351756" datatype="html" xml:space="preserve">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="translated">No s'ha pogut trobar cap vídeo vinculat a la URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> que buscaves.</target>
+        <target state="translated">No s'ha pogut trobar cap vídeo vinculat a l'URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> que buscaves.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7366678433039425999" datatype="html">
+      <trans-unit id="7366678433039425999" datatype="html" xml:space="preserve">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="translated">No s'ha pogut trobar cap recurs vinculat a la URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> que buscaves.</target>
+        <target state="translated">No s'ha pogut trobar cap recurs vinculat a l'URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> que buscaves.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">49</context>
@@ -4751,7 +4751,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4964217545822568684" datatype="html" xml:space="preserve">
         <source>Privacy of the new replay</source>
-        <target state="translated">Privacitat de la nova repetició</target>
+        <target state="translated">Privadesa de la nova repetició</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">355</context>
@@ -5452,9 +5452,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6173286379208830044" datatype="html">
+      <trans-unit id="6173286379208830044" datatype="html" xml:space="preserve">
         <source>Paste magnet URI</source>
-        <target state="translated">Apegar la URI magnet</target>
+        <target state="translated">Apegar l'URI magnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5764,9 +5764,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1122876732223594710" datatype="html">
+      <trans-unit id="1122876732223594710" datatype="html" xml:space="preserve">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="translated">La URL no és segura (no és HTTPS), aleshores el vídeo incrustat no funcionarà en les pàgines HTTPS (els navegadors bloquegen sol·licituds HTTP no segures en pàgines HTTPS).</target>
+        <target state="translated">L'URL no és segur (no és HTTPS), aleshores el vídeo incrustat no funcionarà en les pàgines HTTPS (els navegadors bloquen sol·licituds HTTP no segures en pàgines HTTPS).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">61</context>
@@ -5900,9 +5900,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1068153312491986796" datatype="html">
+      <trans-unit id="1068153312491986796" datatype="html" xml:space="preserve">
         <source>Display privacy warning</source>
-        <target state="translated">Mostrar advertència de privacitat</target>
+        <target state="translated">Mostrar advertència de privadesa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">276</context>
@@ -10262,7 +10262,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html" xml:space="preserve">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="translated">Veure <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>la documentació<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> per obtenir més informació sobre la URL esperada </target>
+        <target state="translated">Veure <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>la documentació<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> per obtenir més informació sobre l'URL esperat </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">657</context>
