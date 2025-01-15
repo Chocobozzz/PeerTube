@@ -4917,7 +4917,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6206893322435329922" datatype="html" xml:space="preserve">
         <source>You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Podeu sol·licitar que els comentaris siguin aprovats en funció de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>la vostra política d'etiquetatge automàtic <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Podeu sol·licitar que els comentaris siguin aprovats en funció de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>la vostra política d'etiquetatge automàtic<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">451</context>
@@ -4941,7 +4941,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html" xml:space="preserve">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="translated">Reduïu la latència a ~ 15 segons deshabilitant P2P</target>
+        <target state="translated">Reduïu la latència a ~ 15s deshabilitant P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -4987,9 +4987,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8896564060463626070" datatype="html">
+      <trans-unit id="8896564060463626070" datatype="html" xml:space="preserve">
         <source>Enable download</source>
-        <target state="translated">Habilita la baixada</target>
+        <target state="translated">Habilitar la baixada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">463</context>
