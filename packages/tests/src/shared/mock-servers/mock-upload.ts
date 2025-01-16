@@ -1,8 +1,8 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import express from 'express'
 import { Server } from 'http'
 import multer from 'multer'
 import { getPort, randomListen, terminateServer } from './shared.js'
-import { HttpStatusCode } from '../../../../models/src/http/http-status-codes.js'
 
 export class MockUpload {
   private server: Server
