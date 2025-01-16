@@ -13,7 +13,6 @@ import {
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
-import { processViewsBuffer } from '@tests/shared/views.js'
 import { expect } from 'chai'
 
 describe('Test live socket messages', function () {
