@@ -80,8 +80,8 @@ header {
   &.active,
   &.completed {
     .step-index {
-      border-color: pvar(--bg-secondary-500);
-      background-color: pvar(--bg-secondary-500);
+      border-color: pvar(--bg-secondary-550);
+      background-color: pvar(--bg-secondary-550);
       color: pvar(--fg-400);
     }
 
@@ -101,7 +101,7 @@ header {
   flex: auto;
   margin: math.div($index-block-height, 2) 10px 0 10px;
   height: 2px;
-  background-color: pvar(--bg-secondary-500);
+  background-color: pvar(--secondary-icon-color);
   opacity: 0.3;
 }
 
