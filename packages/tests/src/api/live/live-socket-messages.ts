@@ -138,8 +138,12 @@ describe('Test live socket messages', function () {
       await servers[0].views.simulateView({ id: liveVideoUUID })
       await servers[1].views.simulateView({ id: liveVideoUUID })
 
+      await wait(3000)
+
+      await servers[0].views.simulateView({ id: liveVideoUUID })
+      await servers[1].views.simulateView({ id: liveVideoUUID })
+
       await waitJobs(servers)
-      await processViewsBuffer(servers)
 
       expect(localLastVideoViews).to.equal(2)
       expect(remoteLastVideoViews).to.equal(2)
