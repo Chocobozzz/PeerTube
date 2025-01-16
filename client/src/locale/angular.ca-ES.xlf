@@ -5910,7 +5910,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4583515246777381165" datatype="html" xml:space="preserve">
         <source>Display player control bar</source>
-        <target state="translated">Mostra la barra de control del reproductor</target>
+        <target state="translated">Mostrar la barra de control del reproductor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">283</context>
@@ -6142,7 +6142,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7274091852247477825" datatype="html" xml:space="preserve">
         <source>Close transcription widget</source>
-        <target state="translated">Tanca el giny de transcripció</target>
+        <target state="translated">Tancar el giny de transcripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6310,7 +6310,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1465291804668949243" datatype="html" xml:space="preserve">
         <source>NSFW</source>
-        <target state="translated">adults</target>
+        <target state="translated">NSFW</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">57</context>
@@ -6410,7 +6410,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Veure <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 réponse} other {{{ comment.totalReplies }} réponses}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> i altres </target>
+        <target state="translated">Veure <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 resposta} other {{{ comment.totalReplies }} respostes}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> i altres </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">80</context>
@@ -6434,7 +6434,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Veure <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 réponse} other {{{ comment.totalReplies }} réponses}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Veure <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 resposta} other {{{ comment.totalReplies }} respostes}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">83</context>
@@ -6676,9 +6676,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3516494528184217808">
+      <trans-unit id="3516494528184217808" xml:space="preserve">
         <source>1 host (without "http://") per line</source>
-        <target>1 amfitrió (sense "http: //") per línia</target>
+        <target state="translated">1 host (sense "http://") per línia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6714,7 +6714,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1131691653475304132" datatype="html" xml:space="preserve">
         <source>Your automatic tag policies</source>
-        <target state="translated">Les vostres polítiques d'etiquetes automàtiques</target>
+        <target state="translated">Les vostres polítiques d'etiquetatge automàtic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">133</context>
