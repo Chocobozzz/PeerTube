@@ -9548,9 +9548,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4809162812315301010" datatype="html">
+      <trans-unit id="4809162812315301010" datatype="html" xml:space="preserve">
         <source>BROADCAST MESSAGE</source>
-        <target state="new">BROADCAST MESSAGE</target>
+        <target state="translated">SALUTACIÓ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">90</context>
@@ -9574,7 +9574,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9192050065623241777" datatype="html" xml:space="preserve">
         <source>Allow users to dismiss the broadcast message</source>
-        <target state="translated">Permetre als visitants tancar el missatge de benvinguda</target>
+        <target state="translated">Permetre a les visites tancar el missatge de benvinguda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">110</context>
@@ -9614,15 +9614,15 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html" xml:space="preserve">
         <source>Signup requires email verification</source>
-        <target state="translated">El registre requereix verificació del correu electrònic</target>
+        <target state="translated">El registre requereix verificació per correu electrònic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8133107840061687919">
+      <trans-unit id="8133107840061687919" xml:space="preserve">
         <source>Signup limit</source>
-        <target>Limit de registres</target>
+        <target state="translated">Limit de comptes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">182</context>
@@ -9734,7 +9734,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Suscriptor/a} other {Suscriptors/es} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriptor/a} other {Subscriptors/es} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
