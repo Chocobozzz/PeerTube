@@ -10094,7 +10094,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6056998652615283808" datatype="html" xml:space="preserve">
         <source>Allow your users to import a data archive</source>
-        <target state="translated">Permetre importar un arxiu de dades</target>
+        <target state="translated">Permetre la importació d'un arxiu de dades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">540</context>
@@ -10102,7 +10102,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4091781230315618850" datatype="html" xml:space="preserve">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
-        <target state="translated">La quota de vídeo es comprova durant la importació perquè no es descarregui un fitxer d'arxiu massa gran</target>
+        <target state="translated">La quota de vídeo es comprova durant la importació perquè no es descarregui un fitxer d'arxiu massa gros</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">543</context>
@@ -10398,7 +10398,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html" xml:space="preserve">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ L'habilitació de la transmissió en directe requereix confiança en les persones i un treball de moderació addicional</target>
+        <target state="translated">⚠️ L'habilitació de l'emissió en directe requereix confiança en les persones i un treball de moderació addicional</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">23</context>
