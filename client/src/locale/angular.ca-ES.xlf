@@ -5714,7 +5714,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5254843797242866315" datatype="html" xml:space="preserve">
         <source>This video is private so you won't be able to share it with external users</source>
-        <target state="translated">Aquest vídeo és privat, no el podreu compartir amb persones externes</target>
+        <target state="translated">Aquest vídeo és privat, no el podreu compartir externament</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">107</context>
@@ -5746,7 +5746,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7906169354857781172" datatype="html" xml:space="preserve">
         <source>Video embed URL</source>
-        <target state="translated">URL d'inserció del vídeo</target>
+        <target state="translated">URL d'incrustació del vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">149,150</context>
@@ -5776,9 +5776,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8151017381798767627">
+      <trans-unit id="8151017381798767627" xml:space="preserve">
         <source>Embed</source>
-        <target>Incrusta</target>
+        <target state="translated">Incrustar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">50</context>
