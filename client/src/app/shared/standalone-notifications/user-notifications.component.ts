@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
-import { AbuseState } from '@peertube/peertube-models'
+import { AbuseState, VideoState } from '@peertube/peertube-models'
 import { CommonModule } from '@angular/common'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { RouterLink } from '@angular/router'
@@ -22,6 +22,7 @@ export class UserNotificationsComponent implements OnInit {
   @Input() infiniteScroll = true
   @Input() itemsPerPage = 20
   @Input() markAllAsReadSubject: Subject<boolean>
+  @Input() userNotificationReload: Subject<boolean>
 
   @Output() notificationsLoaded = new EventEmitter()
 
@@ -49,9 +50,15 @@ export class UserNotificationsComponent implements OnInit {
     if (this.markAllAsReadSubject) {
       this.markAllAsReadSubject.subscribe(() => this.markAllAsRead())
     }
+
+    if (this.userNotificationReload) {
+      this.userNotificationReload.subscribe(() => this.loadNotifications(true))
+    }
   }
 
   loadNotifications (reset?: boolean) {
+    if (reset) this.componentPagination.currentPage = 1
+
     const options = {
       pagination: this.componentPagination,
       ignoreLoadingBar: this.ignoreLoadingBar,
@@ -123,7 +130,11 @@ export class UserNotificationsComponent implements OnInit {
     this.loadNotifications(true)
   }
 
-  isAccepted (notification: UserNotification) {
+  isAbuseAccepted (notification: UserNotification) {
     return notification.abuse.state === AbuseState.ACCEPTED
+  }
+
+  isVideoPublished (notification: UserNotification) {
+    return notification.video.state.id === VideoState.PUBLISHED
   }
 }

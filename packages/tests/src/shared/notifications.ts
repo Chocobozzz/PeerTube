@@ -966,6 +966,7 @@ function checkVideo (video: any, videoName?: string, shortUUID?: string) {
     expect(video.shortUUID).to.equal(shortUUID)
   }
 
+  expect(video.state).to.exist
   expect(video.id).to.be.a('number')
 }
 

@@ -63,11 +63,15 @@
       <ng-container *ngSwitchCase="15"> <!-- UserNotificationType.ABUSE_STATE_CHANGE -->
         <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
-        <div class="message" i18n>
-          <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl" [queryParams]="notification.abuseQueryParams">Your abuse {{ notification.abuse.id }}</a> has been
-          <ng-container *ngIf="isAccepted(notification)">accepted</ng-container>
-          <ng-container *ngIf="!isAccepted(notification)">rejected</ng-container>
-        </div>
+        @if (isAbuseAccepted(notification)) {
+          <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl" [queryParams]="notification.abuseQueryParams">Your abuse {{ notification.abuse.id }}</a> has been accepted
+          </div>
+        } @else {
+          <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl" [queryParams]="notification.abuseQueryParams">Your abuse {{ notification.abuse.id }}</a> has been accepted
+          </div>
+        }
       </ng-container>
 
       <ng-container *ngSwitchCase="16"> <!-- UserNotificationType.ABUSE_NEW_MESSAGE -->
@@ -227,9 +231,15 @@
             <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
           </a>
 
-          <div class="message" i18n>
-            {{ notification.video.channel.displayName }} is live streaming in <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
-          </div>
+          @if (isVideoPublished(notification)) {
+            <div class="message" i18n>
+              {{ notification.video.channel.displayName }} is live streaming: <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
+            </div>
+          } @else {
+            <div class="message" i18n>
+              {{ notification.video.channel.displayName }} went live: <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
+            </div>
+          }
         } @else {
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 

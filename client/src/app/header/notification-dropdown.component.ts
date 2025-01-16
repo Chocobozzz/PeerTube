@@ -35,6 +35,7 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   opened = false
 
   markAllAsReadSubject = new Subject<boolean>()
+  userNotificationReload = new Subject<boolean>()
 
   private notificationSub: Subscription
   private routeSub: Subscription
@@ -78,6 +79,8 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   }
 
   onDropdownShown () {
+    if (this.loaded) this.userNotificationReload.next(true)
+
     this.opened = true
   }
 
