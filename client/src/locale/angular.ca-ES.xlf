@@ -10778,7 +10778,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="443904340561625146" datatype="html" xml:space="preserve">
         <source>If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</source>
-        <target state="translated">Si està habilitat les instàncies remotes de PeerTube &lt; 6.3.0 no podran reproduir aquests vídeos</target>
+        <target state="translated">Si està habilitat, les instàncies remotes de PeerTube &lt; 6.3.0 no podran reproduir aquests vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">128</context>
@@ -10858,7 +10858,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">demanarà com a molt <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> amb transcodificació en directe </target>
+        <target state="translated">demanarà com a màxim <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> amb transcodificació en directe </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">207</context>
