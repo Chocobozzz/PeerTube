@@ -1,5 +1,5 @@
 import { NgClass, NgIf, ViewportScroller } from '@angular/common'
-import { booleanAttribute, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core'
+import { booleanAttribute, Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
@@ -37,7 +37,7 @@ import { FormReactiveErrors } from './form-reactive.service'
   ]
 })
 
-export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
+export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() content = ''
 
   @Input() formError: string | FormReactiveErrors | FormReactiveErrors[]
@@ -87,6 +87,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
         .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content)
+  }
+
+  ngOnDestroy () {
+    this.unlockBodyScroll()
   }
 
   propagateChange = (_: any) => { /* empty */ }
