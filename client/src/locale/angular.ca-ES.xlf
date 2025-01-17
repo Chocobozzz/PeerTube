@@ -15828,131 +15828,129 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2237982448344718491" datatype="html">
+      <trans-unit id="2237982448344718491" datatype="html" xml:space="preserve">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> Registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">L'adreça electrònica de registre no s'ha verificat. L'enviament de correu electrònic s'ha desactivat de manera predeterminada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2884115244144130373" datatype="html">
+      <trans-unit id="2884115244144130373" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </target>
+        <target state="translated">Si <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>accepteu el registre<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> es crearà el compte i el canal. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4287036840463640002" datatype="html">
+      <trans-unit id="4287036840463640002" datatype="html" xml:space="preserve">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </target>
+        <target state="translated">S'enviarà un missatge a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> anunciant que s'ha creat el compte amb la resposta de la moderació que escriureu tot seguit. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6252848909934071768" datatype="html">
+      <trans-unit id="6252848909934071768" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </target>
+        <target state="translated">El correu electrònic no està habilitat en aquesta instància, de manera que PeerTube no podrà enviar un missatge a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> anunciant que s'ha creat el compte. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="908816482785584930" datatype="html">
+      <trans-unit id="908816482785584930" datatype="html" xml:space="preserve">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </target>
+        <target state="translated">S'enviarà un missatge a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> informant que la petició de registre s'ha <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rebutjat<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> amb la resposta de moderació que escriureu tot seguit. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2693506849974732500" datatype="html">
+      <trans-unit id="2693506849974732500" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </target>
+        <target state="translated">El correu electrònic no està habilitat en aquesta instància, de manera que PeerTube no podrà enviar un missatge a  <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> informant que la petició de registre s'ha rebutjat. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8494092276635837685" datatype="html">
+      <trans-unit id="8494092276635837685" datatype="html" xml:space="preserve">
         <source>Send a message to the user</source>
-        <target state="new">Send a message to the user</target>
+        <target state="translated">Envia un missatge a la persona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="608706297814044931" datatype="html">
+      <trans-unit id="608706297814044931" datatype="html" xml:space="preserve">
         <source>Prevent email from being sent to the user</source>
-        <target state="new">Prevent email from being sent to the user</target>
+        <target state="translated">Impedir l'enviament de missatges a la persona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1067821087200879310" datatype="html">
+      <trans-unit id="1067821087200879310" datatype="html" xml:space="preserve">
         <source>Accept registration</source>
-        <target state="new">Accept registration</target>
+        <target state="translated">Acceptar el registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9200323379330335050" datatype="html">
+      <trans-unit id="9200323379330335050" datatype="html" xml:space="preserve">
         <source>Reject registration</source>
-        <target state="new">Reject registration</target>
+        <target state="translated">Rebutjar el registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5919197630789088814" datatype="html">
+      <trans-unit id="5919197630789088814" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.registration.username"/> account created</source>
-        <target state="new"><x id="PH" equiv-text="this.registration.username"/> account created</target>
+        <target state="translated">Compte <x id="PH" equiv-text="this.registration.username"/> creat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2989631909091294713" datatype="html">
+      <trans-unit id="2989631909091294713" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.registration.username"/> registration rejected</source>
-        <target state="new"><x id="PH" equiv-text="this.registration.username"/> registration rejected</target>
+        <target state="translated">Compte <x id="PH" equiv-text="this.registration.username"/> rebutjat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5941489410560989457" datatype="html">
+      <trans-unit id="5941489410560989457" datatype="html" xml:space="preserve">
         <source>Moderation response is required.</source>
-        <target state="new">Moderation response is required.</target>
+        <target state="translated">Cal una resposta de la moderació.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1762427369052469243" datatype="html">
+      <trans-unit id="1762427369052469243" datatype="html" xml:space="preserve">
         <source>Moderation response must be at least 2 characters long.</source>
-        <target state="new">Moderation response must be at least 2 characters long.</target>
+        <target state="translated">El missatge de moderació ha de tenir com a mínim dos caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3326945092799111194" datatype="html">
+      <trans-unit id="3326945092799111194" datatype="html" xml:space="preserve">
         <source>Moderation response cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation response cannot be more than 3000 characters long.</target>
+        <target state="translated">El missatge de moderació no pot tindre més de 3.000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5974506725502681113" datatype="html">
+      <trans-unit id="5974506725502681113" datatype="html" xml:space="preserve">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target state="new">Password changed for user 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">S'ha canviat la contrasenya del compte <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">46</context>
