@@ -1796,11 +1796,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   // ---------------------------------------------------------------------------
 
   getMaxFPS () {
-    return this.getMaxQualityFile(VideoFileStream.VIDEO).fps
+    return this.getMaxQualityFile(VideoFileStream.VIDEO)?.fps || 0
   }
 
   getMaxResolution () {
-    return this.getMaxQualityFile(VideoFileStream.VIDEO).resolution
+    return this.getMaxQualityFile(VideoFileStream.VIDEO)?.resolution || this.getMaxQualityFile(VideoFileStream.AUDIO)?.resolution
   }
 
   hasAudio () {
