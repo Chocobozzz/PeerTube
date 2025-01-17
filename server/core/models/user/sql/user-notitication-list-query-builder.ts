@@ -142,7 +142,7 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "VideoBlacklist->Video"."id" AS "VideoBlacklist.Video.id",
       "VideoBlacklist->Video"."uuid" AS "VideoBlacklist.Video.uuid",
       "VideoBlacklist->Video"."name" AS "VideoBlacklist.Video.name",
-      "VideoBlacklist->Video"."state" AS "VideoBlacklist.Video.name",
+      "VideoBlacklist->Video"."state" AS "VideoBlacklist.Video.state",
       "VideoImport"."id" AS "VideoImport.id",
       "VideoImport"."magnetUri" AS "VideoImport.magnetUri",
       "VideoImport"."targetUrl" AS "VideoImport.targetUrl",

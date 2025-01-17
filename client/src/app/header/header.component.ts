@@ -21,12 +21,12 @@ import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.com
 import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { ServerConfig } from '@peertube/peertube-models'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { isAndroid } from '@root-helpers/web-browser'
 import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
 import { SearchTypeaheadComponent } from './search-typeahead.component'
-import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
-import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 @Component({
   selector: 'my-header',
