@@ -134,19 +134,22 @@ describe('Test live socket messages', function () {
       expect(localLastVideoViews).to.equal(0)
       expect(remoteLastVideoViews).to.equal(0)
 
-      await servers[0].views.simulateView({ id: liveVideoUUID })
-      await servers[1].views.simulateView({ id: liveVideoUUID })
+      const interval = setInterval(async () => {
+        try {
+          await servers[0].views.simulateView({ id: liveVideoUUID, sessionId: 'session1' })
+          await servers[1].views.simulateView({ id: liveVideoUUID, sessionId: 'session2' })
+        } catch (err) {
+          console.error('Cannot simulate view', err)
+        }
+      }, 1000)
 
-      await wait(3000)
-
-      await servers[0].views.simulateView({ id: liveVideoUUID })
-      await servers[1].views.simulateView({ id: liveVideoUUID })
-
+      await wait(6000)
       await waitJobs(servers)
 
       expect(localLastVideoViews).to.equal(2)
       expect(remoteLastVideoViews).to.equal(2)
 
+      clearInterval(interval)
       await stopFfmpeg(ffmpegCommand)
     })
 
