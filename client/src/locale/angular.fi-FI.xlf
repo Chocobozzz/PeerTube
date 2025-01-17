@@ -3225,7 +3225,7 @@
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2184839376696112704" datatype="html">
+      <trans-unit id="2184839376696112704" datatype="html" xml:space="preserve">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
         <target state="translated">mahdollistaa useiden videoiden tuomisen rinnakkain. ⚠️ Vaatii PeerTuben uudelleenkäynnistyksen.</target>
         <context-group purpose="location">
@@ -10669,7 +10669,7 @@
       </trans-unit>
       <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
-        <target state="translated">Jos tämä on käytössä, syötetiedostoa ei poisteta transkoodauksen jälkeen, vaan se siirretään omistettuun kansioon tai objektisäilöön</target>
+        <target state="translated">Jos tämä on käytössä, syötetiedostoa ei poisteta transkoodauksen jälkeen, vaan se siirretään tiettyyn kansioon tai objektisäilöön</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">75</context>
@@ -10851,7 +10851,7 @@
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969393594784140832" datatype="html">
+      <trans-unit id="1969393594784140832" datatype="html" xml:space="preserve">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
         <target state="translated">mahdollistaa useiden tiedostojen transkoodauksen rinnakkain. ⚠️ Vaatii PeerTube-uudelleenkäynnistyksen</target>
         <context-group purpose="location">
