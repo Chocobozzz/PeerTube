@@ -1419,9 +1419,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="80730865601179554">
+      <trans-unit id="80730865601179554" xml:space="preserve">
         <source>Complete preview</source>
-        <target>Kokonainen esikatselu</target>
+        <target state="translated">Kokosivun esikatselu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">20</context>
@@ -9041,7 +9041,7 @@
       </trans-unit>
       <trans-unit id="3470254178332563634" datatype="html" xml:space="preserve">
         <source>Square icon</source>
-        <target state="translated">Neliö ikoni</target>
+        <target state="translated">Neliön muotoinen kuvake</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">12</context>
@@ -9049,7 +9049,7 @@
       </trans-unit>
       <trans-unit id="7072202226437407363" datatype="html" xml:space="preserve">
         <source>Square icon can be used on your custom homepage.</source>
-        <target state="translated">Neliöikonia voidaan käyttää custom kotisivulla.</target>
+        <target state="translated">Neliön muotoista kuvaketta voidaan käyttää kotisivulla.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">15</context>
@@ -9073,7 +9073,7 @@
       </trans-unit>
       <trans-unit id="6614390687854488723" datatype="html" xml:space="preserve">
         <source>It can also be displayed on external websites to promote your instance, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="translated">Banneri voidaan näyttää myös ulkoisilla sivuilla kuten<x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Banneri voidaan näyttää myös ulkoisilla sivuilla kuten <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">30</context>
@@ -9905,7 +9905,7 @@
       </trans-unit>
       <trans-unit id="7773354014171617955" datatype="html" xml:space="preserve">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="translated">Luo tarinat kaikista paikallisista videoista ffmpegillä jotta käyttäjät näkevät esikatselut kun kelaavat videoita</target>
+        <target state="translated">Luo tarinat kaikista paikallisista videoista ffmpegillä jotta käyttäjät näkevät esikatselut, silloin kun kelaavat videoita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">380</context>
@@ -11095,9 +11095,9 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1445676851449000175">
+      <trans-unit id="1445676851449000175" xml:space="preserve">
         <source>Update configuration</source>
-        <target>Päivitä konfiguraatio</target>
+        <target state="translated">Tallenna muutokset</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">91</context>
