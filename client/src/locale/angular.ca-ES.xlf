@@ -15956,61 +15956,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="149953821752893163" datatype="html">
+      <trans-unit id="149953821752893163" datatype="html" xml:space="preserve">
         <source>Update user password</source>
-        <target state="new">Update user password</target>
+        <target state="translated">Actualitzar la contrasenya del compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="780323526182667308" datatype="html">
+      <trans-unit id="780323526182667308" datatype="html" xml:space="preserve">
         <source>User <x id="PH"/> updated.</source>
-        <target state="new">User 
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated">Compte <x id="PH"/> actualitzat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1349763489797682899">
+      <trans-unit id="1349763489797682899" xml:space="preserve">
         <source>Update user</source>
-        <target>Actualitzar usuari</target>
+        <target state="translated">Actualitzar compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8819563010322372715" datatype="html">
+      <trans-unit id="8819563010322372715" datatype="html" xml:space="preserve">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target state="new">An email asking for password reset has been sent to 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">S'ha enviat un missatge sol·licitant un restabliment de la contrasenya a <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5679185794144903715" datatype="html">
+      <trans-unit id="5679185794144903715" datatype="html" xml:space="preserve">
         <source>Two factor authentication of <x id="PH" equiv-text="this.user.username"/> disabled.</source>
-        <target state="new">Two factor authentication of <x id="PH" equiv-text="this.user.username"/> disabled.</target>
+        <target state="translated">Autenticació de dos factors <x id="PH" equiv-text="this.user.username"/> deshabilitada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6715412930390975308" datatype="html">
+      <trans-unit id="6715412930390975308" datatype="html" xml:space="preserve">
         <source>Open table configuration</source>
-        <target state="new">Open table configuration</target>
+        <target state="translated">Configuració de taula oberta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="13024139774181011" datatype="html">
+      <trans-unit id="13024139774181011" datatype="html" xml:space="preserve">
         <source>Select the columns to display</source>
-        <target state="new">Select the columns to display</target>
+        <target state="translated">Trieu les columnes per mostrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">47</context>
@@ -16020,49 +16016,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7483807629538115183" datatype="html">
+      <trans-unit id="7483807629538115183" datatype="html" xml:space="preserve">
         <source>Users list</source>
-        <target state="new">Users list</target>
+        <target state="translated">Llista de comptes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1525334987774465166" datatype="html">
+      <trans-unit id="1525334987774465166" datatype="html" xml:space="preserve">
         <source>Create a user</source>
-        <target state="new">Create a user</target>
+        <target state="translated">Crear un compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552039423287890133" datatype="html">
+      <trans-unit id="5552039423287890133" datatype="html" xml:space="preserve">
         <source>Update a user</source>
-        <target state="new">Update a user</target>
+        <target state="translated">Actualitzar un compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2005509140164856243" datatype="html">
+      <trans-unit id="2005509140164856243" datatype="html" xml:space="preserve">
         <source>Video type</source>
-        <target state="new">Video type</target>
+        <target state="translated">Tipus de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1878553503929537171" datatype="html">
+      <trans-unit id="1878553503929537171" datatype="html" xml:space="preserve">
         <source>VOD</source>
-        <target state="new">VOD</target>
+        <target state="translated">VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8610504659433544583" datatype="html">
+      <trans-unit id="8610504659433544583" datatype="html" xml:space="preserve">
         <source>Live</source>
-        <target state="new">Live</target>
+        <target state="translated">Directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">54</context>
@@ -16072,9 +16068,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="545237611115823456" datatype="html">
+      <trans-unit id="545237611115823456" datatype="html" xml:space="preserve">
         <source>Video files</source>
-        <target state="new">Video files</target>
+        <target state="translated">Fitxers de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -16084,65 +16080,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1882931826815906053" datatype="html">
+      <trans-unit id="1882931826815906053" datatype="html" xml:space="preserve">
         <source>With Web Videos</source>
-        <target state="new">With Web Videos</target>
+        <target state="translated">Amb «Vídeos Web»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1590370632695044398" datatype="html">
+      <trans-unit id="1590370632695044398" datatype="html" xml:space="preserve">
         <source>Without Web Videos</source>
-        <target state="new">Without Web Videos</target>
+        <target state="translated">Sense «Vídeos Web»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7468888924775619361" datatype="html">
+      <trans-unit id="7468888924775619361" datatype="html" xml:space="preserve">
         <source>With HLS</source>
-        <target state="new">With HLS</target>
+        <target state="translated">Amb HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5489331826268601489" datatype="html">
+      <trans-unit id="5489331826268601489" datatype="html" xml:space="preserve">
         <source>Without HLS</source>
-        <target state="new">Without HLS</target>
+        <target state="translated">Sense HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7091163288887549392" datatype="html">
+      <trans-unit id="7091163288887549392" datatype="html" xml:space="preserve">
         <source>Videos scope</source>
-        <target state="new">Videos scope</target>
+        <target state="translated">Àmbit dels vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1144415254281227966" datatype="html">
+      <trans-unit id="1144415254281227966" datatype="html" xml:space="preserve">
         <source>Remote videos</source>
-        <target state="new">Remote videos</target>
+        <target state="translated">Vídeos remots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8564701209009684429" datatype="html">
+      <trans-unit id="8564701209009684429" datatype="html" xml:space="preserve">
         <source>Federation</source>
-        <target state="new">Federation</target>
+        <target state="translated">Federació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3767259920053407667" datatype="html">
+      <trans-unit id="3767259920053407667" datatype="html" xml:space="preserve">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="new">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">Els vídeos s'eliminaran, els comentaris es marcaran com a suprimits.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -16152,9 +16148,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4209525355702493436" datatype="html">
+      <trans-unit id="4209525355702493436" datatype="html" xml:space="preserve">
         <source>Ban</source>
-        <target state="new">Ban</target>
+        <target state="translated">Bandejar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -16164,9 +16160,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3855396975723886053" datatype="html">
+      <trans-unit id="3855396975723886053" datatype="html" xml:space="preserve">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="new">User won't be able to login anymore, but videos and comments will be kept as is.</target>
+        <target state="translated">La persona ja no podrà iniciar sessió, però els vídeos i comentaris es mantindran tal com estan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">149</context>
@@ -16176,9 +16172,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4451482225013335720" datatype="html">
+      <trans-unit id="4451482225013335720" datatype="html" xml:space="preserve">
         <source>Unban</source>
-        <target state="new">Unban</target>
+        <target state="translated">Desbandejar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">154</context>
@@ -16192,9 +16188,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7210277223053877333" datatype="html">
+      <trans-unit id="7210277223053877333" datatype="html" xml:space="preserve">
         <source>Set Email as Verified</source>
-        <target state="new">Set Email as Verified</target>
+        <target state="translated">Establir l'adreça electrònica com a verificada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -16204,33 +16200,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4207916966377787111" datatype="html">
+      <trans-unit id="4207916966377787111" datatype="html" xml:space="preserve">
         <source>Created</source>
-        <target state="new">Created</target>
+        <target state="translated">Creat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8140268298586972139" datatype="html">
+      <trans-unit id="8140268298586972139" datatype="html" xml:space="preserve">
         <source>Daily quota</source>
-        <target state="new">Daily quota</target>
+        <target state="translated">Quota diària</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7910076708497708162" datatype="html">
+      <trans-unit id="7910076708497708162" datatype="html" xml:space="preserve">
         <source>Last login</source>
-        <target state="new">Last login</target>
+        <target state="translated">Últim accés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3403978719736970622" datatype="html">
+      <trans-unit id="3403978719736970622" datatype="html" xml:space="preserve">
         <source>You cannot ban root.</source>
-        <target state="new">You cannot ban root.</target>
+        <target state="translated">No podeu bandejar el compte root.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">241</context>
