@@ -150,7 +150,7 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "VideoImport->Video"."id" AS "VideoImport.Video.id",
       "VideoImport->Video"."uuid" AS "VideoImport.Video.uuid",
       "VideoImport->Video"."name" AS "VideoImport.Video.name",
-      "VideoImport->Video"."state" AS "VideoImport.Video.name",
+      "VideoImport->Video"."state" AS "VideoImport.Video.state",
       "Plugin"."id" AS "Plugin.id",
       "Plugin"."name" AS "Plugin.name",
       "Plugin"."type" AS "Plugin.type",

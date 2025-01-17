@@ -24,4 +24,3 @@ export function isIphone () {
 export function isAndroid () {
   return /Android/i.test(navigator.userAgent)
 }
-
