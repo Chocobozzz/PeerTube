@@ -15728,67 +15728,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="693664545987486839" datatype="html">
+      <trans-unit id="693664545987486839" datatype="html" xml:space="preserve">
         <source>Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</source>
-        <target state="new">Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</target>
+        <target state="translated">Realment voleu cancel·lar {count, plural, =1 {aquest treball} other {<x id="count"/> treballs}}? També es cancel·laran els treballs dependents (fills).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6494788464560085904" datatype="html">
+      <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="new">{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</target>
+        <target state="translated">{count, plural, =1 {treball cancel·lat} other {<x id="count"/> treballs cancel·lats}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2175266358082397536" datatype="html">
+      <trans-unit id="2175266358082397536" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</source>
-        <target state="new">Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</target>
+        <target state="translated">Realment voleu eliminar {count, plural, =1 {aquest treball} other {<x id="count"/> treballs}}? També s'eliminaran els treballs dependents (fills).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="512712988274106243" datatype="html">
+      <trans-unit id="512712988274106243" datatype="html" xml:space="preserve">
         <source>IP</source>
-        <target state="new">IP</target>
+        <target state="translated">IP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="251663748987415005" datatype="html">
+      <trans-unit id="251663748987415005" datatype="html" xml:space="preserve">
         <source>Last contact</source>
-        <target state="new">Last contact</target>
+        <target state="translated">Últim contacte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6329354273972175246" datatype="html">
+      <trans-unit id="6329354273972175246" datatype="html" xml:space="preserve">
         <source>No remote runners found.</source>
-        <target state="new">No remote runners found.</target>
+        <target state="translated">No s'han trobat codificadors remots.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1886888801485703107">
+      <trans-unit id="1886888801485703107" xml:space="preserve">
         <source>User <x id="PH"/> created.</source>
-        <target>Usuari 
-          <x id="PH"/> creat.
-        </target>
+        <target state="translated">Compte <x id="PH"/> creat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-create.component.ts</context>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8286337167859377104" datatype="html">
+      <trans-unit id="8286337167859377104" datatype="html" xml:space="preserve">
         <source>Create user</source>
-        <target state="new">Create user</target>
+        <target state="translated">Crear compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-create.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -15798,33 +15796,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7098180453085889026" datatype="html">
+      <trans-unit id="7098180453085889026" datatype="html" xml:space="preserve">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">Vídeos blocats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2434590176499222618" datatype="html">
+      <trans-unit id="2434590176499222618" datatype="html" xml:space="preserve">
         <source>User registrations</source>
-        <target state="new">User registrations</target>
+        <target state="translated">Registre de comptes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7805059636749367886" datatype="html">
+      <trans-unit id="7805059636749367886" datatype="html" xml:space="preserve">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Instàncies silenciades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2072636325858679364" datatype="html">
+      <trans-unit id="2072636325858679364" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target state="new"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Acceptar <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> el registre<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Rebutjar<x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> el registren<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4,5</context>
