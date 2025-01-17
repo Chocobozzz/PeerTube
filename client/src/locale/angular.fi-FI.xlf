@@ -443,9 +443,9 @@
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5354239156470982824" datatype="html">
+      <trans-unit id="5354239156470982824" datatype="html" xml:space="preserve">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Sinun instanssillasi <x id="START_LINK"/>uusi seuraaja<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> odottaa sinun hyväksyntääsi<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">Instanssillasi <x id="START_LINK"/>uusi seuraaja<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> odottaa sinun hyväksyntääsi<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">179</context>
@@ -1941,7 +1941,7 @@
       </trans-unit>
       <trans-unit id="4700057689494115926" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</source>
-        <target state="translated">Moderaattorimme tarkistaa sen seuraavan <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/> kuluessa.</target>
+        <target state="translated">Moderaattorimme tarkastaa sen seuraavan <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/> kuluessa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">89,90</context>
@@ -1949,7 +1949,7 @@
       </trans-unit>
       <trans-unit id="4819914947083527459" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a few days.</source>
-        <target state="translated">Moderaattorimme tarkistaa sen muutaman päivän kuluessa.</target>
+        <target state="translated">Moderaattorimme tarkastaa sen muutaman päivän kuluessa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -3253,9 +3253,9 @@
           <context context-type="linenumber">290</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2095604754338363597" datatype="html">
+      <trans-unit id="2095604754338363597" datatype="html" xml:space="preserve">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Jos käytössä, suosittelemme <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP-välityspalvelimen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> käyttöä estääksesi PeerTube-palvelimeltasi tapahtuvien yksityisten URL-osoitteiden vierailua</target>
+        <target state="translated">⚠️ Jos tämä on jkäytössä, suosittelemme <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP-välityspalvelimen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> estääksesi yksityisten URL-osoitteiden käytön PeerTube-palvelimeltasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">293</context>
@@ -5431,7 +5431,7 @@
       </trans-unit>
       <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="translated">Emme suosittele, että lataat videoita<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pääkäyttäjänä<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sillä se on super-admin käyttäjä instanssillasi.</target>
+        <target state="translated">Emme suosittele, että lataat videoita <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pääkäyttäjänä<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sillä se on tietoturvariski liian laajojen oikeuksien takia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">38</context>
@@ -7707,9 +7707,9 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7595922272001217567" datatype="html">
+      <trans-unit id="7595922272001217567" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">Instanssillasi ei ole käytössä peilausstrategiaa.</target>
+        <target state="translated">Instanssillasi ei ole käytössä peilausta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">92</context>
@@ -9431,9 +9431,9 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="371306187337992930" datatype="html">
+      <trans-unit id="371306187337992930" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Käytä <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>laajennuksia &amp; teemoja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> lisätäksesi muutoksia tai lisää hieman <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>kustomointeja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Käytä <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>lisäosia &amp; teemoja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> suuremmille muutoksille tai lisää <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>kustomointeja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">7</context>
@@ -9449,7 +9449,7 @@
       </trans-unit>
       <trans-unit id="589280645445401478" datatype="html" xml:space="preserve">
         <source>Default trending algorithm</source>
-        <target state="translated">Vakio trendausalgoritmi</target>
+        <target state="translated">Trendausalgoritmi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">39,41</context>
@@ -9527,9 +9527,9 @@
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7097094470713539753" datatype="html">
+      <trans-unit id="7097094470713539753" datatype="html" xml:space="preserve">
         <source>Display a message on your instance</source>
-        <target state="translated">Näytä viesti instanssillasi</target>
+        <target state="translated">Näytä viesti sivun ylälaidassa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">92</context>
@@ -9543,9 +9543,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9192050065623241777" datatype="html">
+      <trans-unit id="9192050065623241777" datatype="html" xml:space="preserve">
         <source>Allow users to dismiss the broadcast message</source>
-        <target state="translated">Salli käyttäjien hylätä yleislähetysviesti</target>
+        <target state="translated">Salli käyttäjien sulkea yleislähetysviesti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">110</context>
@@ -9575,9 +9575,9 @@
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2669509104300979449" datatype="html">
+      <trans-unit id="2669509104300979449" datatype="html" xml:space="preserve">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target state="translated">Hallitse <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>käyttäjiä<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> asettaakseen kiintiöt yksitellen. </target>
+        <target state="translated">Hallitse <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>käyttäjiä<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> asettaaksesi videokiintiöt yksitellen. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">148</context>
@@ -9825,7 +9825,7 @@
       </trans-unit>
       <trans-unit id="1140716714758760841" datatype="html" xml:space="preserve">
         <source>Automatically enable video history for new users</source>
-        <target state="translated">Automaattisesti ota käyttöön videohistoria uusille käyttäjille</target>
+        <target state="translated">Ota käyttöön videohistoria uusille käyttäjille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">253</context>
@@ -9879,9 +9879,9 @@
           <context context-type="linenumber">333</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3950258704315544174" datatype="html">
+      <trans-unit id="3950258704315544174" datatype="html" xml:space="preserve">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="translated">Ellei käyttäjää ole merkitty luotetuksi, hänen videonsa pysyvät yksityisinä, kunnes moderaattori tarkistaa ne.</target>
+        <target state="translated">Ellei käyttäjää ole merkitty luotetuksi, hänen videonsa pysyvät yksityisinä, kunnes moderaattori hyväksyy ne.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">352</context>
@@ -9897,7 +9897,7 @@
       </trans-unit>
       <trans-unit id="6098767935728651255" datatype="html" xml:space="preserve">
         <source>Enable video storyboards</source>
-        <target state="translated">Ota käyttöön videoiden tarinat</target>
+        <target state="translated">Ota videon esikatseluruudut käyttöön</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">377</context>
@@ -9905,7 +9905,7 @@
       </trans-unit>
       <trans-unit id="7773354014171617955" datatype="html" xml:space="preserve">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="translated">Luo tarinat kaikista paikallisista videoista ffmpegillä jotta käyttäjät näkevät esikatselut, silloin kun kelaavat videoita</target>
+        <target state="translated">Luo esikatseluruudut kaikista paikallisista videoista, jotta käyttäjät näkevät esikatseluruudut kelaamisen aikana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">380</context>
@@ -10407,9 +10407,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5191164170233238999" datatype="html">
+      <trans-unit id="5191164170233238999" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="translated">Maksimi samanaikaisesti luotuja livejä sinun instanssillasi</target>
+        <target state="translated">Maksimi samanaikaisesti luotujen livelähetysten määrä</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">49</context>
@@ -10651,9 +10651,9 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867513506373651775" datatype="html">
+      <trans-unit id="5867513506373651775" datatype="html" xml:space="preserve">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="translated">Tiedosto yhdistetään pysäytyskuvavideoon esikatselutiedoston kanssa latauksen yhteydessä.</target>
+        <target state="translated">Tiedosto yhdistetään still-kuvavideoksi esikatselutiedoston kanssa latauksen yhteydessä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">64</context>
@@ -12599,7 +12599,7 @@
       </trans-unit>
       <trans-unit id="4255980289409848252" datatype="html" xml:space="preserve">
         <source>A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.</source>
-        <target state="translated">Moderaattori tarkistaa rekisteröitymispyyntösi pian, ja saat sähköpostia, kun se on hyväksytty tai hylätty.</target>
+        <target state="translated">Moderaattori tarkastaa rekisteröitymispyyntösi pian, ja saat sähköpostia, kun se on hyväksytty tai hylätty.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">10</context>
@@ -15237,9 +15237,9 @@
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1387301493234848481">
+      <trans-unit id="1387301493234848481" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target state="translated">Asenna vain laajennuksia ja teemoja mihin luotat, koska ne pystyvät suorittamaan komentoja instanssillasi.</target>
+        <target state="translated">Asenna vain luotettavia lisäosia ja teemoja, koska ne voivat esimerkiksi suorittaa koodia instanssilla.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">150</context>
