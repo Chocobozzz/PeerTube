@@ -1,4 +1,4 @@
-function isIOS () {
+export function isIOS () {
   if (/iPad|iPhone|iPod/.test(navigator.platform)) {
     return true
   }
@@ -9,16 +9,19 @@ function isIOS () {
       navigator.platform.includes('MacIntel'))
 }
 
-function isSafari () {
+export function isSafari () {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 }
 
-function isMobile () {
+export function isMobile () {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
-export {
-  isIOS,
-  isSafari,
-  isMobile
+export function isIphone () {
+  return /iPhone/i.test(navigator.userAgent)
 }
+
+export function isAndroid () {
+  return /Android/i.test(navigator.userAgent)
+}
+

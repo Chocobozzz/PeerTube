@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { Router, RouterLink } from '@angular/router'
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthStatus,
@@ -25,6 +25,8 @@ import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
 import { SearchTypeaheadComponent } from './search-typeahead.component'
+import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 @Component({
   selector: 'my-header',
@@ -51,6 +53,8 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {
+  private static LS_HIDE_MOBILE_MSG = 'hide-mobile-msg'
+
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
   @ViewChild('dropdown') dropdown: NgbDropdown
@@ -61,6 +65,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   hotkeysHelpVisible = false
 
   currentInterfaceLanguage: string
+
+  mobileMsg = false
+  mobileAppUrl = ''
 
   private serverConfig: ServerConfig
 
@@ -76,6 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private screenService: ScreenService,
     private modalService: PeertubeModalService,
     private router: Router,
+    private route: ActivatedRoute,
     private menu: MenuService
   ) { }
 
@@ -127,6 +135,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.quickSettingsModalSub = this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
+
+    this.setupMobileMsg()
   }
 
   ngOnDestroy () {
@@ -143,6 +153,58 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getDefaultRouteQuery () {
     return this.redirectService.getDefaultRouteQuery()
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private setupMobileMsg () {
+    if (!this.isInMobileView()) return
+    if (peertubeLocalStorage.getItem(HeaderComponent.LS_HIDE_MOBILE_MSG) === 'true') return
+    if (!isAndroid()) return
+
+    this.mobileMsg = true
+    document.body.classList.add('mobile-app-msg')
+
+    const host = window.location.host
+
+    const getVideoId = (url: string) => {
+      const matches = url.match(/^\/w\/([^/]+)$/)
+
+      if (matches) return matches[1]
+    }
+
+    const getChannelId = (url: string) => {
+      const matches = url.match(/^\/c\/([^/]+)/)
+
+      if (matches) return matches[1]
+    }
+
+    this.router.events.subscribe(event => {
+      if (!(event instanceof NavigationEnd)) return
+
+      const url = event.url
+
+      const videoId = getVideoId(url)
+      if (videoId) {
+        this.mobileAppUrl = `peertube:///video/${videoId}?host=${host}`
+        return
+      }
+
+      const channelId = getChannelId(url)
+      if (channelId) {
+        this.mobileAppUrl = `peertube:///video-channel/${channelId}?host=${host}`
+        return
+      }
+
+      this.mobileAppUrl = `peertube:///?host=${host}`
+    })
+  }
+
+  hideMobileMsg () {
+    this.mobileMsg = false
+    document.body.classList.remove('mobile-app-msg')
+
+    peertubeLocalStorage.setItem(HeaderComponent.LS_HIDE_MOBILE_MSG, 'true')
   }
 
   // ---------------------------------------------------------------------------
