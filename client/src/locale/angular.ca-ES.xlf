@@ -16236,25 +16236,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7634059432691079352" datatype="html">
+      <trans-unit id="7634059432691079352" datatype="html" xml:space="preserve">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="new">Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</target>
+        <target state="translated">Segur que voleu desbandejar {count, plural, =1 {1 compte} other {<x id="count"/> comptes}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738031253894929036" datatype="html">
+      <trans-unit id="738031253894929036" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="new">{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</target>
+        <target state="translated">{count, plural, =1 {1 compte desbandejat.} other {<x id="count"/> comptes desbandejats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5325873477837320044">
+      <trans-unit id="5325873477837320044" xml:space="preserve">
         <source>You cannot delete root.</source>
-        <target>No pots esborrar root.</target>
+        <target state="translated">No podeu esborrar el compte root.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">282</context>
@@ -16264,43 +16264,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5945924096465496818" datatype="html">
+      <trans-unit id="5945924096465496818" datatype="html" xml:space="preserve">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="new">&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;No podeu crear comptes o canals amb un nom ja utilitzat per un compte/canal suprimitl.&lt;/p&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">286</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5643060985393782358" datatype="html">
+      <trans-unit id="5643060985393782358" datatype="html" xml:space="preserve">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="new">It means the following usernames will be permanently deleted and cannot be recovered:</target>
+        <target state="translated">Això vol dir que els comptes següents se suprimiran permanentment i no es podran recuperar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1301767781765127363" datatype="html">
+      <trans-unit id="1301767781765127363" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</target>
+        <target state="translated">{count, plural, =1 {1 compte eliminat.} other {<x id="count"/> comptes eliminats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">298</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3104427236147521673" datatype="html">
+      <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="new">{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</target>
+        <target state="translated">{count, plural, =1 {1 adreça electrònica marcada com a verificada.} other {<x id="count"/> adreces electròniques marcades com a verificades.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">316</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7390990800435887351" datatype="html">
+      <trans-unit id="7390990800435887351" datatype="html" xml:space="preserve">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target state="new">Account 
-          <x id="PH"/> unmuted.
-        </target>
+        <target state="translated">El compte <x id="PH"/> ja no està silenciat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -16314,11 +16312,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">362</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7246356397085094208" datatype="html">
+      <trans-unit id="7246356397085094208" datatype="html" xml:space="preserve">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target state="new">Instance 
-          <x id="PH"/> unmuted.
-        </target>
+        <target state="translated">La instància <x id="PH"/> ja no està silenciada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -16336,41 +16332,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3656932706364053858" datatype="html">
+      <trans-unit id="3656932706364053858" datatype="html" xml:space="preserve">
         <source>Track watch history</source>
-        <target state="new">Track watch history</target>
+        <target state="translated">Seguiment de l'historial de visualitzacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7485962171644689376" datatype="html">
+      <trans-unit id="7485962171644689376" datatype="html" xml:space="preserve">
         <source>Clear all history</source>
-        <target state="new">Clear all history</target>
+        <target state="translated">Esborrar tot l'historial</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3183245287221165928" datatype="html">
+      <trans-unit id="3183245287221165928" datatype="html" xml:space="preserve">
         <source>Ownership accepted</source>
-        <target state="new">Ownership accepted</target>
+        <target state="translated">Canvi de titularitat acceptat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6012072687166259654" datatype="html">
+      <trans-unit id="6012072687166259654" datatype="html" xml:space="preserve">
         <source>Please check your emails to verify your new email.</source>
-        <target state="new">Please check your emails to verify your new email.</target>
+        <target state="translated">Si us plau, comproveu la vostre correu per verificar al nova adreça.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6585766371605707311" datatype="html">
+      <trans-unit id="6585766371605707311" datatype="html" xml:space="preserve">
         <source>Email updated.</source>
-        <target state="new">Email updated.</target>
+        <target state="translated">Adreça electrònica actualitzada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -16380,9 +16376,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="853586874765134886" datatype="html">
+      <trans-unit id="853586874765134886" datatype="html" xml:space="preserve">
         <source>You current password is invalid.</source>
-        <target state="new">You current password is invalid.</target>
+        <target state="translated">La vostra contrasenya actual no és vàlida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -16400,17 +16396,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6897292459203320054" datatype="html">
+      <trans-unit id="6897292459203320054" datatype="html" xml:space="preserve">
         <source>Type your username to confirm</source>
-        <target state="new">Type your username to confirm</target>
+        <target state="translated">Escriviu el vostre nom d'usuari/a per confirmar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3122895472333547524" datatype="html">
+      <trans-unit id="3122895472333547524" datatype="html" xml:space="preserve">
         <source>Delete your account</source>
-        <target state="new">Delete your account</target>
+        <target state="translated">Suprimir el vostre compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">4</context>
@@ -16420,81 +16416,81 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="577064441120663273" datatype="html">
+      <trans-unit id="577064441120663273" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete your account?</source>
-        <target state="new">Are you sure you want to delete your account?</target>
+        <target state="translated">Segur que voleu suprimir el vostre compte?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2740531699780274491" datatype="html">
+      <trans-unit id="2740531699780274491" datatype="html" xml:space="preserve">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <target state="translated">Això destruirà totes les vostres dades, inclosos els canals, els vídeos, els comentaris i no podreu crear un altre compte en aquesta instància amb l'identificador "<x id="PH" equiv-text="this.user.username"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5422897685524094185" datatype="html">
+      <trans-unit id="5422897685524094185" datatype="html" xml:space="preserve">
         <source>Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">El contingut a la memòria cau d'altres servidors i altres entitats externes pot trigar més a eliminar-se.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2520605306994744004" datatype="html">
+      <trans-unit id="2520605306994744004" datatype="html" xml:space="preserve">
         <source>Delete my account</source>
-        <target state="new">Delete my account</target>
+        <target state="translated">Esborrar el meu compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3902597758945766483" datatype="html">
+      <trans-unit id="3902597758945766483" datatype="html" xml:space="preserve">
         <source>Your account is deleted.</source>
-        <target state="new">Your account is deleted.</target>
+        <target state="translated">El vostre compte s'ha suprimit.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215550763077484072" datatype="html">
+      <trans-unit id="5215550763077484072" datatype="html" xml:space="preserve">
         <source>Allow email to be publicly displayed</source>
-        <target state="new">Allow email to be publicly displayed</target>
+        <target state="translated">Permetre la visualització pública de les adreces electròniques</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3472732945521632942" datatype="html">
+      <trans-unit id="3472732945521632942" datatype="html" xml:space="preserve">
         <source>Necessary to claim podcast RSS feeds.</source>
-        <target state="new">Necessary to claim podcast RSS feeds.</target>
+        <target state="translated">Necessari per demanar canals RSS de podcast.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5468340957320375738" datatype="html">
+      <trans-unit id="5468340957320375738" datatype="html" xml:space="preserve">
         <source>⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</source>
-        <target state="new">⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</target>
+        <target state="translated">⚠️ La vostra adreça electrònica no es pot utilitzar als canals RSS de podcast perquè encara no s'ha verificat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422757693184001803" datatype="html">
+      <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="new">Save email settings</target>
+        <target state="translated">Desar la configuració del correu electrònic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776289814033837037" datatype="html">
+      <trans-unit id="4776289814033837037" datatype="html" xml:space="preserve">
         <source>Interface settings updated.</source>
-        <target state="new">Interface settings updated.</target>
+        <target state="translated">Configuració de la interfície actualitzada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -16504,121 +16500,121 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4343589211916204486" datatype="html">
+      <trans-unit id="4343589211916204486" datatype="html" xml:space="preserve">
         <source>New comment on your video</source>
-        <target state="new">New comment on your video</target>
+        <target state="translated">Nou comentari al vostre vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7130088765428829942" datatype="html">
+      <trans-unit id="7130088765428829942" datatype="html" xml:space="preserve">
         <source>New abuse</source>
-        <target state="new">New abuse</target>
+        <target state="translated">Nou abús</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5618790697446401830" datatype="html">
+      <trans-unit id="5618790697446401830" datatype="html" xml:space="preserve">
         <source>An automatically blocked video is awaiting review</source>
-        <target state="new">An automatically blocked video is awaiting review</target>
+        <target state="translated">Un vídeo bloquejat automàticament està pendent de revisió</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5671547068905553663" datatype="html">
+      <trans-unit id="5671547068905553663" datatype="html" xml:space="preserve">
         <source>One of your video is blocked/unblocked</source>
-        <target state="new">One of your video is blocked/unblocked</target>
+        <target state="translated">Un dels vostres vídeos està bloquejat/desbloquejat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1158912204255103651" datatype="html">
+      <trans-unit id="1158912204255103651" datatype="html" xml:space="preserve">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="new">Video published (after transcoding/scheduled update)</target>
+        <target state="translated">Vídeo publicat (després de la transcodificació/actualització programada)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3809414664640924954" datatype="html">
+      <trans-unit id="3809414664640924954" datatype="html" xml:space="preserve">
         <source>Video import finished</source>
-        <target state="new">Video import finished</target>
+        <target state="translated">Importació de vídeo acabada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3268838889659873892" datatype="html">
+      <trans-unit id="3268838889659873892" datatype="html" xml:space="preserve">
         <source>A new user registered on your instance</source>
-        <target state="new">A new user registered on your instance</target>
+        <target state="translated">S'ha creat un compte nou a la vostra instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5935212402338564229" datatype="html">
+      <trans-unit id="5935212402338564229" datatype="html" xml:space="preserve">
         <source>You or one of your channels has a new follower</source>
-        <target state="new">You or one of your channels has a new follower</target>
+        <target state="translated">Vos o un dels vostres canals teniu una nova subscripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5315689532659759332" datatype="html">
+      <trans-unit id="5315689532659759332" datatype="html" xml:space="preserve">
         <source>Someone mentioned you in video comments</source>
-        <target state="new">Someone mentioned you in video comments</target>
+        <target state="translated">Algú us ha mencionat als comentaris d'un vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2018794201569157817" datatype="html">
+      <trans-unit id="2018794201569157817" datatype="html" xml:space="preserve">
         <source>Your instance has a new follower</source>
-        <target state="new">Your instance has a new follower</target>
+        <target state="translated">La vostra instància té una nova subscripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="773085434165307906" datatype="html">
+      <trans-unit id="773085434165307906" datatype="html" xml:space="preserve">
         <source>Your instance automatically followed another instance</source>
-        <target state="new">Your instance automatically followed another instance</target>
+        <target state="translated">La vostra instància ha seguit automàticament una altra instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="900099988467638766" datatype="html">
+      <trans-unit id="900099988467638766" datatype="html" xml:space="preserve">
         <source>An abuse report received a new message</source>
-        <target state="new">An abuse report received a new message</target>
+        <target state="translated">Un informe d'abús ha rebut un missatge nou</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2326816287669585542" datatype="html">
+      <trans-unit id="2326816287669585542" datatype="html" xml:space="preserve">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="new">One of your abuse reports has been accepted or rejected by moderators</target>
+        <target state="translated">Un dels vostres informes d'abús ha estat acceptat o rebutjat per la moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2764971902180889905" datatype="html">
+      <trans-unit id="2764971902180889905" datatype="html" xml:space="preserve">
         <source>A new PeerTube version is available</source>
-        <target state="new">A new PeerTube version is available</target>
+        <target state="translated">Hi ha disponible una nova versió de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2560339336098442670" datatype="html">
+      <trans-unit id="2560339336098442670" datatype="html" xml:space="preserve">
         <source>One of your plugin/theme has a new available version</source>
-        <target state="new">One of your plugin/theme has a new available version</target>
+        <target state="translated">Un dels vostres complements/temes té una versió nova disponible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">51</context>
