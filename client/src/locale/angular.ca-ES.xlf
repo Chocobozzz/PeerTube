@@ -709,7 +709,7 @@
       </trans-unit>
       <trans-unit id="2409672154570643758" xml:space="preserve">
         <source>Display name</source>
-        <target state="translated">Nom a mostrar</target>
+        <target state="translated">Nom per mostrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1785,7 +1785,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html" xml:space="preserve">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Podeu importar qualsevol fitxer torrent que apunti a un fitxer multimèdia. Assegureu-vos que teniu els drets de difusió dels continguts a què apunteu, altrament podríeu tenir problemes legals i causar-los a la instància.</target>
+        <target state="translated">Podeu importar qualsevol fitxer torrent que apunti a un fitxer multimèdia. Assegureu-vos que teniu els drets de difusió dels continguts a què apunteu, altrament podríeu tindre problemes legals i causar-los a la instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">20</context>
@@ -2784,7 +2784,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html" xml:space="preserve">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Triar el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nom de la vostra instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>definir una descripció<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, especificar <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>qui sou<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, per què <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>heu creat la instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>per quant de temps<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> penseu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintenir-la<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> és molt important que els vostres visitants entenguin en quin tipus d'instància es troben. </target>
+        <target state="translated">Triar el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nom de la vostra instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>definir una descripció<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, especificar <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>qui sou<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, per què <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>heu creat la instància<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>per quant de temps<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> penseu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mantindre-la<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> és molt important que els vostres visitants entenguin en quin tipus d'instància es troben. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">59</context>
@@ -2872,7 +2872,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html" xml:space="preserve">
         <source>How long you plan to maintain your instance</source>
-        <target state="translated">Quant de temps penseu mantenir la instància</target>
+        <target state="translated">Quant de temps penseu mantindre la instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2880,7 +2880,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html" xml:space="preserve">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="translated">Com penseu pagar per mantenir la vostra instància en funcionament</target>
+        <target state="translated">Com penseu pagar per mantindre la vostra instància en funcionament</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -4167,7 +4167,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="translated">El segment ha de tenir un contingut de text</target>
+        <target state="translated">El segment ha de tindre un contingut de text</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.ts</context>
           <context context-type="linenumber">176</context>
@@ -6320,9 +6320,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4512155674928869984">
+      <trans-unit id="4512155674928869984" xml:space="preserve">
         <source>Get more information</source>
-        <target>Obtenir més informació</target>
+        <target state="translated">Obtindre més informació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">10</context>
@@ -9398,7 +9398,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3667968987954856844" datatype="html" xml:space="preserve">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="translated">Quant de temps penseu mantenir aquesta instància?</target>
+        <target state="translated">Quant de temps penseu mantindre aquesta instància?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">282</context>
@@ -10262,7 +10262,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html" xml:space="preserve">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="translated">Veure <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>la documentació<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> per obtenir més informació sobre l'URL esperat </target>
+        <target state="translated">Veure <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>la documentació<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> per obtindre més informació sobre l'URL esperat </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">657</context>
@@ -10986,7 +10986,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html" xml:space="preserve">
         <source>Number of previews to keep in cache</source>
-        <target state="translated">Nombre de previsualitzacions per mantenir a la memòria cau</target>
+        <target state="translated">Nombre de previsualitzacions per mantindre a la memòria cau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">15</context>
@@ -11002,7 +11002,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html" xml:space="preserve">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">Nombre de miniatures per mantenir a la memòria cau</target>
+        <target state="translated">Nombre de miniatures per mantindre a la memòria cau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
@@ -11018,7 +11018,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html" xml:space="preserve">
         <source>Number of video torrents to keep in cache</source>
-        <target state="translated">Nombre d'arxius torrent per mantenir a la memòria cau</target>
+        <target state="translated">Nombre d'arxius torrent per mantindre a la memòria cau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -11034,7 +11034,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9180372875725189823" datatype="html" xml:space="preserve">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="translated">Nombre d'imatges del guió gràfic per mantenir a la memòria cau</target>
+        <target state="translated">Nombre d'imatges del guió gràfic per mantindre a la memòria cau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
@@ -13092,7 +13092,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6871360459693149470" datatype="html" xml:space="preserve">
         <source>How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="translated">Quant de temps pensem mantenir <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Quant de temps pensem mantindre <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -13100,7 +13100,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1808344369245431716" datatype="html" xml:space="preserve">
         <source>How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</source>
-        <target state="translated">Com pagarem per mantenir <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> en funcionament</target>
+        <target state="translated">Com pagarem per mantindre <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> en funcionament</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -13468,7 +13468,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9082008222523034483" datatype="html" xml:space="preserve">
         <source>Get help</source>
-        <target state="translated">Obtenir ajuda</target>
+        <target state="translated">Obtindre ajuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/help.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -13516,7 +13516,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1445137115016841401" datatype="html" xml:space="preserve">
         <source>How long do we plan to maintain this instance?</source>
-        <target state="translated">Quant de temps pensem mantenir aquesta instància?</target>
+        <target state="translated">Quant de temps pensem mantindre aquesta instància?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context>
           <context context-type="linenumber">43</context>
@@ -15934,7 +15934,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1762427369052469243" datatype="html" xml:space="preserve">
         <source>Moderation response must be at least 2 characters long.</source>
-        <target state="translated">El missatge de moderació ha de tenir com a mínim dos caràcters.</target>
+        <target state="translated">El missatge de moderació ha de tindre com a mínim dos caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -18078,7 +18078,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="translated">La quota de vídeo només té en compte la mida dels vídeos <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pujats<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, no dels fitxers transcodificats ni arxius d'exportació de compte (que poden contenir fitxers de vídeo). </target>
+        <target state="translated">La quota de vídeo només té en compte la mida dels vídeos <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pujats<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, no dels fitxers transcodificats ni arxius d'exportació de compte (que poden contindre fitxers de vídeo). </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">4</context>
@@ -18336,7 +18336,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8232112521354108802" datatype="html" xml:space="preserve">
         <source>Short description must not be longer than 250 characters.</source>
-        <target state="translated">La descripció breu no ha de tenir més de 250 caràcters.</target>
+        <target state="translated">La descripció breu no ha de tindre més de 250 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -18574,49 +18574,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5727962096948024837" datatype="html">
+      <trans-unit id="5727962096948024837" datatype="html" xml:space="preserve">
         <source>Concurrency must be greater or equal to 1.</source>
-        <target state="new">Concurrency must be greater or equal to 1.</target>
+        <target state="translated">El valor de simultaneïtat ha d'ésser major que 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4327605300509435150" datatype="html">
+      <trans-unit id="4327605300509435150" datatype="html" xml:space="preserve">
         <source>Export expiration is required.</source>
-        <target state="new">Export expiration is required.</target>
+        <target state="translated">La caducitat de les exportacions és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8101376384086436513" datatype="html">
+      <trans-unit id="8101376384086436513" datatype="html" xml:space="preserve">
         <source>Export expiration must be greater or equal to 1.</source>
-        <target state="new">Export expiration must be greater or equal to 1.</target>
+        <target state="translated">La caducitat de les exportacions ha d'ésser major que 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7568988728218416870" datatype="html">
+      <trans-unit id="7568988728218416870" datatype="html" xml:space="preserve">
         <source>Max user video quota is required.</source>
-        <target state="new">Max user video quota is required.</target>
+        <target state="translated">La quota màxima de vídeo per compte és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6536118679588615245" datatype="html">
+      <trans-unit id="6536118679588615245" datatype="html" xml:space="preserve">
         <source>Max user video video quota must be greater or equal to 1.</source>
-        <target state="new">Max user video video quota must be greater or equal to 1.</target>
+        <target state="translated">La quota màxima de vídeo per compte ha d'ésser major que 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8602814243662345124">
+      <trans-unit id="8602814243662345124" xml:space="preserve">
         <source>Email is required.</source>
-        <target>Es requereix un correu electrònic.</target>
+        <target state="translated">L'adreça electrònica és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -18626,9 +18626,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4591482207344282590">
+      <trans-unit id="4591482207344282590" xml:space="preserve">
         <source>Email must be valid.</source>
-        <target>El correu electrònic ha de ser vàlid.</target>
+        <target state="translated">L'adreça electrònica ha d'ésser vàlida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -18638,105 +18638,105 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="544279804045883862" datatype="html">
+      <trans-unit id="544279804045883862" datatype="html" xml:space="preserve">
         <source>Handle is required.</source>
-        <target state="new">Handle is required.</target>
+        <target state="translated">L'identificador és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2805037637775107078" datatype="html">
+      <trans-unit id="2805037637775107078" datatype="html" xml:space="preserve">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
+        <target state="translated">L'identificador ha d'ésser vàlid (per exemple joan@exemple.cat).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3159508433607320799" datatype="html">
+      <trans-unit id="3159508433607320799" datatype="html" xml:space="preserve">
         <source>OTP token is required.</source>
-        <target state="new">OTP token is required.</target>
+        <target state="translated">La fitxa OTP és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4968369344159400023" datatype="html">
+      <trans-unit id="4968369344159400023" datatype="html" xml:space="preserve">
         <source>Your name is required.</source>
-        <target state="new">Your name is required.</target>
+        <target state="translated">El vostre nom és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5799695548385507586" datatype="html">
+      <trans-unit id="5799695548385507586" datatype="html" xml:space="preserve">
         <source>Your name must be at least 1 character long.</source>
-        <target state="new">Your name must be at least 1 character long.</target>
+        <target state="translated">El vostre nom ha de tindre com a mínim 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3600004643604731577" datatype="html">
+      <trans-unit id="3600004643604731577" datatype="html" xml:space="preserve">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="new">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">El vostre nom no pot tindre més de 120 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3981804692726336204" datatype="html">
+      <trans-unit id="3981804692726336204" datatype="html" xml:space="preserve">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">L'assumpte és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7787099349830266861" datatype="html">
+      <trans-unit id="7787099349830266861" datatype="html" xml:space="preserve">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">L'assumpte ha de tindre com a mínim 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5905189237950302829" datatype="html">
+      <trans-unit id="5905189237950302829" datatype="html" xml:space="preserve">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">L'assumpte no pot tindre més de 120 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="847704400962945123" datatype="html">
+      <trans-unit id="847704400962945123" datatype="html" xml:space="preserve">
         <source>A message is required.</source>
-        <target state="new">A message is required.</target>
+        <target state="translated">El missatge és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3871842658394273178" datatype="html">
+      <trans-unit id="3871842658394273178" datatype="html" xml:space="preserve">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">El missatge ha de tindre almenys 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3731145759205895653" datatype="html">
+      <trans-unit id="3731145759205895653" datatype="html" xml:space="preserve">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">El missatge no pot tindre més de 5000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3868123820758341861">
+      <trans-unit id="3868123820758341861" xml:space="preserve">
         <source>Username is required.</source>
-        <target>Es requereix nom d'usuari.</target>
+        <target state="translated">El nom del compte és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -18746,9 +18746,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3577237269587081090">
+      <trans-unit id="3577237269587081090" xml:space="preserve">
         <source>Password is required.</source>
-        <target>Es requereix contrasenya.</target>
+        <target state="translated">La contrasenya és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -18762,73 +18762,73 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3152303769378345477">
+      <trans-unit id="3152303769378345477" xml:space="preserve">
         <source>Confirmation of the password is required.</source>
-        <target>Es requereix confirmació de la contrasenya.</target>
+        <target state="translated">La confirmació de la contrasenya és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4786141633412279939" datatype="html">
+      <trans-unit id="4786141633412279939" datatype="html" xml:space="preserve">
         <source>Username must be at least 1 character long.</source>
-        <target state="new">Username must be at least 1 character long.</target>
+        <target state="translated">El nom del compte ha de tindre com a mínim 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1019755749203839300" datatype="html">
+      <trans-unit id="1019755749203839300" datatype="html" xml:space="preserve">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="new">Username cannot be more than 50 characters long.</target>
+        <target state="translated">El nom del compte no pot tindre més de 50 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5621067256208426608" datatype="html">
+      <trans-unit id="5621067256208426608" datatype="html" xml:space="preserve">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">El nom del compte ha de ser alfanumèric en minúscules; es permeten els punts i els guions baixos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6288154707582132676" datatype="html">
+      <trans-unit id="6288154707582132676" datatype="html" xml:space="preserve">
         <source>Channel name is required.</source>
-        <target state="new">Channel name is required.</target>
+        <target state="translated">El nom del canal és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8178814467139959283" datatype="html">
+      <trans-unit id="8178814467139959283" datatype="html" xml:space="preserve">
         <source>Channel name must be at least 1 character long.</source>
-        <target state="new">Channel name must be at least 1 character long.</target>
+        <target state="translated">El nom del canal ha de tindre com a mínim 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8602785819772117007" datatype="html">
+      <trans-unit id="8602785819772117007" datatype="html" xml:space="preserve">
         <source>Channel name cannot be more than 50 characters long.</source>
-        <target state="new">Channel name cannot be more than 50 characters long.</target>
+        <target state="translated">El nom del canal no pot tindre més de 50 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3419415520566928243" datatype="html">
+      <trans-unit id="3419415520566928243" datatype="html" xml:space="preserve">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">El nom del canal ha d'estar en minúscules i només pot contindre caràcters alfanumèrics, punts i guions baixos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="525871656034789056">
+      <trans-unit id="525871656034789056" xml:space="preserve">
         <source>Password must be at least 6 characters long.</source>
-        <target>La contrasenya ha de tenir com a mínim 6 caràcters.</target>
+        <target state="translated">La contrasenya ha de tindre com a mínim 6 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">81</context>
@@ -18838,9 +18838,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1099684476181448167">
+      <trans-unit id="1099684476181448167" xml:space="preserve">
         <source>Password cannot be more than 255 characters long.</source>
-        <target>La contrasenya no pot tenir més de 255 caràcters.</target>
+        <target state="translated">La contrasenya no pot tindre més de 255 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">82</context>
@@ -18858,49 +18858,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2027337371129904473">
+      <trans-unit id="2027337371129904473" xml:space="preserve">
         <source>Video quota is required.</source>
-        <target>Es requereix una quota de vídeo.</target>
+        <target state="translated">La quota de vídeo és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="267386529333143660">
+      <trans-unit id="267386529333143660" xml:space="preserve">
         <source>Quota must be greater than -1.</source>
-        <target>La quota ha de ser superior a -1.</target>
+        <target state="translated">La quota ha d'ésser superior a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1220179061234048936" datatype="html">
+      <trans-unit id="1220179061234048936" datatype="html" xml:space="preserve">
         <source>Daily upload limit is required.</source>
-        <target state="new">Daily upload limit is required.</target>
+        <target state="translated">El límit diari de pujada és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8959404382357999234" datatype="html">
+      <trans-unit id="8959404382357999234" datatype="html" xml:space="preserve">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="new">Daily upload limit must be greater than -1.</target>
+        <target state="translated">El límit diari de pujada ha d'ésser major que -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4796798537475457493">
+      <trans-unit id="4796798537475457493" xml:space="preserve">
         <source>User role is required.</source>
-        <target>Es requereix una funció d'usuari.</target>
+        <target state="translated">El rol del compte és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2761226139624435788">
+      <trans-unit id="2761226139624435788" xml:space="preserve">
         <source>Description must be at least 3 characters long.</source>
-        <target>La descripció ha de tenir almenys 3 caràcters de longitud.</target>
+        <target state="translated">La descripció ha de tindre almenys 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">134</context>
@@ -18914,9 +18914,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4717982586356605243" datatype="html">
+      <trans-unit id="4717982586356605243" datatype="html" xml:space="preserve">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="new">Description cannot be more than 1000 characters long.</target>
+        <target state="translated">La descripció no pot tindre més de 1000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">135</context>
@@ -18930,73 +18930,73 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1814372869868173571" datatype="html">
+      <trans-unit id="1814372869868173571" datatype="html" xml:space="preserve">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Heu d'acceptar les condicions d'ús de la instància per registrar-vos-hi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27494409477574248" datatype="html">
+      <trans-unit id="27494409477574248" datatype="html" xml:space="preserve">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">El motiu del registre és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7602123087076969338" datatype="html">
+      <trans-unit id="7602123087076969338" datatype="html" xml:space="preserve">
         <source>Registration reason must be at least 2 characters long.</source>
-        <target state="new">Registration reason must be at least 2 characters long.</target>
+        <target state="translated">El motiu del registre ha de tindre com a mínim 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2092241175249165802" datatype="html">
+      <trans-unit id="2092241175249165802" datatype="html" xml:space="preserve">
         <source>Registration reason cannot be more than 3000 characters long.</source>
-        <target state="new">Registration reason cannot be more than 3000 characters long.</target>
+        <target state="translated">El motiu del registre no pot tindre més de 3000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1089471746995032310" datatype="html">
+      <trans-unit id="1089471746995032310" datatype="html" xml:space="preserve">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form.</source>
-        <target state="new">Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form.</target>
+        <target state="translated">La moderació de <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> haurà d'aprovar la vostra sol·licitud de registre un cop ompliu el formulari.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036308773059264427" datatype="html">
+      <trans-unit id="1036308773059264427" datatype="html" xml:space="preserve">
         <source>They usually respond within <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</source>
-        <target state="new">They usually respond within <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">Normalment responen en <x id="INTERPOLATION" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7803960725351649605" datatype="html">
+      <trans-unit id="7803960725351649605" datatype="html" xml:space="preserve">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target state="new">Ban reason must be at least 3 characters long.</target>
+        <target state="translated">El motiu del bandeig ha de tindre almenys 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3851609012243698179" datatype="html">
+      <trans-unit id="3851609012243698179" datatype="html" xml:space="preserve">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target state="new">Ban reason cannot be more than 250 characters long.</target>
+        <target state="translated">El motiu del bandeig no pot tindre més de 250 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6632896893630378443">
+      <trans-unit id="6632896893630378443" xml:space="preserve">
         <source>Display name is required.</source>
-        <target>El nom de visualització és obligatori.</target>
+        <target state="translated">El nom per mostrar és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">157</context>
@@ -19010,9 +19010,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1303578752658966736" datatype="html">
+      <trans-unit id="1303578752658966736" datatype="html" xml:space="preserve">
         <source>Display name must be at least 1 character long.</source>
-        <target state="new">Display name must be at least 1 character long.</target>
+        <target state="translated">El nom per mostrar ha de tindre almenys 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">158</context>
@@ -19026,9 +19026,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4613240543124934954" datatype="html">
+      <trans-unit id="4613240543124934954" datatype="html" xml:space="preserve">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target state="new">Display name cannot be more than 50 characters long.</target>
+        <target state="translated">El nom per mostrar no pot tindre més de 50 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">159</context>
@@ -19040,7 +19040,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1000468652492651683" xml:space="preserve">
         <source>Report reason is required.</source>
-        <target state="translated">Cal un motiu de la denúncia.</target>
+        <target state="translated">El motiu de la denúncia és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -19048,183 +19048,183 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1109780973109145433" xml:space="preserve">
         <source>Report reason must be at least 2 characters long.</source>
-        <target state="translated">El motiu de la denúncia ha de tenir més d'un caràcter.</target>
+        <target state="translated">El motiu de la denúncia ha de tindre almenys 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5414573937278525654" datatype="html">
+      <trans-unit id="5414573937278525654" datatype="html" xml:space="preserve">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target state="new">Report reason cannot be more than 3000 characters long.</target>
+        <target state="translated">El motiu de la denúncia no pot tindre més de 3000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8779567454442277762" datatype="html">
+      <trans-unit id="8779567454442277762" datatype="html" xml:space="preserve">
         <source>Moderation comment is required.</source>
-        <target state="new">Moderation comment is required.</target>
+        <target state="translated">El comentari de moderació és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8954765410376245909" datatype="html">
+      <trans-unit id="8954765410376245909" datatype="html" xml:space="preserve">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="new">Moderation comment must be at least 2 characters long.</target>
+        <target state="translated">El comentari de moderació ha de tindre almenys 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6316804467108244906" datatype="html">
+      <trans-unit id="6316804467108244906" datatype="html" xml:space="preserve">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation comment cannot be more than 3000 characters long.</target>
+        <target state="translated">El comentari de moderació no pot tindre més de 3000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8835075531528610034" datatype="html">
+      <trans-unit id="8835075531528610034" datatype="html" xml:space="preserve">
         <source>Abuse message is required.</source>
-        <target state="new">Abuse message is required.</target>
+        <target state="translated">El missatge d'abús és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9034042966936514516" datatype="html">
+      <trans-unit id="9034042966936514516" datatype="html" xml:space="preserve">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="new">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">El missatge d'abús ha de tindre almenys 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7989186574443390119" datatype="html">
+      <trans-unit id="7989186574443390119" datatype="html" xml:space="preserve">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="new">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">El missatge d'abús no pot tindre més de 3000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417693714872528491" datatype="html">
+      <trans-unit id="1417693714872528491" datatype="html" xml:space="preserve">
         <source>This field is required.</source>
-        <target state="new">This field is required.</target>
+        <target state="translated">Aquest camp és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5590037753298590410" datatype="html">
+      <trans-unit id="5590037753298590410" datatype="html" xml:space="preserve">
         <source>This field must be a URL</source>
-        <target state="new">This field must be a URL</target>
+        <target state="translated">Aquest camp ha d'ésser un URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6700357678556223012" datatype="html">
+      <trans-unit id="6700357678556223012" datatype="html" xml:space="preserve">
         <source>The channel is required.</source>
-        <target state="new">The channel is required.</target>
+        <target state="translated">El canal és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9191505323045740697" datatype="html">
+      <trans-unit id="9191505323045740697" datatype="html" xml:space="preserve">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">El motiu del bloqueig ha de tindre almenys 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8581623418602419755" datatype="html">
+      <trans-unit id="8581623418602419755" datatype="html" xml:space="preserve">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">El motiu del bloqueig no pot tindre més de 3000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1099619384694370156" datatype="html">
+      <trans-unit id="1099619384694370156" datatype="html" xml:space="preserve">
         <source>Video caption language is required.</source>
-        <target state="new">Video caption language is required.</target>
+        <target state="translated">L'idioma de subtítols és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3438639650276868976" datatype="html">
+      <trans-unit id="3438639650276868976" datatype="html" xml:space="preserve">
         <source>Video caption file is required.</source>
-        <target state="translated">Es requereix un fitxer de subtítols de vídeo.</target>
+        <target state="translated">El fitxer de subtítols és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9145435275110757909" datatype="html">
+      <trans-unit id="9145435275110757909" datatype="html" xml:space="preserve">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">El contingut dels subtítols és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7365924714339585574" datatype="html">
+      <trans-unit id="7365924714339585574" datatype="html" xml:space="preserve">
         <source>The username is required.</source>
-        <target state="new">The username is required.</target>
+        <target state="translated">L'identificador és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3954099618513992825" datatype="html">
+      <trans-unit id="3954099618513992825" datatype="html" xml:space="preserve">
         <source>You can only transfer ownership to a local account</source>
-        <target state="new">You can only transfer ownership to a local account</target>
+        <target state="translated">Només podeu transferir la propietat a un compte local</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4444753420973870540" datatype="html">
+      <trans-unit id="4444753420973870540" datatype="html" xml:space="preserve">
         <source>Name is required.</source>
-        <target state="new">Name is required.</target>
+        <target state="translated">El nom és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4006797705713167676" datatype="html">
+      <trans-unit id="4006797705713167676" datatype="html" xml:space="preserve">
         <source>Name must be at least 1 character long.</source>
-        <target state="new">Name must be at least 1 character long.</target>
+        <target state="translated">El nom ha de tindre almenys 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2233809696503670883" datatype="html">
+      <trans-unit id="2233809696503670883" datatype="html" xml:space="preserve">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="new">Name cannot be more than 50 characters long.</target>
+        <target state="translated">El nom no pot tindre més de 50 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7915656854942800659" datatype="html">
+      <trans-unit id="7915656854942800659" datatype="html" xml:space="preserve">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">El nom ha de ser alfanumèric en minúscules; es permeten els punts i els guions baixos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6880459830525364741">
+      <trans-unit id="6880459830525364741" xml:space="preserve">
         <source>Support text must be at least 3 characters long.</source>
-        <target>El text de suport ha de tenir un mínim de 3 caràcters.</target>
+        <target state="translated">El text de suport ha de tindre un mínim de 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -19232,144 +19232,143 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html" xml:space="preserve">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="translated">El text de suport no pot tenir més de mil caràcters.</target>
+        <target state="translated">El text de suport no pot tindre més de 1000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6149476559621965756" datatype="html">
+      <trans-unit id="6149476559621965756" datatype="html" xml:space="preserve">
         <source>Remote channel url is required.</source>
-        <target state="new">Remote channel url is required.</target>
+        <target state="translated">L'URL del canal remot és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7820654428820536159" datatype="html">
+      <trans-unit id="7820654428820536159" datatype="html" xml:space="preserve">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="new">External channel URL must begin with "https://" or "http://"</target>
+        <target state="translated">L'URL del canal extern ha de començar per «https://» o «http://»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5090406837784732474" datatype="html">
+      <trans-unit id="5090406837784732474" datatype="html" xml:space="preserve">
         <source>External channel URL cannot be more than 1000 characters long</source>
-        <target state="new">External channel URL cannot be more than 1000 characters long</target>
+        <target state="translated">L'URL del canal extern no pot tindre més de 1.000 caràcters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653315912561885898" datatype="html">
+      <trans-unit id="1653315912561885898" datatype="html" xml:space="preserve">
         <source>A chapter title is required.</source>
-        <target state="new">A chapter title is required.</target>
+        <target state="translated">El títol de capítol és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021088770925947810" datatype="html">
+      <trans-unit id="4021088770925947810" datatype="html" xml:space="preserve">
         <source>A chapter title should be more than 2 characters long.</source>
-        <target state="new">A chapter title should be more than 2 characters long.</target>
+        <target state="translated">El títol de capítol ha de tindre més de 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5999631145853755676" datatype="html">
+      <trans-unit id="5999631145853755676" datatype="html" xml:space="preserve">
         <source>A chapter title should be less than 100 characters long.</source>
-        <target state="new">A chapter title should be less than 100 characters long.</target>
+        <target state="translated">El títol de capítol ha de tindre menys de 100 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3038146146697752093" datatype="html">
+      <trans-unit id="3038146146697752093" datatype="html" xml:space="preserve">
         <source>Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></source>
-        <target state="new">Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></target>
+        <target state="translated">Diversos capítols tenen el mateix codi de temps <x id="PH" equiv-text="chapter.timecode"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5637879201055173642" datatype="html">
+      <trans-unit id="5637879201055173642" datatype="html" xml:space="preserve">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature. </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature.
-</target>
+        <target state="translated">Llegiu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>la documentació<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> per aprendre a utilitzar la funció d'emissió en directe de PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-documentation-link.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4267638333776227701">
+      <trans-unit id="4267638333776227701" xml:space="preserve">
         <source>Comment is required.</source>
-        <target>Es requereix comentari.</target>
+        <target state="translated">El comentari és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="71132671234491945">
+      <trans-unit id="71132671234491945" xml:space="preserve">
         <source>Comment must be at least 2 characters long.</source>
-        <target>El comentari ha de tenir com a mínim 2 caràcters.</target>
+        <target state="translated">El comentari ha de tindre com a mínim 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4148250392704331190">
+      <trans-unit id="4148250392704331190" xml:space="preserve">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target>El comentari no pot tenir més de 3000 caràcters.</target>
+        <target state="translated">El comentari no pot tindre més de 3000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6854100952145697527">
+      <trans-unit id="6854100952145697527" xml:space="preserve">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target>El nom de visualització no pot tenir més de 120 caràcters.</target>
+        <target state="translated">El nom per mostrar no pot tindre més de 120 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6198895122092095739" datatype="html">
+      <trans-unit id="6198895122092095739" datatype="html" xml:space="preserve">
         <source>Privacy is required.</source>
-        <target state="new">Privacy is required.</target>
+        <target state="translated">La privadesa és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1276238402004616037" datatype="html">
+      <trans-unit id="1276238402004616037" datatype="html" xml:space="preserve">
         <source>The channel is required when the playlist is public.</source>
-        <target state="new">The channel is required when the playlist is public.</target>
+        <target state="translated">El canal és obligatori quan la llista de reproducció és pública.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5226261760726752768" datatype="html">
+      <trans-unit id="5226261760726752768" datatype="html" xml:space="preserve">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">Informació del directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5078078160576986217" datatype="html">
+      <trans-unit id="5078078160576986217" datatype="html" xml:space="preserve">
         <source>Permanent/Recurring live</source>
-        <target state="new">Permanent/Recurring live</target>
+        <target state="translated">Directe permanent/recurrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7220386604464537651" datatype="html">
+      <trans-unit id="7220386604464537651" datatype="html" xml:space="preserve">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">URL RTMP del directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">306</context>
@@ -19379,9 +19378,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4956017863340142734" datatype="html">
+      <trans-unit id="4956017863340142734" datatype="html" xml:space="preserve">
         <source>Live RTMPS Url</source>
-        <target state="new">Live RTMPS Url</target>
+        <target state="translated">URL RTMPS del directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">311</context>
@@ -19391,9 +19390,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1225050607125362052" datatype="html">
+      <trans-unit id="1225050607125362052" datatype="html" xml:space="preserve">
         <source>Live stream key</source>
-        <target state="new">Live stream key</target>
+        <target state="translated">Clau d'emissió del directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">316</context>
@@ -19403,9 +19402,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5058286083557987083" datatype="html">
+      <trans-unit id="5058286083557987083" datatype="html" xml:space="preserve">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="new">⚠️ Never share your stream key with anyone.</target>
+        <target state="translated">⚠️ No compartiu mai la clau d'emissió amb ningú.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">319</context>
@@ -19415,73 +19414,73 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5941639683192662500" datatype="html">
+      <trans-unit id="5941639683192662500" datatype="html" xml:space="preserve">
         <source>This is a normal live</source>
-        <target state="new">This is a normal live</target>
+        <target state="translated">Aquest és un directe normal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4022826795131920912" datatype="html">
+      <trans-unit id="4022826795131920912" datatype="html" xml:space="preserve">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="new"> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </target>
+        <target state="translated">Només podeu emetre una vegada un directe normal. Si activeu la repetició, es desarà amb el mateix URL que el directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">328</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2261925229535541622" datatype="html">
+      <trans-unit id="2261925229535541622" datatype="html" xml:space="preserve">
         <source>This is a permanent/recurring live</source>
-        <target state="new">This is a permanent/recurring live</target>
+        <target state="translated">Aquest és un directe permanent/recurrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8986073791327847979" datatype="html">
+      <trans-unit id="8986073791327847979" datatype="html" xml:space="preserve">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="new"> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </target>
+        <target state="translated">Podeu reproduir diverses vegades en directe permanent o recurrent. Si activeu les repeticions, es desaran com a vídeos separats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">337</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3112273530390098557" datatype="html">
+      <trans-unit id="3112273530390098557" datatype="html" xml:space="preserve">
         <source>Replay will be saved</source>
-        <target state="new">Replay will be saved</target>
+        <target state="translated">La repetició es desarà</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6445713766140892433" datatype="html">
+      <trans-unit id="6445713766140892433" datatype="html" xml:space="preserve">
         <source>Latest live sessions</source>
-        <target state="new">Latest live sessions</target>
+        <target state="translated">Últimes sessions de directes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1018828582442463303" datatype="html">
+      <trans-unit id="1018828582442463303" datatype="html" xml:space="preserve">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">Començà el <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6765028278622459314" datatype="html">
+      <trans-unit id="6765028278622459314" datatype="html" xml:space="preserve">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">Acabà el <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3424935624805832445" datatype="html">
+      <trans-unit id="3424935624805832445" datatype="html" xml:space="preserve">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">Anar a la repetició</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">46</context>
@@ -19503,25 +19502,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2807676084745266104">
+      <trans-unit id="2807676084745266104" xml:space="preserve">
         <source>Video name must be at least 3 characters long.</source>
-        <target>El nom del vídeo ha de tenir almenys 3 caràcters de longitud.</target>
+        <target state="translated">El nom del vídeo ha de tindre almenys 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2155414141025589556">
+      <trans-unit id="2155414141025589556" xml:space="preserve">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target>El nom del vídeo no pot tenir més de 120 caràcters.</target>
+        <target state="translated">El nom del vídeo no pot tindre més de 120 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1074634769552897790" datatype="html">
+      <trans-unit id="1074634769552897790" datatype="html" xml:space="preserve">
         <source>Video name has leading or trailing whitespace.</source>
-        <target state="new">Video name has leading or trailing whitespace.</target>
+        <target state="translated">El nom del vídeo té espais en blanc a l'inici o al final.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -19535,153 +19534,153 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2340164151654372915" datatype="html">
+      <trans-unit id="2340164151654372915" datatype="html" xml:space="preserve">
         <source>A password should be at least 2 characters long.</source>
-        <target state="new">A password should be at least 2 characters long.</target>
+        <target state="translated">Una contrasenya ha de tindre com a mínim 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7699381877503388166" datatype="html">
+      <trans-unit id="7699381877503388166" datatype="html" xml:space="preserve">
         <source>A password should be shorter than 100 characters long.</source>
-        <target state="new">A password should be shorter than 100 characters long.</target>
+        <target state="translated">Una contrasenya ha de tindre menys de 100 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3116180442048363146" datatype="html">
+      <trans-unit id="3116180442048363146" datatype="html" xml:space="preserve">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="translated">Cal una contrasenya per als vídeos protegits.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7309902991450450996">
+      <trans-unit id="7309902991450450996" xml:space="preserve">
         <source>Video channel is required.</source>
-        <target>Cal un canal de vídeo.</target>
+        <target state="translated">El canal de vídeo és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3959376623771116873">
+      <trans-unit id="3959376623771116873" xml:space="preserve">
         <source>Video description must be at least 3 characters long.</source>
-        <target>La descripció del vídeo ha de tenir un mínim de 3 caràcters.</target>
+        <target state="translated">La descripció del vídeo ha de tindre un mínim de 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="725195891739570830">
+      <trans-unit id="725195891739570830" xml:space="preserve">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target>La descripció del vídeo no pot tenir més de 10000 caràcters.</target>
+        <target state="translated">La descripció del vídeo no pot tindre més de 10000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4146790476782316573" datatype="html">
+      <trans-unit id="4146790476782316573" datatype="html" xml:space="preserve">
         <source>A maximum of 5 tags can be used on a video.</source>
-        <target state="new">A maximum of 5 tags can be used on a video.</target>
+        <target state="translated">Es poden posar un màxim de 5 etiquetes a un vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2389667090302909529" datatype="html">
+      <trans-unit id="2389667090302909529" datatype="html" xml:space="preserve">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 1 and less than 30 characters long.</target>
+        <target state="translated">Una etiqueta ha de tindre més d'un i menys de 30 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4806300480558315727">
+      <trans-unit id="4806300480558315727" xml:space="preserve">
         <source>Video support must be at least 3 characters long.</source>
-        <target>La compatibilitat de vídeo ha de tenir un mínim de 3 caràcters.</target>
+        <target state="translated">El text de suport del vídeo ha de tindre un mínim de 3 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6655773021893755977" datatype="html">
+      <trans-unit id="6655773021893755977" datatype="html" xml:space="preserve">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target state="new">Video support cannot be more than 1000 characters long.</target>
+        <target state="translated">El text de suport del vídeo no pot tindre més de 1000 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4246579596585402255">
+      <trans-unit id="4246579596585402255" xml:space="preserve">
         <source>A date is required to schedule video update.</source>
-        <target>Es requereix una data per programar l'actualització de vídeo.</target>
+        <target state="translated">Cal una data per programar l'actualització de vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708973013815646385" datatype="html">
+      <trans-unit id="4708973013815646385" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</source>
-        <target state="new"><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</target>
+        <target state="translated"><x id="PH" equiv-text="word"/> no és vàlid (mínim 1 / màxim 100 caràcter/s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1715587073952235112" datatype="html">
+      <trans-unit id="1715587073952235112" datatype="html" xml:space="preserve">
         <source>There are too much words in the list (max 500 words)</source>
-        <target state="new">There are too much words in the list (max 500 words)</target>
+        <target state="translated">Hi ha massa paraules a la llista (màxim 500 mots)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1391063124784029164" datatype="html">
+      <trans-unit id="1391063124784029164" datatype="html" xml:space="preserve">
         <source>List name is required.</source>
-        <target state="new">List name is required.</target>
+        <target state="translated">El nom de la llista és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4341509997126306236" datatype="html">
+      <trans-unit id="4341509997126306236" datatype="html" xml:space="preserve">
         <source>List name must be at least 1 character long.</source>
-        <target state="new">List name must be at least 1 character long.</target>
+        <target state="translated">El nom de la llista ha de tindre almenys 1 caràcter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="55815482589008245" datatype="html">
+      <trans-unit id="55815482589008245" datatype="html" xml:space="preserve">
         <source>List name cannot be more than 100 characters long.</source>
-        <target state="new">List name cannot be more than 100 characters long.</target>
+        <target state="translated">El nom de la llista no pot tindre més de 100 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1312213389883835455" datatype="html">
+      <trans-unit id="1312213389883835455" datatype="html" xml:space="preserve">
         <source>Words are required.</source>
-        <target state="new">Words are required.</target>
+        <target state="translated">Les paraules són obligatòries.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6677020266490766837" datatype="html">
+      <trans-unit id="6677020266490766837" datatype="html" xml:space="preserve">
         <source>Words entered contain duplicates.</source>
-        <target state="new">Words entered contain duplicates.</target>
+        <target state="translated">Els mots introduïts contenen duplicats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1048926006551468313" datatype="html">
+      <trans-unit id="1048926006551468313" datatype="html" xml:space="preserve">
         <source>A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</source>
-        <target state="new">A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</target>
+        <target state="translated">Una paraula ha de tindre entre 1 i 100 caràcters i el nombre total de mots no ha de superar els 500 elements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -19695,33 +19694,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5604677701754367707" datatype="html">
+      <trans-unit id="5604677701754367707" datatype="html" xml:space="preserve">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">PeerTube no pot gestionar aquest tipus de fitxers. Les extensions acceptades són <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3393133458004181121" datatype="html">
+      <trans-unit id="3393133458004181121" datatype="html" xml:space="preserve">
         <source>All categories</source>
-        <target state="new">All categories</target>
+        <target state="translated">Totes les categories</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4682186700066917562" datatype="html">
+      <trans-unit id="4682186700066917562" datatype="html" xml:space="preserve">
         <source>{1} categories selected</source>
-        <target state="new">{1} categories selected</target>
+        <target state="translated">{1} categories triades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">19,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8280589137189201687" datatype="html">
+      <trans-unit id="8280589137189201687" datatype="html" xml:space="preserve">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">No podeu triar més {maxItems, plural, =1 {d'un element} other {de <x id="maxItems"/> elements}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-default-all.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -19735,9 +19734,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4670312387769733978">
+      <trans-unit id="4670312387769733978" xml:space="preserve">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
-        <target>Es perdran totes les dades no desades, estàs segur que vols sortir d'aquesta pàgina?</target>
+        <target state="translated">Es perdran totes les dades no desades, segur que voleu sortir d'aquesta pàgina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -19799,9 +19798,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1391351050292665308" datatype="html">
+      <trans-unit id="1391351050292665308" datatype="html" xml:space="preserve">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">Diu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -19809,9 +19808,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Sunday short name</note>
       </trans-unit>
-      <trans-unit id="7037142944838911104" datatype="html">
+      <trans-unit id="7037142944838911104" datatype="html" xml:space="preserve">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">Dil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -19819,9 +19818,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Monday short name</note>
       </trans-unit>
-      <trans-unit id="4051951828654963549" datatype="html">
+      <trans-unit id="4051951828654963549" datatype="html" xml:space="preserve">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">Dim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -19829,9 +19828,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Tuesday short name</note>
       </trans-unit>
-      <trans-unit id="5265738215297391426" datatype="html">
+      <trans-unit id="5265738215297391426" datatype="html" xml:space="preserve">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">Dix</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -19839,9 +19838,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Wednesday short name</note>
       </trans-unit>
-      <trans-unit id="1370330981433231150" datatype="html">
+      <trans-unit id="1370330981433231150" datatype="html" xml:space="preserve">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">Dij</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -19849,9 +19848,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Thursday short name</note>
       </trans-unit>
-      <trans-unit id="8713535243933137493" datatype="html">
+      <trans-unit id="8713535243933137493" datatype="html" xml:space="preserve">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">Div</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -19859,9 +19858,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Friday short name</note>
       </trans-unit>
-      <trans-unit id="3547824477629753314" datatype="html">
+      <trans-unit id="3547824477629753314" datatype="html" xml:space="preserve">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">Dis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -19869,9 +19868,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name short</note>
         <note priority="1" from="meaning">Saturday short name</note>
       </trans-unit>
-      <trans-unit id="6115403217651453591" datatype="html">
+      <trans-unit id="6115403217651453591" datatype="html" xml:space="preserve">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">Du</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -19879,9 +19878,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Sunday min name</note>
       </trans-unit>
-      <trans-unit id="3797918310510782582" datatype="html">
+      <trans-unit id="3797918310510782582" datatype="html" xml:space="preserve">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">Dl</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -19889,9 +19888,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Monday min name</note>
       </trans-unit>
-      <trans-unit id="8011371911136291436" datatype="html">
+      <trans-unit id="8011371911136291436" datatype="html" xml:space="preserve">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">Dm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -19899,9 +19898,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Tuesday min name</note>
       </trans-unit>
-      <trans-unit id="1673380870543456256" datatype="html">
+      <trans-unit id="1673380870543456256" datatype="html" xml:space="preserve">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">Dx</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -19909,9 +19908,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Wednesday min name</note>
       </trans-unit>
-      <trans-unit id="8502005439670299526" datatype="html">
+      <trans-unit id="8502005439670299526" datatype="html" xml:space="preserve">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">Dj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -19919,9 +19918,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Thursday min name</note>
       </trans-unit>
-      <trans-unit id="2800261787799336637" datatype="html">
+      <trans-unit id="2800261787799336637" datatype="html" xml:space="preserve">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">Dv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -19929,9 +19928,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Day name min</note>
         <note priority="1" from="meaning">Friday min name</note>
       </trans-unit>
-      <trans-unit id="2045915324506422459" datatype="html">
+      <trans-unit id="2045915324506422459" datatype="html" xml:space="preserve">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">Ds</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -20035,9 +20034,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1799348348510504995" datatype="html">
+      <trans-unit id="1799348348510504995" datatype="html" xml:space="preserve">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">Gen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -20045,9 +20044,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">January short name</note>
       </trans-unit>
-      <trans-unit id="2980544278361296608" datatype="html">
+      <trans-unit id="2980544278361296608" datatype="html" xml:space="preserve">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">Feb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -20055,9 +20054,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">February short name</note>
       </trans-unit>
-      <trans-unit id="3124926955462217092" datatype="html">
+      <trans-unit id="3124926955462217092" datatype="html" xml:space="preserve">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">Mar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -20065,9 +20064,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">March short name</note>
       </trans-unit>
-      <trans-unit id="9658641661863772" datatype="html">
+      <trans-unit id="9658641661863772" datatype="html" xml:space="preserve">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">Abr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -20075,9 +20074,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">April short name</note>
       </trans-unit>
-      <trans-unit id="502512326533496869" datatype="html">
+      <trans-unit id="502512326533496869" datatype="html" xml:space="preserve">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">Mai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -20085,9 +20084,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">May short name</note>
       </trans-unit>
-      <trans-unit id="3044090977322782161" datatype="html">
+      <trans-unit id="3044090977322782161" datatype="html" xml:space="preserve">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">Jun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -20095,9 +20094,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">June short name</note>
       </trans-unit>
-      <trans-unit id="8066434078267346927" datatype="html">
+      <trans-unit id="8066434078267346927" datatype="html" xml:space="preserve">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">Jul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -20105,9 +20104,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">July short name</note>
       </trans-unit>
-      <trans-unit id="1796563865253467834" datatype="html">
+      <trans-unit id="1796563865253467834" datatype="html" xml:space="preserve">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">Ago</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -20115,9 +20114,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">August short name</note>
       </trans-unit>
-      <trans-unit id="5865190625753625986" datatype="html">
+      <trans-unit id="5865190625753625986" datatype="html" xml:space="preserve">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">Set</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -20125,9 +20124,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">September short name</note>
       </trans-unit>
-      <trans-unit id="4011114601374284323" datatype="html">
+      <trans-unit id="4011114601374284323" datatype="html" xml:space="preserve">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">Oct</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -20135,9 +20134,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">October short name</note>
       </trans-unit>
-      <trans-unit id="5063734982204786445" datatype="html">
+      <trans-unit id="5063734982204786445" datatype="html" xml:space="preserve">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">Nov</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -20145,9 +20144,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">November short name</note>
       </trans-unit>
-      <trans-unit id="4789897150069082503" datatype="html">
+      <trans-unit id="4789897150069082503" datatype="html" xml:space="preserve">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">Des</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -20155,9 +20154,9 @@ The link will expire within 1 hour.</source>
         <note priority="1" from="description">Month name short</note>
         <note priority="1" from="meaning">December short name</note>
       </trans-unit>
-      <trans-unit id="8700121026680200191">
+      <trans-unit id="8700121026680200191" xml:space="preserve">
         <source>Clear</source>
-        <target>Clar</target>
+        <target state="translated">Esborrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">71</context>
@@ -20172,41 +20171,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="40119547597591062" datatype="html">
+      <trans-unit id="40119547597591062" datatype="html" xml:space="preserve">
         <source>All languages</source>
-        <target state="new">All languages</target>
+        <target state="translated">Tots els idiomes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8413618684534157435" datatype="html">
+      <trans-unit id="8413618684534157435" datatype="html" xml:space="preserve">
         <source>{1} languages selected</source>
-        <target state="new">{1} languages selected</target>
+        <target state="translated">{1} idiomes triats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="996392855508119363" datatype="html">
+      <trans-unit id="996392855508119363" datatype="html" xml:space="preserve">
         <source>Hidden</source>
-        <target state="new">Hidden</target>
+        <target state="translated">Amagat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2173989454916398137" datatype="html">
+      <trans-unit id="2173989454916398137" datatype="html" xml:space="preserve">
         <source>Blurred with confirmation request</source>
-        <target state="new">Blurred with confirmation request</target>
+        <target state="translated">Difuminat amb sol·licitud de confirmació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8929218224642530466" datatype="html">
+      <trans-unit id="8929218224642530466" datatype="html" xml:space="preserve">
         <source>Displayed</source>
-        <target state="new">Displayed</target>
+        <target state="translated">Mostrat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -20216,59 +20215,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5769292297914455214" datatype="html">
+      <trans-unit id="5769292297914455214" datatype="html" xml:space="preserve">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">Deshabilitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2684349290932402590" datatype="html">
+      <trans-unit id="2684349290932402590" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">Requereix l'aprovació de la moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6263183216314915807" datatype="html">
+      <trans-unit id="6263183216314915807" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</source>
-        <target state="new">Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</target>
+        <target state="translated">Requereix aprovació de la moderació (~ <x id="PH" equiv-text="responseTime"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4816216590591222133" datatype="html">
+      <trans-unit id="4816216590591222133" datatype="html" xml:space="preserve">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">Habilitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3911025298999036211" datatype="html">
+      <trans-unit id="3911025298999036211" datatype="html" xml:space="preserve">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 hora} other {<x id="hours"/> hores}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2819927377059070056" datatype="html">
+      <trans-unit id="2819927377059070056" datatype="html" xml:space="preserve">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minut} other {<x id="minutes"/> minuts}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6028521920505655348">
+      <trans-unit id="6028521920505655348" xml:space="preserve">
         <source><x id="PH"/> of full HD videos </source>
-        <target>
-          <x id="PH"/> de vídeos HD
-        </target>
+        <target state="translated"><x id="PH"/> de vídeos full-HD </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">130</context>
@@ -20294,35 +20291,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792453450803202450" datatype="html">
+      <trans-unit id="1792453450803202450" datatype="html" xml:space="preserve">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">Seguiments acceptats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1745310805516417209" datatype="html">
+      <trans-unit id="1745310805516417209" datatype="html" xml:space="preserve">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">Seguiments rebutjats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1810206793608630396" datatype="html">
+      <trans-unit id="1810206793608630396" datatype="html" xml:space="preserve">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">Seguiments pendents</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6952960992592445535" datatype="html">
+      <trans-unit id="6952960992592445535" datatype="html" xml:space="preserve">
         <source><x id="PH"/> (channel page) </source>
-        <target state="new">
-          <x id="PH"/> (channel page)
-        </target>
+        <target state="translated"><x id="PH"/> (pàgina del canal) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -20336,11 +20331,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1209500590333005801" datatype="html">
+      <trans-unit id="1209500590333005801" datatype="html" xml:space="preserve">
         <source><x id="PH"/> (account page) </source>
-        <target state="new">
-          <x id="PH"/> (account page)
-        </target>
+        <target state="translated"><x id="PH"/> (pàgina del compte) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -20350,9 +20343,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2516633974298697807">
+      <trans-unit id="2516633974298697807" xml:space="preserve">
         <source>Emphasis</source>
-        <target>Èmfasi</target>
+        <target state="translated">Émfasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">27</context>
@@ -20398,41 +20391,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6853170548960328665" datatype="html">
+      <trans-unit id="6853170548960328665" datatype="html" xml:space="preserve">
         <source>Close search</source>
-        <target state="new">Close search</target>
+        <target state="translated">Tancar cerca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/search/simple-search-input.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2762554571133839421" datatype="html">
+      <trans-unit id="2762554571133839421" datatype="html" xml:space="preserve">
         <source>Go to the login page</source>
-        <target state="new">Go to the login page</target>
+        <target state="translated">Anar a la pàgina d'inici de sessió</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/login-link.component.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7941320871431436228" datatype="html">
+      <trans-unit id="7941320871431436228" datatype="html" xml:space="preserve">
         <source>Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Sol·licitar un compte a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8545791785518058029" datatype="html">
+      <trans-unit id="8545791785518058029" datatype="html" xml:space="preserve">
         <source>Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Crear un compte a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7919708461177482031" datatype="html">
+      <trans-unit id="7919708461177482031" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</source>
-        <target state="new">PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcripted.</target>
+        <target state="translated">PeerTube considera que el vídeo «<x id="PH" equiv-text="video.name"/>» ja s'està transcrivint.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">118</context>
