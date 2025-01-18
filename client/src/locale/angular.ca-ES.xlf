@@ -7170,7 +7170,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9132918641931433659" datatype="html" xml:space="preserve">
         <source>No host found matching current filters.</source>
-        <target state="translated">No s'ha trobat cap amfitrió amb els criteris actuals.</target>
+        <target state="translated">No s'ha trobat cap host amb els criteris actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">80</context>
@@ -17750,31 +17750,31 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html" xml:space="preserve">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="needs-translation">Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">No es poden recuperar les credencials del client OAuth: <x id="PH" equiv-text="err.message"/>. Assegureu-vos que heu configurat correctament PeerTube (directori config/), en particular la secció «servidor web».</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667870723906986565" datatype="html">
+      <trans-unit id="6667870723906986565" datatype="html" xml:space="preserve">
         <source>Show / hide this help menu</source>
-        <target state="new">Show / hide this help menu</target>
+        <target state="translated">Mostrar/amagar aquest menú d'ajuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3314265031897048047" datatype="html">
+      <trans-unit id="3314265031897048047" datatype="html" xml:space="preserve">
         <source>Hide this help menu</source>
-        <target state="new">Hide this help menu</target>
+        <target state="translated">Amagar aquest menú d'ajuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="232050922346936574" datatype="html">
+      <trans-unit id="232050922346936574" datatype="html" xml:space="preserve">
         <source>Trending</source>
-        <target state="new">Trending</target>
+        <target state="translated">Tendències</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-all.component.ts</context>
           <context context-type="linenumber">117</context>
@@ -17784,9 +17784,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2821179408673282599" datatype="html">
+      <trans-unit id="2821179408673282599" datatype="html" xml:space="preserve">
         <source>Home</source>
-        <target state="new">Home</target>
+        <target state="translated">Inici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">163</context>
@@ -17800,9 +17800,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4648900870671159218">
+      <trans-unit id="4648900870671159218" xml:space="preserve">
         <source>Success</source>
-        <target>Èxit</target>
+        <target state="translated">Correcte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -17812,41 +17812,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1266887509445371246" datatype="html">
+      <trans-unit id="1266887509445371246" datatype="html" xml:space="preserve">
         <source>Incorrect username or password.</source>
-        <target state="new">Incorrect username or password.</target>
+        <target state="translated">Identificador o contrasenya incorrectes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6974874606619467663" datatype="html">
+      <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
-        <target state="new">Your account is blocked.</target>
+        <target state="translated">El vostre compte està blocat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4713046508117369963" datatype="html">
+      <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
-        <target state="new">This account is awaiting approval by moderators.</target>
+        <target state="translated">Aquest compte està pendent d'aprovació de la moderació.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5751810538002251535" datatype="html">
+      <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="new">Registration approval has been rejected for this account.</target>
+        <target state="translated">S'ha rebutjat l'aprovació del registre per a aquest compte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4467323362722952678" datatype="html">
+      <trans-unit id="4467323362722952678" datatype="html" xml:space="preserve">
         <source>Unknown</source>
-        <target state="new">Unknown</target>
+        <target state="translated">Desconegut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">50</context>
@@ -17876,9 +17876,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5036991421517255667" datatype="html">
+      <trans-unit id="5036991421517255667" datatype="html" xml:space="preserve">
         <source>Cannot load more videos. Try again later.</source>
-        <target state="new">Cannot load more videos. Try again later.</target>
+        <target state="translated">No es poden carregar més vídeos. Torneu-ho a provar més tard.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">486</context>
@@ -17888,25 +17888,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4873149362496451858" datatype="html">
+      <trans-unit id="4873149362496451858" datatype="html" xml:space="preserve">
         <source>Last 7 days</source>
-        <target state="new">Last 7 days</target>
+        <target state="translated">Últims 7 dies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2949150997160654358" datatype="html">
+      <trans-unit id="2949150997160654358" datatype="html" xml:space="preserve">
         <source>Last 30 days</source>
-        <target state="new">Last 30 days</target>
+        <target state="translated">Últims 30 dies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5328600704510694984" datatype="html">
+      <trans-unit id="5328600704510694984" datatype="html" xml:space="preserve">
         <source>Last 365 days</source>
-        <target state="new">Last 365 days</target>
+        <target state="translated">Últims 365 dies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -17936,49 +17936,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8487565500496466433" datatype="html">
+      <trans-unit id="8487565500496466433" datatype="html" xml:space="preserve">
         <source>Short (&lt; 4 min)</source>
-        <target state="new">Short (&lt; 4 min)</target>
+        <target state="translated">Curt (&lt; 4 min)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3642535017283477339" datatype="html">
+      <trans-unit id="3642535017283477339" datatype="html" xml:space="preserve">
         <source>Medium (4-10 min)</source>
-        <target state="new">Medium (4-10 min)</target>
+        <target state="translated">Mitjà (4-10 min)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6613870447286561244" datatype="html">
+      <trans-unit id="6613870447286561244" datatype="html" xml:space="preserve">
         <source>Long (&gt; 10 min)</source>
-        <target state="new">Long (&gt; 10 min)</target>
+        <target state="translated">Llarg (&gt; 10 min)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1787083504545967" datatype="html">
+      <trans-unit id="1787083504545967" datatype="html" xml:space="preserve">
         <source>Relevance</source>
-        <target state="new">Relevance</target>
+        <target state="translated">Rellevància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7944277186358179990" datatype="html">
+      <trans-unit id="7944277186358179990" datatype="html" xml:space="preserve">
         <source>Publish date</source>
-        <target state="new">Publish date</target>
+        <target state="translated">Data de publicació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2123659921722214537" datatype="html">
+      <trans-unit id="2123659921722214537" datatype="html" xml:space="preserve">
         <source>Views</source>
-        <target state="new">Views</target>
+        <target state="translated">Visualitzacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -17988,49 +17988,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">312</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3208627574396957172" datatype="html">
+      <trans-unit id="3208627574396957172" datatype="html" xml:space="preserve">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
-        <target state="new">Search index is unavailable. Retrying with instance results instead.</target>
+        <target state="translated">L'índex de cerca no està disponible. Tornant a provar amb els resultats de la instància al seu lloc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="307702206382241469" datatype="html">
+      <trans-unit id="307702206382241469" datatype="html" xml:space="preserve">
         <source>Search error</source>
-        <target state="new">Search error</target>
+        <target state="translated">Error de cerca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2357625293346946918" datatype="html">
+      <trans-unit id="2357625293346946918" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</source>
-        <target state="new"><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</target>
+        <target state="translated"><x id="PH" equiv-text="this.numberOfFilters()"/> filtres actius, obrir el tauler de filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6183000905044663854" datatype="html">
+      <trans-unit id="6183000905044663854" datatype="html" xml:space="preserve">
         <source>Search <x id="PH" equiv-text="this.currentSearch"/></source>
-        <target state="new">Search <x id="PH" equiv-text="this.currentSearch"/></target>
+        <target state="translated">Cercar <x id="PH" equiv-text="this.currentSearch"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8491751845906232809" datatype="html">
+      <trans-unit id="8491751845906232809" datatype="html" xml:space="preserve">
         <source>PeerTube instance host filter is invalid</source>
-        <target state="new">PeerTube instance host filter is invalid</target>
+        <target state="translated">El filtre de host de la instància PeerTube no és vàlid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4580988005648117665" datatype="html">
+      <trans-unit id="4580988005648117665" datatype="html" xml:space="preserve">
         <source>Search</source>
-        <target state="new">Search</target>
+        <target state="translated">Cercar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/routes.ts</context>
           <context context-type="linenumber">17</context>
@@ -18060,41 +18060,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5378618511917875694" datatype="html">
+      <trans-unit id="5378618511917875694" datatype="html" xml:space="preserve">
         <source>User email has been verified</source>
-        <target state="new">User email has been verified</target>
+        <target state="translated">S'ha verificat l'adreça electrònica del compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2754481302921121772" datatype="html">
+      <trans-unit id="2754481302921121772" datatype="html" xml:space="preserve">
         <source>User email hasn't been verified</source>
-        <target state="new">User email hasn't been verified</target>
+        <target state="translated">No s'ha verificat l'adreça electrònica del compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6180920471345723927" datatype="html">
+      <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="new"> The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </target>
+        <target state="translated">La quota de vídeo només té en compte la mida dels vídeos <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pujats<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, no dels fitxers transcodificats ni arxius d'exportació de compte (que poden contenir fitxers de vídeo). </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1623552341334328156" datatype="html">
+      <trans-unit id="1623552341334328156" datatype="html" xml:space="preserve">
         <source>Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">La transcodificació està activada així que la mida dels vídeos pot ser com a màxim ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7804724824750282316" datatype="html">
+      <trans-unit id="7804724824750282316" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" xid="2781455366919684095" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscripció} other {subscripcions}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -18108,17 +18108,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2781455366919684095" datatype="html">
+      <trans-unit id="2781455366919684095" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {subscripció} other {subscripcions}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2213349488139662070" datatype="html">
+      <trans-unit id="2213349488139662070" datatype="html" xml:space="preserve">
         <source>This is content to which we have subscribed. This allows us to display their videos directly on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </source>
-        <target state="new"> This is content to which we have subscribed. This allows us to display their videos directly on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </target>
+        <target state="translated">Aquest és el contingut al qual ens hem subscrit. Això ens permet mostrar els seus vídeos directament a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -18150,19 +18150,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4733690367258997247" datatype="html">
+      <trans-unit id="4733690367258997247" datatype="html" xml:space="preserve">
         <source>just now</source>
-        <target state="new">just now</target>
+        <target state="translated">ara mateix</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2222108104954671970" datatype="html">
+      <trans-unit id="2222108104954671970" datatype="html" xml:space="preserve">
         <source><x id="PH"/> sec </source>
-        <target state="new">
-          <x id="PH"/> sec
-        </target>
+        <target state="translated"><x id="PH"/> seg </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/time-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">31</context>
@@ -18170,7 +18168,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="translated">{interval, plural, =1 {fa un any} other {fa<x id="interval"/> anys}}</target>
+        <target state="translated">{interval, plural, =1 {fa un any} other {fa <x id="interval"/> anys}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -18186,7 +18184,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="translated">{interval, plural, =1 {fa una setmana} other {fa<x id="interval"/> setmanes}}</target>
+        <target state="translated">{interval, plural, =1 {fa una setmana} other {fa <x id="interval"/> setmanes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">35</context>
@@ -18194,7 +18192,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="translated">{interval, plural, =1 {fa un dia} other {fa<x id="interval"/> dies}}</target>
+        <target state="translated">{interval, plural, =1 {fa un dia} other {fa <x id="interval"/> dies}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">40</context>
@@ -18202,31 +18200,31 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="translated">{interval, plural, =1 {fa una hora} other {fa<x id="interval"/> hores}}</target>
+        <target state="translated">{interval, plural, =1 {fa una hora} other {fa <x id="interval"/> hores}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6499699285816188400" datatype="html">
+      <trans-unit id="6499699285816188400" datatype="html" xml:space="preserve">
         <source>Abuse reports</source>
-        <target state="new">Abuse reports</target>
+        <target state="translated">Informes d'abús</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1043265374828694539" datatype="html">
+      <trans-unit id="1043265374828694539" datatype="html" xml:space="preserve">
         <source>Auto tag policies</source>
-        <target state="new">Auto tag policies</target>
+        <target state="translated">Política d'etiquetatge automàtic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4930506384627295710" datatype="html">
+      <trans-unit id="4930506384627295710" datatype="html" xml:space="preserve">
         <source>Settings</source>
-        <target state="new">Settings</target>
+        <target state="translated">Configuració</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.html</context>
           <context context-type="linenumber">5</context>
@@ -18256,9 +18254,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9178182467454450952">
+      <trans-unit id="9178182467454450952" xml:space="preserve">
         <source>Confirm</source>
-        <target>Confirma</target>
+        <target state="translated">Confirmar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">17</context>
@@ -18272,57 +18270,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3381033584543723394" datatype="html">
+      <trans-unit id="3381033584543723394" datatype="html" xml:space="preserve">
         <source>Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in.</source>
-        <target state="new"> Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in. </target>
+        <target state="translated">Escaneja aquest codi QR a una aplicació TOTP del teu telèfon. Aquesta aplicació generarà fitxes que haureu d'introduir en iniciar sessió.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7990066577913542327" datatype="html">
+      <trans-unit id="7990066577913542327" datatype="html" xml:space="preserve">
         <source>If you can't scan the QR code and need to enter it manually, here is the plain-text secret:</source>
-        <target state="new"> If you can't scan the QR code and need to enter it manually, here is the plain-text secret: </target>
+        <target state="translated">Si no podeu escanejar el codi QR i heu d'introduir-lo manualment, aquí teniu el secret de text sense format:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2363389479062804726" datatype="html">
+      <trans-unit id="2363389479062804726" datatype="html" xml:space="preserve">
         <source>Two-factor code</source>
-        <target state="new">Two-factor code</target>
+        <target state="translated">Codi de dos factors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="336731433013115653" datatype="html">
+      <trans-unit id="336731433013115653" datatype="html" xml:space="preserve">
         <source>Enter the code generated by your authenticator app to confirm</source>
-        <target state="new">Enter the code generated by your authenticator app to confirm</target>
+        <target state="translated">Introduïu el codi generat per la vostra aplicació d'autenticació per confirmar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2026328843059071368" datatype="html">
+      <trans-unit id="2026328843059071368" datatype="html" xml:space="preserve">
         <source>Two factor authentication has been enabled.</source>
-        <target state="new">Two factor authentication has been enabled.</target>
+        <target state="translated">S'ha activat l'autenticació de dos factors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2364233042886987548" datatype="html">
+      <trans-unit id="2364233042886987548" datatype="html" xml:space="preserve">
         <source>Comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="new">Comments that contain any of the watched words are automatically tagged with the name of the list.</target>
+        <target state="translated">Els comentaris que contenen alguna de les paraules vigilades s'etiqueten automàticament amb el nom de la llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-watched-words-list/my-watched-words-list.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="315406341700403563" datatype="html">
+      <trans-unit id="315406341700403563" datatype="html" xml:space="preserve">
         <source>These automatic tags can be used to filter comments or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>automatically block<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> them.</source>
-        <target state="new">These automatic tags can be used to filter comments or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>automatically block<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> them.</target>
+        <target state="translated">Aquestes etiquetes automàtiques es poden utilitzar per filtrar comentaris o <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot;&gt;"/>blocar-los automàticament<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-watched-words-list/my-watched-words-list.component.html</context>
           <context context-type="linenumber">2</context>
@@ -18336,241 +18334,241 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8232112521354108802" datatype="html">
+      <trans-unit id="8232112521354108802" datatype="html" xml:space="preserve">
         <source>Short description must not be longer than 250 characters.</source>
-        <target state="new">Short description must not be longer than 250 characters.</target>
+        <target state="translated">La descripció breu no ha de tenir més de 250 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6033463036257195528">
+      <trans-unit id="6033463036257195528" xml:space="preserve">
         <source>Twitter username is required.</source>
-        <target>El nom d'usuari de Twitter és obligatori.</target>
+        <target state="translated">El nom del compte de X/Twitter és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="518461007481947848" datatype="html">
+      <trans-unit id="518461007481947848" datatype="html" xml:space="preserve">
         <source>Cache size is required.</source>
-        <target state="new">Cache size is required.</target>
+        <target state="translated">La mida de la memòria cau és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5481098690555703943" datatype="html">
+      <trans-unit id="5481098690555703943" datatype="html" xml:space="preserve">
         <source>Cache size must be greater than 1.</source>
-        <target state="new">Cache size must be greater than 1.</target>
+        <target state="translated">La mida de la memòria cau ha d'ésser major que 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4704896848161515188" datatype="html">
+      <trans-unit id="4704896848161515188" datatype="html" xml:space="preserve">
         <source>Cache size must be a number.</source>
-        <target state="new">Cache size must be a number.</target>
+        <target state="translated">La mida de la memòria cau ha d'ésser un nombre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="818392297325723982">
+      <trans-unit id="818392297325723982" xml:space="preserve">
         <source>Signup limit is required.</source>
-        <target>El límit de registre és obligatori.</target>
+        <target state="translated">El límit d'inscripcions és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630311719329022718" datatype="html">
+      <trans-unit id="5630311719329022718" datatype="html" xml:space="preserve">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="new">Signup limit must be greater than 1. Use -1 to disable it.</target>
+        <target state="translated">El límit de registres ha d'ésser major que 1. Utilitzeu -1 per desactivar-lo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2555843408410000965">
+      <trans-unit id="2555843408410000965" xml:space="preserve">
         <source>Signup limit must be a number.</source>
-        <target>El límit de registre ha de ser un número.</target>
+        <target state="translated">El límit de registres ha d'ésser un nombre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="346485141381099383" datatype="html">
+      <trans-unit id="346485141381099383" datatype="html" xml:space="preserve">
         <source>Signup minimum age is required.</source>
-        <target state="new">Signup minimum age is required.</target>
+        <target state="translated">L'edat mínima d'inscripció és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4230672031132838318" datatype="html">
+      <trans-unit id="4230672031132838318" datatype="html" xml:space="preserve">
         <source>Signup minimum age must be greater than 1.</source>
-        <target state="new">Signup minimum age must be greater than 1.</target>
+        <target state="translated">L'edat mínima d'inscripció ha d'ésser major que 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5929230001329133993" datatype="html">
+      <trans-unit id="5929230001329133993" datatype="html" xml:space="preserve">
         <source>Signup minimum age must be a number.</source>
-        <target state="new">Signup minimum age must be a number.</target>
+        <target state="translated">L'edat mínima d'inscripció ha d'ésser un nombre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="240096858386658337">
+      <trans-unit id="240096858386658337" xml:space="preserve">
         <source>Admin email is required.</source>
-        <target>Es necessita un correu electrònic d'administrador.</target>
+        <target state="translated">L'adreça electrònica d'administració és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4392533896009432078">
+      <trans-unit id="4392533896009432078" xml:space="preserve">
         <source>Admin email must be valid.</source>
-        <target>El correu electrònic d'administrador ha de ser vàlid.</target>
+        <target state="translated">L'adreça electrònica d'administració ha d'ésser vàlida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6172217783476989430">
+      <trans-unit id="6172217783476989430" xml:space="preserve">
         <source>Transcoding threads is required.</source>
-        <target>Es requereixen els subprocessos de transcodificació.</target>
+        <target state="translated">El nombre de fils de transcodificació és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5320424292625586941" datatype="html">
+      <trans-unit id="5320424292625586941" datatype="html" xml:space="preserve">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="new">Transcoding threads must be greater or equal to 0.</target>
+        <target state="translated">El nombre de fils de transcodificació ha d'ésser major o igual a 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3683210116632914190" datatype="html">
+      <trans-unit id="3683210116632914190" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS is required.</source>
-        <target state="new">Transcoding max FPS is required.</target>
+        <target state="translated">El nombre màxim de FPS de transcodificació és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4345398192434581438" datatype="html">
+      <trans-unit id="4345398192434581438" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS must be greater or equal to 1.</source>
-        <target state="new">Transcoding max FPS must be greater or equal to 1.</target>
+        <target state="translated">El nombre màxim de FPS de transcodificació ha d'ésser major que 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8185661254949728718" datatype="html">
+      <trans-unit id="8185661254949728718" datatype="html" xml:space="preserve">
         <source>Max live duration is required.</source>
-        <target state="new">Max live duration is required.</target>
+        <target state="translated">La durada màxima del directe és obligatòria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977908106285712483" datatype="html">
+      <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
-        <target state="new">Max live duration must be greater or equal to -1.</target>
+        <target state="translated">La durada màxima del directe ha d'ésser major o igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8196240396863235661" datatype="html">
+      <trans-unit id="8196240396863235661" datatype="html" xml:space="preserve">
         <source>Max instance lives is required.</source>
-        <target state="new">Max instance lives is required.</target>
+        <target state="translated">El nombre màxim de directes a la instància és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8156930104143421972" datatype="html">
+      <trans-unit id="8156930104143421972" datatype="html" xml:space="preserve">
         <source>Max instance lives must be greater or equal to -1.</source>
-        <target state="new">Max instance lives must be greater or equal to -1.</target>
+        <target state="translated">El nombre màxim de directes a la instància ha d'ésser major o igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5614457087254770778" datatype="html">
+      <trans-unit id="5614457087254770778" datatype="html" xml:space="preserve">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">El nombre màxim de directes per compte és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6094685877052448543" datatype="html">
+      <trans-unit id="6094685877052448543" datatype="html" xml:space="preserve">
         <source>Max user lives must be greater or equal to -1.</source>
-        <target state="new">Max user lives must be greater or equal to -1.</target>
+        <target state="translated">El nombre màxim de directes per compte ha d'ésser major o igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="351272950792130803" datatype="html">
+      <trans-unit id="351272950792130803" datatype="html" xml:space="preserve">
         <source>Max video channels per user is required.</source>
-        <target state="new">Max video channels per user is required.</target>
+        <target state="translated">El nombre màxim de canals de vídeo per compte és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5253683089104713724" datatype="html">
+      <trans-unit id="5253683089104713724" datatype="html" xml:space="preserve">
         <source>Max video channels per user must be greater or equal to 1.</source>
-        <target state="new">Max video channels per user must be greater or equal to 1.</target>
+        <target state="translated">El nombre màxim de canals de vídeo per compte ha d'ésser major que 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8354695459880751923" datatype="html">
+      <trans-unit id="8354695459880751923" datatype="html" xml:space="preserve">
         <source>Max video channels per user must be a number.</source>
-        <target state="new">Max video channels per user must be a number.</target>
+        <target state="translated">El nombre màxim de canals de vídeo per compte ha d'ésser un nombre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6274027958678461128" datatype="html">
+      <trans-unit id="6274027958678461128" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user is required.</source>
-        <target state="new">Max synchronizations per user is required.</target>
+        <target state="translated">El nombre màxim de sincronitzacions per compte és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8998234411272282626" datatype="html">
+      <trans-unit id="8998234411272282626" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be greater or equal to 1.</source>
-        <target state="new">Max synchronizations per user must be greater or equal to 1.</target>
+        <target state="translated">El nombre màxim de sincronitzacions per compte ha d'ésser major que 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6409680643108400586" datatype="html">
+      <trans-unit id="6409680643108400586" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be a number.</source>
-        <target state="new">Max synchronizations per user must be a number.</target>
+        <target state="translated">El nombre màxim de sincronitzacions per compte ha d'ésser un nombre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5832601947705094130" datatype="html">
+      <trans-unit id="5832601947705094130" datatype="html" xml:space="preserve">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">El valor de simultaneïtat és obligatori.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">121</context>
