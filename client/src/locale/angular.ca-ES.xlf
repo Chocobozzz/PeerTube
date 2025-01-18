@@ -16620,41 +16620,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="988319118163514570" datatype="html">
+      <trans-unit id="988319118163514570" datatype="html" xml:space="preserve">
         <source>Video studio edition has finished</source>
-        <target state="new">Video studio edition has finished</target>
+        <target state="translated">L'edició de l'estudi de vídeo ha acabat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4190395479539865710" datatype="html">
+      <trans-unit id="4190395479539865710" datatype="html" xml:space="preserve">
         <source>The transcription of your video has been generated</source>
-        <target state="new">The transcription of your video has been generated</target>
+        <target state="translated">S'ha generat la transcripció del vostre vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4579496777570550463" datatype="html">
+      <trans-unit id="4579496777570550463" datatype="html" xml:space="preserve">
         <source>Social</source>
-        <target state="new">Social</target>
+        <target state="translated">Social</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1852164487280647902" datatype="html">
+      <trans-unit id="1852164487280647902" datatype="html" xml:space="preserve">
         <source>Your videos</source>
-        <target state="new">Your videos</target>
+        <target state="translated">Els vostres vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5095562193296630034" datatype="html">
+      <trans-unit id="5095562193296630034" datatype="html" xml:space="preserve">
         <source>Preferences saved</source>
-        <target state="new">Preferences saved</target>
+        <target state="translated">Preferències desades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">154</context>
@@ -16668,17 +16668,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6721822899525405039" datatype="html">
+      <trans-unit id="6721822899525405039" datatype="html" xml:space="preserve">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="new"> People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">La gent pot trobar-vos fent servir @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">Desar el perfil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">42</context>
@@ -16700,9 +16700,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8920809083620698740" datatype="html">
+      <trans-unit id="8920809083620698740" datatype="html" xml:space="preserve">
         <source>avatar</source>
-        <target state="new">avatar</target>
+        <target state="translated">avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -16716,9 +16716,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2775050991871557896" datatype="html">
+      <trans-unit id="2775050991871557896" datatype="html" xml:space="preserve">
         <source>Avatar deleted.</source>
-        <target state="new">Avatar deleted.</target>
+        <target state="translated">Avatar eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -16732,65 +16732,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1233062525939746039" datatype="html">
+      <trans-unit id="1233062525939746039" datatype="html" xml:space="preserve">
         <source>Unknown language</source>
-        <target state="new">Unknown language</target>
+        <target state="translated">Idioma desconegut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1645193489541371451" datatype="html">
+      <trans-unit id="1645193489541371451" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">No s'han trobat resultats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5031056422346819348" datatype="html">
+      <trans-unit id="5031056422346819348" datatype="html" xml:space="preserve">
         <source>No items available</source>
-        <target state="new">No items available</target>
+        <target state="translated">No hi ha entrades disponibles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3761504852202418603" datatype="html">
+      <trans-unit id="3761504852202418603" datatype="html" xml:space="preserve">
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
-        <target state="new">Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</target>
+        <target state="translated">S'han activat massa idiomes. Si us plau, activeu-los tots o manteniu-los per sota de 20 idiomes activats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3960396487495291449" datatype="html">
+      <trans-unit id="3960396487495291449" datatype="html" xml:space="preserve">
         <source>Video settings updated.</source>
-        <target state="new">Video settings updated.</target>
+        <target state="translated">Configuració de vídeo actualitzada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3326446048041727269" datatype="html">
+      <trans-unit id="3326446048041727269" datatype="html" xml:space="preserve">
         <source>Display/Video settings updated.</source>
-        <target state="new">Display/Video settings updated.</target>
+        <target state="translated">Configuració de pantalla/vídeo actualitzada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3931294879857217619" datatype="html">
+      <trans-unit id="3931294879857217619" datatype="html" xml:space="preserve">
         <source>Remote interact</source>
-        <target state="new">Remote interact</target>
+        <target state="translated">Interacció remota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="432723159292175437" datatype="html">
+      <trans-unit id="432723159292175437" datatype="html" xml:space="preserve">
         <source>Remote subscribe</source>
-        <target state="new">Remote subscribe</target>
+        <target state="translated">Subscripció remota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -16806,17 +16806,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8723777130353305761" datatype="html">
+      <trans-unit id="8723777130353305761" datatype="html" xml:space="preserve">
         <source>This name already exists on this instance.</source>
-        <target state="new">This name already exists on this instance.</target>
+        <target state="translated">Aquest nom ja existeix en aquesta instància.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6723130720822791647" datatype="html">
+      <trans-unit id="6723130720822791647" datatype="html" xml:space="preserve">
         <source>Create your channel</source>
-        <target state="new">Create your channel</target>
+        <target state="translated">Crear el vostre canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -16832,17 +16832,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6697109866731379499" datatype="html">
+      <trans-unit id="6697109866731379499" datatype="html" xml:space="preserve">
         <source>Update <x id="PH" equiv-text="this.videoChannel?.name"/></source>
-        <target state="new">Update <x id="PH" equiv-text="this.videoChannel?.name"/></target>
+        <target state="translated">Actualitzar <x id="PH" equiv-text="this.videoChannel?.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-update.component.ts</context>
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8407755843502300957" datatype="html">
+      <trans-unit id="8407755843502300957" datatype="html" xml:space="preserve">
         <source>Banner changed.</source>
-        <target state="new">Banner changed.</target>
+        <target state="translated">Bàner canviat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -16852,9 +16852,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="689638706960732906" datatype="html">
+      <trans-unit id="689638706960732906" datatype="html" xml:space="preserve">
         <source>banner</source>
-        <target state="new">banner</target>
+        <target state="translated">bàner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -16864,9 +16864,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3230561499965076671" datatype="html">
+      <trans-unit id="3230561499965076671" datatype="html" xml:space="preserve">
         <source>Banner deleted.</source>
-        <target state="new">Banner deleted.</target>
+        <target state="translated">Bàner eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -16876,83 +16876,81 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="624066830180032195">
+      <trans-unit id="624066830180032195" xml:space="preserve">
         <source>Video channel <x id="PH"/> deleted.</source>
-        <target>Canal de vídeo 
-          <x id="PH"/> eliminat.
-        </target>
+        <target state="translated">Canal de vídeo <x id="PH"/> eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6450826648284332649" datatype="html">
+      <trans-unit id="6450826648284332649" datatype="html" xml:space="preserve">
         <source>Views for the day</source>
-        <target state="new">Views for the day</target>
+        <target state="translated">Visualitzacions del dia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6184963353282561988" datatype="html">
+      <trans-unit id="6184963353282561988" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></source>
-        <target state="new"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></target>
+        <target state="translated"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {visualització} other {visualitzacions}} since <x id="PH_1" equiv-text="data.startDate"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6337200167647767274" datatype="html">
+      <trans-unit id="6337200167647767274" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {canal} other {canals}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7440637814928143808" datatype="html">
+      <trans-unit id="7440637814928143808" datatype="html" xml:space="preserve">
         <source>My followers</source>
-        <target state="new">My followers</target>
+        <target state="translated">Em segueixen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2521678336272309407" datatype="html">
+      <trans-unit id="2521678336272309407" datatype="html" xml:space="preserve">
         <source>No follower found.</source>
-        <target state="new">No follower found.</target>
+        <target state="translated">No s'ha trobat cap seguidor/a.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5294742063044966238" datatype="html">
+      <trans-unit id="5294742063044966238" datatype="html" xml:space="preserve">
         <source>Follower page</source>
-        <target state="new">Follower page</target>
+        <target state="translated">Pàgina de seguidors/es</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="797409137967291468" datatype="html">
+      <trans-unit id="797409137967291468" datatype="html" xml:space="preserve">
         <source>Is following all your channels</source>
-        <target state="new">Is following all your channels</target>
+        <target state="translated">Està seguint tots els teus canals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7940720844854710428" datatype="html">
+      <trans-unit id="7940720844854710428" datatype="html" xml:space="preserve">
         <source>Is following your channel <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></source>
-        <target state="new">Is following your channel <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></target>
+        <target state="translated">Està seguint el vostre canal <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1716062177529601456" datatype="html">
+      <trans-unit id="1716062177529601456" datatype="html" xml:space="preserve">
         <source>Channel filters</source>
-        <target state="new">Channel filters</target>
+        <target state="translated">Filtres de canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -16962,75 +16960,73 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="782403351079933650" datatype="html">
+      <trans-unit id="782403351079933650" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {seguidor/a} other {seguidors/es}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6059091237492573541" datatype="html">
+      <trans-unit id="6059091237492573541" datatype="html" xml:space="preserve">
         <source>Update video channel</source>
-        <target state="new">Update video channel</target>
+        <target state="translated">Actualitzar canal de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/routes.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6595008830732269870" datatype="html">
+      <trans-unit id="6595008830732269870" datatype="html" xml:space="preserve">
         <source>Not found</source>
-        <target state="new">Not found</target>
+        <target state="translated">No s'ha trobat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/routes.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1009095940160473792" datatype="html">
+      <trans-unit id="1009095940160473792" datatype="html" xml:space="preserve">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">Falta el paràmetre d'URL als paràmetres d'URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7553172329217243895" datatype="html">
+      <trans-unit id="7553172329217243895" datatype="html" xml:space="preserve">
         <source>Cannot access to the remote resource</source>
-        <target state="new">Cannot access to the remote resource</target>
+        <target state="translated">No es pot accedir al recurs remot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1636934520301910285" datatype="html">
+      <trans-unit id="1636934520301910285" datatype="html" xml:space="preserve">
         <source>Reset password</source>
-        <target state="new">Reset password</target>
+        <target state="translated">Restablir la contrasenya</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/routes.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3851357780293085233" datatype="html">
+      <trans-unit id="3851357780293085233" datatype="html" xml:space="preserve">
         <source>Remote interaction</source>
-        <target state="new">Remote interaction</target>
+        <target state="translated">Interacció remota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/routes.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5032453707232754344" datatype="html">
+      <trans-unit id="5032453707232754344" datatype="html" xml:space="preserve">
         <source>Playlist <x id="PH"/> created.</source>
-        <target state="new">Playlist 
-          <x id="PH"/> created.
-        </target>
+        <target state="translated">Llista de reproducció <x id="PH"/> creada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5674286808255988565" datatype="html">
+      <trans-unit id="5674286808255988565" datatype="html" xml:space="preserve">
         <source>Create</source>
-        <target state="new">Create</target>
+        <target state="translated">Crear</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">8</context>
@@ -17060,9 +17056,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8869957234869568361" datatype="html">
+      <trans-unit id="8869957234869568361" datatype="html" xml:space="preserve">
         <source>Update playlist</source>
-        <target state="new">Update playlist</target>
+        <target state="translated">Actualitzar llista de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -17088,17 +17084,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5767090948392236130" datatype="html">
+      <trans-unit id="5767090948392236130" datatype="html" xml:space="preserve">
         <source>Notification preferences</source>
-        <target state="new">Notification preferences</target>
+        <target state="translated">Preferències de notificació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6658000829978978023" datatype="html">
+      <trans-unit id="6658000829978978023" datatype="html" xml:space="preserve">
         <source>Applications</source>
-        <target state="new">Applications</target>
+        <target state="translated">Aplicacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -17108,27 +17104,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="104404386496394770" datatype="html">
+      <trans-unit id="104404386496394770" datatype="html" xml:space="preserve">
         <source>Delete playlist</source>
-        <target state="new">Delete playlist</target>
+        <target state="translated">Eliminar llista de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1431617394009162547" datatype="html">
+      <trans-unit id="1431617394009162547" datatype="html" xml:space="preserve">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target state="new">Playlist 
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated">Llista de reproducció <x id="PH"/> actualitzada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4844578664427956129" datatype="html">
+      <trans-unit id="4844578664427956129" datatype="html" xml:space="preserve">
         <source>Change ownership</source>
-        <target state="new">Change ownership</target>
+        <target state="translated">Canviar la propietat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context>
           <context context-type="linenumber">3</context>
@@ -17138,11 +17132,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3380608219513805292" datatype="html">
+      <trans-unit id="3380608219513805292" datatype="html" xml:space="preserve">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target state="new">Playlist 
-          <x id="PH"/> deleted.
-        </target>
+        <target state="translated">Llista de reproducció <x id="PH"/> eliminada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
           <context context-type="linenumber">159</context>
@@ -17164,35 +17156,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="696910741870112536" datatype="html">
+      <trans-unit id="696910741870112536" datatype="html" xml:space="preserve">
         <source>{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</source>
-        <target state="new">{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</target>
+        <target state="translated">{length, plural, =1 {El vídeo ha estat suprimit} other {<x id="length"/> vídeos han estat suprimits}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="705850529168776436" datatype="html">
+      <trans-unit id="705850529168776436" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {vídeo} other {vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591467977473302125" datatype="html">
+      <trans-unit id="2591467977473302125" datatype="html" xml:space="preserve">
         <source>Videos list</source>
-        <target state="new">Videos list</target>
+        <target state="translated">Llista de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2027805873922338635">
+      <trans-unit id="2027805873922338635" xml:space="preserve">
         <source>Do you really want to delete <x id="PH"/>? </source>
-        <target>Vols realment eliminar 
-          <x id="PH"/>?
-        </target>
+        <target state="translated">Segur que voleu eliminar <x id="PH"/>? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -17210,27 +17200,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">309</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8501241441398968873" datatype="html">
+      <trans-unit id="8501241441398968873" datatype="html" xml:space="preserve">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="new">It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">Això eliminarà {count, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}} d'aquest canal, i no podreu crear un altre canal o compte amb el mateix nom (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2767660806989176400">
+      <trans-unit id="2767660806989176400" xml:space="preserve">
         <source>Video <x id="PH"/> deleted.</source>
-        <target>Vídeo 
-          <x id="PH"/> eliminat.
-        </target>
+        <target state="translated">Vídeo <x id="PH"/> eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">320</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6389312883797462351" datatype="html">
+      <trans-unit id="6389312883797462351" datatype="html" xml:space="preserve">
         <source>Studio</source>
-        <target state="new">Studio</target>
+        <target state="translated">Estudi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/routes.ts</context>
           <context context-type="linenumber">18</context>
@@ -17240,41 +17228,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">486</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6810714890760227072" datatype="html">
+      <trans-unit id="6810714890760227072" datatype="html" xml:space="preserve">
         <source>Ownership change request sent.</source>
-        <target state="new">Ownership change request sent.</target>
+        <target state="translated">Sol·licitud de canvi de propietat enviada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498264516089100469" datatype="html">
+      <trans-unit id="1498264516089100469" datatype="html" xml:space="preserve">
         <source>My synchronizations</source>
-        <target state="new">My synchronizations</target>
+        <target state="translated">Les meves sincronitzacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545420287297803988" datatype="html">
+      <trans-unit id="7545420287297803988" datatype="html" xml:space="preserve">
         <source>My playlists</source>
-        <target state="translated">Les meues llistes de reproducció</target>
+        <target state="translated">Les meves llistes de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2527931602940887636" datatype="html">
+      <trans-unit id="2527931602940887636" datatype="html" xml:space="preserve">
         <source>My subscriptions</source>
-        <target state="translated">Les meues subscripcions</target>
+        <target state="translated">Les meves subscripcions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5177154708872200221" datatype="html">
+      <trans-unit id="5177154708872200221" datatype="html" xml:space="preserve">
         <source>You don't have any subscription yet.</source>
-        <target state="new">You don't have any subscription yet.</target>
+        <target state="translated">Encara no teniu cap subscripció.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">7</context>
