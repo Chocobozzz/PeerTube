@@ -5434,7 +5434,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3455474330346212563" datatype="html" xml:space="preserve">
         <source>Select the torrent to import</source>
-        <target state="translated">Seleccionar el torrent per importar</target>
+        <target state="translated">Triar el torrent per importar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">6</context>
@@ -10046,7 +10046,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5273935530181504015" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="translated">⚠️ Aquesta funcionalitat depèn en gran mesura de la moderació de les instàncies seguides per l'índex de cerca que seleccioneu.</target>
+        <target state="translated">⚠️ Aquesta funcionalitat depèn en gran mesura de la moderació de les instàncies seguides per l'índex de cerca que trieu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">480</context>
@@ -17268,50 +17268,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1991904494976135035" datatype="html">
+      <trans-unit id="1991904494976135035" datatype="html" xml:space="preserve">
         <source>My abuse reports</source>
-        <target state="new">My abuse reports</target>
+        <target state="translated">Els meus informes d'abús</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7484325899601915135" datatype="html">
+      <trans-unit id="7484325899601915135" datatype="html" xml:space="preserve">
         <source>Your watched words</source>
-        <target state="new">Your watched words</target>
+        <target state="translated">Les vostres paraules vigilades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5603224609929994288" datatype="html">
+      <trans-unit id="5603224609929994288" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification
-</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> està esperant verificació de correu electrònic </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4250548381153518208" datatype="html">
+      <trans-unit id="4250548381153518208" datatype="html" xml:space="preserve">
         <source>Change your email</source>
-        <target state="new">Change your email</target>
+        <target state="translated">Canviar la vostra adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3173210699559672958" datatype="html">
+      <trans-unit id="3173210699559672958" datatype="html" xml:space="preserve">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </source>
-        <target state="new"> Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </target>
+        <target state="translated">La vostra adreça electrònica actual és <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Mai es mostra al públic. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5752861278140673787" datatype="html">
+      <trans-unit id="5752861278140673787" datatype="html" xml:space="preserve">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Canvis de titularitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -17321,25 +17320,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5983006734882925930" datatype="html">
+      <trans-unit id="5983006734882925930" datatype="html" xml:space="preserve">
         <source>My video history</source>
-        <target state="new">My video history</target>
+        <target state="translated">El meu historial de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328603643802633101" datatype="html">
+      <trans-unit id="6328603643802633101" datatype="html" xml:space="preserve">
         <source>Create new synchronization</source>
-        <target state="new">Create new synchronization</target>
+        <target state="translated">Crear una nova sincronització</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8181077408762380407" datatype="html">
+      <trans-unit id="8181077408762380407" datatype="html" xml:space="preserve">
         <source>Channels</source>
-        <target state="new">Channels</target>
+        <target state="translated">Canals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -17357,9 +17356,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3897348120591552265" datatype="html">
+      <trans-unit id="3897348120591552265" datatype="html" xml:space="preserve">
         <source>Manage</source>
-        <target state="new">Manage</target>
+        <target state="translated">Gestionar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -17373,25 +17372,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7731752234233950482" datatype="html">
+      <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
-        <target state="new">Synchronizations</target>
+        <target state="translated">Sincronitzacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7607713563510753803" datatype="html">
+      <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
-        <target state="new">Imports</target>
+        <target state="translated">Importacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8936704404804793618" datatype="html">
+      <trans-unit id="8936704404804793618" datatype="html" xml:space="preserve">
         <source>Videos</source>
-        <target state="new">Videos</target>
+        <target state="translated">Vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.html</context>
           <context context-type="linenumber">1</context>
@@ -17445,9 +17444,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7916647920967632052" datatype="html">
+      <trans-unit id="7916647920967632052" datatype="html" xml:space="preserve">
         <source>max size</source>
-        <target state="new">max size</target>
+        <target state="translated">mida màxima</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/thumbnail-manager/thumbnail-manager.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -17457,35 +17456,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6489275254908395777" datatype="html">
+      <trans-unit id="6489275254908395777" datatype="html" xml:space="preserve">
         <source>Maximize editor</source>
-        <target state="new">Maximize editor</target>
+        <target state="translated">Maximitzar editor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4243591013849340688" datatype="html">
+      <trans-unit id="4243591013849340688" datatype="html" xml:space="preserve">
         <source>Exit maximized editor</source>
-        <target state="new">Exit maximized editor</target>
+        <target state="translated">Sortir de l'editor maximitzat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2687679787442328897" datatype="html">
+      <trans-unit id="2687679787442328897" datatype="html" xml:space="preserve">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target state="new">An email with verification link will be sent to 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">S'enviarà un missatge amb l'enllaç de verificació a <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4227831333725112678" datatype="html">
+      <trans-unit id="4227831333725112678" datatype="html" xml:space="preserve">
         <source>Verify email</source>
-        <target state="new">Verify email</target>
+        <target state="translated">Verificar l'adreça electrònica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -17499,9 +17496,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1783173774503340906" datatype="html">
+      <trans-unit id="1783173774503340906" datatype="html" xml:space="preserve">
         <source>Subscribe to the account</source>
-        <target state="new">Subscribe to the account</target>
+        <target state="translated">Subscriure's al compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">112</context>
@@ -17511,250 +17508,249 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">982</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1593265243494758679" datatype="html">
+      <trans-unit id="1593265243494758679" datatype="html" xml:space="preserve">
         <source>Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
-        <target state="new">Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
+        <target state="translated">Estudi per <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5470809226184152498" datatype="html">
+      <trans-unit id="5470809226184152498" datatype="html" xml:space="preserve">
         <source>CUT VIDEO</source>
-        <target state="new">CUT VIDEO</target>
+        <target state="translated">TALLAR VÍDEO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5639348768609905535" datatype="html">
+      <trans-unit id="5639348768609905535" datatype="html" xml:space="preserve">
         <source>Set a new start/end.</source>
-        <target state="new">Set a new start/end.</target>
+        <target state="translated">Canviar inici/final.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="783359429228696335" datatype="html">
+      <trans-unit id="783359429228696335" datatype="html" xml:space="preserve">
         <source>New start</source>
-        <target state="new">New start</target>
+        <target state="translated">Nou inici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8910806821370505981" datatype="html">
+      <trans-unit id="8910806821370505981" datatype="html" xml:space="preserve">
         <source>New end</source>
-        <target state="new">New end</target>
+        <target state="translated">Nou final</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2502254344085150809" datatype="html">
+      <trans-unit id="2502254344085150809" datatype="html" xml:space="preserve">
         <source>ADD INTRO</source>
-        <target state="new">ADD INTRO</target>
+        <target state="translated">AFEGIR INTRO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5030063045826839645" datatype="html">
+      <trans-unit id="5030063045826839645" datatype="html" xml:space="preserve">
         <source>Concatenate a file at the beginning of the video.</source>
-        <target state="new">Concatenate a file at the beginning of the video.</target>
+        <target state="translated">Concatenar un fitxer al principi del vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4798642303989337390" datatype="html">
+      <trans-unit id="4798642303989337390" datatype="html" xml:space="preserve">
         <source>Select the intro video file</source>
-        <target state="new">Select the intro video file</target>
+        <target state="translated">Trieu el fitxer de vídeo d'introducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7698413240170540435" datatype="html">
+      <trans-unit id="7698413240170540435" datatype="html" xml:space="preserve">
         <source>ADD OUTRO</source>
-        <target state="new">ADD OUTRO</target>
+        <target state="translated">AFEGIR «OUTRO»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2832051749922509643" datatype="html">
+      <trans-unit id="2832051749922509643" datatype="html" xml:space="preserve">
         <source>Concatenate a file at the end of the video.</source>
-        <target state="new">Concatenate a file at the end of the video.</target>
+        <target state="translated">Concatenar un fitxer al final del vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4368653199478595315" datatype="html">
+      <trans-unit id="4368653199478595315" datatype="html" xml:space="preserve">
         <source>Select the outro video file</source>
-        <target state="new">Select the outro video file</target>
+        <target state="translated">Trieu el fitxer de vídeo de final</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3463158361655332380" datatype="html">
+      <trans-unit id="3463158361655332380" datatype="html" xml:space="preserve">
         <source>ADD WATERMARK</source>
-        <target state="new">ADD WATERMARK</target>
+        <target state="translated">AFEGIR MARCA D'AIGUA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4472450670859114703" datatype="html">
+      <trans-unit id="4472450670859114703" datatype="html" xml:space="preserve">
         <source>Add a watermark image to the video.</source>
-        <target state="new">Add a watermark image to the video.</target>
+        <target state="translated">Afegir una imatge de marca d'aigua al vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="155510305759087510" datatype="html">
+      <trans-unit id="155510305759087510" datatype="html" xml:space="preserve">
         <source>Select watermark image file</source>
-        <target state="new">Select watermark image file</target>
+        <target state="translated">Trieu un fitxer d'imatge de marca d'aigua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3926035808219061063" datatype="html">
+      <trans-unit id="3926035808219061063" datatype="html" xml:space="preserve">
         <source>Run video edition</source>
-        <target state="new">Run video edition</target>
+        <target state="translated">Executar l'edició de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1514792472513458403" datatype="html">
+      <trans-unit id="1514792472513458403" datatype="html" xml:space="preserve">
         <source>Video before edition</source>
-        <target state="new">Video before edition</target>
+        <target state="translated">Vídeo abans de l'edició</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1109043661443571733" datatype="html">
+      <trans-unit id="1109043661443571733" datatype="html" xml:space="preserve">
         <source>Edition tasks:</source>
-        <target state="new">Edition tasks:</target>
+        <target state="translated">Tasques d'edició:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3541115907775840269" datatype="html">
+      <trans-unit id="3541115907775840269" datatype="html" xml:space="preserve">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="new">Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">Segur que voleu editar "<x id="PH" equiv-text="this.video.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3858880927114551513" datatype="html">
+      <trans-unit id="3858880927114551513" datatype="html" xml:space="preserve">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
-        <target state="new">The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
+        <target state="translated">El vídeo actual se sobreescriurà amb aquest vídeo editat i &lt;strong&gt;no el podreu recuperar&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4876327655498234453" datatype="html">
+      <trans-unit id="4876327655498234453" datatype="html" xml:space="preserve">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="new">As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">Com a recordatori, s'executaran les tasques següents: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7934869554046374009" datatype="html">
+      <trans-unit id="7934869554046374009" datatype="html" xml:space="preserve">
         <source>Edition tasks created.</source>
-        <target state="new">Edition tasks created.</target>
+        <target state="translated">Tasques d'edició creades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7709367721354853232" datatype="html">
+      <trans-unit id="7709367721354853232" datatype="html" xml:space="preserve">
         <source>Focus the search bar</source>
-        <target state="new">Focus the search bar</target>
+        <target state="translated">Posar el focus a la barra de cerca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4049262826107502276" datatype="html">
+      <trans-unit id="4049262826107502276" datatype="html" xml:space="preserve">
         <source>Toggle the left menu</source>
-        <target state="new">Toggle the left menu</target>
+        <target state="translated">Commutar el menú esquerre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">331</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4482153685775394919" datatype="html">
+      <trans-unit id="4482153685775394919" datatype="html" xml:space="preserve">
         <source>Go to the "Discover videos" page</source>
-        <target state="new">Go to the "Discover videos" page</target>
+        <target state="translated">Anar a la pàgina "Descobrir vídeos".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">336</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6123131701694052862" datatype="html">
+      <trans-unit id="6123131701694052862" datatype="html" xml:space="preserve">
         <source>Go to the "Browse videos" page</source>
-        <target state="new">Go to the "Browse videos" page</target>
+        <target state="translated">Anar a la pàgina "Explorar vídeos".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5260039955239962053" datatype="html">
+      <trans-unit id="5260039955239962053" datatype="html" xml:space="preserve">
         <source>Go to the "Publish video" page</source>
-        <target state="new">Go to the "Publish video" page</target>
+        <target state="translated">Anar a la pàgina "Publicar vídeo".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">346</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3779524668013120370" datatype="html">
+      <trans-unit id="3779524668013120370" datatype="html" xml:space="preserve">
         <source>Go to my subscriptions</source>
-        <target state="new">Go to my subscriptions</target>
+        <target state="translated">Anar a les meves subscripcions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1136469849928650779" datatype="html">
+      <trans-unit id="1136469849928650779" datatype="html" xml:space="preserve">
         <source>Go to my videos</source>
-        <target state="new">Go to my videos</target>
+        <target state="translated">Anar als meus vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7836683738999600376" datatype="html">
+      <trans-unit id="7836683738999600376" datatype="html" xml:space="preserve">
         <source>Go to my imports</source>
-        <target state="new">Go to my imports</target>
+        <target state="translated">Anar a les meves importacions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7511292153332773503" datatype="html">
+      <trans-unit id="7511292153332773503" datatype="html" xml:space="preserve">
         <source>Go to my channels</source>
-        <target state="new">Go to my channels</target>
+        <target state="translated">Anar als meus canals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2013324644839511073" datatype="html">
+      <trans-unit id="2013324644839511073" datatype="html" xml:space="preserve">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="needs-translation">Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">102</context>
