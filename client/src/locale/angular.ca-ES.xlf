@@ -21127,9 +21127,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">388</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="985751964589921228" datatype="html">
+      <trans-unit id="985751964589921228" datatype="html" xml:space="preserve">
         <source>Timestamps updated</source>
-        <target state="new">Timestamps updated</target>
+        <target state="translated">Marques de temps actualitzades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context>
           <context context-type="linenumber">285</context>
@@ -21139,9 +21139,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6421445850411984665" datatype="html">
+      <trans-unit id="6421445850411984665" datatype="html" xml:space="preserve">
         <source>Starts at</source>
-        <target state="new">Starts at </target>
+        <target state="translated">Comença a</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">181</context>
@@ -21151,49 +21151,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7145200412085189912" datatype="html">
+      <trans-unit id="7145200412085189912" datatype="html" xml:space="preserve">
         <source>Stops at</source>
-        <target state="new">Stops at </target>
+        <target state="translated">Acaba a</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="921225940108335688" datatype="html">
+      <trans-unit id="921225940108335688" datatype="html" xml:space="preserve">
         <source>and stops at</source>
-        <target state="new"> and stops at </target>
+        <target state="translated">i acaba a</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2909684945706361544" datatype="html">
+      <trans-unit id="2909684945706361544" datatype="html" xml:space="preserve">
         <source>Delete video</source>
-        <target state="new">Delete video</target>
+        <target state="translated">Eliminar vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">418</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2210418817778733727" datatype="html">
+      <trans-unit id="2210418817778733727" datatype="html" xml:space="preserve">
         <source>Actions for the comment</source>
-        <target state="new">Actions for the comment</target>
+        <target state="translated">Accions per al comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7978668497183230348" datatype="html">
+      <trans-unit id="7978668497183230348" datatype="html" xml:space="preserve">
         <source>Delete comment</source>
-        <target state="new">Delete comment</target>
+        <target state="translated">Eliminar comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6747218355168080191" datatype="html">
+      <trans-unit id="6747218355168080191" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this comment?</source>
-        <target state="new">Do you really want to delete this comment?</target>
+        <target state="translated">Segur que voleu suprimir aquest comentari?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">211</context>
@@ -21203,33 +21203,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7837272126865175984" datatype="html">
+      <trans-unit id="7837272126865175984" datatype="html" xml:space="preserve">
         <source>Comment deleted.</source>
-        <target state="new">Comment deleted.</target>
+        <target state="translated">Comentari esborrat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">465</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="346270517625845962" datatype="html">
+      <trans-unit id="346270517625845962" datatype="html" xml:space="preserve">
         <source>Encoder</source>
-        <target state="new">Encoder</target>
+        <target state="translated">Codificador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.ts</context>
           <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2331557444464201331" datatype="html">
+      <trans-unit id="2331557444464201331" datatype="html" xml:space="preserve">
         <source>Format name</source>
-        <target state="new">Format name</target>
+        <target state="translated">Nom del format</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.ts</context>
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="45739481977493163" datatype="html">
+      <trans-unit id="45739481977493163" datatype="html" xml:space="preserve">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target state="translated">Mida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">43</context>
@@ -21239,97 +21239,97 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332428159510983797" datatype="html">
+      <trans-unit id="4332428159510983797" datatype="html" xml:space="preserve">
         <source>Expires on</source>
-        <target state="new">Expires on</target>
+        <target state="translated">Caduca el</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931356925707804915" datatype="html">
+      <trans-unit id="8931356925707804915" datatype="html" xml:space="preserve">
         <source>Download your archive</source>
-        <target state="new">Download your archive</target>
+        <target state="translated">Descarregueu el vostre arxiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3427300811638138150" datatype="html">
+      <trans-unit id="3427300811638138150" datatype="html" xml:space="preserve">
         <source>Request a new archive</source>
-        <target state="new">Request a new archive</target>
+        <target state="translated">Sol·licitar un nou arxiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3628699893924130182" datatype="html">
+      <trans-unit id="3628699893924130182" datatype="html" xml:space="preserve">
         <source>User export is not enabled by your administrator.</source>
-        <target state="new">User export is not enabled by your administrator.</target>
+        <target state="translated">L'exportació de comptes no està habilitada per l'administració.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775513643932382075" datatype="html">
+      <trans-unit id="3775513643932382075" datatype="html" xml:space="preserve">
         <source>Archive settings</source>
-        <target state="new">Archive settings</target>
+        <target state="translated">Configuració de l'arxiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215687357804737187" datatype="html">
+      <trans-unit id="1215687357804737187" datatype="html" xml:space="preserve">
         <source>You already have an active archive. Requesting a new export archive will remove the current one.</source>
-        <target state="new"> You already have an active archive. Requesting a new export archive will remove the current one. </target>
+        <target state="translated">Ja teniu un arxiu d'exportació actiu. En sol·licitar-ne un de nou s'eliminarà l'actual.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Incloure fitxers de vídeo a l'arxiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">Cal incloure fitxers de vídeo si voleu tornar a importar els vostres vídeos a un altre lloc web de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Si incloeu fitxers de vídeo, el fitxer d'arxiu pesarà <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>aproximadament <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">Demanar un arxiu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6258670465000264011" datatype="html">
+      <trans-unit id="6258670465000264011" datatype="html" xml:space="preserve">
         <source>Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</source>
-        <target state="new">Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</target>
+        <target state="translated">Els fitxers de vídeo no es poden incloure a l'exportació perquè heu superat la quota màxima de vídeo permesa per l'administració per exportar aquest arxiu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.ts</context>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1930863079234861089" datatype="html">
+      <trans-unit id="1930863079234861089" datatype="html" xml:space="preserve">
         <source>Import/Export</source>
-        <target state="new">Import/Export</target>
+        <target state="translated">Importar/Exportar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -21339,9 +21339,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2611126741793124345" datatype="html">
+      <trans-unit id="2611126741793124345" datatype="html" xml:space="preserve">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">IMPORTAR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
