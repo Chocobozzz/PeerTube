@@ -10635,17 +10635,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1823941382992046371">
+      <trans-unit id="1823941382992046371" xml:space="preserve">
         <source>Allow audio files upload</source>
-        <target>Salli äänitiedostojen lataus</target>
+        <target state="translated">Ota äänitiedostojen lähetys käyttöön</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8340360585610503574" datatype="html">
+      <trans-unit id="8340360585610503574" datatype="html" xml:space="preserve">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="translated">Sallii .mp3-, .ogg-, .wma-, .flac-, .aac- tai .ac3-äänitiedostojen lataamisen.</target>
+        <target state="translated">Sallii .mp3-, .ogg-, .wma-, .flac-, .aac- tai .ac3-äänitiedostojen lähettäminen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">63</context>
@@ -10661,7 +10661,7 @@
       </trans-unit>
       <trans-unit id="8718102504014634857" datatype="html" xml:space="preserve">
         <source>Keep a version of the input file</source>
-        <target state="translated">Säilytä kopio syötetiedostosta</target>
+        <target state="translated">Säilytä kopio alkuperäisestä tiedostosta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">72</context>
@@ -10669,7 +10669,7 @@
       </trans-unit>
       <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
-        <target state="translated">Jos tämä on käytössä, syötetiedostoa ei poisteta transkoodauksen jälkeen, vaan se siirretään tiettyyn kansioon tai objektisäilöön</target>
+        <target state="translated">Jos tämä on käytössä, alkuperäistä videotiedostoa ei poisteta transkoodauksen jälkeen, vaan se siirretään tiettyyn kansioon tai objektisäilöön</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">75</context>
