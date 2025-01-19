@@ -1037,7 +1037,7 @@
       </trans-unit>
       <trans-unit id="3699875908605792812" datatype="html" xml:space="preserve">
         <source>Web Videos (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</source>
-        <target state="translated">Vídeos Web (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
+        <target state="translated">«Web Videos» (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">101</context>
@@ -1093,7 +1093,7 @@
       </trans-unit>
       <trans-unit id="7427257900193261634" datatype="html" xml:space="preserve">
         <source>Web Videos:</source>
-        <target state="translated">Vídeos Web:</target>
+        <target state="translated">«Web Videos»:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">134</context>
@@ -9958,7 +9958,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="776440228653665977" datatype="html" xml:space="preserve">
         <source>Enable remote runners for transcription</source>
-        <target state="translated">Habilitar els executors remots per a la transcripció</target>
+        <target state="translated">Habilitar els codificadors remots per a la transcripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">400</context>
@@ -9966,7 +9966,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1724410063065362654" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process transcription tasks. Remote runners has to register on your instance first. </source>
-        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar tasques de transcripció. Els executors remots primer s'han de registrar a la vostra instància </target>
+        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>codificadors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar tasques de transcripció. Els executors remots primer s'han de registrar a la vostra instància </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">404</context>
@@ -10554,7 +10554,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="translated">Habilitar executors remots per transcodificar directes</target>
+        <target state="translated">Habilitar codificadors remots per transcodificar directes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">165</context>
@@ -10578,7 +10578,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2134381456844896041" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de directes. Els executors remots s'han de registrar primer a la vostra instància. </target>
+        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>codificadors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de directes. Els executors remots s'han de registrar primer a la vostra instància. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">169</context>
@@ -10642,7 +10642,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8646250517331978259" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de VOD. Els executors remots s'han de registrar primer a la vostra instància. </target>
+        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>codificadors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar la transcodificació de VOD. Els executors remots s'han de registrar primer a la vostra instància. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">195</context>
@@ -10714,7 +10714,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2093595615152706886" datatype="html" xml:space="preserve">
         <source>Web Videos enabled</source>
-        <target state="translated">Vídeos web habilitats</target>
+        <target state="translated">«Web Videos» habilitats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">88</context>
@@ -10762,7 +10762,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Necessita ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Genera llistes de reproducció HLS i arxius MP4 en fragments que permeten una millor reproducció que amb els tradicionals «Vídeos Web»:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>El canvi de resolució és més suau<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reproducció més ràpida, especialment de vídeos llargs<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reproducció més estable (menys errades/càrrega sense fi)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si també heu habilitat el suport de «Vídeos Web», això duplicarà l'espai d'emmagatzematge de vídeos<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Necessita ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Genera llistes de reproducció HLS i arxius MP4 en fragments que permeten una millor reproducció que amb els tradicionals «Vídeos Web»:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>El canvi de resolució és més suau<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reproducció més ràpida, especialment de vídeos llargs<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reproducció més estable (menys errades/càrrega sense fi)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si també heu habilitat el suport de «Web Videos», això duplicarà l'espai d'emmagatzematge de vídeos<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">108</context>
@@ -10946,7 +10946,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5552130276182854923" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>executors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar les transcodificacions de l'estudi. Els codificadors remots s'han de registrar primer a la vostra instància. </target>
+        <target state="translated">Fer servir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>codificadors remots<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per processar les transcodificacions de l'estudi. Els codificadors remots s'han de registrar primer a la vostra instància. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">281</context>
@@ -10962,7 +10962,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="translated">Activar automàticament la transcodificació per a Vídeos Web, perquè s'ha d'activar almenys un format de sortida quan la transcodificació està activada</target>
+        <target state="translated">Activar automàticament la transcodificació per a «Web Videos», perquè s'ha d'activar almenys un format de sortida quan la transcodificació està activada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -16082,7 +16082,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html" xml:space="preserve">
         <source>With Web Videos</source>
-        <target state="translated">Amb «Vídeos Web»</target>
+        <target state="translated">Amb «Web Videos»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -16090,7 +16090,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1590370632695044398" datatype="html" xml:space="preserve">
         <source>Without Web Videos</source>
-        <target state="translated">Sense «Vídeos Web»</target>
+        <target state="translated">Sense «Web Videos»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">68</context>
@@ -21707,17 +21707,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">462</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7672331870004528654" datatype="html">
+      <trans-unit id="7672331870004528654" datatype="html" xml:space="preserve">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">Mostrar la informació del directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">474</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021752662928002901" datatype="html">
+      <trans-unit id="4021752662928002901" datatype="html" xml:space="preserve">
         <source>Update</source>
-        <target state="new">Update</target>
+        <target state="translated">Actualitzar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -21755,9 +21755,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="420763834450076269" datatype="html">
+      <trans-unit id="420763834450076269" datatype="html" xml:space="preserve">
         <source>Block</source>
-        <target state="new">Block</target>
+        <target state="translated">Blocar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -21771,9 +21771,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">498</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6521421218398377925" datatype="html">
+      <trans-unit id="6521421218398377925" datatype="html" xml:space="preserve">
         <source>Run HLS transcoding</source>
-        <target state="new">Run HLS transcoding</target>
+        <target state="translated">Executar la transcodificació HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">149</context>
@@ -21783,9 +21783,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">530</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6726093171366409167" datatype="html">
+      <trans-unit id="6726093171366409167" datatype="html" xml:space="preserve">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Executeu la transcodificació Vídeo Web</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">155</context>
@@ -21795,9 +21795,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">536</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5972374600810542430" datatype="html">
+      <trans-unit id="5972374600810542430" datatype="html" xml:space="preserve">
         <source>Delete HLS files</source>
-        <target state="new">Delete HLS files</target>
+        <target state="translated">Eliminar arxius HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -21807,9 +21807,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">542</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="72391380513979568" datatype="html">
+      <trans-unit id="72391380513979568" datatype="html" xml:space="preserve">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">Eliminar arxius «Web Video»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">167</context>
@@ -21819,9 +21819,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">548</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7977192130714582918" datatype="html">
+      <trans-unit id="7977192130714582918" datatype="html" xml:space="preserve">
         <source>Generate caption</source>
-        <target state="new">Generate caption</target>
+        <target state="translated">Generar subtítols</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -21831,65 +21831,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">556</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8315587636588243636" datatype="html">
+      <trans-unit id="8315587636588243636" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</target>
+        <target state="translated">Segur que voleu suprimir aquest <x id="PH" equiv-text="file.resolution.label"/> fitxer?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6693349469471580292" datatype="html">
+      <trans-unit id="6693349469471580292" datatype="html" xml:space="preserve">
         <source>Delete file</source>
-        <target state="new">Delete file</target>
+        <target state="translated">Esborrar fitxer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7016764388104297354" datatype="html">
+      <trans-unit id="7016764388104297354" datatype="html" xml:space="preserve">
         <source>File removed.</source>
-        <target state="new">File removed.</target>
+        <target state="translated">Arxiu eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="925076027211452339" datatype="html">
+      <trans-unit id="925076027211452339" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete the original file of this video?</source>
-        <target state="new">Are you sure you want to delete the original file of this video?</target>
+        <target state="translated">Segur que voleu suprimir el fitxer original d'aquest vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3014914668468316940" datatype="html">
+      <trans-unit id="3014914668468316940" datatype="html" xml:space="preserve">
         <source>Delete original file</source>
-        <target state="new">Delete original file</target>
+        <target state="translated">Esborrar el fitxer original</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6647462936549531405" datatype="html">
+      <trans-unit id="6647462936549531405" datatype="html" xml:space="preserve">
         <source>Original file removed.</source>
-        <target state="new">Original file removed.</target>
+        <target state="translated">Fitxer original eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1314383205093440631" datatype="html">
+      <trans-unit id="1314383205093440631" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">Segur que voleu suprimir {count, plural, =1 {aquest vídeo} other {aquestos <x id="count"/> vídeos}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1950057220179636309" datatype="html">
+      <trans-unit id="1950057220179636309" datatype="html" xml:space="preserve">
         <source>Save to playlist</source>
-        <target state="new">Save to playlist</target>
+        <target state="translated">Desar a la llista de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -21899,49 +21899,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4503408361537553733" datatype="html">
+      <trans-unit id="4503408361537553733" datatype="html" xml:space="preserve">
         <source>Mirror</source>
-        <target state="new">Mirror</target>
+        <target state="translated">Duplicar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">510</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5571441159247782289" datatype="html">
+      <trans-unit id="5571441159247782289" datatype="html" xml:space="preserve">
         <source>Unmute account</source>
-        <target state="new">Unmute account</target>
+        <target state="translated">Deixar de silenciar el compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6941992199451163843" datatype="html">
+      <trans-unit id="6941992199451163843" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Vídeos a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3942718333651219385" datatype="html">
+      <trans-unit id="3942718333651219385" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</target>
+        <target state="translated">Vídeos a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> altres plataformes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2247270192251966992" datatype="html">
+      <trans-unit id="2247270192251966992" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">28,29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4814285799071780083" datatype="html">
+      <trans-unit id="4814285799071780083" datatype="html" xml:space="preserve">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Eliminar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">152</context>
@@ -21955,145 +21955,145 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7896600179187469316" datatype="html">
+      <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</source>
-        <target state="new">{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</target>
+        <target state="translated">{count, plural, =1 {tasca eliminada} other {<x id="count"/> tasques eliminades}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8527948211896740910" datatype="html">
+      <trans-unit id="8527948211896740910" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">Segur que voleu suprimir aquest codificador? Ja no podrà processar treballs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1331591430867610406" datatype="html">
+      <trans-unit id="1331591430867610406" datatype="html" xml:space="preserve">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">Eliminar <x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7401875498720294519" datatype="html">
+      <trans-unit id="7401875498720294519" datatype="html" xml:space="preserve">
         <source>Runner removed.</source>
-        <target state="new">Runner removed.</target>
+        <target state="translated">Codificador eliminat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3039940756451018621" datatype="html">
+      <trans-unit id="3039940756451018621" datatype="html" xml:space="preserve">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Fitxa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5024831045497027714" datatype="html">
+      <trans-unit id="5024831045497027714" datatype="html" xml:space="preserve">
         <source>Associated runners</source>
-        <target state="new">Associated runners</target>
+        <target state="translated">Codificadors associats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2344549567732505963" datatype="html">
+      <trans-unit id="2344549567732505963" datatype="html" xml:space="preserve">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">Generar fitxa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8075170500509574933" datatype="html">
+      <trans-unit id="8075170500509574933" datatype="html" xml:space="preserve">
         <source>Registration token copied</source>
-        <target state="new">Registration token copied</target>
+        <target state="translated">Fitxa de registre copiada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="320641639634758368" datatype="html">
+      <trans-unit id="320641639634758368" datatype="html" xml:space="preserve">
         <source>Copy registration token</source>
-        <target state="new">Copy registration token</target>
+        <target state="translated">Copiar fitxa de registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1952170121636976975" datatype="html">
+      <trans-unit id="1952170121636976975" datatype="html" xml:space="preserve">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="translated">No s'ha trobat cap fitxa de registre per als codificadors remots.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8244506587463177080" datatype="html">
+      <trans-unit id="8244506587463177080" datatype="html" xml:space="preserve">
         <source>Remove this token</source>
-        <target state="new">Remove this token</target>
+        <target state="translated">Eliminar aquesta fitxa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1188547334387666210" datatype="html">
+      <trans-unit id="1188547334387666210" datatype="html" xml:space="preserve">
         <source>Registration token generated.</source>
-        <target state="new">Registration token generated.</target>
+        <target state="translated">Fitxa de registre generada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="545462083274995239" datatype="html">
+      <trans-unit id="545462083274995239" datatype="html" xml:space="preserve">
         <source>Do you really want to remove this registration token? All associated runners will also be removed.</source>
-        <target state="new">Do you really want to remove this registration token? All associated runners will also be removed.</target>
+        <target state="translated">Realment voleu eliminar aquest fitxa de registre? També s'eliminaran tots els codificadors associats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4228223651959845668" datatype="html">
+      <trans-unit id="4228223651959845668" datatype="html" xml:space="preserve">
         <source>Remove registration token</source>
-        <target state="new">Remove registration token</target>
+        <target state="translated">Eliminar fitxa de registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3614410801173225581" datatype="html">
+      <trans-unit id="3614410801173225581" datatype="html" xml:space="preserve">
         <source>Registration token removed.</source>
-        <target state="new">Registration token removed.</target>
+        <target state="translated">Fitxa de registre eliminada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6713730474908011769" datatype="html">
+      <trans-unit id="6713730474908011769" datatype="html" xml:space="preserve">
         <source>List runner jobs</source>
-        <target state="new">List runner jobs</target>
+        <target state="translated">Llistar tasques de codificadors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="890886250761175417" datatype="html">
+      <trans-unit id="890886250761175417" datatype="html" xml:space="preserve">
         <source>List remote runners</source>
-        <target state="new">List remote runners</target>
+        <target state="translated">Llistar codificadors remots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4255553856349508493" datatype="html">
+      <trans-unit id="4255553856349508493" datatype="html" xml:space="preserve">
         <source>List registration runner tokens</source>
-        <target state="new">List registration runner tokens</target>
+        <target state="translated">Llistar les fitxes de registre dels codificadors remots</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">47</context>
@@ -22107,25 +22107,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="60216491008745400" datatype="html">
+      <trans-unit id="60216491008745400" datatype="html" xml:space="preserve">
         <source>Actions on comment</source>
-        <target state="new">Actions on comment</target>
+        <target state="translated">Accions sobre el comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="992317512448454409" datatype="html">
+      <trans-unit id="992317512448454409" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {comentaris} =1 {1 comentari} other {<x id="INTERPOLATION"/> comentaris}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4903651219400691248" datatype="html">
+      <trans-unit id="4903651219400691248" datatype="html" xml:space="preserve">
         <source>Mute account</source>
-        <target state="new">Mute account</target>
+        <target state="translated">Silenciar compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">339</context>
@@ -22135,49 +22135,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">564</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021487547497211597" datatype="html">
+      <trans-unit id="4021487547497211597" datatype="html" xml:space="preserve">
         <source>Open video actions</source>
-        <target state="new">Open video actions</target>
+        <target state="translated">Obrir accions de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3076101305843397295" datatype="html">
+      <trans-unit id="3076101305843397295" datatype="html" xml:space="preserve">
         <source>Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</source>
-        <target state="new">Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</target>
+        <target state="translated">Segur que voleu desblocar <x id="PH" equiv-text="this.video.name"/>? Tornarà a estar disponible a la llista de vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">286</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8359747231611535508" datatype="html">
+      <trans-unit id="8359747231611535508" datatype="html" xml:space="preserve">
         <source>Unblock <x id="PH" equiv-text="this.video.name"/></source>
-        <target state="new">Unblock <x id="PH" equiv-text="this.video.name"/></target>
+        <target state="translated">Desblocar <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3143238830256588661" datatype="html">
+      <trans-unit id="3143238830256588661" datatype="html" xml:space="preserve">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="new">The live stream will be automatically terminated and replays won't be saved.</target>
+        <target state="translated">L'emissió en directe s'acabarà automàticament i les reproduccions no es desaran.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3719503424625455635" datatype="html">
+      <trans-unit id="3719503424625455635" datatype="html" xml:space="preserve">
         <source>Mute server account</source>
-        <target state="new">Mute server account</target>
+        <target state="translated">Silenciar el compte del servidor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7008439939460403347">
+      <trans-unit id="7008439939460403347" xml:space="preserve">
         <source>Report</source>
-        <target>Reporta</target>
+        <target state="translated">Denunciar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">221</context>
@@ -22191,67 +22191,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">522</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="829951422090160526" datatype="html">
+      <trans-unit id="829951422090160526" datatype="html" xml:space="preserve">
         <source>Reported part</source>
-        <target state="new">Reported part</target>
+        <target state="translated">Part denunciada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4388879716045736175" datatype="html">
+      <trans-unit id="4388879716045736175" datatype="html" xml:space="preserve">
         <source>Note</source>
-        <target state="new">Note</target>
+        <target state="translated">Nota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7234922541542636802" datatype="html">
+      <trans-unit id="7234922541542636802" datatype="html" xml:space="preserve">
         <source>The video was deleted</source>
-        <target state="new">The video was deleted</target>
+        <target state="translated">El vídeo fou eliminat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="872792317034860453" datatype="html">
+      <trans-unit id="872792317034860453" datatype="html" xml:space="preserve">
         <source>Comment:</source>
-        <target state="new">Comment:</target>
+        <target state="translated">Comentari:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="397679576231234820" datatype="html">
+      <trans-unit id="397679576231234820" datatype="html" xml:space="preserve">
         <source>Messages with the reporter</source>
-        <target state="new">Messages with the reporter</target>
+        <target state="translated">Missatges amb el/la denunciant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7417592908147948728" datatype="html">
+      <trans-unit id="7417592908147948728" datatype="html" xml:space="preserve">
         <source>Messages with the moderation team</source>
-        <target state="new">Messages with the moderation team</target>
+        <target state="translated">Missatges amb l'equip de moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1684858568733486744" datatype="html">
+      <trans-unit id="1684858568733486744" datatype="html" xml:space="preserve">
         <source>No messages for now.</source>
-        <target state="new">
-      No messages for now.
-    </target>
+        <target state="translated">No hi ha missatges ara com ara.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2137920566277687382" datatype="html">
+      <trans-unit id="2137920566277687382" datatype="html" xml:space="preserve">
         <source>Add a message</source>
-        <target state="new">Add a message</target>
+        <target state="translated">Afegir un missatge</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">46</context>
@@ -22265,49 +22263,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7657908235362559477" datatype="html">
+      <trans-unit id="7657908235362559477" datatype="html" xml:space="preserve">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
-        <target state="new">Publication scheduled on <x id="PH" equiv-text="updateAt"/></target>
+        <target state="translated">Publicació programada el <x id="PH" equiv-text="updateAt"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5093002376262354382" datatype="html">
+      <trans-unit id="5093002376262354382" datatype="html" xml:space="preserve">
         <source>Transcoding failed</source>
-        <target state="new">Transcoding failed</target>
+        <target state="translated">La transcodificació ha fallat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1831940730037919560" datatype="html">
+      <trans-unit id="1831940730037919560" datatype="html" xml:space="preserve">
         <source>Moving to file system</source>
-        <target state="new">Moving to file system</target>
+        <target state="translated">Movent al sistema de fitxers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4707274274243790782" datatype="html">
+      <trans-unit id="4707274274243790782" datatype="html" xml:space="preserve">
         <source>Moving to file system failed</source>
-        <target state="new">Moving to file system failed</target>
+        <target state="translated">Fallada en moure al sistema de fitxers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792259951302458040" datatype="html">
+      <trans-unit id="1792259951302458040" datatype="html" xml:space="preserve">
         <source>Moving to external storage</source>
-        <target state="new">Moving to external storage</target>
+        <target state="translated">Movent a l'emmagatzematge extern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="118687079501751948" datatype="html">
+      <trans-unit id="118687079501751948" datatype="html" xml:space="preserve">
         <source>Move to external storage failed</source>
-        <target state="new">Move to external storage failed</target>
+        <target state="translated">Fallada en moure a l'emmagatzematge extern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -22321,9 +22319,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4517785179607945981">
+      <trans-unit id="4517785179607945981" xml:space="preserve">
         <source>To transcode</source>
-        <target>Transcodificar</target>
+        <target state="translated">Per transcodificar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">234</context>
@@ -22337,17 +22335,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6963802198225789806" datatype="html">
+      <trans-unit id="6963802198225789806" datatype="html" xml:space="preserve">
         <source>To edit</source>
-        <target state="new">To edit</target>
+        <target state="translated">Per editar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="76275487642696165" datatype="html">
+      <trans-unit id="76275487642696165" datatype="html" xml:space="preserve">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
-        <target state="new">Watch video <x id="PH" equiv-text="this.video.name"/></target>
+        <target state="translated">Visualitzar vídeo <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">247</context>
@@ -22731,9 +22729,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5512208811126492983" datatype="html">
+      <trans-unit id="5512208811126492983" datatype="html" xml:space="preserve">
         <source>Report comment</source>
-        <target state="new">Report comment</target>
+        <target state="translated">Denunciar comentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context>
           <context context-type="linenumber">68</context>
