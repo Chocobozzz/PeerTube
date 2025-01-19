@@ -6903,9 +6903,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6492684506192237359" datatype="html">
+      <trans-unit id="6492684506192237359" datatype="html" xml:space="preserve">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="translated">⚠️ Älä koskaan jaa syötetokeniasi kenenkään kanssa.</target>
+        <target state="translated">⚠️ Älä koskaan jaa syötetokenia kenenkään kanssa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">22</context>
@@ -10595,9 +10595,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4560217482714993155">
+      <trans-unit id="4560217482714993155" xml:space="preserve">
         <source>Transcoding enabled</source>
-        <target>Transkoodaus on päällä</target>
+        <target state="translated">Transkoodaus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">38</context>
@@ -10605,7 +10605,7 @@
       </trans-unit>
       <trans-unit id="1386306711019304612" datatype="html" xml:space="preserve">
         <source>Input</source>
-        <target state="translated">Syöte</target>
+        <target state="translated">Syötevideot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">44</context>
@@ -10677,7 +10677,7 @@
       </trans-unit>
       <trans-unit id="8968030053137661433" datatype="html" xml:space="preserve">
         <source>Output</source>
-        <target state="translated">Tuloste</target>
+        <target state="translated">Tuotetut videot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">82</context>
