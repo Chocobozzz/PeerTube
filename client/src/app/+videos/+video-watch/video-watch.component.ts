@@ -1139,6 +1139,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   public hasPremiere() {
-    return this.video.scheduledUpdate.updateAt;
+    return this.video?.scheduledUpdate?.updateAt;
   }
 }

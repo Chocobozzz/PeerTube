@@ -7,6 +7,7 @@ import { NgIf, NgClass, NgFor } from "@angular/common";
 import { VideoDetails } from "@app/shared/shared-main/video/video-details.model";
 import { PTDatePipe } from "@app/shared/shared-main/common/date.pipe";
 import { interval, Subscription } from "rxjs";
+import { SubscribeButtonComponent } from "@app/shared/shared-user-subscription/subscribe-button.component";
 
 @Component({
   selector: "my-video-premiere",
@@ -19,6 +20,7 @@ import { interval, Subscription } from "rxjs";
     NgClass,
     NgbTooltip,
     GlobalIconComponent,
+    SubscribeButtonComponent,
     NgFor,
     PTDatePipe,
   ],
@@ -37,30 +39,12 @@ export class VideoPremiereComponent {
   remainingTime: string = "";
   private countdownSubscription!: Subscription;
 
-  // constructor(
-  //   private hooks: HooksService,
-  //   private userService: UserService,
-  //   private auth: AuthService,
-  //   private notifier: Notifier,
-  //   private premiereService: VideoPremiereService,
-  //   private sessionStorage: SessionStorageService,
-  //   private router: Router
-  // ) {
-
-  // }
-
   ngOnInit(): void {
     this.startCountdown();
   }
 
   ngOnDestroy(): void {
     this.countdownSubscription?.unsubscribe();
-  }
-
-  addNotification() {
-    // this.notifier.notify("warning", message);
-    console.log("addNotification");
-    console.log(this.video);
   }
 
   startCountdown(): void {

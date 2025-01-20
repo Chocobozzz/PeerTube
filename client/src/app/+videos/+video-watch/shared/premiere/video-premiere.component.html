@@ -5,8 +5,6 @@
       
       <p>Video will be available in {{ remainingTime }}</p>
     </div>
-    <button class="notify-button"
-    (click)="addNotification()"
-    >Set reminder</button>
+    <my-subscribe-button #subscribeButton [videoChannels]="[video.channel]" size="small"></my-subscribe-button>
   </div>
 </div>
