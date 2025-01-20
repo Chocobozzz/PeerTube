@@ -5965,7 +5965,7 @@
       </trans-unit>
       <trans-unit id="4659739156309424184" datatype="html" xml:space="preserve">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="translated">Videota tanskoodataan, eikä se välttämättä toimi vielä oikein.</target>
+        <target state="translated">Videota transkoodataan, eikä se välttämättä toimi vielä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">26</context>
