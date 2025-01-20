@@ -6465,7 +6465,7 @@
       </trans-unit>
       <trans-unit id="6141356876817135294" datatype="html" xml:space="preserve">
         <source>Comments are disabled.</source>
-        <target state="translated">Kommentoiti pois päältä.</target>
+        <target state="translated">Kommentointi ei päällä.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">96</context>
