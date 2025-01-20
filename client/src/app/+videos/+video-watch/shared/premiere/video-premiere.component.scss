@@ -5,68 +5,6 @@
 $video-default-height: 66vh;
 $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-space});
 
-// .premiere-widget {
-//   padding: 20px;
-//   background-color: rgba(0, 0, 0, 0.9);
-//   border: 1px solid rgba(0, 0, 0, 0.5);
-//   border-radius: 8px;
-//   text-align: center;
-//   height: $video-default-height;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-
-//   .premiere-info {
-//     color: pvar(--fg-500);
-
-//     .premiere-title {
-//       font-size: 1.5rem;
-//       font-weight: bold;
-//       color: #fff;
-//       margin-bottom: 10px;
-//     }
-
-//     .premiere-countdown {
-//       font-size: 1.2rem;
-//       color: pvar(--fg-400);
-//       margin-bottom: 20px;
-//     }
-//   }
-
-//   .premiere-controls {
-//     display: flex;
-//     justify-content: center;
-
-//     .notification-button {
-//       display: flex;
-//       align-items: center;
-//       background-color: pvar(--primary);
-//       color: #fff;
-//       border: none;
-//       border-radius: 4px;
-//       padding: 10px 15px;
-//       font-size: 1rem;
-//       cursor: pointer;
-//       transition: background-color 0.3s;
-
-//       &:hover:not(:disabled) {
-//         background-color: darken(#fff, 10%);
-//       }
-
-//       &:disabled {
-//         background-color: #fff;
-//         color: #fff;
-//         cursor: not-allowed;
-//       }
-
-//       my-global-icon {
-//         margin-right: 5px;
-//       }
-//     }
-//   }
-// }
-
-
 .premiere-container {
   position: relative;
   width: 100%;

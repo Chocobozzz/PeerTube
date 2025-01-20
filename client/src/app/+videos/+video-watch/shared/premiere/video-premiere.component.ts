@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ComponentPagination } from "@app/core";
+import { Component, Input } from "@angular/core";
 import { GlobalIconComponent } from "../../../../shared/shared-icons/global-icon.component";
 import { InfiniteScrollerDirective } from "../../../../shared/shared-main/common/infinite-scroller.directive";
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
@@ -27,14 +26,6 @@ import { SubscribeButtonComponent } from "@app/shared/shared-user-subscription/s
 })
 export class VideoPremiereComponent {
   @Input() video: VideoDetails;
-  autoPlayNextPremiere: boolean;
-  autoPlayNextPremiereSwitchText = "";
-
-  loopPremiere: boolean;
-  loopPremiereSwitchText = "";
-
-  notificationAdded = false;
-  currentPremierePosition: number;
 
   remainingTime: string = "";
   private countdownSubscription!: Subscription;
