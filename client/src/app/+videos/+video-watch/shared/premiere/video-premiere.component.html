@@ -1,36 +1,7 @@
-<!-- <div class="premiere-widget">
-  <div class="premiere-info">
-    <div class="premiere-title">
-      <h2> This video will be available soon! </h2>
-    </div>
-
-    <div class="premiere-countdown">
-      <p>This video will be published on {{ video.scheduledUpdate.updateAt | ptDate: 'full' }}.</p>
-    </div>
-
-    <div class="premiere-controls">
-      <button
-        class="notification-button"
-        (click)="addNotification()"
-        [disabled]="notificationAdded"
-        [ngbTooltip]="notificationAdded ? 'Notification already set' : 'Add a notification'"
-        placement="bottom auto"
-        container="body"
-      >
-        <my-global-icon iconName="markdown"></my-global-icon>
-        <span *ngIf="!notificationAdded" i18n>Notify me</span>
-        <span *ngIf="notificationAdded" i18n>Notified</span>
-      </button>
-    </div>
-  </div>
-</div> -->
-
-
-
 <div class="premiere-container">
   <img [src]="video?.thumbnailUrl" alt="Video Thumbnail" class="video-thumbnail" />
   <div class="premiere-info">
-    <div class="premiere-text" *ngIf="video?.scheduledUpdate?.updateAt">
+    <div class="premiere-text">
       
       <p>Video will be available in {{ remainingTime }}</p>
     </div>

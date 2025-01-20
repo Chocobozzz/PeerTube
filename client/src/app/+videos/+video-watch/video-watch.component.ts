@@ -1137,4 +1137,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.updatePlayerOnNoLive();
   }
+
+  public hasPremiere() {
+    return this.video.scheduledUpdate.updateAt;
+  }
 }
