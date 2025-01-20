@@ -31,6 +31,16 @@ describe('Test emails', function () {
     username: 'user_1',
     password: 'super_password'
   }
+  const similarUsers = [
+    {
+      username: 'lowercase_user_1',
+      email: 'lowercase_user_1@example.com'
+    },
+    {
+      username: 'lowercase_user__1',
+      email: 'Lowercase_user_1@example.com'
+    }
+  ]
 
   before(async function () {
     this.timeout(120000)
@@ -40,6 +50,10 @@ describe('Test emails', function () {
 
     await setAccessTokensToServers([ server ])
     await server.config.enableSignup(true)
+
+    for (const user of similarUsers) {
+      await server.users.create(user)
+    }
 
     {
       const created = await server.users.create({ username: user.username, password: user.password })
@@ -99,6 +113,10 @@ describe('Test emails', function () {
         password: 'super_password2',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+
+    it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
+      await server.users.askResetPassword({ email: similarUsers[0].username.toUpperCase(), expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should reset the password', async function () {
@@ -268,6 +286,13 @@ describe('Test emails', function () {
   })
 
   describe('When verifying a user email', function () {
+
+    it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
+      await server.users.askSendVerifyEmail({
+        email: similarUsers[0].username.toUpperCase(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
 
     it('Should ask to send the verification email', async function () {
       await server.users.askSendVerifyEmail({ email: 'user_1@example.com' })

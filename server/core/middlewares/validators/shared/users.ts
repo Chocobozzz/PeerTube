@@ -20,9 +20,10 @@ export function checkUserEmailExistPermissive (email: string, res: express.Respo
 }
 
 export async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
-  const user = await UserModel.loadByUsernameOrEmail(username, email)
+  const existingUser = await UserModel.loadByUsernameOrEmailCaseInsensitive(username)
+  const existingEmail = await UserModel.loadByUsernameOrEmailCaseInsensitive(email)
 
-  if (user) {
+  if (existingUser.length > 0 || existingEmail.length > 0) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
       message: 'User with this username or email already exists.'

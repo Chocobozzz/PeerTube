@@ -663,16 +663,6 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.scope(ScopeNames.FOR_ME_API).findOne(query)
   }
 
-  static loadByEmail (email: string): Promise<MUserDefault> {
-    const query = {
-      where: {
-        email
-      }
-    }
-
-    return UserModel.findOne(query)
-  }
-
   static loadByEmailCaseInsensitive (email: string): Promise<MUserDefault[]> {
     const query = {
       where: where(
@@ -683,22 +673,6 @@ export class UserModel extends SequelizeModel<UserModel> {
     }
 
     return UserModel.findAll(query)
-  }
-
-  static loadByUsernameOrEmail (username: string, email?: string): Promise<MUserDefault> {
-    if (!email) email = username
-
-    const query = {
-      where: {
-        [Op.or]: [
-          where(fn('lower', col('username')), fn('lower', username) as any),
-
-          { email }
-        ]
-      }
-    }
-
-    return UserModel.findOne(query)
   }
 
   static loadByUsernameOrEmailCaseInsensitive (usernameOrEmail: string): Promise<MUserDefault[]> {

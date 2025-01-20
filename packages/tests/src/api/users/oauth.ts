@@ -81,7 +81,7 @@ describe('Test oauth', function () {
     })
 
     it('Should not login with an invalid password', async function () {
-      const user = { username: 'User@example.com', password: 'password' }
+      const user = { username: server.store.user.username, password: 'mew_three' }
       const body = await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       expectInvalidCredentials(body)
@@ -110,6 +110,14 @@ describe('Test oauth', function () {
       await server.login.login({ user, expectedStatus: HttpStatusCode.OK_200 })
 
       const user2 = { username: 'admin' + server.internalServerNumber + '@example.com', password: server.store.user.password }
+      await server.login.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should not be able to login with an insensitive email when similar emails exist', async function () {
+      const user = { username: 'uSer@example.com', password: 'AdvancedPassword' }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+      const user2 = { username: 'User@example.com', password: 'AdvancedPassword' }
       await server.login.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
     })
   })

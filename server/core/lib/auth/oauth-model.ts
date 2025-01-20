@@ -124,7 +124,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
 
   if (usernameOrEmail.includes('@')) {
     user = getUserByEmailPermissive(users, usernameOrEmail)
-  } else {
+  } else if (users.length === 1) {
     user = users[0]
   }
 
