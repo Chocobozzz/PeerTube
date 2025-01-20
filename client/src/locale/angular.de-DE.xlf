@@ -267,9 +267,9 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3039775518917590629" datatype="html">
+      <trans-unit id="3039775518917590629" datatype="html" xml:space="preserve">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators</source>
-        <target state="new">Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators</target>
+        <target state="translated">Kontaktiere <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> die Administratoren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-contact/about-contact.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -523,9 +523,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7128109358021057367" datatype="html">
+      <trans-unit id="7128109358021057367" datatype="html" xml:space="preserve">
         <source>What is it?</source>
-        <target state="new">What is it?</target>
+        <target state="translated">Was ist das?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -539,9 +539,9 @@
           <context context-type="linenumber">24,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="99339465301704740" datatype="html">
+      <trans-unit id="99339465301704740" datatype="html" xml:space="preserve">
         <source>More <x id="INTERPOLATION" equiv-text="{{ host }}"/> content</source>
-        <target state="new">More <x id="INTERPOLATION" equiv-text="{{ host }}"/> content</target>
+        <target state="translated">Mehr Inhalt von <x id="INTERPOLATION" equiv-text="{{ host }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.html</context>
           <context context-type="linenumber">26,27</context>
@@ -743,9 +743,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3468444992991240326" datatype="html">
+      <trans-unit id="3468444992991240326" datatype="html" xml:space="preserve">
         <source>Subtitle URL</source>
-        <target state="new">Subtitle URL</target>
+        <target state="translated">Untertitel URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/subtitle-files-download.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -1243,9 +1243,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7828808805120058354" datatype="html">
+      <trans-unit id="7828808805120058354" datatype="html" xml:space="preserve">
         <source>Revert</source>
-        <target state="new">Revert</target>
+        <target state="translated">Rückgängig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">90</context>
@@ -1291,17 +1291,17 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5439080010715965293" datatype="html">
+      <trans-unit id="5439080010715965293" datatype="html" xml:space="preserve">
         <source>Quick access:</source>
-        <target state="new">Quick access:</target>
+        <target state="translated">Schnellzugriff:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5937251202465808296" datatype="html">
+      <trans-unit id="5937251202465808296" datatype="html" xml:space="preserve">
         <source>More</source>
-        <target state="new">More</target>
+        <target state="translated">Mehr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">15,16</context>
@@ -1315,9 +1315,9 @@
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6981830104215014781" datatype="html">
+      <trans-unit id="6981830104215014781" datatype="html" xml:space="preserve">
         <source>category</source>
-        <target state="new">category</target>
+        <target state="translated">Kategorie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -1339,17 +1339,17 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9123510631384754590" datatype="html">
+      <trans-unit id="9123510631384754590" datatype="html" xml:space="preserve">
         <source>View the channel</source>
-        <target state="new">View the channel</target>
+        <target state="translated">Den Kanal anschauen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="674351509173816083" datatype="html">
+      <trans-unit id="674351509173816083" datatype="html" xml:space="preserve">
         <source>channel</source>
-        <target state="new">channel</target>
+        <target state="translated">Kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -1891,161 +1891,161 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4574617080493559336" datatype="html">
+      <trans-unit id="4574617080493559336" datatype="html" xml:space="preserve">
         <source>hosted videos</source>
-        <target state="new">hosted videos</target>
+        <target state="translated">gehostete Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5396896586834940621" datatype="html">
+      <trans-unit id="5396896586834940621" datatype="html" xml:space="preserve">
         <source>Usage rules</source>
-        <target state="new">Usage rules</target>
+        <target state="translated">Nutzungsregeln</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776113937628941635" datatype="html">
+      <trans-unit id="4776113937628941635" datatype="html" xml:space="preserve">
         <source>This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></source>
-        <target state="new">This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
+        <target state="translated">Diese Plattform wurde erstellt in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">60,61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6778930185647013602" datatype="html">
+      <trans-unit id="6778930185647013602" datatype="html" xml:space="preserve">
         <source>Your content (comments, videos...) must comply with the legislation in force in this country.</source>
-        <target state="new">Your content (comments, videos...) must comply with the legislation in force in this country.</target>
+        <target state="translated">Ihre Inhalte (Kommentare, Videos...) müssen den in diesem Land geltenden Rechtsvorschriften entsprechen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5074204504213350982" datatype="html">
+      <trans-unit id="5074204504213350982" datatype="html" xml:space="preserve">
         <source>You must also follow our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>code of conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> You must also follow our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>code of conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Sie müssen sich außerdem an unseren <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>Verhaltenskodex<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> halten.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8295656255868159329" datatype="html">
+      <trans-unit id="8295656255868159329" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="new">You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</target>
+        <target state="translated">Sie können auf unserer Plattform <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>einen Account beantragen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">86,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4700057689494115926" datatype="html">
+      <trans-unit id="4700057689494115926" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</source>
-        <target state="new">Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">Unsere Moderatoren werden ihn innerhalb von <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/> freigeben.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">89,90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4819914947083527459" datatype="html">
+      <trans-unit id="4819914947083527459" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a few days.</source>
-        <target state="new">Our moderator will validate it within a few days.</target>
+        <target state="translated">Unsere Moderatoren werden ihn innerhalb weniger Tage freigeben.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7984721141162083495" datatype="html">
+      <trans-unit id="7984721141162083495" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>create an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="new">You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>create an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</target>
+        <target state="translated">Sie können auf unserer Plattform <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>einen Account anlegen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">94,95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8017622347308758772" datatype="html">
+      <trans-unit id="8017622347308758772" datatype="html" xml:space="preserve">
         <source>Public registration on our platform is not allowed</source>
-        <target state="new">Public registration on our platform is not allowed</target>
+        <target state="translated">Öffentliche Registrierung ist auf unserer Plattform nicht erlaubt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="707876467820107191" datatype="html">
+      <trans-unit id="707876467820107191" datatype="html" xml:space="preserve">
         <source>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</source>
-        <target state="new">This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</target>
+        <target state="translated">Diese Plattform ist kompatibel mit Mastodon, Lemmy, Misskey und anderen Services des Fediverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">112,114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5640969812017556311" datatype="html">
+      <trans-unit id="5640969812017556311" datatype="html" xml:space="preserve">
         <source>You can use these services to interact with our videos</source>
-        <target state="new">You can use these services to interact with our videos</target>
+        <target state="translated">Sie können diese Dienste verwenden, um mit unseren Videos zu interagieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3289656324871037579" datatype="html">
+      <trans-unit id="3289656324871037579" datatype="html" xml:space="preserve">
         <source>Vous pouvez publier des vidéos</source>
-        <target state="new">Vous pouvez publier des vidéos</target>
+        <target state="translated">Sie können Videos veröffentlichen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193674330844209801" datatype="html">
+      <trans-unit id="9193674330844209801" datatype="html" xml:space="preserve">
         <source>By default, your account allows you to publish videos.</source>
-        <target state="new">By default, your account allows you to publish videos.</target>
+        <target state="translated">Standardweise erlaubt Ihnen Ihr Account, Videos zu veröffentlichen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7471320952405612533" datatype="html">
+      <trans-unit id="7471320952405612533" datatype="html" xml:space="preserve">
         <source>You can also stream lives.</source>
-        <target state="new"> You can also stream lives.</target>
+        <target state="translated">Sie können auch live streamen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5303097409974075102" datatype="html">
+      <trans-unit id="5303097409974075102" datatype="html" xml:space="preserve">
         <source>Contact us to publish videos</source>
-        <target state="new">Contact us to publish videos</target>
+        <target state="translated">Kontaktieren Sie uns um Videos zu veröffentlichen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">148,149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6096043378628857552" datatype="html">
+      <trans-unit id="6096043378628857552" datatype="html" xml:space="preserve">
         <source>You can't publish videos</source>
-        <target state="new">You can't publish videos</target>
+        <target state="translated">Sie können keine Videos veröffentlichen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">150,151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7445632181028998943" datatype="html">
+      <trans-unit id="7445632181028998943" datatype="html" xml:space="preserve">
         <source>By default, your account does not allow to publish videos.</source>
-        <target state="new">By default, your account does not allow to publish videos.</target>
+        <target state="translated">Standardweise erlaubt es Ihr Account nicht, Videos zu veröffentlichen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1763989965529610778" datatype="html">
+      <trans-unit id="1763989965529610778" datatype="html" xml:space="preserve">
         <source>If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Wenn Sie Videos veröffentlichen möchten, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>kontaktieren Sie uns<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4301908502265861759" datatype="html">
+      <trans-unit id="4301908502265861759" datatype="html" xml:space="preserve">
         <source>This platform is powered by PeerTube</source>
-        <target state="new"> This platform is powered by PeerTube </target>
+        <target state="translated">Diese Plattform wird betrieben mit PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -2305,9 +2305,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019610224237760025" datatype="html">
+      <trans-unit id="4019610224237760025" datatype="html" xml:space="preserve">
         <source>Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Auf <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> einloggen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -2526,9 +2526,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="180660177324430106" datatype="html">
+      <trans-unit id="180660177324430106" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new"> Filters </target>
+        <target state="translated">Filter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">20,21</context>
@@ -2683,9 +2683,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910100497841976407" datatype="html">
+      <trans-unit id="2910100497841976407" datatype="html" xml:space="preserve">
         <source>Go to the CLI documentation</source>
-        <target state="new">Go to the CLI documentation</target>
+        <target state="translated">Zur CLI-Dokumentation gehen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -2707,17 +2707,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2505792628717602511" datatype="html">
+      <trans-unit id="2505792628717602511" datatype="html" xml:space="preserve">
         <source>Go to the admin documentation</source>
-        <target state="new">Go to the admin documentation</target>
+        <target state="translated">Zur Admin-Dokumentation gehen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="439770035760298623" datatype="html">
+      <trans-unit id="439770035760298623" datatype="html" xml:space="preserve">
         <source>Admin documentation</source>
-        <target state="new">Admin documentation</target>
+        <target state="translated">Admin-Dokumentation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -2731,17 +2731,17 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3937624467365667635" datatype="html">
+      <trans-unit id="3937624467365667635" datatype="html" xml:space="preserve">
         <source>Go to the user documentation</source>
-        <target state="new">Go to the user documentation</target>
+        <target state="translated">Zur Anwender-Dokumentation gehen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4582314665808509009" datatype="html">
+      <trans-unit id="4582314665808509009" datatype="html" xml:space="preserve">
         <source>User documentation</source>
-        <target state="new">User documentation</target>
+        <target state="translated">Anwender-Dokumentation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">26,28</context>
@@ -2923,9 +2923,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3632214702247906395" datatype="html">
+      <trans-unit id="3632214702247906395" datatype="html" xml:space="preserve">
         <source>Change interface language</source>
-        <target state="new">Change interface language</target>
+        <target state="translated">Sprache der Oberfläche ändern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -3072,9 +3072,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5960096873104755868" datatype="html">
+      <trans-unit id="5960096873104755868" datatype="html" xml:space="preserve">
         <source>More info</source>
-        <target state="new">More info</target>
+        <target state="translated">Mehr Information</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">5</context>
