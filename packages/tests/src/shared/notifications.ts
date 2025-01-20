@@ -661,7 +661,7 @@ async function checkVideoAutoBlacklistForModerators (options: CheckerBaseParams 
 
   function emailNotificationFinder (email: object) {
     const text = email['text']
-    return text.indexOf(shortUUID) !== -1 && email['text'].indexOf('video-auto-blacklist/list') !== -1
+    return text.indexOf(shortUUID) !== -1 && email['text'].indexOf('moderation/video-blocks/list') !== -1
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
@@ -966,6 +966,7 @@ function checkVideo (video: any, videoName?: string, shortUUID?: string) {
     expect(video.shortUUID).to.equal(shortUUID)
   }
 
+  expect(video.state).to.exist
   expect(video.id).to.be.a('number')
 }
 

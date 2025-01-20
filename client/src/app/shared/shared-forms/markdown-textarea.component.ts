@@ -1,5 +1,5 @@
 import { NgClass, NgIf, ViewportScroller } from '@angular/common'
-import { booleanAttribute, Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core'
+import { booleanAttribute, Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
@@ -37,7 +37,7 @@ import { FormReactiveErrors } from './form-reactive.service'
   ]
 })
 
-export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
+export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() content = ''
 
   @Input() formError: string | FormReactiveErrors | FormReactiveErrors[]
@@ -54,6 +54,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input({ required: true }) inputId: string
 
   @Input() dir: string
+
+  @Input({ transform: booleanAttribute }) withHtml = false
   @Input({ transform: booleanAttribute }) withEmoji = false
 
   @ViewChild('textarea') textareaElement: ElementRef
@@ -85,6 +87,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
         .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content)
+  }
+
+  ngOnDestroy () {
+    this.unlockBodyScroll()
   }
 
   propagateChange = (_: any) => { /* empty */ }
@@ -163,9 +169,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
       html = result
     } else if (this.markdownType === 'text') {
-      html = await this.markdownService.textMarkdownToHTML({ markdown: text, withEmoji: this.withEmoji })
+      html = await this.markdownService.textMarkdownToHTML({ markdown: text, withEmoji: this.withEmoji, withHtml: this.withHtml })
     } else if (this.markdownType === 'enhanced') {
-      html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text, withEmoji: this.withEmoji })
+      html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text, withEmoji: this.withEmoji, withHtml: this.withHtml })
     } else if (this.markdownType === 'to-unsafe-html') {
       html = await this.markdownService.markdownToUnsafeHTML({ markdown: text })
     }

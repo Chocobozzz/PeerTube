@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core'
+import { booleanAttribute, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { logger } from '@root-helpers/logger'
@@ -46,6 +46,9 @@ export class HorizontalMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() h1: string
   @Input() h1Icon: GlobalIconName
+
+  @Input({ transform: booleanAttribute }) areChildren = false
+  @Input({ transform: booleanAttribute }) withMarginBottom = true
 
   activeParent: HorizontalMenuEntry
   children: HorizontalMenuEntry[] = []

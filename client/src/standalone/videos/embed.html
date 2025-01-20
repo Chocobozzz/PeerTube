@@ -101,8 +101,11 @@
           return
         }
 
-        // Video element is already created, don't crash the player
-        if (document.querySelector('.vjs-can-play')) {
+        // Video element is already created -> don't crash the player
+        // We also handle the case where a bugged extension throws an error (maybeUnrelatedError)
+        const maybeUnrelatedError = lineNumber === 0 && columnNumber === 0 && !source
+
+        if (document.querySelector('.vjs-can-play') || maybeUnrelatedError) {
           if (window.logger && typeof window.logger.error === 'function') {
             window.logger.error('Uncaught error in embed player ', err)
           }

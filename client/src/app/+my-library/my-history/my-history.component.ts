@@ -1,7 +1,15 @@
-import { NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
+import {
+  AuthService,
+  ComponentPagination,
+  ConfirmService,
+  DisableForReuseHook,
+  Notifier,
+  updatePaginationOnDelete,
+  User,
+  UserService
+} from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { UserHistoryService } from '@app/shared/shared-main/users/user-history.service'
@@ -11,7 +19,6 @@ import { VideosSelectionComponent } from '@app/shared/shared-video-miniature/vid
 import { tap } from 'rxjs/operators'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.component'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 
@@ -21,8 +28,6 @@ import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peert
   standalone: true,
   imports: [
     ButtonComponent,
-    GlobalIconComponent,
-    NgIf,
     AdvancedInputFilterComponent,
     InputSwitchComponent,
     FormsModule,
@@ -132,6 +137,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
       .subscribe({
         next: () => {
           this.videos = this.videos.filter(v => v.id !== video.id)
+          updatePaginationOnDelete(this.pagination)
         },
 
         error: err => this.notifier.error(err.message)

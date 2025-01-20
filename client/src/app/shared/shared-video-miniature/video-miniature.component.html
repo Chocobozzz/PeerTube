@@ -11,76 +11,80 @@
     }
   </my-video-thumbnail>
 
-  <div class="video-bottom">
-    <div class="video-info">
-      <div *ngIf="displayOptions.avatar || displayOptions.by" class="owner min-width-0">
-        @if (displayOptions.avatar) {
+  <div class="video-info">
+    <div *ngIf="displayOptions.avatar || displayOptions.by" class="owner min-width-0">
+      @if (displayOptions.avatar) {
 
-          @if (displayOwnerVideoChannel()) {
-            <my-actor-avatar
-              [title]="channelLinkTitle" actorType="channel" [size]="actorImageSize"
-              [actor]="video.channel" [internalHref]="[ '/c', video.byVideoChannel ]"
-            ></my-actor-avatar>
-          } @else if (displayOwnerAccount()) {
-            <my-actor-avatar
-              [title]="channelLinkTitle" actorType="account" [size]="actorImageSize"
-              [actor]="video.account"  [internalHref]="[ '/c', video.byVideoChannel ]"
-            ></my-actor-avatar>
-          }
+        @if (displayOwnerVideoChannel()) {
+          <my-actor-avatar
+            [title]="channelLinkTitle" actorType="channel" [size]="actorImageSize"
+            [actor]="video.channel" [internalHref]="[ '/c', video.byVideoChannel ]"
+          ></my-actor-avatar>
+        } @else if (displayOwnerAccount()) {
+          <my-actor-avatar
+            [title]="channelLinkTitle" actorType="account" [size]="actorImageSize"
+            [actor]="video.account"  [internalHref]="[ '/c', video.byVideoChannel ]"
+          ></my-actor-avatar>
         }
+      }
 
-        <a *ngIf="displayOptions.by" class="owner-label ellipsis" [routerLink]="[ '/c', video.byVideoChannel ]">
+      <div class="owner-container" *ngIf="displayOptions.by">
+        <a class="owner-label ellipsis" [routerLink]="[ '/c', video.byVideoChannel ]">
           @if (displayOwnerAccount()) {
             {{ authorAccount }}
           } @else if (displayOwnerVideoChannel()) {
             {{ authorChannel }}
           }
         </a>
-      </div>
 
+        <my-actor-host *ngIf="!video.isLocal" [host]="video.account.host"></my-actor-host>
+      </div>
+    </div>
+
+    <div class="video-name-container">
       <my-link
-        [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" [inheritParentCSS]="true"
+        [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" inheritParentStyle="true"
         [ariaLabel]="getAriaLabel()"
         [title]="video.name" class="video-name" className="ellipsis-multiline-2" [ngClass]="{ 'blur-filter': isVideoBlur }"
       >
         {{ video.name }}
       </my-link>
 
-      <div class="date-and-views">
-        <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
-
-        <span class="views">
-          <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
-
-          <my-video-views-counter *ngIf="displayOptions.views" [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
-        </span>
-      </div>
-
-      <div class="video-info-privacy fw-semibold">
-        <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
-        <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
-        <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
-      </div>
-
-      <div *ngIf="containedInPlaylists" class="badges">
-        <a *ngFor="let playlist of containedInPlaylists" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
-          {{ playlist.playlistDisplayName }}
-        </a>
-
-        <span *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="pt-badge badge-danger video-info-blocked">
-          <span class="fw-semibold" i18n>Blocked</span>
-          <span *ngIf="video.blacklistedReason"> - {{ video.blacklistedReason }}</span>
-        </span>
-
-        <span i18n *ngIf="displayOptions.nsfw && video.nsfw" class="pt-badge badge-danger video-info-nsfw">Sensitive</span>
+      <div class="video-actions">
+        <my-video-actions-dropdown
+          *ngIf="showActions" [video]="video" [displayOptions]="videoActionsDisplayOptions" placement="bottom-left bottom-right left auto"
+          (videoRemoved)="onVideoRemoved()" (videoBlocked)="onVideoBlocked()" (videoUnblocked)="onVideoUnblocked()" (videoAccountMuted)="onVideoAccountMuted()"
+        ></my-video-actions-dropdown>
       </div>
     </div>
 
-    <div class="video-actions">
-      <my-video-actions-dropdown
-        *ngIf="showActions" [video]="video" [displayOptions]="videoActionsDisplayOptions" placement="bottom-left bottom-right left auto"
-        (videoRemoved)="onVideoRemoved()" (videoBlocked)="onVideoBlocked()" (videoUnblocked)="onVideoUnblocked()" (videoAccountMuted)="onVideoAccountMuted()"
-      ></my-video-actions-dropdown>
+    <div class="date-and-views">
+      <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
+
+      <span class="views">
+        <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
+
+        <my-video-views-counter *ngIf="displayOptions.views" [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
+      </span>
+    </div>
+
+    <div class="video-info-privacy fw-semibold">
+      <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
+      <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
+      <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
+    </div>
+
+    <div *ngIf="containedInPlaylists" class="badges">
+      <a *ngFor="let playlist of containedInPlaylists" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+        {{ playlist.playlistDisplayName }}
+      </a>
+
+      <span *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="pt-badge badge-danger video-info-blocked">
+        <span class="fw-semibold" i18n>Blocked</span>
+        <span *ngIf="video.blacklistedReason"> - {{ video.blacklistedReason }}</span>
+      </span>
+
+      <span i18n *ngIf="displayOptions.nsfw && video.nsfw" class="pt-badge badge-danger video-info-nsfw">Sensitive</span>
     </div>
   </div>
 </div>

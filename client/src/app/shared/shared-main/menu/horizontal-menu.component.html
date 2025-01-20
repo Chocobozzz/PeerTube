@@ -1,4 +1,4 @@
-<div class="root">
+<div class="root" [ngClass]="{ 'with-mb': withMarginBottom }">
   <h1 *ngIf="h1">
     <my-global-icon *ngIf="h1Icon" [iconName]="h1Icon"></my-global-icon>
 
@@ -16,8 +16,8 @@
     </a>
   </ng-template>
 
-  <div class="parent-container">
-    <my-list-overflow [items]="menuEntries" [itemTemplate]="entryTemplate" hasBorder="true"></my-list-overflow>
+  <div [ngClass]="{ 'children-container': areChildren, 'parent-container': !areChildren }">
+    <my-list-overflow [items]="menuEntries" [itemTemplate]="entryTemplate" [hasBorder]="!areChildren"></my-list-overflow>
   </div>
 
   @if (children && children.length !== 0) {

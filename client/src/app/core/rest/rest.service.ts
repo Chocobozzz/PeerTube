@@ -72,10 +72,11 @@ export class RestService {
   }
 
   componentToRestPagination (componentPagination: ComponentPaginationLight): RestPagination {
-    const start: number = (componentPagination.currentPage - 1) * componentPagination.itemsPerPage
-    const count: number = componentPagination.itemsPerPage
+    const { currentPage, itemsPerPage, itemsRemoved = 0 } = componentPagination
 
-    return { start, count }
+    const start = Math.max(0, (currentPage - 1) * itemsPerPage - itemsRemoved)
+
+    return { start, count: itemsPerPage }
   }
 
   /*

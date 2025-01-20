@@ -20,7 +20,7 @@
       <div class="main-row">
 
         <div *ngIf="broadcastMessage" class="broadcast-message alert margin-content" [ngClass]="broadcastMessage.class">
-          <div [innerHTML]="broadcastMessage.message"></div>
+          <div class="text-break" [innerHTML]="broadcastMessage.message"></div>
 
           <button
             *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()"

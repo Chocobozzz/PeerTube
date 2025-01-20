@@ -1,18 +1,26 @@
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, ComponentPagination, HooksService, Notifier, SessionStorageService, UserService } from '@app/core'
+import {
+  AuthService,
+  ComponentPagination,
+  HooksService,
+  Notifier,
+  SessionStorageService,
+  updatePaginationOnDelete,
+  UserService
+} from '@app/core'
 import { isInViewport } from '@app/helpers'
+import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
-import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
-import { VideoPlaylistElementMiniatureComponent } from '../../../../shared/shared-video-playlist/video-playlist-element-miniature.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
-import { NgIf, NgClass, NgFor } from '@angular/common'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
-import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { VideoPlaylistElementMiniatureComponent } from '../../../../shared/shared-video-playlist/video-playlist-element-miniature.component'
 
 @Component({
   selector: 'my-video-watch-playlist',
@@ -74,7 +82,7 @@ export class VideoWatchPlaylistComponent {
   onElementRemoved (playlistElement: VideoPlaylistElement) {
     this.playlistElements = this.playlistElements.filter(e => e.id !== playlistElement.id)
 
-    this.playlistPagination.totalItems--
+    updatePaginationOnDelete(this.playlistPagination)
   }
 
   isPlaylistOwned () {

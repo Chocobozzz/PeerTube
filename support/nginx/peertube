@@ -61,7 +61,7 @@ server {
 
   location @api {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host;
+    proxy_set_header Host            $http_host;
     proxy_set_header X-Real-IP       $remote_addr;
 
     client_max_body_size  100k; # default is 1M
@@ -126,7 +126,7 @@ server {
   location @api_websocket {
     proxy_http_version 1.1;
     proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header   Host            $host;
+    proxy_set_header   Host            $http_host;
     proxy_set_header   X-Real-IP       $remote_addr;
     proxy_set_header   Upgrade         $http_upgrade;
     proxy_set_header   Connection      "upgrade";
@@ -210,7 +210,7 @@ server {
     # We can't rate limit a try_files directive, so we need to duplicate @api
 
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host;
+    proxy_set_header Host            $http_host;
     proxy_set_header X-Real-IP       $remote_addr;
 
     proxy_limit_rate 5M;

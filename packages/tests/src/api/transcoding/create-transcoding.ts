@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoDetails, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -252,6 +252,56 @@ function runTests (options: {
       const video = await servers[0].videos.get({ id: videoUUID })
 
       expect(video.publishedAt).to.equal(publishedAt)
+    })
+
+    it('Should transcode with an audio-only video', async function () {
+      this.timeout(60000)
+
+      await servers[0].config.enableTranscoding({
+        webVideo: true,
+        hls: false,
+        keepOriginal: false,
+        splitAudioAndVideo: false,
+        alwaysTranscodeOriginalResolution: false,
+        resolutions: [ VideoResolution.H_NOVIDEO ]
+      })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'quick' })
+      await waitJobs(servers)
+
+      // Only keep audio resolution
+      {
+        const video = await servers[0].videos.get({ id: uuid })
+
+        expect(video.streamingPlaylists).to.have.lengthOf(0)
+
+        for (const file of video.files) {
+          if (file.resolution.id !== VideoResolution.H_NOVIDEO) {
+            await servers[0].videos.removeWebVideoFile({ videoId: uuid, fileId: file.id })
+          }
+        }
+      }
+
+      await servers[0].videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
+      await waitJobs(servers)
+
+      await servers[0].videos.runTranscoding({ videoId: uuid, transcodingType: 'web-video' })
+      await waitJobs(servers)
+      await expectNoFailedTranscodingJob(servers[0])
+
+      for (const server of servers) {
+        const videoDetails = await server.videos.get({ id: uuid })
+
+        expect(videoDetails.files).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+        expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(1)
+
+        for (const files of videoDetails.files) {
+          expect(files.resolution.id).to.equal(VideoResolution.H_NOVIDEO)
+        }
+
+        if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
+      }
     })
   })
 

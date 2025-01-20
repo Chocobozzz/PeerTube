@@ -1,10 +1,10 @@
-export type IPCReponse <T extends IPCReponseData = undefined> = {
+export type IPCResponse <T extends IPCResponseData = undefined> = {
   success: boolean
   error?: string
   data?: T
 }
 
-export type IPCReponseData =
+export type IPCResponseData =
   // list registered
   {
     servers: {

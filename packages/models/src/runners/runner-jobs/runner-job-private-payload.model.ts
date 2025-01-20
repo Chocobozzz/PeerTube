@@ -1,4 +1,4 @@
-import { VideoStudioTaskPayload } from '../server/index.js'
+import { VideoStudioTaskPayload } from '../../server/index.js'
 
 export type RunnerJobVODPrivatePayload =
   RunnerJobVODWebVideoTranscodingPrivatePayload |

@@ -189,7 +189,7 @@ body {
     my-global-icon {
       opacity: 0.5;
 
-      @include icon(22px);
+      @include global-icon-size(22px);
 
       &:hover {
         opacity: 0.8;
@@ -347,8 +347,8 @@ body {
 .input-group,
 .btn-group {
   .last-in-group {
-    border-top-right-radius: 3px !important;
-    border-bottom-right-radius: 3px !important;
+    border-top-right-radius: pvar(--input-border-radius) !important;
+    border-bottom-right-radius: pvar(--input-border-radius) !important;
   }
 }
 

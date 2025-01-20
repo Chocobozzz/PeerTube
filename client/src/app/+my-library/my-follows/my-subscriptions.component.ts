@@ -1,16 +1,16 @@
-import { Subject } from 'rxjs'
+import { NgFor, NgIf } from '@angular/common'
 import { Component } from '@angular/core'
-import { ComponentPagination, Notifier } from '@app/core'
-import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 import { RouterLink } from '@angular/router'
-import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { NgIf, NgFor } from '@angular/common'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
-import { formatICU } from '@app/helpers'
+import { Subject } from 'rxjs'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 
 @Component({
   templateUrl: './my-subscriptions.component.html',
@@ -55,7 +55,7 @@ export class MySubscriptionsComponent {
 
   onSearch (search: string) {
     this.search = search
-    this.pagination.currentPage = 1
+    resetCurrentPage(this.pagination)
 
     this.loadSubscriptions(false)
   }

@@ -2,7 +2,16 @@ import { NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
+import {
+  AuthService,
+  ComponentPagination,
+  ConfirmService,
+  Notifier,
+  ScreenService,
+  ServerService,
+  updatePaginationOnDelete,
+  User
+} from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { formatICU, immutableAssign } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
@@ -256,6 +265,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   private removeVideoFromArray (id: number) {
     this.videos = this.videos.filter(v => v.id !== id)
+
+    updatePaginationOnDelete(this.pagination)
   }
 
   private buildActions () {

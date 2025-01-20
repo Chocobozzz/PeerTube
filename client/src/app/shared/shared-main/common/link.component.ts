@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, Input, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 
@@ -19,7 +19,8 @@ export class LinkComponent implements OnInit {
   @Input() title?: string
 
   @Input() className?: string
-  @Input() inheritParentCSS = false
+  @Input({ transform: booleanAttribute }) inheritParentStyle = false
+  @Input({ transform: booleanAttribute }) inheritParentDimension = false
 
   @Input() tabindex: string | number
 
@@ -32,8 +33,12 @@ export class LinkComponent implements OnInit {
   ngOnInit () {
     this.builtClasses = this.className || ''
 
-    if (!this.builtClasses || this.inheritParentCSS) {
-      this.builtClasses += ' inherit-parent'
+    if (this.inheritParentStyle) {
+      this.builtClasses += ' inherit-parent-style'
+    }
+
+    if (this.inheritParentDimension) {
+      this.builtClasses += ' inherit-parent-dimension'
     }
   }
 }

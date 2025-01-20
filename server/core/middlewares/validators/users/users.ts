@@ -39,6 +39,7 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 
 export const usersListValidator = [
   query('blocked')
@@ -334,9 +335,13 @@ export const usersAskResetPasswordValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const exists = await checkUserEmailExist(req.body.email, res, false)
+    const { email } = await Hooks.wrapObject({
+      email: req.body.email
+    }, 'filter:api.users.ask-reset-password.body')
+
+    const exists = await checkUserEmailExist(email, res, false)
     if (!exists) {
-      logger.debug('User with email %s does not exist (asking reset password).', req.body.email)
+      logger.debug('User with email %s does not exist (asking reset password).', email)
       // Do not leak our emails
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }

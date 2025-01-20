@@ -42,6 +42,10 @@ export class PageHtml {
       escapedTitle: escapeHTML(CONFIG.INSTANCE.NAME),
       escapedTruncatedDescription: escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION),
 
+      relMe: url === WEBSERVER.URL
+        ? TagsHtml.findRelMe(CONFIG.INSTANCE.DESCRIPTION)
+        : undefined,
+
       image: avatar
         ? { url: ActorImageModel.getImageUrl(avatar), width: avatar.width, height: avatar.height }
         : undefined,

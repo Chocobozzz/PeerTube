@@ -3,6 +3,27 @@
 @use '_mixins' as *;
 @use '_button-mixins' as *;
 
+.mobile-msg {
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  height: $header-mobile-msg-height;
+  background: pvar(--bg-secondary-400);
+
+  .msg {
+    color: pvar(--fg-300);
+    font-weight: $font-bold;
+
+    @include font-size(14px);
+  }
+
+  button {
+    my-global-icon {
+      color: pvar(--fg-200);
+    }
+  }
+}
+
 .root {
   --co-logo-size: 34px;
   --co-root-padding: 1.5rem;

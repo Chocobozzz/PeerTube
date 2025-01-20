@@ -251,6 +251,18 @@ function customConfig (): CustomConfig {
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
 
+      serverCountry: CONFIG.INSTANCE.SERVER_COUNTRY,
+
+      support: {
+        text: CONFIG.INSTANCE.SUPPORT.TEXT
+      },
+
+      social: {
+        blueskyLink: CONFIG.INSTANCE.SOCIAL.BLUESKY,
+        mastodonLink: CONFIG.INSTANCE.SOCIAL.MASTODON_LINK,
+        externalLink: CONFIG.INSTANCE.SOCIAL.EXTERNAL_LINK
+      },
+
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
 
       customizations: {

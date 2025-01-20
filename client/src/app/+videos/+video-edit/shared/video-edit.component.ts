@@ -462,19 +462,16 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoCaptionAddModal.show();
   }
 
-  openEditCaptionModal(videoCaption: VideoCaptionWithPathEdit) {
-    const modalRef = this.modalService.open(
-      VideoCaptionEditModalContentComponent,
-      {
-        centered: true,
-        size: "xl",
+  openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
+    const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, {
+      centered: true,
+      size: 'xl',
 
-        beforeDismiss: () => {
-          return this.confirmService.confirm(
-            $localize`Are you sure you want to close this modal without saving your changes?`,
-            $localize`Closing caption edition mocal`
-          );
-        },
+      beforeDismiss: () => {
+        return this.confirmService.confirm(
+          $localize`Are you sure you want to close this modal without saving your changes?`,
+          $localize`Closing caption edition modal`
+        )
       }
     );
 

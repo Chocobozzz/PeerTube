@@ -1935,9 +1935,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getMaxQualityAudioAndVideoFiles<T extends MVideoWithFile>(this: T) {
-    const videoFile = this.getMaxQualityFile(VideoFileStream.VIDEO);
-    if (!videoFile) return { videoFile: undefined };
+
+  getMaxQualityAudioAndVideoFiles <T extends MVideoWithFile> (this: T) {
+    const videoFile = this.getMaxQualityFile(VideoFileStream.VIDEO)
+
+    if (!videoFile) {
+      const audioOnly = this.getMaxQualityFile(VideoFileStream.AUDIO)
+      if (audioOnly) return { videoFile: audioOnly }
+
+      return { videoFile: undefined }
+    }
 
     // File also has audio, we can return it
     if (videoFile.hasAudio()) return { videoFile };
@@ -1959,8 +1966,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     const { videoFile, separatedAudioFile } =
       this.getMaxQualityAudioAndVideoFiles();
 
-    let size = videoFile.size;
-    if (separatedAudioFile) size += separatedAudioFile.size;
+
+    let size = videoFile?.size || 0
+    if (separatedAudioFile) size += separatedAudioFile.size
 
     return size;
   }
@@ -1994,16 +2002,21 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getMaxFPS() {
-    return this.getMaxQualityFile(VideoFileStream.VIDEO).fps;
+
+  getMaxFPS () {
+    return this.getMaxQualityFile(VideoFileStream.VIDEO)?.fps || 0
   }
 
-  getMaxResolution() {
-    return this.getMaxQualityFile(VideoFileStream.VIDEO).resolution;
+  getMaxResolution () {
+    return this.getMaxQualityFile(VideoFileStream.VIDEO)?.resolution || this.getMaxQualityFile(VideoFileStream.AUDIO)?.resolution
   }
 
   hasAudio() {
     return !!this.getMaxQualityFile(VideoFileStream.AUDIO);
+  }
+
+  hasVideo () {
+    return !!this.getMaxQualityFile(VideoFileStream.VIDEO)
   }
 
   // ---------------------------------------------------------------------------

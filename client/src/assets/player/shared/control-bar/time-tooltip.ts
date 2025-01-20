@@ -5,7 +5,6 @@ const TimeToolTip = videojs.getComponent('TimeTooltip') as any // FIXME: typings
 
 class TimeTooltip extends TimeToolTip {
   declare private currentTimecode: string
-  declare private currentChapterTitle: string
 
   write (timecode: string) {
     const player: VideoJsPlayer = this.player()
@@ -14,9 +13,15 @@ class TimeTooltip extends TimeToolTip {
       if (timecode === this.currentTimecode) return
 
       this.currentTimecode = timecode
-      this.currentChapterTitle = player.chapters().getChapter(timeToInt(this.currentTimecode))
+      const { title, fixedTimecode } = player.chapters().getChapter(timeToInt(this.currentTimecode))
 
-      if (this.currentChapterTitle) return super.write(this.currentChapterTitle + '\r\n' + this.currentTimecode)
+      if (title) {
+        const timecodeStr = fixedTimecode
+          ? videojs.formatTime(fixedTimecode, this.player()?.duration())
+          : this.currentTimecode
+
+        return super.write(title + '\r\n' + timecodeStr)
+      }
     }
 
     return super.write(timecode)

@@ -123,20 +123,6 @@ export const CONCURRENCY_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const INDEX_URL_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.pattern(/^https:\/\//) ],
-  MESSAGES: {
-    pattern: $localize`Index URL must be a URL`
-  }
-}
-
-export const SEARCH_INDEX_URL_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.pattern(/^https?:\/\//) ],
-  MESSAGES: {
-    pattern: $localize`Search index URL must be a URL`
-  }
-}
-
 export const EXPORT_EXPIRATION_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(1) ],
   MESSAGES: {

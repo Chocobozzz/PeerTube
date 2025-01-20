@@ -414,10 +414,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   getPlaylistDropdownPlacement () {
     if (this.screenService.isInSmallView()) {
-      return 'bottom-right'
+      return 'bottom-right auto'
     }
 
-    return 'bottom-left bottom-right'
+    return 'bottom-left bottom-right auto'
   }
 
   private buildActions () {

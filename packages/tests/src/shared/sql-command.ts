@@ -1,7 +1,7 @@
-import { QueryTypes, Sequelize } from 'sequelize'
 import { forceNumber } from '@peertube/peertube-core-utils'
+import { FileStorageType, RunnerJobPayload } from '@peertube/peertube-models'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
-import { FileStorageType } from '@peertube/peertube-models'
+import { QueryTypes, Sequelize } from 'sequelize'
 
 export class SQLCommand {
   private sequelize: Sequelize
@@ -140,6 +140,17 @@ export class SQLCommand {
       { value, accessToken }
     )
   }
+
+  // ---------------------------------------------------------------------------
+
+  setRunnerJobPayload (uuid: string, payload: RunnerJobPayload) {
+    return this.updateQuery(
+      `UPDATE "runnerJob" SET "payload" = :payload WHERE "uuid" = :uuid`,
+      { uuid, payload: JSON.stringify(payload) }
+    )
+  }
+
+  // ---------------------------------------------------------------------------
 
   async cleanup () {
     if (!this.sequelize) return

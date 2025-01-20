@@ -15,10 +15,10 @@ my-embed {
   display: flex;
 
   my-global-icon {
-    width: 16px;
     position: relative;
     top: -2px;
 
+    @include global-icon-size(16px);
     @include margin-left(3px);
   }
 }

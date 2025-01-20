@@ -1,11 +1,32 @@
 # Changelog
 
-## v7.0.0-rc.1
+## v7.0.1
 
+### Features
+
+ * Update translations
+
+### Bug fixes
+
+ * Fix banner/avatar edit buttons
+ * Fix banner margin in channels page
+ * Textarea font size consistency
+ * Fix subscribe button radius
+ * Fix channel avatar info username
+ * Fix maximized markdown textarea
+ * Remove confusing channel message in *My playlists* pages
+ * Fix broken infinite scroll when deleting items (Videos, Channels...)
+ * Fix broadcast message overflow
+ * Fix adding videos in playlist from discover page
+ * Fix my videos edit/delete buttons display
+ * Fix header components overflow in admin log page
+
+
+## v7.0.0
 
 ### IMPORTANT NOTES
 
- * Ensure you have `storage.original_video_files` set in your configuration file: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L159.
+ * **Classic install only** (for Docker admins see [v6.3 IMPORTANT NOTES](https://github.com/Chocobozzz/PeerTube/releases/tag/v6.3.0)) Ensure you have `storage.original_video_files` set in your configuration file: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L159.
  If you did not configure this key but have already enabled "Keep a version of the input file" configuration, original files may have been saved in `versions/peertube-v6.x.x/storage/original-video-files/` directories. If this is the case, you must move these files in the new directory location specified by your `storage.original_video_files` configuration
  * Safari desktop versions < 13 are not supported anymore
  * iOS versions < 14.5 are not supported anymore
@@ -25,6 +46,7 @@
 
 ### Admin config (non-exhaustive)
 
+ * Ensure `instance.default_client_route` (in web admin -> `Configuration` -> `Basic` -> `Landing page`) has a correct path: `/videos/trending`, `/videos/local` and `/videos/recently-added` have been removed in favour of `/videos/browse`
  * Add ability to configure STUN servers IPs: `webrtc.stun_servers`
  * Remove `client.videos.miniature.display_author_avatar` config: author avatars are now always displayed
 
@@ -56,6 +78,7 @@
    * Add "skip menu" links
    * Improve keyboard navigation
    * Fix various screen readers issues
+ * Add Slovakian language support to the client
  * SEO:
    * Add instance avatar to OpenGraph tags
    * Hide empty accounts/channels from sitemap [#6633](https://github.com/Chocobozzz/PeerTube/pull/6633)
@@ -64,6 +87,7 @@
    * Improve player control bar responsive
    * Add refresh button to following list
    * Clearer signup limit label
+   * Add `0.25` playback rate in player
 
 ### Bug fixes
 
@@ -76,6 +100,10 @@
  * Fix auto blacklisting unlisted videos
  * Fix *ERR_BUFFER_OUT_OF_BOUNDS* error on some node version
  * Add ability to set max channel sync in admin config
+ * Allow plugins to pass client params when listing videos (`filter:api.browse-videos.videos.list.params` hook)
+ * Respect user export expiration admin configuration
+ * Fix studio edition on an audio only file
+ * Fix embed crash on telegram web browser
 
 
 ## v6.3.3

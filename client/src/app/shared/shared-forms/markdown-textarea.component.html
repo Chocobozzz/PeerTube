@@ -2,7 +2,7 @@
 
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
-    class="form-control" [ngClass]="{ 'input-error': formError }"
+    [ngClass]="{ 'input-error': formError }"
     [attr.disabled]="disabled || null"
     [id]="inputId" [name]="inputId" [dir]="dir">
   </textarea>

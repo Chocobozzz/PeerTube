@@ -99,14 +99,6 @@ my-edit-button {
   }
 }
 
-@media screen and (min-width: breakpoint(lg)) {
-  :host-context(.main-col:not(.expanded)) {
-    .video-channel-buttons {
-      float: right;
-    }
-  }
-}
-
 @media screen and (min-width: $small-view) {
   .video-channel-buttons {
     float: right;

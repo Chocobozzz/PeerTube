@@ -1,4 +1,4 @@
-import { omit } from '@peertube/peertube-core-utils'
+import { omit, pick } from '@peertube/peertube-core-utils'
 import {
   VideoPrivacy,
   VideoPlaylistPrivacy,
@@ -55,7 +55,7 @@ export async function prepareClientTests () {
 
   await servers[0].config.updateExistingConfig({
     newConfig: {
-      instance: { name: instanceConfig.name, shortDescription: instanceConfig.shortDescription }
+      instance: { ...pick(instanceConfig, [ 'name', 'shortDescription' ]) }
     }
   })
   await servers[0].config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: instanceConfig.avatar })

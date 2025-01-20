@@ -78,7 +78,7 @@ export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAc
     return {
       to,
       subject: channelName + ' is live streaming',
-      text: `Your subscription ${channelName} is live streaming in "${this.payload.name}".`,
+      text: `Your subscription ${channelName} is live streaming: "${this.payload.name}".`,
       locals: {
         title: 'New content ',
         action: {

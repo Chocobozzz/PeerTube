@@ -17,19 +17,16 @@
       [displayVideoActions]="false" [user]="user"
     ></my-video-miniature>
 
-    <!-- Display only once -->
-    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
-      <div class="action-selection-mode-child">
-        <button i18n class="cancel-selection peertube-button secondary-button me-2" (click)="abortSelectionMode()">
-          Cancel
-        </button>
-
-        <ng-container *ngTemplateOutlet="globalButtonsTemplate"></ng-container>
-      </div>
-    </div>
-
-    <ng-container  *ngIf="isInSelectionMode() === false">
+    @if (isInSelectionMode() === false) {
       <ng-container *ngTemplateOutlet="rowButtonsTemplate; context: {$implicit: video}"></ng-container>
-    </ng-container>
+    }
   </div>
+</div>
+
+<div class="action-selection-mode" *ngIf="isInSelectionMode() === true">
+  <button i18n class="cancel-selection peertube-button secondary-button me-2" (click)="abortSelectionMode()">
+    Cancel
+  </button>
+
+  <ng-container *ngTemplateOutlet="globalButtonsTemplate"></ng-container>
 </div>

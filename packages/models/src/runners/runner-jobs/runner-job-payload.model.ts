@@ -1,4 +1,9 @@
-import { VideoStudioTaskPayload } from '../server/index.js'
+import { VideoStudioTaskPayload } from '../../server/index.js'
+
+export type RunnerJobCustomUpload = {
+  url: string
+  method?: 'PUT' | 'POST' // default 'PUT'
+}
 
 export type RunnerJobVODPayload =
   RunnerJobVODWebVideoTranscodingPayload |
@@ -22,6 +27,9 @@ export interface RunnerJobVODWebVideoTranscodingPayload {
   output: {
     resolution: number
     fps: number
+
+    // To upload on an external URL
+    videoFileCustomUpload?: RunnerJobCustomUpload
   }
 }
 
@@ -35,6 +43,10 @@ export interface RunnerJobVODHLSTranscodingPayload {
     resolution: number
     fps: number
     separatedAudio: boolean
+
+    // To upload on an external URL
+    videoFileCustomUpload?: RunnerJobCustomUpload
+    resolutionPlaylistFileCustomUpload?: RunnerJobCustomUpload
   }
 }
 
@@ -47,6 +59,9 @@ export interface RunnerJobVODAudioMergeTranscodingPayload {
   output: {
     resolution: number
     fps: number
+
+    // To upload on an external URL
+    videoFileCustomUpload?: RunnerJobCustomUpload
   }
 }
 
@@ -57,11 +72,21 @@ export interface RunnerJobStudioTranscodingPayload {
   }
 
   tasks: VideoStudioTaskPayload[]
+
+  output: {
+    // To upload on an external URL
+    videoFileCustomUpload?: RunnerJobCustomUpload
+  }
 }
 
 export interface RunnerJobTranscriptionPayload {
   input: {
     videoFileUrl: string
+  }
+
+  output: {
+    // To upload on an external URL
+    vttFileCustomUpload?: RunnerJobCustomUpload
   }
 }
 
@@ -86,5 +111,10 @@ export interface RunnerJobLiveRTMPHLSTranscodingPayload {
 
     segmentDuration: number
     segmentListSize: number
+
+    // To upload on an external URL
+    masterPlaylistFileCustomUpload?: RunnerJobCustomUpload
+    resolutionPlaylistFileCustomUpload?: RunnerJobCustomUpload
+    videoChunkFileCustomUpload?: RunnerJobCustomUpload
   }
 }

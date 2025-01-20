@@ -61,7 +61,7 @@
         <div class="form-group">
           <label i18n for="instanceDescription">Description</label>
           <div class="label-small-info">
-            <my-custom-markup-help></my-custom-markup-help>
+            <my-custom-markup-help supportRelMe="true"></my-custom-markup-help>
           </div>
 
           <my-markdown-textarea
@@ -99,7 +99,79 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label i18n for="instanceServerCountry">Server country</label>
+          <div i18n class="label-small-info">PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</div>
+
+          <input
+            type="text" id="instanceServerCountry" class="form-control"
+            formControlName="serverCountry" [ngClass]="{ 'input-error': formErrors.instance.serverCountry }"
+          >
+
+          <div *ngIf="formErrors.instance.serverCountry" class="form-error" role="alert">{{ formErrors.instance.serverCountry }}</div>
+        </div>
+
       </div>
+    </div>
+
+    <div class="pt-two-cols mt-4"> <!-- social grid -->
+      <div class="title-col">
+        <h2 i18n>SOCIAL</h2>
+        <div i18n class="inner-form-description">
+          Social links and support information displayed in the <em>About</em> pages
+        </div>
+      </div>
+
+      <div class="content-col">
+
+        <div class="form-group" formGroupName="support">
+          <label i18n for="instanceSupportText">Support text</label><my-help helpType="markdownText"></my-help>
+          <div i18n class="label-small-info">Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</div>
+
+          <my-markdown-textarea
+            inputId="instanceSupportText" formControlName="text" markdownType="enhanced"
+            [formError]="formErrors['instance.support.text']"
+          ></my-markdown-textarea>
+        </div>
+
+        <ng-container formGroupName="social">
+          <div class="form-group">
+            <label i18n for="instanceSocialExternalLink">External link</label>
+            <div i18n class="label-small-info">Link to your main website</div>
+
+            <input
+              type="text" id="instanceSocialExternalLink" class="form-control"
+              formControlName="externalLink" [ngClass]="{ 'input-error': formErrors.instance.social.externalLink }"
+            >
+
+            <div *ngIf="formErrors.instance.social.externalLink" class="form-error" role="alert">{{ formErrors.instance.social.externalLink }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceSocialMastodonLink">Mastodon link</label>
+
+            <input
+              type="text" id="instanceSocialMastodonLink" class="form-control"
+              formControlName="mastodonLink" [ngClass]="{ 'input-error': formErrors.instance.social.mastodonLink }"
+            >
+
+            <div *ngIf="formErrors.instance.social.mastodonLink" class="form-error" role="alert">{{ formErrors.instance.social.mastodonLink }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceSocialBlueskyLink">Bluesky link</label>
+
+            <input
+              type="text" id="instanceSocialBlueskyLink" class="form-control"
+              formControlName="blueskyLink" [ngClass]="{ 'input-error': formErrors.instance.social.blueskyLink }"
+            >
+
+            <div *ngIf="formErrors.instance.social.blueskyLink" class="form-error" role="alert">{{ formErrors.instance.social.blueskyLink }}</div>
+          </div>
+        </ng-container>
+
+      </div>
+
     </div>
 
     <div class="pt-two-cols mt-4"> <!-- moderation & nsfw grid -->

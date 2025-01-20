@@ -17,6 +17,7 @@ import { sha1 } from '@peertube/peertube-node-utils'
 import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
 import { OTP } from '../../initializers/constants.js'
 import { BypassLogin, getAccessToken, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model.js'
+import { Hooks } from '../plugins/hooks.js'
 
 class MissingTwoFactorError extends Error {
   code = HttpStatusCode.UNAUTHORIZED_401
@@ -135,19 +136,25 @@ async function handlePasswordGrant (options: {
   client: MOAuthClient
   bypassLogin?: BypassLogin
 }) {
-  const { request, client, bypassLogin } = options
+  const { client } = options
 
-  if (!request.body.username) {
+  const { bypassLogin, usernameOrEmail, password } = await Hooks.wrapObject({
+    bypassLogin: options.bypassLogin,
+    usernameOrEmail: options.request.body.username,
+    password: options.request.body.password
+  }, 'filter:oauth.password-grant.get-user.params')
+
+  if (!options.request.body.username) {
     throw new InvalidRequestError('Missing parameter: `username`')
   }
 
-  if (!bypassLogin && !request.body.password) {
+  if (!bypassLogin && !options.request.body.password) {
     throw new InvalidRequestError('Missing parameter: `password`')
   }
 
-  const user = await getUser(request.body.username, request.body.password, bypassLogin)
+  const user = await getUser(usernameOrEmail, password, bypassLogin)
   if (!user) {
-    const registration = await UserRegistrationModel.loadByEmailOrUsername(request.body.username)
+    const registration = await UserRegistrationModel.loadByEmailOrUsername(usernameOrEmail)
 
     if (registration?.state === UserRegistrationState.REJECTED) {
       throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
@@ -159,11 +166,11 @@ async function handlePasswordGrant (options: {
   }
 
   if (user.otpSecret) {
-    if (!request.headers[OTP.HEADER_NAME]) {
+    if (!options.request.headers[OTP.HEADER_NAME]) {
       throw new MissingTwoFactorError('Missing two factor header')
     }
 
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.request.headers[OTP.HEADER_NAME] }) !== true) {
       throw new InvalidTwoFactorError('Invalid two factor header')
     }
   }

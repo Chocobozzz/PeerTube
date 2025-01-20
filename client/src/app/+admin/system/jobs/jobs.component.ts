@@ -41,7 +41,7 @@ export class JobsComponent extends RestTable implements OnInit {
   private static LS_STATE = 'jobs-list-state'
   private static LS_TYPE = 'jobs-list-type'
 
-  jobState?: JobStateClient
+  jobState: JobStateClient = 'all'
   jobStates: JobStateClient[] = [ 'all', 'active', 'completed', 'failed', 'waiting', 'delayed' ]
   jobStateItems: SelectOptionsItem[] = this.jobStates.map(s => ({
     id: s,
@@ -176,10 +176,10 @@ export class JobsComponent extends RestTable implements OnInit {
 
   private loadJobStateAndType () {
     const state = peertubeLocalStorage.getItem(JobsComponent.LS_STATE)
-    if (state) this.jobState = state as JobState
+    if (state && state !== 'undefined') this.jobState = state as JobState
 
     const jobType = peertubeLocalStorage.getItem(JobsComponent.LS_TYPE)
-    if (jobType) this.jobType = jobType as JobType
+    if (jobType && jobType !== 'undefined') this.jobType = jobType as JobType
   }
 
   private saveJobStateAndType () {

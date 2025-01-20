@@ -1,7 +1,16 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, hasMoreItems } from '@app/core'
+import {
+  AuthService,
+  ComponentPagination,
+  ConfirmService,
+  Notifier,
+  ScreenService,
+  hasMoreItems,
+  resetCurrentPage,
+  updatePaginationOnDelete
+} from '@app/core'
 import { formatICU } from '@app/helpers'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -12,12 +21,12 @@ import { Subject, first, map, switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { DeferLoadingDirective } from '../../shared/shared-main/common/defer-loading.directive'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
-import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/channel/channels-setup-message.component'
+import { DeferLoadingDirective } from '../../shared/shared-main/common/defer-loading.directive'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 
 type CustomChartData = (ChartData & { startDate: string, total: number })
 
@@ -75,7 +84,7 @@ export class MyVideoChannelsComponent {
   onSearch (search: string) {
     this.search = search
 
-    this.pagination.currentPage = 1
+    resetCurrentPage(this.pagination)
     this.videoChannels = []
     this.pagesDone.clear()
 
@@ -105,6 +114,8 @@ export class MyVideoChannelsComponent {
         next: () => {
           this.videoChannels = this.videoChannels.filter(c => c.id !== videoChannel.id)
           this.notifier.success($localize`Video channel ${videoChannel.displayName} deleted.`)
+
+          updatePaginationOnDelete(this.pagination)
         },
 
         error: err => this.notifier.error(err.message)

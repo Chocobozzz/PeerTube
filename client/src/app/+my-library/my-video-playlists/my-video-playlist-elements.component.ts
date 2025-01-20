@@ -2,7 +2,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop'
 import { NgFor, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService } from '@app/core'
+import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService, updatePaginationOnDelete } from '@app/core'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { VideoShareComponent } from '@app/shared/shared-share-modal/video-share.component'
 import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
@@ -121,6 +121,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     const oldFirst = this.findFirst()
 
     this.playlistElements = this.playlistElements.filter(v => v.id !== element.id)
+    updatePaginationOnDelete(this.pagination)
     this.reorderClientPositions(oldFirst)
   }
 
@@ -184,13 +185,12 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
       'my-library',
       'filter:api.my-library.video-playlist-elements.list.params',
       'filter:api.my-library.video-playlist-elements.list.result'
-    )
-        .subscribe(({ total, data }) => {
-          this.playlistElements = this.playlistElements.concat(data)
-          this.pagination.totalItems = total
+    ).subscribe(({ total, data }) => {
+      this.playlistElements = this.playlistElements.concat(data)
+      this.pagination.totalItems = total
 
-          this.onDataSubject.next(data)
-        })
+      this.onDataSubject.next(data)
+    })
   }
 
   private loadPlaylistInfo () {

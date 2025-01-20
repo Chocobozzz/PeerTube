@@ -67,7 +67,11 @@ export class RedirectService {
   }
 
   getDefaultRoute () {
-    return this.defaultRoute
+    return this.defaultRoute.split('?')[0]
+  }
+
+  getDefaultRouteQuery () {
+    return this.router.parseUrl(this.defaultRoute).queryParams
   }
 
   getDefaultTrendingSort () {

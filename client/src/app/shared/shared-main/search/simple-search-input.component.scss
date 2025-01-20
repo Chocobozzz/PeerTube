@@ -30,8 +30,5 @@ input {
 }
 
 .form-control-clear my-global-icon {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  display: inline-block;
+  @include global-icon-size(20px);
 }

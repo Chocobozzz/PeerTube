@@ -1,13 +1,21 @@
 @if (ptRouterLink || ptQueryParams) {
   <a
-    class="action-button"
+    class="action-button ellipsis"
     [ngClass]="classes" [ngbTooltip]="tooltip" [attr.title]="title"
     [routerLink]="ptRouterLink" [queryParams]="ptQueryParams" [queryParamsHandling]="ptQueryParamsHandling" [routerLinkActive]="ptRouterLinkActive"
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </a>
+} @else if (href) {
+  <a
+    class="action-button ellipsis"
+    [ngClass]="classes" [ngbTooltip]="tooltip" [attr.title]="title"
+    [href]="href" target="_blank"
+  >
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </a>
 } @else {
-  <button type="button" class="action-button" [ngClass]="classes" [disabled]="disabled" [ngbTooltip]="tooltip" [attr.title]="title">
+  <button type="button" class="action-button ellipsis" [ngClass]="classes" [disabled]="disabled" [ngbTooltip]="tooltip" [attr.title]="title">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
 }
@@ -16,7 +24,7 @@
   <my-loader size="sm" [ngClass]="{ displayed: loading }" [loading]="loading"></my-loader>
   <my-global-icon *ngIf="icon && !loading" [iconName]="icon"></my-global-icon>
 
-  <span class="button-label ellipsis" #labelContent (cdkObserveContent)="ngOnChanges()">
+  <span class="button-label" #labelContent (cdkObserveContent)="ngOnChanges()">
     @if (label) {
       {{ label }}
     } @else {

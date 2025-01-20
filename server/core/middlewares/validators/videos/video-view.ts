@@ -38,6 +38,10 @@ export const videoViewValidator = [
     .customSanitizer(toIntOrNull)
     .isInt(),
 
+  body('sessionId')
+    .optional()
+    .isAlphanumeric(),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return
     if (!await doesVideoExist(req.params.videoId, res, 'unsafe-only-immutable-attributes')) return

@@ -68,6 +68,6 @@
 </div>
 
 <ng-container *ngIf="video">
-  <my-support-modal #supportModal [video]="video"></my-support-modal>
+  <my-support-modal #supportModal [name]="video.channel.displayName" [content]="video.support"></my-support-modal>
   <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions" [playlist]="playlist"></my-video-share>
 </ng-container>

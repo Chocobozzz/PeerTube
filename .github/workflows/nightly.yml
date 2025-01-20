@@ -20,7 +20,7 @@ jobs:
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
-          node-version: '18.x'
+          node-version: '20.x'
 
       - name: Build
         run: npm run nightly

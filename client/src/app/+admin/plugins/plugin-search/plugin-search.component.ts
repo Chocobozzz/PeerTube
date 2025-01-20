@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -94,7 +94,7 @@ export class PluginSearchComponent implements OnInit {
   }
 
   reloadPlugins () {
-    this.pagination.currentPage = 1
+    resetCurrentPage(this.pagination)
     this.plugins = []
 
     this.loadMorePlugins()

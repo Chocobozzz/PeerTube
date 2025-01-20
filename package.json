@@ -1,11 +1,11 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "7.0.0-rc.1",
+  "version": "7.0.1",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
-    "node": ">=18.x",
+    "node": ">=20.x",
     "yarn": ">=1.x"
   },
   "type": "module",
@@ -139,10 +139,9 @@
     "flat": "^6.0.1",
     "fluent-ffmpeg": "^2.1.0",
     "fs-extra": "^11.1.0",
-    "got": "^13.0.0",
+    "got": "^14.4.5",
     "got-ssrf": "^3.0.0",
     "helmet": "^7.0.0",
-    "hpagent": "^1.0.0",
     "http-problem-details": "^0.1.5",
     "ioredis": "^5.2.3",
     "ip-anonymize": "^0.1.0",
@@ -162,6 +161,7 @@
     "memoizee": "^0.4.14",
     "morgan": "^1.5.3",
     "multer": "^1.4.5-lts.1",
+    "node-html-parser": "^6.1.13",
     "node-media-server": "^2.1.4",
     "nodemailer": "^6.0.0",
     "opentelemetry-instrumentation-sequelize": "^0.41.0",

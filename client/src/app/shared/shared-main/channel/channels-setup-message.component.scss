@@ -2,7 +2,7 @@
 @use '_mixins' as *;
 
 my-global-icon {
-  width: 32px;
-  display: inline-block;
   margin-bottom: 0.75rem;
+
+  @include global-icon-size(32px);
 }

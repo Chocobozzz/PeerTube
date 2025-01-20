@@ -1,9 +1,19 @@
-import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
+import { NgIf, NgTemplateOutlet } from '@angular/common'
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  Input,
+  OnChanges,
+  OnInit,
+  QueryList,
+  TemplateRef
+} from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf, NgTemplateOutlet } from '@angular/common'
 import { PeerTubeTemplateDirective } from '../common/peertube-template.directive'
 
 @Component({
@@ -20,6 +30,7 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() iconName: GlobalIconName = 'help'
   @Input() title = $localize`Get help`
   @Input() autoClose = 'outside'
+  @Input({ transform: booleanAttribute }) supportRelMe = false
 
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'preHtml' | 'customHtml' | 'postHtml'>>
 
@@ -76,9 +87,17 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   }
 
   private formatMarkdownSupport (rules: string[]) {
-    /* eslint-disable max-len */
-    return $localize`<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> compatible that supports:` +
+    let str =
+      // eslint-disable-next-line max-len
+      $localize`<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> compatible that supports:` +
       this.createMarkdownList(rules)
+
+    if (this.supportRelMe) {
+      // eslint-disable-next-line max-len
+      str += $localize`<a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer">Mastodon verification link</a> is also supported.`
+    }
+
+    return str
   }
 
   private createMarkdownList (rules: string[]) {

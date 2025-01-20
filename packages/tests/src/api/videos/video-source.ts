@@ -409,6 +409,32 @@ describe('Test video source management', function () {
           await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
         }
       })
+
+      it('Should replace the video with an audio only file', async function () {
+        await servers[0].config.save()
+
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: true, resolutions: [ 480, 360, 240, 144 ] })
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'future audio', fixture: 'video_short_360p.mp4' })
+        await waitJobs(servers)
+
+        {
+          const video = await servers[0].videos.get({ id: uuid })
+          expect(getAllFiles(video)).to.have.lengthOf(6)
+        }
+
+        const fixture = 'sample.ogg'
+        await servers[0].videos.replaceSourceFile({ videoId: uuid, fixture })
+        await waitJobs(servers)
+
+        for (const server of servers) {
+          const video = await server.videos.get({ id: uuid })
+
+          const files = getAllFiles(video)
+          expect(files).to.have.lengthOf(8)
+        }
+
+        await servers[0].config.rollback()
+      })
     })
 
     describe('Autoblacklist', function () {

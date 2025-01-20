@@ -13,7 +13,7 @@
   color: pvar(--input-fg);
   background-color: pvar(--input-bg);
   border: 1px solid pvar(--input-border-color);
-  border-radius: 4px;
+  border-radius: pvar(--input-border-radius);
 
   @include rounded-line-height-1-5($font-size);
 
@@ -42,7 +42,7 @@
 }
 
 @mixin peertube-textarea ($width, $height) {
-  @include peertube-input-text($width, 14px);
+  @include peertube-input-text($width);
 
   & {
     color: pvar(--textarea-fg) !important;
@@ -93,7 +93,7 @@
       color: pvar(--input-fg);
       background: pvar(--input-bg);
 
-      border-radius: 4px;
+      border-radius: pvar(--input-border-radius);
     }
 
     &:focus,

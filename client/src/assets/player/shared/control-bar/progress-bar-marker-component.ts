@@ -1,9 +1,9 @@
 import videojs from 'video.js'
 import { ProgressBarMarkerComponentOptions } from '../../types'
 
-const Component = videojs.getComponent('Component')
+const ClickableComponent = videojs.getComponent('ClickableComponent')
 
-export class ProgressBarMarkerComponent extends Component {
+export class ProgressBarMarkerComponent extends ClickableComponent {
   declare options_: ProgressBarMarkerComponentOptions & videojs.ComponentOptions
 
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
@@ -20,7 +20,17 @@ export class ProgressBarMarkerComponent extends Component {
     }
     this.player().on('durationchange', updateMarker)
 
-    this.one('dispose', () => this.player().off('durationchange', updateMarker))
+    const stopPropagation = (event: Event) => event.stopPropagation()
+
+    this.on([ 'mousedown', 'touchstart' ], stopPropagation)
+
+    this.one('dispose', () => {
+      if (this.player()) this.player().off('durationchange', updateMarker)
+
+      if (this.el()) {
+        this.off([ 'mousedown', 'touchstart' ], stopPropagation)
+      }
+    })
   }
 
   createEl () {
@@ -30,6 +40,12 @@ export class ProgressBarMarkerComponent extends Component {
         ? `left: ${this.buildLeftStyle()}`
         : 'display: none;'
     }) as HTMLButtonElement
+  }
+
+  handleClick (event: Event) {
+    event.stopPropagation()
+
+    if (this.player()) this.player().currentTime(this.options_.timecode)
   }
 
   private buildLeftStyle () {

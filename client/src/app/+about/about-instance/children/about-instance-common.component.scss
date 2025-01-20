@@ -1,0 +1,17 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+h4 {
+  color: pvar(--fg-300);
+  font-size: 18px;
+  font-weight: $font-bold;
+  margin-bottom: 0.25rem;
+}
+
+.text-content {
+  color: pvar(--fg-200);
+}
+
+.block {
+  margin-bottom: 1rem;
+}

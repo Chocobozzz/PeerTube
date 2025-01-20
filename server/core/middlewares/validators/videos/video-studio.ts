@@ -33,9 +33,13 @@ const videoStudioAddEditionValidator = [
     }
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
 
     const body: VideoStudioCreateEdition = req.body
     const files = req.files as Express.Multer.File[]
+
+    const video = res.locals.videoAll
+    const videoIsAudio = video.hasAudio() && !video.hasVideo()
 
     for (let i = 0; i < body.tasks.length; i++) {
       const task = body.tasks[i]
@@ -49,6 +53,17 @@ const videoStudioAddEditionValidator = [
         return cleanUpReqFiles(req)
       }
 
+      if (videoIsAudio) {
+        if (task.name === 'add-intro' || task.name === 'add-outro' || task.name === 'add-watermark') {
+          res.fail({
+            status: HttpStatusCode.BAD_REQUEST_400,
+            message: `Task ${task.name} is invalid: video does not contain a video stream`
+          })
+
+          return cleanUpReqFiles(req)
+        }
+      }
+
       if (task.name === 'add-intro' || task.name === 'add-outro') {
         const filePath = getTaskFileFromReq(files, i).path
 
@@ -56,7 +71,7 @@ const videoStudioAddEditionValidator = [
         if (await isAudioFile(filePath)) {
           res.fail({
             status: HttpStatusCode.BAD_REQUEST_400,
-            message: `Task ${task.name} is invalid: file does not contain a video stream`
+            message: `Task ${task.name} is invalid: input file does not contain a video stream`
           })
 
           return cleanUpReqFiles(req)
@@ -64,9 +79,6 @@ const videoStudioAddEditionValidator = [
       }
     }
 
-    if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
-
-    const video = res.locals.videoAll
     if (!checkVideoFileCanBeEdited(video, res)) return cleanUpReqFiles(req)
 
     const user = res.locals.oauth.token.User

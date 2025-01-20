@@ -109,7 +109,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
     const query: FindOptions = {
       where: {
         createdAt: {
-          [Op.lt]: new Date(new Date().getTime() + expirationTimeMS)
+          [Op.lt]: new Date(new Date().getTime() - expirationTimeMS)
         }
       }
     }

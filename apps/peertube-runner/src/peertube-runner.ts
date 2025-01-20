@@ -3,6 +3,7 @@
 import { Command, InvalidArgumentError } from '@commander-js/extra-typings'
 import { RunnerJobType } from '@peertube/peertube-models'
 import { listRegistered, registerRunner, unregisterRunner } from './register/index.js'
+import { gracefulShutdown } from './register/shutdown.js'
 import { RunnerServer } from './server/index.js'
 import { getSupportedJobsList } from './server/shared/supported-job.js'
 import { ConfigManager, logger } from './shared/index.js'
@@ -93,6 +94,18 @@ program.command('list-registered')
       await listRegistered()
     } catch (err) {
       console.error('Cannot list registered PeerTube instances.')
+      console.error(err)
+      process.exit(-1)
+    }
+  })
+
+program.command('graceful-shutdown')
+  .description('Exit runner when all processing tasks are finished')
+  .action(async () => {
+    try {
+      await gracefulShutdown()
+    } catch (err) {
+      console.error('Cannot graceful shutdown the runner.')
       console.error(err)
       process.exit(-1)
     }

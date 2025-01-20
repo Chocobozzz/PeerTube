@@ -11,7 +11,6 @@ import {
   ScreenService,
   ScrollService,
   ServerService,
-  ThemeService,
   User,
   UserLocalStorageService
 } from '@app/core'
@@ -93,7 +92,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     private domSanitizer: DomSanitizer,
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
-    private themeService: ThemeService,
     private hooks: HooksService,
     private location: PlatformLocation,
     private modalService: NgbModal,
@@ -115,7 +113,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.hooks.runAction('action:application.init', 'common')
-    this.themeService.initialize()
 
     this.authService.loadClientCredentials()
 
@@ -336,27 +333,17 @@ export class AppComponent implements OnInit, AfterViewInit {
       new Hotkey('g o', () => {
         this.router.navigate([ '/videos/overview' ])
         return false
-      }, $localize`Go to the discover videos page`),
+      }, $localize`Go to the "Discover videos" page`),
 
-      new Hotkey('g t', () => {
-        this.router.navigate([ '/videos/trending' ])
+      new Hotkey('g v', () => {
+        this.router.navigate([ '/videos/browse' ])
         return false
-      }, $localize`Go to the trending videos page`),
-
-      new Hotkey('g r', () => {
-        this.router.navigate([ '/videos/recently-added' ])
-        return false
-      }, $localize`Go to the recently added videos page`),
-
-      new Hotkey('g l', () => {
-        this.router.navigate([ '/videos/local' ])
-        return false
-      }, $localize`Go to the local videos page`),
+      }, $localize`Go to the "Browse videos" page`),
 
       new Hotkey('g u', () => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, $localize`Go to the videos upload page`)
+      }, $localize`Go to the "Publish video" page`)
     ])
   }
 

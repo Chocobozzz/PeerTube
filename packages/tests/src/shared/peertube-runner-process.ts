@@ -1,9 +1,9 @@
+import { RunnerJobType } from '@peertube/peertube-models'
+import { root } from '@peertube/peertube-node-utils'
+import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { ChildProcess, fork, ForkOptions } from 'child_process'
 import { execaNode } from 'execa'
 import { join } from 'path'
-import { root } from '@peertube/peertube-node-utils'
-import { PeerTubeServer } from '@peertube/peertube-server-commands'
-import { RunnerJobType } from '../../../models/src/runners/runner-job-type.type.js'
 
 export class PeerTubeRunnerProcess {
   private app?: ChildProcess
@@ -89,13 +89,27 @@ export class PeerTubeRunnerProcess {
     return stdout
   }
 
+  // ---------------------------------------------------------------------------
+
+  gracefulShutdown () {
+    const args = [ 'graceful-shutdown', ...this.buildIdArg() ]
+
+    return this.runCommand(this.getRunnerPath(), args)
+  }
+
+  hasCorrectlyExited () {
+    return this.app.exitCode === 0
+  }
+
   kill () {
-    if (!this.app) return
+    if (!this.app || this.app.exitCode !== null) return
 
     process.kill(this.app.pid)
 
     this.app = null
   }
+
+  // ---------------------------------------------------------------------------
 
   getId () {
     return 'test-' + this.server.internalServerNumber

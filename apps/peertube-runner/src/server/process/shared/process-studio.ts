@@ -86,7 +86,8 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       jobToken: job.jobToken,
       jobUUID: job.uuid,
       runnerToken,
-      payload: successBody
+      payload: successBody,
+      reqPayload: payload
     })
   } finally {
     if (tmpVideoInputFilePath) await remove(tmpVideoInputFilePath)

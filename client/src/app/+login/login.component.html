@@ -16,12 +16,12 @@
 
       @if (signupAllowed) {
         <p i18n>
-          This instance allows registration. However, be careful to check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
+          This instance allows registration. However, be careful to check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance">Terms</a> before creating an account.
           You may also search for another instance to match your exact needs at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       } @else {
         <p i18n>
-          Currently this instance doesn't allow for user registration, you may check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
+          Currently this instance doesn't allow for user registration, you may check the <a class="link-primary terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href="/about/instance#terms">Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance">Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
           Find yours among multiple instances at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       }

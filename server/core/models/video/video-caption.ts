@@ -30,14 +30,16 @@ import { SequelizeModel, buildWhereIdOrUUID, throwIfNotValid } from '../shared/i
 import { VideoModel } from './video.js'
 
 export enum ScopeNames {
-  WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
+  CAPTION_WITH_VIDEO = 'CAPTION_WITH_VIDEO'
 }
 
+const videoAttributes = [ 'id', 'name', 'remote', 'uuid', 'url', 'state' ]
+
 @Scopes(() => ({
-  [ScopeNames.WITH_VIDEO_UUID_AND_REMOTE]: {
+  [ScopeNames.CAPTION_WITH_VIDEO]: {
     include: [
       {
-        attributes: [ 'id', 'uuid', 'remote' ],
+        attributes: videoAttributes,
         model: VideoModel.unscoped(),
         required: true
       }
@@ -130,17 +132,13 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   static loadByVideoIdAndLanguage (videoId: string | number, language: string, transaction?: Transaction): Promise<MVideoCaptionVideo> {
     const videoInclude = {
       model: VideoModel.unscoped(),
-      attributes: [ 'id', 'name', 'remote', 'uuid', 'url' ],
+      attributes: videoAttributes,
       where: buildWhereIdOrUUID(videoId)
     }
 
     const query = {
-      where: {
-        language
-      },
-      include: [
-        videoInclude
-      ],
+      where: { language },
+      include: [ videoInclude ],
       transaction
     }
 
@@ -155,7 +153,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       include: [
         {
           model: VideoModel.unscoped(),
-          attributes: [ 'id', 'remote', 'uuid' ]
+          attributes: videoAttributes
         }
       ]
     }
@@ -186,7 +184,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       transaction
     }
 
-    return VideoCaptionModel.scope(ScopeNames.WITH_VIDEO_UUID_AND_REMOTE).findAll(query)
+    return VideoCaptionModel.scope(ScopeNames.CAPTION_WITH_VIDEO).findAll(query)
   }
 
   static async listCaptionsOfMultipleVideos (videoIds: number[], transaction?: Transaction) {
@@ -200,7 +198,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
       transaction
     }
 
-    const captions = await VideoCaptionModel.scope(ScopeNames.WITH_VIDEO_UUID_AND_REMOTE).findAll<MVideoCaptionVideo>(query)
+    const captions = await VideoCaptionModel.scope(ScopeNames.CAPTION_WITH_VIDEO).findAll<MVideoCaptionVideo>(query)
     const result: { [ id: number ]: MVideoCaptionVideo[] } = {}
 
     for (const id of videoIds) {

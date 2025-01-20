@@ -23,13 +23,12 @@ $button-font-size: 1rem;
 $header-height: 94px;
 $header-height-small-view: 74px;
 $header-height-mobile-view: 124px;
+$header-mobile-msg-height: 48px;
 
 $menu-width: 248px;
 $menu-collapsed-width: 50px;
 $menu-margin-left: 2rem;
 $menu-overlay-view: 1200px;
-
-$sub-menu-height: 81px;
 
 $banner-inverted-ratio: math.div(1, 6);
 
@@ -58,6 +57,10 @@ $video-thumbnail-medium-height: 114px;
 $video-thumbnail-medium-width: 201px;
 $video-thumbnail-small-height: 71px;
 $video-thumbnail-small-width: 125px;
+
+// ---------------------------------------------------------------------------
+
+$instance-img-radius: 31%;
 
 // ---------------------------------------------------------------------------
 
@@ -101,6 +104,7 @@ $variables: (
   --input-placeholder: var(--input-placeholder),
   --input-border-color: var(--input-border-color),
   --input-bg-in-secondary: var(--input-bg-in-secondary),
+  --input-border-radius: var(--input-border-radius),
 
   --input-check-active-fg: var(--input-check-active-fg),
   --input-check-active-bg: var(--input-check-active-bg),
@@ -140,6 +144,31 @@ $variables: (
   --bg-secondary-250: var(--bg-secondary-250),
   --bg-secondary-200: var(--bg-secondary-200),
 
+  --menu-fg: var(--menu-fg),
+  --menu-fg-600: var(--menu-fg-600),
+  --menu-fg-550: var(--menu-fg-550),
+  --menu-fg-500: var(--menu-fg-500),
+  --menu-fg-450: var(--menu-fg-450),
+  --menu-fg-400: var(--menu-fg-400),
+  --menu-fg-350: var(--menu-fg-350),
+  --menu-fg-300: var(--menu-fg-300),
+  --menu-fg-250: var(--menu-fg-250),
+  --menu-fg-200: var(--menu-fg-200),
+  --menu-fg-150: var(--menu-fg-150),
+  --menu-fg-100: var(--menu-fg-100),
+  --menu-fg-50: var(--menu-fg-50),
+
+  --menu-bg: var(--menu-bg),
+  --menu-bg-600: var(--menu-bg-600),
+  --menu-bg-550: var(--menu-bg-550),
+  --menu-bg-500: var(--menu-bg-500),
+  --menu-bg-450: var(--menu-bg-450),
+  --menu-bg-400: var(--menu-bg-400),
+  --menu-bg-350: var(--menu-bg-350),
+  --menu-bg-300: var(--menu-bg-300),
+  --menu-bg-250: var(--menu-bg-250),
+  --menu-bg-200: var(--menu-bg-200),
+
   --on-primary: var(--on-primary),
   --on-primary-700: var(--on-primary-700),
   --on-primary-650: var(--on-primary-650),
@@ -173,16 +202,13 @@ $variables: (
   --primary-50: var(--primary-50),
 
   --border-primary: var(--border-primary),
+  --border-secondary: var(--border-secondary),
 
   --alert-primary-fg: var(--alert-primary-fg),
   --alert-primary-bg: var(--alert-primary-bg),
   --alert-primary-border-color: var(--alert-primary-border-color),
 
   --menu-margin-left: var(--menu-margin-left),
-
-  // Optional variables
-  --menu-fg: var(--menu-fg),
-  --menu-bg: var(--menu-bg)
 );
 
 // SASS type check our CSS variables

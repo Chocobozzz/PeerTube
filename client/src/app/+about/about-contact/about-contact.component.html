@@ -1,0 +1,56 @@
+<div class="margin-content mt-4">
+  <h3 class="fs-3 fw-semibold mb-3" i18n>Contact {{ instanceName }} administrators</h3>
+
+  @if (isContactFormEnabled()) {
+    @if (!success) {
+      <form novalidate [formGroup]="form" (ngSubmit)="sendForm()">
+        <div class="form-group">
+          <label i18n for="fromName">Your name</label>
+          <input
+            type="text" id="fromName" class="form-control"
+            formControlName="fromName" [ngClass]="{ 'input-error': formErrors.fromName }"
+            autocomplete="name"
+          >
+
+          <div *ngIf="formErrors.fromName" class="form-error" role="alert">{{ formErrors.fromName }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="fromEmail">Your email</label>
+          <input
+            type="text" id="fromEmail" class="form-control"
+            formControlName="fromEmail" [ngClass]="{ 'input-error': formErrors['fromEmail'] }"
+            i18n-placeholder placeholder="Example: john@example.com" autocomplete="email"
+          >
+
+          <div *ngIf="formErrors.fromEmail" class="form-error" role="alert">{{ formErrors.fromEmail }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="subject">Subject</label>
+          <input
+            type="text" id="subject" class="form-control"
+            formControlName="subject" [ngClass]="{ 'input-error': formErrors['subject'] }"
+          >
+
+          <div *ngIf="formErrors.subject" class="form-error" role="alert">{{ formErrors.subject }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="body">Your message</label>
+          <textarea id="body" formControlName="body" class="form-control" [ngClass]="{ 'input-error': formErrors['body'] }"></textarea>
+
+          <div *ngIf="formErrors.body" class="form-error" role="alert">{{ formErrors.body }}</div>
+        </div>
+
+        <my-alert *ngIf="error" type="danger">{{ error }}</my-alert>
+
+        <input type="submit" i18n-value value="Submit" class="peertube-button primary-button" [disabled]="!form.valid" />
+      </form>
+    } @else {
+      <my-alert type="success">{{ success }}</my-alert>
+    }
+  } @else {
+    <my-alert type="danger" i18n>The contact form is not enabled on this instance.</my-alert>
+  }
+</div>

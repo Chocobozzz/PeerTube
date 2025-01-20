@@ -1,3 +1,11 @@
 <ng-container i18n>
-  <a class="text-decoration-underline" href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noreferrer noopener">Markdown compatible</a> that also supports <a class="text-decoration-underline" href="https://docs.joinpeertube.org/api/custom-client-markup" target="_blank" rel="noreferrer noopener">custom PeerTube HTML tags</a>
+  <a class="text-decoration-underline" href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noreferrer noopener">Markdown compatible</a> that also supports <a class="text-decoration-underline" href="https://docs.joinpeertube.org/api/custom-client-markup" target="_blank" rel="noreferrer noopener">custom PeerTube HTML tags</a>.
 </ng-container>
+
+@if (supportRelMe) {
+  <br />
+
+  <ng-container i18n>
+    <a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer">Mastodon verification link</a> is also supported.
+  </ng-container>
+}

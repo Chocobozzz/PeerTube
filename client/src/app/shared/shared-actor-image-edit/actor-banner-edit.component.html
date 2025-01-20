@@ -11,7 +11,7 @@
     <div *ngIf="hasBanner()" ngbDropdown placement="right">
       <button type="button" class="actor-img-edit-button button-file primary-button" ngbDropdownToggle>
         <my-global-icon iconName="edit"></my-global-icon>
-        <label for="bannerMenu" i18n>Change your banner</label>
+        <span i18n>Change your banner</span>
       </button>
 
       <div ngbDropdownMenu>
@@ -30,6 +30,6 @@
 
 <ng-template #uploadNewBanner>
   <my-global-icon iconName="upload"></my-global-icon>
-  <span for="bannerfile" i18n>Upload a new banner</span>
+  <label for="bannerfile" i18n>Upload a new banner</label>
   <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
 </ng-template>

@@ -1,4 +1,4 @@
-import { isTestOrDevInstance, isUsingViewersFederationV2 } from '@peertube/peertube-node-utils'
+import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
@@ -223,7 +223,7 @@ export class VideoViewerCounters {
     const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
 
     if (viewer.lastFederation && viewer.lastFederation > federationLimit) return
-    if (video.remote === false && isUsingViewersFederationV2()) return
+    if (video.remote === false) return
 
     await sendView({
       byActor: await getServerActor(),
@@ -236,8 +236,6 @@ export class VideoViewerCounters {
   }
 
   private async federateTotalViewers (video: MVideoImmutable) {
-    if (!isUsingViewersFederationV2()) return
-
     await sendView({
       byActor: await getServerActor(),
       video,

@@ -48,6 +48,7 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
           ? [ generateRunnerTranscodingAudioInputFileUrl(jobUUID, video.uuid) ]
           : []
       },
+      output: {},
       tasks: tasks.map(t => {
         if (isVideoStudioTaskIntro(t) || isVideoStudioTaskOutro(t)) {
           return {

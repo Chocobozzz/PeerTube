@@ -75,6 +75,7 @@ export class ActorHtml {
       escapedTitle: escapeHTML(title),
       escapedSiteName: escapeHTML(siteName),
       escapedTruncatedDescription,
+      relMe: TagsHtml.findRelMe(entity.description),
       image,
       ogType,
       twitterCard,

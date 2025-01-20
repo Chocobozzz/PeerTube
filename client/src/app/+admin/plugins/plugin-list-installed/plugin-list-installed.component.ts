@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
+import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, resetCurrentPage, updatePaginationOnDelete } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { compareSemVer } from '@peertube/peertube-core-utils'
 import { PeerTubePlugin, PluginType, PluginType_Type } from '@peertube/peertube-models'
@@ -69,8 +69,8 @@ export class PluginListInstalledComponent implements OnInit {
   }
 
   reloadPlugins () {
-    this.pagination.currentPage = 1
     this.plugins = []
+    resetCurrentPage(this.pagination)
 
     this.loadMorePlugins()
   }
@@ -143,7 +143,7 @@ export class PluginListInstalledComponent implements OnInit {
           this.notifier.success($localize`${plugin.name} uninstalled.`)
 
           this.plugins = this.plugins.filter(p => p.name !== plugin.name)
-          this.pagination.totalItems--
+          updatePaginationOnDelete(this.pagination)
 
           this.uninstalling[pluginKey] = false
         },

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
+import { config, expect } from 'chai'
 import { Account, HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, makeGetRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests } from '@tests/shared/client.js'
+
+config.truncateThreshold = 0
 
 describe('Test Open Graph and Twitter cards HTML tags', function () {
   let servers: PeerTubeServer[]
@@ -236,6 +238,51 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
       expect(text).to.contain(`<meta property="twitter:description" content="&quot;super description&quot;" />`)
       expect(text).to.contain(`<meta property="og:description" content="&quot;super description&quot;" />`)
+    })
+  })
+
+  describe('Mastodon link', function () {
+
+    async function check (path: string, mastoLink: string, exist = true) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      const expected = `<link href="${mastoLink}" rel="me">`
+
+      if (exist)expect(text).to.contain(expected)
+      else expect(text).to.not.contain(expected)
+    }
+
+    it('Should correctly include Mastodon link in account', async function () {
+      await servers[0].users.updateMe({
+        description: 'hi, please <a href="https://social.example.com/@username" rel="me">Follow me on Mastodon!</a>'
+      })
+
+      await check('/a/root', 'https://social.example.com/@username')
+    })
+
+    it('Should correctly include Mastodon link in channel', async function () {
+      await servers[0].channels.update({
+        channelName: 'root_channel',
+        attributes: {
+          description: '<a rel="me" href="https://social.example.com/@username2">Follow me on Mastodon!</a>'
+        }
+      })
+
+      await check('/c/root_channel', 'https://social.example.com/@username2')
+    })
+
+    it('Should correctly include Mastodon link on homepage', async function () {
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            description: '<a>toto</a>coucou<a rel="me" href="https://social.example.com/@username3">Follow me on Mastodon!</a>'
+          }
+        }
+      })
+
+      await check('/', 'https://social.example.com/@username3')
+      await check('/about', 'https://social.example.com/@username3', false)
     })
   })
 

@@ -4,7 +4,9 @@
 .root {
   width: 100%;
 
-  @include rfs(2.5rem, margin-bottom);
+  &.with-mb {
+    @include rfs(2.5rem, margin-bottom);
+  }
 }
 
 h1 {

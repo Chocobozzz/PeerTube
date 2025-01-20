@@ -14,9 +14,13 @@ const icons = {
   'following': require('../../../assets/images/misc/account-arrow-right.svg'), // material ui
   'tip': require('../../../assets/images/misc/tip.svg'), // material ui
   'flame': require('../../../assets/images/misc/flame.svg'),
+  'fediverse': require('../../../assets/images/misc/fediverse.svg'),
+  'mastodon': require('../../../assets/images/misc/mastodon.svg'),
+  'bluesky': require('../../../assets/images/misc/bluesky.svg'),
 
   // feather/lucide icons
   'menu': require('../../../assets/images/feather/menu.svg'),
+  'link': require('../../../assets/images/feather/link.svg'),
   'history': require('../../../assets/images/feather/history.svg'),
   'registry': require('../../../assets/images/feather/registry.svg'),
   'subscriptions': require('../../../assets/images/feather/subscriptions.svg'),

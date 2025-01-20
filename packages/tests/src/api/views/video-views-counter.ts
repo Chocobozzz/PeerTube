@@ -203,33 +203,12 @@ describe('Test video views/viewers counters', function () {
     })
   }
 
-  describe('Federation V1', function () {
+  describe('Federation', function () {
 
     before(async function () {
       this.timeout(120000)
 
-      servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: false })
-    })
-
-    describe('Not using session id', function () {
-      runTests({ useSessionId: false })
-    })
-
-    describe('Using session id', function () {
-      runTests({ useSessionId: true })
-    })
-
-    after(async function () {
-      await cleanupTests(servers)
-    })
-  })
-
-  describe('Federation V2', function () {
-
-    before(async function () {
-      this.timeout(120000)
-
-      servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: true })
+      servers = await prepareViewsServers({ viewExpiration: '5 seconds' })
     })
 
     describe('Not using session id', function () {
@@ -277,7 +256,7 @@ describe('Test video views/viewers counters', function () {
     before(async function () {
       this.timeout(120000)
 
-      servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: true, trustViewerSessionId: false });
+      servers = await prepareViewsServers({ viewExpiration: '5 seconds', trustViewerSessionId: false });
 
       ({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
       await waitJobs(servers)

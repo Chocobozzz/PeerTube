@@ -9,6 +9,8 @@ class ChaptersPlugin extends Plugin {
   declare private chapters: VideoChapter[]
   declare private markers: ProgressBarMarkerComponent[]
 
+  private activeChapter: VideoChapter
+
   constructor (player: videojs.Player, options: videojs.ComponentOptions & ChaptersOptions) {
     super(player, options)
 
@@ -22,6 +24,9 @@ class ChaptersPlugin extends Plugin {
         if (chapter.timecode === 0) continue
 
         const marker = new ProgressBarMarkerComponent(player, { timecode: chapter.timecode })
+
+        marker.on('mouseenter', () => this.activeChapter = chapter)
+        marker.on('mouseleave', () => this.activeChapter = undefined)
 
         this.markers.push(marker)
         this.getSeekBar().addChild(marker)
@@ -38,6 +43,12 @@ class ChaptersPlugin extends Plugin {
   }
 
   getChapter (timecode: number) {
+    if (this.activeChapter) {
+      this.player.addClass('has-chapter')
+
+      return { title: this.activeChapter.title, fixedTimecode: this.activeChapter.timecode }
+    }
+
     if (this.chapters.length !== 0) {
       for (let i = this.chapters.length - 1; i >= 0; i--) {
         const chapter = this.chapters[i]
@@ -45,14 +56,14 @@ class ChaptersPlugin extends Plugin {
         if (chapter.timecode <= timecode) {
           this.player.addClass('has-chapter')
 
-          return chapter.title
+          return { title: chapter.title }
         }
       }
     }
 
     this.player.removeClass('has-chapter')
 
-    return ''
+    return { title: '' }
   }
 
   private getSeekBar () {

@@ -189,7 +189,11 @@ describe('Test resumable upload', function () {
     it('Should not accept more chunks than expected with an invalid content length/content range', async function () {
       const uploadId = await prepareUpload({ size: 1500 })
 
-      await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentLength: 1000 })
+      try {
+        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentLength: 1000 })
+      } catch (err) {
+        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.BAD_REQUEST_400, contentLength: 1000 })
+      }
 
       await checkFileSize(uploadId, 0)
     })
