@@ -40,7 +40,7 @@ import {
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
 import { shortCacheObservable } from '@root-helpers/utils'
-import { lastValueFrom } from 'rxjs'
+import { lastValueFrom, throttleTime } from 'rxjs'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -352,10 +352,9 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
       sort: this.sort,
       search: this.search
     })
-    .pipe(shortCacheObservable())
 
-    obs.subscribe({
-      next: resultList => {
+    return lastValueFrom(obs)
+      .then(resultList => {
         this.users = resultList.data.map(u => ({
           ...u,
 
@@ -373,12 +372,8 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
         this.totalRecords = resultList.total
 
         this.loadMutedStatus()
-      },
-
-      error: err => this.notifier.error(err.message)
-    })
-
-    return lastValueFrom(obs)
+      })
+      .catch(err =>  this.notifier.error(err.message))
   }
 
   private loadMutedStatus () {
