@@ -39,8 +39,7 @@ import {
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
-import { shortCacheObservable } from '@root-helpers/utils'
-import { lastValueFrom, throttleTime } from 'rxjs'
+import { lastValueFrom } from 'rxjs'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -373,7 +372,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
 
         this.loadMutedStatus()
       })
-      .catch(err =>  this.notifier.error(err.message))
+      .catch(err => this.notifier.error(err.message))
   }
 
   private loadMutedStatus () {
