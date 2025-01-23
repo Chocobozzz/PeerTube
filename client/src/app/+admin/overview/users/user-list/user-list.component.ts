@@ -148,7 +148,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
   async ngOnInit () {
     this.initialize()
 
-    this.pluginService.addAction('admin-user-list:load-data', this.reloadDataInternal.bind(this))
+    this.pluginService.addAction('admin-users-list:load-data', this.reloadDataInternal.bind(this))
 
     const bulkActions: DropdownAction<User[]>[][] = [
       [
@@ -200,7 +200,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
   }
 
   ngOnDestroy () {
-    this.pluginService.removeAction('admin-user-list:load-data')
+    this.pluginService.removeAction('admin-users-list:load-data')
   }
 
   loadSelectedColumns () {

@@ -217,7 +217,7 @@ export const clientDoActionObject = {
   'admin-abuse-list:load-data': true,
   'application:increment-loader': true,
   'application:decrement-loader': true,
-  'admin-user-list:load-data': true,
+  'admin-users-list:load-data': true,
   'admin-video-comment-list:load-data': true,
   'video-watch-comment-list:load-data': true
 }
