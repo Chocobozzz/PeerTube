@@ -314,12 +314,13 @@ describe('Test emails', function () {
     let registrationIdEmail: number
 
     before(async function () {
-      const { id } = await server.registrations.requestRegistration({
+      await server.registrations.requestRegistration({
         username: 'request_1',
         email: 'request_1@example.com',
         registrationReason: 'tt'
       })
-      registrationId = id
+      const registrations = await server.registrations.list()
+      registrationId = registrations.data[0].id
     })
 
     it('Should ask to send the verification email', async function () {

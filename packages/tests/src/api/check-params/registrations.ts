@@ -190,10 +190,10 @@ describe('Test registrations API validators', function () {
         const { total } = await server.users.list()
 
         await server.config.enableSignup(false, total + 1)
-        await server.registrations.register({ username: 'user43', expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+        await server.registrations.register({ username: 'user43', expectedStatus: HttpStatusCode.OK_200 })
 
         await server.config.enableSignup(true, total + 2)
-        await server.registrations.requestRegistration({
+        await server.registrations.register({
           username: 'user44',
           registrationReason: 'reason',
           expectedStatus: HttpStatusCode.OK_200
@@ -214,14 +214,14 @@ describe('Test registrations API validators', function () {
           channel: { name: 'super_user_direct_1_channel', displayName: 'super user direct 1 channel' }
         }
 
-        await makePostBodyRequest({ url: server.url, path: registrationPath, fields, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+        await makePostBodyRequest({ url: server.url, path: registrationPath, fields, expectedStatus: HttpStatusCode.OK_200 })
       })
 
-      it('Should fail if the instance requires approval', async function () {
+      it('Should fail if registration reason isnt provided', async function () {
         this.timeout(60000)
 
         await server.config.enableSignup(true)
-        await server.registrations.register({ username: 'user42', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await server.registrations.register({ username: 'user42', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
     })
 
@@ -312,10 +312,15 @@ describe('Test registrations API validators', function () {
     before(async function () {
       this.timeout(60000)
 
-      await server.config.enableSignup(true);
+      await server.config.enableSignup(true)
 
-      ({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_2', registrationReason: 'toto' }));
-      ({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_3', registrationReason: 'toto' }))
+      await server.registrations.requestRegistration({ username: 'request_2', registrationReason: 'toto' })
+      await server.registrations.requestRegistration({ username: 'request_3', registrationReason: 'toto' })
+
+      const registrations = await server.registrations.list()
+
+      id1 = registrations.data[0].id
+      id2 = registrations.data[1].id
     })
 
     it('Should fail to accept/reject registration without token', async function () {
@@ -375,9 +380,15 @@ describe('Test registrations API validators', function () {
     let id3: number
 
     before(async function () {
-      ({ id: id1 } = await server.registrations.requestRegistration({ username: 'request_4', registrationReason: 'toto' }));
-      ({ id: id2 } = await server.registrations.requestRegistration({ username: 'request_5', registrationReason: 'toto' }));
-      ({ id: id3 } = await server.registrations.requestRegistration({ username: 'request_6', registrationReason: 'toto' }))
+      await server.registrations.requestRegistration({ username: 'request_4', registrationReason: 'toto' })
+      await server.registrations.requestRegistration({ username: 'request_5', registrationReason: 'toto' })
+      await server.registrations.requestRegistration({ username: 'request_6', registrationReason: 'toto' })
+
+      const registrations = await server.registrations.list()
+
+      id1 = registrations.data[0].id
+      id2 = registrations.data[1].id
+      id3 = registrations.data[2].id
 
       await server.registrations.accept({ id: id2, moderationResponse: 'tt' })
       await server.registrations.reject({ id: id3, moderationResponse: 'tt' })

@@ -66,7 +66,7 @@ describe('Test plugin filter hooks', function () {
     await servers[0].config.updateExistingConfig({
       newConfig: {
         live: { enabled: true },
-        signup: { enabled: true },
+        signup: { enabled: true, limit: -1 },
         videoFile: {
           update: {
             enabled: true
@@ -475,6 +475,27 @@ describe('Test plugin filter hooks', function () {
       const user = await servers[0].users.getMyInfo() as MyUser & { customParam: string }
 
       expect(user.customParam).to.equal('Customized')
+    })
+  })
+
+  describe('Should run filter:api.user.signup.requires-approval.result', function () {
+
+    before(async function () {
+      await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: false } } })
+    })
+
+    it('Should require approval', async function () {
+      await servers[0].registrations.register({ username: 'waiting_john' })
+      const registrations = await servers[0].registrations.list()
+
+      expect(registrations.data.map((reg) => reg.username)).to.contain('waiting_john')
+    })
+
+    it('Should not require approval', async function () {
+      await servers[0].registrations.register({ username: 'anybody' })
+      const users = await servers[0].users.list()
+
+      expect(users.data.map((reg) => reg.username)).to.contain('anybody')
     })
   })
 
