@@ -925,7 +925,7 @@ describe('Test plugin filter hooks', function () {
       const { total } = await servers[0].channels.list({ start: 0, count: 1 })
 
       // plugin do +1 to the total parameter
-      expect(total).to.equal(6)
+      expect(total).to.equal(7)
     })
 
     it('Should run filter:api.video-channel.get.result', async function () {
