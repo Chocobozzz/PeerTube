@@ -5,7 +5,6 @@ import {
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
-  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
