@@ -28,10 +28,13 @@ describe('Test oauth', function () {
     })
 
     await setAccessTokensToServers([ server ])
-    await server.users.create({ username: 'user1', email: 'user@example.com' })
-    await server.users.create({ username: 'user2', email: 'User@example.com', password: 'AdvancedPassword' })
 
     sqlCommand = new SQLCommand(server)
+
+    await server.users.create({ username: 'user1', email: 'user@example.com' })
+    await server.users.create({ username: 'user2', password: 'AdvancedPassword' })
+
+    await sqlCommand.setUserEmail('user2', 'User@example.com')
   })
 
   describe('OAuth client', function () {

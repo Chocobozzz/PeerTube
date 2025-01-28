@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -11,6 +9,9 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test emails', function () {
   let server: PeerTubeServer
@@ -31,16 +32,8 @@ describe('Test emails', function () {
     username: 'user_1',
     password: 'super_password'
   }
-  const similarUsers = [
-    {
-      username: 'lowercase_user_1',
-      email: 'lowercase_user_1@example.com'
-    },
-    {
-      username: 'lowercase_user__1',
-      email: 'Lowercase_user_1@example.com'
-    }
-  ]
+
+  const similarUsers = [ { username: 'lowercase_user_1'}, { username: 'lowercase_user__1' } ]
 
   before(async function () {
     this.timeout(120000)
@@ -51,8 +44,15 @@ describe('Test emails', function () {
     await setAccessTokensToServers([ server ])
     await server.config.enableSignup(true)
 
-    for (const user of similarUsers) {
-      await server.users.create(user)
+    {
+      const sqlCommand = new SQLCommand(server)
+
+      for (const user of similarUsers) {
+        await server.users.create(user)
+      }
+
+      await sqlCommand.setUserEmail('lowercase_user__1', 'Lowercase_user_1@example.com')
+      await sqlCommand.cleanup()
     }
 
     {
