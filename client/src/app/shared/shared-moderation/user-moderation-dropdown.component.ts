@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
-import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
+import { AuthService, ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
@@ -58,7 +58,9 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     private serverService: ServerService,
     private userAdminService: UserAdminService,
     private blocklistService: BlocklistService,
-    private bulkService: BulkService
+    private bulkService: BulkService,
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) { }
 
   ngOnInit () {
@@ -271,20 +273,20 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     return account && this.authService.getUser().account.id === account.id
   }
 
-  private buildActions () {
-    this.userActions = []
+  private async buildActions () {
+    const userActions: DropdownAction<{ user: User, account: AccountMutedStatus }>[][] = []
 
     if (this.prependActions && this.prependActions.length !== 0) {
-      this.userActions = [
-        this.prependActions
-      ]
+      userActions.push(this.prependActions)
     }
 
     const myAccountModerationActions = this.buildMyAccountModerationActions()
     const instanceModerationActions = this.buildInstanceModerationActions()
 
-    if (myAccountModerationActions.length !== 0) this.userActions.push(myAccountModerationActions)
-    if (instanceModerationActions.length !== 0) this.userActions.push(instanceModerationActions)
+    if (myAccountModerationActions.length !== 0) userActions.push(myAccountModerationActions)
+    if (instanceModerationActions.length !== 0) userActions.push(instanceModerationActions)
+
+    this.userActions = await this.hooks.wrapObject(userActions, 'moderation', 'filter:user-moderation.actions.create.result')
   }
 
   private buildMyAccountModerationActions () {

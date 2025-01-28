@@ -1,4 +1,4 @@
-function copyToClipboard (text: string, container?: HTMLElement) {
+export function copyToClipboard (text: string, container?: HTMLElement) {
   if (!container) container = document.body
 
   const el = document.createElement('textarea')
@@ -12,13 +12,8 @@ function copyToClipboard (text: string, container?: HTMLElement) {
   container.removeChild(el)
 }
 
-function wait (ms: number) {
+export function wait (ms: number) {
   return new Promise<void>(res => {
     setTimeout(() => res(), ms)
   })
-}
-
-export {
-  copyToClipboard,
-  wait
 }

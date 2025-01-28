@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, User, hasMoreItems } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication } from '@app/shared/shared-main/feeds/syndication.model'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -10,10 +10,10 @@ import { VideoComment } from '@app/shared/shared-video-comment/video-comment.mod
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
-import { Subject, Subscription } from 'rxjs'
+import { lastValueFrom, Subject, Subscription } from 'rxjs'
 import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
-import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { LoaderComponent } from '../../../../shared/shared-main/common/loader.component'
+import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { VideoCommentAddComponent } from './video-comment-add.component'
 import { VideoCommentComponent } from './video-comment.component'
 
@@ -78,10 +78,13 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {}
 
   ngOnInit () {
+    this.pluginService.addAction('video-watch-comment-list:load-data', () => this.loadMoreThreads(true))
+
     // Find highlighted comment in params
     this.sub = this.activatedRoute.params.subscribe(
       params => {
@@ -100,6 +103,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy () {
+    this.pluginService.removeAction('video-watch-comment-list:load-data')
+
     if (this.sub) this.sub.unsubscribe()
   }
 
@@ -145,7 +150,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  loadMoreThreads () {
+  async loadMoreThreads (reset = false) {
+    if (reset === true) {
+      this.componentPagination.currentPage = 1
+    }
+
     const params = {
       videoId: this.video.uuid,
       videoPassword: this.videoPassword,
@@ -161,19 +170,20 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       'filter:api.video-watch.video-threads.list.result'
     )
 
-    obs.subscribe({
-      next: res => {
-        this.comments = this.comments.concat(res.data)
-        this.componentPagination.totalItems = res.total
-        this.totalNotDeletedComments = res.totalNotDeletedComments
+    try {
+      const res = await lastValueFrom(obs)
 
-        this.onDataSubject.next(res.data)
+      if (reset) this.comments = []
+      this.comments = this.comments.concat(res.data)
+      this.componentPagination.totalItems = res.total
+      this.totalNotDeletedComments = res.totalNotDeletedComments
 
-        this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
-      },
+      this.onDataSubject.next(res.data)
 
-      error: err => this.notifier.error(err.message)
-    })
+      this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
+    } catch (err) {
+      this.notifier.error(err.message)
+    }
   }
 
   onCommentThreadCreated (comment: VideoComment) {
