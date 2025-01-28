@@ -8,7 +8,7 @@ import { isVideoChannelDisplayNameValid } from '@server/helpers/custom-validator
 import { cryptPassword } from '@server/helpers/peertube-crypto.js'
 import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import { MRegistration, MRegistrationFormattable } from '@server/types/models/index.js'
-import { FindOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
+import { col, FindOptions, fn, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeCreate,
@@ -129,36 +129,49 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     return UserRegistrationModel.findByPk(id)
   }
 
-  static loadByEmail (email: string): Promise<MRegistration> {
+  static listByEmailCaseInsensitive (email: string): Promise<MRegistration[]> {
     const query = {
-      where: { email }
+      where: where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      )
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
-  static loadByEmailOrUsername (emailOrUsername: string): Promise<MRegistration> {
+  static listByEmailCaseInsensitiveOrUsername (emailOrUsername: string): Promise<MRegistration[]> {
     const query = {
       where: {
         [Op.or]: [
-          { email: emailOrUsername },
+          where(
+            fn('LOWER', col('email')),
+            '=',
+            emailOrUsername.toLowerCase()
+          ),
+
           { username: emailOrUsername }
         ]
       }
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
-  static loadByEmailOrHandle (options: {
+  static listByEmailCaseInsensitiveOrHandle (options: {
     email: string
     username: string
     channelHandle?: string
-  }): Promise<MRegistration> {
+  }): Promise<MRegistration[]> {
     const { email, username, channelHandle } = options
 
     let or: WhereOptions = [
-      { email },
+      where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      ),
       { channelHandle: username },
       { username }
     ]
@@ -176,7 +189,7 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
       }
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
   // ---------------------------------------------------------------------------

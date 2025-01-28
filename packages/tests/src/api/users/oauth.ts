@@ -30,6 +30,11 @@ describe('Test oauth', function () {
     await setAccessTokensToServers([ server ])
 
     sqlCommand = new SQLCommand(server)
+
+    await server.users.create({ username: 'user1', email: 'user@example.com' })
+    await server.users.create({ username: 'user2', password: 'AdvancedPassword' })
+
+    await sqlCommand.setUserEmail('user2', 'User@example.com')
   })
 
   describe('OAuth client', function () {
@@ -87,6 +92,9 @@ describe('Test oauth', function () {
 
     it('Should be able to login', async function () {
       await server.login.login({ expectedStatus: HttpStatusCode.OK_200 })
+
+      const user = { username: 'User@example.com', password: 'AdvancedPassword' }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.OK_200 })
     })
 
     it('Should be able to login with an insensitive username', async function () {
@@ -98,6 +106,22 @@ describe('Test oauth', function () {
 
       const user3 = { username: 'ROOt', password: server.store.user.password }
       await server.login.login({ user: user3, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should be able to login with an insensitive email when no similar emails exist', async function () {
+      const user = { username: 'ADMIN' + server.internalServerNumber + '@example.com', password: server.store.user.password }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.OK_200 })
+
+      const user2 = { username: 'admin' + server.internalServerNumber + '@example.com', password: server.store.user.password }
+      await server.login.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should not be able to login with an insensitive email when similar emails exist', async function () {
+      const user = { username: 'uSer@example.com', password: 'AdvancedPassword' }
+      await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+      const user2 = { username: 'User@example.com', password: 'AdvancedPassword' }
+      await server.login.login({ user: user2, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 

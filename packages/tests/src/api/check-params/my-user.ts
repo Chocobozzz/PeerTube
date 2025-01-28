@@ -60,10 +60,30 @@ describe('Test my user API validators', function () {
 
     it('Should fail with an invalid email attribute', async function () {
       const fields = {
-        email: 'blabla'
+        email: 'blabla',
+        currentPassword: 'password'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + 'me', token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
+    })
+
+    it('Should fail with an already existing email attribute', async function () {
+      const emails = [ 'moderator1@example.com', 'moderatoR1@example.com' ]
+
+      for (const email of emails) {
+        const fields = {
+          email,
+          currentPassword: 'password'
+        }
+
+        await makePutBodyRequest({
+          url: server.url,
+          path: path + 'me',
+          token: userToken,
+          fields,
+          expectedStatus: HttpStatusCode.CONFLICT_409
+        })
+      }
     })
 
     it('Should fail with a too small password', async function () {

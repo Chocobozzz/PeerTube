@@ -1,14 +1,14 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import express from 'express'
 import { body, param } from 'express-validator'
-import { toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { Redis } from '../../../lib/redis.js'
-import { areValidationErrors, checkUserEmailExist, checkUserIdExist } from '../shared/index.js'
-import { checkRegistrationEmailExist, checkRegistrationIdExist } from './shared/user-registrations.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
+import { areValidationErrors, checkUserEmailExistPermissive, checkUserIdExist } from '../shared/index.js'
+import { checkRegistrationEmailExistPermissive, checkRegistrationIdExist } from './shared/user-registrations.js'
 
-const usersAskSendVerifyEmailValidator = [
+export const usersAskSendVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -19,8 +19,8 @@ const usersAskSendVerifyEmailValidator = [
     }, 'filter:api.email-verification.ask-send-verify-email.body')
 
     const [ userExists, registrationExists ] = await Promise.all([
-      checkUserEmailExist(email, res, false),
-      checkRegistrationEmailExist(email, res, false)
+      checkUserEmailExistPermissive(email, res, false),
+      checkRegistrationEmailExistPermissive(email, res, false)
     ])
 
     if (!userExists && !registrationExists) {
@@ -40,7 +40,7 @@ const usersAskSendVerifyEmailValidator = [
   }
 ]
 
-const usersVerifyEmailValidator = [
+export const usersVerifyEmailValidator = [
   param('id')
     .isInt().not().isEmpty().withMessage('Should have a valid id'),
 
@@ -67,7 +67,7 @@ const usersVerifyEmailValidator = [
 
 // ---------------------------------------------------------------------------
 
-const registrationVerifyEmailValidator = [
+export const registrationVerifyEmailValidator = [
   param('registrationId')
     .isInt().not().isEmpty().withMessage('Should have a valid registrationId'),
 
@@ -88,12 +88,3 @@ const registrationVerifyEmailValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  usersAskSendVerifyEmailValidator,
-  usersVerifyEmailValidator,
-
-  registrationVerifyEmailValidator
-}
