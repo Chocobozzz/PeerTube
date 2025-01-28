@@ -33,7 +33,7 @@ describe('Test emails', function () {
     password: 'super_password'
   }
 
-  const similarUsers = [ { username: 'lowercase_user_1'}, { username: 'lowercase_user__1' } ]
+  const similarUsers = [ { username: 'lowercase_user_1' }, { username: 'lowercase_user__1' } ]
 
   before(async function () {
     this.timeout(120000)

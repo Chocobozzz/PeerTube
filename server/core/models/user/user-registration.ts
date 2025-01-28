@@ -129,7 +129,7 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     return UserRegistrationModel.findByPk(id)
   }
 
-  static loadByEmailCaseInsensitive (email: string): Promise<MRegistration[]> {
+  static listByEmailCaseInsensitive (email: string): Promise<MRegistration[]> {
     const query = {
       where: where(
         fn('LOWER', col('email')),
@@ -141,28 +141,37 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
     return UserRegistrationModel.findAll(query)
   }
 
-  static loadByEmailOrUsername (emailOrUsername: string): Promise<MRegistration> {
+  static listByEmailCaseInsensitiveOrUsername (emailOrUsername: string): Promise<MRegistration[]> {
     const query = {
       where: {
         [Op.or]: [
-          { email: emailOrUsername },
+          where(
+            fn('LOWER', col('email')),
+            '=',
+            emailOrUsername.toLowerCase()
+          ),
+
           { username: emailOrUsername }
         ]
       }
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
-  static loadByEmailOrHandle (options: {
+  static listByEmailCaseInsensitiveOrHandle (options: {
     email: string
     username: string
     channelHandle?: string
-  }): Promise<MRegistration> {
+  }): Promise<MRegistration[]> {
     const { email, username, channelHandle } = options
 
     let or: WhereOptions = [
-      { email },
+      where(
+        fn('LOWER', col('email')),
+        '=',
+        email.toLowerCase()
+      ),
       { channelHandle: username },
       { username }
     ]
@@ -180,7 +189,7 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
       }
     }
 
-    return UserRegistrationModel.findOne(query)
+    return UserRegistrationModel.findAll(query)
   }
 
   // ---------------------------------------------------------------------------

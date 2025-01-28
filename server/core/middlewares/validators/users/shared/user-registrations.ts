@@ -12,7 +12,7 @@ function checkRegistrationIdExist (idArg: number | string, res: express.Response
 
 function checkRegistrationEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
   return checkRegistrationExist(async () => {
-    const registrations = await UserRegistrationModel.loadByEmailCaseInsensitive(email)
+    const registrations = await UserRegistrationModel.listByEmailCaseInsensitive(email)
 
     return getUserByEmailPermissive(registrations, email)
   }, res, abortResponse)
@@ -26,9 +26,11 @@ async function checkRegistrationHandlesDoNotAlreadyExist (options: {
 }) {
   const { res } = options
 
-  const registration = await UserRegistrationModel.loadByEmailOrHandle(pick(options, [ 'username', 'email', 'channelHandle' ]))
+  const registrations = await UserRegistrationModel.listByEmailCaseInsensitiveOrHandle(
+    pick(options, [ 'username', 'email', 'channelHandle' ])
+  )
 
-  if (registration) {
+  if (registrations.length !== 0) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
       message: 'Registration with this username, channel name or email already exists.'

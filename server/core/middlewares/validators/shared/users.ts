@@ -19,7 +19,7 @@ export function checkUserEmailExistPermissive (email: string, res: express.Respo
   }, res, abortResponse)
 }
 
-export async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
+export async function checkUsernameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
   const existingUser = await UserModel.loadByUsernameOrEmailCaseInsensitive(username)
   const existingEmail = await UserModel.loadByUsernameOrEmailCaseInsensitive(email)
 
@@ -36,6 +36,20 @@ export async function checkUserNameOrEmailDoNotAlreadyExist (username: string, e
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
       message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
+    })
+    return false
+  }
+
+  return true
+}
+
+export async function checkEmailDoesNotAlreadyExist (email: string, res: express.Response) {
+  const user = await UserModel.loadByEmailCaseInsensitive(email)
+
+  if (user.length !== 0) {
+    res.fail({
+      status: HttpStatusCode.CONFLICT_409,
+      message: 'User with this email already exists.'
     })
     return false
   }
