@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
+import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,7 +11,6 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
-import { HttpStatusCode } from '../../../../models/src/http/http-status-codes.js'
 
 describe('Test lazy static endpoinds', function () {
   let servers: PeerTubeServer[]
