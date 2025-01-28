@@ -2,6 +2,7 @@ import { FollowState } from '../actors/index.js'
 import { AbuseStateType } from '../moderation/index.js'
 import { PluginType_Type } from '../plugins/index.js'
 import { VideoConstant } from '../videos/video-constant.model.js'
+import { VideoStateType } from '../videos/video-state.enum.js'
 
 export const UserNotificationType = {
   NEW_VIDEO_FROM_SUBSCRIPTION: 1,
@@ -49,6 +50,10 @@ export interface VideoInfo {
   uuid: string
   shortUUID: string
   name: string
+  state: {
+    id: VideoStateType
+    label: string
+  }
 }
 
 export interface AvatarInfo {

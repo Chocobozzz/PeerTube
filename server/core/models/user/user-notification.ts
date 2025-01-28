@@ -12,6 +12,7 @@ import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ApplicationModel } from '../application/application.js'
 import { PluginModel } from '../server/plugin.js'
 import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { getStateLabel } from '../video/formatter/video-api-format.js'
 import { VideoBlacklistModel } from '../video/video-blacklist.js'
 import { VideoCaptionModel } from '../video/video-caption.js'
 import { VideoCommentModel } from '../video/video-comment.js'
@@ -490,7 +491,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       id: video.id,
       uuid: video.uuid,
       shortUUID: uuidToShort(video.uuid),
-      name: video.name
+      name: video.name,
+      state: {
+        id: video.state,
+        label: getStateLabel(video.state)
+      }
     }
   }
 
@@ -500,12 +505,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
 
         video: abuse.VideoCommentAbuse.VideoComment.Video
-          ? {
-            id: abuse.VideoCommentAbuse.VideoComment.Video.id,
-            name: abuse.VideoCommentAbuse.VideoComment.Video.name,
-            shortUUID: uuidToShort(abuse.VideoCommentAbuse.VideoComment.Video.uuid),
-            uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
-          }
+          ? this.formatVideo(abuse.VideoCommentAbuse.VideoComment.Video)
           : undefined
       }
       : undefined

@@ -5,6 +5,8 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-comm
 
 export class ConfigCommand extends AbstractCommand {
 
+  private savedConfig: CustomConfig
+
   static getConfigResolutions (enabled: boolean, with0p = false) {
     return {
       '0p': enabled && with0p,
@@ -578,5 +580,15 @@ export class ConfigCommand extends AbstractCommand {
     const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })
 
     return this.updateCustomConfig({ ...options, newCustomConfig: merge({}, existing, options.newConfig) })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  async save () {
+    this.savedConfig = await this.getCustomConfig()
+  }
+
+  rollback () {
+    return this.updateCustomConfig({ newCustomConfig: this.savedConfig })
   }
 }

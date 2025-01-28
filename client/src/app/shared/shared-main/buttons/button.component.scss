@@ -8,6 +8,7 @@
 
 .action-button {
   width: 100%; // useful for ellipsis, allow to define a max-width on host component
+  vertical-align: top; // prevent additional height to the parent because of ellipsis
 
   my-loader.displayed {
     display: inline-flex;

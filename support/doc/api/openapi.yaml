@@ -8252,6 +8252,8 @@ components:
           $ref: '#/components/schemas/Video/properties/uuid'
         name:
           $ref: '#/components/schemas/Video/properties/name'
+        state:
+          $ref: '#/components/schemas/Video/properties/state'
     Video:
       properties:
         id:

@@ -13,7 +13,6 @@ import {
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
-import { processViewsBuffer } from '@tests/shared/views.js'
 import { expect } from 'chai'
 
 describe('Test live socket messages', function () {
@@ -105,8 +104,8 @@ describe('Test live socket messages', function () {
     it('Should correctly send views change notification', async function () {
       this.timeout(60000)
 
-      let localLastVideoViews = 0
-      let remoteLastVideoViews = 0
+      let localLastVideoViewers = 0
+      let remoteLastVideoViewers = 0
 
       const liveVideoUUID = await createLiveWrapper()
       await waitJobs(servers)
@@ -115,7 +114,7 @@ describe('Test live socket messages', function () {
         const videoId = await servers[0].videos.getId({ uuid: liveVideoUUID })
 
         const localSocket = servers[0].socketIO.getLiveNotificationSocket()
-        localSocket.on('views-change', (data: LiveVideoEventPayload) => { localLastVideoViews = data.viewers })
+        localSocket.on('views-change', (data: LiveVideoEventPayload) => { localLastVideoViewers = data.viewers })
         localSocket.emit('subscribe', { videoId })
       }
 
@@ -123,7 +122,7 @@ describe('Test live socket messages', function () {
         const videoId = await servers[1].videos.getId({ uuid: liveVideoUUID })
 
         const remoteSocket = servers[1].socketIO.getLiveNotificationSocket()
-        remoteSocket.on('views-change', (data: LiveVideoEventPayload) => { remoteLastVideoViews = data.viewers })
+        remoteSocket.on('views-change', (data: LiveVideoEventPayload) => { remoteLastVideoViewers = data.viewers })
         remoteSocket.emit('subscribe', { videoId })
       }
 
@@ -132,18 +131,25 @@ describe('Test live socket messages', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
 
-      expect(localLastVideoViews).to.equal(0)
-      expect(remoteLastVideoViews).to.equal(0)
+      expect(localLastVideoViewers).to.equal(0)
+      expect(remoteLastVideoViewers).to.equal(0)
 
-      await servers[0].views.simulateView({ id: liveVideoUUID })
-      await servers[1].views.simulateView({ id: liveVideoUUID })
+      const interval = setInterval(async () => {
+        try {
+          await servers[0].views.simulateView({ id: liveVideoUUID, sessionId: 'session1' })
+          await servers[1].views.simulateView({ id: liveVideoUUID, sessionId: 'session2' })
+        } catch (err) {
+          console.error('Cannot simulate view', err)
+        }
+      }, 1000)
 
+      await wait(6000)
       await waitJobs(servers)
-      await processViewsBuffer(servers)
 
-      expect(localLastVideoViews).to.equal(2)
-      expect(remoteLastVideoViews).to.equal(2)
+      expect(localLastVideoViewers).to.equal(2)
+      expect(remoteLastVideoViewers).to.equal(2)
 
+      clearInterval(interval)
       await stopFfmpeg(ffmpegCommand)
     })
 

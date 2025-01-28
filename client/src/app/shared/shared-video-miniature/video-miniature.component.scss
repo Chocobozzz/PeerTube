@@ -12,6 +12,7 @@ $more-button-width: 40px;
 
 .video-name-container {
   display: flex;
+  align-items: center;
   min-width: 1px;
 }
 
@@ -68,7 +69,6 @@ my-actor-host {
 
 .video-actions {
   width: $more-button-width;
-  height: 30px;
 
   ::ng-deep .dropdown-root:not(.show) {
     opacity: 0;
@@ -78,12 +78,8 @@ my-actor-host {
     opacity: 1;
   }
 
-  ::ng-deep .more-icon {
-    opacity: .6;
-
-    &:hover {
-      opacity: 1;
-    }
+  ::ng-deep .dropdown-root > .dropdown-toggle {
+    --input-y-padding: 0;
   }
 }
 
@@ -142,10 +138,6 @@ my-actor-host {
   }
 
   .date-and-views {
-    margin-top: 3px;
-  }
-
-  .video-actions {
     margin-top: 3px;
   }
 

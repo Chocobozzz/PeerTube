@@ -1,4 +1,4 @@
-FROM node:18-bookworm-slim
+FROM node:20-bookworm-slim
 
 ARG ALREADY_BUILT=0
 
@@ -9,13 +9,13 @@ RUN apt update \
  && rm /var/lib/apt/lists/* -fR
 
 # Node images hardcode the node uid to 1000 so that number is not available.
-# The "peertube" user is created as a system account which selects a UID from 
+# The "peertube" user is created as a system account which selects a UID from
 # the range of SYS_UID_MIN to SYS_UID_MAX (-1 to 1000] and consistently
 # selects 999 given the current image build steps. The same is true for the
 # system group range SYS_GID_MIN and SYS_GID_MAX. It is fine to manually assign
 # them an ID outside of that range.
-DEFAULT_PEERTUBE_UID=999
-DEFAULT_PEERTUBE_GID=999
+ENV DEFAULT_PEERTUBE_UID=999
+ENV DEFAULT_PEERTUBE_GID=999
 
 # Add peertube user
 RUN groupadd -r -g ${PEERTUBE_GID:-${DEFAULT_PEERTUBE_GID}} peertube \

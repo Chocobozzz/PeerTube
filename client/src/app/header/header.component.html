@@ -1,3 +1,13 @@
+<div *ngIf="mobileMsg" class="mobile-msg">
+  <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
+
+  <a class="peertube-button-link secondary-button me-3" [href]="mobileAppUrl">Open</a>
+
+  <button class="border-0 p-0" title="Close this message" i18n-title (click)="hideMobileMsg()">
+    <my-global-icon iconName="cross"></my-global-icon>
+  </button>
+</div>
+
 <div class="root">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
 

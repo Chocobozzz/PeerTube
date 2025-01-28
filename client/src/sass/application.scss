@@ -85,15 +85,27 @@ body {
 
   --header-height: #{$header-height};
 
+  &.mobile-app-msg {
+    --header-height: #{$header-height + $header-mobile-msg-height};
+  }
+
   --menu-fg: #{pvar(--fg-400)};
   --menu-bg: #{pvar(--bg-secondary-400)};
 
   @media screen and (max-width: $small-view) {
     --header-height: #{$header-height-small-view};
+
+    &.mobile-app-msg {
+      --header-height: #{$header-height-small-view + $header-mobile-msg-height};
+    }
   }
 
   @media screen and (max-width: $mobile-view) {
     --header-height: #{$header-height-mobile-view};
+
+    &.mobile-app-msg {
+      --header-height: #{$header-height-mobile-view + $header-mobile-msg-height};
+    }
   }
 
   // Light theme

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, RunnerJobState, RunnerJobVODPayload } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -13,7 +14,6 @@ import {
 import { MockUpload } from '@tests/shared/mock-servers/mock-upload.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
-import { wait } from '../../../core-utils/src/common/time.js'
 
 describe('Test peertube-runner custom upload', function () {
   let server: PeerTubeServer

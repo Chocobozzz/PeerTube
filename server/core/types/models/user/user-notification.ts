@@ -25,7 +25,7 @@ type Use<K extends keyof UserNotificationModel, M> = PickWith<UserNotificationMo
 export module UserNotificationIncludes {
   export type ActorImageInclude = Pick<ActorImageModel, 'createdAt' | 'filename' | 'getStaticPath' | 'width' | 'updatedAt'>
 
-  export type VideoInclude = Pick<VideoModel, 'id' | 'uuid' | 'name'>
+  export type VideoInclude = Pick<VideoModel, 'id' | 'uuid' | 'name' | 'state'>
   export type VideoIncludeChannel =
     VideoInclude &
     PickWith<VideoModel, 'VideoChannel', VideoChannelIncludeActor>
@@ -58,7 +58,7 @@ export module UserNotificationIncludes {
     Pick<VideoCommentAbuseModel, 'id'> &
     PickWith<VideoCommentAbuseModel, 'VideoComment',
     Pick<VideoCommentModel, 'id' | 'originCommentId' | 'getThreadId'> &
-    PickWith<VideoCommentModel, 'Video', Pick<VideoModel, 'id' | 'name' | 'uuid'>>>
+    PickWith<VideoCommentModel, 'Video', Pick<VideoModel, 'id' | 'name' | 'uuid' | 'state'>>>
 
   export type AbuseInclude =
     Pick<AbuseModel, 'id' | 'state'> &
