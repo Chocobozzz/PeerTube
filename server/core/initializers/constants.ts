@@ -419,7 +419,7 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 8 * 1024 * 1024 // 8MB
       }
     },
     EXTNAME: [] as string[],
@@ -444,7 +444,7 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 8 * 1024 * 1024 // 8MB
       }
     }
   },
@@ -455,7 +455,7 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024 // 4MB
+        max: 8 * 1024 * 1024 // 8MB
       }
     }
   },
