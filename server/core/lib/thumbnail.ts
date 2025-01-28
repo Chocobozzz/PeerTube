@@ -211,6 +211,7 @@ export function updateRemoteVideoThumbnail (options: {
 
   // Do not change the thumbnail filename if the file did not change
   if (hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)) {
+    thumbnail.previousThumbnailFilename = thumbnail.filename
     thumbnail.filename = generatedFilename
   }
 
