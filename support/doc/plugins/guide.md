@@ -109,39 +109,6 @@ function register ({ registerHook, peertubeHelpers }) {
 
 See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete hooks list.
 
-### Client actions
-
-Plugin can trigger actions in the client by calling `doAction` with a specific action.
-This can be used in combination with a hook to add custom admin actions, for instance:
-
-```
-function register ({ registerHook, doAction }) {
-  registerHook({
-    target: 'filter:admin-video-comments-list.bulk-actions.create.result',
-    handler: async menuItems => {
-      return menuItems.concat(
-      [
-        {
-          label: 'Mark as spam',
-          description: 'Report as spam and delete user.',
-          handler: async (comments) => {
-            // Show the loader
-            doAction('application:increment-loader')
-            // Run custom function
-            await deleteCommentsAndMarkAsSpam(comments)
-            // Reload the list in order for the admin to see the updated list
-            await doAction('admin-video-comments-list:load-data')
-          },
-          isDisplayed: (users) => true,
-        }
-      ])
-    }
-  })
-}
-```
-
-See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete `doAction` list.
-
 ### Static files
 
 Plugins can declare static directories that PeerTube will serve (images for example)
@@ -954,6 +921,39 @@ function register ({ registerClientRoute }) {
 ```
 
 You can then access the page on `/p/my-super/route` (please note the additional `/p/` in the path).
+
+#### Run actions
+
+Plugin can trigger actions in the client by calling `doAction` with a specific action.
+This can be used in combination with a hook to add custom admin actions, for instance:
+
+```js
+function register ({ registerHook, doAction }) {
+  registerHook({
+    target: 'filter:admin-video-comments-list.bulk-actions.create.result',
+    handler: async menuItems => {
+      return menuItems.concat(
+      [
+        {
+          label: 'Mark as spam',
+          description: 'Report as spam and delete user.',
+          handler: async (comments) => {
+            // Show the loader
+            doAction('application:increment-loader')
+            // Run custom function
+            await deleteCommentsAndMarkAsSpam(comments)
+            // Reload the list in order for the admin to see the updated list
+            await doAction('admin-video-comments-list:load-data')
+          },
+          isDisplayed: (users) => true,
+        }
+      ])
+    }
+  })
+}
+```
+
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete `doAction` list.
 
 ### Publishing
 
