@@ -81,6 +81,10 @@ export class SQLCommand {
     await this.updateQuery(`UPDATE "userExport" SET storage = :storage WHERE "userId" = :userId`, { storage, userId })
   }
 
+  async setUserEmail (username: string, email: string) {
+    await this.updateQuery(`UPDATE "user" SET email = :email WHERE "username" = :username`, { email, username })
+  }
+
   // ---------------------------------------------------------------------------
 
   setPluginVersion (pluginName: string, newVersion: string) {

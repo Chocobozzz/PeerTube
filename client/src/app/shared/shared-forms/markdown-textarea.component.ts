@@ -145,7 +145,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   private unlockBodyScroll () {
     document.getElementById('content').classList.remove('lock-scroll')
-    this.viewportScroller.scrollToPosition(this.scrollPosition)
+
+    if (this.scrollPosition) {
+      this.viewportScroller.scrollToPosition(this.scrollPosition)
+    }
   }
 
   private async updatePreviews () {

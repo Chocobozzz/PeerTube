@@ -244,6 +244,8 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   await user.destroy()
 
+  Hooks.runAction('action:api.user.deleted', { user, req, res })
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 

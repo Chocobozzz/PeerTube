@@ -1,5 +1,7 @@
+import { forkJoin } from 'rxjs'
+import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, NgClass, NgIf, PlatformLocation } from '@angular/common'
-import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterLink, RouterOutlet } from '@angular/router'
 import {
@@ -28,8 +30,6 @@ import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
-import { forkJoin } from 'rxjs'
-import { filter, first, map } from 'rxjs/operators'
 import { MenuService } from './core/menu/menu.service'
 import { HeaderComponent } from './header/header.component'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
@@ -65,7 +65,7 @@ import { InstanceService } from './shared/shared-main/instance/instance.service'
     ButtonComponent
   ]
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private static LS_BROADCAST_MESSAGE = 'app-broadcast-message-dismissed'
 
   @ViewChild('accountSetupWarningModal') accountSetupWarningModal: AccountSetupWarningModalComponent
@@ -146,10 +146,26 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.document.documentElement.lang = getShortLocale(this.localeId)
     this.document.documentElement.dir = getLocaleDirection(this.localeId)
+
+    this.pluginService.addAction('application:increment-loader', () => {
+      this.loadingBar.useRef('plugins').start()
+
+      return Promise.resolve()
+    })
+    this.pluginService.addAction('application:decrement-loader', () => {
+      this.loadingBar.useRef('plugins').complete()
+
+      return Promise.resolve()
+    })
   }
 
   ngAfterViewInit () {
     this.pluginService.initializeCustomModal(this.customModal)
+  }
+
+  ngOnDestroy () {
+    this.pluginService.removeAction('application:increment-loader')
+    this.pluginService.removeAction('application:decrement-loader')
   }
 
   // ---------------------------------------------------------------------------

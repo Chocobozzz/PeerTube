@@ -237,6 +237,12 @@ async function isUserQuotaValid (options: {
   return true
 }
 
+function getUserByEmailPermissive <T extends { email: string }> (users: T[], email: string): T {
+  if (users.length === 1) return users[0]
+
+  return users.find(r => r.email === email)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -250,7 +256,8 @@ export {
   sendVerifyRegistrationEmail,
 
   isUserQuotaValid,
-  buildUser
+  buildUser,
+  getUserByEmailPermissive
 }
 
 // ---------------------------------------------------------------------------

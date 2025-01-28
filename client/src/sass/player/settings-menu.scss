@@ -19,7 +19,7 @@ $setting-transition-easing: ease-out;
     position: absolute;
     right: .5em;
     bottom: 4em;
-    color: pvar(--embed-foreground-color);
+    color: pvar(--embed-fg);
     opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;
