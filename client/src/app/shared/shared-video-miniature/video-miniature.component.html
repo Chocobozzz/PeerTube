@@ -29,7 +29,7 @@
       }
 
       <div class="owner-container" *ngIf="displayOptions.by">
-        <a class="owner-label ellipsis" [routerLink]="[ '/c', video.byVideoChannel ]">
+        <a class="owner-label ellipsis" [routerLink]="[ '/c', video.byVideoChannel ]" [title]="displayOwnerAccount() ? authorAccount : authorChannel">
           @if (displayOwnerAccount()) {
             {{ authorAccount }}
           } @else if (displayOwnerVideoChannel()) {
