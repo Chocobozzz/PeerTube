@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
@@ -24,6 +24,7 @@ import { User, UserRole, UserRoleType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
+import { lastValueFrom } from 'rxjs'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
 import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
@@ -39,7 +40,6 @@ import {
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
-import { lastValueFrom } from 'rxjs'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -148,7 +148,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
   async ngOnInit () {
     this.initialize()
 
-    this.pluginService.addAction('admin-users-list:load-data', this.reloadDataInternal.bind(this))
+    this.pluginService.addAction('admin-users-list:load-data', () => this.reloadDataInternal())
 
     const bulkActions: DropdownAction<User[]>[][] = [
       [
@@ -345,34 +345,36 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
       })
   }
 
-  protected reloadDataInternal () {
+  protected async reloadDataInternal () {
     const obs = this.userAdminService.getUsers({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
     })
 
-    return lastValueFrom(obs)
-      .then(resultList => {
-        this.users = resultList.data.map(u => ({
-          ...u,
+    try {
+      const resultList = await lastValueFrom(obs)
 
-          accountMutedStatus: {
-            ...u.account,
+      this.users = resultList.data.map(u => ({
+        ...u,
 
-            nameWithHost: Actor.CREATE_BY_STRING(u.account.name, u.account.host),
+        accountMutedStatus: {
+          ...u.account,
 
-            mutedByInstance: false,
-            mutedByUser: false,
-            mutedServerByInstance: false,
-            mutedServerByUser: false
-          }
-        }))
-        this.totalRecords = resultList.total
+          nameWithHost: Actor.CREATE_BY_STRING(u.account.name, u.account.host),
 
-        this.loadMutedStatus()
-      })
-      .catch(err => this.notifier.error(err.message))
+          mutedByInstance: false,
+          mutedByUser: false,
+          mutedServerByInstance: false,
+          mutedServerByUser: false
+        }
+      }))
+      this.totalRecords = resultList.total
+
+      this.loadMutedStatus()
+    } catch (err) {
+      this.notifier.error(err.message)
+    }
   }
 
   private loadMutedStatus () {

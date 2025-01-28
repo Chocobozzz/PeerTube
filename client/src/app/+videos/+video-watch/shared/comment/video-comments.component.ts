@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, ComponentPagination, ConfirmService, Notifier, PluginService, User, hasMoreItems } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication } from '@app/shared/shared-main/feeds/syndication.model'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -12,11 +12,10 @@ import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, N
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import { lastValueFrom, Subject, Subscription } from 'rxjs'
 import { InfiniteScrollerDirective } from '../../../../shared/shared-main/common/infinite-scroller.directive'
-import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { LoaderComponent } from '../../../../shared/shared-main/common/loader.component'
+import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 import { VideoCommentAddComponent } from './video-comment-add.component'
 import { VideoCommentComponent } from './video-comment.component'
-import { shortCacheObservable } from '@root-helpers/utils'
 
 @Component({
   selector: 'my-video-comments',
@@ -84,7 +83,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit () {
-    this.pluginService.addAction('video-watch-comment-list:load-data', this.loadMoreThreads.bind(this, true))
+    this.pluginService.addAction('video-watch-comment-list:load-data', () => this.loadMoreThreads(true))
 
     // Find highlighted comment in params
     this.sub = this.activatedRoute.params.subscribe(
@@ -105,6 +104,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy () {
     this.pluginService.removeAction('video-watch-comment-list:load-data')
+
     if (this.sub) this.sub.unsubscribe()
   }
 
@@ -150,7 +150,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  loadMoreThreads (reset = false) {
+  async loadMoreThreads (reset = false) {
     if (reset === true) {
       this.componentPagination.currentPage = 1
     }
@@ -169,24 +169,21 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       'filter:api.video-watch.video-threads.list.params',
       'filter:api.video-watch.video-threads.list.result'
     )
-    .pipe(shortCacheObservable())
 
-    obs.subscribe({
-      next: res => {
-        if (reset) this.comments = []
-        this.comments = this.comments.concat(res.data)
-        this.componentPagination.totalItems = res.total
-        this.totalNotDeletedComments = res.totalNotDeletedComments
+    try {
+      const res = await lastValueFrom(obs)
 
-        this.onDataSubject.next(res.data)
+      if (reset) this.comments = []
+      this.comments = this.comments.concat(res.data)
+      this.componentPagination.totalItems = res.total
+      this.totalNotDeletedComments = res.totalNotDeletedComments
 
-        this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
-      },
+      this.onDataSubject.next(res.data)
 
-      error: err => this.notifier.error(err.message)
-    })
-
-    return lastValueFrom(obs)
+      this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
+    } catch (err) {
+      this.notifier.error(err.message)
+    }
   }
 
   onCommentThreadCreated (comment: VideoComment) {

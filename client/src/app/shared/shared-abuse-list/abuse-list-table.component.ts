@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -9,6 +9,7 @@ import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
+import { lastValueFrom } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -29,8 +30,6 @@ import { AbuseDetailsComponent } from './abuse-details.component'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
-import { shortCacheObservable } from '@root-helpers/utils'
-import { lastValueFrom } from 'rxjs'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -117,7 +116,9 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
   }
 
   async ngOnInit () {
-    this.pluginService.addAction('admin-abuse-list:load-data', this.reloadDataInternal.bind(this))
+    if (this.viewType === 'admin') {
+      this.pluginService.addAction('admin-abuse-list:load-data', () => this.reloadDataInternal())
+    }
 
     const abuseActions: DropdownAction<ProcessedAbuse>[][] = [
       this.buildInternalActions(),
@@ -130,13 +131,18 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
 
       this.buildAccountActions()
     ]
-    this.abuseActions = await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
+
+    this.abuseActions = this.viewType === 'admin'
+      ? await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
+      : abuseActions
 
     this.initialize()
   }
 
   ngOnDestroy () {
-    this.pluginService.removeAction('admin-abuse-list:load-data')
+    if (this.viewType === 'admin') {
+      this.pluginService.removeAction('admin-abuse-list:load-data')
+    }
   }
 
   isAdminView () {
@@ -235,7 +241,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     )
   }
 
-  protected reloadDataInternal () {
+  protected async reloadDataInternal () {
     debugLogger('Loading data.')
 
     const options = {
@@ -245,56 +251,54 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     }
 
     const observable = this.viewType === 'admin'
-      ? this.abuseService.getAdminAbuses(options).pipe(shortCacheObservable())
-      : this.abuseService.getUserAbuses(options).pipe(shortCacheObservable())
+      ? this.abuseService.getAdminAbuses(options)
+      : this.abuseService.getUserAbuses(options)
 
-    observable.subscribe({
-      next: async resultList => {
-        this.totalRecords = resultList.total
+    try {
+      const resultList = await lastValueFrom(observable)
 
-        this.abuses = []
+      this.totalRecords = resultList.total
 
-        for (const a of resultList.data) {
-          const abuse = a as ProcessedAbuse
+      this.abuses = []
 
-          abuse.reasonHtml = await this.toHtml(abuse.reason)
+      for (const a of resultList.data) {
+        const abuse = a as ProcessedAbuse
 
-          if (abuse.moderationComment) {
-            abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
-          }
+        abuse.reasonHtml = await this.toHtml(abuse.reason)
 
-          if (abuse.video) {
-            if (abuse.video.channel?.ownerAccount) {
-              abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
-            }
-          }
-
-          if (abuse.comment) {
-            if (abuse.comment.deleted) {
-              abuse.commentHTML = $localize`Deleted comment`
-            } else {
-              abuse.commentHTML = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
-            }
-          }
-
-          if (abuse.reporterAccount) {
-            abuse.reporterAccount = new Account(abuse.reporterAccount)
-          }
-
-          if (abuse.flaggedAccount) {
-            abuse.flaggedAccount = new Account(abuse.flaggedAccount)
-          }
-
-          if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
-
-          this.abuses.push(abuse)
+        if (abuse.moderationComment) {
+          abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
         }
-      },
 
-      error: err => this.notifier.error(err.message)
-    })
+        if (abuse.video) {
+          if (abuse.video.channel?.ownerAccount) {
+            abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
+          }
+        }
 
-    return lastValueFrom(observable)
+        if (abuse.comment) {
+          if (abuse.comment.deleted) {
+            abuse.commentHTML = $localize`Deleted comment`
+          } else {
+            abuse.commentHTML = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
+          }
+        }
+
+        if (abuse.reporterAccount) {
+          abuse.reporterAccount = new Account(abuse.reporterAccount)
+        }
+
+        if (abuse.flaggedAccount) {
+          abuse.flaggedAccount = new Account(abuse.flaggedAccount)
+        }
+
+        if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
+
+        this.abuses.push(abuse)
+      }
+    } catch (err) {
+      this.notifier.error(err.message)
+    }
   }
 
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {

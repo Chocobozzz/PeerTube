@@ -1,7 +1,4 @@
-import { MonoTypeOperatorFunction } from 'rxjs/internal/types'
-import { shareReplay } from 'rxjs/operators'
-
-function copyToClipboard (text: string, container?: HTMLElement) {
+export function copyToClipboard (text: string, container?: HTMLElement) {
   if (!container) container = document.body
 
   const el = document.createElement('textarea')
@@ -15,18 +12,8 @@ function copyToClipboard (text: string, container?: HTMLElement) {
   container.removeChild(el)
 }
 
-function wait (ms: number) {
+export function wait (ms: number) {
   return new Promise<void>(res => {
     setTimeout(() => res(), ms)
   })
-}
-
-function shortCacheObservable<T> (): MonoTypeOperatorFunction<T> {
-  return shareReplay({ refCount: true, windowTime: 500 })
-}
-
-export {
-  copyToClipboard,
-  shortCacheObservable,
-  wait
 }

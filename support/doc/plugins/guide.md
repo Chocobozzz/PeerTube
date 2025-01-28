@@ -107,6 +107,8 @@ function register ({ registerHook, peertubeHelpers }) {
 }
 ```
 
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete hooks list.
+
 ### Client actions
 
 Plugin can trigger actions in the client by calling `doAction` with a specific action.
@@ -137,6 +139,8 @@ function register ({ registerHook, doAction }) {
   })
 }
 ```
+
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete `doAction` list.
 
 ### Static files
 
