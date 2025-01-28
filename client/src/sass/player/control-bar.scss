@@ -27,7 +27,7 @@ $chapter-marker-size: 9px;
   border-radius: $chapter-marker-size;
   margin-left: - math.div($chapter-marker-size, 2);
 
-  background-color: pvar(--bg);
+  background-color: #fff;
   cursor: pointer;
   transition: transform 50ms ease-in-out, border-color 50ms ease-in-out;
   border: 2px solid transparent;
@@ -77,7 +77,7 @@ $chapter-marker-size: 9px;
   .vjs-theater-control,
   .vjs-caption-toggle-control,
   .vjs-settings {
-    color: pvar(--embed-foreground-color) !important;
+    color: pvar(--embed-fg) !important;
 
     opacity: $primary-foreground-opacity;
     transition: opacity .1s;
@@ -90,7 +90,7 @@ $chapter-marker-size: 9px;
   .vjs-current-time,
   .vjs-duration,
   .vjs-peertube {
-    color: pvar(--embed-foreground-color);
+    color: pvar(--embed-fg);
     opacity: $primary-foreground-opacity;
   }
 
@@ -111,7 +111,7 @@ $chapter-marker-size: 9px;
       transition: none;
 
       .vjs-play-progress {
-        background: pvar(--embed-foreground-color);
+        background: pvar(--embed-fg);
 
         // Not display the circle if the progress is not hovered
         &::before {

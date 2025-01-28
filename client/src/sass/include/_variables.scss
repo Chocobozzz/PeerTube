@@ -83,9 +83,6 @@ $primeng-breakpoint: 960px;
 // ---------------------------------------------------------------------------
 
 $variables: (
-  --embed-foreground-color: var(--embed-foreground-color),
-  --embed-big-play-background-color: var(--embed-big-play-background-color),
-
   --x-margin-content: var(--x-margin-content),
   --main-col-width: var(--main-col-width),
   --header-height: var(--header-height),
@@ -209,6 +206,9 @@ $variables: (
   --alert-primary-border-color: var(--alert-primary-border-color),
 
   --menu-margin-left: var(--menu-margin-left),
+
+  --embed-fg: var(--embed-fg),
+  --embed-big-play-bg: var(--embed-big-play-bg),
 );
 
 // SASS type check our CSS variables

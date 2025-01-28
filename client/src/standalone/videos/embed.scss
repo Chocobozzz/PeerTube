@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_css-variables' as *;
 @use 'video.js/dist/video-js';
 
 $assets-path: '../../assets/';
@@ -11,9 +12,13 @@ $assets-path: '../../assets/';
 }
 
 body {
-  font-family: $main-fonts;
-  font-weight: $font-regular;
-  color: #000;
+  @include define-css-variables();
+
+  & {
+    font-family: $main-fonts;
+    font-weight: $font-regular;
+    color: #000;
+  }
 }
 
 video {
