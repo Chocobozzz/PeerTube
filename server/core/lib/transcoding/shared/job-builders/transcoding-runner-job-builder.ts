@@ -26,12 +26,14 @@ type Payload = {
   options: Omit<Parameters<VODWebVideoTranscodingJobHandler['create']>[0], 'priority'>
 }
 
+type PayloadWithPriority = Payload & { higherPriority?: boolean }
+
 // eslint-disable-next-line max-len
 export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
 
   protected async createJobs (options: {
     video: MVideo
-    payloads: [ [ Payload ], ...(Payload[][]) ] // Array of sequential jobs to create that depend on parent job
+    payloads: [ [ PayloadWithPriority ], ...(PayloadWithPriority[][]) ] // Array of sequential jobs to create that depend on parent job
     user: MUserId | null
   }): Promise<void> {
     const { payloads, user } = options
@@ -39,7 +41,12 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
     const parent = payloads[0][0]
     payloads.shift()
 
-    const parentJob = await this.createJob({ payload: parent, user })
+    const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
+
+    const parentJob = await this.createJob({
+      payload: parent,
+      priority: parent.higherPriority ? priority - 1 : priority
+    })
 
     for (const parallelPayloads of payloads) {
       let lastJob = parentJob
@@ -47,8 +54,8 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
       for (const parallelPayload of parallelPayloads) {
         lastJob = await this.createJob({
           payload: parallelPayload,
-          dependsOnRunnerJob: lastJob,
-          user
+          priority: parallelPayload.higherPriority ? priority - 1 : priority,
+          dependsOnRunnerJob: lastJob
         })
       }
 
@@ -58,10 +65,10 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
 
   private async createJob (options: {
     payload: Payload
-    user: MUserId | null
+    priority: number
     dependsOnRunnerJob?: MRunnerJob
   }) {
-    const { dependsOnRunnerJob, payload, user } = options
+    const { dependsOnRunnerJob, payload, priority } = options
 
     const builder = new payload.Builder()
 
@@ -69,7 +76,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
       ...(payload.options as any), // FIXME: typings
 
       dependsOnRunnerJob,
-      priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
+      priority
     })
   }
 

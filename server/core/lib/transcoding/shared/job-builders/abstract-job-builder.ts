@@ -23,8 +23,8 @@ export abstract class AbstractJobBuilder <P> {
   }) {
     const { video, videoFile, isNewVideo, user, videoFileAlreadyLocked } = options
 
-    let mergeOrOptimizePayload: P
-    let children: P[][] = []
+    let mergeOrOptimizePayload: P & { higherPriority?: boolean }
+    let children: (P & { higherPriority?: boolean })[][] = []
 
     const mutexReleaser = videoFileAlreadyLocked
       ? () => {}
@@ -72,16 +72,16 @@ export abstract class AbstractJobBuilder <P> {
 
         // HLS version of max resolution
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
-          const hasSplitAndioTranscoding = CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO && videoFile.hasAudio()
+          const hasSplitAudioTranscoding = CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO && videoFile.hasAudio()
 
           // We had some issues with a web video quick transcoded while producing a HLS version of it
           const copyCodecs = !quickTranscode
 
-          const hlsPayloads: P[] = []
+          const hlsPayloads: (P & { higherPriority?: boolean })[] = []
 
           hlsPayloads.push(
             this.buildHLSJobPayload({
-              deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED && !hasSplitAndioTranscoding,
+              deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED && !hasSplitAudioTranscoding,
 
               separatedAudio: CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO,
 
@@ -94,20 +94,24 @@ export abstract class AbstractJobBuilder <P> {
             })
           )
 
-          if (hasSplitAndioTranscoding) {
+          if (hasSplitAudioTranscoding) {
             hlsAudioAlreadyGenerated = true
 
             hlsPayloads.push(
-              this.buildHLSJobPayload({
-                deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED,
-                separatedAudio: CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO,
+              {
+                higherPriority: true,
 
-                copyCodecs,
-                resolution: 0,
-                fps: 0,
-                video,
-                isNewVideo
-              })
+                ...this.buildHLSJobPayload({
+                  deleteWebVideoFiles: !CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED,
+                  separatedAudio: CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO,
+
+                  copyCodecs,
+                  resolution: 0,
+                  fps: 0,
+                  video,
+                  isNewVideo
+                })
+              }
             )
           }
 
@@ -262,7 +266,8 @@ export abstract class AbstractJobBuilder <P> {
 
   protected abstract createJobs (options: {
     video: MVideoFullLight
-    payloads: [ [ P ], ...(P[][]) ] // Array of sequential jobs to create that depend on parent job
+    // Array of sequential jobs to create that depend on parent job
+    payloads: [ [ (P & { higherPriority?: boolean }) ], ...((P & { higherPriority?: boolean })[][]) ]
     user: MUserId | null
   }): Promise<void>
 

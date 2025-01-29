@@ -22,7 +22,7 @@
     @else {
       <my-reactive-file
         class="d-inline-block"
-        inputName="uploadNewThumbnail" inputLabel="Select from your device" [extensions]="videoImageExtensions"
+        inputName="uploadNewThumbnail" i18n-inputLabel inputLabel="Select from your device" [extensions]="videoImageExtensions"
         [maxFileSize]="maxVideoImageSize" placement="right" (fileChanged)="onFileChanged($event)"
         [buttonTooltip]="getReactiveFileButtonTooltip()" theme="primary">
       </my-reactive-file>
