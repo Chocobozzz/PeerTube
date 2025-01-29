@@ -206,7 +206,7 @@ export class ThemeService {
 
     const toProcess = [
       { prefix: 'primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
-      { prefix: 'on-primary', invertIfDark: true, step: 0, darkTheme: isGlobalDarkTheme },
+      { prefix: 'on-primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: isGlobalDarkTheme },
 
