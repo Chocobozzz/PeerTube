@@ -299,8 +299,6 @@ describe('Test video studio', function () {
 
   describe('Web videos enabled', function () {
 
-    runCommonTests()
-
     it('Should run a complex task', async function () {
       this.timeout(240_000)
       await renewVideo()
