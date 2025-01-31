@@ -19,7 +19,6 @@ import {
   MLocalVideoViewerWithWatchSections,
   MVideoAP, MVideoAccountLight,
   MVideoPlaylistFull,
-  MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo
 } from '../../../types/models/index.js'
 import { audiencify, getAudience } from '../audience.js'
@@ -60,7 +59,7 @@ export async function sendCreateVideo (video: MVideoAP, transaction: Transaction
 export async function sendCreateCacheFile (
   byActor: MActorLight,
   video: MVideoAccountLight,
-  fileRedundancy: MVideoRedundancyStreamingPlaylistVideo | MVideoRedundancyFileVideo
+  fileRedundancy: MVideoRedundancyStreamingPlaylistVideo
 ) {
   logger.info('Creating job to send file cache of %s.', fileRedundancy.url, lTags(video.uuid))
 

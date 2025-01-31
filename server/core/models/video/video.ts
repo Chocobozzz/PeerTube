@@ -40,7 +40,7 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
-import { FindOptions, IncludeOptions, Includeable, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Includeable, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -114,7 +114,6 @@ import { AccountModel } from '../account/account.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel } from '../actor/actor.js'
 import { VideoAutomaticTagModel } from '../automatic-tag/video-automatic-tag.js'
-import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { ServerModel } from '../server/server.js'
 import { TrackerModel } from '../server/tracker.js'
 import { VideoTrackerModel } from '../server/video-tracker.js'
@@ -308,53 +307,30 @@ export type ForAPIOptions = {
       }
     ]
   },
-  [ScopeNames.WITH_WEB_VIDEO_FILES]: (withRedundancies = false) => {
-    let subInclude: any[] = []
-
-    if (withRedundancies === true) {
-      subInclude = [
-        {
-          attributes: [ 'fileUrl' ],
-          model: VideoRedundancyModel.unscoped(),
-          required: false
-        }
-      ]
-    }
-
+  [ScopeNames.WITH_WEB_VIDEO_FILES]: () => {
     return {
       include: [
         {
           model: VideoFileModel,
           separate: true,
-          required: false,
-          include: subInclude
+          required: false
         }
       ]
     }
   },
-  [ScopeNames.WITH_STREAMING_PLAYLISTS]: (withRedundancies = false) => {
-    const subInclude: IncludeOptions[] = [
-      {
-        model: VideoFileModel,
-        required: false
-      }
-    ]
-
-    if (withRedundancies === true) {
-      subInclude.push({
-        attributes: [ 'fileUrl' ],
-        model: VideoRedundancyModel.unscoped(),
-        required: false
-      })
-    }
-
+  [ScopeNames.WITH_STREAMING_PLAYLISTS]: () => {
     return {
       include: [
         {
           model: VideoStreamingPlaylistModel.unscoped(),
           required: false,
           separate: true,
-          include: subInclude
+          include: [
+            {
+              model: VideoFileModel,
+              required: false
+            }
+          ]
         }
       ]
     }
@@ -2015,19 +1991,19 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  removeWebVideoFile (videoFile: MVideoFile, isRedundancy = false) {
-    const filePath = isRedundancy
-      ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
-      : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
+  removeWebVideoFile (videoFile: MVideoFile) {
+    const filePath = VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
 
-    const promises: Promise<any>[] = [ remove(filePath) ]
-    if (!isRedundancy) promises.push(videoFile.removeTorrent())
+    const promises: Promise<any>[] = [
+      remove(filePath),
+      videoFile.removeTorrent()
+    ]
 
     if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
       promises.push(removeWebVideoObjectStorage(videoFile))
     }
 
-    logger.debug(`Removing files associated to web video ${videoFile.filename}`, { videoFile, isRedundancy, ...lTags(this.uuid) })
+    logger.debug(`Removing files associated to web video ${videoFile.filename}`, { videoFile, ...lTags(this.uuid) })
 
     return Promise.all(promises)
   }

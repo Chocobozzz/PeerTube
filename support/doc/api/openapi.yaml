@@ -8502,10 +8502,6 @@ components:
         redundancies:
           type: object
           properties:
-            files:
-              type: array
-              items:
-                $ref: '#/components/schemas/FileRedundancyInformation'
             streamingPlaylists:
               type: array
               items:

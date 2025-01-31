@@ -24,7 +24,7 @@ import {
   VIDEO_STATES
 } from '../../../initializers/constants.js'
 import { MServer, MStreamingPlaylistRedundanciesOpt, MVideoFormattable, MVideoFormattableDetails } from '../../../types/models/index.js'
-import { MVideoFileRedundanciesOpt } from '../../../types/models/video/video-file.js'
+import { MVideoFile } from '../../../types/models/video/video-file.js'
 import { sortByResolutionDesc } from './shared/index.js'
 
 export type VideoFormattingJSONOptions = {
@@ -208,7 +208,7 @@ export function streamingPlaylistsModelToFormattedJSON (
 
 export function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
-  videoFiles: MVideoFileRedundanciesOpt[],
+  videoFiles: MVideoFile[],
   options: {
     includeMagnet?: boolean // default true
   } = {}

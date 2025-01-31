@@ -1,29 +1,25 @@
-import { move } from 'fs-extra/esm'
-import { join } from 'path'
+import { VideosRedundancyStrategy } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
   MStreamingPlaylistFiles,
   MVideoAccountLight,
   MVideoFile,
-  MVideoFileVideo,
-  MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo,
   MVideoRedundancyVideo,
   MVideoWithAllFiles
 } from '@server/types/models/index.js'
-import { VideosRedundancyStrategy } from '@peertube/peertube-models'
+import { join } from 'path'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
-import { downloadWebTorrentVideo } from '../../helpers/webtorrent.js'
 import { CONFIG } from '../../initializers/config.js'
 import { DIRECTORIES, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send/index.js'
-import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url.js'
+import { getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url.js'
 import { getOrCreateAPVideo } from '../activitypub/videos/index.js'
 import { downloadPlaylistSegments } from '../hls.js'
 import { removeVideoRedundancy } from '../redundancy.js'
-import { generateHLSRedundancyUrl, generateWebVideoRedundancyUrl } from '../video-urls.js'
+import { generateHLSRedundancyUrl } from '../video-urls.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 const lTags = loggerTagsFactory('redundancy')
@@ -31,14 +27,7 @@ const lTags = loggerTagsFactory('redundancy')
 type CandidateToDuplicate = {
   redundancy: VideosRedundancyStrategy
   video: MVideoWithAllFiles
-  files: MVideoFile[]
   streamingPlaylists: MStreamingPlaylistFiles[]
-}
-
-function isMVideoRedundancyFileVideo (
-  o: MVideoRedundancyFileVideo | MVideoRedundancyStreamingPlaylistVideo
-): o is MVideoRedundancyFileVideo {
-  return !!(o as MVideoRedundancyFileVideo).VideoFile
 }
 
 export class VideosRedundancyScheduler extends AbstractScheduler {
@@ -62,7 +51,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     return this.createVideoRedundancies({
       video: videoToDuplicate,
       redundancy: null,
-      files: videoToDuplicate.VideoFiles,
       streamingPlaylists: videoToDuplicate.VideoStreamingPlaylists
     })
   }
@@ -197,17 +185,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       return
     }
 
-    for (const file of data.files) {
-      const existingRedundancy = await VideoRedundancyModel.loadLocalByFileId(file.id)
-      if (existingRedundancy) {
-        await this.extendsRedundancy(existingRedundancy)
-
-        continue
-      }
-
-      await this.createVideoFileRedundancy(data.redundancy, video, file)
-    }
-
+    // Only HLS player supports redundancy, so do not duplicate web videos
     for (const streamingPlaylist of data.streamingPlaylists) {
       const existingRedundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(streamingPlaylist.id)
       if (existingRedundancy) {
@@ -218,43 +196,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
       await this.createStreamingPlaylistRedundancy(data.redundancy, video, streamingPlaylist)
     }
-  }
-
-  private async createVideoFileRedundancy (redundancy: VideosRedundancyStrategy | null, video: MVideoAccountLight, fileArg: MVideoFile) {
-    let strategy = 'manual'
-    let expiresOn: Date = null
-
-    if (redundancy) {
-      strategy = redundancy.strategy
-      expiresOn = this.buildNewExpiration(redundancy.minLifetime)
-    }
-
-    const file = fileArg as MVideoFileVideo
-    file.Video = video
-
-    const serverActor = await getServerActor()
-
-    logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, strategy, lTags(video.uuid))
-
-    const tmpPath = await downloadWebTorrentVideo({ uri: file.torrentUrl }, VIDEO_IMPORT_TIMEOUT)
-
-    const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, file.filename)
-    await move(tmpPath, destPath, { overwrite: true })
-
-    const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({
-      expiresOn,
-      url: getLocalVideoCacheFileActivityPubUrl(file),
-      fileUrl: generateWebVideoRedundancyUrl(file),
-      strategy,
-      videoFileId: file.id,
-      actorId: serverActor.id
-    })
-
-    createdModel.VideoFile = file
-
-    await sendCreateCacheFile(serverActor, video, createdModel)
-
-    logger.info('Duplicated %s - %d -> %s.', video.url, file.resolution, createdModel.url, lTags(video.uuid))
   }
 
   private async createStreamingPlaylistRedundancy (
@@ -278,7 +219,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const destDirectory = join(DIRECTORIES.HLS_REDUNDANCY, video.uuid)
     const masterPlaylistUrl = playlist.getMasterPlaylistUrl(video)
 
-    const maxSizeKB = this.getTotalFileSizes([], [ playlist ]) / 1000
+    const maxSizeKB = this.getTotalFileSizes([ playlist ]) / 1000
     const toleranceKB = maxSizeKB + ((5 * maxSizeKB) / 100) // 5% more tolerance
     await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT, toleranceKB)
 
@@ -315,11 +256,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       const toDelete = await VideoRedundancyModel.loadOldestLocalExpired(redundancy.strategy, redundancy.minLifetime)
       if (!toDelete) return
 
-      const videoId = toDelete.VideoFile
-        ? toDelete.VideoFile.videoId
-        : toDelete.VideoStreamingPlaylist.videoId
-
-      const redundancies = await VideoRedundancyModel.listLocalByVideoId(videoId)
+      const redundancies = await VideoRedundancyModel.listLocalByStreamingPlaylistId(toDelete.VideoStreamingPlaylist.id)
 
       for (const redundancy of redundancies) {
         await removeVideoRedundancy(redundancy)
@@ -332,7 +269,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     const { totalUsed: alreadyUsed } = await VideoRedundancyModel.getStats(candidateToDuplicate.redundancy.strategy)
 
-    const videoSize = this.getTotalFileSizes(candidateToDuplicate.files, candidateToDuplicate.streamingPlaylists)
+    const videoSize = this.getTotalFileSizes(candidateToDuplicate.streamingPlaylists)
     const willUse = alreadyUsed + videoSize
 
     logger.debug('Checking candidate size.', { maxSize, alreadyUsed, videoSize, willUse, ...lTags(candidateToDuplicate.video.uuid) })
@@ -344,16 +281,14 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     return new Date(Date.now() + expiresAfterMs)
   }
 
-  private buildEntryLogId (object: MVideoRedundancyFileVideo | MVideoRedundancyStreamingPlaylistVideo) {
-    if (isMVideoRedundancyFileVideo(object)) return `${object.VideoFile.Video.url}-${object.VideoFile.resolution}`
-
+  private buildEntryLogId (object: MVideoRedundancyStreamingPlaylistVideo) {
     return `${object.VideoStreamingPlaylist.getMasterPlaylistUrl(object.VideoStreamingPlaylist.Video)}`
   }
 
-  private getTotalFileSizes (files: MVideoFile[], playlists: MStreamingPlaylistFiles[]): number {
+  private getTotalFileSizes (playlists: MStreamingPlaylistFiles[]): number {
     const fileReducer = (previous: number, current: MVideoFile) => previous + current.size
 
-    let allFiles = files
+    let allFiles: MVideoFile[] = []
     for (const p of playlists) {
       allFiles = allFiles.concat(p.VideoFiles)
     }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
+import { VideoPrivacy, VideoRedundanciesTarget } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,7 +10,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { VideoPrivacy, VideoRedundanciesTarget } from '@peertube/peertube-models'
+import { expect } from 'chai'
 
 describe('Test manage videos redundancy', function () {
   const targets: VideoRedundanciesTarget[] = [ 'my-videos', 'remote-videos' ]
@@ -95,7 +95,7 @@ describe('Test manage videos redundancy', function () {
     this.timeout(120000)
 
     await waitJobs(servers)
-    await servers[0].servers.waitUntilLog('Duplicated ', 10)
+    await servers[0].servers.waitUntilLog('Duplicated playlist ', 2)
     await waitJobs(servers)
 
     const body = await commands[1].listVideos({ target: 'remote-videos' })
@@ -119,12 +119,10 @@ describe('Test manage videos redundancy', function () {
     expect(videos1.name).to.equal('video 1 server 2')
     expect(videos2.name).to.equal('video 2 server 2')
 
-    expect(videos1.redundancies.files).to.have.lengthOf(4)
+    expect(videos1.redundancies.files).to.have.lengthOf(0)
     expect(videos1.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
-    const redundancies = videos1.redundancies.files.concat(videos1.redundancies.streamingPlaylists)
-
-    for (const r of redundancies) {
+    for (const r of videos1.redundancies.streamingPlaylists) {
       expect(r.strategy).to.be.null
       expect(r.fileUrl).to.exist
       expect(r.createdAt).to.exist
@@ -155,12 +153,10 @@ describe('Test manage videos redundancy', function () {
     expect(videos1.name).to.equal('video 1 server 2')
     expect(videos2.name).to.equal('video 2 server 2')
 
-    expect(videos1.redundancies.files).to.have.lengthOf(4)
+    expect(videos1.redundancies.files).to.have.lengthOf(0)
     expect(videos1.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
-    const redundancies = videos1.redundancies.files.concat(videos1.redundancies.streamingPlaylists)
-
-    for (const r of redundancies) {
+    for (const r of videos1.redundancies.streamingPlaylists) {
       expect(r.strategy).to.equal('recently-added')
       expect(r.fileUrl).to.exist
       expect(r.createdAt).to.exist
@@ -218,7 +214,7 @@ describe('Test manage videos redundancy', function () {
     await commands[0].addVideo({ videoId })
 
     await waitJobs(servers)
-    await servers[0].servers.waitUntilLog('Duplicated ', 15)
+    await servers[0].servers.waitUntilLog('Duplicated playlist ', 3)
     await waitJobs(servers)
 
     {
@@ -232,12 +228,10 @@ describe('Test manage videos redundancy', function () {
       const video = body.data[0]
 
       expect(video.name).to.equal('video 3 server 2')
-      expect(video.redundancies.files).to.have.lengthOf(4)
+      expect(video.redundancies.files).to.have.lengthOf(0)
       expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
-      const redundancies = video.redundancies.files.concat(video.redundancies.streamingPlaylists)
-
-      for (const r of redundancies) {
+      for (const r of video.redundancies.streamingPlaylists) {
         redundanciesToRemove.push(r.id)
 
         expect(r.strategy).to.equal('manual')
@@ -257,12 +251,10 @@ describe('Test manage videos redundancy', function () {
 
     const video = body.data[0]
     expect(video.name).to.equal('video 3 server 2')
-    expect(video.redundancies.files).to.have.lengthOf(4)
+    expect(video.redundancies.files).to.have.lengthOf(0)
     expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
-    const redundancies = video.redundancies.files.concat(video.redundancies.streamingPlaylists)
-
-    for (const r of redundancies) {
+    for (const r of video.redundancies.streamingPlaylists) {
       expect(r.strategy).to.be.null
       expect(r.fileUrl).to.exist
       expect(r.createdAt).to.exist
@@ -292,12 +284,10 @@ describe('Test manage videos redundancy', function () {
 
       const video = videos[0]
       expect(video.name).to.equal('video 2 server 2')
-      expect(video.redundancies.files).to.have.lengthOf(4)
+      expect(video.redundancies.files).to.have.lengthOf(0)
       expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
-      const redundancies = video.redundancies.files.concat(video.redundancies.streamingPlaylists)
-
-      redundanciesToRemove = redundancies.map(r => r.id)
+      redundanciesToRemove = video.redundancies.streamingPlaylists.map(r => r.id)
     }
   })
 

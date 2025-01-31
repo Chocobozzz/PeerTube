@@ -34,7 +34,6 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  HasMany,
   Is, Scopes,
   Table,
   UpdatedAt
@@ -56,7 +55,6 @@ import {
   WEBSERVER
 } from '../../initializers/constants.js'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
-import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
@@ -252,15 +250,6 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   })
   VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
 
-  @HasMany(() => VideoRedundancyModel, {
-    foreignKey: {
-      allowNull: true
-    },
-    onDelete: 'CASCADE',
-    hooks: true
-  })
-  RedundancyVideos: Awaited<VideoRedundancyModel>[]
-
   static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist.bind(VideoFileModel), {
     promise: true,
     max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
@@ -331,11 +320,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   }
 
   static loadWithMetadata (id: number) {
-    return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk(id)
+    return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk<MVideoFile>(id)
   }
 
-  static loadWithVideo (id: number) {
-    return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk(id)
+  static loadWithVideo (id: number, transaction?: Transaction) {
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk<MVideoFileVideo>(id, { transaction })
   }
 
   static loadWithVideoOrPlaylist (id: number, videoIdOrUUID: number | string) {

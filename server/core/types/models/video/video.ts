@@ -18,7 +18,7 @@ import {
   MChannelHostOnly,
   MChannelUserId
 } from './video-channel.js'
-import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file.js'
+import { MVideoFile } from './video-file.js'
 import { MVideoLive } from './video-live.js'
 import {
   MStreamingPlaylistFiles,
@@ -181,7 +181,7 @@ export type MVideoAP =
   Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
   Use<'VideoCaptions', MVideoCaptionLanguageUrl[]> &
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'VideoFiles', MVideoFile[]> &
   Use<'Thumbnails', MThumbnail[]> &
   Use<'VideoLive', MVideoLive> &
   Use<'Storyboard', MStoryboard>
@@ -197,7 +197,7 @@ export type MVideoDetails =
   Use<'Thumbnails', MThumbnail[]> &
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'VideoFiles', MVideoFile[]> &
   Use<'Trackers', MTrackerUrl[]>
 
 export type MVideoForUser =
@@ -209,7 +209,6 @@ export type MVideoForUser =
 
 export type MVideoForRedundancyAPI =
   MVideo &
-  Use<'VideoFiles', MVideoFileRedundanciesAll[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesAll[]>
 
 // ############################################################################
@@ -230,5 +229,5 @@ export type MVideoFormattableDetails =
   Use<'VideoChannel', MChannelFormattable> &
   Use<'Tags', MTag[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'VideoFiles', MVideoFile[]> &
   PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]>

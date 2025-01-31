@@ -53,7 +53,6 @@ export class RedundancyService {
 
   removeVideoRedundancies (redundancy: VideoRedundancy) {
     const observables = redundancy.redundancies.streamingPlaylists.map(r => r.id)
-      .concat(redundancy.redundancies.files.map(r => r.id))
       .map(id => this.removeRedundancy(id))
 
     return concat(...observables)
