@@ -344,9 +344,12 @@ redundancy:
 # Other instances that duplicate your content
 remote_redundancy:
   videos:
-    # 'nobody': Do not accept remote redundancies
-    # 'anybody': Accept remote redundancies from anybody
-    # 'followings': Accept redundancies from instance followings
+    # PeerTube doesn't remove existing redundancies when you change this setting
+    # You can remove them in the web interface: https://docs.joinpeertube.org/admin/following-instances#instances-redundancy
+    # Available values:
+    #  * nobody: Do not accept remote redundancies
+    #  * followings: Accept redundancies from instance followings
+    #  * anybody: Accept remote redundancies from anybody
     accept_from: 'anybody'
 
 csp:
