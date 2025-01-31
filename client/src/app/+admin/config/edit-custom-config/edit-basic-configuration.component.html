@@ -478,15 +478,15 @@
             >
               <ng-container ngProjectAs="description">
                 <div i18n>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</div>
-
-                <div i18n>
-                  You should only use moderated search indexes in production, or <a class="link-primary" href="https://framagit.org/framasoft/peertube/search-index">host your own</a>.
-                </div>
               </ng-container>
 
               <ng-container ngProjectAs="extra">
                 <div [ngClass]="getDisabledSearchIndexClass()">
                   <label i18n for="searchIndexUrl">Search index URL</label>
+
+                  <div i18n class="label-small-info">
+                    Use your <a class="link-primary" target="_blank" href="https://framagit.org/framasoft/peertube/search-index">your own search index</a> or choose the official one, <a class="link-primary" target="_blank" href="https://sepiasearch.org">https://sepiasearch.org</a>, that is not moderated.
+                  </div>
 
                   <input
                     type="text"  id="searchIndexUrl" class="form-control"
