@@ -32,7 +32,6 @@ async function waitJobs (
       if (process.env.DEBUG) console.log(`${new Date().toISOString()} - Checking ${server.url}`)
 
       for (const state of states) {
-
         const jobPromise = server.jobs.list({
           state,
           start: 0,

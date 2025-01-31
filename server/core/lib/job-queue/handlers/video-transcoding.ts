@@ -5,6 +5,7 @@ import {
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
+import { isVideoMissHLSAudio } from '@server/lib/runners/job-handlers/shared/utils.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
 import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebVideoResolution } from '@server/lib/transcoding/web-transcoding.js'
@@ -150,5 +151,12 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
     await removeAllWebVideoFiles(video)
   }
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
+  let moveVideoToNextState = !payload.hasChildren
+
+  // Splitted audio, wait audio generation before moving the video in its next state
+  if (await isVideoMissHLSAudio({ resolution: payload.resolution, separatedAudio: payload.separatedAudio, videoId: videoArg.uuid })) {
+    moveVideoToNextState = false
+  }
+
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState, video })
 }
