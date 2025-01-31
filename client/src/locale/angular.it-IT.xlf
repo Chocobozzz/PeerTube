@@ -3041,7 +3041,7 @@
       </trans-unit>
       <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
-        <target state="translated">Stream video di ingresso non valido</target>
+        <target state="translated">Flusso video in ingresso non valido</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -3217,9 +3217,9 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="667372110624203230" datatype="html">
+      <trans-unit id="667372110624203230" datatype="html" xml:space="preserve">
         <source>Import jobs concurrency</source>
-        <target state="translated">Lavori di importazione concorrenti</target>
+        <target state="translated">Concorrenza dei lavori di importazione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">276</context>
@@ -3245,17 +3245,17 @@
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5997625369044180192" datatype="html">
+      <trans-unit id="5997625369044180192" datatype="html" xml:space="preserve">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target state="translated">Consente importazione con URL HTTP (ad es. YouTube)</target>
+        <target state="translated">Consenti l'importazione con URL HTTP (ad esempio YouTube)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">290</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2095604754338363597" datatype="html">
+      <trans-unit id="2095604754338363597" datatype="html" xml:space="preserve">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Se abilitato, si consiglia di utilizzare <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un proxy HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per impedire l'accesso a URL privati dal server PeerTube</target>
+        <target state="translated">⚠️ Se abilitato, consigliamo di utilizzare <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un proxy HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per prevenire l'accesso a URL privati dal tuo server PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">293</context>
@@ -3361,25 +3361,25 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8246967116432095499" datatype="html">
+      <trans-unit id="8246967116432095499" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>Ho già un account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, mi connetto </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>Ho già un account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, faccio il login </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6075115017891566450" datatype="html">
+      <trans-unit id="6075115017891566450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Termini<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>di <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Termini<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5788965650054506209" datatype="html">
+      <trans-unit id="5788965650054506209" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Configurazione<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>il vostro account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Configura<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>il tuo account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">60</context>
@@ -3393,9 +3393,9 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3071761663064320665" datatype="html">
+      <trans-unit id="3071761663064320665" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>il vostro primo canale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Crea<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>il tuo primo canale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">77</context>
@@ -3409,9 +3409,9 @@
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792963373738226329" datatype="html">
+      <trans-unit id="1792963373738226329" datatype="html" xml:space="preserve">
         <source>You will be able to create a channel later</source>
-        <target state="translated">Sarà possibile creare un canale in seguito</target>
+        <target state="translated">Potrai creare un canale più tardi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">94</context>
@@ -3449,9 +3449,9 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8278995041812548563">
+      <trans-unit id="8278995041812548563" xml:space="preserve">
         <source>Update your notification preferences</source>
-        <target>Aggiorna le preferenze sulle notifiche</target>
+        <target state="translated">Modifica le impostazioni delle notifiche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
           <context context-type="linenumber">54</context>
@@ -3481,17 +3481,17 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8821712929823045567" datatype="html">
+      <trans-unit id="8821712929823045567" datatype="html" xml:space="preserve">
         <source>It's time to set up your account profile!</source>
-        <target state="translated">È il momento di impostare il profilo del vostro account!</target>
+        <target state="translated">È il momento di configurare il profilo del tuo account!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7239874680342223476" datatype="html">
+      <trans-unit id="7239874680342223476" datatype="html" xml:space="preserve">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="translated">Aiuta i moderatori e gli altri utenti a sapere <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>da chi sei<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>:</target>
+        <target state="translated">Aiuta i moderatori e gli altri utenti a sapere <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>chi sei<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
