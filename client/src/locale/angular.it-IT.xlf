@@ -5833,17 +5833,17 @@
           <context context-type="linenumber">55,56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6375858514817734542" datatype="html">
+      <trans-unit id="6375858514817734542" datatype="html" xml:space="preserve">
         <source>Auto select subtitle</source>
-        <target state="translated">Selezione automatica del sottotitolo</target>
+        <target state="translated">Selezione automatica dei sottotitoli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2353402732767789211" datatype="html">
+      <trans-unit id="2353402732767789211" datatype="html" xml:space="preserve">
         <source>More customization</source>
-        <target state="translated">Più personalizzazioni</target>
+        <target state="translated">Altre personalizzazioni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">305</context>
@@ -5905,9 +5905,9 @@
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784956659778044823" datatype="html">
+      <trans-unit id="2784956659778044823" datatype="html" xml:space="preserve">
         <source>Loop</source>
-        <target state="translated">Ciclo</target>
+        <target state="translated">Ripeti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">248</context>
@@ -5945,17 +5945,17 @@
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4583515246777381165" datatype="html">
+      <trans-unit id="4583515246777381165" datatype="html" xml:space="preserve">
         <source>Display player control bar</source>
-        <target state="translated">Visualizzare la barra di controllo del lettore</target>
+        <target state="translated">Visualizza la barra di controllo del lettore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="805456636864344681" datatype="html">
+      <trans-unit id="805456636864344681" datatype="html" xml:space="preserve">
         <source>Display PeerTube button link</source>
-        <target state="translated">Visualizza pulsante di link a Peertube</target>
+        <target state="translated">Visualizza il link del pulsante PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">290</context>
@@ -6019,7 +6019,7 @@
       </trans-unit>
       <trans-unit id="8421704878620521033" datatype="html" xml:space="preserve">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="translated">Il video è stato spostato su un server esterno e potrebbe non funzionare correttamente.</target>
+        <target state="translated">Il video è in fase di spostamento su un server esterno, potrebbe non funzionare correttamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -6027,7 +6027,7 @@
       </trans-unit>
       <trans-unit id="1832806861457762248" datatype="html" xml:space="preserve">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="translated">Se lo spostamento su una memoria esterna non è riuscito, questo video potrebbe non funzionare correttamente.</target>
+        <target state="translated">Il trasferimento su archiviazione esterna è fallito, questo video potrebbe non funzionare correttamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -6035,7 +6035,7 @@
       </trans-unit>
       <trans-unit id="4982143979847413207" datatype="html" xml:space="preserve">
         <source>The video is being edited, it may not work properly.</source>
-        <target state="translated">Il video è in fase di montaggio e potrebbe non funzionare correttamente.</target>
+        <target state="translated">Il video è in fase di modifica, potrebbe non funzionare correttamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -6091,23 +6091,23 @@
       </trans-unit>
       <trans-unit id="2392048495773035896" datatype="html" xml:space="preserve">
         <source>Open the modal to support the video uploader</source>
-        <target state="translated">Aprire il modale per supportare il caricatore di video</target>
+        <target state="translated">Apri la finestra per supportare chi ha caricato il video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="677619204556459328">
+      <trans-unit id="677619204556459328" xml:space="preserve">
         <source>Like this video</source>
-        <target>Metti mi piace su questo video</target>
+        <target state="translated">Metti mi piace al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1979134407801821102">
+      <trans-unit id="1979134407801821102" xml:space="preserve">
         <source>Dislike this video</source>
-        <target>Rimuovi mi piace da questo video</target>
+        <target state="translated">Rimuovi mi piace al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -6263,15 +6263,15 @@
       </trans-unit>
       <trans-unit id="795485832100313" datatype="html" xml:space="preserve">
         <source>Video re-upload</source>
-        <target state="translated">Ricaricamento del video</target>
+        <target state="translated">Ricaricare il video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5139892963394684487">
+      <trans-unit id="5139892963394684487" xml:space="preserve">
         <source>Originally published</source>
-        <target>Pubblicato</target>
+        <target state="translated">Pubblicato originariamente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">27</context>
@@ -6387,15 +6387,15 @@
       </trans-unit>
       <trans-unit id="6481633820711333116" datatype="html" xml:space="preserve">
         <source>This live is not currently streaming.</source>
-        <target state="translated">Questa diretta non è attualmente attiva.</target>
+        <target state="translated">Questa live non è attualmente attiva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4926204350710628499" datatype="html">
+      <trans-unit id="4926204350710628499" datatype="html" xml:space="preserve">
         <source>This live has ended.</source>
-        <target state="translated">Questa diretta è terminata.</target>
+        <target state="translated">Questa live è terminata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6417,17 +6417,17 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448160249466325288" datatype="html">
+      <trans-unit id="6448160249466325288" datatype="html" xml:space="preserve">
         <source>Most recent first (default)</source>
-        <target state="translated">I più recenti prima (predefinito)</target>
+        <target state="translated">Più recenti prima (predefinito)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5179007899354903649" datatype="html">
+      <trans-unit id="5179007899354903649" datatype="html" xml:space="preserve">
         <source>Most replies first</source>
-        <target state="translated">I più risposti prima</target>
+        <target state="translated">Più commenti prima</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6489,9 +6489,9 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3691787517663044217" datatype="html">
+      <trans-unit id="3691787517663044217" datatype="html" xml:space="preserve">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="translated">L'eliminazione verrà inviata alle istanze remote in modo che possano riflettere la modifica.</target>
+        <target state="translated">La cancellazione sarà inviata alle istanze remote affinché possano riflettere il cambiamento.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -6529,9 +6529,9 @@
           <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="723038562278401061" datatype="html">
+      <trans-unit id="723038562278401061" datatype="html" xml:space="preserve">
         <source>Friendly Reminder:</source>
-        <target state="translated">Promemoria di cortesia:</target>
+        <target state="translated">Promemoria amichevole:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6545,17 +6545,17 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="982956590420630883" datatype="html">
+      <trans-unit id="982956590420630883" datatype="html" xml:space="preserve">
         <source>Markdown compatible</source>
-        <target state="translated">Markdown compatibile</target>
+        <target state="translated">Compatibile con Markdown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5793595564950675122" datatype="html">
+      <trans-unit id="5793595564950675122" datatype="html" xml:space="preserve">
         <source>Markdown compatible that supports:</source>
-        <target state="translated">Markdown compatibile che supporta:</target>
+        <target state="translated">Compatibile con Markdown che supporta:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6691,7 +6691,7 @@
       </trans-unit>
       <trans-unit id="3821661153451769620" datatype="html" xml:space="preserve">
         <source>Approve</source>
-        <target state="translated">Approvare</target>
+        <target state="translated">Approva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -6717,9 +6717,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7651712714082200084" datatype="html">
+      <trans-unit id="7651712714082200084" datatype="html" xml:space="preserve">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">La tua segnalazione sarà inviata ai moderatori di <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> e sarà inviato anche all'origine del commento (<x id="INTERPOLATION_1"/>) <x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">La tua segnalazione sarà inviata ai moderatori di <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> e sarà inviata anche al creatore del commento (<x id="INTERPOLATION_1"/>) <x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context>
           <context context-type="linenumber">38</context>
@@ -6729,17 +6729,17 @@
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658727060940996385" datatype="html">
+      <trans-unit id="658727060940996385" datatype="html" xml:space="preserve">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="translated">Il rinnovo del token imperdirà ai client già configurati di recuperare il flusso / feed finché non potranno usare il nuovo token. Continuare?</target>
+        <target state="translated">Rinnovare il token impedirà ai client precedentemente configurati di recuperare il feed fino a quando non utilizzeranno il nuovo token. Procedere?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3029923402309610616" datatype="html">
+      <trans-unit id="3029923402309610616" datatype="html" xml:space="preserve">
         <source>Token renewed. Update your client configuration accordingly.</source>
-        <target state="translated">Token rinnovato. Pensa a adattare la configurazione del tuo client.</target>
+        <target state="translated">Token rinnovato. Aggiorna la configurazione del tuo client di conseguenza.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -6747,7 +6747,7 @@
       </trans-unit>
       <trans-unit id="1131691653475304132" datatype="html" xml:space="preserve">
         <source>Your automatic tag policies</source>
-        <target state="translated">I vostri criteri di etichettatura automatica</target>
+        <target state="translated">Le tue politiche automatiche sui tag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">133</context>
@@ -6787,7 +6787,7 @@
       </trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
-        <target state="translated">Commenti sui vostri video</target>
+        <target state="translated">Commenti sui tuoi video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">113</context>
@@ -6803,7 +6803,7 @@
       </trans-unit>
       <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="translated">È possibile richiedere un archivio del proprio account contenente:</target>
+        <target state="translated">Puoi richiedere un archivio del tuo account contenente:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
@@ -6811,7 +6811,7 @@
       </trans-unit>
       <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="translated">Le impostazioni del vostro account con il file avatar</target>
+        <target state="translated">Le impostazioni del tuo account con il file avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6819,7 +6819,7 @@
       </trans-unit>
       <trans-unit id="4189339781940878663" datatype="html" xml:space="preserve">
         <source>Your channels with banner and avatar files</source>
-        <target state="translated">I vostri canali con file di banner e avatar</target>
+        <target state="translated">I tuoi canali con i file banner e avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6827,7 +6827,7 @@
       </trans-unit>
       <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="translated">Gli account e i server silenziati</target>
+        <target state="translated">I tuoi account e server silenziati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6859,7 +6859,7 @@
       </trans-unit>
       <trans-unit id="8728252018840518768" datatype="html" xml:space="preserve">
         <source>Your video playlists with thumbnail files</source>
-        <target state="translated">Le vostre playlist video con file miniatura</target>
+        <target state="translated">Le tue playlist video con file miniatura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6875,7 +6875,7 @@
       </trans-unit>
       <trans-unit id="5019912911402302063" datatype="html" xml:space="preserve">
         <source>Your video history</source>
-        <target state="translated">La vostra storia video</target>
+        <target state="translated">La tua cronologia video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">22</context>
@@ -6891,7 +6891,7 @@
       </trans-unit>
       <trans-unit id="3192985534238875835" datatype="html" xml:space="preserve">
         <source>A directory containing an export in ActivityPub format, readable by any compliant software</source>
-        <target state="translated">Una directory contenente un'esportazione in formato ActivityPub, leggibile da qualsiasi software compatibile</target>
+        <target state="translated">Una directory contenente un esportazione in formato ActivityPub, leggibile da qualsiasi software compatibile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">28</context>
@@ -6899,7 +6899,7 @@
       </trans-unit>
       <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="translated">Una directory contenente un'esportazione in formato PeerTube JSON personalizzato che può essere utilizzata per reimportare il proprio account su un'altra istanza PeerTube</target>
+        <target state="translated">Una directory contenente un'esportazione in formato JSON personalizzato di PeerTube che può essere utilizzata per re-importare il tuo account su un'altra istanza PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
@@ -6915,7 +6915,7 @@
       </trans-unit>
       <trans-unit id="5507694448548293913" datatype="html" xml:space="preserve">
         <source>You can only request one archive at a time.</source>
-        <target state="translated">È possibile richiedere un solo archivio alla volta.</target>
+        <target state="translated">Puoi richiedere solo un archivio alla volta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">33</context>
@@ -6923,7 +6923,7 @@
       </trans-unit>
       <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="translated">Verrà inviata un'e-mail quando l'archivio di esportazione sarà disponibile.</target>
+        <target state="translated">Una email sarà inviata quando l'archivio di esportazione sarà disponibile.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">36</context>
@@ -6937,9 +6937,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5302915360176176604" datatype="html">
+      <trans-unit id="5302915360176176604" datatype="html" xml:space="preserve">
         <source>SUBSCRIPTION FEED</source>
-        <target state="translated">SOTTOSCRIZIONE FLUSSO / FEED</target>
+        <target state="translated">SOTTOSCRIZIONE FEED</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6969,17 +6969,17 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6492684506192237359" datatype="html">
+      <trans-unit id="6492684506192237359" datatype="html" xml:space="preserve">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="translated">⚠️ Non condividere mai il tuo feed token con nessuno.</target>
+        <target state="translated">⚠️ Non condividere mai il tuo feed token</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="270726559962362501" datatype="html">
+      <trans-unit id="270726559962362501" datatype="html" xml:space="preserve">
         <source>Renew token</source>
-        <target state="translated">Rinnova il token</target>
+        <target state="translated">Rinnova token</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">25</context>
@@ -7017,9 +7017,9 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4266779970063047572" datatype="html">
+      <trans-unit id="4266779970063047572" datatype="html" xml:space="preserve">
         <source>Video/Comment/Account</source>
-        <target state="translated">Video/Commento/Account</target>
+        <target state="translated">Video/Commenta/Account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">24</context>
@@ -7219,7 +7219,7 @@
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html" xml:space="preserve">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">Vuoi davvero non seguire {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> voci?}}</target>
+        <target state="translated">Vuoi davvero smettere di seguire {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> voci?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">91</context>
