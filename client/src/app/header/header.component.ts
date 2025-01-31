@@ -186,17 +186,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       const videoId = getVideoId(url)
       if (videoId) {
-        this.mobileAppUrl = `peertube:///video/${videoId}?host=${host}`
+        this.mobileAppUrl = `peertube://joinpeertube.org/video/${videoId}?host=${host}`
         return
       }
 
       const channelId = getChannelId(url)
       if (channelId) {
-        this.mobileAppUrl = `peertube:///video-channel/${channelId}?host=${host}`
+        this.mobileAppUrl = `peertube://joinpeertube.org/video-channel/${channelId}?host=${host}`
         return
       }
 
-      this.mobileAppUrl = `peertube:///?host=${host}`
+      this.mobileAppUrl = `peertube://joinpeertube.org/?host=${host}`
     })
   }
 
