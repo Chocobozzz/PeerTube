@@ -210,6 +210,8 @@ export class CustomMarkupService {
       accountHandle: data.accountHandle || undefined,
       channelHandle: data.channelHandle || undefined,
 
+      host: data.host || undefined,
+
       isLive: this.buildBoolean(data.isLive),
 
       isLocal: this.buildBoolean(data.onlyLocal) ? true : undefined

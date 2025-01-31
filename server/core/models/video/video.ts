@@ -1141,6 +1141,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     tagsAllOf?: string[]
     privacyOneOf?: VideoPrivacyType[]
 
+    host?: string
+
     accountId?: number
     videoChannelId?: number
 
@@ -1184,6 +1186,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'host',
         'autoTagOneOf',
         'tagsOneOf',
         'tagsAllOf',

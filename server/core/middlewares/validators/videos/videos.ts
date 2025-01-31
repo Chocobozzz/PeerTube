@@ -56,6 +56,7 @@ import {
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
+import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 
 export const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -491,6 +492,9 @@ export const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
+  query('host')
+    .optional()
+    .custom(isHostValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

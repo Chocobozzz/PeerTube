@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { pick } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -11,7 +10,8 @@ import {
   VideoInclude,
   VideoIncludeType,
   VideoPrivacy,
-  VideoPrivacyType
+  VideoPrivacyType,
+  VideosCommonQuery
 } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -24,6 +24,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test videos filter', function () {
   let servers: PeerTubeServer[]
@@ -89,17 +90,11 @@ describe('Test videos filter', function () {
     async function listVideos (options: {
       server: PeerTubeServer
       path: string
-      isLocal?: boolean
-      hasWebVideoFiles?: boolean
-      hasHLSFiles?: boolean
-      include?: VideoIncludeType
-      privacyOneOf?: VideoPrivacyType[]
-      category?: number
-      tagsAllOf?: string[]
+
       token?: string
       expectedStatus?: HttpStatusCodeType
       excludeAlreadyWatched?: boolean
-    }) {
+    } & VideosCommonQuery) {
       const res = await makeGetRequest({
         url: options.server.url,
         path: options.path,
@@ -108,12 +103,15 @@ describe('Test videos filter', function () {
           ...pick(options, [
             'isLocal',
             'include',
-            'category',
-            'tagsAllOf',
             'hasWebVideoFiles',
             'hasHLSFiles',
+            'tagsAllOf',
+            'categoryOneOf',
+            'languageOneOf',
             'privacyOneOf',
-            'excludeAlreadyWatched'
+            'excludeAlreadyWatched',
+            'host',
+            'search'
           ]),
 
           sort: 'createdAt'
@@ -396,6 +394,51 @@ describe('Test videos filter', function () {
           const { total } = await servers[0].videos.list({ tagsAllOf: [ 'tag4' ], categoryOneOf: [ 4 ] })
           expect(total).to.equal(0)
         }
+      }
+    })
+
+    it('Should filter by language', async function () {
+      await servers[0].videos.upload({ attributes: { name: 'english', language: 'en' } })
+      await servers[0].videos.upload({ attributes: { name: 'french', language: 'fr' } })
+
+      for (const path of paths) {
+        {
+          const videos = await listVideos({ server: servers[0], path, languageOneOf: [ 'fr', 'en' ] })
+          expect(videos).to.have.lengthOf(2)
+          expect(videos.map(v => v.name)).to.have.members([ 'english', 'french' ])
+        }
+
+        {
+          const videos = await listVideos({ server: servers[0], path, languageOneOf: [ 'ca', 'es' ] })
+          expect(videos).to.have.lengthOf(0)
+        }
+      }
+    })
+
+    it('Should filter by host', async function () {
+      await servers[0].videos.upload({ attributes: { name: 'filter host 1' } })
+      await servers[1].videos.upload({ attributes: { name: 'filter host 2' } })
+
+      await waitJobs(servers)
+
+      const getVideos = (videos: Video[]) => videos.filter(v => v.name.includes('filter host'))
+
+      {
+        const { data } = await servers[0].videos.list({ search: 'filter host' })
+        expect(getVideos(data)).to.have.lengthOf(2)
+      }
+
+      {
+        const { data } = await servers[0].videos.list({ search: 'filter host', host: servers[0].host })
+        const videos = getVideos(data)
+
+        expect(videos).to.have.lengthOf(1)
+        expect(videos.map(v => v.name)).to.have.members([ 'filter host 1' ])
+      }
+
+      {
+        const { data } = await servers[0].videos.list({ host: 'example.com' })
+        expect(data).to.have.lengthOf(0)
       }
     })
 

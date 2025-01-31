@@ -51,6 +51,7 @@ export type CommonVideoParams = {
   isLive?: boolean
   skipCount?: boolean
   nsfw?: BooleanBothQuery
+  host?: string
   search?: string
 }
 
@@ -548,6 +549,7 @@ export class VideoService {
       isLive,
       nsfw,
       search,
+      host,
 
       ...otherOptions
     } = options
@@ -568,6 +570,7 @@ export class VideoService {
     if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
     if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
     if (search) newParams = newParams.set('search', search)
+    if (host) newParams = newParams.set('host', host)
 
     newParams = this.restService.addObjectParams(newParams, otherOptions)
 

@@ -615,13 +615,15 @@ export class VideosCommand extends AbstractCommand {
       'categoryOneOf',
       'licenceOneOf',
       'languageOneOf',
+      'host',
       'privacyOneOf',
       'tagsOneOf',
       'tagsAllOf',
       'isLocal',
       'include',
       'skipCount',
-      'autoTagOneOf'
+      'autoTagOneOf',
+      'search'
     ])
   }
 
