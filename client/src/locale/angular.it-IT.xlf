@@ -2051,9 +2051,9 @@
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8726138323871139597" datatype="html">
+      <trans-unit id="8726138323871139597" datatype="html" xml:space="preserve">
         <source>Following</source>
-        <target state="translated">Segui</target>
+        <target state="translated">Seguiti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -2067,9 +2067,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4914577418256256836" datatype="html">
+      <trans-unit id="4914577418256256836" datatype="html" xml:space="preserve">
         <source>Followers</source>
-        <target state="translated">Seguaci</target>
+        <target state="translated">Followers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -2125,7 +2125,7 @@
       </trans-unit>
       <trans-unit id="5950472748615640135" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large </source>
-        <target state="translated">Il tuo file <x id="PH" equiv-text="name"/> era troppo grande </target>
+        <target state="translated">Il file <x id="PH" equiv-text="name"/> è troppo grande </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">64</context>
@@ -2155,11 +2155,9 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7908493851025027368">
+      <trans-unit id="7908493851025027368" xml:space="preserve">
         <source>A banned user will no longer be able to login.</source>
-        <target>
-        Un utente espulso non sarà più in grado di accedere.
-      </target>
+        <target state="translated">Un utente bannato non potrà più effettuare il login.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2205,9 +2203,9 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2728722206183105047" datatype="html">
+      <trans-unit id="2728722206183105047" datatype="html" xml:space="preserve">
         <source>This will ask remote instances to delete this video</source>
-        <target state="translated">In questo modo si chiederà alle istanze remote di eliminare il video</target>
+        <target state="translated">Questo chiederà alle istanze remote di eliminare questo video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">37</context>
@@ -2221,9 +2219,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="901879091817013957" datatype="html">
+      <trans-unit id="901879091817013957" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="translated">{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> video.}}</target>
+        <target state="translated">{count, plural, =1 {Video <x id="videoName"/> bloccato.} other {<x id="count"/> video bloccati.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -2251,23 +2249,23 @@
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html" xml:space="preserve">
         <source><x id="PH"/>sec</source>
-        <target state="translated"><x id="PH"/> sec</target>
+        <target state="translated"><x id="PH"/>sec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/time-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1909492071130899005" datatype="html">
+      <trans-unit id="1909492071130899005" datatype="html" xml:space="preserve">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK"/>contact an administrator<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Spiacenti, si è verificato un problema con il processo di accesso esterno. per favore <x id="START_LINK"/>contatta un'amministratore<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Siamo spiacenti ma c'è stato un problema con il processo di login esterno. Per favore <x id="START_LINK"/>contatta un amministratore<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5418570600695268383" datatype="html">
+      <trans-unit id="5418570600695268383" datatype="html" xml:space="preserve">
         <source>Request new verification email</source>
-        <target state="translated">Nuova richiesta di verifica della email</target>
+        <target state="translated">Richiedi una nuova email di verifica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">38</context>
@@ -2313,9 +2311,9 @@
           <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6512825581399429064" datatype="html">
+      <trans-unit id="6512825581399429064" datatype="html" xml:space="preserve">
         <source>Enter the two-factor code generated by your phone app:</source>
-        <target state="translated">Inserite il codice a due fattori generato dall'app del telefono:</target>
+        <target state="translated">Inserisci il codice a due fattori generato dalla tua app sul telefono:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">73</context>
@@ -2381,9 +2379,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2101170466365500913" datatype="html">
+      <trans-unit id="2101170466365500913" datatype="html" xml:space="preserve">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">L'accesso a un account ti consente di pubblicare contenuti</target>
+        <target state="translated">Accedere ad un account per pubblicare contenuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2399,7 +2397,7 @@
       </trans-unit>
       <trans-unit id="921088049695906924" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Al momento questa istanza non consente la registrazione dell'utente; per maggiori dettagli è possibile consultare i <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Termini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Termini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o trovare un'istanza che dia la possibilità di registrarsi per un account e caricare lì i propri video. Trovate la vostra tra le varie istanze all'indirizzo: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Al momento questa istanza non consente la registrazione dell'utente; per maggiori dettagli è possibile consultare i <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Termini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Termini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o trovare un'istanza che dia la possibilità di registrare un account e caricare lì i propri video. Trovate la vostra tra quelle all'indirizzo: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2534,9 +2532,9 @@
           <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3782563238994348625">
+      <trans-unit id="3782563238994348625" xml:space="preserve">
         <source>Confirm password</source>
-        <target>Conferma la password</target>
+        <target state="translated">Conferma password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2587,41 +2585,41 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3514732276382852116" datatype="html">
+      <trans-unit id="3514732276382852116" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Commento<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Commenta<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> i video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6928511254538021087" datatype="html">
+      <trans-unit id="6928511254538021087" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Iscriviti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ai canali per essere avvisati dei nuovi video</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Iscriviti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ai canali per essere notificato dei nuovi video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="269413964682905563" datatype="html">
+      <trans-unit id="269413964682905563" datatype="html" xml:space="preserve">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">accesso alla propria <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>cronologia visualizzazioni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Accedi alla tua <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>cronologia delle visualizzazioni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7760677303939127268" datatype="html">
+      <trans-unit id="7760677303939127268" datatype="html" xml:space="preserve">
         <source>Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Create il vostro canale per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Crea il tuo canale per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5767014923310516" datatype="html">
+      <trans-unit id="5767014923310516" datatype="html" xml:space="preserve">
         <source>Do you use Mastodon, ActivityPub or a RSS feed aggregator?</source>
-        <target state="translated">Utilizzate Mastodon, ActivityPub o un aggregatore di feed RSS?</target>
+        <target state="translated">Usi Mastodon, ActivityPub o un aggregatore di feed RSS?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2629,7 +2627,7 @@
       </trans-unit>
       <trans-unit id="1257029815550886575" datatype="html" xml:space="preserve">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</source>
-        <target state="translated">Potete già seguire <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> utilizzando il vostro strumento preferito.</target>
+        <target state="translated">Puoi già seguire <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> utilizzando il tuo strumento preferito.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2637,23 +2635,23 @@
       </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> è stato creato utilizzando <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, una piattaforma di creazione video sviluppata da Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> è un'organizzazione francese senza scopo di lucro che offre alternative agli strumenti digitali delle Big Tech. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> è stato creato utilizzando <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, una piattaforma di creazione video sviluppata da Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> è un'organizzazione non-profit francese che offre alternative agli strumenti digitali delle Big Tech. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2528596078796844503" datatype="html">
+      <trans-unit id="2528596078796844503" datatype="html" xml:space="preserve">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated">Vuoi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> su <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Allora devi creare il tuo primo canale <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Vuoi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> su <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Allora crea il tuo primo canale <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1335686739562009265" datatype="html">
+      <trans-unit id="1335686739562009265" datatype="html" xml:space="preserve">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="translated">Potreste voler <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>creare un canale per tema:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ad esempio, potete creare un canale chiamato "SweetMelodies" per pubblicare i vostri concerti di pianoforte e un altro "Ecology" in cui pubblicare i vostri video che parlano di ecologia. </target>
+        <target state="translated">Potresti voler <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>creare un canale per tema:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ad esempio, puoi creare un canale chiamato "SweetMelodies" per pubblicare i tuoi concerti di pianoforte e un altro "Ecology" in cui pubblichi i tuoi video che parlano di ecologia. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2661,7 +2659,7 @@
       </trans-unit>
       <trans-unit id="5716290603546738313" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> Gli amministratori possono pubblicare fino a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> di <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video nel loro sito. </target>
+        <target state="translated">Gli amministratori di <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> ti permettono di pubblicare fino a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> di video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sul loro sito. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2725,9 +2723,9 @@
           <context context-type="linenumber">20,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910950876330656326" datatype="html">
+      <trans-unit id="5910950876330656326" datatype="html" xml:space="preserve">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="translated">Gestione degli utenti, seguire altre istanze, trattare con gli spammer...</target>
+        <target state="translated">Gestione degli utenti, spammer, seguire altre istanze...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2749,9 +2747,9 @@
           <context context-type="linenumber">26,28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3848077896245199337" datatype="html">
+      <trans-unit id="3848077896245199337" datatype="html" xml:space="preserve">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Imposta il tuo account, gestisci le playlist dei video, scopri applicazioni di terze parti...</target>
+        <target state="translated">Gestisci il tuo account, le playlist, scopri applicazioni di terze parti...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2775,7 +2773,7 @@
       </trans-unit>
       <trans-unit id="647900782867860768" datatype="html" xml:space="preserve">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Mettere l'istanza nell'indice pubblico di PeerTube: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Inserisci la tua istanza nell'indice pubblico di PeerTube: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">46</context>
@@ -2789,17 +2787,17 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1852111465407058121" datatype="html">
+      <trans-unit id="1852111465407058121" datatype="html" xml:space="preserve">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Scegliere il nome della propria <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>istanza<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>impostare una descrizione<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specificare <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>chi si è<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, perché <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>si è creata l'istanza<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>per quanto tempo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> si pensa di <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mantenerla<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> è molto importante per far capire ai visitatori che tipo di istanza si tratta. </target>
+        <target state="translated">Scegliere il <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nome della tua istanza<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>impostare una descrizione<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specificare <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>chi sei<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, perché <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hai creato la tua istanza<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>per quanto tempo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> prevedi di <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mantenerla<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> è molto importante affinché i visitatori capiscano che tipo di istanza stanno visitando. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5329436244765769292" datatype="html">
+      <trans-unit id="5329436244765769292" datatype="html" xml:space="preserve">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Se desideri aprire le registrazioni, decidi quali sono le <x id="START_TAG_STRONG"/>le tue regole di moderazione<x id="CLOSE_TAG_STRONG"/> e i <x id="START_TAG_STRONG"/>termini di servizio dell'istanza<x id="CLOSE_TAG_STRONG"/>, oltre a specificare le categorie e le lingue che i tuoi moderatori parlano. In questo modo, aiuterai gli utenti a registrarsi sull' <x id="START_TAG_STRONG"/>istanza<x id="CLOSE_TAG_STRONG"/> appropriata di PeerTube. </target>
+        <target state="translated">Se desideri aprire le registrazioni, per favore decidi quali sono le <x id="START_TAG_STRONG"/>tue regole di moderazione<x id="CLOSE_TAG_STRONG"/> e i <x id="START_TAG_STRONG"/>termini di servizio dell'istanza<x id="CLOSE_TAG_STRONG"/>, oltre a specificare le categorie e le lingue parlate dai tuoi moderatori. In questo modo, aiuterai gli utenti a registrarsi sulla <x id="START_TAG_STRONG"/>giusta<x id="CLOSE_TAG_STRONG"/> istanza PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">65</context>
@@ -2837,17 +2835,17 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9005121595859995793" datatype="html">
+      <trans-unit id="9005121595859995793" datatype="html" xml:space="preserve">
         <source>Configuration warning!</source>
-        <target state="translated">Avviso di configurazione!</target>
+        <target state="translated">Attenzione, configurazione errata!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8901933019590352016" datatype="html">
+      <trans-unit id="8901933019590352016" datatype="html" xml:space="preserve">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">Hai abilitato la registrazione utente sulla tua istanza ma non hai configurato i seguenti campi:</target>
+        <target state="translated">Hai abilitato la registrazione degli utenti alla tua istanza ma non hai configurato i seguenti campi:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2885,9 +2883,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1909672990242291785" datatype="html">
+      <trans-unit id="1909672990242291785" datatype="html" xml:space="preserve">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="translated">Come si pensa di pagare per mantenere la propria istanza in funzione</target>
+        <target state="translated">Come pensi di pagare per mantenere la tua istanza in funzione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -2933,9 +2931,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5330788940795142335" datatype="html">
+      <trans-unit id="5330788940795142335" datatype="html" xml:space="preserve">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Considera la possibilità di configurare questi campi per aiutare le persone a scegliere<x id="START_TAG_STRONG"/>l'istanza appropriata<x id="CLOSE_TAG_STRONG"/>. Senza questi, la tua istanza potrebbe non essere referenziata sul <x id="START_LINK"/>sito JoinPeerTube<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Considera la possibilità di configurare questi campi per aiutare le persone a scegliere<x id="START_TAG_STRONG"/>l'istanza appropriata<x id="CLOSE_TAG_STRONG"/>. Senza di essi la tua istanza potrebbe non essere referenziata sul <x id="START_LINK"/>sito JoinPeerTube<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -2985,9 +2983,9 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1599290313974118905" datatype="html">
+      <trans-unit id="1599290313974118905" datatype="html" xml:space="preserve">
         <source>Live blacklisted</source>
-        <target state="translated">Live nella lista nera</target>
+        <target state="translated">Live in blacklist</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -3019,7 +3017,7 @@
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html" xml:space="preserve">
         <source>Runner job cancelled</source>
-        <target state="translated">Lavoro di runner annullato</target>
+        <target state="translated">Lavoro del runner annullato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">68</context>
