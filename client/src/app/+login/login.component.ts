@@ -203,19 +203,6 @@ The link will expire within 1 hour.`
     this.accordion = instanceAboutAccordion.accordion
   }
 
-  hasUsernameUppercase () {
-    const username = this.form.value['username']
-    if (!username) return false
-
-    return username.match(/[A-Z]/)
-  }
-
-  hasForgotPasswordEmailUppercase () {
-    if (!this.forgotPasswordEmail) return false
-
-    return this.forgotPasswordEmail.match(/[A-Z]/)
-  }
-
   private loadExternalAuthToken (username: string, token: string) {
     this.isAuthenticatedWithExternalAuth = true
 
