@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
@@ -19,6 +19,7 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
 import { InstanceBannerComponent } from '../shared/shared-instance/instance-banner.component'
 import { AutofocusDirective } from '../shared/shared-main/common/autofocus.directive'
 import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-selector.directive'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-login',
@@ -43,7 +44,7 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
   ]
 })
 
-export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
+export class LoginComponent extends FormReactive implements OnInit, AfterViewInit, OnDestroy {
   private static SESSION_STORAGE_REDIRECT_URL_KEY = 'login-previous-url'
 
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
@@ -51,6 +52,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   @ViewChild('instanceAboutAccordion') instanceAboutAccordion: InstanceAboutAccordionComponent
 
   accordion: NgbAccordionDirective
+  currentLoginStep = 1
   error: string = null
   forgotPasswordEmail = ''
 
@@ -72,6 +74,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
+  private routeSub: Subscription
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -122,6 +125,15 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
       }
     })
 
+    this.routeSub = this.route.queryParams
+                        .subscribe((event) => {
+                          if (this.form.controls.username.invalid) {
+                            this.goToLoginStep(1)
+                          } else {
+                            this.currentLoginStep = !isNaN(event.step) ? +event.step : 1
+                          }
+                        })
+
     this.serverConfig = snapshot.data.serverConfig
 
     if (snapshot.queryParams.externalAuthToken) {
@@ -144,6 +156,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     this.hooks.runAction('action:login.init', 'login')
   }
 
+  ngOnDestroy () {
+    if (this.routeSub) this.routeSub.unsubscribe()
+  }
+
   getExternalLogins () {
     return this.serverConfig.plugin.registeredExternalAuths
   }
@@ -156,7 +172,23 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return getExternalAuthHref(environment.apiUrl, auth)
   }
 
-  login () {
+  isFormValid () {
+    if (this.currentLoginStep === 1) return this.form.controls.username.valid
+
+    return this.form.valid
+  }
+
+  goToLoginStep (step: number) {
+    this.router.navigate([], { relativeTo: this.route, queryParams: { step }, queryParamsHandling: 'merge' })
+  }
+
+  submit () {
+    if (this.currentLoginStep === 1) {
+      this.goToLoginStep(2)
+
+      return
+    }
+
     this.error = null
 
     const options = {

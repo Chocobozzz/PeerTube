@@ -42,13 +42,15 @@
     <div class="wrapper">
       <div class="login-form-and-externals">
 
-        <form class="w-100 m-0" myPluginSelector pluginSelectorId="login-form" (ngSubmit)="login()" [formGroup]="form">
+        <form class="w-100 m-0" myPluginSelector pluginSelectorId="login-form" (ngSubmit)="submit()" [formGroup]="form">
           <ng-container *ngIf="!otpStep">
-            <div class="form-group">
+            <div class="form-group" *ngIf="currentLoginStep === 1">
+              <p i18n>
+                Enter your email address or username
+              </p>
               <div>
-                <label i18n for="username">Username or email address</label>
                 <input
-                  type="text" id="username" i18n-placeholder placeholder="Example: john@example.com" required
+                  type="text" id="username" i18n-placeholder placeholder="Email or username" required
                   formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" myAutofocus
                   autocomplete="username"
                 >
@@ -59,11 +61,12 @@
               <ng-template *ngIf="hasUsernameUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
             </div>
 
-            <div class="form-group">
-              <label i18n for="password">Password</label>
-
+            <div class="form-group" *ngIf="currentLoginStep === 2">
+              <p i18n>
+                Enter password for <strong>{{ form.controls.username.value }}</strong> (<a [routerLink]="['./']" [queryParams]="{ step: '1' }">change</a>)
+              </p>
               <my-input-text
-                formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
+                formControlName="password" inputId="password" i18n-placeholder placeholder="Password" [autofocus]="true"
                 [formError]="formErrors['password']" autocomplete="current-password"
               ></my-input-text>
             </div>
@@ -81,7 +84,7 @@
             ></my-input-text>
           </div>
 
-          <input type="submit" class="peertube-button primary-button w-100" i18n-value value="Login" [disabled]="!form.valid">
+          <input type="submit" class="peertube-button primary-button w-100" i18n-value [value]="currentLoginStep === 1 ? 'Continue' : 'Login'" [disabled]="!isFormValid()">
 
           <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5 text-center">
             <button type="button" i18n class="button-unstyle link-primary mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
