@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
@@ -18,7 +18,7 @@ import {
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { QRCodeModule } from 'angularx-qrcode'
+import { QRCodeComponent } from 'angularx-qrcode'
 import { InputTextComponent } from '../shared-forms/input-text.component'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
@@ -70,13 +70,12 @@ type TabId = 'url' | 'qrcode' | 'embed'
     NgbNavLinkBase,
     NgbNavContent,
     InputTextComponent,
-    QRCodeModule,
+    QRCodeComponent,
     NgbNavOutlet,
     PeertubeCheckboxComponent,
     FormsModule,
     PluginPlaceholderComponent,
     TimestampInputComponent,
-    NgClass,
     NgFor,
     NgbCollapse,
     AlertComponent
