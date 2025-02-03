@@ -12561,7 +12561,7 @@
       </trans-unit>
       <trans-unit id="8536543691393468142" datatype="html" xml:space="preserve">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
-        <target state="translated">a <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
+        <target state="translated">alle <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">335</context>
@@ -12585,7 +12585,7 @@
       </trans-unit>
       <trans-unit id="3458449147454605646" datatype="html" xml:space="preserve">
         <source>Request a new verification email</source>
-        <target state="translated">Richiesta di una nuova e-mail di verifica</target>
+        <target state="translated">Richiedi una nuova e-mail di verifica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">16</context>
@@ -12593,7 +12593,7 @@
       </trans-unit>
       <trans-unit id="6001536520193131937" datatype="html" xml:space="preserve">
         <source>Unable to find verification string in URL query.</source>
-        <target state="translated">Impossibile trovare la stringa di verifica nella query URL.</target>
+        <target state="translated">Impossibile trovare la stringa di verifica nella query dell'URL.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -12601,7 +12601,7 @@
       </trans-unit>
       <trans-unit id="7264033009244104285" datatype="html" xml:space="preserve">
         <source>Unable to find user id or registration id in URL query.</source>
-        <target state="translated">Impossibile trovare l'id utente o l'id di registrazione nella query URL.</target>
+        <target state="translated">Impossibile trovare l'id utente o l'id di registrazione nella query dell'URL.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -12623,17 +12623,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8610022770999239699">
+      <trans-unit id="8610022770999239699" xml:space="preserve">
         <source>This instance does not require email verification.</source>
-        <target>Questa istanza non richiede la verifica dell'email.</target>
+        <target state="needs-translation">Questa istanza non richiede la verifica dell'e-mail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="248731258067914565" datatype="html">
+      <trans-unit id="248731258067914565" datatype="html" xml:space="preserve">
         <source>Verify account via email</source>
-        <target state="translated">Verifica l'account via email</target>
+        <target state="translated">Verifica l'account via e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">16</context>
@@ -12641,7 +12641,7 @@
       </trans-unit>
       <trans-unit id="6040639330855198542" datatype="html" xml:space="preserve">
         <source>Ask to send an email to verify your account</source>
-        <target state="translated">Chiedete di inviare un'e-mail per verificare il vostro account</target>
+        <target state="translated">Chiedi di inviare un'e-mail per verificare il tuo account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">25</context>
@@ -12685,7 +12685,7 @@
       </trans-unit>
       <trans-unit id="2448802938372065840" datatype="html" xml:space="preserve">
         <source>If you need help using PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Se avete bisogno di aiuto per usare PeerTube, potete consultare la documentazione di <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> . </target>
+        <target state="translated">Se hai bisogno di aiuto per utilizzare PeerTube, puoi dare un'occhiata alla <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentazione<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">18</context>
@@ -12697,7 +12697,7 @@
       </trans-unit>
       <trans-unit id="7225513189981158956" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Benvenuti su<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Benvenuto<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>su <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">7</context>
@@ -12721,7 +12721,7 @@
       </trans-unit>
       <trans-unit id="7273859988396814188" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Controllare l'e-mail<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> per convalidare l'account e completare la richiesta di registrazione. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Controlla la tua e-mail<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> per validare il tuo account e completare la registrazione. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -12729,15 +12729,15 @@
       </trans-unit>
       <trans-unit id="7056036938435794110" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Controllare l'e-mail<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> per convalidare l'account e completare la registrazione. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Controlla la tua e-mail<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> per validare il tuo account e completare la registrazione. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2999492056553212422">
+      <trans-unit id="2999492056553212422" xml:space="preserve">
         <source>Banned</source>
-        <target>Espulso</target>
+        <target state="translated">Bannato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">21</context>
@@ -12883,9 +12883,9 @@
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7766488542631150871" datatype="html">
+      <trans-unit id="7766488542631150871" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> video}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nessun video} =1 {1 video} other {<x id="INTERPOLATION"/> video}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">29</context>
@@ -13029,7 +13029,7 @@
       </trans-unit>
       <trans-unit id="1030806577637361194" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not have followers.</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> non ha seguaci.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> non ha follower.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">66</context>
@@ -13203,17 +13203,17 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135286612733607700" datatype="html">
+      <trans-unit id="135286612733607700" datatype="html" xml:space="preserve">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">È un software libero e open source, su <x id="START_LINK"/>licenza AGPLv3<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">È un software libero e open-source, sotto <x id="START_LINK"/>licenza AGPLv3<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7257048945916143687" datatype="html">
+      <trans-unit id="7257048945916143687" datatype="html" xml:space="preserve">
         <source>For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Per maggiori informazioni, perfavore visita <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/> </target>
+        <target state="translated">Per maggiori informazioni, visita <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">19</context>
@@ -13243,9 +13243,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7916664392219781729" datatype="html">
+      <trans-unit id="7916664392219781729" datatype="html" xml:space="preserve">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target state="translated">Scopri le applicazioni Android non ufficiali o i omponenti aggiuntivi del browser!</target>
+        <target state="translated">Scopri le applicazioni Android non ufficiali o i componenti aggiuntivi del browser!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">44</context>
@@ -13259,9 +13259,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6886584917624458638" datatype="html">
+      <trans-unit id="6886584917624458638" datatype="html" xml:space="preserve">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
-        <target state="translated">Vuoi aiutare a migliorare PeerTube? Puoi tradurre l'interfaccia web, dare la tua opinione o contribuire direttamente al codice!</target>
+        <target state="translated">Vuoi aiutare a migliorare PeerTube? Puoi tradurre l'interfaccia web, fornire un feedback o contribuire direttamente al codice!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">56</context>
@@ -13277,7 +13277,7 @@
       </trans-unit>
       <trans-unit id="6039800040694117968" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not have subscriptions.</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> non ha sottoscrizioni.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> non ha iscrizioni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">17</context>
@@ -13317,7 +13317,7 @@
       </trans-unit>
       <trans-unit id="1481887811671001508" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {follower} other {followers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {follower} other {followers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {follower} other {follower}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">55</context>
@@ -13389,7 +13389,7 @@
       </trans-unit>
       <trans-unit id="5322177163493113456" datatype="html" xml:space="preserve">
         <source>Close this modal</source>
-        <target state="translated">Chiudere questa finestra modale</target>
+        <target state="translated">Chiudi questa finestra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -13537,7 +13537,7 @@
       </trans-unit>
       <trans-unit id="7119544246688514254" datatype="html" xml:space="preserve">
         <source>Go to the previous step</source>
-        <target state="translated">Andare al passo precedente</target>
+        <target state="translated">Vai al passo precedente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -13545,7 +13545,7 @@
       </trans-unit>
       <trans-unit id="4323994782717641395" datatype="html" xml:space="preserve">
         <source>Go to the next step</source>
-        <target state="translated">Passare alla fase successiva</target>
+        <target state="translated">Vai al passo successivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -13599,9 +13599,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8583412279916132438" datatype="html">
+      <trans-unit id="8583412279916132438" datatype="html" xml:space="preserve">
         <source>Channel display name</source>
-        <target state="translated">Nome visualizzato del canale</target>
+        <target state="translated">Nome del canale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">21</context>
@@ -13649,7 +13649,7 @@
       </trans-unit>
       <trans-unit id="6433602064879074151" datatype="html" xml:space="preserve">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="translated">L'identificativo del canale non può coincidere con il nome dell'account. È possibile fare clic sul primo passo per aggiornare il nome dell'account.</target>
+        <target state="translated">L'identificatore del canale non può essere lo stesso del nome del tuo account. Puoi tornare al primo passo per aggiornare il nome del tuo account.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">51</context>
