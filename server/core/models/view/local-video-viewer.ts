@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize'
+import { QueryOptionsWithType, QueryTypes } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Table } from 'sequelize-typescript'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
@@ -8,6 +8,7 @@ import {
   VideoStatsRetention,
   VideoStatsTimeserie,
   VideoStatsTimeserieMetric,
+  VideoStatsUserAgent,
   WatchActionObject
 } from '@peertube/peertube-models'
 import { VideoModel } from '../video/video.js'
@@ -31,6 +32,15 @@ import { SequelizeModel } from '../shared/index.js'
     {
       fields: [ 'url' ],
       unique: true
+    },
+    {
+      fields: [ 'browser' ]
+    },
+    {
+      fields: [ 'device' ]
+    },
+    {
+      fields: [ 'operatingSystem' ]
     }
   ]
 })
@@ -49,6 +59,18 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   @AllowNull(false)
   @Column
   watchTime: number
+
+  @AllowNull(true)
+  @Column
+  browser: string
+
+  @AllowNull(true)
+  @Column
+  device: string
+
+  @AllowNull(true)
+  @Column
+  operatingSystem: string
 
   @AllowNull(true)
   @Column
@@ -203,27 +225,12 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
       return LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
     }
 
-    const buildGeoPromise = (type: 'country' | 'subdivisionName') => {
-      let dateWhere = ''
-
-      if (startDate) dateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
-      if (endDate) dateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
-
-      const query = `SELECT "${type}", COUNT("${type}") as viewers ` +
-        `FROM "localVideoViewer" ` +
-        `WHERE "videoId" = :videoId AND "${type}" IS NOT NULL ${dateWhere} ` +
-        `GROUP BY "${type}" ` +
-        `ORDER BY "viewers" DESC`
-
-      return LocalVideoViewerModel.sequelize.query<any>(query, queryOptions)
-    }
-
     const [ rowsTotalViewers, rowsWatchTime, rowsWatchPeak, rowsCountries, rowsSubdivisions ] = await Promise.all([
       buildTotalViewersPromise(),
       buildWatchTimePromise(),
       buildWatchPeakPromise(),
-      buildGeoPromise('country'),
-      buildGeoPromise('subdivisionName')
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'country', startDate, endDate, queryOptions }),
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'subdivisionName', startDate, endDate, queryOptions })
     ])
 
     const viewersPeak = rowsWatchPeak.length !== 0
@@ -254,6 +261,34 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
       subdivisions: rowsSubdivisions.map(r => ({
         name: r.subdivisionName,
+        viewers: r.viewers
+      }))
+    }
+  }
+
+  static async getUserAgentStats (video: MVideo): Promise<VideoStatsUserAgent> {
+    const queryOptions = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { videoId: video.id } as any
+    }
+
+    const [ browser, device, operatingSystem ] = await Promise.all([
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'browser', queryOptions }),
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'device', queryOptions }),
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'operatingSystem', queryOptions })
+    ])
+
+    return {
+      browser: browser.map(r => ({
+        name: r.browser,
+        viewers: r.viewers
+      })),
+      device: device.map(r => ({
+        name: r.device,
+        viewers: r.viewers
+      })),
+      operatingSystem: operatingSystem.map(r => ({
+        name: r.operatingSystem,
         viewers: r.viewers
       }))
     }
@@ -351,6 +386,27 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
         value: parseInt(r.value)
       }))
     }
+  }
+
+  private static async buildGroupBy (options: {
+    groupByColumn: string
+    startDate?: string
+    endDate?: string
+    queryOptions: QueryOptionsWithType<QueryTypes.SELECT>
+  }) {
+    const { groupByColumn, startDate, endDate, queryOptions } = options
+    let dateWhere = ''
+
+    if (startDate) dateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
+    if (endDate) dateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
+
+    const query = `SELECT "${groupByColumn}", COUNT("${groupByColumn}") as viewers ` +
+      `FROM "localVideoViewer" ` +
+      `WHERE "videoId" = :videoId AND "${groupByColumn}" IS NOT NULL ${dateWhere} ` +
+      `GROUP BY "${groupByColumn}" ` +
+      `ORDER BY "viewers" DESC`
+
+    return LocalVideoViewerModel.sequelize.query<any>(query, queryOptions)
   }
 
   toActivityPubObject (this: MLocalVideoViewerWithWatchSections): WatchActionObject {

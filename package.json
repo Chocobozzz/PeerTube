@@ -258,6 +258,7 @@
     "tsc-watch": "^6.0.0",
     "tsx": "^4.7.1",
     "type-fest": "^4.37.0",
-    "typescript": "~5.5.2"
+    "typescript": "~5.5.2",
+    "ua-parser-js": "^2.0.1"
   }
 }

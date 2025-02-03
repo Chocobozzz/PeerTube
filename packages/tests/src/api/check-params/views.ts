@@ -222,6 +222,36 @@ describe('Test videos views API validators', function () {
     })
   })
 
+  describe('When getting user agent stats', function () {
+
+    it('Should fail with a remote video', async function () {
+      await servers[0].videoStats.getUserAgentStats({
+        videoId: remoteVideoId,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail without token', async function () {
+      await servers[0].videoStats.getUserAgentStats({
+        videoId,
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with another token', async function () {
+      await servers[0].videoStats.getUserAgentStats({
+        videoId,
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await servers[0].videoStats.getUserAgentStats({ videoId })
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

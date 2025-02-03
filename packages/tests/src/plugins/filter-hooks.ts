@@ -28,6 +28,7 @@ import { expectEndWith } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '../shared/fixture-urls.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { processViewersStats } from '@tests/shared/views.js'
 
 describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]
@@ -415,6 +416,32 @@ describe('Test plugin filter hooks', function () {
       // 3 because we get 3 samples per page
       await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.params', 3)
       await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.result', 3)
+    })
+  })
+
+  describe('filter:api.video-view.parse-user-agent.get.result', function () {
+    let server
+    let videoUUID
+
+    before(async function () {
+      server = servers[0]
+      const { uuid } = await server.videos.quickUpload({ name: 'video' })
+      videoUUID = uuid
+      await waitJobs(server)
+
+      await server.views.simulateView({
+        id: uuid,
+        userAgent: 'user agent string'
+      })
+      await processViewersStats([ server ])
+    })
+
+    it('Should return custom browser, device and os', async function () {
+      const stats = await server.videoStats.getUserAgentStats({ videoId: videoUUID })
+
+      expect(stats.browser[0].name).to.equal('Custom browser')
+      expect(stats.device[0].name).to.equal('Custom device')
+      expect(stats.operatingSystem[0].name).to.equal('Custom os')
     })
   })
 

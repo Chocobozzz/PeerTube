@@ -313,6 +313,27 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
+    target: 'filter:api.video-view.parse-user-agent.get.result',
+    handler: (parsedUserAgent, userAgentStr) => {
+      if (userAgentStr === 'user agent string') {
+        return {
+          browser: {
+            name: 'Custom browser'
+          },
+          device: {
+            type: 'Custom device'
+          },
+          os: {
+            name: 'Custom os'
+          }
+        }
+      }
+
+      return parsedUserAgent
+    }
+  })
+
+  registerHook({
     target: 'filter:video.auto-blacklist.result',
     handler: (blacklisted, { video }) => {
       if (blacklisted) return true

@@ -149,7 +149,8 @@ export const serverFilterHookObject = {
 
   // Peertube >= 7.2
   'filter:email.subject.result': true,
-  'filter:email.template-path.result': true
+  'filter:email.template-path.result': true,
+  'filter:api.video-view.parse-user-agent.get.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

@@ -10,15 +10,22 @@ export class ViewsCommand extends AbstractCommand {
     viewEvent?: VideoViewEvent
     xForwardedFor?: string
     sessionId?: string
+    userAgent?: string
   }) {
-    const { id, xForwardedFor, viewEvent, currentTime, sessionId } = options
+    const { id, xForwardedFor, viewEvent, currentTime, sessionId, userAgent } = options
     const path = '/api/v1/videos/' + id + '/views'
+    const headers = userAgent
+      ? {
+        'User-Agent': userAgent
+      }
+      : undefined
 
     return this.postBodyRequest({
       ...options,
 
       path,
       xForwardedFor,
+      headers,
       fields: {
         currentTime,
         viewEvent,
@@ -33,6 +40,7 @@ export class ViewsCommand extends AbstractCommand {
     id: number | string
     xForwardedFor?: string
     sessionId?: string
+    userAgent?: string
   }) {
     await this.view({ ...options, currentTime: 0 })
     await this.view({ ...options, currentTime: 5 })
