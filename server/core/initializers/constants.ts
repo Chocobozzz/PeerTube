@@ -826,7 +826,7 @@ export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 export const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
 export const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
-export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME = '15 minutes'
+export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME: `${number} minutes` | `${number} seconds` = '15 minutes'
 
 export const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 

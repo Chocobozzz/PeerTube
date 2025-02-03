@@ -14,7 +14,7 @@ program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
   .option('-f, --files [file...]', 'Files to parse. If not provided, the script will parse the latest log file from config)')
   .option('-t, --tags [tags...]', 'Display only lines with these tags')
-  .option('-nt, --not-tags [tags...]', 'Do not display lines containing these tags')
+  .option('-n, --not-tags [tags...]', 'Do not display lines containing these tags')
   .parse(process.argv)
 
 const options = program.opts()
