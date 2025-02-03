@@ -4,7 +4,8 @@ import {
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
-  VideoStatsTimeserieMetric
+  VideoStatsTimeserieMetric,
+  VideoStatsUserAgent
 } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
@@ -22,6 +23,20 @@ export class VideoStatsCommand extends AbstractCommand {
       path,
 
       query: pick(options, [ 'startDate', 'endDate' ]),
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getUserAgentStats (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/stats/user-agent'
+
+    return this.getRequestBody<VideoStatsUserAgent>({
+      ...options,
+      path,
 
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200

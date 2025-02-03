@@ -43,6 +43,17 @@ const videoRetentionStatsValidator = [
   }
 ]
 
+const videoUserAgentStatsValidator = [
+  isValidVideoIdParam('videoId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await commonStatsCheck(req, res)) return
+
+    return next()
+  }
+]
+
 const videoTimeserieStatsValidator = [
   isValidVideoIdParam('videoId'),
 
@@ -88,7 +99,8 @@ const videoTimeserieStatsValidator = [
 export {
   videoOverallStatsValidator,
   videoTimeserieStatsValidator,
-  videoRetentionStatsValidator
+  videoRetentionStatsValidator,
+  videoUserAgentStatsValidator
 }
 
 // ---------------------------------------------------------------------------

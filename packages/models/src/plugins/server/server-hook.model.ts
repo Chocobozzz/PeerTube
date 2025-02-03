@@ -145,7 +145,10 @@ export const serverFilterHookObject = {
   // Peertube >= 7.1
   'filter:oauth.password-grant.get-user.params': true,
   'filter:api.email-verification.ask-send-verify-email.body': true,
-  'filter:api.users.ask-reset-password.body': true
+  'filter:api.users.ask-reset-password.body': true,
+
+  // Peertube >= 7.2
+  'filter:api.video-view.parse-user-agent.get.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

@@ -3,6 +3,7 @@ import { wait } from '@peertube/peertube-core-utils'
 import { VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import {
   createMultipleServers,
+  createSingleServer,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -33,8 +34,9 @@ async function processViewsBuffer (servers: PeerTubeServer[]) {
 async function prepareViewsServers (options: {
   viewExpiration?: string // default 1 second
   trustViewerSessionId?: boolean // default true
+  singleServer?: boolean // default false
 } = {}) {
-  const { viewExpiration = '1 second', trustViewerSessionId = true } = options
+  const { viewExpiration = '1 second', trustViewerSessionId = true, singleServer } = options
 
   const config = {
     views: {
@@ -46,14 +48,16 @@ async function prepareViewsServers (options: {
     }
   }
 
-  const servers = await createMultipleServers(2, config)
+  const servers = await (singleServer ? Promise.all([ createSingleServer(1, config) ]) : createMultipleServers(2, config))
   await setAccessTokensToServers(servers)
   await setDefaultVideoChannel(servers)
 
   await servers[0].config.enableMinimumTranscoding()
   await servers[0].config.enableLive({ allowReplay: true, transcoding: false })
 
-  await doubleFollow(servers[0], servers[1])
+  if (!singleServer) {
+    await doubleFollow(servers[0], servers[1])
+  }
 
   return servers
 }

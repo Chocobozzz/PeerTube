@@ -12,6 +12,7 @@ import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-vid
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
+import { IResult } from 'ua-parser-js'
 
 const lTags = loggerTagsFactory('views')
 
@@ -25,6 +26,10 @@ type LocalViewerStats = {
   }[]
 
   watchTime: number
+
+  browser: string
+  device: string
+  operatingSystem: string
 
   country: string
   subdivisionName: string
@@ -47,13 +52,14 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   async addLocalViewer (options: {
+    userAgent: IResult
     video: MVideoImmutable
     currentTime: number
     ip: string
     sessionId: string
     viewEvent?: VideoViewEvent
   }) {
-    const { video, ip, viewEvent, currentTime, sessionId } = options
+    const { video, ip, viewEvent, currentTime, sessionId, userAgent } = options
 
     logger.debug(
       'Adding local viewer to video stats %s.', video.uuid,
@@ -82,6 +88,10 @@ export class VideoViewerStats {
         watchSections: [],
 
         watchTime: 0,
+
+        browser: userAgent.browser.name,
+        device: userAgent.device.type || 'unknown',
+        operatingSystem: userAgent.os.name,
 
         country,
         subdivisionName,
@@ -181,6 +191,9 @@ export class VideoViewerStats {
       startDate: new Date(stats.firstUpdated),
       endDate: new Date(stats.lastUpdated),
       watchTime: stats.watchTime,
+      browser: stats.browser,
+      device: stats.device,
+      operatingSystem: stats.operatingSystem,
       country: stats.country,
       subdivisionName: stats.subdivisionName,
       videoId: video.id

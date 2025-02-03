@@ -86,6 +86,10 @@ my-embed {
 
 .nav-tabs {
   @include peertube-nav-tabs($border-width: 2px);
+
+  a.nav-link {
+    padding: 0 10px !important;
+  }
 }
 
 .chart-container {
