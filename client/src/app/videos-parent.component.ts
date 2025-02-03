@@ -5,7 +5,6 @@ import { DisableForReuseHook } from './core'
 
 @Component({
   templateUrl: './videos-parent.component.html',
-  standalone: true,
   imports: [
     HomeMenuComponent,
     RouterOutlet

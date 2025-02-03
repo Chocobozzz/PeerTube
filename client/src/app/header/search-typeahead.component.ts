@@ -15,7 +15,6 @@ import { FormsModule } from '@angular/forms'
   selector: 'my-search-typeahead',
   templateUrl: './search-typeahead.component.html',
   styleUrls: [ './search-typeahead.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, GlobalIconComponent, NgFor, SuggestionComponent, NgIf, NgClass ]
 })
 export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDestroy {

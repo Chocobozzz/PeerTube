@@ -13,7 +13,6 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
   selector: 'my-video-channel-playlists',
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ],
-  standalone: true,
   imports: [ NgIf, InfiniteScrollerDirective, NgFor, VideoPlaylistMiniatureComponent ]
 })
 export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {

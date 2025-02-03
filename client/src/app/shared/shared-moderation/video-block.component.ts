@@ -17,7 +17,6 @@ import { NgIf, NgClass } from '@angular/common'
   selector: 'my-video-block',
   templateUrl: './video-block.component.html',
   styleUrls: [ './video-block.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
 })
 export class VideoBlockComponent extends FormReactive implements OnInit {

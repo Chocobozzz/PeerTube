@@ -9,7 +9,6 @@ import { NgIf } from '@angular/common'
   selector: 'my-privacy-concerns',
   templateUrl: './privacy-concerns.component.html',
   styleUrls: [ './privacy-concerns.component.scss' ],
-  standalone: true,
   imports: [ NgIf ]
 })
 export class PrivacyConcernsComponent implements OnInit {

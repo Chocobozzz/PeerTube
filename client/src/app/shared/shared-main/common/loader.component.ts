@@ -4,7 +4,6 @@ import { NgIf, NgStyle } from '@angular/common'
 @Component({
   selector: 'my-loader',
   template: `<div *ngIf="loading" class="spinner-border" [ngStyle]="getStyle()" role="status"></div>`,
-  standalone: true,
   imports: [ NgIf, NgStyle ]
 })
 export class LoaderComponent {

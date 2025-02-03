@@ -21,7 +21,6 @@ import { VideoRedundancyInformationComponent } from './video-redundancy-informat
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
   styleUrls: [ './video-redundancies-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,

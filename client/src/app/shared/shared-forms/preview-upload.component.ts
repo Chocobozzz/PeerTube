@@ -18,7 +18,6 @@ import { BytesPipe } from '../shared-main/common/bytes.pipe'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ ReactiveFileComponent, NgIf, NgStyle ]
 })
 export class PreviewUploadComponent implements OnInit, ControlValueAccessor {

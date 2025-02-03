@@ -10,7 +10,6 @@ import { InstanceFeaturesTableComponent } from '@app/shared/shared-instance/inst
 @Component({
   templateUrl: './about-instance-tech.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, PluginSelectorDirective, InstanceFeaturesTableComponent ]
 })
 export class AboutInstanceTechComponent implements OnInit {

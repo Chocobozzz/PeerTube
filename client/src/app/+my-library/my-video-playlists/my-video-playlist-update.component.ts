@@ -27,7 +27,6 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
 @Component({
   templateUrl: './my-video-playlist-edit.component.html',
   styleUrls: [ './my-video-playlist-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,

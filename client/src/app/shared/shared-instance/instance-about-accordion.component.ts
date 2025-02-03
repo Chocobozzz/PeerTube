@@ -20,7 +20,6 @@ import { NgIf, NgFor } from '@angular/common'
   selector: 'my-instance-about-accordion',
   templateUrl: './instance-about-accordion.component.html',
   styleUrls: [ './instance-about-accordion.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgbAccordionDirective,

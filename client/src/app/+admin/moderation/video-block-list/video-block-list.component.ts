@@ -25,7 +25,6 @@ import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.com
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

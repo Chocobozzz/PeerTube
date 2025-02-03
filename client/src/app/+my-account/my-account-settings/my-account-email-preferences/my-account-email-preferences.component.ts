@@ -10,7 +10,6 @@ import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube
   selector: 'my-account-email-preferences',
   templateUrl: './my-account-email-preferences.component.html',
   styleUrls: [ './my-account-email-preferences.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, PeertubeCheckboxComponent ]
 })
 export class MyAccountEmailPreferencesComponent extends FormReactive implements OnInit {

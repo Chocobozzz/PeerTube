@@ -13,7 +13,6 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-two-factor',
   templateUrl: './my-account-two-factor.component.html',
   styleUrls: [ './my-account-two-factor.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, QRCodeComponent ]
 })
 export class MyAccountTwoFactorComponent implements OnInit {

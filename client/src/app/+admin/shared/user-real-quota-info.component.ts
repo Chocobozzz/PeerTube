@@ -7,7 +7,6 @@ import { NgIf } from '@angular/common'
 @Component({
   selector: 'my-user-real-quota-info',
   templateUrl: './user-real-quota-info.component.html',
-  standalone: true,
   imports: [ NgIf, BytesPipe ]
 })
 export class UserRealQuotaInfoComponent implements OnInit {

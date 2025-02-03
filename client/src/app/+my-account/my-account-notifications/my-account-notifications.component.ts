@@ -10,7 +10,6 @@ type NotificationSortType = 'createdAt' | 'read'
 @Component({
   templateUrl: './my-account-notifications.component.html',
   styleUrls: [ './my-account-notifications.component.scss' ],
-  standalone: true,
   imports: [ RouterLink, GlobalIconComponent, FormsModule, NgIf, UserNotificationsComponent ]
 })
 export class MyAccountNotificationsComponent {

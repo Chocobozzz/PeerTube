@@ -20,7 +20,6 @@ import { VideoComment } from '@app/shared/shared-video-comment/video-comment.mod
   selector: 'my-comment-report',
   templateUrl: './report.component.html',
   styleUrls: [ './report.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,

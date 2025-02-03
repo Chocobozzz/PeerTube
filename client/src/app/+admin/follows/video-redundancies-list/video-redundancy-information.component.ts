@@ -7,7 +7,6 @@ import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
   selector: 'my-video-redundancy-information',
   templateUrl: './video-redundancy-information.component.html',
   styleUrls: [ './video-redundancy-information.component.scss' ],
-  standalone: true,
   imports: [ PTDatePipe, BytesPipe ]
 })
 export class VideoRedundancyInformationComponent {

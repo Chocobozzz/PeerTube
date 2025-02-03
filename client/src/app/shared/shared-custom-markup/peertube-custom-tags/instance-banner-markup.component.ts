@@ -12,7 +12,6 @@ import { CustomMarkupComponent } from './shared'
   selector: 'my-instance-banner-markup',
   templateUrl: 'instance-banner-markup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgIf ]
 })
 export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupComponent {

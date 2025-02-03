@@ -21,7 +21,6 @@ import { FormReactiveErrors } from './form-reactive.service'
       multi: true
     }
   ],
-  standalone: true,
   imports: [
     NgClass,
     FormsModule,

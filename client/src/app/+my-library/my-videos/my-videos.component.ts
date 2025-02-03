@@ -39,7 +39,6 @@ import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.c
 @Component({
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     DeleteButtonComponent,

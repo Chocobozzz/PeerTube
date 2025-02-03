@@ -11,7 +11,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 @Component({
   templateUrl: './reset-password.component.html',
   styleUrls: [ './reset-password.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, InputTextComponent ]
 })
 export class ResetPasswordComponent extends FormReactive implements OnInit {

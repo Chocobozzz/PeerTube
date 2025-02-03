@@ -12,7 +12,6 @@ type FormOption = { id: string, label: string }
   selector: 'my-search-filters',
   styleUrls: [ './search-filters.component.scss' ],
   templateUrl: './search-filters.component.html',
-  standalone: true,
   imports: [ FormsModule, NgIf, NgFor, SelectTagsComponent ]
 })
 export class SearchFiltersComponent implements OnInit {

@@ -21,7 +21,6 @@ import { JobService } from './job.service'
   selector: 'my-jobs',
   templateUrl: './jobs.component.html',
   styleUrls: [ './jobs.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     NgFor,

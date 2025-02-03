@@ -37,7 +37,6 @@ const debugLogger = debug('peertube:video-update')
   selector: 'my-videos-update',
   styleUrls: [ './shared/video-edit.component.scss' ],
   templateUrl: './video-update.component.html',
-  standalone: true,
   imports: [
     RouterLink,
     UploadProgressComponent,

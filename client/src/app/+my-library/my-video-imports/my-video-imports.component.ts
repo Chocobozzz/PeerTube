@@ -18,7 +18,6 @@ import { TableExpanderIconComponent } from '../../shared/shared-tables/table-exp
 @Component({
   templateUrl: './my-video-imports.component.html',
   styleUrls: [ './my-video-imports.component.scss' ],
-  standalone: true,
   imports: [
     AdvancedInputFilterComponent,
     TableModule,

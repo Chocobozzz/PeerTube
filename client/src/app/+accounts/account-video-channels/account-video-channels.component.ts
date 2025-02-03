@@ -21,7 +21,6 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   selector: 'my-account-video-channels',
   templateUrl: './account-video-channels.component.html',
   styleUrls: [ './account-video-channels.component.scss' ],
-  standalone: true,
   imports: [ NgIf, InfiniteScrollerDirective, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
 })
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {

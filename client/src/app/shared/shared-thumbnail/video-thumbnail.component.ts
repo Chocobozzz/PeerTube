@@ -11,7 +11,6 @@ import { Video } from '../shared-main/video/video.model'
   selector: 'my-video-thumbnail',
   styleUrls: [ './video-thumbnail.component.scss' ],
   templateUrl: './video-thumbnail.component.html',
-  standalone: true,
   imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
 })
 export class VideoThumbnailComponent {

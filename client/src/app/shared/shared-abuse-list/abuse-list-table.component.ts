@@ -37,7 +37,6 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
   selector: 'my-abuse-list-table',
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,

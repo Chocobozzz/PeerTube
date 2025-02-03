@@ -14,7 +14,6 @@ import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infin
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {

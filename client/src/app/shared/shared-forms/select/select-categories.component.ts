@@ -27,7 +27,6 @@ import { NgIf } from '@angular/common'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
 })
 export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {

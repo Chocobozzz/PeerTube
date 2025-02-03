@@ -27,7 +27,6 @@ import { SearchFiltersComponent } from './search-filters.component'
   selector: 'my-search',
   styleUrls: [ './search.component.scss' ],
   templateUrl: './search.component.html',
-  standalone: true,
   imports: [
     InfiniteScrollerDirective,
     NgIf,

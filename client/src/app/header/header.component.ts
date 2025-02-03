@@ -32,7 +32,6 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
   selector: 'my-header',
   templateUrl: './header.component.html',
   styleUrls: [ './header.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     NotificationDropdownComponent,

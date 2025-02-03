@@ -12,7 +12,6 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-account-videos',
   templateUrl: './account-videos.component.html',
-  standalone: true,
   imports: [ NgIf, VideosListComponent ]
 })
 export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {

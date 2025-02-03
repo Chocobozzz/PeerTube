@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 @Component({
   selector: 'my-remote-subscribe',
   templateUrl: './remote-subscribe.component.html',
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, NgIf, HelpComponent, PeerTubeTemplateDirective ]
 })
 export class RemoteSubscribeComponent extends FormReactive implements OnInit {

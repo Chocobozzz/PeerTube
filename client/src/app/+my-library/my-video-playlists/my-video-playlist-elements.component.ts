@@ -19,7 +19,6 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
 @Component({
   templateUrl: './my-video-playlist-elements.component.html',
   styleUrls: [ './my-video-playlist-elements.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     ButtonComponent,

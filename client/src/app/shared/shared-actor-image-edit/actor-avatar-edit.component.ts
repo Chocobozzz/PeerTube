@@ -15,7 +15,6 @@ import { NgIf } from '@angular/common'
     './actor-image-edit.scss',
     './actor-avatar-edit.component.scss'
   ],
-  standalone: true,
   imports: [ NgIf, ActorAvatarComponent, NgbTooltip, GlobalIconComponent, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu ]
 })
 export class ActorAvatarEditComponent implements OnInit, OnChanges {

@@ -9,7 +9,6 @@ import { ButtonComponent } from '../shared-main/buttons/button.component'
   selector: 'my-actor-host',
   templateUrl: 'actor-host.component.html',
   styleUrls: [ 'actor-host.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, NgbDropdownModule, GlobalIconComponent, ButtonComponent, RouterLink ]
 })
 export class ActorHostComponent implements OnChanges {

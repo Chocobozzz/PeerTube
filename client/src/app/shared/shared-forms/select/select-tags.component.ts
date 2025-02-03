@@ -14,7 +14,6 @@ import { ChipsModule } from 'primeng/chips'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ CommonModule, ChipsModule, FormsModule ]
 })
 export class SelectTagsComponent implements OnInit, ControlValueAccessor {

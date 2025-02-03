@@ -20,7 +20,6 @@ import { PeerTubeTemplateDirective } from '../common/peertube-template.directive
   selector: 'my-help',
   styleUrls: [ './help.component.scss' ],
   templateUrl: './help.component.html',
-  standalone: true,
   imports: [ NgIf, NgTemplateOutlet, NgbPopover, GlobalIconComponent ]
 })
 

@@ -33,7 +33,6 @@ export interface ListOverflowItem {
   templateUrl: './list-overflow.component.html',
   styleUrls: [ './list-overflow.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgTemplateOutlet,
     NgbDropdown,

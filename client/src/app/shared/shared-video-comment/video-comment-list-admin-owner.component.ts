@@ -23,7 +23,6 @@ import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon
   selector: 'my-video-comment-list-admin-owner',
   templateUrl: './video-comment-list-admin-owner.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,

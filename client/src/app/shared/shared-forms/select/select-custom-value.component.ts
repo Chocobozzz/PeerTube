@@ -14,7 +14,6 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ SelectOptionsComponent, FormsModule, NgIf ]
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {

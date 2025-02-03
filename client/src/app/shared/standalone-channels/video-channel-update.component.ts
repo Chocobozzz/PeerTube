@@ -27,7 +27,6 @@ import { VideoChannelEdit } from './video-channel-edit'
   selector: 'my-video-channel-update',
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,

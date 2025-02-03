@@ -15,7 +15,6 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-change-email',
   templateUrl: './my-account-change-email.component.html',
   styleUrls: [ './my-account-change-email.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {

@@ -5,7 +5,6 @@ import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({
   name: 'ptDate',
-  standalone: true,
   pure: true
 })
 export class PTDatePipe implements PipeTransform {

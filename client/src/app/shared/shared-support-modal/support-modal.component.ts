@@ -6,7 +6,6 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 @Component({
   selector: 'my-support-modal',
   templateUrl: './support-modal.component.html',
-  standalone: true,
   imports: [ GlobalIconComponent ]
 })
 export class SupportModalComponent implements OnChanges {

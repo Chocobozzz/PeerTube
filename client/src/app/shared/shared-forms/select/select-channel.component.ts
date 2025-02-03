@@ -27,7 +27,6 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ DropdownModule, FormsModule, CommonModule, SelectOptionsComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {

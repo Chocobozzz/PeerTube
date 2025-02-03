@@ -4,7 +4,6 @@ import { CustomMarkupContainerComponent } from '../shared/shared-custom-markup/c
 
 @Component({
   templateUrl: './home.component.html',
-  standalone: true,
   imports: [ CustomMarkupContainerComponent ]
 })
 

@@ -9,7 +9,6 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-admin-welcome-modal',
   templateUrl: './admin-welcome-modal.component.html',
   styleUrls: [ './admin-welcome-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent ]
 })
 export class AdminWelcomeModalComponent implements OnInit {

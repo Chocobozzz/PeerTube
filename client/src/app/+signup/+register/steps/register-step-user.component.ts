@@ -19,7 +19,6 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-register-step-user',
   templateUrl: './register-step-user.component.html',
   styleUrls: [ './step.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {

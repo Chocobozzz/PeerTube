@@ -12,7 +12,6 @@ import { RunnerService } from '../runner.service'
 @Component({
   selector: 'my-runner-list',
   templateUrl: './runner-list.component.html',
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,

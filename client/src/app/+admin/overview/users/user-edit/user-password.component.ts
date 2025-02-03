@@ -12,7 +12,6 @@ import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
   selector: 'my-user-password',
   templateUrl: './user-password.component.html',
   styleUrls: [ './user-password.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class UserPasswordComponent extends FormReactive implements OnInit {

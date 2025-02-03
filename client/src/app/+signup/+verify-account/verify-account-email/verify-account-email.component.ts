@@ -9,7 +9,6 @@ import { SignupSuccessAfterEmailComponent } from '../../shared/signup-success-af
 @Component({
   selector: 'my-verify-account-email',
   templateUrl: './verify-account-email.component.html',
-  standalone: true,
   imports: [ NgIf, SignupSuccessAfterEmailComponent, RouterLink, AlertComponent ]
 })
 

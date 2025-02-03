@@ -10,7 +10,6 @@ import { VideoChannel } from './video-channel.model'
   selector: 'my-channels-setup-message',
   templateUrl: './channels-setup-message.component.html',
   styleUrls: [ './channels-setup-message.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, RouterLink, AlertComponent ]
 })
 export class ChannelsSetupMessageComponent implements OnInit {

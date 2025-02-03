@@ -19,7 +19,6 @@ import { CustomMarkupComponent } from './shared'
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgStyle, NgFor, VideoMiniatureComponent ]
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {

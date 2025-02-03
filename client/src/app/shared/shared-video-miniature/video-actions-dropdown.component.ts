@@ -46,7 +46,6 @@ export type VideoActionsDisplayType = {
   selector: 'my-video-actions-dropdown',
   templateUrl: './video-actions-dropdown.component.html',
   styleUrls: [ './video-actions-dropdown.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgbDropdown,

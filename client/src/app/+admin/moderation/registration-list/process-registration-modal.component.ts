@@ -16,7 +16,6 @@ import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registrati
 @Component({
   selector: 'my-process-registration-modal',
   templateUrl: './process-registration-modal.component.html',
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent, AlertComponent ]
 })
 export class ProcessRegistrationModalComponent extends FormReactive implements OnInit {

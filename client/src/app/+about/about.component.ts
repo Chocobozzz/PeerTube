@@ -14,7 +14,6 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
   selector: 'my-about',
   templateUrl: './about.component.html',
   styleUrls: [ './about.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, RouterOutlet, HorizontalMenuComponent, GlobalIconComponent, ButtonComponent, SupportModalComponent ]
 })
 

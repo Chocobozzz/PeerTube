@@ -18,7 +18,6 @@ type PluginMetadata = {
   selector: 'my-video-attributes',
   templateUrl: './video-attributes.component.html',
   styleUrls: [ './video-attributes.component.scss' ],
-  standalone: true,
   imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, TimeDurationFormatterPipe, PTDatePipe ]
 })
 export class VideoAttributesComponent implements OnChanges {

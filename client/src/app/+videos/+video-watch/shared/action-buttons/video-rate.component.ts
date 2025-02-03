@@ -12,7 +12,6 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
   selector: 'my-video-rate',
   templateUrl: './video-rate.component.html',
   styleUrls: [ './video-rate.component.scss' ],
-  standalone: true,
   imports: [ NgbPopover, NgClass, NgbTooltip, GlobalIconComponent, NgIf ]
 })
 export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {

@@ -15,7 +15,6 @@ import { UserSubscriptionService } from './user-subscription.service'
   selector: 'my-subscribe-button',
   templateUrl: './subscribe-button.component.html',
   styleUrls: [ './subscribe-button.component.scss' ],
-  standalone: true,
   imports: [
     NgClass,
     NgIf,

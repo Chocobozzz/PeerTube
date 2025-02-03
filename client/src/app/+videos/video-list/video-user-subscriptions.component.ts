@@ -12,7 +12,6 @@ import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.m
 @Component({
   selector: 'my-videos-user-subscriptions',
   templateUrl: './video-user-subscriptions.component.html',
-  standalone: true,
   imports: [ VideosListComponent ]
 })
 export class VideoUserSubscriptionsComponent implements DisableForReuseHook {

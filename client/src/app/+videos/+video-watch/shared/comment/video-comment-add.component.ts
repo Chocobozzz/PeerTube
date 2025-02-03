@@ -35,7 +35,6 @@ import { RemoteSubscribeComponent } from '../../../../shared/shared-user-subscri
   selector: 'my-video-comment-add',
   templateUrl: './video-comment-add.component.html',
   styleUrls: [ './video-comment-add.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

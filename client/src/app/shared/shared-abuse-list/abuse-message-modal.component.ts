@@ -17,7 +17,6 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-abuse-message-modal',
   templateUrl: './abuse-message-modal.component.html',
   styleUrls: [ './abuse-message-modal.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, NgFor, NgClass, FormsModule, ReactiveFormsModule, PTDatePipe ]
 })
 export class AbuseMessageModalComponent extends FormReactive implements OnInit {

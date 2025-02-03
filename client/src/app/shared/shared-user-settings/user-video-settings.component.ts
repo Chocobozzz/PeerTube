@@ -18,7 +18,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
   selector: 'my-user-video-settings',
   templateUrl: './user-video-settings.component.html',
   styleUrls: [ './user-video-settings.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

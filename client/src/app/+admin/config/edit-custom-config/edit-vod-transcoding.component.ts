@@ -16,7 +16,6 @@ import { EditConfigurationService, ResolutionOption } from './edit-configuration
   selector: 'my-edit-vod-transcoding',
   templateUrl: './edit-vod-transcoding.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

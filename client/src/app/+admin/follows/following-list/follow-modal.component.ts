@@ -17,7 +17,6 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-follow-modal',
   templateUrl: './follow-modal.component.html',
   styleUrls: [ './follow-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf, AlertComponent ]
 })
 export class FollowModalComponent extends FormReactive implements OnInit {

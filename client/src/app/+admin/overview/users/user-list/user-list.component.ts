@@ -52,7 +52,6 @@ type UserForList = User & {
   selector: 'my-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

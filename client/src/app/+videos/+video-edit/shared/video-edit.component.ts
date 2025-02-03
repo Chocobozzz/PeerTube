@@ -93,7 +93,6 @@ type PluginField = {
   selector: 'my-video-edit',
   styleUrls: [ './video-edit.component.scss' ],
   templateUrl: './video-edit.component.html',
-  standalone: true,
   imports: [
     RouterLink,
     FormsModule,

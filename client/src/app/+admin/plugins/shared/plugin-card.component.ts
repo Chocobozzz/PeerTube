@@ -7,7 +7,6 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-plugin-card',
   templateUrl: './plugin-card.component.html',
   styleUrls: [ './plugin-card.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent ]
 })
 

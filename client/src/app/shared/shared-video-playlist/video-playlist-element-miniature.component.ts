@@ -24,7 +24,6 @@ import { VideoService } from '../shared-main/video/video.service'
   styleUrls: [ './video-playlist-element-miniature.component.scss' ],
   templateUrl: './video-playlist-element-miniature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgClass,
     RouterLink,

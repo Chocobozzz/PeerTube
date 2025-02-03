@@ -8,7 +8,6 @@ import { ResolverData } from '../about-instance.resolver'
 @Component({
   templateUrl: './about-instance-team.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
-  standalone: true,
   imports: [ CommonModule ]
 })
 export class AboutInstanceTeamComponent implements OnInit {

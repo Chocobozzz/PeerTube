@@ -50,7 +50,6 @@ enum GroupDate {
   selector: 'my-videos-list',
   templateUrl: './videos-list.component.html',
   styleUrls: [ './videos-list.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgClass,

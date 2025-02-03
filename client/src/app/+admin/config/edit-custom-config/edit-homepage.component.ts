@@ -9,7 +9,6 @@ import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-mar
   selector: 'my-edit-homepage',
   templateUrl: './edit-homepage.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, CustomMarkupHelpComponent, MarkdownTextareaComponent, NgIf ]
 })
 export class EditHomepageComponent {

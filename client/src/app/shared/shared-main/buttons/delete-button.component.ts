@@ -10,7 +10,6 @@ import { ButtonComponent } from './button.component'
       [responsiveLabel]="responsiveLabel"
     ></my-button>
   `,
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ ButtonComponent ]
 })

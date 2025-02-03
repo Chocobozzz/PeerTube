@@ -13,7 +13,6 @@ import { NgIf } from '@angular/common'
   selector: 'my-instance-avatar-markup',
   templateUrl: 'instance-avatar-markup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgIf, ActorAvatarComponent ]
 })
 export class InstanceAvatarMarkupComponent implements OnInit, CustomMarkupComponent {

@@ -44,7 +44,6 @@ import { InstanceService } from './shared/shared-main/instance/instance.service'
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     HotkeysCheatSheetComponent,

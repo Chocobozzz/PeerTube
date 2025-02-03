@@ -11,7 +11,6 @@ import { NgIf, NgClass } from '@angular/common'
   selector: 'my-register-step-terms',
   templateUrl: './register-step-terms.component.html',
   styleUrls: [ './step.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, NgIf, NgClass, PeertubeCheckboxComponent, PeerTubeTemplateDirective ]
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {

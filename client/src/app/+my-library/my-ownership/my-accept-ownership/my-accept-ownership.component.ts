@@ -17,7 +17,6 @@ import { VideoOwnershipService } from '@app/shared/shared-main/video/video-owner
   selector: 'my-accept-ownership',
   templateUrl: './my-accept-ownership.component.html',
   styleUrls: [ './my-accept-ownership.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent, NgIf ]
 })
 export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {

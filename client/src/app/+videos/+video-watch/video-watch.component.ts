@@ -97,7 +97,6 @@ type URLOptions = {
   selector: 'my-video-watch',
   templateUrl: './video-watch.component.html',
   styleUrls: [ './video-watch.component.scss' ],
-  standalone: true,
   imports: [
     NgClass,
     NgIf,

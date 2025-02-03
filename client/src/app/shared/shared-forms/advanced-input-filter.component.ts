@@ -26,7 +26,6 @@ const debugLogger = debug('peertube:AdvancedInputFilterComponent')
   selector: 'my-advanced-input-filter',
   templateUrl: './advanced-input-filter.component.html',
   styleUrls: [ './advanced-input-filter.component.scss' ],
-  standalone: true,
   imports: [ NgbDropdown, NgIf, NgbDropdownToggle, NgbDropdownMenu, NgFor, GlobalIconComponent, NgClass, FormsModule ]
 })
 export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {

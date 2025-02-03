@@ -9,7 +9,6 @@ import { AutomaticTagService } from './automatic-tag.service'
 
 @Component({
   templateUrl: './my-auto-tag-policies.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,

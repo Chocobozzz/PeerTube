@@ -20,7 +20,6 @@ import { Account } from '@app/shared/shared-main/account/account.model'
   selector: 'my-account-report',
   templateUrl: './report.component.html',
   styleUrls: [ './report.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,

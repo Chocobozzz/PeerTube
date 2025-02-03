@@ -16,7 +16,6 @@ import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon
   selector: 'my-video-caption-add-modal',
   styleUrls: [ './video-caption-add-modal.component.scss' ],
   templateUrl: './video-caption-add-modal.component.html',
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgIf, ReactiveFileComponent, SelectOptionsComponent ]
 })
 

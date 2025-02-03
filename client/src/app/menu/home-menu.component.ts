@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs'
 @Component({
   selector: 'my-home-menu',
   templateUrl: './home-menu.component.html',
-  standalone: true,
   imports: [ HorizontalMenuComponent ]
 })
 export class HomeMenuComponent implements OnInit, OnDestroy {

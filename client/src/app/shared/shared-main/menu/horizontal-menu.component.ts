@@ -32,7 +32,6 @@ export type HorizontalMenuEntry = {
   selector: 'my-horizontal-menu',
   templateUrl: './horizontal-menu.component.html',
   styleUrls: [ './horizontal-menu.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

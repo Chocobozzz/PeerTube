@@ -22,7 +22,6 @@ export type UserModerationDisplayType = {
 @Component({
   selector: 'my-user-moderation-dropdown',
   templateUrl: './user-moderation-dropdown.component.html',
-  standalone: true,
   imports: [ NgIf, UserBanModalComponent, ActionDropdownComponent ]
 })
 export class UserModerationDropdownComponent implements OnInit, OnChanges {

@@ -15,7 +15,6 @@ import { WatchedWordsListService } from './watched-words-list.service'
   selector: 'my-watched-words-list-save-modal',
   styleUrls: [ './watched-words-list-save-modal.component.scss' ],
   templateUrl: './watched-words-list-save-modal.component.html',
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgIf, NgClass ]
 })
 

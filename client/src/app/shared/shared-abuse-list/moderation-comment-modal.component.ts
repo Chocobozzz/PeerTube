@@ -15,7 +15,6 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-moderation-comment-modal',
   templateUrl: './moderation-comment-modal.component.html',
   styleUrls: [ './moderation-comment-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {

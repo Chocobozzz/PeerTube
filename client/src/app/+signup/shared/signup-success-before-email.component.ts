@@ -7,7 +7,6 @@ import { SignupStepTitleComponent } from './signup-step-title.component'
   selector: 'my-signup-success-before-email',
   templateUrl: './signup-success-before-email.component.html',
   styleUrls: [ './signup-success.component.scss' ],
-  standalone: true,
   imports: [ SignupStepTitleComponent, NgIf, AlertComponent ]
 })
 export class SignupSuccessBeforeEmailComponent {

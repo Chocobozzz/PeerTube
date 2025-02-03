@@ -24,7 +24,6 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
   selector: 'my-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,

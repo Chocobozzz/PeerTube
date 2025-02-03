@@ -6,7 +6,6 @@ import { NgIf } from '@angular/common'
   selector: 'my-feature-boolean',
   templateUrl: './feature-boolean.component.html',
   styleUrls: [ './feature-boolean.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent ]
 })
 export class FeatureBooleanComponent {

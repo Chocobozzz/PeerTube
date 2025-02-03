@@ -7,7 +7,6 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 @Component({
   templateUrl: './debug.component.html',
   styleUrls: [ './debug.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent
   ]

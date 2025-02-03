@@ -7,7 +7,6 @@ import { ButtonComponent } from '../../../shared/shared-main/buttons/button.comp
 @Component({
   selector: 'my-account-two-factor-button',
   templateUrl: './my-account-two-factor-button.component.html',
-  standalone: true,
   imports: [ NgIf, ButtonComponent ]
 })
 export class MyAccountTwoFactorButtonComponent implements OnInit {

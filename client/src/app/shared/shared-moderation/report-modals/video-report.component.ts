@@ -22,7 +22,6 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   selector: 'my-video-report',
   templateUrl: './video-report.component.html',
   styleUrls: [ './report.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,

@@ -15,7 +15,6 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   selector: 'my-video-change-ownership',
   templateUrl: './video-change-ownership.component.html',
   styleUrls: [ './video-change-ownership.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, AutoCompleteModule, NgIf ]
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {

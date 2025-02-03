@@ -15,7 +15,6 @@ import { LogsService } from './logs.service'
 @Component({
   templateUrl: './logs.component.html',
   styleUrls: [ './logs.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     NgFor,

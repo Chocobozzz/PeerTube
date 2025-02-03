@@ -15,7 +15,6 @@ import { InputMaskModule } from 'primeng/inputmask'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ InputMaskModule, FormsModule, NgClass ]
 })
 export class TimestampInputComponent implements ControlValueAccessor, OnInit {

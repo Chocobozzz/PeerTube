@@ -36,7 +36,6 @@ type Segment = {
 @Component({
   styleUrls: [ './video-caption-edit-modal-content.component.scss' ],
   templateUrl: './video-caption-edit-modal-content.component.html',
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

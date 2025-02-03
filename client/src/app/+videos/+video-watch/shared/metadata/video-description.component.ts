@@ -8,7 +8,6 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
   selector: 'my-video-description',
   templateUrl: './video-description.component.html',
   styleUrls: [ './video-description.component.scss' ],
-  standalone: true,
   imports: [ TimestampRouteTransformerDirective, NgClass, NgIf ]
 })
 export class VideoDescriptionComponent implements OnChanges {

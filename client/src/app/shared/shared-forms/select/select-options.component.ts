@@ -30,7 +30,6 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ DropdownModule, FormsModule, CommonModule ]
 })
 export class SelectOptionsComponent implements AfterContentInit, ControlValueAccessor {

@@ -13,7 +13,6 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
   selector: 'my-account-profile',
   templateUrl: './my-account-profile.component.html',
   styleUrls: [ './my-account-profile.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent, HelpComponent, MarkdownTextareaComponent ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {

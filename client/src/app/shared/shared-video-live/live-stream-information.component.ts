@@ -16,7 +16,6 @@ import { LiveVideoService } from './live-video.service'
   selector: 'my-live-stream-information',
   templateUrl: './live-stream-information.component.html',
   styleUrls: [ './live-stream-information.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     NgIf,

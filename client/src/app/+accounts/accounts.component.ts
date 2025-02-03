@@ -26,7 +26,6 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
 @Component({
   templateUrl: './accounts.component.html',
   styleUrls: [ './accounts.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     ActorAvatarComponent,

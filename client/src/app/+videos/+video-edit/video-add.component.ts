@@ -24,7 +24,6 @@ import { VideoUploadComponent } from './video-add-components/video-upload.compon
   selector: 'my-videos-add',
   templateUrl: './video-add.component.html',
   styleUrls: [ './video-add.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,

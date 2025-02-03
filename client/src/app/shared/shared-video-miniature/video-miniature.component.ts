@@ -46,7 +46,6 @@ export type MiniatureDisplayOptions = {
   styleUrls: [ './video-miniature.component.scss' ],
   templateUrl: './video-miniature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgClass,
     VideoThumbnailComponent,

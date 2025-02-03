@@ -6,7 +6,6 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-video-space.component.html',
-  standalone: true,
   imports: [ RouterOutlet, HorizontalMenuComponent ]
 })
 export class MyVideoSpaceComponent implements OnInit {

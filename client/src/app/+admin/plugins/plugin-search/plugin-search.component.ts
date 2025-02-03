@@ -19,7 +19,6 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
   styleUrls: [ './plugin-search.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     GlobalIconComponent,

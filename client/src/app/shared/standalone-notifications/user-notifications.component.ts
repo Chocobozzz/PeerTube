@@ -14,7 +14,6 @@ import { UserNotification } from '../shared-main/users/user-notification.model'
   selector: 'my-user-notifications',
   templateUrl: 'user-notifications.component.html',
   styleUrls: [ 'user-notifications.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, GlobalIconComponent, RouterLink, FromNowPipe, InfiniteScrollerDirective ]
 })
 export class UserNotificationsComponent implements OnInit {

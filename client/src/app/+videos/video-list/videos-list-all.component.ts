@@ -10,7 +10,6 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 
 @Component({
   templateUrl: './videos-list-all.component.html',
-  standalone: true,
   imports: [
     VideosListComponent
   ]

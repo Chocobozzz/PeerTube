@@ -21,7 +21,6 @@ import { VideoCommentComponent } from './video-comment.component'
   selector: 'my-video-comments',
   templateUrl: './video-comments.component.html',
   styleUrls: [ './video-comments.component.scss' ],
-  standalone: true,
   imports: [
     FeedComponent,
     NgbDropdown,

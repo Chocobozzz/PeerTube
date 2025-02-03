@@ -13,7 +13,6 @@ import { SelectOptionsComponent } from '../shared-forms/select/select-options.co
   selector: 'my-user-interface-settings',
   templateUrl: './user-interface-settings.component.html',
   styleUrls: [ './user-interface-settings.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, NgFor, NgIf, SelectOptionsComponent ]
 })
 export class UserInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {

@@ -6,7 +6,6 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
   selector: 'my-progress-bar',
   styleUrls: [ './progress-bar.component.scss' ],
   templateUrl: './progress-bar.component.html',
-  standalone: true,
   imports: [
     CommonModule,
     NgbTooltip

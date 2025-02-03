@@ -32,7 +32,6 @@ export type DropdownDirection = 'horizontal' | 'vertical'
   styleUrls: [ './action-dropdown.component.scss' ],
   templateUrl: './action-dropdown.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgIf,
     NgbTooltip,

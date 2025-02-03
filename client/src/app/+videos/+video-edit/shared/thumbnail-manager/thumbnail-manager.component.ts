@@ -21,7 +21,6 @@ import { PeerTubePlayer } from '../../../../../standalone/embed-player-api/playe
   selector: 'my-thumbnail-manager',
   styleUrls: [ './thumbnail-manager.component.scss' ],
   templateUrl: './thumbnail-manager.component.html',
-  standalone: true,
   imports: [ CommonModule, ReactiveFileComponent, EmbedComponent ],
   providers: [
     {

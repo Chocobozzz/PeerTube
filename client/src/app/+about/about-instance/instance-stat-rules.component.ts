@@ -13,7 +13,6 @@ import { AuthService } from '@app/core'
   selector: 'my-instance-stat-rules',
   templateUrl: './instance-stat-rules.component.html',
   styleUrls: [ './instance-stat-rules.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     NgIf,

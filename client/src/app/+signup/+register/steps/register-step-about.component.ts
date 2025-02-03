@@ -10,7 +10,6 @@ import { DaysDurationFormatterPipe } from '../../../shared/shared-main/date/days
   selector: 'my-register-step-about',
   templateUrl: './register-step-about.component.html',
   styleUrls: [ './register-step-about.component.scss' ],
-  standalone: true,
   imports: [ InstanceBannerComponent, NgIf, DaysDurationFormatterPipe, AlertComponent ]
 })
 export class RegisterStepAboutComponent {

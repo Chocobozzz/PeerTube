@@ -14,7 +14,6 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ MultiSelectModule, FormsModule, CommonModule ]
 })
 export class SelectCheckboxComponent implements ControlValueAccessor {

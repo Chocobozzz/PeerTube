@@ -6,7 +6,6 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-abuse-list',
   templateUrl: './abuse-list.component.html',
   styleUrls: [],
-  standalone: true,
   imports: [ GlobalIconComponent, AbuseListTableComponent ]
 })
 export class AbuseListComponent {

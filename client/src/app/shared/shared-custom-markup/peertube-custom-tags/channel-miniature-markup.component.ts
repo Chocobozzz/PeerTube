@@ -22,7 +22,6 @@ import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.servic
   templateUrl: 'channel-miniature-markup.component.html',
   styleUrls: [ 'channel-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgIf, ActorAvatarComponent, RouterLink, VideoMiniatureMarkupComponent ]
 })
 export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {

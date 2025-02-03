@@ -11,7 +11,6 @@ import { NgClass, NgIf } from '@angular/common'
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
   templateUrl: './video-playlist-miniature.component.html',
-  standalone: true,
   imports: [ NgClass, LinkComponent, NgIf, RouterLink, FromNowPipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {

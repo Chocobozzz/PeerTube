@@ -59,7 +59,6 @@ type TabId = 'url' | 'qrcode' | 'embed'
   selector: 'my-video-share',
   templateUrl: './video-share.component.html',
   styleUrls: [ './video-share.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     NgIf,

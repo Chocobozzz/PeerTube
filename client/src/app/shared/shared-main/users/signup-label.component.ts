@@ -4,7 +4,6 @@ import { ServerService } from '@app/core'
 @Component({
   selector: 'my-signup-label',
   templateUrl: './signup-label.component.html',
-  standalone: true,
   imports: []
 })
 export class SignupLabelComponent {

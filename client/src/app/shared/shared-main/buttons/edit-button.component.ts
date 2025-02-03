@@ -9,7 +9,6 @@ import { ButtonComponent } from './button.component'
       [ptRouterLink]="ptRouterLink"
     ></my-button>
   `,
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ ButtonComponent ]
 })

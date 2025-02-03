@@ -15,7 +15,6 @@ import { VideoDetails } from '../../shared-main/video/video-details.model'
   selector: 'my-video-generate-download',
   templateUrl: './video-generate-download.component.html',
   styleUrls: [ './video-generate-download.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,

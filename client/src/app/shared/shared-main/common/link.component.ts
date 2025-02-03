@@ -7,7 +7,6 @@ import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/gl
   selector: 'my-link',
   styleUrls: [ './link.component.scss' ],
   templateUrl: './link.component.html',
-  standalone: true,
   imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet, GlobalIconComponent ]
 })
 export class LinkComponent implements OnInit {

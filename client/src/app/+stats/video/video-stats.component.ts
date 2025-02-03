@@ -54,7 +54,6 @@ ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--fg')
   templateUrl: './video-stats.component.html',
   styleUrls: [ './video-stats.component.scss' ],
   providers: [ NumberFormatterPipe ],
-  standalone: true,
   imports: [
     NgFor,
     NgIf,

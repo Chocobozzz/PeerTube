@@ -14,7 +14,6 @@ import { NgIf, NgTemplateOutlet } from '@angular/common'
     './actor-image-edit.scss',
     './actor-banner-edit.component.scss'
   ],
-  standalone: true,
   imports: [ NgIf, NgbTooltip, NgTemplateOutlet, NgbDropdown, NgbDropdownToggle, GlobalIconComponent, NgbDropdownMenu ]
 })
 export class ActorBannerEditComponent implements OnInit {

@@ -17,7 +17,6 @@ export type SuggestionPayloadType = 'search-instance' | 'search-index'
   selector: 'my-suggestion',
   templateUrl: './suggestion.component.html',
   styleUrls: [ './suggestion.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, NgIf ]
 })
 export class SuggestionComponent implements OnInit, ListKeyManagerOption {

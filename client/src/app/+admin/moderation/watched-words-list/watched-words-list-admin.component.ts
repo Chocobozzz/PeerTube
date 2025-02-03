@@ -4,7 +4,6 @@ import { WatchedWordsListAdminOwnerComponent } from '@app/shared/standalone-watc
 
 @Component({
   templateUrl: './watched-words-list-admin.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     WatchedWordsListAdminOwnerComponent

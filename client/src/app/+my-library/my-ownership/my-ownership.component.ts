@@ -16,7 +16,6 @@ import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-owne
 
 @Component({
   templateUrl: './my-ownership.component.html',
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,

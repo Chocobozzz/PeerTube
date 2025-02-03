@@ -8,7 +8,6 @@ export type AlertType = 'success' | 'info' | 'warning' | 'danger' | 'primary'
   selector: 'my-alert',
   styleUrls: [ './alert.component.scss' ],
   templateUrl: './alert.component.html',
-  standalone: true,
   imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet ]
 })
 export class AlertComponent implements OnInit, OnChanges {

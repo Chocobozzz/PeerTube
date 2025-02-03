@@ -20,7 +20,6 @@ import { VideoCommentAddComponent } from './video-comment-add.component'
   selector: 'my-video-comment',
   templateUrl: './video-comment.component.html',
   styleUrls: [ './video-comment.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgClass,
