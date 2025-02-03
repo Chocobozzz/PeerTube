@@ -13,7 +13,8 @@ export class TranslationsManager {
       .then(res => res.json())
       .catch(err => {
         logger.error('Cannot get server translations', err)
-        return undefined
+
+        return undefined as any
       })
   }
 
@@ -35,7 +36,8 @@ export class TranslationsManager {
         })
         .catch(err => {
           logger.error('Cannot get player translations', err)
-          return undefined
+
+          return undefined as any
         })
     }
 

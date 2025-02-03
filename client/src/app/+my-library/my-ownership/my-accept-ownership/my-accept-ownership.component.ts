@@ -61,7 +61,9 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
       .open(this.modal, { centered: true })
       .result
       .then(() => this.acceptOwnership())
-      .catch(() => this.videoChangeOwnership = undefined)
+      .catch(() => {
+        this.videoChangeOwnership = undefined
+      })
   }
 
   acceptOwnership () {

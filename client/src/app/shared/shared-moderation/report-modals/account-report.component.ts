@@ -65,7 +65,7 @@ export class AccountReportComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({
       reason: ABUSE_REASON_VALIDATOR,
-      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null)
+      predefinedReasons: mapValues(abusePredefinedReasonsMap, _ => null as any)
     })
 
     this.predefinedReasons = this.abuseService.getPrefefinedReasons('account')

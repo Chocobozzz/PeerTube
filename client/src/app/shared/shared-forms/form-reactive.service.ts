@@ -4,9 +4,9 @@ import { wait } from '@root-helpers/utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormValidatorService } from './form-validator.service'
 
-export type FormReactiveErrors = { [ id: string | number ]: string | FormReactiveErrors | FormReactiveErrors[] }
+export type FormReactiveErrors = { [ id: string ]: string | FormReactiveErrors | FormReactiveErrors[] }
 export type FormReactiveValidationMessages = {
-  [ id: string | number ]: { [ name: string ]: string } | FormReactiveValidationMessages | FormReactiveValidationMessages[]
+  [ id: string ]: { [ name: string ]: string } | FormReactiveValidationMessages | FormReactiveValidationMessages[]
 }
 
 @Injectable()

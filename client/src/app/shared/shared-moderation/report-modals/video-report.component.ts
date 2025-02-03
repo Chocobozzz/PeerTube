@@ -73,7 +73,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({
       reason: ABUSE_REASON_VALIDATOR,
-      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null),
+      predefinedReasons: mapValues(abusePredefinedReasonsMap, _ => null as any),
       timestamp: {
         hasStart: null,
         startAt: null,
