@@ -147,9 +147,9 @@
           <context context-type="linenumber">398</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.progressbar.value" datatype="html">
+      <trans-unit id="ngb.progressbar.value" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="nd so on.    *"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="e così via. *"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">41</context>
@@ -569,7 +569,7 @@
       </trans-unit>
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
-        <target state="translated">PeerTube considera che il video "<x id="PH" equiv-text="video.name"/>" sia già in fase di transcodifica.</target>
+        <target state="translated">PeerTube considera il video "<x id="PH" equiv-text="video.name"/>" già in fase di transcodifica.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">351</context>
@@ -577,7 +577,7 @@
       </trans-unit>
       <trans-unit id="5630101530611188113" datatype="html" xml:space="preserve">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.</source>
-        <target state="translated">Se ritieni che PeerTube si sbagli (video in stato danneggiato dopo un crash, ecc.), puoi forzare la transcodifica di questo video.</target>
+        <target state="translated">Se ritieni che PeerTube si stia sbagliando (video in stato danneggiato dopo un crash, ecc.), puoi forzare la transcodifica di questo video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">353</context>
@@ -1059,7 +1059,7 @@
       </trans-unit>
       <trans-unit id="3699875908605792812" datatype="html" xml:space="preserve">
         <source>Web Videos (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</source>
-        <target state="translated">Video web (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
+        <target state="translated">Web Video (<x id="INTERPOLATION" equiv-text="{{ video.files.length }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">101</context>
@@ -1115,7 +1115,7 @@
       </trans-unit>
       <trans-unit id="7427257900193261634" datatype="html" xml:space="preserve">
         <source>Web Videos:</source>
-        <target state="translated">Video web:</target>
+        <target state="translated">Web Video:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">134</context>
@@ -1129,9 +1129,9 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5779580280418408097" datatype="html">
+      <trans-unit id="5779580280418408097" datatype="html" xml:space="preserve">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Cancella {count, plural, =1 {1 video} other {<x id="count"/> video}}.</target>
+        <target state="translated">Cancellato {count, plural, =1 {1 video} other {<x id="count"/> video}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">345</context>
@@ -1737,7 +1737,7 @@
       </trans-unit>
       <trans-unit id="4990508956923223990" datatype="html" xml:space="preserve">
         <source>Max parallel lives</source>
-        <target state="translated">Numero massimo di live paralleli</target>
+        <target state="translated">Numero massimo di live parallele</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">91</context>
@@ -2033,7 +2033,7 @@
       </trans-unit>
       <trans-unit id="7471320952405612533" datatype="html" xml:space="preserve">
         <source>You can also stream lives.</source>
-        <target state="translated">Puoi anche trasmettere in diretta.</target>
+        <target state="translated">Puoi anche trasmettere live.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">134</context>
@@ -2199,9 +2199,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2992313729068029516" datatype="html">
+      <trans-unit id="2992313729068029516" datatype="html" xml:space="preserve">
         <source>Block live "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Blocca diretta "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Blocca live "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2239,9 +2239,9 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3849007546028672808" datatype="html">
+      <trans-unit id="3849007546028672808" datatype="html" xml:space="preserve">
         <source>Blocking a live will automatically terminate the live stream.</source>
-        <target state="translated">Il blocco di una diretta interromperà automaticamente la live stream.</target>
+        <target state="translated">Bloccando una live verrà automaticamente terminata la trasmissione.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">43</context>
@@ -2463,9 +2463,9 @@
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4768749765465246664">
+      <trans-unit id="4768749765465246664" xml:space="preserve">
         <source>Email</source>
-        <target>Email</target>
+        <target state="translated">E-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">36</context>
@@ -2499,9 +2499,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3967269098753656610">
+      <trans-unit id="3967269098753656610" xml:space="preserve">
         <source>Email address</source>
-        <target>Indirizzo email</target>
+        <target state="translated">Indirizzo e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">137</context>
@@ -2663,7 +2663,7 @@
       </trans-unit>
       <trans-unit id="2528596078796844503" datatype="html" xml:space="preserve">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated">Vuoi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> su <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Allora crea il tuo primo canale <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Vuoi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> su <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Allora crea il tuo primo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>canale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2987,9 +2987,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4853631149357965563" datatype="html">
+      <trans-unit id="4853631149357965563" datatype="html" xml:space="preserve">
         <source>Update live settings</source>
-        <target state="translated">Aggiorna le impostazioni della diretta</target>
+        <target state="translated">Aggiorna le impostazioni della live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">57</context>
@@ -4760,17 +4760,17 @@
           <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8508836953540308271" datatype="html">
+      <trans-unit id="8508836953540308271" datatype="html" xml:space="preserve">
         <source>Live settings</source>
-        <target state="translated">Impostazioni diretta</target>
+        <target state="translated">Impostazioni live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1212376766715456139" datatype="html">
+      <trans-unit id="1212376766715456139" datatype="html" xml:space="preserve">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ Se abiliti questa opzione, la tua diretta verrà interrotta se superi la tua quota video</target>
+        <target state="translated">⚠️ Se abiliti questa opzione, la tua live verrà interrotta se superi la tua quota video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">349</context>
@@ -4792,9 +4792,9 @@
           <context context-type="linenumber">360</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8891497955962997247" datatype="html">
+      <trans-unit id="8891497955962997247" datatype="html" xml:space="preserve">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">Pubblica automaticamente un replay al termine della tua diretta</target>
+        <target state="translated">Pubblica automaticamente un replay al termine della tua live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">345</context>
@@ -5505,9 +5505,9 @@
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7860848084471862305" datatype="html">
+      <trans-unit id="7860848084471862305" datatype="html" xml:space="preserve">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="translated">Impossibile creare la diretta perché questa istanza ha troppe dirette create</target>
+        <target state="translated">Impossibile creare un video live perché questa istanza ha troppe live create</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -5515,7 +5515,7 @@
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html" xml:space="preserve">
         <source>Cannot create live because you created too many lives</source>
-        <target state="translated">Impossibile creare un live perché hai creato troppi live</target>
+        <target state="translated">Impossibile creare una live perché hai creato troppe live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">152</context>
@@ -5531,7 +5531,7 @@
       </trans-unit>
       <trans-unit id="8675588963276687921" datatype="html" xml:space="preserve">
         <source>Stream only once, replay will replace your live</source>
-        <target state="translated">Trasmetti solo una volta, la riproduzione sostituirà il tuo live</target>
+        <target state="translated">Trasmetti solo una volta, il replay sostituirà la tua live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">213</context>
@@ -5547,7 +5547,7 @@
       </trans-unit>
       <trans-unit id="3384650899171037827" datatype="html" xml:space="preserve">
         <source>Stream multiple times, replays will be separate videos</source>
-        <target state="translated">Trasmetti più volte, le riproduzioni saranno video separati</target>
+        <target state="translated">Trasmetti più volte, i replay saranno video separati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">221</context>
@@ -6091,7 +6091,7 @@
       </trans-unit>
       <trans-unit id="677619204556459328" xml:space="preserve">
         <source>Like this video</source>
-        <target state="translated">Metti mi piace al video</target>
+        <target state="translated">Metti like al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -6099,7 +6099,7 @@
       </trans-unit>
       <trans-unit id="1979134407801821102" xml:space="preserve">
         <source>Dislike this video</source>
-        <target state="translated">Rimuovi mi piace al video</target>
+        <target state="translated">Metti dislike al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -6963,7 +6963,7 @@
       </trans-unit>
       <trans-unit id="6492684506192237359" datatype="html" xml:space="preserve">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="translated">⚠️ Non condividere mai il tuo feed token</target>
+        <target state="translated">⚠️ Non condividere mai il tuo feed token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">22</context>
@@ -8591,7 +8591,7 @@
       </trans-unit>
       <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="translated">Runners</target>
+        <target state="translated">Runner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -10443,7 +10443,7 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html" xml:space="preserve">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">Consenti ai tuoi utenti di pubblicare automaticamente una riproduzione del loro live</target>
+        <target state="translated">Consenti ai tuoi utenti di pubblicare automaticamente un replay delle loro live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">32</context>
@@ -10451,7 +10451,7 @@
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html" xml:space="preserve">
         <source>Allow your users to change live latency</source>
-        <target state="translated">Consenti ai tuoi utenti di modificare la latenza del live</target>
+        <target state="translated">Consenti ai tuoi utenti di modificare la latenza della live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">40</context>
@@ -10507,7 +10507,7 @@
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html" xml:space="preserve">
         <source>Max live duration</source>
-        <target state="translated">Durata massima della live</target>
+        <target state="translated">Durata massima delle live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">74</context>
@@ -10515,7 +10515,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html" xml:space="preserve">
         <source>Live transcoding threads</source>
-        <target state="translated">Thread di transcodifica della live</target>
+        <target state="translated">Thread di transcodifica delle live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">177</context>
@@ -10539,7 +10539,7 @@
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html" xml:space="preserve">
         <source>Live transcoding profile</source>
-        <target state="translated">Profilo di transcodifica della live</target>
+        <target state="translated">Profilo di transcodifica delle live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">200</context>
@@ -10547,7 +10547,7 @@
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html" xml:space="preserve">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">Nuovi profili di transcodifica della live possono essere aggiunti dai plugin di PeerTube</target>
+        <target state="translated">Nuovi profili di transcodifica delle live possono essere aggiunti dai plugin di PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">201</context>
@@ -10555,7 +10555,7 @@
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html" xml:space="preserve">
         <source>Live resolutions to generate</source>
-        <target state="translated">Risoluzioni della live da generare</target>
+        <target state="translated">Risoluzioni delle live da generare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">130</context>
@@ -10583,7 +10583,7 @@
       </trans-unit>
       <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="translated">Abilita i runner remoti per i live</target>
+        <target state="translated">Abilita i runner remoti per le live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">165</context>
@@ -10599,7 +10599,7 @@
       </trans-unit>
       <trans-unit id="6759167469686242835" datatype="html" xml:space="preserve">
         <source>Transcoding enabled for live streams</source>
-        <target state="translated">Transcodifica abilitata per i live stream</target>
+        <target state="translated">Transcodifica abilitata per le live stream</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">106</context>
@@ -10607,7 +10607,7 @@
       </trans-unit>
       <trans-unit id="2134381456844896041" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="translated">Usa <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>runner remoti<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per elaborare la transcodifica dei live. I runner remoti devono essere prima registrati e attivati sulla tua istanza. </target>
+        <target state="translated">Usa <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>runner remoti<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per elaborare la transcodifica delle live. I runner remoti devono essere prima registrati e attivati sulla tua istanza. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">169</context>
@@ -10887,7 +10887,7 @@
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">utilizzerà al massimo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> per la transcodifica live </target>
+        <target state="translated">utilizzerà al massimo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> per la transcodifica delle live </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">207</context>
@@ -10895,7 +10895,7 @@
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">utilizzerà almeno <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> per la transcodifica live. </target>
+        <target state="translated">utilizzerà almeno <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> per la transcodifica delle live. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">211</context>
@@ -11131,7 +11131,7 @@
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="translated">Non puoi consentire la riproduzione del live se non abiliti la transcodifica.</target>
+        <target state="translated">Non puoi consentire il replay della live se non abiliti la transcodifica.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">82</context>
@@ -12617,7 +12617,7 @@
       </trans-unit>
       <trans-unit id="8610022770999239699" xml:space="preserve">
         <source>This instance does not require email verification.</source>
-        <target state="needs-translation">Questa istanza non richiede la verifica dell'e-mail.</target>
+        <target state="translated">Questa istanza non richiede la verifica dell'e-mail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20</context>
@@ -18516,7 +18516,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html" xml:space="preserve">
         <source>Max live duration is required.</source>
-        <target state="translated">La durata massima dei live è obbligatoria.</target>
+        <target state="translated">La durata massima delle live è obbligatoria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
@@ -18524,7 +18524,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
-        <target state="translated">La durata massima dei live deve essere maggiore o uguale a -1.</target>
+        <target state="translated">La durata massima delle live deve essere maggiore o uguale a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -19460,7 +19460,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5941639683192662500" datatype="html" xml:space="preserve">
         <source>This is a normal live</source>
-        <target state="translated">Si tratta di una normale live</target>
+        <target state="translated">Questa è una live normale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">325</context>
@@ -19468,7 +19468,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html" xml:space="preserve">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="translated">È possibile effettuare lo stream solo una volta in una live normale. Se si attiva il replay, verrà salvato con lo stesso URL della live</target>
+        <target state="translated">È possibile fare un unico stream nelle live normali. Se attivi il replay, questo verrà salvato con lo stesso URL della live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">328</context>
@@ -19500,7 +19500,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html" xml:space="preserve">
         <source>Latest live sessions</source>
-        <target state="translated">Le ultime sessioni live</target>
+        <target state="translated">Ultime sessioni live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">38</context>
@@ -21445,7 +21445,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="737889420694273353" datatype="html" xml:space="preserve">
         <source>Add likes/dislikes</source>
-        <target state="translated">Aggiunge mi piace/non mi piace</target>
+        <target state="translated">Aggiungi like/dislike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">23</context>
@@ -23033,7 +23033,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html" xml:space="preserve">
         <source>Seek the video forward</source>
-        <target state="translated">Cercare il video in avanti</target>
+        <target state="translated">Avanza nel video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">963</context>
@@ -23041,7 +23041,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html" xml:space="preserve">
         <source>Seek the video backward</source>
-        <target state="translated">Cercare il video all'indietro</target>
+        <target state="translated">Riavvolgi il video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">964</context>
@@ -23049,7 +23049,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html" xml:space="preserve">
         <source>Increase playback rate</source>
-        <target state="translated">Aumentare la velocità di riproduzione</target>
+        <target state="translated">Aumenta la velocità di riproduzione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">966</context>
@@ -23057,7 +23057,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html" xml:space="preserve">
         <source>Decrease playback rate</source>
-        <target state="translated">Riduzione della velocità di riproduzione</target>
+        <target state="translated">Riduci la velocità di riproduzione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">967</context>
@@ -23065,7 +23065,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the previous frame</source>
-        <target state="translated">Navigare nel video fino al fotogramma precedente</target>
+        <target state="translated">Naviga nel video al fotogramma precedente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">969</context>
@@ -23073,7 +23073,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the next frame</source>
-        <target state="translated">Navigare nel video fino al fotogramma successivo</target>
+        <target state="translated">Naviga nel video al fotogramma successivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">970</context>
@@ -23081,23 +23081,23 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html" xml:space="preserve">
         <source>Toggle theater mode</source>
-        <target state="translated">Alterna la modalità teatro</target>
+        <target state="translated">Attiva/Disattiva la modalità teatro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">954</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8025996572234182184">
+      <trans-unit id="8025996572234182184" xml:space="preserve">
         <source>Like the video</source>
-        <target>Mi piace</target>
+        <target state="translated">Aggiungi like al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7692127636377222448">
+      <trans-unit id="7692127636377222448" xml:space="preserve">
         <source>Dislike the video</source>
-        <target>Non mi piace</target>
+        <target state="translated">Aggiungi dislike al video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -23111,9 +23111,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1729036051846673606" datatype="html">
+      <trans-unit id="1729036051846673606" datatype="html" xml:space="preserve">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="translated">Quando è attivo, il video successivo viene riprodotto automaticamente dopo quello corrente.</target>
+        <target state="translated">Quando attivo, il prossimo video viene riprodotto automaticamente dopo quello corrente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -23121,7 +23121,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="9065310971920830281" datatype="html" xml:space="preserve">
         <source>Sorry, but this video did not load because the remote instance did not respond.</source>
-        <target state="translated">Siamo spiacenti, ma il video non è stato caricato perché l'istanza remota non ha risposto.</target>
+        <target state="translated">Spiacenti, ma questo video non è stato caricato perché l'istanza remota non ha risposto.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">6</context>
@@ -23129,7 +23129,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7621888306128470863" datatype="html" xml:space="preserve">
         <source>Please try refreshing the page, or try again later.</source>
-        <target state="translated">Provare ad aggiornare la pagina o riprovare più tardi.</target>
+        <target state="translated">Prova a ricaricare la pagina o riprova più tardi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">10</context>
@@ -23197,7 +23197,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2587910160708766081" datatype="html" xml:space="preserve">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="translated">Alternare il formato della data a "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">Cambia il formato della data in "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -23205,7 +23205,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5912861064428387069" datatype="html" xml:space="preserve">
         <source>Close syndication dropdown</source>
-        <target state="translated">Chiudere la tendina di syndication</target>
+        <target state="translated">Chiudi la tendina di syndication</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -23233,7 +23233,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html" xml:space="preserve">
         <source>Exclude muted accounts</source>
-        <target state="translated">Escludere gli account muti</target>
+        <target state="translated">Escludi gli account silenziati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">100</context>
@@ -23241,15 +23241,15 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8397092871503752085" datatype="html" xml:space="preserve">
         <source>Exclude public videos</source>
-        <target state="translated">Escludere i video pubblici</target>
+        <target state="translated">Escludi i video pubblici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4668975178372693951" datatype="html">
+      <trans-unit id="4668975178372693951" datatype="html" xml:space="preserve">
         <source>Discover videos</source>
-        <target state="translated">Scopri video</target>
+        <target state="translated">Scopri tra i video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/routes.ts</context>
           <context context-type="linenumber">30</context>
@@ -23273,7 +23273,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1914592173926880968" datatype="html" xml:space="preserve">
         <source>Skip to main content</source>
-        <target state="translated">Salta al contenuto principale</target>
+        <target state="translated">Vai al contenuto principale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">3</context>
