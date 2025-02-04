@@ -56,7 +56,12 @@ export async function magnetUriEncode (data: MagnetUriInstance) {
 async function webtorrentAdd (torrentId: string) {
   const WebTorrent = (await import('webtorrent')).default
 
-  const webtorrent = new WebTorrent()
+  const webtorrent = new WebTorrent({
+    natUpnp: false,
+    natPmp: false,
+    utp: false,
+    lsd: false
+  } as any)
 
   webtorrent.on('error', err => console.error('Error in webtorrent', err))
 
