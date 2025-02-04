@@ -1,5 +1,4 @@
 import { logger } from '@server/helpers/logger.js'
-import { getServerActor } from '@server/models/application/application.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { remove } from 'fs-extra'
 import { join } from 'path'
@@ -14,13 +13,10 @@ async function up (utils: {
 }): Promise<void> {
   const { transaction } = utils
 
-  const actor = await getServerActor()
-
   {
-    const query = 'SELECT "videoFileId" FROM "videoRedundancy" WHERE "actor" = :actorId AND "videoFileId" IS NOT NULL'
+    const query = 'SELECT "videoFileId" FROM "videoRedundancy" WHERE "strategy" IS NOT NULL AND "videoFileId" IS NOT NULL'
 
     const rows = await utils.sequelize.query<{ videoFileId: number }>(query, {
-      bind: { actorId: actor.id },
       transaction,
       type: QueryTypes.SELECT as QueryTypes.SELECT
     })
@@ -44,7 +40,7 @@ async function up (utils: {
   }
 
   {
-    await utils.sequelize.query('DROP INDEX IF EXISTS video_redundancy_video_file_id')
+    await utils.sequelize.query('DROP INDEX IF EXISTS video_redundancy_video_file_id', { transaction })
   }
 
   {
