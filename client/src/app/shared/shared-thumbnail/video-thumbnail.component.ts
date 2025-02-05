@@ -72,7 +72,7 @@ export class VideoThumbnailComponent {
 
     const currentTime = this.video.userHistory.currentTime
 
-    return Math.round((currentTime / this.video.duration)) * 100
+    return Math.round(currentTime / this.video.duration * 100)
   }
 
   getDurationOverlayLabel () {
