@@ -2,7 +2,7 @@
 import debug from 'debug'
 import { firstValueFrom, ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
-import { RegisterClientHelpers } from 'src/types/register-client-option.model'
+import { RegisterClientHelpers } from '../types/register-client-option.model'
 import { getExternalAuthHref, getHookType, internalRunHook } from '@peertube/peertube-core-utils'
 import {
   ClientDoAction,
@@ -83,6 +83,7 @@ class PluginsManager {
   private readonly onFormFields: OnFormFields
   private readonly onSettingsScripts: OnSettingsScripts
   private readonly onClientRoute: OnClientRoute
+  private readonly backendUrl: string
 
   constructor (options: {
     doAction?: ClientDoAction
@@ -90,12 +91,14 @@ class PluginsManager {
     onFormFields?: OnFormFields
     onSettingsScripts?: OnSettingsScripts
     onClientRoute?: OnClientRoute
+    backendUrl?: string
   }) {
     this.doAction = options.doAction
     this.peertubeHelpersFactory = options.peertubeHelpersFactory
     this.onFormFields = options.onFormFields
     this.onSettingsScripts = options.onSettingsScripts
     this.onClientRoute = options.onClientRoute
+    this.backendUrl = options.backendUrl
   }
 
   static getPluginPathPrefix (isTheme: boolean) {
@@ -281,7 +284,7 @@ class PluginsManager {
 
     logger.info(`Loading script ${clientScript.script} of plugin ${plugin.name}`)
 
-    const absURL = (environment.apiUrl || window.location.origin) + clientScript.script
+    const absURL = (this.backendUrl || environment.apiUrl || window.location.origin) + clientScript.script
     return dynamicImport(absURL)
       .then((script: ClientScript) => {
         return script.register({

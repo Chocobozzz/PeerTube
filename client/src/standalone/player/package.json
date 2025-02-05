@@ -1,0 +1,31 @@
+{
+  "name": "@peertube/player",
+  "private": false,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "rm -rf ./build && ../../../node_modules/.bin/vite build --mode production --config ./vite.config.mjs",
+    "dev": "../../../node_modules/.bin/vite build --mode dev --watch --config ./vite.config.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chocobozzz/PeerTube.git"
+  },
+  "keywords": [
+    "peertube",
+    "embed"
+  ],
+  "main": "./build/peertube-player.js",
+  "exports": {
+    ".": "./build/peertube-player.js"
+  },
+  "types": "./src/index.ts",
+  "author": "Chocobozzz",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "sideEffects": true,
+  "bugs": {
+    "url": "https://github.com/Chocobozzz/PeerTube/issues"
+  },
+  "homepage": "https://github.com/Chocobozzz/PeerTube#readme",
+  "dependencies": {}
+}

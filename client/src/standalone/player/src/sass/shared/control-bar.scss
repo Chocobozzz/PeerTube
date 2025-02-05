@@ -270,11 +270,11 @@ $chapter-marker-size: 9px;
       @include margin-right(2px);
 
       &.icon-download {
-        background-image: url('#{$assets-path}/player/images/arrow-down.svg');
+        background-image: url('./svg/arrow-down.svg');
       }
 
       &.icon-upload {
-        background-image: url('#{$assets-path}/player/images/arrow-up.svg');
+        background-image: url('./svg/arrow-up.svg');
       }
     }
   }
@@ -291,8 +291,8 @@ $chapter-marker-size: 9px;
     .icon {
       &.icon-next,
       &.icon-previous {
-        mask-image: url('#{$assets-path}/player/images/next.svg');
-        -webkit-mask-image: url('#{$assets-path}/player/images/next.svg');
+        mask-image: url('./svg/next.svg');
+        -webkit-mask-image: url('./svg/next.svg');
         mask-size: cover;
         -webkit-mask-size: cover;
 
@@ -319,7 +319,7 @@ $chapter-marker-size: 9px;
       width: $control-bar-icon-size;
       height: $control-bar-icon-size;
       vertical-align: middle;
-      background: url('#{$assets-path}/player/images/volume.svg') no-repeat;
+      background: url('./svg/volume.svg') no-repeat;
       background-size: contain;
 
       &::before {
@@ -328,7 +328,7 @@ $chapter-marker-size: 9px;
     }
 
     &.vjs-vol-0 .vjs-icon-placeholder {
-      background: url('#{$assets-path}/player/images/volume-mute.svg') no-repeat;
+      background: url('./svg/volume-mute.svg') no-repeat;
       background-size: contain;
     }
   }
@@ -415,7 +415,7 @@ $chapter-marker-size: 9px;
       height: $control-bar-icon-size - 4px;
       width: $control-bar-icon-size - 4px;
       vertical-align: middle;
-      background: url('#{$assets-path}/player/images/settings.svg') no-repeat;
+      background: url('./svg/settings.svg') no-repeat;
       background-size: contain;
 
       &::before {
@@ -448,7 +448,7 @@ $chapter-marker-size: 9px;
       width: $control-bar-icon-size - 4px;
       height: $control-bar-icon-size - 4px;
       vertical-align: middle;
-      background: url('#{$assets-path}/player/images/theater.svg') no-repeat;
+      background: url('./svg/theater.svg') no-repeat;
       background-size: contain;
 
       &::before {
@@ -493,7 +493,7 @@ $chapter-marker-size: 9px;
       width: $control-bar-icon-size;
       height: $control-bar-icon-size;
       vertical-align: middle;
-      background: url('#{$assets-path}/player/images/fullscreen.svg') no-repeat;
+      background: url('./svg/fullscreen.svg') no-repeat;
       background-size: contain;
 
       &::before {
@@ -515,14 +515,6 @@ $chapter-marker-size: 9px;
   .vjs-theater-control {
     display: none;
   }
-
-  .vjs-peertube {
-    .icon,
-    .download-speed-text,
-    .upload-speed-text {
-      display: none !important;
-    }
-  }
 }
 
 .video-js.vjs-peertube-skin.vjs-size-570 .vjs-control-bar {
@@ -538,6 +530,12 @@ $chapter-marker-size: 9px;
     padding: 0 !important;
 
     .vjs-peertube-displayed {
+      display: none !important;
+    }
+
+    .icon,
+    .download-speed-text,
+    .upload-speed-text {
       display: none !important;
     }
   }

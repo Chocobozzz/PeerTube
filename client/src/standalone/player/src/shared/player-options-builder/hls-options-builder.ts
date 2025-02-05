@@ -1,13 +1,12 @@
-import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
-import { Engine, HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { getResolutionAndFPSLabel, getResolutionLabel } from '@peertube/peertube-core-utils'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import debug from 'debug'
 import { Level } from 'hls.js'
+import type { CoreConfig, StreamConfig } from 'p2p-media-loader-core'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
 import {
-  HLSLoaderClass,
   HLSPluginOptions,
   P2PMediaLoaderPluginOptions,
   PeerTubePlayerConstructorOptions,
@@ -15,9 +14,7 @@ import {
 } from '../../types'
 import { getRtcConfig, isSameOrigin } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
-import { segmentUrlBuilderFactory } from '../p2p-media-loader/segment-url-builder'
 import { SegmentValidator } from '../p2p-media-loader/segment-validator'
-import debug from 'debug'
 
 const debugLogger = debug('peertube:player:hls')
 
@@ -58,7 +55,6 @@ export class HLSOptionsBuilder {
       'filter:internal.player.p2p-media-loader.options.result',
       this.getP2PMediaLoaderOptions({ redundancyUrlManager, segmentValidator })
     )
-    const loaderBuilder = () => new Engine(p2pMediaLoaderConfig).createLoaderClass() as unknown as HLSLoaderClass
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
       requiresUserAuth: this.options.requiresUserAuth,
@@ -73,7 +69,7 @@ export class HLSOptionsBuilder {
     }
 
     const hlsjs = {
-      hlsjsConfig: this.getHLSJSOptions(loaderBuilder),
+      hlsjsConfig: this.getHLSJSOptions(p2pMediaLoaderConfig),
 
       levelLabelHandler: (level: Level, player: videojs.VideoJsPlayer) => {
         const resolution = Math.min(level.height || 0, level.width || 0)
@@ -99,65 +95,81 @@ export class HLSOptionsBuilder {
   private getP2PMediaLoaderOptions (options: {
     redundancyUrlManager: RedundancyUrlManager | null
     segmentValidator: SegmentValidator | null
-  }): HlsJsEngineSettings {
+  }) {
     const { redundancyUrlManager, segmentValidator } = options
 
-    let consumeOnly = false
+    let isP2PUploadDisabled = false
     if (
       (navigator as any)?.connection?.type === 'cellular' ||
       peertubeLocalStorage.getItem('peertube-videojs-p2p-consume-only') === 'true' // Use for E2E testing
     ) {
       logger.info('We are on a cellular connection: disabling seeding.')
-      consumeOnly = true
+      isP2PUploadDisabled = true
     }
 
-    const trackerAnnounce = this.options.hls.trackerAnnounce
+    const announceTrackers = this.options.hls.trackerAnnounce
       .filter(t => t.startsWith('ws'))
 
     const specificLiveOrVODOptions = this.options.isLive
       ? this.getP2PMediaLoaderLiveOptions()
       : this.getP2PMediaLoaderVODOptions()
 
-    return {
-      loader: {
-        trackerAnnounce,
-        rtcConfig: getRtcConfig(this.options.stunServers),
+    // TODO: remove validateHTTPSegment typing when p2p-media-loader-core is updated
+    const loaderOptions: Partial<StreamConfig> & { validateHTTPSegment: any } = {
+      announceTrackers,
+      rtcConfig: getRtcConfig(this.options.stunServers),
 
-        simultaneousHttpDownloads: 1,
-        httpFailedSegmentTimeout: 1000,
+      httpRequestSetup: (segmentUrlArg, segmentByteRange, requestAbortSignal, requestByteRange) => {
+        const { requiresUserAuth, requiresPassword } = this.options
 
-        xhrSetup: (xhr, url) => {
-          const { requiresUserAuth, requiresPassword } = this.options
+        const segmentUrl = redundancyUrlManager
+          ? redundancyUrlManager.buildUrl(segmentUrlArg)
+          : segmentUrlArg
 
-          if (!(requiresUserAuth || requiresPassword)) return
+        const headers = new Headers()
 
-          if (!isSameOrigin(this.options.serverUrl, url)) return
+        if (requestByteRange) {
+          headers.set('Range', `bytes=${requestByteRange.start}-${requestByteRange.end ?? ''}`)
+        }
 
-          if (requiresPassword) xhr.setRequestHeader('x-peertube-video-password', this.options.videoPassword())
-          else xhr.setRequestHeader('Authorization', this.options.authorizationHeader())
-        },
+        if (isSameOrigin(this.options.serverUrl, segmentUrl)) {
+          if (requiresPassword) {
+            headers.set('x-peertube-video-password', this.options.videoPassword())
+          } else if (requiresUserAuth) {
+            headers.set('Authorization', this.options.authorizationHeader())
+          }
+        }
 
-        segmentValidator: segmentValidator
-          ? segmentValidator.validate.bind(segmentValidator)
-          : null,
-
-        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
-
-        useP2P: this.options.p2pEnabled,
-        consumeOnly,
-
-        ...specificLiveOrVODOptions
+        return Promise.resolve(
+          new Request(segmentUrl, {
+            headers,
+            signal: requestAbortSignal
+          })
+        )
       },
-      segments: {
-        swarmId: this.options.hls.playlistUrl,
-        forwardSegmentCount: specificLiveOrVODOptions.p2pDownloadMaxPriority ?? 20
-      }
+
+      validateP2PSegment: segmentValidator
+        ? segmentValidator.validate.bind(segmentValidator)
+        : null,
+
+      validateHTTPSegment: segmentValidator
+        ? segmentValidator.validate.bind(segmentValidator)
+        : null,
+
+      isP2PDisabled: !this.options.p2pEnabled,
+      isP2PUploadDisabled,
+
+      swarmId: this.options.hls.playlistUrl,
+
+      ...specificLiveOrVODOptions
     }
+
+    return { loader: loaderOptions }
   }
 
-  private getP2PMediaLoaderLiveOptions (): Partial<HybridLoaderSettings> {
+  private getP2PMediaLoaderLiveOptions (): Partial<CoreConfig> {
     const base = {
-      requiredSegmentsPriority: 1
+      highDemandTimeWindow: 4
     }
 
     const latencyMode = this.options.liveOptions.latencyMode
@@ -167,8 +179,7 @@ export class HLSOptionsBuilder {
         return {
           ...base,
 
-          useP2P: false,
-          requiredSegmentsPriority: 10
+          isP2PDisabled: true
         }
 
       case LiveVideoLatencyMode.HIGH_LATENCY:
@@ -179,34 +190,39 @@ export class HLSOptionsBuilder {
     }
   }
 
-  private getP2PMediaLoaderVODOptions (): Partial<HybridLoaderSettings> {
+  private getP2PMediaLoaderVODOptions (): Partial<CoreConfig> {
     return {
-      requiredSegmentsPriority: 3,
-      skipSegmentBuilderPriority: 1,
+      highDemandTimeWindow: 15,
 
-      cachedSegmentExpiration: 86400000,
-      cachedSegmentsCount: 100,
-
-      httpDownloadMaxPriority: 9,
-      httpDownloadProbability: 0.06,
-      httpDownloadProbabilitySkipIfNoPeers: true,
-
-      p2pDownloadMaxPriority: 50
+      segmentMemoryStorageLimit: 1024
     }
   }
 
   // ---------------------------------------------------------------------------
 
-  private getHLSJSOptions (loaderBuilder: () => HLSLoaderClass): HLSPluginOptions {
+  private getHLSJSOptions (p2pMediaLoaderConfig: { loader: CoreConfig }): HLSPluginOptions {
     const specificLiveOrVODOptions = this.options.isLive
       ? this.getHLSLiveOptions()
       : this.getHLSVODOptions()
 
-    const base = {
+    const base: HLSPluginOptions = {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
 
-      loaderBuilder,
+      p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
+
+      // p2p-media-loader uses hls.js loader to fetch m3u8 playlists
+      xhrSetup: (xhr, url) => {
+        const { requiresUserAuth, requiresPassword } = this.options
+
+        if (isSameOrigin(this.options.serverUrl, url)) {
+          if (requiresPassword) {
+            xhr.setRequestHeader('x-peertube-video-password', this.options.videoPassword())
+          } else if (requiresUserAuth) {
+            xhr.setRequestHeader('Authorization', this.options.authorizationHeader())
+          }
+        }
+      },
 
       ...specificLiveOrVODOptions
     }

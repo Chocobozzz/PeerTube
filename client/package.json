@@ -24,10 +24,13 @@
     "net": false,
     "stream": false,
     "os": false,
+    "http": false,
+    "dgram": false,
     "util": false
   },
   "workspaces": [
-    "../packages/*"
+    "../packages/*",
+    "./src/standalone/player"
   ],
   "typings": "*.d.ts",
   "devDependencies": {
@@ -55,8 +58,6 @@
     "@ngx-loading-bar/http-client": "^7.0.0",
     "@ngx-loading-bar/router": "^7.0.0",
     "@peertube/maildev": "^1.2.0",
-    "@peertube/p2p-media-loader-core": "^1.0.20",
-    "@peertube/p2p-media-loader-hlsjs": "^1.0.20",
     "@peertube/xliffmerge": "^2.0.3",
     "@plussub/srt-vtt-parser": "^2.0.5",
     "@popperjs/core": "^2.11.5",
@@ -103,8 +104,11 @@
     "markdown-it": "14.1.0",
     "markdown-it-emoji": "^3.0.0",
     "ngx-uploadx": "^7.0.0",
+    "p2p-media-loader-core": "^2.1.2",
+    "p2p-media-loader-hlsjs": "^2.1.2",
     "primeng": "^17",
     "rxjs": "^7.3.0",
+    "sass-embedded": "^1.83.4",
     "sha.js": "^2.4.11",
     "socket.io-client": "^4.5.4",
     "stylelint": "^16.2.1",
@@ -115,9 +119,9 @@
     "tslib": "^2.4.0",
     "typescript": "~5.7.3",
     "video.js": "^7.19.2",
-    "vite": "^5.3.1",
-    "vite-plugin-checker": "^0.7.2",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite": "^6.0.11",
+    "vite-plugin-checker": "^0.8.0",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "zone.js": "~0.15.0"
   },
   "dependencies": {}

@@ -1,9 +1,9 @@
-import { Events, Segment } from '@peertube/p2p-media-loader-core'
-import { Engine, initHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
 import { addQueryParams } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
-import Hlsjs from 'hls.js'
+import { FragLoadedData, default as Hlsjs } from 'hls.js'
+import type { DownloadSource, SegmentErrorDetails, SegmentLoadDetails } from 'p2p-media-loader-core'
+import type { HlsWithP2PInstance } from 'p2p-media-loader-hlsjs'
 import videojs from 'video.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
@@ -14,8 +14,7 @@ const Plugin = videojs.getPlugin('plugin')
 class P2pMediaLoaderPlugin extends Plugin {
   declare private readonly options: P2PMediaLoaderPluginOptions
 
-  declare private hlsjs: Hlsjs
-  declare private p2pEngine: Engine
+  declare private hlsjs: HlsWithP2PInstance<Hlsjs>
   declare private statsP2PBytes: {
     pendingDownload: number[]
     pendingUpload: number[]
@@ -32,6 +31,9 @@ class P2pMediaLoaderPlugin extends Plugin {
   declare private networkInfoInterval: any
 
   declare private liveEnded: boolean
+
+  declare private connectedPeers: Set<string>
+  declare private totalHTTPPeers: number
 
   constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
     super(player)
@@ -76,15 +78,13 @@ class P2pMediaLoaderPlugin extends Plugin {
     }
 
     {
-      const onHLSJSInitialized = (_: any, { hlsjs, engine }: { hlsjs: Hlsjs, engine: Engine }) => {
-        this.p2pEngine?.removeAllListeners()
-        this.p2pEngine?.destroy()
+      const onHLSJSInitialized = (_: any, { hlsjs }: { hlsjs: HlsWithP2PInstance<Hlsjs> }) => {
+        this.hlsjs?.p2pEngine?.destroy()
         clearInterval(this.networkInfoInterval)
 
         this.hlsjs = hlsjs
-        this.p2pEngine = engine
 
-        debugLogger('hls.js initialized, initializing p2p-media-loader plugin', { hlsjs, engine })
+        debugLogger('hls.js initialized, initializing p2p-media-loader plugin', { hlsjs })
 
         player.ready(() => this.initializePlugin())
       }
@@ -116,8 +116,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   dispose () {
-    this.p2pEngine?.removeAllListeners()
-    this.p2pEngine?.destroy()
+    this.hlsjs?.p2pEngine?.destroy()
 
     this.hlsjs?.destroy()
     this.options.segmentValidator?.destroy()
@@ -152,15 +151,22 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   private initializePlugin () {
-    initHlsJsPlayer(this.player, this.hlsjs)
+    this.hlsjs.p2pEngine.addEventListener('onSegmentError', (details: SegmentErrorDetails) => {
+      if (navigator.onLine === false || this.liveEnded || details.downloadSource !== 'http') return
 
-    this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
-      if (navigator.onLine === false || this.liveEnded) return
-
-      logger.clientError(`Segment ${segment.id} error.`, err)
+      const segment = details.segment
+      logger.clientError(`Segment ${segment.runtimeId} error.`, details)
 
       if (this.options.redundancyUrlManager) {
-        this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
+        this.options.redundancyUrlManager.onSegmentError(segment.url)
+      }
+    })
+
+    this.hlsjs.p2pEngine.addEventListener('onSegmentLoaded', (details: SegmentLoadDetails) => {
+      if (details.downloadSource !== 'http') return
+
+      if (this.options.redundancyUrlManager) {
+        this.options.redundancyUrlManager.onSegmentSuccess(details.segmentUrl)
       }
     })
 
@@ -168,7 +174,8 @@ class P2pMediaLoaderPlugin extends Plugin {
       ? this.options.redundancyUrlManager.countBaseUrls()
       : 0
 
-    this.statsP2PBytes.peersWithWebSeed = 1 + redundancyUrlsCount
+    this.totalHTTPPeers = 1 + redundancyUrlsCount
+    this.statsP2PBytes.peersWithWebSeed = this.totalHTTPPeers
 
     this.runStats()
 
@@ -200,30 +207,44 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   private runStats () {
-    this.p2pEngine.on(Events.PieceBytesDownloaded, (method: string, _segment, bytes: number) => {
+    this.connectedPeers = new Set()
+
+    if (this.hlsjs.p2pEngine.getConfig().core.mainStream.isP2PDisabled) {
+      this.hlsjs.on(Hlsjs.Events.FRAG_LOADED, (e, data: FragLoadedData) => {
+        const bytes = data.frag.stats.loaded
+
+        this.statsHTTPBytes.pendingDownload.push(bytes)
+        this.statsHTTPBytes.totalDownload += bytes
+      })
+    }
+
+    this.hlsjs.p2pEngine.addEventListener('onChunkDownloaded', (bytes: number, method: DownloadSource) => {
       const elem = method === 'p2p' ? this.statsP2PBytes : this.statsHTTPBytes
 
       elem.pendingDownload.push(bytes)
       elem.totalDownload += bytes
     })
 
-    this.p2pEngine.on(Events.PieceBytesUploaded, (method: string, _segment, bytes: number) => {
-      if (method !== 'p2p') {
-        logger.error(`Received upload from unknown method ${method}`)
-        return
-      }
-
+    this.hlsjs.p2pEngine.addEventListener('onChunkUploaded', (bytes: number) => {
       this.statsP2PBytes.pendingUpload.push(bytes)
       this.statsP2PBytes.totalUpload += bytes
     })
 
-    this.p2pEngine.on(Events.PeerConnect, () => {
-      this.statsP2PBytes.peersWithWebSeed++
-      this.statsP2PBytes.peersP2POnly++
+    this.hlsjs.p2pEngine.addEventListener('onPeerConnect', peer => {
+      if (peer.streamType !== 'main') return
+
+      this.connectedPeers.add(peer.peerId)
+      this.statsP2PBytes.peersP2POnly = this.connectedPeers.size
+
+      this.statsP2PBytes.peersWithWebSeed = this.totalHTTPPeers + this.statsP2PBytes.peersP2POnly
     })
-    this.p2pEngine.on(Events.PeerClose, () => {
-      this.statsP2PBytes.peersWithWebSeed--
-      this.statsP2PBytes.peersP2POnly--
+    this.hlsjs.p2pEngine.addEventListener('onPeerClose', peer => {
+      if (peer.streamType !== 'main') return
+
+      this.connectedPeers.delete(peer.peerId)
+      this.statsP2PBytes.peersP2POnly = this.connectedPeers.size
+
+      this.statsP2PBytes.peersWithWebSeed = this.totalHTTPPeers + this.statsP2PBytes.peersP2POnly
     })
 
     this.networkInfoInterval = setInterval(() => {

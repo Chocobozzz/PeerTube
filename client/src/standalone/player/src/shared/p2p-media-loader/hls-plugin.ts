@@ -5,6 +5,10 @@ import { logger } from '@root-helpers/logger'
 import Hlsjs, { ErrorData, Level, LevelSwitchingData, ManifestParsedData } from 'hls.js'
 import videojs from 'video.js'
 import { HLSPluginOptions, HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../../types'
+import { HlsJsP2PEngine, HlsWithP2PInstance } from 'p2p-media-loader-hlsjs'
+import { omit } from '@peertube/peertube-core-utils'
+
+const HlsWithP2P = HlsJsP2PEngine.injectMixin(Hlsjs)
 
 type ErrorCounts = {
   [ type: string ]: number
@@ -13,8 +17,6 @@ type ErrorCounts = {
 // ---------------------------------------------------------------------------
 // Source handler registration
 // ---------------------------------------------------------------------------
-
-type HookFn = (player: videojs.Player, hljs: Hlsjs) => void
 
 let alreadyRegistered = false
 
@@ -110,8 +112,6 @@ videojs.registerPlugin('hlsjs', HLSJSConfigHandler)
 // ---------------------------------------------------------------------------
 
 export class Html5Hlsjs {
-  private static hooks: { [id: string]: HookFn[] } = {}
-
   private readonly videoElement: HTMLVideoElement
   private readonly errorCounts: ErrorCounts = {}
   private readonly player: videojs.Player
@@ -121,7 +121,7 @@ export class Html5Hlsjs {
 
   private maxNetworkErrorRecovery = 5
 
-  private hls: Hlsjs
+  private hls: HlsWithP2PInstance<Hlsjs>
   private hlsjsConfig: HLSPluginOptions = null
 
   private _duration: number = null
@@ -410,10 +410,15 @@ export class Html5Hlsjs {
       this.videoElement.addEventListener('play', this.handlers.play)
     }
 
-    const loader = this.hlsjsConfig.loaderBuilder()
-    this.hls = new Hlsjs({ ...this.hlsjsConfig, loader })
+    this.hls = new HlsWithP2P({
+      ...omit(this.hlsjsConfig, [ 'p2pMediaLoaderOptions' ]),
 
-    this.player.trigger('hlsjs-initialized', { hlsjs: this.hls, engine: loader.getEngine() })
+      p2p: {
+        core: this.hlsjsConfig.p2pMediaLoaderOptions
+      }
+    })
+
+    this.player.trigger('hlsjs-initialized', { hlsjs: this.hls })
 
     this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
     this.hls.on(Hlsjs.Events.MANIFEST_PARSED, (event, data) => this._onMetaData(event, data))
@@ -462,17 +467,21 @@ export class Html5Hlsjs {
     this.hlsjsConfig.autoStartLoad = true
     this.player.autoplay('play')
 
-    const loader = this.hlsjsConfig.loaderBuilder()
-    this.hls = new Hlsjs({
-      ...this.hlsjsConfig,
-      loader,
+    this.hls = new HlsWithP2P({
+      ...omit(this.hlsjsConfig, [ 'p2pMediaLoaderOptions' ]),
+
+      p2p: {
+        core: this.hlsjsConfig.p2pMediaLoaderOptions
+      },
+
       startPosition: this.duration() === Infinity
         ? undefined
         : currentTime,
+
       startLevel
     })
 
-    this.player.trigger('hlsjs-initialized', { hlsjs: this.hls, engine: loader.getEngine() })
+    this.player.trigger('hlsjs-initialized', { hlsjs: this.hls })
 
     this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
     this.registerLevelEventSwitch()

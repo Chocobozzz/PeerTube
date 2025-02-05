@@ -12,6 +12,8 @@
 /e2e/local.log
 /e2e/browserstack.err
 /e2e/screenshots
+/src/standalone/player/build
+/src/standalone/player/dist
 /src/standalone/embed-player-api/build
 /src/standalone/embed-player-api/dist
 /e2e/logs

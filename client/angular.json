@@ -183,7 +183,10 @@
               "includePaths": [
                 "src/sass/include",
                 "."
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": [ "import", "mixed-decls", "color-functions", "global-builtin" ]
+              }
             },
             "assets": [
               "src/assets/images",
@@ -212,7 +215,9 @@
               "is-plain-object",
               "parse-srcset",
               "deepmerge",
-              "core-js/features/reflect"
+              "core-js/features/reflect",
+              "hammerjs",
+              "jschannel"
             ],
             "scripts": [],
             "extractLicenses": false,
@@ -241,7 +246,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "100kb"
+                  "maximumError": "120kb"
                 }
               ],
               "fileReplacements": [

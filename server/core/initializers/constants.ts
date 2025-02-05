@@ -423,7 +423,7 @@ export const CONSTRAINTS_FIELDS = {
       }
     },
     EXTNAME: [] as string[],
-    INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
+    INFO_HASH: { min: 10, max: 100 },
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
@@ -1112,7 +1112,9 @@ export const TRACKER_RATE_LIMITS = {
   BLOCK_IP_LIFETIME: parseDurationToMs('3 minutes')
 }
 
-export const P2P_MEDIA_LOADER_PEER_VERSION = 2
+// We use -2 instead of 2 because of historical reason
+// When p2p-media-loader bumps to v3, we'll be able to switch to it
+export const P2P_MEDIA_LOADER_PEER_VERSION = -2
 
 // ---------------------------------------------------------------------------
 

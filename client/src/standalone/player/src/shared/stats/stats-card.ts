@@ -138,6 +138,8 @@ class StatsCard extends Component {
     this.containerEl.style.display = 'block'
 
     this.updateInterval = setInterval(async () => {
+      if (!this.mode) return
+
       try {
         const options = this.mode === 'p2p-media-loader'
           ? this.buildHLSOptions()

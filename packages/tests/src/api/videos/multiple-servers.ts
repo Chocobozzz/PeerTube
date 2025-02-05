@@ -17,7 +17,7 @@ import {
 import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
-import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'

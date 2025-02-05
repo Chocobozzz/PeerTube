@@ -16,7 +16,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
 import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
-import { magnetUriDecode, parseTorrentVideo } from '@tests/shared/webtorrent.js'
+import { magnetUriDecode, parseTorrentVideo } from '@tests/shared/p2p.js'
 import { expect } from 'chai'
 
 describe('Test video static file privacy', function () {

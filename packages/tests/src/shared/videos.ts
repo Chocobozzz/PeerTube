@@ -29,7 +29,7 @@ import { tmpdir } from 'os'
 import { basename, join } from 'path'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
 import { completeCheckHlsPlaylist } from './streaming-playlists.js'
-import { checkWebTorrentWorks } from './webtorrent.js'
+import { checkWebTorrentWorks } from './p2p.js'
 
 export async function completeWebVideoFilesCheck (options: {
   server: PeerTubeServer

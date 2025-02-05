@@ -1,4 +1,4 @@
-import { Segment } from '@peertube/p2p-media-loader-core'
+import type { Segment } from 'p2p-media-loader-core'
 import { RedundancyUrlManager } from './redundancy-url-manager'
 
 export function segmentUrlBuilderFactory (redundancyUrlManager: RedundancyUrlManager | null) {

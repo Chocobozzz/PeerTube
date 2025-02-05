@@ -1,20 +1,30 @@
 import { logger } from '@root-helpers/logger'
 
 class RedundancyUrlManager {
+  private map = new Map<string, string>()
 
   constructor (private baseUrls: string[] = []) {
     // empty
   }
 
-  removeBySegmentUrl (segmentUrl: string) {
-    const baseUrl = getBaseUrl(segmentUrl)
+  onSegmentError (segmentUrl: string) {
+    if (!this.map.has(segmentUrl)) return
+
+    const customSegmentUrl = this.map.get(segmentUrl)
+    this.map.delete(segmentUrl)
+
+    const baseUrl = getBaseUrl(customSegmentUrl)
     const oldLength = baseUrl.length
 
     this.baseUrls = this.baseUrls.filter(u => u !== baseUrl && u !== baseUrl + '/')
 
     if (oldLength !== this.baseUrls.length) {
-      logger.info(`Removed redundancy of segment URL ${segmentUrl}.`)
+      logger.info(`Removed redundancy of segment URL ${customSegmentUrl}.`)
     }
+  }
+
+  onSegmentSuccess (segmentUrl: string) {
+    this.map.delete(segmentUrl)
   }
 
   buildUrl (url: string) {
@@ -26,7 +36,11 @@ class RedundancyUrlManager {
     const newBaseUrl = this.baseUrls[i]
     const slashPart = newBaseUrl.endsWith('/') ? '' : '/'
 
-    return newBaseUrl + slashPart + getFilename(url)
+    const newUrl = newBaseUrl + slashPart + getFilename(url)
+
+    this.map.set(url, newUrl)
+
+    return newUrl
   }
 
   countBaseUrls () {

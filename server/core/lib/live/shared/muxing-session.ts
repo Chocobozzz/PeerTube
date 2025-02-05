@@ -227,7 +227,7 @@ class MuxingSession extends EventEmitter {
           this.streamingPlaylist.playlistUrl = url
         }
 
-        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions)
+        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions.map(r => ({ height: r })))
 
         await this.streamingPlaylist.save()
       } catch (err) {

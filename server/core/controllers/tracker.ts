@@ -10,7 +10,7 @@ import { LRU_CACHE, TRACKER_RATE_LIMITS } from '../initializers/constants.js'
 import { VideoFileModel } from '../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 
-const trackerRouter = express.Router()
+export const trackerRouter = express.Router()
 
 const blockedIPs = new LRUCache<string, boolean>({
   max: LRU_CACHE.TRACKER_IPS.MAX_SIZE,
@@ -30,13 +30,9 @@ const trackerServer = new TrackerServer({
       return cb(new Error('Tracker is disabled on this instance.'))
     }
 
-    let ip: string
-
-    if (params.type === 'ws') {
-      ip = params.ip
-    } else {
-      ip = params.httpReq.ip
-    }
+    const ip = params.type === 'ws'
+      ? params.ip
+      : params.httpReq.ip
 
     const key = ip + '-' + infoHash
 
@@ -50,11 +46,12 @@ const trackerServer = new TrackerServer({
     try {
       if (CONFIG.TRACKER.PRIVATE === false) return cb()
 
-      const videoFileExists = await VideoFileModel.doesInfohashExistCached(infoHash)
-      if (videoFileExists === true) return cb()
-
       const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExistCached(infoHash)
       if (playlistExists === true) return cb()
+
+      // Classic infohash (not p2p-media-loader custom one), use arg directly
+      const videoFileExists = await VideoFileModel.doesInfohashExistCached(infoHash)
+      if (videoFileExists === true) return cb()
 
       cb(new Error(`Unknown infoHash ${infoHash} requested by ip ${ip}`))
 
@@ -92,7 +89,7 @@ const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
 trackerRouter.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
 trackerRouter.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
 
-function createWebsocketTrackerServer (app: express.Application) {
+export function createWebsocketTrackerServer (app: express.Application) {
   const server = createServer(app)
   const wss = new WebSocketServer({ noServer: true })
 
@@ -124,12 +121,7 @@ function createWebsocketTrackerServer (app: express.Application) {
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  trackerRouter,
-  createWebsocketTrackerServer
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function runPeersChecker () {

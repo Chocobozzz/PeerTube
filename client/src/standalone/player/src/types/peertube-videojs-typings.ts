@@ -1,6 +1,7 @@
-import { Engine } from '@peertube/p2p-media-loader-hlsjs'
 import { VideoChapter, VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
 import type { HlsConfig, Level, Loader, LoaderContext } from 'hls.js'
+import type { CoreConfig } from 'p2p-media-loader-core'
+import type { HlsJsP2PEngine } from 'p2p-media-loader-hlsjs'
 import videojs from 'video.js'
 import { BezelsPlugin } from '../shared/bezels/bezels-plugin'
 import { ContextMenuPlugin } from '../shared/context-menu'
@@ -215,9 +216,9 @@ export type WebVideoPluginOptions = {
 export type HLSLoaderClass = {
   new (confg: HlsConfig): Loader<LoaderContext>
 
-  getEngine(): Engine
+  getEngine(): HlsJsP2PEngine
 }
-export type HLSPluginOptions = Partial<HlsConfig & { cueHandler: any, loaderBuilder: () => HLSLoaderClass }>
+export type HLSPluginOptions = Partial<HlsConfig & { cueHandler: any, p2pMediaLoaderOptions: CoreConfig }>
 
 export type P2PMediaLoaderPluginOptions = {
   redundancyUrlManager: RedundancyUrlManager | null
@@ -233,7 +234,7 @@ export type P2PMediaLoaderPluginOptions = {
 }
 
 export type P2PMediaLoader = {
-  getEngine(): Engine
+  getEngine(): HlsJsP2PEngine
 
   destroy: () => void
 }

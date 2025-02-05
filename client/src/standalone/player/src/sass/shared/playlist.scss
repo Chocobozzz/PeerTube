@@ -44,8 +44,8 @@ $playlist-menu-width: 350px;
     }
 
     .cross {
-      mask-image: url('#{$assets-path}/images/feather/x.svg');
-      -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
+      mask-image: url('./svg/x.svg');
+      -webkit-mask-image: url('./svg/x.svg');
       mask-size: cover;
       -webkit-mask-size: cover;
 
@@ -92,8 +92,8 @@ $playlist-menu-width: 350px;
 }
 
 .vjs-playlist-icon {
-  mask-image: url('#{$assets-path}/images/feather/playlists.svg');
-  -webkit-mask-image: url('#{$assets-path}/images/feather/playlists.svg');
+  mask-image: url('./svg/playlists.svg');
+  -webkit-mask-image: url('./svg/playlists.svg');
   mask-size: cover;
   -webkit-mask-size: cover;
 

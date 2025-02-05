@@ -5,8 +5,9 @@ import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import checker from 'vite-plugin-checker'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { getCSSConfig, getAliasConfig } from '../build-tools/vite-utils.js'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = resolve(__dirname, '../../../')
 
 export default defineConfig(({ mode }) => {
@@ -41,26 +42,17 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
-      alias: [
-        { find: /^video.js$/, replacement: resolve(root, './node_modules/video.js/core.js') },
-        { find: '@root-helpers', replacement: resolve(root, './src/root-helpers') }
-      ],
+      alias: getAliasConfig(root),
     },
 
-    css: {
-      preprocessorOptions: {
-        scss: {
-          includePaths: [resolve(root, './src/sass/include')]
-        }
-      }
-    },
+    css: getCSSConfig(root),
 
     build: {
       outDir: resolve(root, 'dist', 'standalone', 'videos'),
       emptyOutDir: true,
       sourcemap: mode === 'development',
 
-      target: [ 'firefox78', 'ios12' ],
+      target: [ 'firefox78', 'ios14' ],
 
       rollupOptions: {
         input: {

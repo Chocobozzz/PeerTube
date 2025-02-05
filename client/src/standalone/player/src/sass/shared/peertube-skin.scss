@@ -60,7 +60,7 @@ body {
 
     .vjs-icon-placeholder::before {
       content: '';
-      background-image: url('#{$assets-path}/player/images/big-play-button.svg');
+      background-image: url('./svg/big-play-button.svg');
 
       @include big-play-button-triangle-size(45px);
     }

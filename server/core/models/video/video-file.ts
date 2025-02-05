@@ -354,23 +354,17 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     const query = {
       include: [
         {
-          model: VideoModel.unscoped(),
+          model: VideoStreamingPlaylistModel.unscoped(),
           required: true,
-          include: [
-            {
-              model: VideoStreamingPlaylistModel.unscoped(),
-              required: true,
-              where: {
-                id: streamingPlaylistId
-              }
-            }
-          ]
+          where: {
+            id: streamingPlaylistId
+          }
         }
       ],
       transaction
     }
 
-    return VideoFileModel.findAll(query)
+    return VideoFileModel.findAll<MVideoFile>(query)
   }
 
   static getStats () {

@@ -1,9 +1,9 @@
-import { Segment } from '@peertube/p2p-media-loader-core'
+import type { ByteRange } from 'p2p-media-loader-core'
+import { removeQueryParams } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
-import { removeQueryParams } from '@peertube/peertube-core-utils'
-import { isSameOrigin } from '../common'
 import debug from 'debug'
+import { isSameOrigin } from '../common'
 
 const debugLogger = debug('peertube:player:segment-validator')
 
@@ -12,9 +12,6 @@ type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string
 const maxRetries = 10
 
 export class SegmentValidator {
-
-  private readonly bytesRangeRegex = /bytes=(\d+)-(\d+)/
-
   private destroyed = false
 
   private segmentJSONPromise: Promise<SegmentsJSON>
@@ -29,17 +26,18 @@ export class SegmentValidator {
   }) {
   }
 
-  async validate (segment: Segment, _method: string, _peerId: string, retry = 1) {
-    if (this.destroyed) return
+  async validate (url: string, byteRange: ByteRange | undefined, data: ArrayBuffer, retry = 1): Promise<boolean> {
+    if (this.destroyed) return false
 
     this.loadSha256SegmentsPromiseIfNeeded()
 
-    const filename = removeQueryParams(segment.url).split('/').pop()
+    const filename = removeQueryParams(url).split('/').pop()
 
     const segmentValue = (await this.segmentJSONPromise)[filename]
 
     if (!segmentValue && retry > maxRetries) {
-      throw new Error(`Unknown segment name ${filename} in segment validator`)
+      logger.clientError(`Unknown segment name ${filename} in segment validator`)
+      return false
     }
 
     if (!segmentValue) {
@@ -49,9 +47,7 @@ export class SegmentValidator {
 
       this.loadSha256SegmentsPromise()
 
-      await this.validate(segment, _method, _peerId, retry + 1)
-
-      return
+      return this.validate(url, byteRange, data, retry + 1)
     }
 
     let hashShouldBe: string
@@ -60,24 +56,25 @@ export class SegmentValidator {
     if (typeof segmentValue === 'string') {
       hashShouldBe = segmentValue
     } else {
-      const captured = this.bytesRangeRegex.exec(segment.range)
-      range = captured[1] + '-' + captured[2]
+      range = byteRange.start + '-' + byteRange.end
 
       hashShouldBe = segmentValue[range]
     }
 
     if (hashShouldBe === undefined) {
-      throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
+      logger.clientError(`Unknown segment name ${filename}/${range} in segment validator`)
+      return false
     }
 
-    debugLogger(`Validating ${filename}` + (segment.range ? ` range ${segment.range}` : ''))
+    debugLogger(`Validating ${filename}` + (range ? ` range ${range}` : ''))
 
-    const calculatedSha = await this.sha256Hex(segment.data)
+    const calculatedSha = await this.sha256Hex(data)
     if (calculatedSha !== hashShouldBe) {
-      throw new Error(
-        `Hashes does not correspond for segment ${filename}/${range}` +
-        `(expected: ${hashShouldBe} instead of ${calculatedSha})`
+      logger.clientError(
+        `Hashes does not correspond for segment ${filename}/${range} (expected: ${hashShouldBe} instead of ${calculatedSha})`
       )
+
+      return true
     }
   }
 
@@ -106,7 +103,7 @@ export class SegmentValidator {
     return fetch(this.options.segmentsSha256Url, { headers })
       .then(res => res.json() as Promise<SegmentsJSON>)
       .catch(err => {
-        logger.error('Cannot get sha256 segments', err)
+        logger.clientError('Cannot get sha256 segments', err)
         return {}
       })
   }

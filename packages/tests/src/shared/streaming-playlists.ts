@@ -10,14 +10,14 @@ import {
   VideoStreamingPlaylist,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
-import { sha1, sha256 } from '@peertube/peertube-node-utils'
+import { generateP2PMediaLoaderHash, sha256 } from '@peertube/peertube-node-utils'
 import { makeRawRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { basename, dirname, join } from 'path'
 import { expectStartWith } from './checks.js'
+import { checkWebTorrentWorks } from './p2p.js'
 import { SQLCommand } from './sql-command.js'
-import { hlsInfohashExist } from './tracker.js'
-import { checkWebTorrentWorks } from './webtorrent.js'
+import { checkTrackerInfohash } from './tracker.js'
 
 export async function checkSegmentHash (options: {
   server: PeerTubeServer
@@ -72,16 +72,24 @@ export async function checkLiveSegmentHash (options: {
 export async function checkPlaylistInfohash (options: {
   video: VideoDetails
   sqlCommand: SQLCommand
-  files: unknown[]
+  files: { resolution: { id: number } }[]
 }) {
   const { sqlCommand, video, files } = options
   const hls = getHLS(video)
 
+  const version = 2
+
   for (let i = 0; i < files.length; i++) {
-    const infohash = sha1(`${2 + hls.playlistUrl}+V${i}`)
+    const str = files[0].resolution.id === VideoResolution.H_NOVIDEO && files.length !== 0
+      ? `v${version}-${hls.playlistUrl}-secondary-0`
+      : `v${version}-${hls.playlistUrl}-main-${i}`
+
+    const infohash = generateP2PMediaLoaderHash(str)
     const dbInfohashes = await sqlCommand.getPlaylistInfohash(hls.id)
 
     expect(dbInfohashes).to.include(infohash)
+
+    await checkTrackerInfohash(video.account.host, infohash)
   }
 }
 
@@ -298,40 +306,33 @@ export async function completeCheckHlsPlaylist (options: {
 
       const masterPlaylist = await server.streamingPlaylists.get({ url: hlsPlaylist.playlistUrl, token })
 
-      let i = 0
       for (const resolution of hlsResolutions) {
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
-
-        const url = 'http://' + videoDetails.account.host
-        await hlsInfohashExist(url, hlsPlaylist.playlistUrl, i)
-
-        i++
       }
     }
 
     // Check resolution playlists
-    {
-      for (const resolution of hlsResolutions) {
-        const file = hlsFiles.find(f => f.resolution.id === resolution)
-        const playlistName = removeFragmentedMP4Ext(basename(file.fileUrl)) + '.m3u8'
+    for (const resolution of hlsResolutions) {
+      const file = hlsFiles.find(f => f.resolution.id === resolution)
+      const playlistName = removeFragmentedMP4Ext(basename(file.fileUrl)) + '.m3u8'
 
-        let url: string
-        if (objectStorageBaseUrl && requiresAuth) {
-          url = `${baseUrl}/object-storage-proxy/streaming-playlists/hls/${privatePath}${videoUUID}/${playlistName}`
-        } else if (objectStorageBaseUrl) {
-          url = `${objectStorageBaseUrl}hls/${videoUUID}/${playlistName}`
-        } else {
-          url = `${baseUrl}/static/streaming-playlists/hls/${privatePath}${videoUUID}/${playlistName}`
-        }
-
-        const subPlaylist = await server.streamingPlaylists.get({ url, token })
-
-        expect(subPlaylist).to.match(new RegExp(`${uuidRegex}-${resolution}-fragmented.mp4`))
-        expect(subPlaylist).to.contain(basename(file.fileUrl))
+      let url: string
+      if (objectStorageBaseUrl && requiresAuth) {
+        url = `${baseUrl}/object-storage-proxy/streaming-playlists/hls/${privatePath}${videoUUID}/${playlistName}`
+      } else if (objectStorageBaseUrl) {
+        url = `${objectStorageBaseUrl}hls/${videoUUID}/${playlistName}`
+      } else {
+        url = `${baseUrl}/static/streaming-playlists/hls/${privatePath}${videoUUID}/${playlistName}`
       }
+
+      const subPlaylist = await server.streamingPlaylists.get({ url, token })
+
+      expect(subPlaylist).to.match(new RegExp(`${uuidRegex}-${resolution}-fragmented.mp4`))
+      expect(subPlaylist).to.contain(basename(file.fileUrl))
     }
 
+    // Segment hash
     {
       let baseUrlAndPath: string
       if (objectStorageBaseUrl && requiresAuth) {
@@ -352,6 +353,14 @@ export async function completeCheckHlsPlaylist (options: {
           hlsPlaylist
         })
       }
+    }
+
+    // Info hashed
+    if (isOrigin) {
+      const sqlCommand = new SQLCommand(server)
+
+      await checkPlaylistInfohash({ video: videoDetails, sqlCommand, files: hlsFiles })
+      await sqlCommand.cleanup()
     }
   }
 }

@@ -47,16 +47,18 @@ import { logger } from '@root-helpers/logger'
 import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
 import debug from 'debug'
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
+import { environment } from '../../../environments/environment'
 import {
+  cleanupVideoWatch,
+  getStoredTheater,
+  getStoredVideoWatchHistory,
   HLSOptions,
   PeerTubePlayer,
   PeerTubePlayerConstructorOptions,
   PeerTubePlayerLoadOptions,
   PlayerMode,
   videojs
-} from '../../../assets/player'
-import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
-import { environment } from '../../../environments/environment'
+} from '@peertube/player'
 import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.component'
 import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
 import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'

@@ -1,5 +1,1 @@
-@use 'node_modules/video.js/dist/video-js';
-
-$assets-path: '../../assets/';
-
-@use '../../../sass/player/index';
+@use '../../../standalone/player/build/peertube-player.css';
