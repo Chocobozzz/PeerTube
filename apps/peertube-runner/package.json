@@ -4,9 +4,6 @@
   "type": "module",
   "main": "dist/peertube-runner.js",
   "bin": "dist/peertube-runner.js",
-  "engines": {
-    "node": ">=16.x"
-  },
   "license": "AGPL-3.0",
   "dependencies": {},
   "devDependencies": {
