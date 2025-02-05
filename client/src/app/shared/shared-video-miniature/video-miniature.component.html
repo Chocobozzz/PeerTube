@@ -66,6 +66,10 @@
 
         <my-video-views-counter *ngIf="displayOptions.views" [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
       </span>
+      <ng-container *ngIf="hasComments()">
+        <span class="comment-count"> • </span>
+        <span class="comment-count">{{ getCommentCount() }}</span>
+      </ng-container>
     </div>
 
     <div class="video-info-privacy fw-semibold">

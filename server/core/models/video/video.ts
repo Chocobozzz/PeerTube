@@ -572,6 +572,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Column
   originallyPublishedAt: Date
 
+  @AllowNull(false)
+  @Default(0)
+  @Column
+  commentCount: number
+
   @ForeignKey(() => VideoChannelModel)
   @Column
   channelId: number

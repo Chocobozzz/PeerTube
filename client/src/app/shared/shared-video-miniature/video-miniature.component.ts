@@ -14,6 +14,7 @@ import {
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs/operators'
 import { LinkType } from '../../../types/link.type'
@@ -39,7 +40,8 @@ export type MiniatureDisplayOptions = {
   nsfw?: boolean
 
   by?: boolean
-  forceChannelInBy?: boolean
+  forceChannelInBy?: boolean,
+  commentCount?: boolean
 }
 @Component({
   selector: 'my-video-miniature',
@@ -244,6 +246,14 @@ export class VideoMiniatureComponent implements OnInit {
 
   getAriaLabel () {
     return $localize`Watch video ${this.video.name}`
+  }
+
+  hasComments () {
+    return this.video.commentCount > 0
+  }
+
+  getCommentCount () {
+    return $localize`${this.video.commentCount} comment${this.video.commentCount > 1 ? 's' : ''}`
   }
 
   loadActions () {
