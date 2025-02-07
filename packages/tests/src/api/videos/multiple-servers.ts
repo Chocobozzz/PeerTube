@@ -9,6 +9,7 @@ import {
   createMultipleServers,
   followAll,
   makeGetRequest,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
@@ -137,13 +138,10 @@ describe('Test multiple servers', function () {
           expect(image.createdAt).to.exist
           expect(image.updatedAt).to.exist
           expect(image.width).to.be.above(20).and.below(2000)
+          expect(image.fileUrl).to.exist
           expect(image.path).to.exist
 
-          await makeGetRequest({
-            url: server.url,
-            path: image.fileUrl,
-            expectedStatus: HttpStatusCode.OK_200
-          })
+          await makeRawRequest({ url: image.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
       })
     })

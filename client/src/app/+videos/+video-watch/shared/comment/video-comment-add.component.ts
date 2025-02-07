@@ -60,7 +60,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   @Input() textValue?: string
 
   @Output() commentCreated = new EventEmitter<VideoComment>()
-  @Output() cancelEdition = new EventEmitter()
+  @Output() cancelEdit = new EventEmitter()
 
   @ViewChild('visitorModal', { static: true }) visitorModal: NgbModal
   @ViewChild('emojiModal', { static: true }) emojiModal: NgbModal
@@ -185,7 +185,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   cancelCommentReply () {
-    this.cancelEdition.emit(null)
+    this.cancelEdit.emit(null)
     this.form.value['text'] = this.textareaElement.nativeElement.value = ''
   }
 

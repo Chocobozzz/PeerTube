@@ -1,6 +1,6 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { makeRawRequest } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
-import { makeRawRequest } from '../../../server-commands/src/requests/requests.js'
 
 export async function testCaptionFile (fileUrl: string, toTest: RegExp | string) {
   const res = await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.OK_200 })

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -17,7 +18,6 @@ import { expectStartWith } from '@tests/shared/checks.js'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
 import { checkVideoFilesWereRemoved } from '@tests/shared/videos.js'
 import { expect } from 'chai'
-import { HttpStatusCode } from '../../../../models/src/http/http-status-codes.js'
 
 describe('Test video captions', function () {
   const uuidRegex = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
