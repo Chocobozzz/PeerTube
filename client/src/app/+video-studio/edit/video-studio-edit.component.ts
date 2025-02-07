@@ -34,7 +34,7 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
   ]
 })
 export class VideoStudioEditComponent extends FormReactive implements OnInit {
-  isRunningEdition = false
+  isRunningEditing = false
 
   video: VideoDetails
 
@@ -86,10 +86,10 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
     return this.serverService.getHTMLConfig().video.image.extensions
   }
 
-  async runEdition () {
-    if (this.isRunningEdition) return
+  async runEditing () {
+    if (this.isRunningEditing) return
     if (!this.form.valid) return
-    if (this.noEdition()) return
+    if (this.noEditing()) return
 
     const title = $localize`Are you sure you want to edit "${this.video.name}"?`
     const listHTML = this.getTasksSummary().map(t => `<li>${t}</li>`).join('')
@@ -100,7 +100,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
 
     if (await this.confirmService.confirm(confirmHTML, title) !== true) return
 
-    this.isRunningEdition = true
+    this.isRunningEditing = true
 
     const tasks = this.buildTasks()
 
@@ -109,7 +109,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
     return this.videoStudioService.editVideo(this.video.uuid, tasks)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Edition tasks created.`)
+          this.notifier.success($localize`Editing tasks created.`)
 
           // Don't redirect to old video version watch page that could be confusing for users
           this.router.navigateByUrl('/my-library/videos')
@@ -117,7 +117,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
 
         error: err => {
           this.loadingBar.useRef().complete()
-          this.isRunningEdition = false
+          this.isRunningEditing = false
           this.notifier.error(err.message)
           logger.error(err)
         }
@@ -132,7 +132,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
     return $localize`(extensions: ${this.imageExtensions.join(', ')})`
   }
 
-  noEdition () {
+  noEditing () {
     return this.buildTasks().length === 0
   }
 

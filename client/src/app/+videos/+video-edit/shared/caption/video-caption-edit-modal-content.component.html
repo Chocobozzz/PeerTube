@@ -16,16 +16,16 @@
 
       <div class="d-flex justify-content-between align-items-center mb-3 ms-2">
         <my-peertube-checkbox
-          inputName="raw-edition"
-          [(ngModel)]="rawEdition" (ngModelChange)="onRawEditionSwitch()"
-          i18n-labelText labelText="Raw edition"
+          inputName="raw-edit"
+          [(ngModel)]="rawEdit" (ngModelChange)="onRawEditSwitch()"
+          i18n-labelText labelText="Raw edit"
         ></my-peertube-checkbox>
 
-        <my-button *ngIf="!rawEdition && !segmentToUpdate" i18n-label label="Add a new segment" (click)="addSegmentToEdit()">
+        <my-button *ngIf="!rawEdit && !segmentToUpdate" i18n-label label="Add a new segment" (click)="addSegmentToEdit()">
         </my-button>
       </div>
 
-      <div [hidden]="!rawEdition" [formGroup]="form">
+      <div [hidden]="!rawEdit" [formGroup]="form">
         <textarea
           id="captionFileContent"
           formControlName="captionFileContent"
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="text-start segments pe-2 ps-2" [hidden]="rawEdition">
+      <div class="text-start segments pe-2 ps-2" [hidden]="rawEdit">
         @for (segment of segments; track segment.id) {
           <div class="pt-1 pb-1 mb-3">
             @if (segmentToUpdate === segment) {
@@ -78,16 +78,16 @@
 
                 <div class="d-flex mt-2">
                   <div class="form-group w-100">
-                    <label class="visually-hidden" i18n for="segment-edition">Segment end timestamp</label>
+                    <label class="visually-hidden" i18n for="segment-edit">Segment end timestamp</label>
 
-                    <textarea  id="segment-edition" name="segment-edition" class="form-control fs-7" [(ngModel)]="segment.text"></textarea>
+                    <textarea  id="segment-edit" name="segment-edit" class="form-control fs-7" [(ngModel)]="segment.text"></textarea>
 
-                    <div *ngIf="segmentEditionError" class="form-error" role="alert">{{ segmentEditionError }}</div>
+                    <div *ngIf="segmentEditError" class="form-error" role="alert">{{ segmentEditError }}</div>
                   </div>
 
                   <div class="d-flex flex-column ms-3">
-                    <my-button i18n-title title="Save" icon="tick" (click)="onEditionSaved(segment)"></my-button>
-                    <my-button class="mt-3" i18n-title title="Revert" icon="undo" (click)="onEditionCanceled(segment)"></my-button>
+                    <my-button i18n-title title="Save" icon="tick" (click)="onEditSaved(segment)"></my-button>
+                    <my-button class="mt-3" i18n-title title="Revert" icon="undo" (click)="onEditCanceled(segment)"></my-button>
                   </div>
                 </div>
               </div>
@@ -127,6 +127,6 @@
 
   <input
     type="button" i18n-value value="Edit this caption" class="peertube-button primary-button"
-    [disabled]="rawEdition && !form.valid" (click)="updateCaption()"
+    [disabled]="rawEdit && !form.valid" (click)="updateCaption()"
   >
 </div>

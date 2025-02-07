@@ -62,11 +62,11 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
   @ViewChild('textarea', { static: true }) textarea: ElementRef
   @ViewChild('embed') embed: EmbedComponent
 
-  rawEdition = false
+  rawEdit = false
   segments: Segment[] = []
 
   segmentToUpdate: Segment
-  segmentEditionError = ''
+  segmentEditError = ''
   private segmentToUpdateSave: Segment
 
   activeSegment: Segment
@@ -126,7 +126,7 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
   // ---------------------------------------------------------------------------
 
   loadCaptionContent () {
-    this.rawEdition = false
+    this.rawEdit = false
 
     if (this.videoCaption.action === 'CREATE' || this.videoCaption.action === 'UPDATE') {
       const file = this.videoCaption.captionfile as File
@@ -144,8 +144,8 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
       })
   }
 
-  onRawEditionSwitch () {
-    if (this.rawEdition === true) {
+  onRawEditSwitch () {
+    if (this.rawEdit === true) {
       this.form.patchValue({ captionFileContent: this.formatSegments() })
       this.resetTextarea()
     } else {
@@ -163,16 +163,16 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
     this.player.seek(segment.startMs / 1000)
   }
 
-  onEditionSaved (segment: Segment) {
-    this.segmentEditionError = ''
+  onEditSaved (segment: Segment) {
+    this.segmentEditError = ''
 
     if (segment.startMs >= segment.endMs) {
-      this.segmentEditionError = $localize`Start segment must be before end segment time`
+      this.segmentEditError = $localize`Start segment must be before end segment time`
       return
     }
 
     if (!segment.text) {
-      this.segmentEditionError = $localize`Segment must have a text content`
+      this.segmentEditError = $localize`Segment must have a text content`
       return
     }
 
@@ -185,7 +185,7 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
     this.scrollToSegment(segment)
   }
 
-  onEditionCanceled (segment: Segment) {
+  onEditCanceled (segment: Segment) {
     if (!this.segmentToUpdateSave) {
       this.segments = this.segments.filter(s => s.id !== segment.id)
       return
@@ -195,11 +195,11 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
     segment.endMs = this.segmentToUpdateSave.endMs
     segment.text = this.segmentToUpdateSave.text
 
-    this.onEditionSaved(segment)
+    this.onEditSaved(segment)
   }
 
   updateSegment (segment: Segment) {
-    this.segmentEditionError = ''
+    this.segmentEditError = ''
 
     this.segmentToUpdateSave = { ...segment }
     this.segmentToUpdate = segment
@@ -306,14 +306,14 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
 
   updateCaption () {
     if (this.segmentToUpdate) {
-      this.notifier.error($localize`A segment is being edited. Save or cancel the edition first.`)
+      this.notifier.error($localize`A segment is being edited. Save or cancel the edit first.`)
       return
     }
 
     const languageId = this.videoCaption.language.id
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 
-    if (this.rawEdition) {
+    if (this.rawEdit) {
       this.loadSegments(this.form.value['captionFileContent'])
     }
 
