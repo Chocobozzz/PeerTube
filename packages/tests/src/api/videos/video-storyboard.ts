@@ -11,6 +11,7 @@ import {
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   sendRTMPStream,
   setAccessTokensToServers,
@@ -46,8 +47,15 @@ async function checkStoryboard (options: {
     expect(storyboard.totalHeight).to.equal(spriteHeight * Math.max((tilesCount / 11), 1))
   }
 
-  const { body } = await makeGetRequest({ url: server.url, path: storyboard.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
-  expect(body.length).to.be.above(minSize)
+  {
+    const { body } = await makeGetRequest({ url: server.url, path: storyboard.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
+    expect(body.length).to.be.above(minSize)
+  }
+
+  {
+    const { body } = await makeRawRequest({ url: storyboard.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    expect(body.length).to.be.above(minSize)
+  }
 }
 
 describe('Test video storyboard', function () {

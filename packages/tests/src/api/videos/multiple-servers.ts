@@ -141,7 +141,7 @@ describe('Test multiple servers', function () {
 
           await makeGetRequest({
             url: server.url,
-            path: image.path,
+            path: image.fileUrl,
             expectedStatus: HttpStatusCode.OK_200
           })
         }

@@ -6,7 +6,6 @@ import { peertubeTranslate, sortBy } from '@peertube/peertube-core-utils'
 import { PeerTubeProblemDocument, ResultList, ServerErrorCode, Video, VideoCaption, VideoCaptionGenerate } from '@peertube/peertube-models'
 import { Observable, from, of, throwError } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
-import { environment } from '../../../../environments/environment'
 import { VideoPasswordService } from '../video/video-password.service'
 import { VideoService } from '../video/video.service'
 import { VideoCaptionEdit } from './video-caption-edit.model'
@@ -72,8 +71,8 @@ export class VideoCaptionService {
     return obs
   }
 
-  getCaptionContent ({ captionPath }: Pick<VideoCaption, 'captionPath'>) {
-    return this.authHttp.get(environment.originServerUrl + captionPath, { responseType: 'text' })
+  getCaptionContent ({ fileUrl }: Pick<VideoCaption, 'fileUrl'>) {
+    return this.authHttp.get(fileUrl, { responseType: 'text' })
   }
 
   // ---------------------------------------------------------------------------

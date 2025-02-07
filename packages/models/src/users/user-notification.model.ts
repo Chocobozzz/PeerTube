@@ -58,7 +58,11 @@ export interface VideoInfo {
 
 export interface AvatarInfo {
   width: number
+
+  // TODO: remove, deprecated in 7.1
   path: string
+
+  fileUrl: string
 }
 
 export interface ActorInfo {

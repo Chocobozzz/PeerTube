@@ -44,6 +44,7 @@ export type MVideoUrl = Pick<MVideo, 'url'>
 export type MVideoUUID = Pick<MVideo, 'uuid'>
 
 export type MVideoImmutable = Pick<MVideo, 'id' | 'url' | 'uuid' | 'remote' | 'isOwned'>
+export type MVideoOwned = Pick<MVideo, 'remote' | 'isOwned'>
 export type MVideoIdUrl = MVideoId & MVideoUrl
 export type MVideoFeed = Pick<MVideo, 'name' | 'uuid'>
 

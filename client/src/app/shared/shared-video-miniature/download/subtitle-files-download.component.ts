@@ -60,6 +60,6 @@ export class SubtitleFilesDownloadComponent implements OnInit {
     const caption = this.getCaption()
     if (!caption) return ''
 
-    return window.location.origin + caption.captionPath
+    return caption.fileUrl
   }
 }

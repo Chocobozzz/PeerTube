@@ -2,7 +2,9 @@
 
 import { wait } from '@peertube/peertube-core-utils'
 import { RunnerJobState } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
+  ObjectStorageCommand,
   PeerTubeServer,
   cleanupTests,
   createMultipleServers,
@@ -41,82 +43,115 @@ describe('Test transcription in peertube-runner program', function () {
 
   describe('Running transcription', function () {
 
-    it('Should run transcription on classic file', async function () {
-      this.timeout(360000)
+    describe('Common on filesystem', function () {
 
-      const uuid = await uploadForTranscription(servers[0])
-      await waitJobs(servers, { runnerJobs: true })
+      it('Should run transcription on classic file', async function () {
+        this.timeout(360000)
 
-      await checkAutoCaption(servers, uuid)
-      await checkLanguage(servers, uuid, 'en')
+        const uuid = await uploadForTranscription(servers[0])
+        await waitJobs(servers, { runnerJobs: true })
+
+        await checkAutoCaption({ servers, uuid })
+        await checkLanguage(servers, uuid, 'en')
+      })
+
+      it('Should run transcription on HLS with audio separated', async function () {
+        await servers[0].config.enableMinimumTranscoding({ hls: true, webVideo: false, splitAudioAndVideo: true })
+
+        const uuid = await uploadForTranscription(servers[0], { generateTranscription: false })
+        await waitJobs(servers)
+        await checkLanguage(servers, uuid, null)
+
+        await servers[0].captions.runGenerate({ videoId: uuid })
+        await waitJobs(servers, { runnerJobs: true })
+
+        await checkAutoCaption({ servers, uuid })
+        await checkLanguage(servers, uuid, 'en')
+      })
+
+      it('Should not run transcription on video without audio stream', async function () {
+        this.timeout(360000)
+
+        const uuid = await uploadForTranscription(servers[0], { fixture: 'video_short_no_audio.mp4' })
+
+        await waitJobs(servers)
+
+        let continueWhile = true
+        while (continueWhile) {
+          await wait(500)
+
+          const { data } = await servers[0].runnerJobs.list({ stateOneOf: [ RunnerJobState.ERRORED ] })
+
+          continueWhile = !data.some(j => j.type === 'video-transcription')
+        }
+
+        await checkNoCaption(servers, uuid)
+        await checkLanguage(servers, uuid, null)
+      })
     })
 
-    it('Should run transcription on HLS with audio separated', async function () {
-      await servers[0].config.enableMinimumTranscoding({ hls: true, webVideo: false, splitAudioAndVideo: true })
+    describe('On object storage', function () {
+      if (areMockObjectStorageTestsDisabled()) return
 
-      const uuid = await uploadForTranscription(servers[0], { generateTranscription: false })
-      await waitJobs(servers)
-      await checkLanguage(servers, uuid, null)
+      const objectStorage = new ObjectStorageCommand()
 
-      await servers[0].captions.runGenerate({ videoId: uuid })
-      await waitJobs(servers, { runnerJobs: true })
+      before(async function () {
+        this.timeout(120000)
 
-      await checkAutoCaption(servers, uuid)
-      await checkLanguage(servers, uuid, 'en')
+        const configOverride = objectStorage.getDefaultMockConfig()
+        await objectStorage.prepareDefaultMockBuckets()
+
+        await servers[0].kill()
+        await servers[0].run(configOverride)
+      })
+
+      it('Should run transcription and upload it on object storage', async function () {
+        this.timeout(360000)
+
+        const uuid = await uploadForTranscription(servers[0])
+        await waitJobs(servers, { runnerJobs: true })
+
+        await checkAutoCaption({ servers, uuid, objectStorageBaseUrl: objectStorage.getMockCaptionFileBaseUrl() })
+        await checkLanguage(servers, uuid, 'en')
+      })
+
+      after(async function () {
+        await objectStorage.cleanupMock()
+      })
     })
 
-    it('Should not run transcription on video without audio stream', async function () {
-      this.timeout(360000)
+    describe('When transcription is not enabled in runner', function () {
 
-      const uuid = await uploadForTranscription(servers[0], { fixture: 'video_short_no_audio.mp4' })
-
-      await waitJobs(servers)
-
-      let continueWhile = true
-      while (continueWhile) {
+      before(async function () {
+        await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'runner' })
+        peertubeRunner.kill()
         await wait(500)
 
-        const { data } = await servers[0].runnerJobs.list({ stateOneOf: [ RunnerJobState.ERRORED ] })
+        const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
+        await peertubeRunner.runServer({ jobType: 'live-rtmp-hls-transcoding' })
+        await peertubeRunner.registerPeerTubeInstance({ registrationToken, runnerName: 'runner' })
+      })
 
-        continueWhile = !data.some(j => j.type === 'video-transcription')
-      }
+      it('Should not run transcription', async function () {
+        this.timeout(60000)
 
-      await checkNoCaption(servers, uuid)
-      await checkLanguage(servers, uuid, null)
-    })
-  })
+        const uuid = await uploadForTranscription(servers[0])
+        await waitJobs(servers)
+        await wait(2000)
 
-  describe('When transcription is not enabled in runner', function () {
+        const { data } = await servers[0].runnerJobs.list({ stateOneOf: [ RunnerJobState.PENDING ] })
+        expect(data.some(j => j.type === 'video-transcription')).to.be.true
 
-    before(async function () {
-      await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'runner' })
-      peertubeRunner.kill()
-      await wait(500)
-
-      const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
-      await peertubeRunner.runServer({ jobType: 'live-rtmp-hls-transcoding' })
-      await peertubeRunner.registerPeerTubeInstance({ registrationToken, runnerName: 'runner' })
+        await checkNoCaption(servers, uuid)
+        await checkLanguage(servers, uuid, null)
+      })
     })
 
-    it('Should not run transcription', async function () {
-      this.timeout(60000)
+    describe('Check cleanup', function () {
 
-      const uuid = await uploadForTranscription(servers[0])
-      await waitJobs(servers)
-      await wait(2000)
-
-      const { data } = await servers[0].runnerJobs.list({ stateOneOf: [ RunnerJobState.PENDING ] })
-      expect(data.some(j => j.type === 'video-transcription')).to.be.true
-
-      await checkNoCaption(servers, uuid)
-      await checkLanguage(servers, uuid, null)
-    })
-  })
-
-  describe('Check cleanup', function () {
-
-    it('Should have an empty cache directory', async function () {
-      await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner, 'transcription')
+      it('Should have an empty cache directory', async function () {
+        await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner, 'transcription')
+      })
     })
   })
 

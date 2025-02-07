@@ -17,7 +17,7 @@ export abstract class Actor implements ServerActor {
 
   isLocal: boolean
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size?: number) {
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, fileUrl?: string, url?: string, path: string }[] }, size?: number) {
     const avatarsAscWidth = actor.avatars.sort((a, b) => a.width - b.width)
 
     const avatar = size && avatarsAscWidth.length > 1
@@ -25,6 +25,7 @@ export abstract class Actor implements ServerActor {
       : avatarsAscWidth[avatarsAscWidth.length - 1] // Bigger one
 
     if (!avatar) return ''
+    if (avatar.fileUrl) return avatar.fileUrl
     if (avatar.url) return avatar.url
 
     const absoluteAPIUrl = getAbsoluteAPIUrl()

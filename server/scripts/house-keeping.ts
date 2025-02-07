@@ -6,7 +6,7 @@ import Bluebird from 'bluebird'
 import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
 
 const program = createCommand()
-  .description('Remove unused objects from database or remote files')
+  .description('Remove remote files')
   .option('--delete-remote-files', 'Remove remote files (avatars, banners, thumbnails...)')
   .parse(process.argv)
 

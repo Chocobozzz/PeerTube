@@ -155,7 +155,7 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
   }
 
   private parseCurrentCaption () {
-    this.captionService.getCaptionContent({ captionPath: this.currentCaption.captionPath })
+    this.captionService.getCaptionContent({ fileUrl: this.currentCaption.fileUrl })
       .subscribe({
         next: content => {
           try {

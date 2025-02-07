@@ -21,6 +21,7 @@ import { VideoModel } from '../video/video.js'
 import { UserNotificationListQueryBuilder } from './sql/user-notitication-list-query-builder.js'
 import { UserRegistrationModel } from './user-registration.js'
 import { UserModel } from './user.js'
+import { ActorImageModel } from '../actor/actor-image.js'
 
 @Table({
   tableName: 'userNotification',
@@ -552,13 +553,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
 
   formatAvatar (a: UserNotificationIncludes.ActorImageInclude) {
     return {
-      path: a.getStaticPath(),
-      width: a.width
-    }
-  }
-
-  formatVideoCaption (a: UserNotificationIncludes.ActorImageInclude) {
-    return {
+      fileUrl: ActorImageModel.getImageUrl(a),
       path: a.getStaticPath(),
       width: a.width
     }

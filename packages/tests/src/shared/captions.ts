@@ -1,21 +1,13 @@
-import { expect } from 'chai'
-import request from 'supertest'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { expect } from 'chai'
+import { makeRawRequest } from '../../../server-commands/src/requests/requests.js'
 
-async function testCaptionFile (url: string, captionPath: string, toTest: RegExp | string) {
-  const res = await request(url)
-    .get(captionPath)
-    .expect(HttpStatusCode.OK_200)
+export async function testCaptionFile (fileUrl: string, toTest: RegExp | string) {
+  const res = await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.OK_200 })
 
   if (toTest instanceof RegExp) {
     expect(res.text).to.match(toTest)
   } else {
     expect(res.text).to.contain(toTest)
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  testCaptionFile
 }

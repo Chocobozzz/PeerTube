@@ -48,7 +48,7 @@ describe('Test CLI wrapper', function () {
   describe('Authentication and instance selection', function () {
 
     it('Should get an access token', async function () {
-      const stdout = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
       const token = stdout.trim()
 
       const body = await server.users.getMyInfo({ token })

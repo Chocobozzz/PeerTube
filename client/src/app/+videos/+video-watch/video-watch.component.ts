@@ -787,12 +787,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       label: c.language.label,
       language: c.language.id,
       automaticallyGenerated: c.automaticallyGenerated,
-      src: environment.apiUrl + c.captionPath
+      src: c.fileUrl
     }))
 
     const storyboard = storyboards.length !== 0
       ? {
-        url: environment.apiUrl + storyboards[0].storyboardPath,
+        url: storyboards[0].fileUrl,
         height: storyboards[0].spriteHeight,
         width: storyboards[0].spriteWidth,
         interval: storyboards[0].spriteDuration

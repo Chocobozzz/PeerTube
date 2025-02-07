@@ -10,7 +10,7 @@ import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models/index.
 import { federateVideoIfNeeded } from './activitypub/videos/index.js'
 import { JobQueue } from './job-queue/index.js'
 import { Notifier } from './notifier/index.js'
-import { buildMoveJob } from './video-jobs.js'
+import { buildMoveVideoJob } from './video-jobs.js'
 
 function buildNextVideoState (currentState?: VideoStateType) {
   if (currentState === VideoState.PUBLISHED) {
@@ -94,7 +94,7 @@ async function moveToExternalStorageState (options: {
   logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
 
   try {
-    await JobQueue.Instance.createJob(await buildMoveJob({ video, previousVideoState, isNewVideo, type: 'move-to-object-storage' }))
+    await JobQueue.Instance.createJob(await buildMoveVideoJob({ video, previousVideoState, isNewVideo, type: 'move-to-object-storage' }))
 
     return true
   } catch (err) {
@@ -120,7 +120,7 @@ async function moveToFileSystemState (options: {
   logger.info('Creating move to file system job for video %s.', video.uuid, { tags: [ video.uuid ] })
 
   try {
-    await JobQueue.Instance.createJob(await buildMoveJob({ video, previousVideoState, isNewVideo, type: 'move-to-file-system' }))
+    await JobQueue.Instance.createJob(await buildMoveVideoJob({ video, previousVideoState, isNewVideo, type: 'move-to-file-system' }))
 
     return true
   } catch (err) {

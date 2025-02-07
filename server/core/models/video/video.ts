@@ -99,6 +99,7 @@ import {
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
+  MVideoOwned,
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
@@ -935,7 +936,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       },
       include: [
         {
-          attributes: [ 'filename', 'language', 'fileUrl' ],
+          attributes: [ 'filename', 'language', 'storage', 'fileUrl' ],
           model: VideoCaptionModel.unscoped(),
           required: false
         },
@@ -1845,7 +1846,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  isOwned () {
+  isOwned (this: MVideoOwned) {
     return this.remote === false
   }
 
@@ -1922,7 +1923,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       if (isArray(videoAP.VideoCaptions)) return videoAP.VideoCaptions
 
       return this.$get('VideoCaptions', {
-        attributes: [ 'filename', 'language', 'fileUrl', 'automaticallyGenerated' ],
+        attributes: [ 'filename', 'language', 'fileUrl', 'storage', 'automaticallyGenerated' ],
         transaction
       }) as Promise<MVideoCaptionLanguageUrl[]>
     }

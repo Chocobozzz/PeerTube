@@ -1,11 +1,12 @@
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { MStreamingPlaylistVideo, MVideo, MVideoFile } from '@server/types/models/index.js'
+import { MStreamingPlaylistVideo, MVideo, MVideoCaption, MVideoFile } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { basename, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import {
+  generateCaptionObjectStorageKey,
   generateHLSObjectBaseStorageKey,
   generateHLSObjectStorageKey,
   generateOriginalVideoObjectStorageKey,
@@ -71,6 +72,18 @@ export function storeWebVideoFile (video: MVideo, file: MVideoFile) {
 
 // ---------------------------------------------------------------------------
 
+export function storeVideoCaption (inputPath: string, filename: string) {
+  return storeObject({
+    inputPath,
+    objectStorageKey: generateCaptionObjectStorageKey(filename),
+    bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS,
+    isPrivate: false,
+    contentType: 'text/vtt'
+  })
+}
+
+// ---------------------------------------------------------------------------
+
 export function storeOriginalVideoFile (inputPath: string, filename: string) {
   return storeObject({
     inputPath,
@@ -130,6 +143,12 @@ export function removeOriginalFileObjectStorage (videoSource: MVideoSource) {
 
 // ---------------------------------------------------------------------------
 
+export function removeCaptionObjectStorage (videoCaption: MVideoCaption) {
+  return removeObject(generateCaptionObjectStorageKey(videoCaption.filename), CONFIG.OBJECT_STORAGE.CAPTIONS)
+}
+
+// ---------------------------------------------------------------------------
+
 export async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, filename: string, destination: string) {
   const key = generateHLSObjectStorageKey(playlist, filename)
 
@@ -167,6 +186,20 @@ export async function makeOriginalFileAvailable (keptOriginalFilename: string, d
     key,
     destination,
     bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES
+  })
+
+  return destination
+}
+
+export async function makeCaptionFileAvailable (filename: string, destination: string) {
+  const key = generateCaptionObjectStorageKey(filename)
+
+  logger.info('Fetching Caption file %s from object storage to %s.', key, destination, lTags())
+
+  await makeAvailable({
+    key,
+    destination,
+    bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS
   })
 
   return destination

@@ -267,27 +267,46 @@ describe('Test prune storage CLI', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
     const videos: string[] = []
+
     const objectStorage = new ObjectStorageCommand()
+
+    const videoFileUrls: { [ uuid: string ]: string[] } = {}
+    const sourceFileUrls: { [ uuid: string ]: string } = {}
+    const captionFileUrls: { [ uuid: string ]: { [ language: string ]: string } } = {}
 
     let sqlCommand: SQLCommand
     let rootId: number
+    let captionVideoId: number
+
+    async function execPruneStorage () {
+      const env = servers[0].cli.getEnv(objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false }))
+
+      await servers[0].cli.execWithEnv(`${env} npm run prune-storage -- -y`)
+    }
 
     async function checkVideosFiles (uuids: string[], expectedStatus: HttpStatusCodeType) {
       for (const uuid of uuids) {
-        const video = await servers[0].videos.getWithToken({ id: uuid })
-
-        for (const file of getAllFiles(video)) {
-          await makeRawRequest({ url: file.fileUrl, token: servers[0].accessToken, expectedStatus })
+        for (const url of videoFileUrls[uuid]) {
+          await makeRawRequest({ url, token: servers[0].accessToken, expectedStatus })
         }
 
-        const source = await servers[0].videos.getSource({ id: uuid })
-        await makeRawRequest({ url: source.fileDownloadUrl, redirects: 1, token: servers[0].accessToken, expectedStatus })
+        await makeRawRequest({ url: sourceFileUrls[uuid], redirects: 1, token: servers[0].accessToken, expectedStatus })
+      }
+    }
+
+    async function checkCaptionFiles (uuids: string[], languages: string[], expectedStatus: HttpStatusCodeType) {
+      for (const uuid of uuids) {
+        for (const language of languages) {
+          await makeRawRequest({ url: captionFileUrls[uuid][language], token: servers[0].accessToken, expectedStatus })
+        }
       }
     }
 
     async function checkUserExport (expectedStatus: HttpStatusCodeType) {
-      const { data } = await servers[0].userExports.list({ userId: rootId })
-      await makeRawRequest({ url: data[0].privateDownloadUrl, redirects: 1, expectedStatus })
+      const { data: userExports } = await servers[0].userExports.list({ userId: rootId })
+      const userExportUrl = userExports[0].privateDownloadUrl
+
+      await makeRawRequest({ url: userExportUrl, token: servers[0].accessToken, redirects: 1, expectedStatus })
     }
 
     before(async function () {
@@ -297,7 +316,7 @@ describe('Test prune storage CLI', function () {
 
       await objectStorage.prepareDefaultMockBuckets()
 
-      await servers[0].run(objectStorage.getDefaultMockConfig())
+      await servers[0].run(objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false }))
 
       {
         const { uuid } = await servers[0].videos.quickUpload({ name: 's3 video 1', privacy: VideoPrivacy.PUBLIC })
@@ -310,7 +329,13 @@ describe('Test prune storage CLI', function () {
       }
 
       {
-        const { uuid } = await servers[0].videos.quickUpload({ name: 's3 video 3', privacy: VideoPrivacy.PRIVATE })
+        const { id, uuid } = await servers[0].videos.quickUpload({ name: 's3 video 3', privacy: VideoPrivacy.PRIVATE })
+
+        await servers[0].captions.add({ language: 'ar', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+
+        await servers[0].captions.add({ language: 'zh', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+        captionVideoId = id
+
         videos.push(uuid)
       }
 
@@ -321,33 +346,62 @@ describe('Test prune storage CLI', function () {
       await servers[0].userExports.request({ userId: rootId, withVideoFiles: false })
 
       await waitJobs([ servers[0] ])
+
+      // Grab all file URLs
+      for (const uuid of videos) {
+        const video = await servers[0].videos.getWithToken({ id: uuid })
+
+        videoFileUrls[uuid] = getAllFiles(video).map(f => f.fileUrl)
+
+        const source = await servers[0].videos.getSource({ id: uuid })
+        sourceFileUrls[uuid] = source.fileDownloadUrl
+
+        const { data: captions } = await servers[0].captions.list({ videoId: uuid, token: servers[0].accessToken })
+        if (!captionFileUrls[uuid]) captionFileUrls[uuid] = {}
+
+        for (const caption of captions) {
+          captionFileUrls[uuid][caption.language.id] = caption.fileUrl
+        }
+      }
     })
 
     it('Should have the files on object storage', async function () {
       await checkVideosFiles(videos, HttpStatusCode.OK_200)
       await checkUserExport(HttpStatusCode.OK_200)
+      await checkCaptionFiles([ videos[2] ], [ 'ar', 'zh' ], HttpStatusCode.OK_200)
     })
 
     it('Should run prune-storage script on videos', async function () {
       await sqlCommand.setVideoFileStorageOf(videos[1], FileStorage.FILE_SYSTEM)
       await sqlCommand.setVideoFileStorageOf(videos[2], FileStorage.FILE_SYSTEM)
 
+      await execPruneStorage()
+
       await checkVideosFiles([ videos[1], videos[2] ], HttpStatusCode.NOT_FOUND_404)
       await checkVideosFiles([ videos[0] ], HttpStatusCode.OK_200)
 
       await checkUserExport(HttpStatusCode.OK_200)
+      await checkCaptionFiles([ videos[2] ], [ 'ar', 'zh' ], HttpStatusCode.OK_200)
     })
 
     it('Should run prune-storage script on exports', async function () {
       await sqlCommand.setUserExportStorageOf(rootId, FileStorage.FILE_SYSTEM)
-
-      await checkVideosFiles([ videos[1], videos[2] ], HttpStatusCode.NOT_FOUND_404)
-      await checkVideosFiles([ videos[0] ], HttpStatusCode.OK_200)
+      await execPruneStorage()
 
       await checkUserExport(HttpStatusCode.NOT_FOUND_404)
+      await checkCaptionFiles([ videos[2] ], [ 'ar', 'zh' ], HttpStatusCode.OK_200)
+    })
+
+    it('Should run prune-storage script on captions', async function () {
+      await sqlCommand.setCaptionStorageOf(captionVideoId, 'zh', FileStorage.FILE_SYSTEM)
+      await execPruneStorage()
+
+      await checkCaptionFiles([ videos[2] ], [ 'ar' ], HttpStatusCode.OK_200)
+      await checkCaptionFiles([ videos[2] ], [ 'zh' ], HttpStatusCode.NOT_FOUND_404)
     })
 
     after(async function () {
+      await objectStorage.cleanupMock()
       await sqlCommand.cleanup()
     })
   })

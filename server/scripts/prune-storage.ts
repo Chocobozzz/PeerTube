@@ -1,3 +1,4 @@
+import { createCommand } from '@commander-js/extra-typings'
 import { uniqify } from '@peertube/peertube-core-utils'
 import { FileStorage, ThumbnailType, ThumbnailType_Type } from '@peertube/peertube-models'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX } from '@server/initializers/constants.js'
@@ -20,6 +21,13 @@ import { VideoRedundancyModel } from '../core/models/redundancy/video-redundancy
 import { ThumbnailModel } from '../core/models/video/thumbnail.js'
 import { VideoModel } from '../core/models/video/video.js'
 import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
+
+const program = createCommand()
+  .description('Remove unused local objects (video files, captions, user exports...) from object storage or file system')
+  .option('-y, --yes', 'Auto confirm files deletion')
+  .parse(process.argv)
+
+const options = program.opts()
 
 run()
   .then(() => process.exit(0))
@@ -56,6 +64,7 @@ class ObjectStoragePruner {
     await this.findFilesToDelete(CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS, this.doesStreamingPlaylistFileExistFactory())
     await this.findFilesToDelete(CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES, this.doesOriginalFileExistFactory())
     await this.findFilesToDelete(CONFIG.OBJECT_STORAGE.USER_EXPORTS, this.doesUserExportFileExistFactory())
+    await this.findFilesToDelete(CONFIG.OBJECT_STORAGE.CAPTIONS, this.doesCaptionFileExistFactory())
 
     if (this.keysToDelete.length === 0) {
       console.log('No unknown object storage files to delete.')
@@ -65,7 +74,7 @@ class ObjectStoragePruner {
     const formattedKeysToDelete = this.keysToDelete.map(({ bucket, key }) => ` In bucket ${bucket}: ${key}`).join('\n')
     console.log(`${this.keysToDelete.length} unknown files from object storage can be deleted:\n${formattedKeysToDelete}\n`)
 
-    const res = await askPruneConfirmation()
+    const res = await askPruneConfirmation(options.yes)
     if (res !== true) {
       console.log('Exiting without deleting object storage files.')
       return
@@ -97,7 +106,7 @@ class ObjectStoragePruner {
         ? ` and prefix ${config.PREFIX}`
         : ''
 
-      console.error('Cannot find files to delete in bucket ' + config.BUCKET_NAME + prefixMessage)
+      console.error('Cannot find files to delete in bucket ' + config.BUCKET_NAME + prefixMessage, { err })
     }
   }
 
@@ -105,13 +114,14 @@ class ObjectStoragePruner {
     return (key: string) => {
       const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
 
-      return VideoFileModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+      return VideoFileModel.doesOwnedWebVideoFileExist(filename, FileStorage.OBJECT_STORAGE)
     }
   }
 
   private doesStreamingPlaylistFileExistFactory () {
     return (key: string) => {
-      const uuid = basename(dirname(this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)))
+      const sanitizedKey = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+      const uuid = dirname(sanitizedKey).replace(/^hls\//, '')
 
       return VideoStreamingPlaylistModel.doesOwnedVideoUUIDExist(uuid, FileStorage.OBJECT_STORAGE)
     }
@@ -130,6 +140,14 @@ class ObjectStoragePruner {
       const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.USER_EXPORTS)
 
       return UserExportModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesCaptionFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.CAPTIONS)
+
+      return VideoCaptionModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
     }
   }
 
@@ -191,7 +209,7 @@ class FSPruner {
     const formattedKeysToDelete = this.pathsToDelete.map(p => ` ${p}`).join('\n')
     console.log(`${this.pathsToDelete.length} unknown files from filesystem can be deleted:\n${formattedKeysToDelete}\n`)
 
-    const res = await askPruneConfirmation()
+    const res = await askPruneConfirmation(options.yes)
     if (res !== true) {
       console.log('Exiting without deleting filesystem files.')
       return
@@ -223,7 +241,7 @@ class FSPruner {
       // Don't delete private directory
       if (filePath === DIRECTORIES.WEB_VIDEOS.PRIVATE) return true
 
-      return VideoFileModel.doesOwnedFileExist(basename(filePath), FileStorage.FILE_SYSTEM)
+      return VideoFileModel.doesOwnedWebVideoFileExist(basename(filePath), FileStorage.FILE_SYSTEM)
     }
   }
 
@@ -320,7 +338,9 @@ class FSPruner {
   }
 }
 
-async function askPruneConfirmation () {
+async function askPruneConfirmation (yes?: boolean) {
+  if (yes === true) return true
+
   return askConfirmation(
     'These unknown files can be deleted, but please check your backups first (bugs happen). ' +
     'Can we delete these files?'

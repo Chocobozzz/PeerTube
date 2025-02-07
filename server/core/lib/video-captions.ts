@@ -1,4 +1,4 @@
-import { VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, TranscriptionModel, WhisperBuiltinModel, transcriberFactory } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
@@ -34,6 +34,7 @@ export async function createLocalCaption (options: {
   const videoCaption = new VideoCaptionModel({
     videoId: video.id,
     filename: VideoCaptionModel.generateCaptionName(language),
+    storage: FileStorage.FILE_SYSTEM,
     language,
     automaticallyGenerated
   }) as MVideoCaption
@@ -45,6 +46,12 @@ export async function createLocalCaption (options: {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
     })
   })
+
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+    await JobQueue.Instance.createJob({ type: 'move-to-object-storage', payload: { captionId: videoCaption.id } })
+  }
+
+  logger.info(`Created/replaced caption ${videoCaption.filename} of ${language} of video ${video.uuid}`, lTags(video.uuid))
 
   return Object.assign(videoCaption, { Video: video })
 }

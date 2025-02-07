@@ -1,6 +1,6 @@
 import { ActivityIconObject, ActorImage, ActorImageType, type ActorImageType_Type } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { MActorId, MActorImage, MActorImageFormattable } from '@server/types/models/index.js'
+import { MActorId, MActorImage, MActorImageFormattable, MActorImagePath } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Op } from 'sequelize'
@@ -149,7 +149,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     })
   }
 
-  static getImageUrl (image: MActorImage) {
+  static getImageUrl (image: MActorImagePath) {
     if (!image) return undefined
 
     return WEBSERVER.URL + image.getStaticPath()
@@ -161,6 +161,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     return {
       width: this.width,
       path: this.getStaticPath(),
+      fileUrl: ActorImageModel.getImageUrl(this),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -178,7 +179,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     }
   }
 
-  getStaticPath () {
+  getStaticPath (this: MActorImagePath) {
     switch (this.type) {
       case ActorImageType.AVATAR:
         return join(LAZY_STATIC_PATHS.AVATARS, this.filename)

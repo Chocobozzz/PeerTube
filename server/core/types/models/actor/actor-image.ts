@@ -5,8 +5,10 @@ export type MActorImage = ActorImageModel
 
 // ############################################################################
 
+export type MActorImagePath = Pick<MActorImage, 'type' | 'filename' | 'getStaticPath'>
+
 // Format for API or AP object
 
 export type MActorImageFormattable =
   FunctionProperties<MActorImage> &
-  Pick<MActorImage, 'width' | 'filename' | 'createdAt' | 'updatedAt'>
+  Pick<MActorImage, 'type' | 'getStaticPath' | 'width' | 'filename' | 'createdAt' | 'updatedAt'>

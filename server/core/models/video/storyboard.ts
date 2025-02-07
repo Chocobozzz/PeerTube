@@ -141,6 +141,10 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
     return this.fileUrl
   }
 
+  getFileUrl () {
+    return WEBSERVER.URL + this.getLocalStaticPath()
+  }
+
   getLocalStaticPath () {
     return LAZY_STATIC_PATHS.STORYBOARDS + this.filename
   }
@@ -155,6 +159,7 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
 
   toFormattedJSON (this: MStoryboardVideo): Storyboard {
     return {
+      fileUrl: this.getFileUrl(),
       storyboardPath: this.getLocalStaticPath(),
 
       totalHeight: this.totalHeight,

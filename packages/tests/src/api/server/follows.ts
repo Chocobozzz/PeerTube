@@ -575,7 +575,7 @@ describe('Test follows', function () {
         expect(caption1.language.id).to.equal('ar')
         expect(caption1.language.label).to.equal('Arabic')
         expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/.+-ar.vtt$'))
-        await testCaptionFile(servers[0].url, caption1.captionPath, 'Subtitle good 2.')
+        await testCaptionFile(caption1.fileUrl, 'Subtitle good 2.')
       })
 
       it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {

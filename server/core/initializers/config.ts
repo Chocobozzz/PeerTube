@@ -170,6 +170,11 @@ const CONFIG = {
       BUCKET_NAME: config.get<string>('object_storage.original_video_files.bucket_name'),
       PREFIX: config.get<string>('object_storage.original_video_files.prefix'),
       BASE_URL: config.get<string>('object_storage.original_video_files.base_url')
+    },
+    CAPTIONS: {
+      BUCKET_NAME: config.get<string>('object_storage.captions.bucket_name'),
+      PREFIX: config.get<string>('object_storage.captions.prefix'),
+      BASE_URL: config.get<string>('object_storage.captions.base_url')
     }
   },
   WEBSERVER: {

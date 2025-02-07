@@ -135,10 +135,10 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
       return
     }
 
-    const { captionPath } = this.videoCaption
-    if (!captionPath) return
+    const { fileUrl } = this.videoCaption
+    if (!fileUrl) return
 
-    this.videoCaptionService.getCaptionContent({ captionPath })
+    this.videoCaptionService.getCaptionContent({ fileUrl })
       .subscribe(content => {
         this.loadSegments(content)
       })

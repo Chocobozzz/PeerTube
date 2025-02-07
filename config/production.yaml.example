@@ -258,6 +258,12 @@ object_storage:
     prefix: ''
     base_url: ''
 
+  # Video captions
+  captions:
+    bucket_name: 'captions'
+    prefix: ''
+    base_url: ''
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 

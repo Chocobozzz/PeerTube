@@ -40,7 +40,7 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
     const video = await VideoModel.loadFull(videoCaption.videoId)
     if (!video) return undefined
 
-    const remoteUrl = videoCaption.getFileUrl(video)
+    const remoteUrl = videoCaption.getOriginFileUrl(video)
     const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.filename)
 
     try {

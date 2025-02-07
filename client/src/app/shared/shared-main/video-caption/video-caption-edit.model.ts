@@ -11,4 +11,4 @@ export interface VideoCaptionEdit {
   updatedAt?: string
 }
 
-export type VideoCaptionWithPathEdit = VideoCaptionEdit & { captionPath?: string }
+export type VideoCaptionWithPathEdit = VideoCaptionEdit & { fileUrl?: string }
