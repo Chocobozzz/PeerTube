@@ -50,8 +50,6 @@ server {
   ssl_session_timeout       1d; # defaults to 5m
   ssl_session_cache         shared:SSL:10m; # estimated to 40k sessions
   ssl_session_tickets       off;
-  ssl_stapling              on;
-  ssl_stapling_verify       on;
   # HSTS (https://hstspreload.org), requires to be copied in 'location' sections that have add_header directives
   #add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
 
