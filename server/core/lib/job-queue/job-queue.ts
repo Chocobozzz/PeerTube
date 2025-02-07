@@ -7,7 +7,6 @@ import {
   ActorKeysPayload,
   AfterVideoChannelImportPayload,
   CreateUserExportPayload,
-  DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
   GenerateStoryboardPayload,
@@ -94,7 +93,6 @@ export type CreateJobArgument =
   { type: 'video-live-ending', payload: VideoLiveEndingPayload } |
   { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
-  { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
   { type: 'move-to-object-storage', payload: MoveStoragePayload } |

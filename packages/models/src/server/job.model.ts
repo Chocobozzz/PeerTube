@@ -200,10 +200,6 @@ export interface ActorKeysPayload {
   actorId: number
 }
 
-export interface DeleteResumableUploadMetaFilePayload {
-  filepath: string
-}
-
 // ---------------------------------------------------------------------------
 
 export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
