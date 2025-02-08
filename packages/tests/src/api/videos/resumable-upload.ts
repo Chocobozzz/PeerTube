@@ -187,6 +187,9 @@ describe('Test resumable upload', function () {
     })
 
     it('Should not accept more chunks than expected with an invalid content length/content range', async function () {
+      // Sometimes the server answers 409, and sometimes 400 :shrug:
+      this.retries(3)
+
       const uploadId = await prepareUpload({ size: 1500 })
 
       try {

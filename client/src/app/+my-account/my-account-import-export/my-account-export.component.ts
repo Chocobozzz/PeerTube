@@ -16,7 +16,6 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-export',
   templateUrl: './my-account-export.component.html',
   styleUrls: [ './my-account-export.component.scss' ],
-  standalone: true,
   imports: [ NgIf, NgFor, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, PTDatePipe, BytesPipe, AlertComponent ]
 })
 export class MyAccountExportComponent implements OnInit {

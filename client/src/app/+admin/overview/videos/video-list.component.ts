@@ -37,7 +37,6 @@ import { VideoAdminService } from './video-admin.service'
   selector: 'my-video-list',
   templateUrl: './video-list.component.html',
   styleUrls: [ './video-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

@@ -117,10 +117,9 @@ type URLOptions = {
 };
 
 @Component({
-  selector: "my-video-watch",
-  templateUrl: "./video-watch.component.html",
-  styleUrls: ["./video-watch.component.scss"],
-  standalone: true,
+  selector: 'my-video-watch',
+  templateUrl: './video-watch.component.html',
+  styleUrls: ['./video-watch.component.scss'],
   imports: [
     NgClass,
     NgIf,
@@ -209,7 +208,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private location: PlatformLocation,
     private metaService: MetaService,
     @Inject(LOCALE_ID) private localeId: string
-  ) {}
+  ) { }
 
   get user() {
     return this.authService.getUser();
@@ -866,11 +865,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const storyboard =
       storyboards.length !== 0
         ? {
-            url: environment.apiUrl + storyboards[0].storyboardPath,
-            height: storyboards[0].spriteHeight,
-            width: storyboards[0].spriteWidth,
-            interval: storyboards[0].spriteDuration,
-          }
+          url: environment.apiUrl + storyboards[0].storyboardPath,
+          height: storyboards[0].spriteHeight,
+          width: storyboards[0].spriteWidth,
+          interval: storyboards[0].spriteDuration,
+        }
         : undefined;
 
     const liveOptions = video.isLive
@@ -928,9 +927,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         handler: this.playlist
           ? () =>
-              this.zone.run(() =>
-                this.videoWatchPlaylist.navigateToPreviousPlaylistVideo()
-              )
+            this.zone.run(() =>
+              this.videoWatchPlaylist.navigateToPreviousPlaylistVideo()
+            )
           : undefined,
 
         displayControlBarButton: !!this.playlist,

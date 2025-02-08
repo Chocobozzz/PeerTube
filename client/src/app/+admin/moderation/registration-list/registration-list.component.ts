@@ -21,7 +21,6 @@ import { ProcessRegistrationModalComponent } from './process-registration-modal.
   selector: 'my-registration-list',
   templateUrl: './registration-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

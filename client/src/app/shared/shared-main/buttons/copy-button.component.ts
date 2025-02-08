@@ -8,7 +8,6 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
   selector: 'my-copy-button',
   styleUrls: [ './copy-button.component.scss' ],
   templateUrl: './copy-button.component.html',
-  standalone: true,
   providers: [ Clipboard ],
   imports: [ NgClass, GlobalIconComponent ]
 })

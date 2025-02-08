@@ -17,7 +17,6 @@ import { NgClass, NgIf } from '@angular/common'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ NgClass, NgbTooltip, NgIf, GlobalIconComponent, FormsModule ]
 })
 export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {

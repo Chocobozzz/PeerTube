@@ -13,7 +13,6 @@ import { AutoColspanDirective } from '../../shared/shared-main/common/auto-colsp
 @Component({
   selector: 'my-account-blocklist',
   templateUrl: '../../shared/shared-moderation/account-blocklist.component.html',
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,

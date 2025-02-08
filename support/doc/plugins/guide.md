@@ -33,6 +33,7 @@ Example:
 
 ```js
 async function register ({
+  doAction,
   registerHook,
 
   registerSetting,
@@ -105,6 +106,8 @@ function register ({ registerHook, peertubeHelpers }) {
   })
 }
 ```
+
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete hooks list.
 
 ### Static files
 
@@ -919,6 +922,39 @@ function register ({ registerClientRoute }) {
 
 You can then access the page on `/p/my-super/route` (please note the additional `/p/` in the path).
 
+#### Run actions
+
+Plugin can trigger actions in the client by calling `doAction` with a specific action.
+This can be used in combination with a hook to add custom admin actions, for instance:
+
+```js
+function register ({ registerHook, doAction }) {
+  registerHook({
+    target: 'filter:admin-video-comments-list.bulk-actions.create.result',
+    handler: async menuItems => {
+      return menuItems.concat(
+      [
+        {
+          label: 'Mark as spam',
+          description: 'Report as spam and delete user.',
+          handler: async (comments) => {
+            // Show the loader
+            doAction('application:increment-loader')
+            // Run custom function
+            await deleteCommentsAndMarkAsSpam(comments)
+            // Reload the list in order for the admin to see the updated list
+            await doAction('admin-video-comments-list:load-data')
+          },
+          isDisplayed: (users) => true,
+        }
+      ])
+    }
+  })
+}
+```
+
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete `doAction` list.
+
 ### Publishing
 
 PeerTube plugins and themes should be published on [NPM](https://www.npmjs.com/) so that PeerTube indexes take into account your plugin (after ~ 1 day). An official plugin index is available on [packages.joinpeertube.org](https://packages.joinpeertube.org/api/v1/plugins), with no interface to present packages.
@@ -1167,7 +1203,7 @@ you can deprecate it. The plugin index will automatically remove it preventing u
 npm deprecate peertube-plugin-xxx@"> 0.0.0" "explain here why you deprecate your plugin/theme"
 ```
 
-## Plugin & Theme hooks/helpers API
+## Plugin & Theme hooks/actions/helpers API
 
 See the dedicated documentation: https://docs.joinpeertube.org/api/plugins
 
@@ -1206,6 +1242,11 @@ If you want to create an antispam/moderation plugin, you could use the following
  * `filter:api.video-threads.list.result`: to change/hide the text of threads
  * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies
  * `filter:video.auto-blacklist.result`: to automatically blacklist local or remote videos
+ * `filter:admin-users-list.bulk-actions.create.result`: to add bulk actions in the admin users list
+ * `filter:admin-video-comments-list.actions.create.result`: to add actions in the admin video comments list
+ * `filter:admin-video-comments-list.bulk-actions.create.result`: to add bulk actions in the admin video comments list
+ * `filter:user-moderation.actions.create.result`: to add actions in the user moderation dropdown (available in multiple views)
+ * `filter:admin-abuse-list.actions.create.result`: to add actions in the admin abuse list
 
 ### Other plugin examples
 

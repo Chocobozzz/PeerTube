@@ -38,7 +38,6 @@ import { VideoSend } from './video-send'
     './video-upload.component.scss',
     './video-send.scss'
   ],
-  standalone: true,
   imports: [
     NgIf,
     DragDropDirective,

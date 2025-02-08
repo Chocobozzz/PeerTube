@@ -6,7 +6,6 @@ import { UserRight, UserRightType } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './admin-overview.component.html',
-  standalone: true,
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminOverviewComponent implements OnInit {

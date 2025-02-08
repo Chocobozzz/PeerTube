@@ -18,52 +18,6 @@ import { ServerModel } from '../../models/server/server.js'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared/index.js'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 
-const videoFileRedundancyGetValidator = [
-  isValidVideoIdParam('videoId'),
-
-  param('resolution')
-    .customSanitizer(toIntOrNull)
-    .custom(exists),
-  param('fps')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(exists),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!canVideoBeFederated(res.locals.onlyVideo)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
-
-    const video = res.locals.videoAll
-
-    const paramResolution = req.params.resolution as unknown as number // We casted to int above
-    const paramFPS = req.params.fps as unknown as number // We casted to int above
-
-    const videoFile = video.VideoFiles.find(f => {
-      return f.resolution === paramResolution && (!req.params.fps || paramFPS)
-    })
-
-    if (!videoFile) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Video file not found.'
-      })
-    }
-    res.locals.videoFile = videoFile
-
-    const videoRedundancy = await VideoRedundancyModel.loadLocalByFileId(videoFile.id)
-    if (!videoRedundancy) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Video redundancy not found.'
-      })
-    }
-    res.locals.videoRedundancy = videoRedundancy
-
-    return next()
-  }
-]
-
 const videoPlaylistRedundancyGetValidator = [
   isValidVideoIdParam('videoId'),
 
@@ -192,7 +146,6 @@ const removeVideoRedundancyValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videoFileRedundancyGetValidator,
   videoPlaylistRedundancyGetValidator,
   updateServerRedundancyValidator,
   listVideoRedundanciesValidator,

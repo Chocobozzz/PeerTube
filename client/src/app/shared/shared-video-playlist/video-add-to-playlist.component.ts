@@ -44,7 +44,6 @@ type PlaylistSummary = {
   styleUrls: [ './video-add-to-playlist.component.scss' ],
   templateUrl: './video-add-to-playlist.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     FormsModule,
     NgFor,

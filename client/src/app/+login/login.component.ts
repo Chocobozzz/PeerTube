@@ -24,7 +24,6 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
   selector: 'my-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,
@@ -201,19 +200,6 @@ The link will expire within 1 hour.`
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
     this.accordion = instanceAboutAccordion.accordion
-  }
-
-  hasUsernameUppercase () {
-    const username = this.form.value['username']
-    if (!username) return false
-
-    return username.match(/[A-Z]/)
-  }
-
-  hasForgotPasswordEmailUppercase () {
-    if (!this.forgotPasswordEmail) return false
-
-    return this.forgotPasswordEmail.match(/[A-Z]/)
   }
 
   private loadExternalAuthToken (username: string, token: string) {

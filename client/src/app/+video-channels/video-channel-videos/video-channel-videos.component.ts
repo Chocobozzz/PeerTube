@@ -13,7 +13,6 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-video-channel-videos',
   templateUrl: './video-channel-videos.component.html',
-  standalone: true,
   imports: [ NgIf, VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {

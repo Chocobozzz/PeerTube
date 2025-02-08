@@ -235,6 +235,10 @@ body .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
   color: pvar(--on-primary);
   background: pvar(--primary);
+
+  .muted {
+    color: pvar(--on-primary) !important;
+  }
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus {
   background: pvar(--primary);

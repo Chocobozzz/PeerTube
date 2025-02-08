@@ -16,7 +16,6 @@ import { SubscriptionImageComponent } from './subscription-image.component'
   selector: 'my-about-follows',
   templateUrl: './about-follows.component.html',
   styleUrls: [ './about-follows.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgFor,

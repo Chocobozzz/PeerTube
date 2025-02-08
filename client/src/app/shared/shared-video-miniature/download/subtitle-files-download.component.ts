@@ -8,7 +8,6 @@ import { InputTextComponent } from '../../shared-forms/input-text.component'
 @Component({
   selector: 'my-subtitle-files-download',
   templateUrl: './subtitle-files-download.component.html',
-  standalone: true,
   imports: [
     NgIf,
     NgFor,

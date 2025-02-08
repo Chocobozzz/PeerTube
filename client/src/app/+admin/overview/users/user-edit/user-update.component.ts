@@ -31,7 +31,6 @@ import { UserPasswordComponent } from './user-password.component'
   selector: 'my-user-update',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ],
-  standalone: true,
   imports: [
     RouterLink,
     NgIf,

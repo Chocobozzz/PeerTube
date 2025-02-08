@@ -19,7 +19,6 @@ import { ConfigService } from '../shared/config.service'
   selector: 'my-edit-basic-configuration',
   templateUrl: './edit-basic-configuration.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

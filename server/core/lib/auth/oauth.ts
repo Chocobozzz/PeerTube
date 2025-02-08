@@ -154,12 +154,14 @@ async function handlePasswordGrant (options: {
 
   const user = await getUser(usernameOrEmail, password, bypassLogin)
   if (!user) {
-    const registration = await UserRegistrationModel.loadByEmailOrUsername(usernameOrEmail)
+    const registrations = await UserRegistrationModel.listByEmailCaseInsensitiveOrUsername(usernameOrEmail)
 
-    if (registration?.state === UserRegistrationState.REJECTED) {
-      throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
-    } else if (registration?.state === UserRegistrationState.PENDING) {
-      throw new RegistrationWaitingForApproval('Registration for this account is awaiting approval')
+    if (registrations.length === 1) {
+      if (registrations[0].state === UserRegistrationState.REJECTED) {
+        throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
+      } else if (registrations[0].state === UserRegistrationState.PENDING) {
+        throw new RegistrationWaitingForApproval('Registration for this account is awaiting approval')
+      }
     }
 
     throw new InvalidGrantError('Invalid grant: user credentials are invalid')

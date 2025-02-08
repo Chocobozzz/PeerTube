@@ -1,14 +1,13 @@
-import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
+import { PickWith } from '@peertube/peertube-typescript-utils'
 import { VideoFileModel } from '../../../models/video/video-file.js'
-import { MVideo, MVideoUUID } from './video.js'
-import { MVideoRedundancy, MVideoRedundancyFileUrl } from './video-redundancy.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo } from './video-streaming-playlist.js'
+import { MVideo, MVideoUUID } from './video.js'
 
 type Use<K extends keyof VideoFileModel, M> = PickWith<VideoFileModel, K, M>
 
 // ############################################################################
 
-export type MVideoFile = Omit<VideoFileModel, 'Video' | 'RedundancyVideos' | 'VideoStreamingPlaylist'>
+export type MVideoFile = Omit<VideoFileModel, 'Video' | 'VideoStreamingPlaylist'>
 
 export type MVideoFileVideo =
   MVideoFile &
@@ -25,14 +24,6 @@ export type MVideoFileStreamingPlaylistVideo =
 export type MVideoFileVideoUUID =
   MVideoFile &
   Use<'Video', MVideoUUID>
-
-export type MVideoFileRedundanciesAll =
-  MVideoFile &
-  PickWithOpt<VideoFileModel, 'RedundancyVideos', MVideoRedundancy[]>
-
-export type MVideoFileRedundanciesOpt =
-  MVideoFile &
-  PickWithOpt<VideoFileModel, 'RedundancyVideos', MVideoRedundancyFileUrl[]>
 
 export function isStreamingPlaylistFile (file: any): file is MVideoFileStreamingPlaylist {
   return !!file.videoStreamingPlaylistId

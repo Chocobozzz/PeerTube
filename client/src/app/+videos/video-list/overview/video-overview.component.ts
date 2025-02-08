@@ -14,7 +14,6 @@ import { OverviewService } from './overview.service'
   selector: 'my-video-overview',
   templateUrl: './video-overview.component.html',
   styleUrls: [ './video-overview.component.scss' ],
-  standalone: true,
   imports: [
     InfiniteScrollerDirective,
     RouterLink,

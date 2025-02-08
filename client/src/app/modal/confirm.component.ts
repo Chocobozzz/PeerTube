@@ -13,7 +13,6 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
   selector: 'my-confirm',
   templateUrl: './confirm.component.html',
   styleUrls: [ './confirm.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, NgIf, FormsModule, InputTextComponent ]
 })
 export class ConfirmComponent implements OnInit {

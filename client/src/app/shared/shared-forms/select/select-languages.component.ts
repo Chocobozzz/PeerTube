@@ -35,7 +35,6 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
       multi: true
     }
   ],
-  standalone: true,
   imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {

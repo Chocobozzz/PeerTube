@@ -6,7 +6,6 @@ import { NgIf } from '@angular/common'
   selector: 'my-user-email-info',
   templateUrl: './user-email-info.component.html',
   styleUrls: [ './user-email-info.component.scss' ],
-  standalone: true,
   imports: [ NgIf ]
 })
 export class UserEmailInfoComponent {

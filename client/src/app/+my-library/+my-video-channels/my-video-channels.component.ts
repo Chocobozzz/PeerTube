@@ -33,7 +33,6 @@ type CustomChartData = (ChartData & { startDate: string, total: number })
 @Component({
   templateUrl: './my-video-channels.component.html',
   styleUrls: [ './my-video-channels.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     NgIf,

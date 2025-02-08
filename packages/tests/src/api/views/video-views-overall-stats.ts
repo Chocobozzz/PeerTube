@@ -18,11 +18,11 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
  *  * user4 started and ended after end date
  */
 async function simulateComplexViewers (servers: PeerTubeServer[], videoUUID: string, useSessionId: boolean) {
-  const user0 = '8.8.8.8,127.0.0.1'
-  const user1 = '8.8.8.8,127.0.0.1'
-  const user2 = '8.8.8.9,127.0.0.1'
-  const user3 = '8.8.8.10,127.0.0.1'
-  const user4 = '8.8.8.11,127.0.0.1'
+  const user0 = '8-8-8-8-127-0-0-1'
+  const user1 = '8-8-8-8-127-0-0-1'
+  const user2 = '8-8-8-9-127-0-0-1'
+  const user3 = '8-8-8-10-127-0-0-1'
+  const user4 = '8-8-8-11-127-0-0-1'
 
   const sessionIdField = useSessionId
     ? 'sessionId'

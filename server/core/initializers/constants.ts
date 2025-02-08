@@ -54,7 +54,7 @@ import { CONFIG, registerConfigChangedHandler } from "./config.js";
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 865;
+export const LAST_MIGRATION_VERSION = 870
 
 // ---------------------------------------------------------------------------
 
@@ -468,8 +468,8 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [".png", ".jpg", ".jpeg", ".webp"],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024, // 4MB
-      },
+        max: 8 * 1024 * 1024 // 8MB
+      }
     },
     EXTNAME: [] as string[],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
@@ -493,9 +493,9 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [".jpg", ".jpeg"],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024, // 4MB
-      },
-    },
+        max: 8 * 1024 * 1024 // 8MB
+      }
+    }
   },
   ACTORS: {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
@@ -504,9 +504,9 @@ export const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [".png", ".jpeg", ".jpg", ".gif", ".webp"],
       FILE_SIZE: {
-        max: 4 * 1024 * 1024, // 4MB
-      },
-    },
+        max: 8 * 1024 * 1024 // 8MB
+      }
+    }
   },
   VIDEO_EVENTS: {
     COUNT: { min: 0 },
@@ -887,8 +887,8 @@ export const ENCRYPTION = {
 export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60; // 60 minutes
 export const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7; // 7 days
 
-export const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10; // 10 minutes
-export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME = "15 minutes";
+export const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
+export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME: `${number} minutes` | `${number} seconds` = '15 minutes'
 
 export const EMAIL_VERIFY_LIFETIME = 60000 * 60; // 60 minutes
 

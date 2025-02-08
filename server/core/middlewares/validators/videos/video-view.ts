@@ -40,7 +40,7 @@ export const videoViewValidator = [
 
   body('sessionId')
     .optional()
-    .isAlphanumeric(),
+    .isAlphanumeric(undefined, { ignore: '-' }),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return

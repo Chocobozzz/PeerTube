@@ -15,7 +15,6 @@ import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-templa
       multi: true
     }
   ],
-  standalone: true,
   imports: [ FormsModule, NgIf, NgTemplateOutlet, HelpComponent, PeerTubeTemplateDirective ]
 })
 export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterContentInit {

@@ -16,6 +16,7 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'categoryOneOf',
     'licenceOneOf',
     'languageOneOf',
+    'host',
     'privacyOneOf',
     'tagsOneOf',
     'tagsAllOf',

@@ -10,7 +10,6 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
   selector: 'my-about-instance',
   templateUrl: './about-instance.component.html',
   styleUrls: [ './about-instance.component.scss' ],
-  standalone: true,
   imports: [
     InstanceStatRulesComponent,
     HorizontalMenuComponent,

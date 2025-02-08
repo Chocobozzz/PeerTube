@@ -16,7 +16,7 @@ $context-menu-width: 350px;
 
   .vjs-menu-content {
     opacity: $primary-foreground-opacity;
-    color: pvar(--embed-foreground-color);
+    color: pvar(--embed-fg);
     font-size: $font-size !important;
     font-weight: $font-semibold;
   }

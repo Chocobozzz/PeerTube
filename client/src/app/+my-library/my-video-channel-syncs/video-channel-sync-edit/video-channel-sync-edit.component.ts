@@ -20,7 +20,6 @@ import { REQUIRED_VALIDATOR } from '@app/shared/form-validators/common-validator
   selector: 'my-video-channel-sync-edit',
   templateUrl: './video-channel-sync-edit.component.html',
   styleUrls: [ './video-channel-sync-edit.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, SelectChannelComponent, AlertComponent ]
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {

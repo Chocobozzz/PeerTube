@@ -8,7 +8,6 @@ import { NgIf, NgFor, NgClass, NgTemplateOutlet } from '@angular/common'
   templateUrl: './custom-stepper.component.html',
   styleUrls: [ './custom-stepper.component.scss' ],
   providers: [ { provide: CdkStepper, useExisting: CustomStepperComponent } ],
-  standalone: true,
   imports: [ NgIf, NgFor, NgClass, GlobalIconComponent, NgTemplateOutlet ]
 })
 export class CustomStepperComponent extends CdkStepper {

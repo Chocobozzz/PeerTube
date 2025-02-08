@@ -1,14 +1,14 @@
-import { finalize, map } from 'rxjs/operators'
+import { NgFor, NgStyle } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { CommonVideoParams, VideoService } from '@app/shared/shared-main/video/video.service'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ResultList, VideoSortField } from '@peertube/peertube-models'
-import { CustomMarkupComponent } from './shared'
 import { Observable } from 'rxjs'
+import { finalize, map } from 'rxjs/operators'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
-import { NgStyle, NgFor } from '@angular/common'
-import { Video } from '@app/shared/shared-main/video/video.model'
-import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component list videos depending on criteria
@@ -19,7 +19,6 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgStyle, NgFor, VideoMiniatureComponent ]
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
@@ -33,6 +32,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   @Input() maxRows: number
   @Input() channelHandle: string
   @Input() accountHandle: string
+  @Input() host: string
 
   @Output() loaded = new EventEmitter<boolean>()
 
@@ -90,26 +90,37 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   }
 
   getVideosObservable () {
-    const options = {
+    const options: CommonVideoParams = {
       videoPagination: {
         currentPage: 1,
         itemsPerPage: this.count
       },
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
+      host: this.host,
       isLocal: this.isLocal,
       isLive: this.isLive,
       sort: this.sort as VideoSortField,
-      account: { nameWithHost: this.accountHandle },
-      videoChannel: { nameWithHost: this.channelHandle },
       skipCount: true
     }
 
     let obs: Observable<ResultList<Video>>
 
-    if (this.channelHandle) obs = this.videoService.getVideoChannelVideos(options)
-    else if (this.accountHandle) obs = this.videoService.getAccountVideos(options)
-    else obs = this.videoService.getVideos(options)
+    if (this.channelHandle) {
+      obs = this.videoService.getVideoChannelVideos({
+        ...options,
+
+        videoChannel: { nameWithHost: this.channelHandle }
+      })
+    } else if (this.accountHandle) {
+      obs = this.videoService.getAccountVideos({
+        ...options,
+
+        account: { nameWithHost: this.accountHandle }
+      })
+    } else {
+      obs = this.videoService.getVideos(options)
+    }
 
     return obs.pipe(map(({ data }) => data))
   }

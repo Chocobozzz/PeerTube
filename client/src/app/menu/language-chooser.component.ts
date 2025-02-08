@@ -9,7 +9,6 @@ import { getCompleteLocale, getShortLocale, I18N_LOCALES, objectKeysTyped, sortB
   selector: 'my-language-chooser',
   templateUrl: './language-chooser.component.html',
   styleUrls: [ './language-chooser.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, GlobalIconComponent ]
 })
 export class LanguageChooserComponent {

@@ -7,7 +7,6 @@ import { RedundancyService } from '@app/shared/shared-main/video/redundancy.serv
 @Component({
   selector: 'my-redundancy-checkbox',
   templateUrl: './redundancy-checkbox.component.html',
-  standalone: true,
   imports: [ PeertubeCheckboxComponent, FormsModule ]
 })
 export class RedundancyCheckboxComponent {

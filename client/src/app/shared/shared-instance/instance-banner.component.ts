@@ -6,7 +6,6 @@ import { maxBy } from '@peertube/peertube-core-utils'
 @Component({
   selector: 'my-instance-banner',
   templateUrl: './instance-banner.component.html',
-  standalone: true,
   imports: [ NgIf, NgClass ]
 })
 export class InstanceBannerComponent implements OnInit {

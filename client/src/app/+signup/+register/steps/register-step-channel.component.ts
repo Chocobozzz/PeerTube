@@ -13,7 +13,6 @@ import { NgIf, NgClass } from '@angular/common'
   selector: 'my-register-step-channel',
   templateUrl: './register-step-channel.component.html',
   styleUrls: [ './step.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, BytesPipe ]
 })
 export class RegisterStepChannelComponent extends FormReactive implements OnInit {

@@ -69,6 +69,13 @@ export class VideoViewerCounters {
 
     logger.debug('Adding remote viewer to local video %s.', video.uuid, { viewerId, viewerExpires, ...lTags(video.uuid) })
 
+    const viewer = this.idToViewer.get(viewerId)
+    if (viewer) {
+      viewer.expires = viewerExpires.getTime()
+
+      return false
+    }
+
     this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote', viewerCount: 1 })
 
     return true

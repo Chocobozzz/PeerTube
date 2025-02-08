@@ -7,8 +7,7 @@ import { ProgressBarComponent } from '../shared-main/common/progress-bar.compone
   selector: 'my-upload-progress',
   templateUrl: './upload-progress.component.html',
   styleUrls: [ './upload-progress.component.scss' ],
-  imports: [ CommonModule, ProgressBarComponent, AlertComponent ],
-  standalone: true
+  imports: [ CommonModule, ProgressBarComponent, AlertComponent ]
 })
 export class UploadProgressComponent {
   @Input() isUploading: boolean

@@ -8,7 +8,6 @@ import {
 import { CreateJobArgument, JobQueue } from '@server/lib/job-queue/index.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MUserId, MVideo } from '@server/types/models/index.js'
-import Bluebird from 'bluebird'
 import { getTranscodingJobPriority } from '../../transcoding-priority.js'
 import { AbstractJobBuilder } from './abstract-job-builder.js'
 
@@ -18,21 +17,29 @@ type Payload =
   NewWebVideoResolutionTranscodingPayload |
   HLSTranscodingPayload
 
+type PayloadWithPriority = Payload & { higherPriority?: boolean }
+
 export class TranscodingJobQueueBuilder extends AbstractJobBuilder <Payload> {
 
   protected async createJobs (options: {
     video: MVideo
-    payloads: [ [ Payload ], ...(Payload[][]) ] // Array of sequential jobs to create that depend on parent job
+    // Array of sequential jobs to create that depend on parent job
+    payloads: [ [ PayloadWithPriority ], ...(PayloadWithPriority[][]) ]
     user: MUserId | null
   }): Promise<void> {
     const { video, payloads, user } = options
 
+    const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: undefined })
+
     const parent = payloads[0][0]
     payloads.shift()
 
-    const nextTranscodingSequentialJobs = await Bluebird.mapSeries(payloads, p => {
-      return Bluebird.mapSeries(p, payload => {
-        return this.buildTranscodingJob({ payload, user })
+    const nextTranscodingSequentialJobs = payloads.map(p => {
+      return p.map(payload => {
+        return this.buildTranscodingJob({
+          payload,
+          priority: payload.higherPriority ? priority - 1 : priority
+        })
       })
     })
 
@@ -44,7 +51,11 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder <Payload> {
       }
     }
 
-    const parentJob = await this.buildTranscodingJob({ payload: parent, user, hasChildren: payloads.length !== 0 })
+    const parentJob = this.buildTranscodingJob({
+      payload: parent,
+      priority: parent.higherPriority ? priority - 1 : priority,
+      hasChildren: payloads.length !== 0
+    })
 
     await JobQueue.Instance.createSequentialJobFlow(parentJob, transcodingJobBuilderJob)
 
@@ -52,16 +63,16 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder <Payload> {
     await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingTranscode')
   }
 
-  private async buildTranscodingJob (options: {
+  private buildTranscodingJob (options: {
     payload: VideoTranscodingPayload
     hasChildren?: boolean
-    user: MUserId | null // null means we don't want priority
+    priority: number
   }) {
-    const { user, payload, hasChildren = false } = options
+    const { priority, payload, hasChildren = false } = options
 
     return {
       type: 'video-transcoding' as 'video-transcoding',
-      priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: undefined }),
+      priority,
       payload: { ...payload, hasChildren }
     }
   }

@@ -25,7 +25,6 @@ import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peert
 @Component({
   templateUrl: './my-history.component.html',
   styleUrls: [ './my-history.component.scss' ],
-  standalone: true,
   imports: [
     ButtonComponent,
     AdvancedInputFilterComponent,

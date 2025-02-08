@@ -8,7 +8,6 @@ import { VideoCommentListAdminOwnerComponent } from '../../../shared/shared-vide
 @Component({
   selector: 'my-video-comment-list',
   templateUrl: './video-comment-list.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FeedComponent,

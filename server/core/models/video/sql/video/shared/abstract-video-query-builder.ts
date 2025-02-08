@@ -293,19 +293,6 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  protected includeWebVideoRedundancies () {
-    this.addJoin(
-      'LEFT OUTER JOIN "videoRedundancy" AS "VideoFiles->RedundancyVideos" ON ' +
-        '"VideoFiles"."id" = "VideoFiles->RedundancyVideos"."videoFileId"'
-    )
-
-    this.attributes = {
-      ...this.attributes,
-
-      ...this.buildAttributesObject('VideoFiles->RedundancyVideos', this.tables.getRedundancyAttributes())
-    }
-  }
-
   protected includeStreamingPlaylistRedundancies () {
     this.addJoin(
       'LEFT OUTER JOIN "videoRedundancy" AS "VideoStreamingPlaylists->RedundancyVideos" ' +

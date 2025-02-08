@@ -125,10 +125,9 @@ type PluginField = {
 };
 
 @Component({
-  selector: "my-video-edit",
-  styleUrls: ["./video-edit.component.scss"],
-  templateUrl: "./video-edit.component.html",
-  standalone: true,
+  selector: 'my-video-edit',
+  styleUrls: ['./video-edit.component.scss'],
+  templateUrl: './video-edit.component.html',
   imports: [
     RouterLink,
     FormsModule,
@@ -462,7 +461,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoCaptionAddModal.show();
   }
 
-  openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
+  openEditCaptionModal(videoCaption: VideoCaptionWithPathEdit) {
     const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, {
       centered: true,
       size: 'xl',

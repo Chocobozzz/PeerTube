@@ -18,7 +18,6 @@ import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-mai
 
 @Component({
   templateUrl: './my-video-channel-syncs.component.html',
-  standalone: true,
   imports: [
     NgIf,
     GlobalIconComponent,

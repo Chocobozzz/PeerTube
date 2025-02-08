@@ -167,7 +167,6 @@ export class VideoModelBuilder {
 
       const videoModel = this.videosMemo[row.id]
       this.addWebVideoFile(row, videoModel)
-      this.addRedundancy(row, 'VideoFiles', this.videoFileMemo[id])
     }
   }
 
@@ -314,7 +313,7 @@ export class VideoModelBuilder {
     this.videoFileMemo[id] = videoFileModel
   }
 
-  private addRedundancy (row: SQLRow, prefix: string, to: VideoFileModel | VideoStreamingPlaylistModel) {
+  private addRedundancy (row: SQLRow, prefix: string, to: VideoStreamingPlaylistModel) {
     if (!to.RedundancyVideos) to.RedundancyVideos = []
 
     const redundancyPrefix = `${prefix}.RedundancyVideos`

@@ -25,7 +25,6 @@ const debugLogger = debug('peertube:button')
   styleUrls: [ './button.component.scss' ],
   templateUrl: './button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgIf,
     NgClass,

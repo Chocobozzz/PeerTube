@@ -1,6 +1,13 @@
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
-import { APP_INITIALIZER, ApplicationRef, enableProdMode, importProvidersFrom, provideZoneChangeDetection } from '@angular/core'
+import {
+  ApplicationRef,
+  enableProdMode,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+  inject,
+  provideAppInitializer
+} from '@angular/core'
 import { BrowserModule, bootstrapApplication, enableDebugTools } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router'
@@ -95,12 +102,11 @@ const bootstrap = () => bootstrapApplication(AppComponent, {
       provide: APP_BASE_HREF,
       useValue: '/'
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: loadConfigFactory,
-      deps: [ ServerService, PluginService, ThemeService, RedirectService ],
-      multi: true
-    }
+    provideAppInitializer(() => {
+      const initializerFn = loadConfigFactory(inject(ServerService), inject(PluginService), inject(ThemeService), inject(RedirectService))
+
+      return initializerFn()
+    })
   ]
 })
   .then(bootstrapModule => {
@@ -128,7 +134,7 @@ const bootstrap = () => bootstrapApplication(AppComponent, {
       }
     }, 1000)
 
-    return null
+    return null as any
   })
 
 bootstrap()

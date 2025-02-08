@@ -20,7 +20,6 @@ import { VideoRateComponent } from './video-rate.component'
   selector: 'my-action-buttons',
   templateUrl: './action-buttons.component.html',
   styleUrls: [ './action-buttons.component.scss' ],
-  standalone: true,
   imports: [
     VideoRateComponent,
     NgIf,

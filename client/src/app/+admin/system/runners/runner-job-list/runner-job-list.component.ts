@@ -18,7 +18,6 @@ import { RunnerJobFormatted, RunnerService } from '../runner.service'
 @Component({
   selector: 'my-runner-job-list',
   templateUrl: './runner-job-list.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     RouterLink,

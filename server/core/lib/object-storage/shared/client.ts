@@ -46,7 +46,9 @@ function getClient () {
         }
         : undefined,
       requestHandler: await getProxyRequestHandler(),
-      maxAttempts: CONFIG.OBJECT_STORAGE.MAX_REQUEST_ATTEMPTS
+      maxAttempts: CONFIG.OBJECT_STORAGE.MAX_REQUEST_ATTEMPTS,
+      // Default behaviour has incompatibilities with some S3 providers: https://github.com/aws/aws-sdk-js-v3/issues/6810
+      requestChecksumCalculation: 'WHEN_REQUIRED'
     })
 
     logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())

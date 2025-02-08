@@ -14,7 +14,7 @@ import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
-import { buildUser, createUserAccountAndChannelAndPlaylist } from '../user.js'
+import { buildUser, createUserAccountAndChannelAndPlaylist, getUserByEmailPermissive } from '../user.js'
 import { ExternalUser } from './external-auth.js'
 import { TokensCache } from './tokens-cache.js'
 
@@ -87,7 +87,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   if (bypassLogin && bypassLogin.bypass === true) {
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
-    let user = await UserModel.loadByEmail(bypassLogin.user.email)
+    let user = getUserByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
 
     if (!user) {
       user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
@@ -119,7 +119,14 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
 
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
-  const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
+  const users = await UserModel.loadByUsernameOrEmailCaseInsensitive(usernameOrEmail)
+  let user: MUserDefault
+
+  if (usernameOrEmail.includes('@')) {
+    user = getUserByEmailPermissive(users, usernameOrEmail)
+  } else if (users.length === 1) {
+    user = users[0]
+  }
 
   // If we don't find the user, or if the user belongs to a plugin
   if (!user || user.pluginAuth !== null || !password) return null

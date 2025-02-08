@@ -32,7 +32,6 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
   selector: 'my-header',
   templateUrl: './header.component.html',
   styleUrls: [ './header.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     NotificationDropdownComponent,
@@ -186,17 +185,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       const videoId = getVideoId(url)
       if (videoId) {
-        this.mobileAppUrl = `peertube:///video/${videoId}?host=${host}`
+        this.mobileAppUrl = `peertube://joinpeertube.org/video/${videoId}?host=${host}`
         return
       }
 
       const channelId = getChannelId(url)
       if (channelId) {
-        this.mobileAppUrl = `peertube:///video-channel/${channelId}?host=${host}`
+        this.mobileAppUrl = `peertube://joinpeertube.org/video-channel/${channelId}?host=${host}`
         return
       }
 
-      this.mobileAppUrl = `peertube:///?host=${host}`
+      this.mobileAppUrl = `peertube://joinpeertube.org/?host=${host}`
     })
   }
 

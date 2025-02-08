@@ -9,7 +9,7 @@ import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from
 import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../../lib/signup.js'
 import { ActorModel } from '../../../models/actor/actor.js'
-import { areValidationErrors, checkUserNameOrEmailDoNotAlreadyExist } from '../shared/index.js'
+import { areValidationErrors, checkUsernameOrEmailDoNotAlreadyExist } from '../shared/index.js'
 import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } from './shared/user-registrations.js'
 
 const usersDirectRegistrationValidator = usersCommonRegistrationValidatorFactory()
@@ -182,7 +182,7 @@ function usersCommonRegistrationValidatorFactory (additionalValidationChain: Val
 
       const body: UserRegister | UserRegistrationRequest = req.body
 
-      if (!await checkUserNameOrEmailDoNotAlreadyExist(body.username, body.email, res)) return
+      if (!await checkUsernameOrEmailDoNotAlreadyExist(body.username, body.email, res)) return
 
       if (body.channel) {
         if (!body.channel.name || !body.channel.displayName) {

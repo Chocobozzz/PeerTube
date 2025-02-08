@@ -22,7 +22,6 @@ import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/a
   selector: 'my-account-settings',
   templateUrl: './my-account-settings.component.html',
   styleUrls: [ './my-account-settings.component.scss' ],
-  standalone: true,
   imports: [
     ActorAvatarEditComponent,
     UserQuotaComponent,

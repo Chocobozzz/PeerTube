@@ -7,7 +7,6 @@ import { MyAccountImportComponent } from './my-account-import.component'
 @Component({
   selector: 'my-account-import-export',
   templateUrl: './my-account-import-export.component.html',
-  standalone: true,
   imports: [ GlobalIconComponent, MyAccountImportComponent, MyAccountExportComponent ]
 })
 export class MyAccountImportExportComponent implements OnInit, CanComponentDeactivate {

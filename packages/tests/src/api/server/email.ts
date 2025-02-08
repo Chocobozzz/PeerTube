@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -11,6 +9,9 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test emails', function () {
   let server: PeerTubeServer
@@ -32,6 +33,8 @@ describe('Test emails', function () {
     password: 'super_password'
   }
 
+  const similarUsers = [ { username: 'lowercase_user_1' }, { username: 'lowercase_user__1' } ]
+
   before(async function () {
     this.timeout(120000)
 
@@ -40,6 +43,17 @@ describe('Test emails', function () {
 
     await setAccessTokensToServers([ server ])
     await server.config.enableSignup(true)
+
+    {
+      const sqlCommand = new SQLCommand(server)
+
+      for (const user of similarUsers) {
+        await server.users.create(user)
+      }
+
+      await sqlCommand.setUserEmail('lowercase_user__1', 'Lowercase_user_1@example.com')
+      await sqlCommand.cleanup()
+    }
 
     {
       const created = await server.users.create({ username: user.username, password: user.password })
@@ -99,6 +113,10 @@ describe('Test emails', function () {
         password: 'super_password2',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+
+    it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
+      await server.users.askResetPassword({ email: similarUsers[0].username.toUpperCase(), expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should reset the password', async function () {
@@ -268,6 +286,13 @@ describe('Test emails', function () {
   })
 
   describe('When verifying a user email', function () {
+
+    it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
+      await server.users.askSendVerifyEmail({
+        email: similarUsers[0].username.toUpperCase(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
 
     it('Should ask to send the verification email', async function () {
       await server.users.askSendVerifyEmail({ email: 'user_1@example.com' })

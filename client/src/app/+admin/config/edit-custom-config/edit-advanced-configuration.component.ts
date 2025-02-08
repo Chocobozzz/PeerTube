@@ -8,7 +8,6 @@ import { NgClass, NgIf } from '@angular/common'
   selector: 'my-edit-advanced-configuration',
   templateUrl: './edit-advanced-configuration.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, NgClass, NgIf, HelpComponent, PeerTubeTemplateDirective ]
 })
 export class EditAdvancedConfigurationComponent {

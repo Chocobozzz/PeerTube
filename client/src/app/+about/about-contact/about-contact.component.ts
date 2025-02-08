@@ -23,7 +23,6 @@ type Prefill = {
 @Component({
   templateUrl: './about-contact.component.html',
   styleUrls: [ './about-contact.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent ]
 })
 export class AboutContactComponent extends FormReactive implements OnInit {

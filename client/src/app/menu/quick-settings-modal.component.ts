@@ -15,7 +15,6 @@ import { filter } from 'rxjs/operators'
 @Component({
   selector: 'my-quick-settings',
   templateUrl: './quick-settings-modal.component.html',
-  standalone: true,
   imports: [
     CommonModule,
     GlobalIconComponent,

@@ -34,6 +34,8 @@ export interface VideosCommonQuery {
 
   excludeAlreadyWatched?: boolean
 
+  host?: string
+
   // Only available with special user right
   autoTagOneOf?: string[]
   privacyOneOf?: VideoPrivacyType[]

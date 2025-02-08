@@ -4,7 +4,6 @@ import { VideoCommentListAdminOwnerComponent } from '../../shared/shared-video-c
 
 @Component({
   templateUrl: './comments-on-my-videos.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     VideoCommentListAdminOwnerComponent

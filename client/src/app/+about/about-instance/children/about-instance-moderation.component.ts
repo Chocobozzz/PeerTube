@@ -9,7 +9,6 @@ import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-
 @Component({
   templateUrl: './about-instance-moderation.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, PluginSelectorDirective ]
 })
 export class AboutInstanceModerationComponent implements OnInit {

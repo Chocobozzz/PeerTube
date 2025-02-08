@@ -8,7 +8,6 @@ import { ProgressBarComponent } from '../common/progress-bar.component'
 @Component({
   selector: 'my-user-quota',
   templateUrl: './user-quota.component.html',
-  standalone: true,
   imports: [ NgIf, BytesPipe, ProgressBarComponent ]
 })
 

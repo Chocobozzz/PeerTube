@@ -19,7 +19,6 @@ import { WatchedWordsListService } from './watched-words-list.service'
 @Component({
   selector: 'my-watched-words-list-admin-owner',
   templateUrl: './watched-words-list-admin-owner.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

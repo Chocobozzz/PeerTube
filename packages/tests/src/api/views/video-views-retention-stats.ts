@@ -40,15 +40,15 @@ describe('Test views retention stats', function () {
       })
 
       it('Should display appropriate retention metrics', async function () {
-        await servers[0].views.simulateViewer({ [sessionField]: '127.0.0.2,127.0.0.1', id: vodVideoId, currentTimes: [ 0, 1 ] })
-        await servers[0].views.simulateViewer({ [sessionField]: '127.0.0.3,127.0.0.1', id: vodVideoId, currentTimes: [ 1, 3 ] })
-        await servers[1].views.simulateViewer({ [sessionField]: '127.0.0.2,127.0.0.1', id: vodVideoId, currentTimes: [ 3, 4 ] })
-        await servers[1].views.simulateViewer({ [sessionField]: '127.0.0.3,127.0.0.1', id: vodVideoId, currentTimes: [ 0, 1 ] })
+        await servers[0].views.simulateViewer({ [sessionField]: '127-0-0-2-127-0-0-1', id: vodVideoId, currentTimes: [ 0, 1 ] })
+        await servers[0].views.simulateViewer({ [sessionField]: '127-0-0-3-127-0-0-1', id: vodVideoId, currentTimes: [ 1, 3 ] })
+        await servers[1].views.simulateViewer({ [sessionField]: '127-0-0-2-127-0-0-1', id: vodVideoId, currentTimes: [ 3, 4 ] })
+        await servers[1].views.simulateViewer({ [sessionField]: '127-0-0-3-127-0-0-1', id: vodVideoId, currentTimes: [ 0, 1 ] })
 
         // Do not take into account empty section
-        await servers[1].views.simulateViewer({ [sessionField]: '127.0.0.3,127.0.0.1', id: vodVideoId, currentTimes: [ 5, 5 ] })
-        await servers[0].views.simulateViewer({ [sessionField]: '127.0.0.4,127.0.0.1', id: vodVideoId, currentTimes: [ 1, 1 ] })
-        await servers[1].views.simulateViewer({ [sessionField]: '127.0.0.4,127.0.0.1', id: vodVideoId, currentTimes: [ 1, 1 ] })
+        await servers[1].views.simulateViewer({ [sessionField]: '127-0-0-3-127-0-0-1', id: vodVideoId, currentTimes: [ 5, 5 ] })
+        await servers[0].views.simulateViewer({ [sessionField]: '127-0-0-4-127-0-0-1', id: vodVideoId, currentTimes: [ 1, 1 ] })
+        await servers[1].views.simulateViewer({ [sessionField]: '127-0-0-4-127-0-0-1', id: vodVideoId, currentTimes: [ 1, 1 ] })
 
         await processViewersStats(servers)
 
@@ -63,8 +63,8 @@ describe('Test views retention stats', function () {
 
         const newVideo = await servers[0].videos.quickUpload({ name: 'video 2' })
 
-        await servers[0].views.simulateViewer({ [sessionField]: '127.0.0.2,127.0.0.1', id: newVideo.id, currentTimes: [ 0, 1 ] })
-        await servers[0].views.simulateViewer({ [sessionField]: '127.0.0.3,127.0.0.1', id: newVideo.id, currentTimes: [ 1, 3 ] })
+        await servers[0].views.simulateViewer({ [sessionField]: '127-0-0-2-127-0-0-1', id: newVideo.id, currentTimes: [ 0, 1 ] })
+        await servers[0].views.simulateViewer({ [sessionField]: '127-0-0-3-127-0-0-1', id: newVideo.id, currentTimes: [ 1, 3 ] })
 
         await wait(2500)
 

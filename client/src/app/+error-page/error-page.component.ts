@@ -9,7 +9,6 @@ import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
   selector: 'my-error-page',
   templateUrl: './error-page.component.html',
   styleUrls: [ './error-page.component.scss' ],
-  standalone: true,
   imports: [ NgIf, LoginLinkComponent ]
 })
 export class ErrorPageComponent implements OnInit {

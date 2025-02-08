@@ -15,7 +15,6 @@ import { VideoRecommendationService } from './video-recommendation.service'
   selector: 'my-recommended-videos',
   templateUrl: './recommended-videos.component.html',
   styleUrls: [ './recommended-videos.component.scss' ],
-  standalone: true,
   imports: [ NgClass, NgIf, NgbTooltip, InputSwitchComponent, FormsModule, NgFor, VideoMiniatureComponent, AsyncPipe ]
 })
 export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy {

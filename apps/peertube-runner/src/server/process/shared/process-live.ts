@@ -68,10 +68,10 @@ export class ProcessLiveRTMPHLSTranscoding {
         const bitrate = await getVideoStreamBitrate(this.payload.input.rtmpUrl, probe)
         const { ratio } = await getVideoStreamDimensionsInfo(this.payload.input.rtmpUrl, probe)
 
-        const m3u8Watcher = watch(this.outputPath + '/*.m3u8')
+        const m3u8Watcher = watch(this.outputPath, { ignored: (path, stats) => stats?.isFile() && !path.endsWith('.m3u8') })
         this.fsWatchers.push(m3u8Watcher)
 
-        const tsWatcher = watch(this.outputPath + '/*.ts')
+        const tsWatcher = watch(this.outputPath, { ignored: (path, stats) => stats?.isFile() && !path.endsWith('.ts') })
         this.fsWatchers.push(tsWatcher)
 
         m3u8Watcher.on('change', p => {

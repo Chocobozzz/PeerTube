@@ -4,7 +4,6 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
 
 @Component({
   templateUrl: './my-library.component.html',
-  standalone: true,
   imports: [ RouterOutlet, HorizontalMenuComponent ]
 })
 export class MyLibraryComponent implements OnInit {

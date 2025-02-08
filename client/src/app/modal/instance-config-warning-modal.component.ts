@@ -13,7 +13,6 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-instance-config-warning-modal',
   templateUrl: './instance-config-warning-modal.component.html',
   styleUrls: [ './instance-config-warning-modal.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
 })
 export class InstanceConfigWarningModalComponent implements OnInit {

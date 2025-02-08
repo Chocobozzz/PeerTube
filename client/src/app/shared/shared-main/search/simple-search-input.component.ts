@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms'
   selector: 'my-simple-search-input',
   templateUrl: './simple-search-input.component.html',
   styleUrls: [ './simple-search-input.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, GlobalIconComponent, NgIf ]
 })
 export class SimpleSearchInputComponent implements OnInit {

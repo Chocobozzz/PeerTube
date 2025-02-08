@@ -19,7 +19,6 @@ import { FollowModalComponent } from './follow-modal.component'
 @Component({
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

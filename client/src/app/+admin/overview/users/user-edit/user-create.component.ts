@@ -33,7 +33,6 @@ import { UserPasswordComponent } from './user-password.component'
   selector: 'my-user-create',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ],
-  standalone: true,
   imports: [
     RouterLink,
     NgIf,

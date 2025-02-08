@@ -10,7 +10,6 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'my-remote-interaction',
   templateUrl: './remote-interaction.component.html',
-  standalone: true,
   imports: [ NgIf, AlertComponent ]
 })
 export class RemoteInteractionComponent implements OnInit {

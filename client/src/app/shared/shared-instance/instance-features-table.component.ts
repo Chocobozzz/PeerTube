@@ -14,7 +14,6 @@ import { FeatureBooleanComponent } from './feature-boolean.component'
   selector: 'my-instance-features-table',
   templateUrl: './instance-features-table.component.html',
   styleUrls: [ './instance-features-table.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FeatureBooleanComponent, HelpComponent, PeerTubeTemplateDirective, NgFor, BytesPipe ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {

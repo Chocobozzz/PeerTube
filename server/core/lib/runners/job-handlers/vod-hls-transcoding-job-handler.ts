@@ -15,7 +15,7 @@ import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { generateRunnerTranscodingAudioInputFileUrl, generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
-import { loadRunnerVideo } from './shared/utils.js'
+import { isVideoMissHLSAudio, loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
   video: MVideoWithFile
@@ -80,6 +80,7 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
     resultPayload: VODHLSTranscodingSuccess
   }) {
     const { runnerJob, resultPayload } = options
+    const payload = runnerJob.payload as RunnerJobVODHLSTranscodingPayload
     const privatePayload = runnerJob.privatePayload as RunnerJobVODHLSTranscodingPrivatePayload
 
     const video = await loadRunnerVideo(runnerJob, this.lTags)
@@ -94,7 +95,14 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
       videoOutputPath: videoFilePath
     })
 
-    await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: true, video })
+    // Splitted audio? Wait audio generation before moving the video in its next state
+    const moveVideoToNextState = !await isVideoMissHLSAudio({
+      resolution: payload.output.resolution,
+      separatedAudio: payload.output.separatedAudio,
+      videoId: video.uuid
+    })
+
+    await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState, video })
 
     if (privatePayload.deleteWebVideoFiles === true) {
       logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, this.lTags(video.uuid))

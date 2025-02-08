@@ -46,7 +46,6 @@ const debugLogger = debug('peertube:menu:MenuComponent')
   selector: 'my-menu',
   templateUrl: './menu.component.html',
   styleUrls: [ './menu.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     GlobalIconComponent,

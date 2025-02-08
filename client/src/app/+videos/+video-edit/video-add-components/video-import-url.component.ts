@@ -33,7 +33,6 @@ import { VideoSend } from './video-send'
     '../shared/video-edit.component.scss',
     './video-send.scss'
   ],
-  standalone: true,
   imports: [
     NgIf,
     GlobalIconComponent,

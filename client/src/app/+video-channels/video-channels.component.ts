@@ -22,7 +22,6 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
 @Component({
   templateUrl: './video-channels.component.html',
   styleUrls: [ './video-channels.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,

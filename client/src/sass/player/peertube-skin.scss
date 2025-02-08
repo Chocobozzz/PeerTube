@@ -18,7 +18,7 @@ body {
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
-  color: pvar(--embed-foreground-color);
+  color: pvar(--embed-fg);
 
   &.disabled {
     cursor: default;
@@ -101,7 +101,7 @@ body {
   }
 
   .vjs-big-play-button {
-    background-color: pvar(--embed-big-play-background-color);
+    background-color: pvar(--embed-big-play-bg);
   }
 
   .vjs-settings-dialog,

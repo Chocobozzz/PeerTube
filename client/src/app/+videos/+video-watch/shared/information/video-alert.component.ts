@@ -9,7 +9,6 @@ import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
 @Component({
   selector: 'my-video-alert',
   templateUrl: './video-alert.component.html',
-  standalone: true,
   styles: `my-alert { text-align: center }`,
   imports: [ NgIf, PTDatePipe, AlertComponent ]
 })

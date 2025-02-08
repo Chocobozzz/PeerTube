@@ -44,10 +44,6 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
 
     this.includeWebVideoFiles()
 
-    if (options.includeRedundancy) {
-      this.includeWebVideoRedundancies()
-    }
-
     this.whereId(options)
 
     this.query = this.buildQuery()

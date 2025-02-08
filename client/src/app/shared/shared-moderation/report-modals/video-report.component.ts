@@ -22,7 +22,6 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   selector: 'my-video-report',
   templateUrl: './video-report.component.html',
   styleUrls: [ './report.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,
@@ -74,7 +73,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({
       reason: ABUSE_REASON_VALIDATOR,
-      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null),
+      predefinedReasons: mapValues(abusePredefinedReasonsMap, _ => null as any),
       timestamp: {
         hasStart: null,
         startAt: null,

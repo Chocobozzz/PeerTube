@@ -1,12 +1,12 @@
 import { DatePipe } from '@angular/common'
 import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core'
 
-// Re-implementation of the angular date pipe that use the web browser locale to display dates
+// Re-implementation of the angular date pipe that uses the web browser locale to display dates
 
 @Pipe({
   name: 'ptDate',
-  standalone: true,
-  pure: true
+  pure: true,
+  standalone: true
 })
 export class PTDatePipe implements PipeTransform {
   private angularPipe: DatePipe

@@ -17,7 +17,6 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-import',
   templateUrl: './my-account-import.component.html',
   styleUrls: [ './my-account-import.component.scss' ],
-  standalone: true,
   imports: [ NgIf, UploadProgressComponent, NgbTooltip, PTDatePipe, AlertComponent ]
 })
 export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponentDeactivate {

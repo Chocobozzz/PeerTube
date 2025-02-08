@@ -14,7 +14,6 @@ import { filter } from 'rxjs/operators'
   selector: 'my-notification-dropdown',
   templateUrl: './notification-dropdown.component.html',
   styleUrls: [ './notification-dropdown.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     UserNotificationsComponent,

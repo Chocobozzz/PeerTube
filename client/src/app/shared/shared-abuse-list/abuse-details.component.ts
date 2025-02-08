@@ -13,7 +13,6 @@ import { ProcessedAbuse } from './processed-abuse.model'
   selector: 'my-abuse-details',
   templateUrl: './abuse-details.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-details.component.scss' ],
-  standalone: true,
   imports: [ NgIf, RouterLink, ActorAvatarComponent, GlobalIconComponent, NgFor, EmbedComponent, PTDatePipe ]
 })
 export class AbuseDetailsComponent implements OnInit {

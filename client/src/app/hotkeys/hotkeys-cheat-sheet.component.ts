@@ -9,7 +9,6 @@ import { NgClass, NgFor } from '@angular/common'
   selector: 'my-hotkeys-cheat-sheet',
   templateUrl: './hotkeys-cheat-sheet.component.html',
   styleUrls: [ './hotkeys-cheat-sheet.component.scss' ],
-  standalone: true,
   imports: [ NgClass, PeertubeCheckboxComponent, FormsModule, NgFor ]
 })
 export class HotkeysCheatSheetComponent implements OnInit, OnDestroy {

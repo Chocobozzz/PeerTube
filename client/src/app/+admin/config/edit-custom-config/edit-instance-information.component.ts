@@ -23,7 +23,6 @@ import { HelpComponent } from '../../../shared/shared-main/buttons/help.componen
   selector: 'my-edit-instance-information',
   templateUrl: './edit-instance-information.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

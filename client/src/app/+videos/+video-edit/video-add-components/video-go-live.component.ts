@@ -40,7 +40,6 @@ import { VideoSend } from './video-send'
     './video-go-live.component.scss',
     './video-send.scss'
   ],
-  standalone: true,
   imports: [
     NgIf,
     GlobalIconComponent,

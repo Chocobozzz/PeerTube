@@ -8,7 +8,6 @@ import { Syndication } from './syndication.model'
   selector: 'my-feed',
   styleUrls: [ './feed.component.scss' ],
   templateUrl: './feed.component.html',
-  standalone: true,
   imports: [ NgIf, NgbPopover, GlobalIconComponent, NgFor ]
 })
 export class FeedComponent {

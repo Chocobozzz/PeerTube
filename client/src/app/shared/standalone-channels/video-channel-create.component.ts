@@ -26,7 +26,6 @@ import { VideoChannelEdit } from './video-channel-edit'
 @Component({
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,

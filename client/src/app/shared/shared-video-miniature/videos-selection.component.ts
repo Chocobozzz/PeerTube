@@ -18,7 +18,6 @@ export type SelectionType = { [ id: number ]: boolean }
   selector: 'my-videos-selection',
   templateUrl: './videos-selection.component.html',
   styleUrls: [ './videos-selection.component.scss' ],
-  standalone: true,
   imports: [ NgIf, InfiniteScrollerDirective, NgFor, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
 })
 export class VideosSelectionComponent implements AfterContentInit {

@@ -17,7 +17,7 @@ import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
 import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
-import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths.js'
+import { getHLSDirectory, getHlsResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
 
 type MakeAvailableCB <T> = (path: string) => Awaitable<T>
@@ -40,16 +40,6 @@ class VideoPathManager {
     if (!filename) return base
 
     return join(base, filename)
-  }
-
-  getFSRedundancyVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
-    if (videoFile.isHLS()) {
-      const video = extractVideo(videoOrPlaylist)
-
-      return join(getHLSRedundancyDirectory(video), videoFile.filename)
-    }
-
-    return join(CONFIG.STORAGE.REDUNDANCY_DIR, videoFile.filename)
   }
 
   getFSVideoFileOutputPath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {

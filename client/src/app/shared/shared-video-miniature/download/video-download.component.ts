@@ -21,7 +21,6 @@ type DownloadType = 'video-generate' | 'video-files' | 'subtitle-files'
   selector: 'my-video-download',
   templateUrl: './video-download.component.html',
   styleUrls: [ './video-download.component.scss' ],
-  standalone: true,
   imports: [
     SubtitleFilesDownloadComponent,
     VideoFilesDownloadComponent,

@@ -13,7 +13,6 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
   selector: 'my-batch-domains-modal',
   templateUrl: './batch-domains-modal.component.html',
   styleUrls: [ './batch-domains-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class BatchDomainsModalComponent extends FormReactive implements OnInit {

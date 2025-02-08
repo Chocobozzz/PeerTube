@@ -11,7 +11,6 @@ import { ResolverData } from '../about-instance.resolver'
 @Component({
   templateUrl: './about-instance-home.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgFor,

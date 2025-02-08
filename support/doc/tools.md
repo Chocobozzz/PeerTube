@@ -12,7 +12,7 @@ It can be launched from a remote server/computer to easily upload videos, manage
 Ensure you have `node` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ```
 
 Then install the CLI:
@@ -131,7 +131,7 @@ You can read the admin documentation on how to use PeerTube runners on https://d
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ffprobe -version # Should be >= 4.3
 ffmpeg -version # Should be >= 4.3
 ```

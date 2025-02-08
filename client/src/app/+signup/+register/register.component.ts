@@ -23,7 +23,6 @@ import { RegisterStepUserComponent } from './steps/register-step-user.component'
   selector: 'my-register',
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     SignupLabelComponent,

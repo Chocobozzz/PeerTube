@@ -12,7 +12,6 @@ import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.
   selector: 'my-account-notification-preferences',
   templateUrl: './my-account-notification-preferences.component.html',
   styleUrls: [ './my-account-notification-preferences.component.scss' ],
-  standalone: true,
   imports: [ NgIf, NgFor, InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {

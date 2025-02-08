@@ -26,7 +26,6 @@ import { VideoPlaylistElementMiniatureComponent } from '../../../../shared/share
   selector: 'my-video-watch-playlist',
   templateUrl: './video-watch-playlist.component.html',
   styleUrls: [ './player-widget.component.scss', './video-watch-playlist.component.scss' ],
-  standalone: true,
   imports: [ NgIf, InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, NgFor, VideoPlaylistElementMiniatureComponent ]
 })
 export class VideoWatchPlaylistComponent {

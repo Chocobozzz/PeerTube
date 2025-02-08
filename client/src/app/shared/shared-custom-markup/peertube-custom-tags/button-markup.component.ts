@@ -12,7 +12,6 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
   templateUrl: 'button-markup.component.html',
   styleUrls: [ 'button-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgClass ]
 })
 export class ButtonMarkupComponent implements CustomMarkupComponent {

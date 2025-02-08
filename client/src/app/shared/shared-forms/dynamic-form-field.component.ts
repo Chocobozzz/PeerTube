@@ -11,7 +11,6 @@ import { NgIf, NgFor } from '@angular/common'
   selector: 'my-dynamic-form-field',
   templateUrl: './dynamic-form-field.component.html',
   styleUrls: [ './dynamic-form-field.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,

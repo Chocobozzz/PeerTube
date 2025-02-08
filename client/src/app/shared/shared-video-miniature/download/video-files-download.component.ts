@@ -27,7 +27,6 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
   selector: 'my-video-files-download',
   templateUrl: './video-files-download.component.html',
   styleUrls: [ './video-files-download.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,

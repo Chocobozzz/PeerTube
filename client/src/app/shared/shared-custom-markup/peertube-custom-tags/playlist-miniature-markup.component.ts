@@ -17,7 +17,6 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.
   templateUrl: 'playlist-miniature-markup.component.html',
   styleUrls: [ 'playlist-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ NgIf, VideoPlaylistMiniatureComponent ]
 })
 export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {

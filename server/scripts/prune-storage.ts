@@ -303,11 +303,8 @@ class FSPruner {
         return !!redundancy
       }
 
-      const file = await VideoFileModel.loadByFilename(basename(filePath))
-      if (!file) return false
-
-      const redundancy = await VideoRedundancyModel.loadLocalByFileId(file.id)
-      return !!redundancy
+      // WebTorrent support redundancy has been removed from PeerTube
+      return false
     }
   }
 

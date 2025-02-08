@@ -346,9 +346,12 @@ redundancy:
 # Other instances that duplicate your content
 remote_redundancy:
   videos:
-    # 'nobody': Do not accept remote redundancies
-    # 'anybody': Accept remote redundancies from anybody
-    # 'followings': Accept redundancies from instance followings
+    # PeerTube doesn't remove existing redundancies when you change this setting
+    # You can remove them in the web interface: https://docs.joinpeertube.org/admin/following-instances#instances-redundancy
+    # Available values:
+    #  * nobody: Do not accept remote redundancies
+    #  * followings: Accept redundancies from instance followings
+    #  * anybody: Accept remote redundancies from anybody
     accept_from: 'anybody'
 
 csp:
@@ -1039,11 +1042,12 @@ search:
   # instead of loading the video locally
   search_index:
     enabled: false
-    # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
-    # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
-    # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
-    url: ''
+    # URL of the search index, which should use the same search API and routes
+    # as PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
+    # You can deploy your own with https://framagit.org/framasoft/peertube/search-index,
+    # or you can use the official one: https://sepiasearch.org.
+    # But keep in mind it is an unmoderated search index
+    url: 'https://sepiasearch.org'
     # You can disable local search in the client, so users only use the search index
     disable_local_search: false
     # If you did not disable local search in the client, you can decide to use the search index by default

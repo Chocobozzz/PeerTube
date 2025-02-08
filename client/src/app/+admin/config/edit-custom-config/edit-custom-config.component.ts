@@ -52,7 +52,6 @@ type ComponentCustomConfig = CustomConfig & {
   selector: 'my-edit-custom-config',
   templateUrl: './edit-custom-config.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,

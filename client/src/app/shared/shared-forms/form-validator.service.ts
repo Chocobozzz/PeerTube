@@ -49,7 +49,9 @@ export class FormValidatorService {
     defaultValues: BuildFormDefaultValues = {}
   ) {
     for (const name of objectKeysTyped(formToBuild)) {
-      formErrors[name] = ''
+      if (typeof formErrors[name] === 'string') {
+        formErrors[name] = ''
+      }
 
       const field = formToBuild[name]
       if (this.isRecursiveField(field)) {

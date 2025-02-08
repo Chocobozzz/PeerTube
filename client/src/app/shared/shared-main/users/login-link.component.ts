@@ -8,7 +8,6 @@ import { LinkComponent } from '../common/link.component'
   selector: 'my-login-link',
   templateUrl: './login-link.component.html',
   styleUrls: [ './login-link.component.scss' ],
-  standalone: true,
   imports: [ LinkComponent ]
 })
 export class LoginLinkComponent {

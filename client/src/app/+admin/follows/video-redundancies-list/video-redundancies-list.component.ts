@@ -21,7 +21,6 @@ import { VideoRedundancyInformationComponent } from './video-redundancy-informat
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
   styleUrls: [ './video-redundancies-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,
@@ -94,8 +93,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   getTotalSize (redundancy: VideoRedundancy) {
-    return redundancy.redundancies.files.reduce((a, b) => a + b.size, 0) +
-      redundancy.redundancies.streamingPlaylists.reduce((a, b) => a + b.size, 0)
+    return redundancy.redundancies.streamingPlaylists.reduce((a, b) => a + b.size, 0)
   }
 
   onDisplayTypeChanged () {
@@ -106,8 +104,9 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   getRedundancyStrategy (redundancy: VideoRedundancy) {
-    if (redundancy.redundancies.files.length !== 0) return redundancy.redundancies.files[0].strategy
-    if (redundancy.redundancies.streamingPlaylists.length !== 0) return redundancy.redundancies.streamingPlaylists[0].strategy
+    if (redundancy.redundancies.streamingPlaylists.length !== 0) {
+      return redundancy.redundancies.streamingPlaylists[0].strategy
+    }
 
     return ''
   }

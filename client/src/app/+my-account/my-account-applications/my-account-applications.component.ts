@@ -10,7 +10,6 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
   selector: 'my-account-applications',
   templateUrl: './my-account-applications.component.html',
   styleUrls: [ './my-account-applications.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, InputTextComponent ]
 })
 export class MyAccountApplicationsComponent implements OnInit {

@@ -8,7 +8,6 @@ import { NgIf } from '@angular/common'
   selector: 'my-custom-modal',
   templateUrl: './custom-modal.component.html',
   styleUrls: [ './custom-modal.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent ]
 })
 export class CustomModalComponent {

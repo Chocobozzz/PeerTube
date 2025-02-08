@@ -17,7 +17,6 @@ import { RunnerService } from '../runner.service'
   selector: 'my-runner-registration-token-list',
   styleUrls: [ './runner-registration-token-list.component.scss' ],
   templateUrl: './runner-registration-token-list.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     RouterLink,

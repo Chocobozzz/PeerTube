@@ -6,16 +6,14 @@ import { AuthService, Notifier, User } from '@app/core'
 import { USER_EXISTING_PASSWORD_VALIDATOR, USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
-import { QRCodeModule } from 'angularx-qrcode'
+import { QRCodeComponent } from 'angularx-qrcode'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-account-two-factor',
   templateUrl: './my-account-two-factor.component.html',
   styleUrls: [ './my-account-two-factor.component.scss' ],
-  standalone: true,
-  imports: [ GlobalIconComponent, NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, QRCodeModule ]
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, QRCodeComponent ]
 })
 export class MyAccountTwoFactorComponent implements OnInit {
   twoFactorAlreadyEnabled: boolean

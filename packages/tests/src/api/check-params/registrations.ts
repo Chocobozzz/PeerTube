@@ -110,9 +110,16 @@ describe('Test registrations API validators', function () {
       })
 
       it('Should fail if we register a user with the same email', async function () {
-        const fields = { ...baseCorrectParams, email: 'admin' + server.internalServerNumber + '@example.com' }
+        const emails = [
+          'admin' + server.internalServerNumber + '@example.com',
+          'Admin' + server.internalServerNumber + '@example.com'
+        ]
 
-        await check(fields, HttpStatusCode.CONFLICT_409)
+        for (const email of emails) {
+          const fields = { ...baseCorrectParams, email }
+
+          await check(fields, HttpStatusCode.CONFLICT_409)
+        }
       })
 
       it('Should fail with a bad display name', async function () {
@@ -267,16 +274,18 @@ describe('Test registrations API validators', function () {
       })
 
       it('Should fail if the email is already awaiting registration approval', async function () {
-        await server.registrations.requestRegistration({
-          username: 'user42',
-          email: 'user_request_2@example.com',
-          registrationReason: 'tt',
-          channel: {
-            displayName: 'my user request 42 channel',
-            name: 'user_request_42_channel'
-          },
-          expectedStatus: HttpStatusCode.CONFLICT_409
-        })
+        for (const email of [ 'user_request_2@example.com', 'user_requesT_2@example.com' ]) {
+          await server.registrations.requestRegistration({
+            username: 'user42',
+            email,
+            registrationReason: 'tt',
+            channel: {
+              displayName: 'my user request 42 channel',
+              name: 'user_request_42_channel'
+            },
+            expectedStatus: HttpStatusCode.CONFLICT_409
+          })
+        }
       })
 
       it('Should fail if the channel is already awaiting registration approval', async function () {

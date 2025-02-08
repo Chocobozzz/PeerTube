@@ -19,7 +19,6 @@ import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-co
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
   styleUrls: [ './followers-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

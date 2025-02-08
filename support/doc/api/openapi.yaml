@@ -794,6 +794,7 @@ paths:
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/privacyOneOf'
@@ -2256,6 +2257,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
@@ -2725,7 +2727,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -2779,7 +2781,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/VideoStudioCreateTask'
       responses:
@@ -2803,6 +2805,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
@@ -4497,6 +4500,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
@@ -8502,10 +8506,6 @@ components:
         redundancies:
           type: object
           properties:
-            files:
-              type: array
-              items:
-                $ref: '#/components/schemas/FileRedundancyInformation'
             streamingPlaylists:
               type: array
               items:

@@ -21,7 +21,6 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
   selector: 'my-video-studio-edit',
   templateUrl: './video-studio-edit.component.html',
   styleUrls: [ './video-studio-edit.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

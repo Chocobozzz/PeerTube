@@ -7,7 +7,6 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   selector: 'my-video-avatar-channel',
   templateUrl: './video-avatar-channel.component.html',
   styleUrls: [ './video-avatar-channel.component.scss' ],
-  standalone: true,
   imports: [ NgIf, ActorAvatarComponent ]
 })
 export class VideoAvatarChannelComponent implements OnInit {

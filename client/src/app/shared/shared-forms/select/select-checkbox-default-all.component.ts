@@ -31,7 +31,6 @@ import { SelectCheckboxComponent } from './select-checkbox.component'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ SelectCheckboxComponent, FormsModule ]
 })
 export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor {

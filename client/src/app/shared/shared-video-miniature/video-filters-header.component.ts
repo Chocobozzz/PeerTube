@@ -32,7 +32,6 @@ type QuickFilter = {
   selector: 'my-video-filters-header',
   styleUrls: [ './video-filters-header.component.scss' ],
   templateUrl: './video-filters-header.component.html',
-  standalone: true,
   imports: [
     RouterLink,
     FormsModule,

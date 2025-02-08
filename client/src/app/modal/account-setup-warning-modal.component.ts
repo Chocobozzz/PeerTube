@@ -13,7 +13,6 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-account-setup-warning-modal',
   templateUrl: './account-setup-warning-modal.component.html',
   styleUrls: [ './account-setup-warning-modal.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, RouterLink ]
 })
 export class AccountSetupWarningModalComponent implements OnInit {

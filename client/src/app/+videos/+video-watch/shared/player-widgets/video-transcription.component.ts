@@ -40,7 +40,6 @@ type Segment = {
   selector: 'my-video-transcription',
   templateUrl: './video-transcription.component.html',
   styleUrls: [ './player-widget.component.scss', './video-transcription.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     NgClass,

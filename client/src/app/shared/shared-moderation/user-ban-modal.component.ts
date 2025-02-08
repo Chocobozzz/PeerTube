@@ -20,7 +20,6 @@ import { UserAdminService } from '../shared-users/user-admin.service'
   selector: 'my-user-ban-modal',
   templateUrl: './user-ban-modal.component.html',
   styleUrls: [ './user-ban-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf, PeertubeCheckboxComponent ]
 })
 export class UserBanModalComponent extends FormReactive implements OnInit {

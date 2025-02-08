@@ -15,7 +15,6 @@ import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube
   selector: 'my-edit-live-configuration',
   templateUrl: './edit-live-configuration.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -16,7 +16,6 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   selector: 'my-plugin-list-installed',
   templateUrl: './plugin-list-installed.component.html',
   styleUrls: [ './plugin-list-installed.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     InfiniteScrollerDirective,

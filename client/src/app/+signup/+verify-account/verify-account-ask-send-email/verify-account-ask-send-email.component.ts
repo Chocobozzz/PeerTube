@@ -11,7 +11,6 @@ import { NgIf, NgClass } from '@angular/common'
   selector: 'my-verify-account-ask-send-email',
   templateUrl: './verify-account-ask-send-email.component.html',
   styleUrls: [ './verify-account-ask-send-email.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass ]
 })
 

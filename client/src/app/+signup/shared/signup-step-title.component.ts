@@ -5,7 +5,6 @@ import { MascotImageName, SignupMascotComponent } from './signup-mascot.componen
   selector: 'my-signup-step-title',
   templateUrl: './signup-step-title.component.html',
   styleUrls: [ './signup-step-title.component.scss' ],
-  standalone: true,
   imports: [ SignupMascotComponent ]
 })
 export class SignupStepTitleComponent {

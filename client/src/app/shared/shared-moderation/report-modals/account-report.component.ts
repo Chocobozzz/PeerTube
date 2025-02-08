@@ -20,7 +20,6 @@ import { Account } from '@app/shared/shared-main/account/account.model'
   selector: 'my-account-report',
   templateUrl: './report.component.html',
   styleUrls: [ './report.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,
@@ -66,7 +65,7 @@ export class AccountReportComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({
       reason: ABUSE_REASON_VALIDATOR,
-      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null)
+      predefinedReasons: mapValues(abusePredefinedReasonsMap, _ => null as any)
     })
 
     this.predefinedReasons = this.abuseService.getPrefefinedReasons('account')

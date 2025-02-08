@@ -161,6 +161,7 @@ export class UsersCommand extends AbstractCommand {
     videoQuotaDaily?: number
     role?: UserRoleType
     adminFlags?: UserAdminFlagType
+    email?: string
   }) {
     const {
       username,
@@ -168,7 +169,8 @@ export class UsersCommand extends AbstractCommand {
       password = 'password',
       videoQuota,
       videoQuotaDaily,
-      role = UserRole.USER
+      role = UserRole.USER,
+      email = username + '@example.com'
     } = options
 
     const path = '/api/v1/users'
@@ -182,7 +184,7 @@ export class UsersCommand extends AbstractCommand {
         password,
         role,
         adminFlags,
-        email: username + '@example.com',
+        email,
         videoQuota,
         videoQuotaDaily
       },

@@ -49,18 +49,19 @@ import { VideoPasswordService } from "./video-password.service";
 import { Video } from "./video.model";
 
 export type CommonVideoParams = {
-  videoPagination?: ComponentPaginationLight;
-  sort: VideoSortField | SortMeta;
-  include?: VideoIncludeType;
-  isLocal?: boolean;
-  categoryOneOf?: number[];
-  languageOneOf?: string[];
-  privacyOneOf?: VideoPrivacyType[];
-  isLive?: boolean;
-  skipCount?: boolean;
-  nsfw?: BooleanBothQuery;
-  search?: string;
-};
+  videoPagination?: ComponentPaginationLight
+  sort: VideoSortField | SortMeta
+  include?: VideoIncludeType
+  isLocal?: boolean
+  categoryOneOf?: number[]
+  languageOneOf?: string[]
+  privacyOneOf?: VideoPrivacyType[]
+  isLive?: boolean
+  skipCount?: boolean
+  nsfw?: BooleanBothQuery
+  host?: string
+  search?: string
+}
 
 @Injectable()
 export class VideoService {
@@ -79,7 +80,7 @@ export class VideoService {
     private restService: RestService,
     private serverService: ServerService,
     private confirmService: ConfirmService
-  ) {}
+  ) { }
 
   getVideoViewUrl(uuid: string) {
     return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`;
@@ -243,8 +244,8 @@ export class VideoService {
     return this.authHttp
       .get<ResultList<Video>>(
         VideoChannelService.BASE_VIDEO_CHANNEL_URL +
-          videoChannel.nameWithHost +
-          "/videos",
+        videoChannel.nameWithHost +
+        "/videos",
         { params }
       )
       .pipe(
@@ -419,7 +420,7 @@ export class VideoService {
             catchError((err) => {
               if (
                 err.error?.code ===
-                  ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED &&
+                ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED &&
                 !forceTranscoding
               ) {
                 const message =
@@ -641,6 +642,7 @@ export class VideoService {
       isLive,
       nsfw,
       search,
+      host,
 
       ...otherOptions
     } = options;
@@ -655,41 +657,27 @@ export class VideoService {
       this.buildListSort(sort)
     );
 
-    if (skipCount) newParams = newParams.set("skipCount", skipCount + "");
+    if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
 
-    if (isLocal !== undefined) newParams = newParams.set("isLocal", isLocal);
-    if (include !== undefined) newParams = newParams.set("include", include);
-    if (isLive !== undefined) newParams = newParams.set("isLive", isLive);
-    if (nsfw !== undefined) newParams = newParams.set("nsfw", nsfw);
-    if (languageOneOf !== undefined)
-      newParams = this.restService.addArrayParams(
-        newParams,
-        "languageOneOf",
-        languageOneOf
-      );
-    if (categoryOneOf !== undefined)
-      newParams = this.restService.addArrayParams(
-        newParams,
-        "categoryOneOf",
-        categoryOneOf
-      );
-    if (privacyOneOf !== undefined)
-      newParams = this.restService.addArrayParams(
-        newParams,
-        "privacyOneOf",
-        privacyOneOf
-      );
-    if (search) newParams = newParams.set("search", search);
+    if (isLocal !== undefined) newParams = newParams.set('isLocal', isLocal)
+    if (include !== undefined) newParams = newParams.set('include', include)
+    if (isLive !== undefined) newParams = newParams.set('isLive', isLive)
+    if (nsfw !== undefined) newParams = newParams.set('nsfw', nsfw)
+    if (languageOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+    if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (search) newParams = newParams.set('search', search)
+    if (host) newParams = newParams.set('host', host)
 
-    newParams = this.restService.addObjectParams(newParams, otherOptions);
+    newParams = this.restService.addObjectParams(newParams, otherOptions)
 
-    return newParams;
+    return newParams
   }
 
   private buildListSort(sortArg: VideoSortField | SortMeta) {
-    const sort = this.restService.buildSortString(sortArg);
+    const sort = this.restService.buildSortString(sortArg)
 
-    if (typeof sort === "string") {
+    if (typeof sort === 'string') {
       // Silently use the best algorithm for logged in users if they chose the hot algorithm
       if (this.auth.isLoggedIn() && (sort === "hot" || sort === "-hot")) {
         return sort.replace("hot", "best");
