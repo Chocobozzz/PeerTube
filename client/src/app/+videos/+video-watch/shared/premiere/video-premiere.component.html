@@ -1,0 +1,10 @@
+<div class="premiere-container">
+  <img [src]="video?.thumbnailUrl" alt="Video Thumbnail" class="video-thumbnail" />
+  <div class="premiere-info">
+    <div class="premiere-text">
+      
+      <p>Video will be available in {{ remainingTime }}</p>
+    </div>
+    <my-subscribe-button #subscribeButton [videoChannels]="[video.channel]" size="small"></my-subscribe-button>
+  </div>
+</div>

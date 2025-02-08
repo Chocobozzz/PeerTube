@@ -3,7 +3,8 @@ export const VideoPrivacy = {
   UNLISTED: 2,
   PRIVATE: 3,
   INTERNAL: 4,
-  PASSWORD_PROTECTED: 5
-} as const
+  PASSWORD_PROTECTED: 5,
+  SCHEDULED: 6,
+} as const;
 
-export type VideoPrivacyType = typeof VideoPrivacy[keyof typeof VideoPrivacy]
+export type VideoPrivacyType = (typeof VideoPrivacy)[keyof typeof VideoPrivacy];
