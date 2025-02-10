@@ -5,7 +5,12 @@ import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
 import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
-import { getCaptionReadStream, getHLSFileReadStream, getOriginalFileReadStream, getWebVideoFileReadStream } from '@server/lib/object-storage/videos.js'
+import {
+  getCaptionReadStream,
+  getHLSFileReadStream,
+  getOriginalFileReadStream,
+  getWebVideoFileReadStream
+} from '@server/lib/object-storage/videos.js'
 import { muxToMergeVideoFiles } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
