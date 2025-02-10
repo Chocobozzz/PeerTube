@@ -291,8 +291,6 @@ export class UserExporter {
       stream.once('readable', () => {
         if (errored) return
 
-        logger.error('Readable stream ' + archivePath)
-
         this.archive.append(stream, { name: archivePath })
       })
     })

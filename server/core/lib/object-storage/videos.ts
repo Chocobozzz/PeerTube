@@ -252,3 +252,18 @@ export function getOriginalFileReadStream (options: {
     rangeHeader
   })
 }
+
+export function getCaptionReadStream (options: {
+  filename: string
+  rangeHeader: string
+}) {
+  const { filename, rangeHeader } = options
+
+  const key = generateCaptionObjectStorageKey(filename)
+
+  return createObjectReadStream({
+    key,
+    bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS,
+    rangeHeader
+  })
+}
