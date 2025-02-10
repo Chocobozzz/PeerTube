@@ -306,7 +306,7 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
 
   updateCaption () {
     if (this.segmentToUpdate) {
-      this.notifier.error($localize`A segment is being edited. Save or cancel the edit first.`)
+      this.notifier.error($localize`A segment is being edited. Save or cancel your edits first.`)
       return
     }
 

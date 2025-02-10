@@ -16,9 +16,9 @@
 
       <div class="d-flex justify-content-between align-items-center mb-3 ms-2">
         <my-peertube-checkbox
-          inputName="raw-edit"
-          [(ngModel)]="rawEdit" (ngModelChange)="onRawEditSwitch()"
-          i18n-labelText labelText="Raw edit"
+          inputName="raw-edition"
+          [(ngModel)]="rawEdition" (ngModelChange)="onRawEditionSwitch()"
+          i18n-labelText labelText="Edit raw"
         ></my-peertube-checkbox>
 
         <my-button *ngIf="!rawEdit && !segmentToUpdate" i18n-label label="Add a new segment" (click)="addSegmentToEdit()">
