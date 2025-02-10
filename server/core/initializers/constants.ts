@@ -1113,7 +1113,7 @@ export const TRACKER_RATE_LIMITS = {
 }
 
 // We use -2 instead of 2 because of historical reason
-// When p2p-media-loader bumps to v3, we'll be able to switch to it
+// When p2p-media-loader bumps to v3, we'll be able to switch to 3 directly
 export const P2P_MEDIA_LOADER_PEER_VERSION = -2
 
 // ---------------------------------------------------------------------------

@@ -68,8 +68,8 @@
 
       <my-button
         theme="primary" i18n-label label="Apply edits" icon="circle-tick"
-        (click)="runEdition()" (keydown.enter)="runEdition()"
-        [disabled]="!form.valid || isRunningEdition || noEdition()"
+        (click)="runEdit()" (keydown.enter)="runEdit()"
+        [disabled]="!form.valid || isRunningEdit || noEdit()"
       ></my-button>
     </form>
 
@@ -78,7 +78,7 @@
       <my-embed [video]="video"></my-embed>
     </div>
 
-    <div class="tasks-container" *ngIf="!noEdition()">
+    <div class="tasks-container" *ngIf="!noEdit()">
       <div class="mb-1 fw-bold" i18n>Edits to apply:</div>
 
       <ol>

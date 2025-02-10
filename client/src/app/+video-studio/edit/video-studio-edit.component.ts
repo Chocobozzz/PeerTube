@@ -34,7 +34,7 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
   ]
 })
 export class VideoStudioEditComponent extends FormReactive implements OnInit {
-  isRunningEditing = false
+  isRunningEdit = false
 
   video: VideoDetails
 
@@ -86,10 +86,10 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
     return this.serverService.getHTMLConfig().video.image.extensions
   }
 
-  async runEditing () {
-    if (this.isRunningEditing) return
+  async runEdit () {
+    if (this.isRunningEdit) return
     if (!this.form.valid) return
-    if (this.noEditing()) return
+    if (this.noEdit()) return
 
     const title = $localize`Are you sure you want to edit "${this.video.name}"?`
     const listHTML = this.getTasksSummary().map(t => `<li>${t}</li>`).join('')
@@ -100,7 +100,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
 
     if (await this.confirmService.confirm(confirmHTML, title) !== true) return
 
-    this.isRunningEditing = true
+    this.isRunningEdit = true
 
     const tasks = this.buildTasks()
 
@@ -117,7 +117,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
 
         error: err => {
           this.loadingBar.useRef().complete()
-          this.isRunningEditing = false
+          this.isRunningEdit = false
           this.notifier.error(err.message)
           logger.error(err)
         }
@@ -132,7 +132,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
     return $localize`(extensions: ${this.imageExtensions.join(', ')})`
   }
 
-  noEditing () {
+  noEdit () {
     return this.buildTasks().length === 0
   }
 
