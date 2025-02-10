@@ -8,7 +8,6 @@ import {
   cleanupTests,
   createMultipleServers,
   followAll,
-  makeGetRequest,
   makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
