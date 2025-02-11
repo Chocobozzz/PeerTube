@@ -223,11 +223,13 @@ export class ProcessLiveRTMPHLSTranscoding {
   private async onFFmpegEnded () {
     if (this.ended) return
 
-    this.ended = true
     logger.info('FFmpeg ended, sending success to server')
 
     // Wait last ffmpeg chunks generation
     await wait(1500)
+    await this.sendPendingChunks()
+
+    this.ended = true
 
     this.sendSuccess()
       .catch(err => logger.error({ err }, 'Cannot send success'))
@@ -360,11 +362,17 @@ export class ProcessLiveRTMPHLSTranscoding {
 
   private async updatePlaylistContent (playlistName: string, latestChunkFilename: string) {
     const m3u8Path = join(this.outputPath, playlistName)
-    const playlistContent = await readFile(m3u8Path, 'utf-8')
+    let playlistContent = await readFile(m3u8Path, 'utf-8')
+
+    if (!playlistContent.includes('#EXT-X-ENDLIST')) {
+      playlistContent = playlistContent.substring(
+        0,
+        playlistContent.lastIndexOf(latestChunkFilename) + latestChunkFilename.length
+      ) + '\n'
+    }
 
     // Remove new chunk references, that will be processed later
     this.latestFilteredPlaylistContent[playlistName] = playlistContent
-      .substring(0, playlistContent.lastIndexOf(latestChunkFilename) + latestChunkFilename.length) + '\n'
   }
 
   private buildPlaylistFileParam (playlistName: string) {
