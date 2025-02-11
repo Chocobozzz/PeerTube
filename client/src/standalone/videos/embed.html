@@ -123,6 +123,14 @@
       if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
         window.displayIncompatibleBrowser()
       }
+
+      try {
+        BigInt(9007199254740991)
+      } catch (err) {
+        console.error('BigInt is not supported on this web browser')
+
+        window.displayIncompatibleBrowser()
+      }
     </script>
 
     <script type="module" src="./embed.ts"></script>

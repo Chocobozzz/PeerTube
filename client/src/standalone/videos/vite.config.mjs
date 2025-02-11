@@ -7,6 +7,12 @@ import checker from 'vite-plugin-checker'
 
 import { getCSSConfig, getAliasConfig } from '../build-tools/vite-utils.js'
 
+const nodeConfig = process.env.NODE_CONFIG
+  ? JSON.parse(process.env.NODE_CONFIG)
+  : undefined
+
+const hostname = nodeConfig?.webserver?.hostname || 'localhost'
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = resolve(__dirname, '../../../')
 
@@ -19,9 +25,11 @@ export default defineConfig(({ mode }) => {
     root: resolve(root, 'src', 'standalone', 'videos'),
 
     server: {
+      host: hostname,
+
       proxy: {
         '^/(videos|video-playlists)/(test-)?embed/[^\/\.]+$': {
-          target: 'http://localhost:5173',
+          target: 'http://' + hostname + ':5173',
           rewrite: (path) => {
             return path.replace('/videos/embed/', 'embed.html?videoId=')
               .replace('/videos/test-embed/', 'test-embed.html?')
@@ -30,13 +38,13 @@ export default defineConfig(({ mode }) => {
           }
         },
         '^/(videos|video-playlists)/(test-)?embed/.*': {
-          target: 'http://localhost:5173',
+          target: 'http://' + hostname + ':5173',
           rewrite: (path) => {
             return path.replace(/\/(videos|video-playlists)\/(test-)?embed\//, '')
           }
         },
         '^/lazy-static': {
-          target: 'http://localhost:9000'
+          target: 'http://' + hostname + ':9000'
         }
       }
     },
