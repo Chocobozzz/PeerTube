@@ -1,16 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
-    <title>volume-mute</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <g id="Artboard-4" transform="translate(-92.000000, -159.000000)" stroke="#fff" stroke-width="2">
-            <g id="22" transform="translate(92.000000, 159.000000)">
-                <path d="M2,8.99703014 C2,8.4463856 2.44335318,8 3.0093689,8 L6,8 L12,4 L12,20 L6,16 L3.0093689,16 C2.45190985,16 2,15.5469637 2,15.0029699 L2,8.99703014 Z" id="Rectangle-415" stroke-linejoin="round"></path>
-                <path d="M16,15 L22,9" id="Path-28"></path>
-                <path d="M16.0000002,15 L22.0249378,9" id="Path-28" transform="translate(19.012469, 12.000000) scale(-1, 1) translate(-19.012469, -12.000000) "></path>
-            </g>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+    <g fill="none" fill-rule="evenodd" stroke="#fff" stroke-linecap="round" stroke-width="2">
+        <path stroke-linejoin="round" d="M2 8.997C2 8.447 2.443 8 3.01 8H6l6-4v16l-6-4H3.01C2.451 16 2 15.547 2 15.003z"/>
+        <path d="m16 15 6-6M22.025 15 16 9"/>
     </g>
 </svg>

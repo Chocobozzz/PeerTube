@@ -1,13 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <g id="Artboard-4" transform="translate(-884.000000, -115.000000)" stroke="#fff" stroke-width="2">
-            <g id="20" transform="translate(884.000000, 115.000000)">
-                <path d="M2,8.99703014 C2,8.4463856 2.44335318,8 3.0093689,8 L6,8 L12,4 L12,20 L6,16 L3.0093689,16 C2.45190985,16 2,15.5469637 2,15.0029699 L2,8.99703014 Z" id="Rectangle-415" stroke-linejoin="round"></path>
-                <path d="M16,8 C16,8 18,9.5 18,12 C18,14.5 16,16 16,16" id="Path-26"></path>
-                <path d="M16.0734116,20 C19.3093571,18.9698098 22.0000001,15.5773201 22.0000001,12 C22.0000001,8.43619491 19.2903975,5.04132966 16.0734116,4" id="Oval-33"></path>
-            </g>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+    <g fill="none" fill-rule="evenodd" stroke="#fff" stroke-linecap="round" stroke-width="2">
+        <path stroke-linejoin="round" d="M2 8.997C2 8.447 2.443 8 3.01 8H6l6-4v16l-6-4H3.01C2.451 16 2 15.547 2 15.003z"/>
+        <path d="M16 8s2 1.5 2 4-2 4-2 4"/>
+        <path d="M16.073 20C19.31 18.97 22 15.577 22 12c0-3.564-2.71-6.959-5.927-8"/>
     </g>
 </svg>
