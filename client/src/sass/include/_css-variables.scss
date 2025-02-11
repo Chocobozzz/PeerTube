@@ -63,7 +63,7 @@
   --header-height: #{$header-height};
 
   --embed-fg: #fff;
-  --embed-big-play-bg: transparent;
+  --embed-big-play-bg: rgba(0, 0, 0, 0.8);
 
   &.mobile-app-msg {
     --header-height: #{$header-height + $header-mobile-msg-height};
