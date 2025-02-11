@@ -238,11 +238,20 @@ describe('Test video comments', function () {
       await command.addReply({ token: userAccessTokenServer1, videoId, toCommentId: threadId2, text: text2 })
 
       const text3 = 'my second answer to thread 4'
-      await command.addReply({ videoId, toCommentId: threadId2, text: text3 })
+      await command.addReply({ videoId, toCommentId: threadId2, token: userAccessTokenServer1, text: text3 })
+      await command.addReplyToLastReply({ text: 'third answer' })
 
       const tree = await command.getThread({ videoId: videoUUID, threadId: threadId2 })
       expect(tree.comment.totalRepliesFromVideoAuthor).to.equal(1)
-      expect(tree.comment.totalReplies).to.equal(2)
+      expect(tree.comment.totalReplies).to.equal(3)
+
+      const reply1 = tree.children.find(c => c.comment.text === text2)
+      expect(reply1.comment.totalReplies).to.equal(0)
+      expect(reply1.comment.totalRepliesFromVideoAuthor).to.equal(0)
+
+      const reply2 = tree.children.find(c => c.comment.text === text3)
+      expect(reply2.comment.totalReplies).to.equal(1)
+      expect(reply2.comment.totalRepliesFromVideoAuthor).to.equal(1)
     })
   })
 
@@ -257,9 +266,9 @@ describe('Test video comments', function () {
       for (const fn of listFunctions()) {
         const { data, total } = await fn({ start: 0, count: 1 })
 
-        expect(total).to.equal(7)
+        expect(total).to.equal(8)
         expect(data).to.have.lengthOf(1)
-        expect(data[0].text).to.equal('my second answer to thread 4')
+        expect(data[0].text).to.equal('third answer')
         expect(data[0].account.name).to.equal('root')
         expect(data[0].account.displayName).to.equal('root')
         expect(data[0].account.avatars).to.have.lengthOf(4)
@@ -268,7 +277,7 @@ describe('Test video comments', function () {
       for (const fn of listFunctions()) {
         const { data, total } = await fn({ start: 1, count: 2 })
 
-        expect(total).to.equal(7)
+        expect(total).to.equal(8)
         expect(data).to.have.lengthOf(2)
 
         expect(data[0].account.avatars).to.have.lengthOf(4)
@@ -307,10 +316,11 @@ describe('Test video comments', function () {
       for (const fn of listFunctions()) {
         const { total, data } = await fn({ searchAccount: 'user' })
 
-        expect(data).to.have.lengthOf(1)
-        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(2)
+        expect(total).to.equal(2)
 
-        expect(data[0].text).to.equal('a first answer to thread 4 by a third party')
+        expect(data[0].text).to.equal('my second answer to thread 4')
+        expect(data[1].text).to.equal('a first answer to thread 4 by a third party')
       }
 
       const { data, total } = await command.listCommentsOnMyVideos({ token: userAccessTokenServer1, searchAccount: 'user' })
@@ -322,8 +332,8 @@ describe('Test video comments', function () {
       for (const fn of listFunctions()) {
         const { total, data } = await fn({ searchVideo: 'video' })
 
-        expect(data).to.have.lengthOf(7)
-        expect(total).to.equal(7)
+        expect(data).to.have.lengthOf(8)
+        expect(total).to.equal(8)
       }
 
       for (const fn of listFunctions()) {
@@ -358,8 +368,8 @@ describe('Test video comments', function () {
 
       {
         const { total, data } = await command.listForAdmin({ videoId: videoUUID })
-        expect(data).to.have.lengthOf(7)
-        expect(total).to.equal(7)
+        expect(data).to.have.lengthOf(8)
+        expect(total).to.equal(8)
       }
 
       {
@@ -377,8 +387,8 @@ describe('Test video comments', function () {
 
       {
         const { total, data } = await command.listForAdmin({ videoChannelId: rootChannels[0].id })
-        expect(data).to.have.lengthOf(7)
-        expect(total).to.equal(7)
+        expect(data).to.have.lengthOf(8)
+        expect(total).to.equal(8)
       }
 
       {

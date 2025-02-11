@@ -68,7 +68,7 @@ export class SelectOptionsComponent implements AfterContentInit, ControlValueAcc
   // Allow plugins to update our value
   @HostListener('change', [ '$event.target' ])
   handleChange (target: HTMLInputElement) {
-    // Prevent the primeng search input to out value
+    // Prevent the primeng search input to update our value
     if (target.role === 'searchbox') return
 
     this.writeValue(target.value)

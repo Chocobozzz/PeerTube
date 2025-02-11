@@ -414,7 +414,7 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
       `SELECT COUNT("replies"."id") AS "count" FROM "videoComment" AS "replies" ` +
       `INNER JOIN "video" ON "video"."id" = "replies"."videoId" AND "replies"."videoId" = :videoId ` +
       `LEFT JOIN "videoChannel" ON "video"."channelId" = "videoChannel"."id" ` +
-      `WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ` +
+      `WHERE ("replies"."inReplyToCommentId" = "VideoCommentModel"."id" OR "replies"."originCommentId" = "VideoCommentModel"."id") ` +
         `AND "deletedAt" IS NULL ` +
         `AND ${blockWhereString} ` +
     `) "totalReplies" ON TRUE `
@@ -428,7 +428,8 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
       `SELECT COUNT("replies"."id") AS "count" FROM "videoComment" AS "replies" ` +
       `INNER JOIN "video" ON "video"."id" = "replies"."videoId" AND "replies"."videoId" = :videoId ` +
       `INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
-      `WHERE "replies"."originCommentId" = "VideoCommentModel"."id" AND "replies"."accountId" = "videoChannel"."accountId"` +
+      `WHERE ("replies"."inReplyToCommentId" = "VideoCommentModel"."id" OR "replies"."originCommentId" = "VideoCommentModel"."id") ` +
+        `AND "replies"."accountId" = "videoChannel"."accountId"` +
     `) "totalRepliesFromVideoAuthor" ON TRUE `
   }
 
