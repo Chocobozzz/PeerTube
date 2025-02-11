@@ -317,7 +317,7 @@ class StatsCard extends Component {
 
     const p2pEnabled = this.options_.p2pEnabled && this.mode === 'p2p-media-loader'
 
-    this.setInfoValue(this.playerMode, this.mode)
+    this.setInfoValue(this.playerMode, this.mode === 'p2p-media-loader' ? 'P2P Media Loader (v2)' : 'Web Video')
     this.setInfoValue(this.p2p, player.localize(p2pEnabled ? 'enabled' : 'disabled'))
     this.setInfoValue(this.uuid, this.options_.videoUUID)
 

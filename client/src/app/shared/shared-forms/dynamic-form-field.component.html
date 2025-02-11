@@ -10,35 +10,51 @@
 
   <div *ngIf="setting.descriptionHTML" class="label-small-info" [innerHTML]="setting.descriptionHTML"></div>
 
-  <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
+  @switch (setting.type) {
+    @case ('input') {
+      <input type="text" [id]="setting.name" [formControlName]="setting.name" />
+    }
 
-  <div *ngIf="setting.type === 'select'" class="peertube-select-container">
-    <select  [id]="setting.name" [formControlName]="setting.name" class="form-control">
-      <option *ngFor="let option of setting.options" [value]="option.value">{{ option.label }}</option>
-    </select>
-  </div>
+    @case ('select') {
+      <div class="peertube-select-container">
+        <select  [id]="setting.name" [formControlName]="setting.name" class="form-control">
+          <option *ngFor="let option of setting.options" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
+    }
 
-  <my-input-text *ngIf="setting.type === 'input-password'" [formError]="formErrors['settings.name']" [formControlName]="setting.name" [inputId]="setting.name"></my-input-text>
+    @case ('input-password') {
+      <my-input-text [formError]="formErrors['settings.name']" [formControlName]="setting.name" [inputId]="setting.name"></my-input-text>
+    }
 
-  <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
+    @case ('input-textarea') {
+      <textarea type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
 
-  <my-help *ngIf="setting.type === 'markdown-text'" helpType="markdownText"></my-help>
+    }
 
-  <my-help *ngIf="setting.type === 'markdown-enhanced'" helpType="markdownEnhanced"></my-help>
+    @case ('markdown-text') {
+      <my-help helpType="markdownText"></my-help>
 
-  <my-markdown-textarea
-    *ngIf="setting.type === 'markdown-text'"
-    markdownType="text" [inputId]="setting.name" [formControlName]="setting.name"
-    [formError]="formErrors['settings.name']"
-  ></my-markdown-textarea>
+      <my-markdown-textarea
+        markdownType="text" [inputId]="setting.name" [formControlName]="setting.name"
+        [formError]="formErrors['settings.name']"
+      ></my-markdown-textarea>
+    }
 
-  <my-markdown-textarea
-    *ngIf="setting.type === 'markdown-enhanced'"
-    markdownType="enhanced" [inputId]="setting.name" [formControlName]="setting.name"
-    [formError]="formErrors['settings.name']"
-  ></my-markdown-textarea>
+    @case ('markdown-enhanced') {
+      <my-help helpType="markdownEnhanced"></my-help>
 
-  <div *ngIf="setting.type === 'html'" [innerHTML]="setting.html"></div>
+      <my-markdown-textarea
+        markdownType="enhanced" [inputId]="setting.name" [formControlName]="setting.name"
+        [formError]="formErrors['settings.name']"
+      ></my-markdown-textarea>
+
+    }
+
+    @case ('html') {
+      <div [innerHTML]="setting.html"></div>
+    }
+  }
 
   <div *ngIf="hasDedicatedFormError() && formErrors[setting.name]" class="form-error" role="alert">
     {{ formErrors[setting.name] }}

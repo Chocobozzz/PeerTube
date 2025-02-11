@@ -49,22 +49,23 @@ export class FormValidatorService {
     defaultValues: BuildFormDefaultValues = {}
   ) {
     for (const name of objectKeysTyped(formToBuild)) {
-      if (typeof formErrors[name] === 'string') {
-        formErrors[name] = ''
-      }
-
       const field = formToBuild[name]
+
       if (this.isRecursiveField(field)) {
+        formErrors[name] = {}
+
         this.updateFormGroup(
           // FIXME: typings
           (form as any)[name],
-          formErrors[name] as FormReactiveErrors,
+          formErrors[name],
           validationMessages[name] as FormReactiveValidationMessages,
           formToBuild[name] as BuildFormArgument,
           defaultValues[name] as BuildFormDefaultValues
         )
         continue
       }
+
+      formErrors[name] = ''
 
       if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
