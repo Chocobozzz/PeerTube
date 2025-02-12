@@ -5,7 +5,6 @@ import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, Rest
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
-import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
