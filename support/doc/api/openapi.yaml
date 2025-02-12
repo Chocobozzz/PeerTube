@@ -2179,7 +2179,7 @@ paths:
 
   /api/v1/users/me/subscriptions:
     get:
-      summary: Get my user subscriptions
+      summary: List my user subscriptions
       security:
         - OAuth2:
           - user
@@ -2188,7 +2188,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/mySubscriptionSort'
       responses:
         '200':
           description: successful operation
@@ -2381,29 +2381,49 @@ paths:
             schema:
               type: object
               properties:
-                newVideoFromSubscription:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newCommentOnMyVideo:
-                  $ref: '#/components/schemas/NotificationSettingValue'
                 abuseAsModerator:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 videoAutoBlacklistAsModerator:
                   $ref: '#/components/schemas/NotificationSettingValue'
+                newUserRegistration:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                newVideoFromSubscription:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
                 blacklistOnMyVideo:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 myVideoPublished:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 myVideoImportFinished:
                   $ref: '#/components/schemas/NotificationSettingValue'
-                newFollow:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newUserRegistration:
-                  $ref: '#/components/schemas/NotificationSettingValue'
+
                 commentMention:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newCommentOnMyVideo:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                newFollow:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 newInstanceFollower:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 autoInstanceFollowing:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                abuseStateChange:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                abuseNewMessage:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                newPeerTubeVersion:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newPluginVersion:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                myVideoStudioEditionFinished:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                myVideoTranscriptionGenerated:
                   $ref: '#/components/schemas/NotificationSettingValue'
       responses:
         '204':
@@ -7102,6 +7122,16 @@ components:
         enum:
           - 'local'
           - 'search-index'
+    mySubscriptionSort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - -id
+          - -createdAt
+          - -channelUpdatedAt
     videosSort:
       name: sort
       in: query
@@ -10734,6 +10764,8 @@ components:
             - `20` NEW_USER_REGISTRATION_REQUEST
 
             - `21` NEW_LIVE_FROM_SUBSCRIPTION
+
+            - `22` MY_VIDEO_TRANSCRIPTION_GENERATED
         read:
           type: boolean
         video:
