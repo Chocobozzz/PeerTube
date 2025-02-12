@@ -251,6 +251,8 @@ class LiveManager {
   }) {
     const { inputLocalUrl, inputPublicUrl, sessionId, streamKey } = options
 
+    logger.debug(`Handling session ${sessionId}`, lTags(sessionId))
+
     const videoLive = await VideoLiveModel.loadByStreamKey(streamKey)
     if (!videoLive) {
       logger.warn('Unknown live video with stream key %s.', streamKey, lTags(sessionId))
@@ -270,7 +272,10 @@ class LiveManager {
     }
 
     if (this.videoSessions.has(video.uuid)) {
-      logger.warn('Video %s has already a live session. Refusing stream %s.', video.uuid, streamKey, lTags(sessionId, video.uuid))
+      logger.warn(
+        'Video %s has already a live session %s. Refusing stream %s.',
+        video.uuid, this.videoSessions.get(video.uuid), streamKey, lTags(sessionId, video.uuid)
+      )
       return this.abortSession(sessionId)
     }
 
@@ -286,8 +291,19 @@ class LiveManager {
 
     this.videoSessions.set(video.uuid, sessionId)
 
+    logger.debug('Probing ' + inputLocalUrl, lTags(sessionId, video.uuid))
+
     const now = Date.now()
-    const probe = await ffprobePromise(inputLocalUrl)
+    let probe: FfprobeData
+
+    try {
+      probe = await ffprobePromise(inputLocalUrl)
+    } catch (err) {
+      logger.error('Cannot probe ' + inputLocalUrl, { err, ...lTags(sessionId, video.uuid) })
+
+      this.videoSessions.delete(video.uuid)
+      return this.abortSession(sessionId)
+    }
 
     const [ { resolution, ratio }, fps, bitrate, hasAudio, hasVideo ] = await Promise.all([
       getVideoStreamDimensionsInfo(inputLocalUrl, probe),
