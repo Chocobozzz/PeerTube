@@ -7,10 +7,11 @@ async function waitJobs (
   serversArg: PeerTubeServer[] | PeerTubeServer,
   options: {
     skipDelayed?: boolean // default false
+    skipFailed?: boolean // default false
     runnerJobs?: boolean // default false
   } = {}
 ) {
-  const { skipDelayed = false, runnerJobs = false } = options
+  const { skipDelayed = false, skipFailed = false, runnerJobs = false } = options
 
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
@@ -69,6 +70,8 @@ async function waitJobs (
           .then(({ data }) => {
             for (const job of data) {
               if (job.state.id !== RunnerJobState.COMPLETED) {
+                if (skipFailed && job.state.id === RunnerJobState.ERRORED) continue
+
                 pendingRequests = true
 
                 if (process.env.DEBUG) {

@@ -109,7 +109,7 @@ describe('Test transcription in peertube-runner program', function () {
         this.timeout(360000)
 
         const uuid = await uploadForTranscription(servers[0])
-        await waitJobs(servers, { runnerJobs: true })
+        await waitJobs(servers, { runnerJobs: true, skipFailed: true }) // skipFailed because previous test had a failed runner job
 
         await checkAutoCaption({ servers, uuid, objectStorageBaseUrl: objectStorage.getMockCaptionFileBaseUrl() })
         await checkLanguage(servers, uuid, 'en')
