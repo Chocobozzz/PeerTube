@@ -332,21 +332,25 @@ async function uploadToStorage (options: {
     params: input
   })
 
-  const response = await parallelUploads3.done()
-  // Check is needed even if the HTTP status code is 200 OK
-  // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
-  if (!response.Bucket) {
-    const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
-    logger.error(message, { response, ...lTags() })
-    throw new Error(message)
+  try {
+    const response = await parallelUploads3.done()
+    // Check is needed even if the HTTP status code is 200 OK
+    // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
+    if (!response.Bucket) {
+      const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
+      logger.error(message, { response, ...lTags() })
+      throw new Error(message)
+    }
+
+    logger.debug(
+      'Completed %s%s in bucket %s',
+      bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, { ...lTags(), responseMetadata: response.$metadata }
+    )
+
+    return getInternalUrl(bucketInfo, objectStorageKey)
+  } catch (err) {
+    throw parseS3Error(err)
   }
-
-  logger.debug(
-    'Completed %s%s in bucket %s',
-    bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, { ...lTags(), reseponseMetadata: response.$metadata }
-  )
-
-  return getInternalUrl(bucketInfo, objectStorageKey)
 }
 
 async function applyOnPrefix (options: {
@@ -394,4 +398,20 @@ function getACL (isPrivate: boolean) {
   return isPrivate
     ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE as ObjectCannedACL
     : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC as ObjectCannedACL
+}
+
+// Prevent logging too much information, in particular the body request
+function parseS3Error (err: any) {
+  if (err.$response?.body) {
+    const body = err.$response.body
+
+    err.$response.body = {
+      rawHeaders: body.rawHeaders,
+      req: {
+        _header: body.req?._header
+      }
+    }
+  }
+
+  return err
 }
