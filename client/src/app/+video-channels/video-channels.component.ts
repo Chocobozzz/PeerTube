@@ -34,8 +34,7 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
     NgClass,
     HorizontalMenuComponent,
     RouterOutlet,
-    SupportModalComponent,
-    PTDatePipe
+    SupportModalComponent
   ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {

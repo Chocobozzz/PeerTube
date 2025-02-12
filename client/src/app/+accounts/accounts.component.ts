@@ -7,7 +7,6 @@ import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
-import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
@@ -41,7 +40,6 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
     SimpleSearchInputComponent,
     RouterOutlet,
     AccountReportComponent,
-    PTDatePipe,
     HorizontalMenuComponent
   ]
 })

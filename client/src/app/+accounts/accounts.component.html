@@ -10,7 +10,7 @@
         <div class="actor-info">
           <div>
             <div class="actor-display-name align-items-center">
-              <h1 i18n-title [title]="'Created on ' + (account.createdAt | ptDate)">{{ account.displayName }}</h1>
+              <h1>{{ account.displayName }}</h1>
 
               <my-user-moderation-dropdown
                 class="mx-3" [prependActions]="prependModerationActions"

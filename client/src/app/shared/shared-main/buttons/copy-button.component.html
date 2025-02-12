@@ -2,7 +2,7 @@
   type="button"
   class="btn copy-button"
   (click)="copy()"
-  [title]="title" [ngClass]="{ 'is-input-group': isInputGroup, 'with-border': withBorder }"
+  [attr.title]="title" [ngClass]="{ 'is-input-group': isInputGroup, 'with-border': withBorder }"
 >
   <my-global-icon iconName="copy"></my-global-icon>
 
