@@ -1561,7 +1561,7 @@
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html" xml:space="preserve">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="translated">Segur que voleu suprimir els fitxers de «<x id="PH" equiv-text="this.video.name"/>»?</target>
+        <target state="translated">De veritat voleu suprimir els fitxers de «<x id="PH" equiv-text="this.video.name"/>»?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">369</context>
@@ -5134,7 +5134,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
-        <target state="translated">Segur que voleu tancar aquesta finestra sense desar els canvis?</target>
+        <target state="translated">De veritat voleu tancar aquesta finestra sense desar els canvis?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">411</context>
@@ -5263,7 +5263,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3011306880188617431" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="list.listName"/> list?</source>
-        <target state="translated">Segur que voleu eliminar aquesta <x id="PH" equiv-text="list.listName"/> llista?</target>
+        <target state="translated">De veritat voleu eliminar aquesta <x id="PH" equiv-text="list.listName"/> llista?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -6499,7 +6499,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html" xml:space="preserve">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="translated">Segur que voleu suprimir i modificar aquest comentari?</target>
+        <target state="translated">De veritat voleu suprimir i modificar aquest comentari?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">254</context>
@@ -7203,7 +7203,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html" xml:space="preserve">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">Segur que voleu deixar de seguir a {count, plural,=1 {<x id="entryName"/>?} other {<x id="count"/> entrades?}}</target>
+        <target state="translated">De veritat voleu deixar de seguir a {count, plural,=1 {<x id="entryName"/>?} other {<x id="count"/> entrades?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -8807,7 +8807,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="translated">Segur que voleu suprimir tots els comentaris de <x id="PH"/>?</target>
+        <target state="translated">De veritat voleu suprimir tots els comentaris de <x id="PH"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">274</context>
@@ -11231,7 +11231,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4561231095368496452" datatype="html" xml:space="preserve">
         <source>Are you sure you want to disable two factor authentication of your account?</source>
-        <target state="translated">Segur que voleu desactivar l'autenticació de dos factors al vostre compte?</target>
+        <target state="translated">De veritat voleu desactivar l'autenticació de dos factors al vostre compte?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -12163,7 +12163,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete all your video history?</source>
-        <target state="translated">Segur que voleu suprimir tot l'historial de vídeo?</target>
+        <target state="translated">De veritat voleu suprimir tot l'historial de vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -14643,7 +14643,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8823680466537853782" datatype="html" xml:space="preserve">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Segur que voleu rebutjar {count, plural, =1 {<x id="followerName"/> sol·licitud} other {<x id="count"/> sol·licituds}} de seguiment?</target>
+        <target state="translated">De veritat voleu rebutjar {count, plural, =1 {<x id="followerName"/> sol·licitud} other {<x id="count"/> sol·licituds}} de seguiment?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -14667,7 +14667,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Segur que voleu eliminar {count, plural, =1 {<x id="followerName"/> petició} other {<x id="count"/> peticions}} de seguiment?</target>
+        <target state="translated">De veritat voleu eliminar {count, plural, =1 {<x id="followerName"/> petició} other {<x id="count"/> peticions}} de seguiment?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -14769,7 +14769,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5875705095657098468" datatype="html" xml:space="preserve">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="translated">Segur que voleu eliminar aquesta redundància de vídeo?</target>
+        <target state="translated">De veritat voleu eliminar aquesta redundància de vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">174</context>
@@ -15017,7 +15017,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1250415136605923486" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this abuse report?</source>
-        <target state="translated">Segur que voleu suprimir aquesta denúncia?</target>
+        <target state="translated">De veritat voleu suprimir aquesta denúncia?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">184</context>
@@ -15193,7 +15193,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9107383323119159110" datatype="html" xml:space="preserve">
         <source>Do you really want to uninstall <x id="PH"/>?</source>
-        <target state="translated">Segur que voleu desinstal·lar <x id="PH"/>?</target>
+        <target state="translated">De veritat voleu desinstal·lar <x id="PH"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">132</context>
@@ -16273,7 +16273,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html" xml:space="preserve">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="translated">Segur que voleu desbandejar {count, plural, =1 {1 compte} other {<x id="count"/> comptes}}?</target>
+        <target state="translated">De veritat voleu desbandejar {count, plural, =1 {1 compte} other {<x id="count"/> comptes}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">275</context>
@@ -16453,7 +16453,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="577064441120663273" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete your account?</source>
-        <target state="translated">Segur que voleu suprimir el vostre compte?</target>
+        <target state="translated">De veritat voleu suprimir el vostre compte?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -17213,7 +17213,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2027805873922338635" xml:space="preserve">
         <source>Do you really want to delete <x id="PH"/>? </source>
-        <target state="translated">Segur que voleu eliminar <x id="PH"/>? </target>
+        <target state="translated">De veritat voleu eliminar <x id="PH"/>? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -17677,7 +17677,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html" xml:space="preserve">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="translated">Segur que voleu editar «<x id="PH" equiv-text="this.video.name"/>»?</target>
+        <target state="translated">De veritat voleu editar «<x id="PH" equiv-text="this.video.name"/>»?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -19769,7 +19769,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="4670312387769733978" xml:space="preserve">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
-        <target state="translated">Es perdran totes les dades no desades, segur que voleu sortir d'aquesta pàgina?</target>
+        <target state="translated">Es perdran totes les dades no desades, de veritat voleu sortir d'aquesta pàgina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -20506,7 +20506,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html" xml:space="preserve">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target state="translated">Segur que voleu desbandejar <x id="PH"/>?</target>
+        <target state="translated">De veritat voleu desbandejar <x id="PH"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -20650,7 +20650,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove all the comments of this account?</source>
-        <target state="translated">Segur que voleu eliminar tots els comentaris d'aquest compte?</target>
+        <target state="translated">De veritat voleu eliminar tots els comentaris d'aquest compte?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -21226,7 +21226,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this comment?</source>
-        <target state="translated">Segur que voleu suprimir aquest comentari?</target>
+        <target state="translated">De veritat voleu suprimir aquest comentari?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">220</context>
@@ -21550,7 +21550,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1842877412269588224" datatype="html" xml:space="preserve">
         <source>Your archive file is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">El vostre fitxer d'arxiu encara no s'ha penjat, segur que voleu sortir d'aquesta pàgina?</target>
+        <target state="translated">El vostre fitxer d'arxiu encara no s'ha penjat, de veritat voleu sortir d'aquesta pàgina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -21618,7 +21618,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3622946684246476652" xml:space="preserve">
         <source>Do you really want to delete this video?</source>
-        <target state="translated">Segur que voleu suprimir aquest vídeo?</target>
+        <target state="translated">De veritat voleu suprimir aquest vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">119</context>
@@ -21866,7 +21866,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="translated">Segur que voleu suprimir aquest <x id="PH" equiv-text="file.resolution.label"/> fitxer?</target>
+        <target state="translated">De veritat voleu suprimir aquest <x id="PH" equiv-text="file.resolution.label"/> fitxer?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">251</context>
@@ -21890,7 +21890,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="925076027211452339" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete the original file of this video?</source>
-        <target state="translated">Segur que voleu suprimir el fitxer original d'aquest vídeo?</target>
+        <target state="translated">De veritat voleu suprimir el fitxer original d'aquest vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">267</context>
@@ -21914,7 +21914,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">Segur que voleu suprimir {count, plural, =1 {aquest vídeo} other {aquestos <x id="count"/> vídeos}}?</target>
+        <target state="translated">De veritat voleu suprimir {count, plural, =1 {aquest vídeo} other {aquestos <x id="count"/> vídeos}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">333</context>
@@ -21998,7 +21998,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8527948211896740910" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="translated">Segur que voleu suprimir aquest codificador? Ja no podrà processar treballs.</target>
+        <target state="translated">De veritat voleu suprimir aquest codificador? Ja no podrà processar treballs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -22178,7 +22178,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3076101305843397295" datatype="html" xml:space="preserve">
         <source>Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</source>
-        <target state="translated">Segur que voleu desblocar <x id="PH" equiv-text="this.video.name"/>? Tornarà a estar disponible a la llista de vídeos.</target>
+        <target state="translated">De veritat voleu desblocar <x id="PH" equiv-text="this.video.name"/>? Tornarà a estar disponible a la llista de vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">285</context>
@@ -22606,7 +22606,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="5699822024600815733" xml:space="preserve">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
-        <target state="translated">Però es perdran les dades associades (etiquetes, descripció…), estàs segur que voleu deixar aquesta pàgina?</target>
+        <target state="translated">Però es perdran les dades associades (etiquetes, descripció…), de veritat voleu deixar aquesta pàgina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">138</context>
@@ -22614,7 +22614,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1219739004043110649" xml:space="preserve">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">El teu vídeo encara no s'ha carregat, segur que voleu sortir d'aquesta pàgina?</target>
+        <target state="translated">El teu vídeo encara no s'ha carregat, de veritat voleu sortir d'aquesta pàgina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -22850,7 +22850,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8858527736400081688" xml:space="preserve">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
-        <target state="translated">Aquest vídeo conté contingut sensible o explícit. Segur que el voleu veure?</target>
+        <target state="translated">Aquest vídeo conté contingut sensible o explícit. De veritat el voleu veure?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">518</context>
