@@ -1,7 +1,7 @@
 import { literal, OrderItem, Sequelize } from 'sequelize'
 
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
-function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+export function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
   let finalField: string | ReturnType<typeof Sequelize.col>
@@ -15,7 +15,7 @@ function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderIt
   return [ [ finalField, direction ], lastSort ]
 }
 
-function getAdminUsersSort (value: string): OrderItem[] {
+export function getAdminUsersSort (value: string): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
   let finalField: string | ReturnType<typeof Sequelize.col>
@@ -34,7 +34,7 @@ function getAdminUsersSort (value: string): OrderItem[] {
   return [ [ finalField as any, direction, nullPolicy ], [ 'id', 'ASC' ] ]
 }
 
-function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+export function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
   if (field.toLowerCase() === 'name') {
@@ -44,7 +44,7 @@ function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]):
   return getSort(value, lastSort)
 }
 
-function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+export function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
   if (field.toLowerCase() === 'trending') { // Sort by aggregation
@@ -81,7 +81,7 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
   return [ firstSort, lastSort ]
 }
 
-function getBlacklistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+export function getBlacklistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
   const videoFields = new Set([ 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid' ])
@@ -96,7 +96,7 @@ function getBlacklistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ])
   return getSort(value, lastSort)
 }
 
-function getInstanceFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+export function getInstanceFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
   if (field === 'redundancyAllowed') {
@@ -109,7 +109,7 @@ function getInstanceFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'A
   return getSort(value, lastSort)
 }
 
-function getChannelSyncSort (value: string): OrderItem[] {
+export function getChannelSyncSort (value: string): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
   if (field.toLowerCase() === 'videochannel') {
     return [
@@ -119,7 +119,18 @@ function getChannelSyncSort (value: string): OrderItem[] {
   return [ [ field, direction ] ]
 }
 
-function buildSortDirectionAndField (value: string) {
+export function getSubscriptionSort (value: string): OrderItem[] {
+  const { direction, field } = buildSortDirectionAndField(value)
+
+  if (field === 'channelUpdatedAt') {
+    return [
+      [ literal('"ActorFollowing.VideoChannel.updatedAt"'), direction ]
+    ]
+  }
+  return [ [ field, direction ] ]
+}
+
+export function buildSortDirectionAndField (value: string) {
   let field: string
   let direction: 'ASC' | 'DESC'
 
@@ -132,15 +143,4 @@ function buildSortDirectionAndField (value: string) {
   }
 
   return { direction, field }
-}
-
-export {
-  buildSortDirectionAndField,
-  getPlaylistSort,
-  getSort,
-  getAdminUsersSort,
-  getVideoSort,
-  getBlacklistSort,
-  getChannelSyncSort,
-  getInstanceFollowsSort
 }

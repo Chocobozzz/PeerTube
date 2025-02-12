@@ -85,7 +85,7 @@ export const WEBSERVER = {
 // Sortable columns per schema
 export const SORTABLE_COLUMNS = {
   ADMIN_USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt', 'lastLoginDate', 'role' ],
-  USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
+  USER_SUBSCRIPTIONS: [ 'id', 'createdAt', 'channelUpdatedAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],

@@ -40,7 +40,7 @@ import {
 } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
 import { ServerModel } from '../server/server.js'
-import { SequelizeModel, buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, createSafeIn, getSubscriptionSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
 import { doesExist } from '../shared/query.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { ActorModel, unusedActorAttributesForAPI } from './actor.js'
@@ -428,11 +428,11 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
       return {
         attributes: forCount === true
           ? []
-          : SORTABLE_COLUMNS.USER_SUBSCRIPTIONS,
+          : SORTABLE_COLUMNS.USER_SUBSCRIPTIONS.filter(s => s !== 'channelUpdatedAt'),
         distinct: true,
         offset: start,
         limit: count,
-        order: getSort(sort),
+        order: getSubscriptionSort(sort),
         where,
         include: [
           {

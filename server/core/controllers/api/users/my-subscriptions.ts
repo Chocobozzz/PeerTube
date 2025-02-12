@@ -57,7 +57,7 @@ mySubscriptionsRouter.get('/me/subscriptions',
   setDefaultSort,
   setDefaultPagination,
   userSubscriptionListValidator,
-  asyncMiddleware(getUserSubscriptions)
+  asyncMiddleware(listUserSubscriptions)
 )
 
 mySubscriptionsRouter.post('/me/subscriptions',
@@ -151,7 +151,7 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
             .end()
 }
 
-async function getUserSubscriptions (req: express.Request, res: express.Response) {
+async function listUserSubscriptions (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const actorId = user.Account.Actor.id
 

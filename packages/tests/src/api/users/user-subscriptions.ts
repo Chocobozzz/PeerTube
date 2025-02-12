@@ -53,7 +53,8 @@ describe('Test users subscriptions', function () {
     command = servers[0].subscriptions
   })
 
-  describe('Destinction between server videos and user videos', function () {
+  describe('Distinction between server videos and user videos', function () {
+
     it('Should display videos of server 2 on server 1', async function () {
       const { total } = await servers[0].videos.list()
 
@@ -160,6 +161,15 @@ describe('Test users subscriptions', function () {
         expect(body.total).to.equal(0)
         expect(body.data).to.have.lengthOf(0)
       }
+    })
+
+    it('Should sort subscriptions by channelUpdatedAt', async function () {
+      const body = await command.list({ token: users[0].accessToken, sort: '-channelUpdatedAt' })
+      expect(body.total).to.equal(2)
+
+      const subscriptions = body.data
+      expect(subscriptions[0].name).to.equal('user3_channel')
+      expect(subscriptions[1].name).to.equal('root_channel')
     })
   })
 
