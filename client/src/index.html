@@ -81,6 +81,15 @@
       if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
         displayIncompatibleBrowser()
       }
+
+      // BigInt must be supported (for the player to work)
+      try {
+        BigInt(9007199254740991)
+      } catch (err) {
+        console.error('BigInt is not supported on this web browser')
+
+        displayIncompatibleBrowser()
+      }
     </script>
 
     <my-app>
