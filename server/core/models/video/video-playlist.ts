@@ -660,7 +660,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   }
 
   getEmbedStaticPath () {
-    return buildPlaylistEmbedPath(this)
+    return buildPlaylistEmbedPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   static async getStats () {

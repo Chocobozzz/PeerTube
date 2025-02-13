@@ -47,19 +47,19 @@ function buildVideoLink (video: Pick<Video, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildVideoWatchPath(video)
 }
 
-function buildPlaylistEmbedPath (playlist: Pick<VideoPlaylist, 'uuid'>) {
-  return '/video-playlists/embed/' + playlist.uuid
+function buildPlaylistEmbedPath (playlist: Partial<Pick<VideoPlaylist, 'shortUUID' | 'uuid'>>) {
+  return '/video-playlists/embed/' + (playlist.shortUUID || playlist.uuid)
 }
 
-function buildPlaylistEmbedLink (playlist: Pick<VideoPlaylist, 'uuid'>, base?: string) {
+function buildPlaylistEmbedLink (playlist: Partial<Pick<VideoPlaylist, 'shortUUID' | 'uuid'>>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistEmbedPath(playlist)
 }
 
-function buildVideoEmbedPath (video: Pick<Video, 'uuid'>) {
-  return '/videos/embed/' + video.uuid
+function buildVideoEmbedPath (video: Partial<Pick<Video, 'shortUUID' | 'uuid'>>) {
+  return '/videos/embed/' + (video.shortUUID || video.uuid)
 }
 
-function buildVideoEmbedLink (video: Pick<Video, 'uuid'>, base?: string) {
+function buildVideoEmbedLink (video: Partial<Pick<Video, 'shortUUID' | 'uuid'>>, base?: string) {
   return (base ?? window.location.origin) + buildVideoEmbedPath(video)
 }
 

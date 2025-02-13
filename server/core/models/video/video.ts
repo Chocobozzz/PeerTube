@@ -1855,7 +1855,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   getEmbedStaticPath () {
-    return buildVideoEmbedPath(this)
+    return buildVideoEmbedPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   getMiniatureStaticPath (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails'>) {

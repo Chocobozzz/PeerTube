@@ -257,7 +257,7 @@ describe('Test video playlists', function () {
           expect(playlist.privacy.label).to.equal('Public')
           expect(playlist.type.id).to.equal(VideoPlaylistType.REGULAR)
           expect(playlist.type.label).to.equal('Regular')
-          expect(playlist.embedPath).to.equal('/video-playlists/embed/' + playlist.uuid)
+          expect(playlist.embedPath).to.equal('/video-playlists/embed/' + playlist.shortUUID)
 
           expect(playlist.videosLength).to.equal(0)
 
