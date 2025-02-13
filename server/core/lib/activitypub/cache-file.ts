@@ -24,7 +24,7 @@ export {
 
 function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
-  if (attributes) return
+  if (!attributes) return
 
   return VideoRedundancyModel.create(attributes, { transaction: t })
 }
