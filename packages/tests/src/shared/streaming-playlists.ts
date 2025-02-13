@@ -257,6 +257,8 @@ export async function completeCheckHlsPlaylist (options: {
       expect(file.magnetUri).to.have.lengthOf.above(2)
       await checkWebTorrentWorks(file.magnetUri)
 
+      expect(file.playlistUrl).to.equal(file.fileUrl.replace(/-fragmented.mp4$/, '.m3u8'))
+
       {
         const nameReg = `${uuidRegex}-${file.resolution.id}`
 

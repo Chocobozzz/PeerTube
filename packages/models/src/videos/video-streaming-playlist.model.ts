@@ -11,5 +11,5 @@ export interface VideoStreamingPlaylist {
     baseUrl: string
   }[]
 
-  files: VideoFile[]
+  files: (VideoFile & { playlistUrl: string })[]
 }

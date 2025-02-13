@@ -8214,6 +8214,10 @@ components:
           type: string
           description: Direct URL of the video
           format: url
+        playlistUrl:
+          type: string
+          description: Playlist URL of the file if it is owned by a playlist
+          format: url
         fileDownloadUrl:
           type: string
           description: URL endpoint that transfers the video file as an attachment (so that the browser opens a download dialog)
