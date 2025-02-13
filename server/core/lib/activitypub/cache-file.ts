@@ -24,6 +24,7 @@ export {
 
 function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+  if (attributes) return
 
   return VideoRedundancyModel.create(attributes, { transaction: t })
 }
@@ -40,6 +41,7 @@ function updateCacheFile (
   }
 
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+  if (!attributes) return
 
   redundancyModel.expiresOn = attributes.expiresOn
   redundancyModel.fileUrl = attributes.fileUrl
@@ -49,8 +51,8 @@ function updateCacheFile (
 
 function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId) {
   if (cacheFileObject.url.mediaType !== 'application/x-mpegURL') {
-    logger.debug('Do not create remoet cache file of non application/x-mpegURL media type', { cacheFileObject })
-    return
+    logger.debug('Do not create remote cache file of non application/x-mpegURL media type', { cacheFileObject })
+    return undefined
   }
 
   const url = cacheFileObject.url
