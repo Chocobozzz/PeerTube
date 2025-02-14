@@ -7,7 +7,7 @@ import { getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests }
 
 config.truncateThreshold = 0
 
-describe('Test Open Graph and Twitter cards HTML tags', function () {
+describe('Test <head> HTML tags', function () {
   let servers: PeerTubeServer[]
   let account: Account
 
@@ -283,6 +283,66 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
       await check('/', 'https://social.example.com/@username3')
       await check('/about', 'https://social.example.com/@username3', false)
+    })
+  })
+
+  describe('RSS links', function () {
+
+    async function commonPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      const feedUrl = `${servers[0].url}/feeds/videos.xml`
+      // eslint-disable-next-line max-len
+      expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="super instance title - Videos feed" href="${feedUrl}" />`)
+    }
+
+    async function channelPageTest (path: string) {
+      await commonPageTest(path)
+
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      const feedUrl = `${servers[0].url}/feeds/podcast/videos.xml?videoChannelId=${servers[0].store.channel.id}`
+
+      // eslint-disable-next-line max-len
+      expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="${servers[0].store.channel.displayName} feed" href="${feedUrl}" />`)
+    }
+
+    async function watchVideoPageTest (path: string) {
+      await commonPageTest(path)
+
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      const feedUrl = `${servers[0].url}/feeds/video-comments.xml?videoId=${servers[0].store.video.uuid}`
+      expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="${videoName} - Comments feed" href="${feedUrl}" />`)
+    }
+
+    it('Should have valid RSS links on the watch video page', async function () {
+      for (const path of getWatchVideoBasePaths()) {
+        await watchVideoPageTest(path + videoIds[0])
+      }
+    })
+
+    it('Should have valid RSS links on the watch playlist page', async function () {
+      for (const path of getWatchPlaylistBasePaths()) {
+        for (const id of playlistIds) {
+          await commonPageTest(path + id)
+        }
+      }
+    })
+
+    it('Should have valid RSS links on the account page', async function () {
+      await commonPageTest('/accounts/' + account.name)
+      await commonPageTest('/a/' + account.name)
+      await commonPageTest('/@' + account.name)
+    })
+
+    it('Should have valid RSS links the channel page', async function () {
+      await channelPageTest('/video-channels/' + servers[0].store.channel.name)
+      await channelPageTest('/c/' + servers[0].store.channel.name)
+      await channelPageTest('/@' + servers[0].store.channel.name)
     })
   })
 

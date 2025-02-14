@@ -18,7 +18,7 @@ import {
   UserService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
+import { getOriginUrl, isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -29,7 +29,7 @@ import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/s
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
-import { timeToInt } from '@peertube/peertube-core-utils'
+import { getVideoWatchRSSFeeds, timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   HttpStatusCode,
@@ -43,11 +43,6 @@ import {
   VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
-import { logger } from '@root-helpers/logger'
-import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
-import debug from 'debug'
-import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
-import { environment } from '../../../environments/environment'
 import {
   cleanupVideoWatch,
   getStoredTheater,
@@ -59,6 +54,11 @@ import {
   PlayerMode,
   videojs
 } from '@peertube/player'
+import { logger } from '@root-helpers/logger'
+import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
+import debug from 'debug'
+import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
+import { environment } from '../../../environments/environment'
 import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.component'
 import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
 import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'
@@ -229,6 +229,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Unbind hotkeys
     this.hotkeysService.remove(this.hotkeys)
+
+    this.metaService.revertMetaTags()
   }
 
   getCurrentTime () {
@@ -990,7 +992,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private setMetaTags (video: Video) {
     this.metaService.setTitle(video.name)
 
-    this.metaService.setTag('description', video.description)
+    this.metaService.setDescription(video.description)
+
+    this.metaService.setRSSFeeds(
+      getVideoWatchRSSFeeds(getOriginUrl(), this.serverConfig.instance.name, { ...video, privacy: video.privacy.id })
+    )
   }
 
   private getUrlOptions (): URLOptions {

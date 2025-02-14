@@ -1,4 +1,4 @@
-import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML, getDefaultRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
@@ -8,7 +8,7 @@ import express from 'express'
 import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
 import { MEMOIZE_TTL, WEBSERVER } from '../../../initializers/constants.js'
-import { CommonEmbedHtml } from './common-embed-html.js'
+import { buildEmptyEmbedHTML } from './common.js'
 import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
@@ -56,7 +56,7 @@ export class PlaylistHtml {
     const [ html, playlist ] = await Promise.all([ PageHtml.getEmbedHTML(), playlistPromise ])
 
     if (!playlist || playlist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      return CommonEmbedHtml.buildEmptyEmbedHTML({ html, playlist })
+      return buildEmptyEmbedHTML({ html, playlist })
     }
 
     return this.buildPlaylistHTML({
@@ -126,7 +126,9 @@ export class PlaylistHtml {
       twitterCard,
 
       embed,
-      oembedUrl: this.getOEmbedUrl(playlist, currentQuery)
+      oembedUrl: this.getOEmbedUrl(playlist, currentQuery),
+
+      rssFeeds: getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
     }, { playlist })
   }
 

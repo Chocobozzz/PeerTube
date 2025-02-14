@@ -1,7 +1,8 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
-import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService } from '@app/core'
+import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
+import { getOriginUrl } from '@app/helpers'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -10,6 +11,7 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
+import { getChannelRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
@@ -63,7 +65,8 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     private screenService: ScreenService,
     private markdown: MarkdownService,
     private blocklist: BlocklistService,
-    private metaService: MetaService
+    private metaService: MetaService,
+    private server: ServerService
   ) { }
 
   ngOnInit () {
@@ -79,6 +82,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
       )
       .subscribe(async videoChannel => {
         this.metaService.setTitle(videoChannel.displayName)
+        this.metaService.setRSSFeeds(getChannelRSSFeeds(getOriginUrl(), this.server.getHTMLConfig().instance.name, videoChannel))
 
         this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML({
           markdown: videoChannel.description,
@@ -121,6 +125,8 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
     // Unbind hotkeys
     if (this.isUserLoggedIn()) this.hotkeysService.remove(this.hotkeys)
+
+    this.metaService.revertMetaTags()
   }
 
   isInSmallView () {

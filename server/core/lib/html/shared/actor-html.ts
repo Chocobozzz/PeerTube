@@ -1,5 +1,6 @@
-import { escapeHTML, maxBy } from '@peertube/peertube-core-utils'
+import { escapeHTML, getChannelRSSFeeds, getDefaultRSSFeeds, maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { WEBSERVER } from '@server/initializers/constants.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -7,20 +8,30 @@ import { MAccountHost, MChannelHost } from '@server/types/models/index.js'
 import express from 'express'
 import { CONFIG } from '../../../initializers/config.js'
 import { PageHtml } from './page-html.js'
-import { TagsHtml } from './tags-html.js'
+import { TagsHtml, TagsOptions } from './tags-html.js'
 
 export class ActorHtml {
 
   static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
     const accountModelPromise = AccountModel.loadByNameWithHost(nameWithHost)
 
-    return this.getAccountOrChannelHTMLPage(() => accountModelPromise, req, res)
+    return this.getAccountOrChannelHTMLPage({
+      loader: () => accountModelPromise,
+      getRSSFeeds: () => getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME),
+      req,
+      res
+    })
   }
 
   static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    const videoChannelModelPromise = VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
 
-    return this.getAccountOrChannelHTMLPage(() => videoChannelModelPromise, req, res)
+    return this.getAccountOrChannelHTMLPage({
+      loader: () => Promise.resolve(videoChannel),
+      getRSSFeeds: () => getChannelRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, videoChannel),
+      req,
+      res
+    })
   }
 
   static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
@@ -29,16 +40,28 @@ export class ActorHtml {
       VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
     ])
 
-    return this.getAccountOrChannelHTMLPage(() => Promise.resolve(account || channel), req, res)
+    return this.getAccountOrChannelHTMLPage({
+      loader: () => Promise.resolve(account || channel),
+
+      getRSSFeeds: () => account
+        ? getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
+        : getChannelRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, channel),
+
+      req,
+      res
+    })
   }
 
   // ---------------------------------------------------------------------------
 
-  private static async getAccountOrChannelHTMLPage (
-    loader: () => Promise<MAccountHost | MChannelHost>,
-    req: express.Request,
+  private static async getAccountOrChannelHTMLPage (options: {
+    loader: () => Promise<MAccountHost | MChannelHost>
+    getRSSFeeds: (entity: MAccountHost | MChannelHost) => TagsOptions['rssFeeds']
+    req: express.Request
     res: express.Response
-  ) {
+  }) {
+    const { loader, getRSSFeeds, req, res } = options
+
     const [ html, entity ] = await Promise.all([
       PageHtml.getIndexHTML(req, res),
       loader()
@@ -85,7 +108,9 @@ export class ActorHtml {
         updatedAt: entity.updatedAt
       },
 
-      forbidIndexation: !entity.Actor.isOwned()
+      forbidIndexation: !entity.Actor.isOwned(),
+
+      rssFeeds: getRSSFeeds(entity)
     }, {})
 
     return customHTML

@@ -1,4 +1,4 @@
-import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML, getVideoWatchRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
@@ -10,7 +10,7 @@ import { VideoModel } from '../../../models/video/video.js'
 import { MVideo, MVideoThumbnail, MVideoThumbnailBlacklist } from '../../../types/models/index.js'
 import { getActivityStreamDuration } from '../../activitypub/activity.js'
 import { isVideoInPrivateDirectory } from '../../video-privacy.js'
-import { CommonEmbedHtml } from './common-embed-html.js'
+import { buildEmptyEmbedHTML } from './common.js'
 import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
@@ -57,7 +57,7 @@ export class VideoHtml {
     const [ html, video ] = await Promise.all([ PageHtml.getEmbedHTML(), videoPromise ])
 
     if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
-      return CommonEmbedHtml.buildEmptyEmbedHTML({ html, video })
+      return buildEmptyEmbedHTML({ html, video })
     }
 
     return this.buildVideoHTML({
@@ -131,7 +131,9 @@ export class VideoHtml {
 
       ogType,
       twitterCard,
-      schemaType
+      schemaType,
+
+      rssFeeds: getVideoWatchRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, video)
     }, { video })
   }
 

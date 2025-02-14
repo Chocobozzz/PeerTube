@@ -1,6 +1,6 @@
 import { environment } from '../../../environments/environment'
 
-function getAbsoluteAPIUrl () {
+export function getAbsoluteAPIUrl () {
   let absoluteAPIUrl = environment.hmr === true
     ? 'http://localhost:9000'
     : environment.apiUrl
@@ -13,11 +13,15 @@ function getAbsoluteAPIUrl () {
   return absoluteAPIUrl
 }
 
-function getAPIHost () {
+export function getOriginUrl () {
+  return environment.originServerUrl || window.location.origin
+}
+
+export function getAPIHost () {
   return new URL(getAbsoluteAPIUrl()).host
 }
 
-function getAbsoluteEmbedUrl () {
+export function getAbsoluteEmbedUrl () {
   let absoluteEmbedUrl = environment.originServerUrl
   if (!absoluteEmbedUrl) {
     // The Embed is on the same domain
@@ -28,7 +32,7 @@ function getAbsoluteEmbedUrl () {
 }
 
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34
-function objectToFormData (obj: any, form?: FormData, namespace?: string) {
+export function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   const fd = form || new FormData()
   let formKey
 
@@ -51,12 +55,4 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   }
 
   return fd
-}
-
-export {
-  getAbsoluteAPIUrl,
-  getAPIHost,
-  getAbsoluteEmbedUrl,
-
-  objectToFormData
 }
