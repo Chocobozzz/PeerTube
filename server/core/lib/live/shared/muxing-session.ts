@@ -470,6 +470,8 @@ class MuxingSession extends EventEmitter {
     const segmentName = basename(segmentPath)
     const dest = join(this.replayDirectory, buildConcatenatedName(segmentName))
 
+    logger.debug(`Add segment ${segmentPath} to replay ${dest}`, this.lTags())
+
     try {
       const data = await readFile(segmentPath)
 
