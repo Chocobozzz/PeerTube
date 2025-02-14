@@ -87,6 +87,22 @@ const CONFIG = {
       LOGIN: {
         get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () { return config.get<boolean>('client.menu.login.redirect_on_single_external_auth') }
       }
+    },
+    OPEN_IN_APP: {
+      ANDROID: {
+        INTENT: {
+          get ENABLED () { return config.get<boolean>('client.open_in_app.android.intent.enabled') },
+          get HOST () { return config.get<string>('client.open_in_app.android.intent.host') },
+          get SCHEME () { return config.get<string>('client.open_in_app.android.intent.scheme') },
+          get FALLBACK_URL () { return config.get<string>('client.open_in_app.android.intent.fallback_url') }
+        }
+      },
+      IOS: {
+        get ENABLED () { return config.get<boolean>('client.open_in_app.ios.enabled') },
+        get HOST () { return config.get<string>('client.open_in_app.ios.host') },
+        get SCHEME () { return config.get<string>('client.open_in_app.ios.scheme') },
+        get FALLBACK_URL () { return config.get<string>('client.open_in_app.ios.fallback_url') }
+      }
     }
   },
 

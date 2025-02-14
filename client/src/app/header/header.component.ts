@@ -22,7 +22,7 @@ import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { ServerConfig } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { isAndroid } from '@root-helpers/web-browser'
+import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
 import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
@@ -66,7 +66,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentInterfaceLanguage: string
 
   mobileMsg = false
-  mobileAppUrl = ''
+  androidAppUrl = ''
+  iosAppUrl = ''
 
   private serverConfig: ServerConfig
 
@@ -159,12 +160,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private setupMobileMsg () {
     if (!this.isInMobileView()) return
     if (peertubeLocalStorage.getItem(HeaderComponent.LS_HIDE_MOBILE_MSG) === 'true') return
-    if (!isAndroid()) return
+
+    if (!isAndroid() && !isIphone()) return
 
     this.mobileMsg = true
     document.body.classList.add('mobile-app-msg')
 
     const host = window.location.host
+    const intentConfig = this.serverConfig.client.openInApp.android.intent
+    const iosConfig = this.serverConfig.client.openInApp.ios
 
     const getVideoId = (url: string) => {
       const matches = url.match(/^\/w\/([^/]+)$/)
@@ -183,19 +187,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       const url = event.url
 
+      const baseAndroid = `intent://${intentConfig.host}`
+      const fallbackAndroid = `#Intent;scheme=${intentConfig.scheme};S.browser_fallback_url=${intentConfig.fallbackUrl};end`
+
+      const baseIOS = `peertube://${iosConfig.host}`
+
       const videoId = getVideoId(url)
-      if (videoId) {
-        this.mobileAppUrl = `peertube://joinpeertube.org/video/${videoId}?host=${host}`
-        return
-      }
-
       const channelId = getChannelId(url)
-      if (channelId) {
-        this.mobileAppUrl = `peertube://joinpeertube.org/video-channel/${channelId}?host=${host}`
+
+      if (videoId) {
+        if (isAndroid()) {
+          this.androidAppUrl = `${baseAndroid}/video/${videoId}?host=${host}${fallbackAndroid}`
+        } else {
+          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
+        }
+
         return
       }
 
-      this.mobileAppUrl = `peertube://joinpeertube.org/?host=${host}`
+      if (channelId) {
+        if (isAndroid()) {
+          this.androidAppUrl = `${baseAndroid}/video-channel/${channelId}?host=${host}${fallbackAndroid}`
+        } else {
+          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
+        }
+
+        return
+      }
+
+      if (isAndroid()) {
+        this.androidAppUrl = `${baseAndroid}/?host=${host}${fallbackAndroid}`
+      } else {
+        this.iosAppUrl = `${baseIOS}/?host=${host}`
+      }
     })
   }
 
@@ -204,6 +228,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     document.body.classList.remove('mobile-app-msg')
 
     peertubeLocalStorage.setItem(HeaderComponent.LS_HIDE_MOBILE_MSG, 'true')
+  }
+
+  onOpenClientClick () {
+    if (!isIOS()) return
+
+    setTimeout(() => {
+      window.location.href = this.serverConfig.client.openInApp.ios.fallbackUrl
+    }, 2500)
   }
 
   // ---------------------------------------------------------------------------

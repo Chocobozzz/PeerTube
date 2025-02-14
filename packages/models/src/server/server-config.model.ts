@@ -51,6 +51,24 @@ export interface ServerConfig {
         redirectOnSingleExternalAuth: boolean
       }
     }
+
+    openInApp: {
+      android: {
+        intent: {
+          enabled: boolean
+          host: string
+          scheme: string
+          fallbackUrl: string
+        }
+      }
+
+      ios: {
+        enabled: boolean
+        host: string
+        scheme: string
+        fallbackUrl: string
+      }
+    }
   }
 
   defaults: {

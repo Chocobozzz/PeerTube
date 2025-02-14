@@ -1077,6 +1077,29 @@ client:
       # You can automatically redirect your users on this external platform when they click on the login button
       redirect_on_single_external_auth: false
 
+  open_in_app:
+    android:
+      # Use an intent URL: https://developer.chrome.com/docs/android/intents
+      intent:
+        enabled: true
+        # Host registered by the mobile app
+        host: 'joinpeertube.org'
+        # Scheme registered by the mobile app
+        scheme: 'peertube'
+        # If not having the app on the mobile device, open this page
+        # F-Droid alternative: https://f-droid.org/packages/org.framasoft.peertube/
+        fallback_url: 'https://play.google.com/store/apps/details?id=org.framasoft.peertube'
+
+    ios:
+      # We use a timeout for iOS: if the app is not opened after a few seconds, open the fallback URL
+      enabled: true
+      # Host registered by the mobile app
+      host: 'joinpeertube.org'
+      # Scheme registered by the mobile app
+      scheme: 'peertube'
+      # If not having the app on the mobile device, open this page
+      fallback_url: 'https://apps.apple.com/fr/app/peertube/id6737834858'
+
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
   enabled: true

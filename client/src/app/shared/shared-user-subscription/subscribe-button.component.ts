@@ -1,12 +1,11 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, Input, OnChanges, ViewChild } from '@angular/core'
 import { AuthService, Notifier, RedirectService } from '@app/core'
-import { NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { FeedFormat } from '@peertube/peertube-models'
 import { concat, forkJoin, merge } from 'rxjs'
 import { Account } from '../shared-main/account/account.model'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
-import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
 import { VideoService } from '../shared-main/video/video.service'
 import { RemoteSubscribeComponent } from './remote-subscribe.component'
 import { UserSubscriptionService } from './user-subscription.service'
@@ -22,9 +21,7 @@ import { UserSubscriptionService } from './user-subscription.service'
     NgbDropdown,
     NgbDropdownToggle,
     NgbDropdownMenu,
-    NgbDropdownItem,
-    RemoteSubscribeComponent,
-    NumberFormatterPipe
+    RemoteSubscribeComponent
   ]
 })
 export class SubscribeButtonComponent implements OnChanges {

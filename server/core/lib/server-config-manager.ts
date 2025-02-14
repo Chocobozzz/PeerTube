@@ -66,6 +66,22 @@ class ServerConfigManager {
           login: {
             redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
           }
+        },
+        openInApp: {
+          android: {
+            intent: {
+              enabled: CONFIG.CLIENT.OPEN_IN_APP.ANDROID.INTENT.ENABLED,
+              host: CONFIG.CLIENT.OPEN_IN_APP.ANDROID.INTENT.HOST,
+              scheme: CONFIG.CLIENT.OPEN_IN_APP.ANDROID.INTENT.SCHEME,
+              fallbackUrl: CONFIG.CLIENT.OPEN_IN_APP.ANDROID.INTENT.FALLBACK_URL
+            }
+          },
+          ios: {
+            enabled: CONFIG.CLIENT.OPEN_IN_APP.IOS.ENABLED,
+            host: CONFIG.CLIENT.OPEN_IN_APP.IOS.HOST,
+            scheme: CONFIG.CLIENT.OPEN_IN_APP.IOS.SCHEME,
+            fallbackUrl: CONFIG.CLIENT.OPEN_IN_APP.IOS.FALLBACK_URL
+          }
         }
       },
 
