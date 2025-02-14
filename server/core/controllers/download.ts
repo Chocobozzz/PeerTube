@@ -252,6 +252,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
     : maxResolutionFile.extname
 
   const downloadFilename = buildDownloadFilename({ video, extname })
+  res.setHeader('Content-Length', videoFiles.reduce((p, f) => p + f.size, 0))
   res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
 
   await muxToMergeVideoFiles({ video, videoFiles, output: res })
