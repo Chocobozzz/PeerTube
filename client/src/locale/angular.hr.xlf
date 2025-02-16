@@ -2823,9 +2823,9 @@
           <context context-type="linenumber">103,104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8534731544752464794" datatype="html">
+      <trans-unit id="8534731544752464794" datatype="html" xml:space="preserve">
         <source>PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</source>
-        <target state="new">PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</target>
+        <target state="translated">PeerTube koristi ovu postavku kako bi objasnio svojim korisnicima koji zakon moraju slijediti na stranicama „Informacije”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">104,106</context>
@@ -2839,9 +2839,9 @@
           <context context-type="linenumber">119,120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4364641327642273311" datatype="html">
+      <trans-unit id="4364641327642273311" datatype="html" xml:space="preserve">
         <source>Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </source>
-        <target state="new"> Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </target>
+        <target state="translated">Društvene poveznice i informacije o podršci prikazane na stranicama <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>Informacije<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">121,123</context>
@@ -4987,9 +4987,9 @@
           <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5841439724861780893" datatype="html">
+      <trans-unit id="5841439724861780893" datatype="html" xml:space="preserve">
         <source>Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="new">Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</target>
+        <target state="translated">Ime videa/opis i komentari koji sadrže bilo koju od praćenih riječi automatski se označavaju s imenom popisa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">1</context>
@@ -10535,9 +10535,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2213349488139662070" datatype="html">
+      <trans-unit id="2213349488139662070" datatype="html" xml:space="preserve">
         <source>This is content to which we have subscribed. This allows us to display their videos directly on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </source>
-        <target state="new"> This is content to which we have subscribed. This allows us to display their videos directly on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </target>
+        <target state="translated">Ovo je sadržaj na koji smo se pretplatili. To nam omogućuje da prikazujemo njihova videa izravno na <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -13100,9 +13100,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="11546234043677618" datatype="html">
+      <trans-unit id="11546234043677618" datatype="html" xml:space="preserve">
         <source>Save watched words list</source>
-        <target state="new">Save watched words list</target>
+        <target state="translated">Spremi popis praćenih riječi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -21644,9 +21644,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1541005328084571131" datatype="html">
+      <trans-unit id="1541005328084571131" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platforma se pretplaćuje na sadržaj od <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> drugih platformi<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99,101</context>
@@ -22740,17 +22740,17 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="676860092433275829" datatype="html">
+      <trans-unit id="676860092433275829" datatype="html" xml:space="preserve">
         <source>Hot</source>
-        <target state="new">Hot</target>
+        <target state="translated">Vruće</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3456598716931498601" datatype="html">
+      <trans-unit id="3456598716931498601" datatype="html" xml:space="preserve">
         <source>Global Views</source>
-        <target state="new">Global Views</target>
+        <target state="translated">Globalna gledanja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">185</context>
