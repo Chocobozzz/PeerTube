@@ -859,9 +859,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1381866989532931408" datatype="html">
+      <trans-unit id="1381866989532931408" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> je posvećen osjetljivom/neprikladnom sadržaju.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -927,25 +927,25 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332376397563834845" datatype="html">
+      <trans-unit id="4332376397563834845" datatype="html" xml:space="preserve">
         <source>Go to the Mastodon profile</source>
-        <target state="new">Go to the Mastodon profile</target>
+        <target state="translated">Idi na Mastodon profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">28,29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2237913518258347530" datatype="html">
+      <trans-unit id="2237913518258347530" datatype="html" xml:space="preserve">
         <source>Go to the Bluesky profile</source>
-        <target state="new">Go to the Bluesky profile</target>
+        <target state="translated">Idi na Bluesky profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2311169522826596795" datatype="html">
+      <trans-unit id="2311169522826596795" datatype="html" xml:space="preserve">
         <source>Go to the external website</source>
-        <target state="new">Go to the external website</target>
+        <target state="translated">Idi na eksternu web stranicu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">44,45</context>
@@ -1443,9 +1443,9 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1217842609094113552" datatype="html">
+      <trans-unit id="1217842609094113552" datatype="html" xml:space="preserve">
         <source>Installed plugins</source>
-        <target state="new">Installed plugins</target>
+        <target state="translated">Instalirani dodaci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">74</context>
