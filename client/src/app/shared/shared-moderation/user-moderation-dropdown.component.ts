@@ -310,14 +310,14 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
         handler: ({ account }) => this.unblockAccountByUser(account)
       },
       {
-        label: $localize`Mute the instance`,
-        description: $localize`Hide any content from that instance for you.`,
+        label: $localize`Mute the PeerTube platform`,
+        description: $localize`Hide any content from that PeerTube platform for you.`,
         isDisplayed: ({ account }) => !account.userId && account.mutedServerByUser === false,
         handler: ({ account }) => this.blockServerByUser(account.host)
       },
       {
-        label: $localize`Unmute the instance`,
-        description: $localize`Show back content from that instance for you.`,
+        label: $localize`Unmute the PeerTube platform`,
+        description: $localize`Show back content from that PeerTube platform for you.`,
         isDisplayed: ({ account }) => !account.userId && account.mutedServerByUser === true,
         handler: ({ account }) => this.unblockServerByUser(account.host)
       },
@@ -377,13 +377,13 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       instanceActions = instanceActions.concat([
         {
           label: $localize`Mute this account`,
-          description: $localize`Hide any content from that user from you, your instance and its users.`,
+          description: $localize`Hide any content from that user from you, your PeerTube platform and its users.`,
           isDisplayed: ({ account }) => !this.isMyAccount(account) && account.mutedByInstance === false,
           handler: ({ account }) => this.blockAccountByInstance(account)
         },
         {
           label: $localize`Unmute this account`,
-          description: $localize`Show this user's content to the users of this instance again.`,
+          description: $localize`Show this user's content to the users of this PeerTube platform again.`,
           isDisplayed: ({ account }) => !this.isMyAccount(account) && account.mutedByInstance === true,
           handler: ({ account }) => this.unblockAccountByInstance(account)
         }
@@ -394,14 +394,14 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     if (this.account && this.displayOptions.instanceAccount && authUser.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
       instanceActions = instanceActions.concat([
         {
-          label: $localize`Mute the instance`,
-          description: $localize`Hide any content from that instance from you, your instance and its users.`,
+          label: $localize`Mute the PeerTube platform`,
+          description: $localize`Hide any content from that PeerTube platform from you, your platform and its users.`,
           isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
           handler: ({ account }) => this.blockServerByInstance(account.host)
         },
         {
-          label: $localize`Unmute the instance by your instance`,
-          description: $localize`Show back content from that instance for you, your instance and its users.`,
+          label: $localize`Unmute the PeerTube platform by your platform`,
+          description: $localize`Show back content from that PeerTube platform for you, your platform and its users.`,
           isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
           handler: ({ account }) => this.unblockServerByInstance(account.host)
         }
@@ -411,8 +411,8 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     if (this.account && this.displayOptions.instanceAccount && authUser.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)) {
       instanceActions = instanceActions.concat([
         {
-          label: $localize`Remove comments from your instance`,
-          description: $localize`Remove comments made by this account from your instance.`,
+          label: $localize`Remove comments from your PeerTube platform`,
+          description: $localize`Remove comments made by this account from your platform.`,
           isDisplayed: ({ account }) => !this.isMyAccount(account),
           handler: ({ account }) => this.bulkRemoveCommentsOf({ accountName: account.nameWithHost, scope: 'instance' })
         }
@@ -421,6 +421,6 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
 
     if (instanceActions.length === 0) return []
 
-    return [ { label: $localize`Instance moderation`, isHeader: true }, ...instanceActions ]
+    return [ { label: $localize`PeerTube platform moderation`, isHeader: true }, ...instanceActions ]
   }
 }
