@@ -96,7 +96,7 @@ export class VideoHtml {
       ? {
         url: WEBSERVER.URL + video.getEmbedStaticPath(),
         createdAt: video.createdAt.toISOString(),
-        duration: getActivityStreamDuration(video.duration),
+        duration: video.duration ? getActivityStreamDuration(video.duration) : undefined,
         views: video.views
       }
       : undefined
