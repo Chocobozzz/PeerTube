@@ -352,7 +352,7 @@ describe('Test index search', function () {
 
       expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
       expect(videoPlaylist.thumbnailUrl).to.exist
-      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
+      expect(videoPlaylist.embedUrl).to.equal('https://peertube2.cpy.re/video-playlists/embed/fgei1ws1oa6FCaJ2qZPG29')
 
       expect(videoPlaylist.type.id).to.equal(VideoPlaylistType.REGULAR)
       expect(videoPlaylist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
