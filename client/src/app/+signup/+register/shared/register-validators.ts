@@ -4,7 +4,7 @@ import { BuildFormValidator } from '@app/shared/form-validators/form-validator.m
 export const REGISTER_TERMS_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.requiredTrue ],
   MESSAGES: {
-    required: $localize`You must agree with the instance terms in order to register on it.`
+    required: $localize`You must agree with the platform terms in order to register on it.`
   }
 }
 
