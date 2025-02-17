@@ -51,7 +51,7 @@ describe('Test syndication feeds', () => {
     serverHLSOnly = await createSingleServer(3)
 
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
-    await setDefaultChannelAvatar(servers[0])
+    await setDefaultChannelAvatar([ servers[0], serverHLSOnly ])
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
 
@@ -107,7 +107,7 @@ describe('Test syndication feeds', () => {
       await servers[0].comments.createThread({ videoId: id, text: 'comment on password protected video' })
     }
 
-    await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
+    await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video', nsfw: true } })
 
     await waitJobs([ ...servers, serverHLSOnly ])
 
@@ -156,7 +156,7 @@ describe('Test syndication feeds', () => {
 
     describe('Podcast feed', function () {
 
-      it('Should contain a valid podcast:alternateEnclosure', async function () {
+      it('Should contain a valid podcast enclosures', async function () {
         // Since podcast feeds should only work on the server they originate on,
         // only test the first server where the videos reside
         const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
@@ -171,6 +171,9 @@ describe('Test syndication feeds', () => {
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
+        expect(enclosure['@_url']).to.contain(`${servers[0].url}/static/web-videos/`)
+        expect(enclosure['@_type']).to.equal('video/webm')
+
         const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
         expect(alternateEnclosure).to.exist
 
@@ -187,7 +190,7 @@ describe('Test syndication feeds', () => {
         expect(alternateEnclosure['podcast:source'][2]['@_uri']).to.contain('magnet:?')
       })
 
-      it('Should contain a valid podcast:alternateEnclosure with HLS only', async function () {
+      it('Should contain a valid podcast enclosures with HLS only', async function () {
         const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
         expect(XMLValidator.validate(rss)).to.be.true
 
@@ -199,16 +202,25 @@ describe('Test syndication feeds', () => {
         expect(itemGuid['@_isPermaLink']).to.equal(true)
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
-        const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
-        expect(alternateEnclosure).to.exist
+        expect(enclosure).to.exist
+        expect(enclosure['@_url']).to.contain(`${serverHLSOnly.url}/download/videos/generate/`)
+        expect(enclosure['@_type']).to.equal('audio/mp4')
 
-        expect(alternateEnclosure['@_type']).to.equal('application/x-mpegURL')
-        expect(alternateEnclosure['@_lang']).to.equal('zh')
-        expect(alternateEnclosure['@_title']).to.equal('HLS')
-        expect(alternateEnclosure['@_default']).to.equal(true)
+        const alternateEnclosures = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
+        expect(alternateEnclosures).to.be.an('array')
 
-        expect(alternateEnclosure['podcast:source']['@_uri']).to.contain('-master.m3u8')
-        expect(alternateEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+        const audioEnclosure = alternateEnclosures.find(e => e['@_type'] === 'audio/mp4')
+        expect(audioEnclosure).to.exist
+        expect(audioEnclosure['@_default']).to.equal(true)
+        expect(audioEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+
+        const hlsEnclosure = alternateEnclosures.find(e => e['@_type'] === 'application/x-mpegURL')
+        expect(hlsEnclosure).to.exist
+        expect(hlsEnclosure['@_lang']).to.equal('zh')
+        expect(hlsEnclosure['@_title']).to.equal('HLS')
+        expect(hlsEnclosure['@_default']).to.equal(false)
+
+        expect(hlsEnclosure['podcast:source']['@_uri']).to.contain('-master.m3u8')
       })
 
       it('Should contain a valid podcast:socialInteract', async function () {
@@ -282,8 +294,7 @@ describe('Test syndication feeds', () => {
         const xmlDoc = parser.parse(rss)
         const liveItem = xmlDoc.rss.channel['podcast:liveItem']
         expect(liveItem.title).to.equal('live-0')
-        expect(liveItem.guid['@_isPermaLink']).to.equal(false)
-        expect(liveItem.guid['#text']).to.contain(`${uuid}_`)
+        expect(liveItem.guid['@_isPermaLink']).to.equal(true)
         expect(liveItem['@_status']).to.equal('live')
 
         const enclosure = liveItem.enclosure
@@ -301,6 +312,26 @@ describe('Test syndication feeds', () => {
         await servers[0].live.waitUntilEnded({ videoId: liveId })
 
         await waitJobs(servers)
+      })
+
+      it('Should have valid itunes metadata', async function () {
+        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        expect(XMLValidator.validate(rss)).to.be.true
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const channel = xmlDoc.rss.channel
+
+        expect(channel['language']).to.equal('zh')
+
+        expect(channel['category']).to.equal('Sports')
+        expect(channel['itunes:category']['@_text']).to.equal('Sports')
+
+        expect(channel['itunes:explicit']).to.equal(true)
+
+        expect(channel['itunes:image']['@_href']).to.exist
+        await makeRawRequest({ url: channel['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
       })
     })
 

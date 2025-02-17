@@ -122,6 +122,7 @@ import {
   SequelizeModel,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
+  doesExist,
   getVideoSort,
   isOutdated,
   setAsUpdated,
@@ -1616,6 +1617,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return videos.map(v => v.id)
   }
 
+  // ---------------------------------------------------------------------------
+
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
     const serverActor = await getServerActor()
@@ -1654,6 +1657,44 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
     }
   }
+
+  // ---------------------------------------------------------------------------
+
+  static guessLanguageOrCategoryOfChannel (channelId: number, type: 'category'): Promise<number>
+  static guessLanguageOrCategoryOfChannel (channelId: number, type: 'language'): Promise<string>
+  static guessLanguageOrCategoryOfChannel (channelId: number, type: 'language' | 'category') {
+    const queryOptions: BuildVideosListQueryOptions = {
+      attributes: [ `COUNT("${type}") AS "total"`, `"${type}"` ],
+      group: `GROUP BY "${type}"`,
+      having: `HAVING COUNT("${type}") > 0`,
+      start: 0,
+      count: 1,
+      sort: '-total',
+      videoChannelId: channelId,
+      displayOnlyForFollower: null,
+      serverAccountIdForBlock: null
+    }
+
+    const queryBuilder = new VideosIdListQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideoIds(queryOptions)
+      .then(rows => {
+        const result = rows[0]?.[type]
+        if (!result) return undefined
+
+        if (type === 'category') return parseInt(result, 10)
+
+        return result as string
+      })
+  }
+
+  static channelHasNSFWContent (channelId: number) {
+    const query = 'SELECT 1 FROM "video" WHERE "nsfw" IS TRUE AND "channelId" = $channelId LIMIT 1'
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { channelId } })
+  }
+
+  // ---------------------------------------------------------------------------
 
   private static async getAvailableForApi (
     options: BuildVideosListQueryOptions,

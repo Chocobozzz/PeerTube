@@ -1,23 +1,24 @@
-import express from 'express'
-import { extname } from 'path'
 import { Feed } from '@peertube/feed'
+import { buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
+import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { cacheRouteFactory } from '@server/middlewares/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
+import express from 'express'
+import { extname } from 'path'
 import { buildNSFWFilter } from '../../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
+  feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
   setDefaultVideosSort,
   setFeedFormatContentType,
-  feedsAccountOrChannelFiltersValidator,
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../../middlewares/index.js'
 import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed, sendFeed } from './shared/index.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 const videoFeedsRouter = express.Router()
 
@@ -61,15 +62,15 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
 
-  const { name, description, imageUrl, accountImageUrl, link, accountLink } = await buildFeedMetadata({ videoChannel, account })
+  const { name, description, imageUrl, ownerImageUrl, link, ownerLink } = await buildFeedMetadata({ videoChannel, account })
 
   const feed = initFeed({
     name,
     description,
     link,
     isPodcast: false,
-    imageUrl,
-    author: { name, link: accountLink, imageUrl: accountImageUrl },
+    imageUrl: ownerImageUrl || imageUrl,
+    author: { name, link: ownerLink },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
@@ -149,6 +150,9 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       }
     })
 
+    const { videoFile: bestFile, separatedAudioFile: bestAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+    const bestFiles = [ bestFile, bestAudioFile ].filter(f => !!f)
+
     feed.addItem({
       ...getCommonVideoFeedAttributes(video),
 
@@ -162,11 +166,11 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       torrents,
 
       // Enclosure
-      video: videoFiles.length !== 0
+      video: bestFiles.length !== 0
         ? {
-          url: videoFiles[0].url,
-          length: videoFiles[0].fileSize,
-          type: videoFiles[0].type
+          url: buildDownloadFilesUrl({ baseUrl: WEBSERVER.URL, videoFiles: bestFiles.map(f => f.id), videoUUID: video.uuid }),
+          length: bestFiles.reduce((p, f) => p + f.size, 0),
+          type: getVideoFileMimeType('.mp4', bestFile.resolution === VideoResolution.H_NOVIDEO)
         }
         : undefined,
 

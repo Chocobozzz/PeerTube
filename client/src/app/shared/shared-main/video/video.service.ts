@@ -2,7 +2,7 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { arrayify } from '@peertube/peertube-core-utils'
+import { arrayify, buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -57,7 +57,6 @@ export type CommonVideoParams = {
 
 @Injectable()
 export class VideoService {
-  static BASE_VIDEO_DOWNLOAD_URL = environment.originServerUrl + '/download/videos/generate'
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
@@ -385,14 +384,12 @@ export class VideoService {
   }) {
     const { video, files, videoFileToken } = options
 
-    if (files.length === 0) throw new Error('Cannot generate download URL without files')
-
-    let url = `${VideoService.BASE_VIDEO_DOWNLOAD_URL}/${video.uuid}?`
-    url += files.map(f => 'videoFileIds=' + f.id).join('&')
-
-    if (videoFileToken) url += `&videoFileToken=${videoFileToken}`
-
-    return url
+    return buildDownloadFilesUrl({
+      baseUrl: environment.originServerUrl,
+      videoFiles: files.map(f => f.id),
+      videoUUID: video.uuid,
+      videoFileToken
+    })
   }
 
   // ---------------------------------------------------------------------------

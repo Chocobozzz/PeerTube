@@ -750,6 +750,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     if (field.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + field)
 
     if (field.toLowerCase() === 'random') return 'ORDER BY RANDOM()'
+    if (field.toLowerCase() === 'total') return `ORDER BY "total" ${direction}`
 
     if ([ 'trending', 'hot', 'best' ].includes(field.toLowerCase())) { // Sort by aggregation
       return `ORDER BY "score" ${direction}, "video"."views" ${direction}`

@@ -1,7 +1,9 @@
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings/index.js'
-import { maxBy, sortObjectComparator } from '@peertube/peertube-core-utils'
+import { buildDownloadFilesUrl, getResolutionLabel, maxBy, sortObjectComparator } from '@peertube/peertube-core-utils'
 import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
+import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
+import { buildNSFWFilter } from '@server/helpers/express-utils.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
@@ -9,8 +11,7 @@ import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKe
 import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
 import { extname } from 'path'
-import { buildNSFWFilter } from '../../helpers/express-utils.js'
-import { MIMETYPES, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
+import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '../../initializers/constants.js'
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares/index.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { VideoModel } from '../../models/video/video.js'
@@ -59,17 +60,28 @@ export {
 async function generateVideoPodcastFeed (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
-  const { name, userName, description, imageUrl, accountImageUrl, email, link, accountLink } = await buildFeedMetadata({ videoChannel })
+  const { name, description, imageUrl, ownerImageUrl, email, link, ownerLink } = await buildFeedMetadata({ videoChannel })
+
+  const nsfw = buildNSFWFilter()
 
   const data = await getVideosForFeeds({
     sort: '-publishedAt',
-    nsfw: buildNSFWFilter(),
+
+    // Only list non-NSFW videos (for Apple)
+    nsfw,
+
     // Prevent podcast feeds from listing videos in other instances
     // helps prevent duplicates when they are indexed -- only the author should control them
     isLocal: true,
     include: VideoInclude.FILES,
     videoChannelId: videoChannel?.id
   })
+
+  const language = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'language')
+  const category = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'category')
+  const hasNSFW = nsfw !== false
+    ? await VideoModel.channelHasNSFWContent(videoChannel.id)
+    : false
 
   const customTags: CustomTag[] = await Hooks.wrapObject(
     [],
@@ -89,11 +101,17 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     isPodcast: true,
     imageUrl,
 
+    language: language || 'en',
+    category: categoryToItunes(category),
+    nsfw: hasNSFW,
+
+    guid: buildUUIDv5FromURL(videoChannel.Actor.url),
+
     locked: email
       ? { isLocked: true, email } // Default to true because we have no way of offering a redirect yet
       : undefined,
 
-    person: [ { name: userName, href: accountLink, img: accountImageUrl } ],
+    person: [ { name, href: ownerLink, img: ownerImageUrl } ],
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: 'video',
@@ -144,8 +162,8 @@ async function generatePodcastItem (options: {
 
   const commonAttributes = getCommonVideoFeedAttributes(video)
   const guid = liveItem
-    ? `${video.uuid}_${video.publishedAt.toISOString()}`
-    : commonAttributes.link
+    ? `${video.url}?publishedAt=${video.publishedAt.toISOString()}`
+    : video.url
 
   let personImage: string
 
@@ -204,7 +222,7 @@ async function addVODPodcastItem (options: {
 
   const webVideos = video.getFormattedWebVideoFilesJSON(true)
     .map(f => buildVODWebVideoFile(video, f))
-    .sort(sortObjectComparator('bitrate', 'desc'))
+    .sort(sortObjectComparator('bitrate', 'asc'))
 
   const streamingPlaylistFiles = buildVODStreamingPlaylists(video)
 
@@ -266,7 +284,31 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
+  const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
   return [
+    ...hls.VideoFiles
+      .sort(sortObjectComparator('resolution', 'asc'))
+      .map(videoFile => {
+        const files = [ videoFile ]
+
+        if (videoFile.resolution !== VideoResolution.H_NOVIDEO && separatedAudioFile) {
+          files.push(separatedAudioFile)
+        }
+
+        return {
+          type: getVideoFileMimeType(videoFile.extname, videoFile.resolution === VideoResolution.H_NOVIDEO),
+          title: getResolutionLabel(videoFile),
+          length: files.reduce((p, f) => p + f.size, 0),
+          language: video.language,
+          sources: [
+            {
+              uri: buildDownloadFilesUrl({ baseUrl: WEBSERVER.URL, videoFiles: files.map(f => f.id), videoUUID: video.uuid })
+            }
+          ]
+        }
+      }),
+
     {
       type: 'application/x-mpegURL',
       title: 'HLS',
@@ -305,4 +347,29 @@ function buildVODCaptions (video: MVideo, videoCaptions: MVideoCaptionVideo[]) {
       rel: 'captions'
     }
   }).filter(c => c)
+}
+
+function categoryToItunes (category: number) {
+  const itunesMap: { [ id in keyof typeof VIDEO_CATEGORIES ]: string } = {
+    1: 'Music',
+    2: 'TV &amp; Film',
+    3: 'Leisure',
+    4: 'Arts',
+    5: 'Sports',
+    6: 'Places &amp; Travel',
+    7: 'Video Games',
+    8: 'Society &amp; Culture',
+    9: 'Comedy',
+    10: 'Fiction',
+    11: 'News',
+    12: 'Leisure',
+    13: 'Education',
+    14: 'Society &amp; Culture',
+    15: 'Technology',
+    16: 'Pets &amp; Animals',
+    17: 'Kids &amp; Family',
+    18: 'Food'
+  }
+
+  return itunesMap[category]
 }

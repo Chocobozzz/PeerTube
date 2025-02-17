@@ -31,6 +31,22 @@ function queryParamsToObject (entries: URLSearchParams) {
 
 // ---------------------------------------------------------------------------
 
+function buildDownloadFilesUrl (options: {
+  baseUrl: string
+  videoUUID: string
+  videoFiles: number[]
+  videoFileToken?: string
+}) {
+  const { baseUrl, videoFiles, videoUUID, videoFileToken } = options
+
+  let url = `${baseUrl}/download/videos/generate/${videoUUID}?`
+  url += videoFiles.map(f => 'videoFileIds=' + f).join('&')
+
+  if (videoFileToken) url += `&videoFileToken=${videoFileToken}`
+
+  return url
+}
+
 function buildPlaylistLink (playlist: Pick<VideoPlaylist, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistWatchPath(playlist)
 }
@@ -140,6 +156,8 @@ export {
   addQueryParams,
   removeQueryParams,
   queryParamsToObject,
+
+  buildDownloadFilesUrl,
 
   buildPlaylistLink,
   buildVideoLink,
