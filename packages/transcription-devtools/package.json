@@ -16,5 +16,10 @@
     "watch": "tsc -w",
     "benchmark": "tsx --conditions=peertube:tsx --tsconfig ./tsconfig.json ./src/benchmark.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@peertube/peertube-core-utils": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*",
+    "@peertube/peertube-server-commands": "workspace:*",
+    "@peertube/peertube-transcription": "workspace:*"
+  }
 }

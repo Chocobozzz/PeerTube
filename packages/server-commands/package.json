@@ -10,10 +10,18 @@
     "default": "./dist/index.js"
   },
   "type": "module",
-  "devDependencies": {},
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@peertube/peertube-core-utils": "workspace:*",
+    "@peertube/peertube-models": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*",
+    "@peertube/peertube-typescript-utils": "workspace:*",
+    "@socket.io/component-emitter": "~3.1.0"
+  },
+  "devDependencies": {
+    "@types/superagent": "^8.1.0"
+  }
 }

@@ -27,5 +27,7 @@
     "url": "https://github.com/Chocobozzz/PeerTube/issues"
   },
   "homepage": "https://github.com/Chocobozzz/PeerTube#readme",
-  "dependencies": {}
+  "dependencies": {
+    "@peertube/peertube-core-utils": "workspace:*"
+  }
 }

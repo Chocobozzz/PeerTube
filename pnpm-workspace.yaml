@@ -1,0 +1,5 @@
+packages:
+  - 'packages/*'
+  - 'server'
+  - 'client'
+  - 'client/src/standalone/player'

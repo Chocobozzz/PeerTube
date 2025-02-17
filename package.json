@@ -6,8 +6,9 @@
   "licence": "AGPL-3.0",
   "engines": {
     "node": ">=20.x",
-    "yarn": ">=1.x"
+    "pnpm": ">=9.x"
   },
+  "packageManager": "pnpm@10.4.1",
   "type": "module",
   "author": {
     "name": "Chocobozzz",
@@ -19,12 +20,8 @@
     "url": "git+https://github.com/Chocobozzz/PeerTube.git"
   },
   "typings": "*.d.ts",
-  "workspaces": [
-    "packages/*",
-    "server"
-  ],
   "scripts": {
-    "install-node-dependencies": "yarn install --pure-lockfile",
+    "install-node-dependencies": "pnpm install --prefer-frozen-lockfile",
     "benchmark-server": "tsx --conditions=peertube:tsx ./scripts/benchmark.ts",
     "benchmark-transcription": "tsx --conditions=peertube:tsx --tsconfig ./packages/transcription/tsconfig.json ./packages/transcription/src/benchmark.ts",
     "build:client": "bash ./scripts/build/client.sh",
@@ -67,7 +64,6 @@
     "parse-log": "node ./dist/scripts/parse-log.js",
     "plugin:install": "node ./dist/scripts/plugin/install.js",
     "plugin:uninstall": "node ./dist/scripts/plugin/uninstall.js",
-    "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",
     "prune-storage": "LOGGER_LEVEL=warn node ./dist/scripts/prune-storage.js",
     "regenerate-thumbnails": "node ./dist/scripts/regenerate-thumbnails.js",
     "release-embed-api": "bash ./scripts/release-embed-api.sh",

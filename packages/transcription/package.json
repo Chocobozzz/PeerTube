@@ -15,5 +15,8 @@
     "build": "tsc",
     "watch": "tsc -w"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@peertube/peertube-models": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*"
+  }
 }
