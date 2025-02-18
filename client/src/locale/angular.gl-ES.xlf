@@ -17693,9 +17693,9 @@
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2150635874774701699" datatype="html">
+      <trans-unit id="2150635874774701699" datatype="html" xml:space="preserve">
         <source>Editing tasks created.</source>
-        <target state="new">Editing tasks created.</target>
+        <target state="translated">Creáronse as tarefas de edición.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">112</context>
