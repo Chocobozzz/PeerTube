@@ -116,7 +116,7 @@
     "@opentelemetry/sdk-trace-node": "^1.15.1",
     "@opentelemetry/semantic-conventions": "^1.15.1",
     "@peertube/bittorrent-tracker-server": "^11.1.2",
-    "@peertube/feed": "^5.2.0",
+    "@peertube/feed": "^5.3.0",
     "@peertube/http-signature": "^1.7.0",
     "@smithy/node-http-handler": "^4.0.2",
     "@uploadx/core": "^6.0.0",

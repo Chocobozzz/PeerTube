@@ -16,6 +16,7 @@ import {
   stopFfmpeg,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expectStartWith } from '@tests/shared/checks.js'
 import * as chai from 'chai'
 import chaiJSONSChema from 'chai-json-schema'
 import chaiXML from 'chai-xml'
@@ -203,13 +204,17 @@ describe('Test syndication feeds', () => {
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
-        expect(enclosure['@_url']).to.contain(`${serverHLSOnly.url}/download/videos/generate/`)
-        expect(enclosure['@_type']).to.equal('audio/mp4')
+        expectStartWith(enclosure['@_url'], `${serverHLSOnly.url}/download/videos/generate/`)
+        expect(enclosure['@_url']).to.contain('.m4a')
+        expect(enclosure['@_type']).to.equal('audio/x-m4a')
+
+        const res = await makeRawRequest({ url: enclosure['@_url'], expectedStatus: HttpStatusCode.OK_200 })
+        expect(res.headers['content-type']).to.equal('audio/mp4')
 
         const alternateEnclosures = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
         expect(alternateEnclosures).to.be.an('array')
 
-        const audioEnclosure = alternateEnclosures.find(e => e['@_type'] === 'audio/mp4')
+        const audioEnclosure = alternateEnclosures.find(e => e['@_type'] === 'audio/x-m4a')
         expect(audioEnclosure).to.exist
         expect(audioEnclosure['@_default']).to.equal(true)
         expect(audioEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
@@ -330,8 +335,14 @@ describe('Test syndication feeds', () => {
 
         expect(channel['itunes:explicit']).to.equal(true)
 
+        expect(channel['itunes:author']).to.equal('PeerTube')
+
         expect(channel['itunes:image']['@_href']).to.exist
         await makeRawRequest({ url: channel['itunes:image']['@_href'], expectedStatus: HttpStatusCode.OK_200 })
+
+        const item = xmlDoc.rss.channel.item
+
+        expect(item['itunes:duration']).to.equal(5)
       })
     })
 

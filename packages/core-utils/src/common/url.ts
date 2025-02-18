@@ -36,10 +36,11 @@ function buildDownloadFilesUrl (options: {
   videoUUID: string
   videoFiles: number[]
   videoFileToken?: string
+  extension?: string
 }) {
-  const { baseUrl, videoFiles, videoUUID, videoFileToken } = options
+  const { baseUrl, videoFiles, videoUUID, videoFileToken, extension = '' } = options
 
-  let url = `${baseUrl}/download/videos/generate/${videoUUID}?`
+  let url = `${baseUrl}/download/videos/generate/${videoUUID}${extension}?`
   url += videoFiles.map(f => 'videoFileIds=' + f).join('&')
 
   if (videoFileToken) url += `&videoFileToken=${videoFileToken}`

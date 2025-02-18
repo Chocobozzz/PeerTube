@@ -1,9 +1,10 @@
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings/index.js'
-import { buildDownloadFilesUrl, getResolutionLabel, maxBy, sortObjectComparator } from '@peertube/peertube-core-utils'
+import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from '@peertube/peertube-core-utils'
 import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
@@ -112,6 +113,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
       : undefined,
 
     person: [ { name, href: ownerLink, img: ownerImageUrl } ],
+    author: { name: CONFIG.INSTANCE.NAME, link: WEBSERVER.URL },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: 'video',
@@ -153,23 +155,19 @@ async function generatePodcastItem (options: {
     { video, liveItem }
   )
 
-  const account = video.VideoChannel.Account
-
-  const author = {
-    name: account.getDisplayName(),
-    href: account.getClientUrl()
-  }
-
   const commonAttributes = getCommonVideoFeedAttributes(video)
   const guid = liveItem
     ? `${video.url}?publishedAt=${video.publishedAt.toISOString()}`
     : video.url
 
-  let personImage: string
+  const account = video.VideoChannel.Account
+  const person = {
+    name: account.getDisplayName(),
+    href: account.getClientUrl(),
 
-  if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-    const avatar = maxBy(account.Actor.Avatars, 'width')
-    personImage = WEBSERVER.URL + avatar.getStaticPath()
+    img: account.Actor.hasImage(ActorImageType.AVATAR)
+      ? WEBSERVER.URL + account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      : undefined
   }
 
   return {
@@ -178,14 +176,7 @@ async function generatePodcastItem (options: {
 
     trackers: video.getTrackerUrls(),
 
-    author: [ author ],
-    person: [
-      {
-        ...author,
-
-        img: personImage
-      }
-    ],
+    person: [ person ],
 
     media,
 
@@ -196,6 +187,8 @@ async function generatePodcastItem (options: {
         accountUrl: account.getClientUrl()
       }
     ],
+
+    duration: video.duration,
 
     customTags
   }
@@ -271,7 +264,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 
   return {
-    type: getVideoFileMimeType(extname(videoFile.fileUrl), videoFile.resolution.id === VideoResolution.H_NOVIDEO),
+    type: getAppleMimeType(extname(videoFile.fileUrl), videoFile.resolution.id === VideoResolution.H_NOVIDEO),
     title: videoFile.resolution.label,
     length: videoFile.size,
     bitrate: videoFile.size / video.duration * 8,
@@ -297,13 +290,20 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
         }
 
         return {
-          type: getVideoFileMimeType(videoFile.extname, videoFile.resolution === VideoResolution.H_NOVIDEO),
+          type: getAppleMimeType(videoFile.extname, videoFile.resolution === VideoResolution.H_NOVIDEO),
           title: getResolutionLabel(videoFile),
           length: files.reduce((p, f) => p + f.size, 0),
           language: video.language,
           sources: [
             {
-              uri: buildDownloadFilesUrl({ baseUrl: WEBSERVER.URL, videoFiles: files.map(f => f.id), videoUUID: video.uuid })
+              uri: buildDownloadFilesUrl({
+                baseUrl: WEBSERVER.URL,
+                videoFiles: files.map(f => f.id),
+                videoUUID: video.uuid,
+                extension: videoFile.hasVideo() && videoFile.hasAudio()
+                  ? '.mp4'
+                  : '.m4a'
+              })
             }
           ]
         }
@@ -372,4 +372,13 @@ function categoryToItunes (category: number) {
   }
 
   return itunesMap[category]
+}
+
+// Guidelines: https://help.apple.com/itc/podcasts_connect/#/itcb54353390
+// "The type values for the supported file formats are: audio/x-m4a, audio/mpeg, video/quicktime, video/mp4, video/x-m4v, ..."
+function getAppleMimeType (extname: string, isAudio: boolean) {
+  if (extname === '.mp4' && isAudio) return 'audio/x-m4a'
+  if (extname === '.mp3') return 'audio/mpeg'
+
+  return getVideoFileMimeType(extname, isAudio)
 }

@@ -68,7 +68,7 @@ const downloadGenerateRateLimiter = buildRateLimiter({
 })
 
 downloadRouter.use(
-  DOWNLOAD_PATHS.GENERATE_VIDEO + ':id',
+  [ DOWNLOAD_PATHS.GENERATE_VIDEO + ':id.m4a', DOWNLOAD_PATHS.GENERATE_VIDEO + ':id.mp4', DOWNLOAD_PATHS.GENERATE_VIDEO + ':id' ],
   downloadGenerateRateLimiter,
   optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
@@ -251,8 +251,13 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
     ? '.m4a'
     : maxResolutionFile.extname
 
-  const downloadFilename = buildDownloadFilename({ video, extname })
-  res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
+  // If there is the extension, we want to simulate a "raw file" and so not send the content disposition header
+  if (!req.path.endsWith('.mp4') && !req.path.endsWith('.m4a')) {
+    const downloadFilename = buildDownloadFilename({ video, extname })
+    res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
+  }
+
+  res.type(extname)
 
   await muxToMergeVideoFiles({ video, videoFiles, output: res })
 }
