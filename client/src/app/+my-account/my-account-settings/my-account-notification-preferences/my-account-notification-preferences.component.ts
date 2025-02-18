@@ -31,26 +31,6 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private serverService: ServerService,
     private notifier: Notifier
   ) {
-    this.labelNotifications = {
-      newVideoFromSubscription: $localize`New video or live from your subscriptions`,
-      newCommentOnMyVideo: $localize`New comment on your video`,
-      abuseAsModerator: $localize`New abuse`,
-      videoAutoBlacklistAsModerator: $localize`An automatically blocked video is awaiting review`,
-      blacklistOnMyVideo: $localize`One of your video is blocked/unblocked`,
-      myVideoPublished: $localize`Video published (after transcoding/scheduled update)`,
-      myVideoImportFinished: $localize`Video import finished`,
-      newUserRegistration: $localize`A new user registered on your platform`,
-      newFollow: $localize`You or one of your channels has a new follower`,
-      commentMention: $localize`Someone mentioned you in video comments`,
-      newInstanceFollower: $localize`Your platform has a new follower`,
-      autoInstanceFollowing: $localize`Your platform automatically followed another platform`,
-      abuseNewMessage: $localize`An abuse report received a new message`,
-      abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
-      newPeerTubeVersion: $localize`A new PeerTube version is available`,
-      newPluginVersion: $localize`One of your plugin/theme has a new available version`,
-      myVideoStudioEditionFinished: $localize`Processing of edits has finished`,
-      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`
-    }
     this.notificationSettingGroups = [
       {
         label: $localize`Social`,
@@ -107,8 +87,29 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   ngOnInit () {
-    const serverConfig = this.serverService.getHTMLConfig()
-    this.emailEnabled = serverConfig.email.enabled
+    const config = this.serverService.getHTMLConfig()
+    this.emailEnabled = config.email.enabled
+
+    this.labelNotifications = {
+      newVideoFromSubscription: $localize`New video or live from your subscriptions`,
+      newCommentOnMyVideo: $localize`New comment on your video`,
+      abuseAsModerator: $localize`New abuse`,
+      videoAutoBlacklistAsModerator: $localize`An automatically blocked video is awaiting review`,
+      blacklistOnMyVideo: $localize`One of your video is blocked/unblocked`,
+      myVideoPublished: $localize`Video published (after transcoding/scheduled update)`,
+      myVideoImportFinished: $localize`Video import finished`,
+      newUserRegistration: $localize`A new user registered on ${config.instance.name}`,
+      newFollow: $localize`You or one of your channels has a new follower`,
+      commentMention: $localize`Someone mentioned you in video comments`,
+      newInstanceFollower: $localize`${config.instance.name} has a new follower`,
+      autoInstanceFollowing: $localize`${config.instance.name} automatically followed another platform`,
+      abuseNewMessage: $localize`An abuse report received a new message`,
+      abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
+      newPeerTubeVersion: $localize`A new PeerTube version is available`,
+      newPluginVersion: $localize`One of your plugin/theme has a new available version`,
+      myVideoStudioEditionFinished: $localize`Processing of edits has finished`,
+      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`
+    }
 
     this.loadNotificationSettings()
   }

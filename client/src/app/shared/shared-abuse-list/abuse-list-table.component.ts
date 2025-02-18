@@ -494,7 +494,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     this.blocklistService.blockAccountByInstance(account)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${account.nameWithHost} muted by the platform.`)
+          this.notifier.success($localize`Account ${account.nameWithHost} muted by your platform.`)
           account.mutedByInstance = true
         },
 
@@ -506,7 +506,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     this.blocklistService.blockServerByInstance(host)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Server ${host} muted by the platform.`)
+          this.notifier.success($localize`${host} muted by your platform.`)
         },
 
         error: err => this.notifier.error(err.message)

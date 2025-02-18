@@ -165,7 +165,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     this.blocklistService.blockServerByUser(host)
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Instance ${host} muted.`)
+            this.notifier.success($localize`${host} muted.`)
 
             this.account.mutedServerByUser = true
             this.userChanged.emit()
@@ -179,7 +179,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     this.blocklistService.unblockServerByUser(host)
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Instance ${host} unmuted.`)
+            this.notifier.success($localize`${host} unmuted.`)
 
             this.account.mutedServerByUser = false
             this.userChanged.emit()
@@ -193,7 +193,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     this.blocklistService.blockAccountByInstance(account)
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Account ${account.nameWithHost} muted by the instance.`)
+            this.notifier.success($localize`Account ${account.nameWithHost} muted by your platform.`)
 
             this.account.mutedByInstance = true
             this.userChanged.emit()
@@ -207,7 +207,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     this.blocklistService.unblockAccountByInstance(account)
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Account ${account.nameWithHost} unmuted by the instance.`)
+            this.notifier.success($localize`Account ${account.nameWithHost} unmuted by your platform.`)
 
             this.account.mutedByInstance = false
             this.userChanged.emit()

@@ -84,8 +84,8 @@ export const MAX_LIVE_DURATION_VALIDATOR: BuildFormValidator = {
 export const MAX_INSTANCE_LIVES_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(-1) ],
   MESSAGES: {
-    required: $localize`Max platform lives is required.`,
-    min: $localize`Max platform lives must be greater or equal to -1.`
+    required: $localize`Max lives is required.`,
+    min: $localize`Max lives must be greater or equal to -1.`
   }
 }
 

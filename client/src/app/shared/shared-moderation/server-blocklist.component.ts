@@ -42,8 +42,8 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
       () => {
         this.notifier.success(
           this.mode === BlocklistComponentType.Account
-            ? $localize`Platform ${host} unmuted.`
-            : $localize`Platform ${host} unmuted by your platform.`
+            ? $localize`${host} unmuted.`
+            : $localize`${host} unmuted by your platform.`
         )
 
         this.reloadData()
