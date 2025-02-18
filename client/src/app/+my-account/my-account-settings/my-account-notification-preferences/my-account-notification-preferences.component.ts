@@ -43,7 +43,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newFollow: $localize`You or one of your channels has a new follower`,
       commentMention: $localize`Someone mentioned you in video comments`,
       newInstanceFollower: $localize`Your platform has a new follower`,
-      autoInstanceFollowing: $localize`Your platform automatically followed another PeerTube platform`,
+      autoInstanceFollowing: $localize`Your platform automatically followed another platform`,
       abuseNewMessage: $localize`An abuse report received a new message`,
       abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
       newPeerTubeVersion: $localize`A new PeerTube version is available`,

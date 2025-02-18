@@ -190,7 +190,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
 
         this.notifier.error(
-          $localize`Search index is unavailable. Retrying with PeerTube platform results instead.`,
+          $localize`Search index is unavailable. Retrying with platform results instead.`,
           $localize`Search error`
         )
         this.advancedSearch.searchTarget = 'local'
@@ -367,7 +367,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private checkFieldsAndGetError () {
     if (this.advancedSearch.host && !validateHost(this.advancedSearch.host)) {
-      return $localize`PeerTube platform host filter is invalid`
+      return $localize`platform host filter is invalid`
     }
 
     return undefined

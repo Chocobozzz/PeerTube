@@ -43,7 +43,7 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
         this.notifier.success(
           this.mode === BlocklistComponentType.Account
             ? $localize`Platform ${host} unmuted.`
-            : $localize`Platform ${host} unmuted by your PeerTube platform.`
+            : $localize`Platform ${host} unmuted by your platform.`
         )
 
         this.reloadData()
@@ -66,7 +66,7 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
           this.notifier.success(
             this.mode === BlocklistComponentType.Account
               ? $localize`Platform ${domain} muted.`
-              : $localize`Platform ${domain} muted by your PeerTube platform.`
+              : $localize`Platform ${domain} muted by your platform.`
           )
 
           this.reloadData()
