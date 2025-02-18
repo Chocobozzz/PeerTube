@@ -167,7 +167,8 @@ server {
                     font/truetype
                     font/opentype
                     application/vnd.ms-fontobject
-                    image/svg+xml;
+                    image/svg+xml
+                    application/xml;
   gzip_min_length   1000; # default is 20 bytes
   gzip_buffers      16 8k;
   gzip_comp_level   2; # default is 1
