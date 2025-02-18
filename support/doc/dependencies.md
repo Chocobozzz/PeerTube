@@ -110,7 +110,7 @@ sudo yum update
 sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git devtoolset-7
 ```
 
-5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-7.
+5. You need to use a more up to date version of G++ in order to run the `npm run install-node-dependencies` command, hence the installation of devtoolset-7.
 
 ```sh
 sudo scl enable devtoolset-7 bash
@@ -119,7 +119,7 @@ sudo scl enable devtoolset-7 bash
 Later when you invoke any node command, please prefix them with `CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++`, such as with:
 
 ```sh
-sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
+sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ npm run install-node-dependencies -- --production
 ```
 
 6. Initialize the PostgreSQL database:

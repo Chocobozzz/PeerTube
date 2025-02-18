@@ -29,14 +29,14 @@ USER peertube
 
 # Install manually client dependencies to apply our network timeout option
 RUN if [ "${ALREADY_BUILT}" = 0 ]; then \
-    cd client && yarn install --pure-lockfile --network-timeout 1200000 && cd ../ \
-    && yarn install --pure-lockfile --network-timeout 1200000 \
+    cd client && npm run install-node-dependencies -- --network-timeout 1200000 && cd ../ \
+    && npm run install-node-dependencies -- --network-timeout 1200000 \
     && npm run build; \
   else \
     echo "Do not build application inside Docker because of ALREADY_BUILT build argument"; \
   fi; \
   rm -rf ./node_modules ./client/node_modules ./client/.angular \
-  && NOCLIENT=1 yarn install --pure-lockfile --production --network-timeout 1200000 --network-concurrency 20 \
+  && NOCLIENT=1 npm run install-node-dependencies -- --production --network-timeout 1200000 --network-concurrency 20 \
   && yarn cache clean
 
 USER root
