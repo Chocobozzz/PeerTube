@@ -316,9 +316,12 @@ describe('Test stats (excluding redundancy)', function () {
     it('Should create registration requests, accept one and have correct stats', async function () {
       beforeTimestamp = new Date().getTime()
 
-      const { id: id1 } = await servers[0].registrations.requestRegistration({ username: 'user2', registrationReason: 'reason 1' });
-      ({ id: id2 } = await servers[0].registrations.requestRegistration({ username: 'user3', registrationReason: 'reason 2' }))
-      await servers[0].registrations.requestRegistration({ username: 'user4', registrationReason: 'reason 3' })
+      await servers[0].registrations.register({ username: 'user2', registrationReason: 'reason 1' })
+      await servers[0].registrations.register({ username: 'user3', registrationReason: 'reason 2' })
+      const registrations = await servers[0].registrations.list()
+      const id1 = registrations.data[1].id
+      id2 = registrations.data[0].id
+      await servers[0].registrations.register({ username: 'user4', registrationReason: 'reason 3' })
 
       await wait(1500)
 

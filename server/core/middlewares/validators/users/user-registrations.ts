@@ -11,8 +11,16 @@ import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../
 import { ActorModel } from '../../../models/actor/actor.js'
 import { areValidationErrors, checkUsernameOrEmailDoNotAlreadyExist } from '../shared/index.js'
 import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } from './shared/user-registrations.js'
+import { pick } from '@peertube/peertube-core-utils'
+import { asyncMiddleware } from '@server/middlewares/async.js'
 
-const usersDirectRegistrationValidator = usersCommonRegistrationValidatorFactory()
+const usersRegistrationValidator = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (res.locals.signupMode === 'direct-registration') {
+    return asyncMiddleware(usersCommonRegistrationValidatorFactory())(req, res, next)
+  }
+
+  return asyncMiddleware(usersRequestRegistrationValidator)(req, res, next)
+}
 
 const usersRequestRegistrationValidator = [
   ...usersCommonRegistrationValidatorFactory([
@@ -22,8 +30,10 @@ const usersRequestRegistrationValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body: UserRegistrationRequest = req.body
+    // CONFIG.SIGNUP.REQUIRES_APPROVAL is only used for deprecated /registrations/request endpoint
+    const requiresApproval = (res.locals.signupMode && res.locals.signupMode === 'request-registration') || CONFIG.SIGNUP.REQUIRES_APPROVAL
 
-    if (CONFIG.SIGNUP.REQUIRES_APPROVAL !== true) {
+    if (requiresApproval !== true) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'Signup approval is not enabled on this instance'
@@ -39,8 +49,30 @@ const usersRequestRegistrationValidator = [
 
 // ---------------------------------------------------------------------------
 
-function ensureUserRegistrationAllowedFactory (signupMode: SignupMode) {
+const determineSignupMode = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const { registrationReason, requiresApproval } = await Hooks.wrapObject(
+      {
+        requiresApproval: CONFIG.SIGNUP.REQUIRES_APPROVAL,
+        registrationReason: req.body.registrationReason
+      },
+      'filter:api.user.signup.requires-approval.result',
+      {
+        body: pick(req.body, [ 'username', 'email', 'registrationReason' ]),
+        headers: req.headers
+      }
+    )
+
+    req.body.registrationReason = registrationReason
+    res.locals.signupMode = requiresApproval ? 'request-registration' : 'direct-registration'
+
+    return next()
+  }
+]
+
+function ensureUserRegistrationAllowedFactory (sm?: SignupMode) {
   return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const signupMode = sm || res.locals.signupMode // sm is provided by deprecated /registrations/request endpoint
     const allowedParams = {
       body: req.body,
       ip: req.ip,
@@ -142,7 +174,9 @@ const listRegistrationsValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  usersDirectRegistrationValidator,
+  determineSignupMode,
+
+  usersRegistrationValidator,
   usersRequestRegistrationValidator,
 
   ensureUserRegistrationAllowedFactory,

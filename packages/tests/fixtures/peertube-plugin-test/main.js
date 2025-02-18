@@ -320,6 +320,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  registerHook({
+    target: 'filter:api.user.signup.requires-approval.result',
+    handler: ({ requiresApproval, registrationReason }, { body, headers }) => {
+      return {
+        requiresApproval: body.username === 'waiting_john',
+        registrationReason: 'Marked as spam'
+      }
+    }
+  })
+
   {
     registerHook({
       target: 'filter:api.user.signup.allowed.result',

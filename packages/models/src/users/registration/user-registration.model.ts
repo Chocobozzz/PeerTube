@@ -1,5 +1,12 @@
 import { UserRegistrationStateType } from './user-registration-state.model.js'
 
+export interface UserRegistrationResponse {
+  state: {
+    id: UserRegistrationStateType
+    label: string
+  }
+}
+
 export interface UserRegistration {
   id: number
 
