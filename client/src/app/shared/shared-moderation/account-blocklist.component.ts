@@ -40,7 +40,7 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
         this.notifier.success(
           this.mode === BlocklistComponentType.Account
             ? $localize`Account ${blockedAccount.nameWithHost} unmuted.`
-            : $localize`Account ${blockedAccount.nameWithHost} unmuted by your instance.`
+            : $localize`Account ${blockedAccount.nameWithHost} unmuted by your platform.`
         )
 
         this.reloadData()

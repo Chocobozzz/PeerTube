@@ -220,9 +220,9 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     message = $localize`Do you really want to delete this comment?`
   ): Promise<boolean> {
     if (commentToDelete.isLocal || this.video.isLocal) {
-      message += $localize` The deletion will be sent to remote instances so they can reflect the change.`
+      message += $localize` The deletion will be sent to remote platforms so they can reflect the change.`
     } else {
-      message += $localize` It is a remote comment, so the deletion will only be effective on your instance.`
+      message += $localize` It is a remote comment, so the deletion will only be effective on your platform.`
     }
 
     const res = await this.confirmService.confirm(message, title)

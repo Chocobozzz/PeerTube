@@ -434,7 +434,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       const res = await this.confirmService.confirm(
         // eslint-disable-next-line max-len
-        $localize`This video is not available on this instance. Do you want to be redirected on the origin instance: <a href="${originUrl}">${originUrl}</a>?`,
+        $localize`This video is not available on this platform. Do you want to be redirected on the origin platform: <a href="${originUrl}">${originUrl}</a>?`,
         $localize`Redirection`
       )
 

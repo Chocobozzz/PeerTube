@@ -146,7 +146,7 @@ export class PluginSearchComponent implements OnInit {
     if (this.installing[plugin.npmName]) return
 
     const res = await this.confirmService.confirm(
-      $localize`Please only install plugins or themes you trust, since they can execute any code on your instance.`,
+      $localize`Please only install plugins or themes you trust, since they can execute any code on your platform.`,
       $localize`Install ${plugin.name}?`
     )
     if (res === false) return

@@ -147,7 +147,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
           const error = err.body as PeerTubeProblemDocument
 
           if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
-            message = $localize`Cannot create live because this instance have too many created lives`
+            message = $localize`Cannot create live because this platform have too many created lives`
           } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
             message = $localize`Cannot create live because you created too many lives`
           }

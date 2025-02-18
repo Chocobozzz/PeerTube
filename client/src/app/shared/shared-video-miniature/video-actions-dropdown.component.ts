@@ -328,7 +328,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.redundancyService.addVideoRedundancy(this.video)
         .subscribe({
           next: () => {
-            const message = $localize`${this.video.name} will be duplicated by your instance.`
+            const message = $localize`${this.video.name} will be duplicated by your platform.`
             this.notifier.success(message)
           },
 

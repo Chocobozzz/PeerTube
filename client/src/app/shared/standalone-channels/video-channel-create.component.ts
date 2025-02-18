@@ -95,7 +95,7 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
 
         error: err => {
           if (err.status === HttpStatusCode.CONFLICT_409) {
-            this.error = $localize`This name already exists on this instance.`
+            this.error = $localize`This name already exists on this platform.`
             return
           }
 
