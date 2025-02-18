@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router'
+import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthStatus,
@@ -20,7 +20,7 @@ import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-
 import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
 import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig } from '@peertube/peertube-models'
+import { HTMLServerConfig, ServerConfig } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
 import { Subscription } from 'rxjs'
@@ -69,7 +69,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   androidAppUrl = ''
   iosAppUrl = ''
 
-  private serverConfig: ServerConfig
+  private config: ServerConfig
+  private htmlConfig: HTMLServerConfig
 
   private quickSettingsModalSub: Subscription
   private hotkeysSub: Subscription
@@ -83,7 +84,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private screenService: ScreenService,
     private modalService: PeertubeModalService,
     private router: Router,
-    private route: ActivatedRoute,
     private menu: MenuService
   ) { }
 
@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   get requiresApproval () {
-    return this.serverConfig.signup.requiresApproval
+    return this.config.signup.requiresApproval
   }
 
   get instanceName () {
@@ -100,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isLoaded () {
-    return this.serverConfig && (!this.loggedIn || !!this.user?.account)
+    return this.config && (!this.loggedIn || !!this.user?.account)
   }
 
   isInMobileView () {
@@ -112,6 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
+    this.htmlConfig = this.serverService.getHTMLConfig()
     this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
 
     this.loggedIn = this.authService.isLoggedIn()
@@ -131,7 +132,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(isOpen => this.hotkeysHelpVisible = isOpen)
 
     this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+      .subscribe(config => this.config = config)
 
     this.quickSettingsModalSub = this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
@@ -167,8 +168,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     document.body.classList.add('mobile-app-msg')
 
     const host = window.location.host
-    const intentConfig = this.serverConfig.client.openInApp.android.intent
-    const iosConfig = this.serverConfig.client.openInApp.ios
+    const intentConfig = this.htmlConfig.client.openInApp.android.intent
+    const iosConfig = this.htmlConfig.client.openInApp.ios
 
     const getVideoId = (url: string) => {
       const matches = url.match(/^\/w\/([^/]+)$/)
@@ -234,17 +235,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!isIOS()) return
 
     setTimeout(() => {
-      window.location.href = this.serverConfig.client.openInApp.ios.fallbackUrl
+      window.location.href = this.htmlConfig.client.openInApp.ios.fallbackUrl
     }, 2500)
   }
 
   // ---------------------------------------------------------------------------
 
   isRegistrationAllowed () {
-    if (!this.serverConfig) return false
+    if (!this.config) return false
 
-    return this.serverConfig.signup.allowed &&
-      this.serverConfig.signup.allowedForCurrentIP
+    return this.config.signup.allowed &&
+      this.config.signup.allowedForCurrentIP
   }
 
   logout (event: Event) {
