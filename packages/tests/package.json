@@ -9,5 +9,18 @@
     "watch": "tsc -w",
     "install-dependencies:transcription": "pip install -r ./requirements.txt -r ../transcription-devtools/requirements.txt"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@peertube/peertube-core-utils": "workspace:*",
+    "@peertube/peertube-ffmpeg": "workspace:*",
+    "@peertube/peertube-models": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*",
+    "@peertube/peertube-server": "workspace:*",
+    "@peertube/peertube-server-commands": "workspace:*",
+    "@peertube/peertube-transcription": "workspace:*",
+    "@peertube/peertube-transcription-devtools": "workspace:*",
+    "@peertube/peertube-typescript-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/superagent": "^8.1.9"
+  }
 }

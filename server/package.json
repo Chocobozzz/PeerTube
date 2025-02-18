@@ -10,6 +10,21 @@
       "default": "./dist/*"
     }
   },
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "async": "^3.1.0",
+    "jsonfile": "^6.1.0",
+    "logform": "^2.7.0",
+    "@jimp/plugin-color": ">=0.8.0",
+    "@peertube/peertube-core-utils": "workspace:*",
+    "@peertube/peertube-ffmpeg": "workspace:*",
+    "@peertube/peertube-models": "workspace:*",
+    "@peertube/peertube-node-utils": "workspace:*",
+    "@peertube/peertube-transcription": "workspace:*",
+    "@peertube/peertube-typescript-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/jsonfile": "^6.1.0",
+    "@types/express-serve-static-core": "^4.19.5",
+    "@types/lodash": "^4.17.15"
+  }
 }

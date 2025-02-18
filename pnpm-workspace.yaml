@@ -1,0 +1,7 @@
+packages:
+  - 'apps/*'
+  - 'server'
+  - 'client'
+  - 'client/src/standalone/*'
+  - 'packages/*'
+  - 'packages/tests/fixtures/*'

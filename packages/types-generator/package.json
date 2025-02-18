@@ -4,6 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@peertube/peertube-core-utils": "*"
+    "@peertube/peertube-core-utils": "workspace:*"
   }
 }
