@@ -80,18 +80,17 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {
-    const commentTree = this.commentTree()
-    if (!commentTree) {
+    if (!this.commentTree()) {
       this.commentTree.set({
         comment: this.comment(),
         hasDisplayedChildren: false,
         children: []
       })
 
-      this.threadCreated.emit(commentTree)
+      this.threadCreated.emit(this.commentTree())
     }
 
-    commentTree.children.unshift({
+    this.commentTree().children.unshift({
       comment: createdComment,
       hasDisplayedChildren: false,
       children: []

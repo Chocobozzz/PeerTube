@@ -1,10 +1,10 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, booleanAttribute, numberAttribute, inject, input, viewChild } from '@angular/core'
-import { Account } from '../shared-main/account/account.model'
-import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, numberAttribute, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
-import { VideoChannel } from '../shared-main/channel/video-channel.model'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
+import { VideoChannel } from '../shared-main/channel/video-channel.model'
 
 export type ActorAvatarInput = {
   name: string

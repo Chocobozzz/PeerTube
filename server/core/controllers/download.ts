@@ -33,7 +33,6 @@ import {
   videosDownloadValidator,
   videosGenerateDownloadValidator
 } from '../middlewares/index.js'
-import { parse } from 'node:url'
 
 const lTags = loggerTagsFactory('download')
 
@@ -253,7 +252,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
     : maxResolutionFile.extname
 
   // If there is the extension, we want to simulate a "raw file" and so not send the content disposition header
-  const urlPath = parse(req.originalUrl).pathname
+  const urlPath = new URL(req.originalUrl).pathname
   if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
     const downloadFilename = buildDownloadFilename({ video, extname })
     res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
