@@ -35,15 +35,10 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   // Use routerLink
   readonly internalHref = input<string | any[]>(undefined)
 
-  private _title: string
+  readonly title = input<string>()
 
-  @Input()
-  set title (value) {
-    this._title = value
-  }
-
-  get title () {
-    if (this._title) return this._title
+  getTitle () {
+    if (this.title()) return this.title()
     if (this.isAccount()) return $localize`${this.actor().name} (account page)`
     if (this.isChannel()) return $localize`${this.actor().name} (channel page)`
     if (this.isInstance()) return $localize`${this.actor().name} (instance page)`

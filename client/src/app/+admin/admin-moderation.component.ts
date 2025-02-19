@@ -5,6 +5,7 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
 import { UserRight, UserRightType } from '@peertube/peertube-models'
 
 @Component({
+  selector: 'my-admin-moderation',
   templateUrl: './admin-moderation.component.html',
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })

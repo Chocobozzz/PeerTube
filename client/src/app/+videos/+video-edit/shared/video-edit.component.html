@@ -185,7 +185,6 @@
                     <div i18n class="caption-entry-state green">Will be created on update</div>
                   } @case ('UPDATE') {
                     <div i18n class="caption-entry-state green">Will be edited on update</div>
-                    Will be edited on update
                   } @case ('REMOVE') {
                     <div i18n class="caption-entry-state red">Will be deleted on update</div>
                   }
@@ -492,3 +491,5 @@
 <my-video-caption-add-modal
   #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionEdited($event)"
 ></my-video-caption-add-modal>
+
+<my-video-caption-edit-modal #videoCaptionEditModal></my-video-caption-edit-modal>

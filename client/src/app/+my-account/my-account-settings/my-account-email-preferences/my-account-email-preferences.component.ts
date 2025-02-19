@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, model } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, UserService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -17,7 +17,7 @@ export class MyAccountEmailPreferencesComponent extends FormReactive implements 
   private userService = inject(UserService)
   private notifier = inject(Notifier)
 
-  readonly user = input<User>(undefined)
+  readonly user = model<User>(undefined)
 
   ngOnInit () {
     this.buildForm({
@@ -38,7 +38,7 @@ export class MyAccountEmailPreferencesComponent extends FormReactive implements 
           if (details.emailPublic) this.notifier.success($localize`Email is now public`)
           else this.notifier.success($localize`Email is now private`)
 
-          this.user().emailPublic = details.emailPublic
+          this.user.update(u => ({ ...u, emailPublic: details.emailPublic }))
         },
 
         error: err => this.notifier.error(err.message)

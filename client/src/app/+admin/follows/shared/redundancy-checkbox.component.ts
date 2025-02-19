@@ -1,8 +1,8 @@
-import { Component, inject, input } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Component, inject, input, model } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { Notifier } from '@app/core'
 import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 
 @Component({
   selector: 'my-redundancy-checkbox',
@@ -13,8 +13,8 @@ export class RedundancyCheckboxComponent {
   private notifier = inject(Notifier)
   private redundancyService = inject(RedundancyService)
 
-  readonly redundancyAllowed = input<boolean>(undefined)
   readonly host = input<string>(undefined)
+  readonly redundancyAllowed = model<boolean>(undefined)
 
   updateRedundancyState () {
     this.redundancyService.updateRedundancy(this.host(), this.redundancyAllowed())

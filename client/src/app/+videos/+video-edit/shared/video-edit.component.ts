@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { RouterLink } from '@angular/router'
-import { ConfirmService, HooksService, PluginService, ServerService } from '@app/core'
+import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
@@ -29,7 +29,7 @@ import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/shared/shared-m
 import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
 import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { NgbModal, NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -67,7 +67,7 @@ import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/pe
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
 import { VideoCaptionAddModalComponent } from './caption/video-caption-add-modal.component'
-import { VideoCaptionEditModalContentComponent } from './caption/video-caption-edit-modal-content.component'
+import { VideoCaptionEditModalComponent } from './caption/video-caption-edit-modal.component'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 import { VideoEditType } from './video-edit.type'
@@ -116,7 +116,8 @@ type PluginField = {
     ThumbnailManagerComponent,
     EditButtonComponent,
     ButtonComponent,
-    AlertComponent
+    AlertComponent,
+    VideoCaptionEditModalComponent
   ]
 })
 export class VideoEditComponent implements OnInit, OnDestroy {
@@ -129,8 +130,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   private ngZone = inject(NgZone)
   private hooks = inject(HooksService)
   private cd = inject(ChangeDetectorRef)
-  private modalService = inject(NgbModal)
-  private confirmService = inject(ConfirmService)
 
   readonly form = input<FormGroup>(undefined)
   readonly formErrors = input<
@@ -161,6 +160,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   readonly liveVideo = input<LiveVideo>(undefined)
 
   readonly videoCaptionAddModal = viewChild<VideoCaptionAddModalComponent>('videoCaptionAddModal')
+  readonly videoCaptionEditModal = viewChild<VideoCaptionEditModalComponent>('videoCaptionEditModal')
 
   readonly formBuilt = output()
   readonly pluginFieldsAdded = output()
@@ -398,22 +398,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
-    const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, {
-      centered: true,
-      size: 'xl',
-
-      beforeDismiss: () => {
-        return this.confirmService.confirm(
-          $localize`Are you sure you want to close this modal without saving your changes?`,
-          $localize`Closing caption editing modal`
-        )
-      }
+    this.videoCaptionEditModal().show({
+      videoCaption,
+      serverConfig: this.serverConfig,
+      publishedVideo: this.publishedVideo(),
+      captionEdited: caption => this.onCaptionEdited(caption)
     })
-
-    modalRef.componentInstance.videoCaption = videoCaption
-    modalRef.componentInstance.serverConfig = this.serverConfig
-    modalRef.componentInstance.publishedVideo = this.publishedVideo()
-    modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
   }
 
   // ---------------------------------------------------------------------------
@@ -526,6 +516,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     )
 
     this.form().addControl('pluginData', this.pluginDataFormGroup)
+    // FIXME: use update function to signal
     this.formErrors()['pluginData'] = pluginFormErrors
     this.validationMessages()['pluginData'] = pluginValidationMessages
 

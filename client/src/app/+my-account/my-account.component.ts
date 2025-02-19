@@ -4,6 +4,7 @@ import { AuthUser, PluginService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 
 @Component({
+  selector: 'my-account',
   templateUrl: './my-account.component.html',
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })

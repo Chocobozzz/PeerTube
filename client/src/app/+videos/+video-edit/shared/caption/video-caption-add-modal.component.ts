@@ -33,7 +33,6 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   videoCaptionLanguages: VideoConstant<string>[] = []
 
   private openedModal: NgbModalRef
-  private closingModal = false
 
   get videoCaptionExtensions () {
     return this.serverConfig().videoCaption.file.extensions
@@ -58,20 +57,15 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   }
 
   show () {
-    this.closingModal = false
-
     this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
   }
 
   hide () {
-    this.closingModal = true
     this.openedModal.close()
     this.form.reset()
   }
 
   isReplacingExistingCaption () {
-    if (this.closingModal === true) return false
-
     const languageId = this.form.value['language']
 
     return languageId && this.existingCaptions().includes(languageId)

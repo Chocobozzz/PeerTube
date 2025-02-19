@@ -8,11 +8,11 @@
   <div #avatarEl *ngIf="displayPlaceholder()" [ngClass]="classes"></div>
 </ng-template>
 
-<a *ngIf="actor() && href()" [href]="href()" target="_blank" rel="noopener noreferrer" [title]="title">
+<a *ngIf="actor() && href()" [href]="href()" target="_blank" rel="noopener noreferrer" [title]="getTitle()">
   <ng-template *ngTemplateOutlet="img"></ng-template>
 </a>
 
-<a *ngIf="actor() && internalHref()" [routerLink]="internalHref()" [title]="title">
+<a *ngIf="actor() && internalHref()" [routerLink]="internalHref()" [title]="getTitle()">
   <ng-template *ngTemplateOutlet="img"></ng-template>
 </a>
 

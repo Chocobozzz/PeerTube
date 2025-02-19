@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, model } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -20,7 +20,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
   private notifier = inject(Notifier)
   private userService = inject(UserService)
 
-  readonly user = input<User>(null)
+  readonly user = model<User>()
 
   error: string = null
 
@@ -52,9 +52,13 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
     this.userService.updateMyProfile({ displayName, description })
       .subscribe({
         next: () => {
-          const user = this.user()
-          user.account.displayName = displayName
-          user.account.description = description
+          this.user.update(u => {
+            // FIXME: Use immutability
+            u.account.displayName = displayName
+            u.account.description = description
+
+            return u
+          })
 
           this.notifier.success($localize`Profile updated.`)
         },

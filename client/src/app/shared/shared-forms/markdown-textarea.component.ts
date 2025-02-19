@@ -166,9 +166,12 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
       const result = await customMarkdownRenderer(text)
 
       if (result instanceof HTMLElement) {
-        const wrapperElement = this.previewElement().nativeElement as HTMLElement
-        wrapperElement.innerHTML = ''
-        wrapperElement.appendChild(result)
+        setTimeout(() => {
+          const wrapperElement = this.previewElement().nativeElement as HTMLElement
+          wrapperElement.innerHTML = ''
+          wrapperElement.appendChild(result)
+        })
+
         return
       }
 

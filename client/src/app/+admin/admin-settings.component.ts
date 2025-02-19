@@ -5,6 +5,7 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
 import { PluginType, UserRight, UserRightType } from '@peertube/peertube-models'
 
 @Component({
+  selector: 'my-admin-settings',
   templateUrl: './admin-settings.component.html',
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })

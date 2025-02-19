@@ -38,7 +38,7 @@ export class UserNotificationsComponent implements OnInit {
   ngOnInit () {
     this.componentPagination = {
       currentPage: 1,
-      itemsPerPage: this.itemsPerPage(), // Reset items per page, because of the @Input() variable
+      itemsPerPage: this.itemsPerPage(),
       totalItems: null
     }
 

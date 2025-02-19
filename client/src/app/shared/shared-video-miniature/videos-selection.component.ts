@@ -1,5 +1,5 @@
 import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { AfterContentInit, Component, Input, TemplateRef, inject, input, output, contentChildren } from '@angular/core'
+import { AfterContentInit, Component, contentChildren, inject, input, model, TemplateRef } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ComponentPagination, Notifier, resetCurrentPage, User } from '@app/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -40,15 +40,12 @@ export class VideosSelectionComponent implements AfterContentInit {
 
   readonly templates = contentChildren(PeerTubeTemplateDirective)
 
-  readonly selectionChange = output<SelectionType>()
-  readonly videosModelChange = output<Video[]>()
-
-  _selection: SelectionType = {}
+  readonly selection = model<SelectionType>({})
+  readonly videos = model<Video[]>([])
 
   rowButtonsTemplate: TemplateRef<any>
   globalButtonsTemplate: TemplateRef<any>
 
-  videos: Video[] = []
   sort: VideoSortField = '-publishedAt'
 
   onDataSubject = new Subject<any[]>()
@@ -56,26 +53,6 @@ export class VideosSelectionComponent implements AfterContentInit {
   hasDoneFirstQuery = false
 
   private lastQueryLength: number
-
-  @Input()
-  get selection () {
-    return this._selection
-  }
-
-  set selection (selection: SelectionType) {
-    this._selection = selection
-    this.selectionChange.emit(this._selection)
-  }
-
-  @Input()
-  get videosModel () {
-    return this.videos
-  }
-
-  set videosModel (videos: Video[]) {
-    this.videos = videos
-    this.videosModelChange.emit(this.videos)
-  }
 
   ngAfterContentInit () {
     {
@@ -96,14 +73,15 @@ export class VideosSelectionComponent implements AfterContentInit {
   }
 
   abortSelectionMode () {
-    this._selection = {}
+    this.selection.update(() => ({}))
   }
 
   isInSelectionMode () {
-    return objectKeysTyped(this._selection).some(k => this._selection[k] === true)
+    return objectKeysTyped(this.selection())
+      .some(k => this.selection()[k] === true)
   }
 
-  videoById (index: number, video: Video) {
+  videoById (_index: number, video: Video) {
     return video.id
   }
 
@@ -127,9 +105,8 @@ export class VideosSelectionComponent implements AfterContentInit {
           this.hasDoneFirstQuery = true
           this.lastQueryLength = data.length
 
-          if (reset) this.videos = []
-          this.videos = this.videos.concat(data)
-          this.videosModel = this.videos
+          if (reset) this.videos.set([])
+          this.videos.update(videos => videos.concat(data))
 
           this.onDataSubject.next(data)
         },

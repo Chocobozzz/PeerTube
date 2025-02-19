@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, model } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
@@ -19,7 +19,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   private serverService = inject(ServerService)
   private notifier = inject(Notifier)
 
-  readonly user = input<User>(undefined)
+  readonly user = model<User>(undefined)
 
   notificationSettingGroups: { label: string, keys: (keyof UserNotificationSetting)[] }[] = []
   emailNotifications: { [id in keyof UserNotificationSetting]?: boolean } = {}
@@ -134,15 +134,27 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   updateEmailSetting (field: keyof UserNotificationSetting, value: boolean) {
-    if (value === true) this.user().notificationSettings[field] |= UserNotificationSettingValue.EMAIL
-    else this.user().notificationSettings[field] &= ~UserNotificationSettingValue.EMAIL
+    this.user.update(u => {
+      // FIXME: use immutable user object
+      u.notificationSettings[field] = value === true
+        ? u.notificationSettings[field] | UserNotificationSettingValue.EMAIL
+        : u.notificationSettings[field] & ~UserNotificationSettingValue.EMAIL
+
+      return u
+    })
 
     this.savePreferences()
   }
 
   updateWebSetting (field: keyof UserNotificationSetting, value: boolean) {
-    if (value === true) this.user().notificationSettings[field] |= UserNotificationSettingValue.WEB
-    else this.user().notificationSettings[field] &= ~UserNotificationSettingValue.WEB
+    this.user.update(u => {
+      // FIXME: use immutable user object
+      u.notificationSettings[field] = value === true
+        ? u.notificationSettings[field] | UserNotificationSettingValue.WEB
+        : u.notificationSettings[field] & ~UserNotificationSettingValue.WEB
+
+      return u
+    })
 
     this.savePreferences()
   }

@@ -1,21 +1,20 @@
 import { NgClass, NgIf } from '@angular/common'
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '@app/shared/shared-forms/timestamp-input.component'
-
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { EmbedComponent } from '@app/shared/shared-main/video/embed.component'
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { millisecondsToVttTime, sortBy, timeToInt } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, Video, VideoConstant } from '@peertube/peertube-models'
 import { parse } from '@plussub/srt-vtt-parser'
 import { PeerTubePlayer } from '../../../../../standalone/embed-player-api/player'
-import { Notifier, ServerService } from '../../../../core'
+import { ConfirmService, Notifier, ServerService } from '../../../../core'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../../../shared/shared-main/buttons/delete-button.component'
@@ -34,8 +33,9 @@ type Segment = {
 }
 
 @Component({
-  styleUrls: [ './video-caption-edit-modal-content.component.scss' ],
-  templateUrl: './video-caption-edit-modal-content.component.html',
+  selector: 'my-video-caption-edit-modal',
+  styleUrls: [ './video-caption-edit-modal.component.scss' ],
+  templateUrl: './video-caption-edit-modal.component.html',
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -50,22 +50,20 @@ type Segment = {
     DeleteButtonComponent
   ]
 })
-export class VideoCaptionEditModalContentComponent extends FormReactive implements OnInit, AfterViewInit {
-  protected openedModal = inject(NgbActiveModal)
+export class VideoCaptionEditModalComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
   private videoCaptionService = inject(VideoCaptionService)
   private serverService = inject(ServerService)
   private notifier = inject(Notifier)
   private cd = inject(ChangeDetectorRef)
-
-  readonly videoCaption = input<VideoCaptionWithPathEdit>(undefined)
-  readonly serverConfig = input<HTMLServerConfig>(undefined)
-  readonly publishedVideo = input<Video>(undefined)
-
-  readonly captionEdited = output<VideoCaptionEdit>()
+  private modalService = inject(NgbModal)
+  private confirmService = inject(ConfirmService)
 
   readonly textarea = viewChild<ElementRef>('textarea')
   readonly embed = viewChild<EmbedComponent>('embed')
+  readonly modal = viewChild<ElementRef>('modal')
+
+  private openedModal: NgbModalRef
 
   rawEdit = false
   segments: Segment[] = []
@@ -83,19 +81,59 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
 
   private player: PeerTubePlayer
 
+  // Show options
+  videoCaption: VideoCaptionWithPathEdit
+  serverConfig: HTMLServerConfig
+  publishedVideo: Video
+  captionEdited: (caption: VideoCaptionEdit) => any
+
   ngOnInit () {
     this.serverService.getVideoLanguages().subscribe(languages => {
       this.videoCaptionLanguages = languages
     })
 
     this.buildForm({ captionFileContent: VIDEO_CAPTION_FILE_CONTENT_VALIDATOR })
+  }
+
+  show (options: {
+    videoCaption: VideoCaptionWithPathEdit
+    serverConfig: HTMLServerConfig
+    publishedVideo: Video
+    captionEdited: (caption: VideoCaptionEdit) => any
+  }) {
+    this.videoCaption = options.videoCaption
+    this.serverConfig = options.serverConfig
+    this.publishedVideo = options.publishedVideo
+    this.captionEdited = options.captionEdited
+
+    this.openedModal = this.modalService.open(this.modal(), {
+      centered: true,
+      size: 'xl',
+
+      beforeDismiss: () => {
+        return this.confirmService.confirm(
+          $localize`Are you sure you want to close this modal without saving your changes?`,
+          $localize`Closing caption editing modal`
+        )
+      }
+    })
 
     this.loadCaptionContent()
 
-    this.openedModal.update({})
+    setTimeout(() => this.initEmbed())
   }
 
-  ngAfterViewInit () {
+  hide () {
+    this.videoCaption = undefined
+    this.serverConfig = undefined
+    this.publishedVideo = undefined
+    this.captionEdited = undefined
+
+    this.openedModal.close()
+    this.form.reset()
+  }
+
+  initEmbed () {
     const embed = this.embed()
     if (embed) {
       this.player = new PeerTubePlayer(embed.getIframe())
@@ -123,15 +161,14 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
   loadCaptionContent () {
     this.rawEdit = false
 
-    const videoCaption = this.videoCaption()
-    if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
-      const file = videoCaption.captionfile as File
+    if (this.videoCaption.action === 'CREATE' || this.videoCaption.action === 'UPDATE') {
+      const file = this.videoCaption.captionfile as File
 
       file.text().then(content => this.loadSegments(content))
       return
     }
 
-    const { fileUrl } = videoCaption
+    const { fileUrl } = this.videoCaption
     if (!fileUrl) return
 
     this.videoCaptionService.getCaptionContent({ fileUrl })
@@ -296,24 +333,20 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
     el.selectionEnd = 0
   }
 
-  hide () {
-    this.openedModal.dismiss()
-  }
-
   updateCaption () {
     if (this.segmentToUpdate) {
       this.notifier.error($localize`A segment is being edited. Save or cancel your edits first.`)
       return
     }
 
-    const languageId = this.videoCaption().language.id
+    const languageId = this.videoCaption.language.id
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 
     if (this.rawEdit) {
       this.loadSegments(this.form.value['captionFileContent'])
     }
 
-    this.captionEdited.emit({
+    this.captionEdited({
       language: languageObject,
       captionfile: new File([ this.formatSegments() ], `${languageId}.vtt`, {
         type: 'text/vtt',

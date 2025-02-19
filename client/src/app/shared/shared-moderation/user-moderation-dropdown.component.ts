@@ -1,13 +1,13 @@
+import { NgIf } from '@angular/common'
 import { Component, OnChanges, OnInit, inject, input, output, viewChild } from '@angular/core'
-import { AuthService, ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
+import { AuthService, ConfirmService, HooksService, Notifier, ServerService } from '@app/core'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
+import { Account } from '../shared-main/account/account.model'
+import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
+import { UserAdminService } from '../shared-users/user-admin.service'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
 import { UserBanModalComponent } from './user-ban-modal.component'
-import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
-import { NgIf } from '@angular/common'
-import { Account } from '../shared-main/account/account.model'
-import { UserAdminService } from '../shared-users/user-admin.service'
 
 export type AccountMutedStatus = Pick<
   Account,
@@ -34,7 +34,6 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   private blocklistService = inject(BlocklistService)
   private bulkService = inject(BulkService)
   private hooks = inject(HooksService)
-  private pluginService = inject(PluginService)
 
   readonly userBanModal = viewChild<UserBanModalComponent>('userBanModal')
 
