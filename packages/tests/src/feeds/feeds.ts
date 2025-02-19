@@ -210,6 +210,7 @@ describe('Test syndication feeds', () => {
 
         const res = await makeRawRequest({ url: enclosure['@_url'], expectedStatus: HttpStatusCode.OK_200 })
         expect(res.headers['content-type']).to.equal('audio/mp4')
+        expect(res.headers['content-disposition']).to.not.exist
 
         const alternateEnclosures = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
         expect(alternateEnclosures).to.be.an('array')
