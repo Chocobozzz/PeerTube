@@ -1,15 +1,15 @@
 <div class="card plugin">
   <div class="card-body">
     <div class="first-row">
-      <span class="plugin-name">{{ plugin.name }}</span>
+      <span class="plugin-name">{{ plugin().name }}</span>
 
-      <span class="plugin-version">{{ version }}</span>
+      <span class="plugin-version">{{ version() }}</span>
 
-      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin.homepage" i18n-title title="Homepage (new window)">
+      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin().homepage" i18n-title title="Homepage (new window)">
         <my-global-icon iconName="home"></my-global-icon>
       </a>
 
-      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="getPluginOrThemeHref(plugin.name)" i18n-title title="NPM page (new window)">
+      <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="getPluginOrThemeHref(plugin().name)" i18n-title title="NPM page (new window)">
         <my-global-icon iconName="registry"></my-global-icon>
       </a>
 
@@ -21,7 +21,7 @@
     </div>
 
     <div class="second-row">
-      <div dir="auto" class="description">{{ plugin.description }}</div>
+      <div dir="auto" class="description">{{ plugin().description }}</div>
     </div>
   </div>
 </div>

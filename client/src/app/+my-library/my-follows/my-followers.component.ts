@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -17,6 +17,11 @@ import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infin
   imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {
+  private route = inject(ActivatedRoute)
+  private auth = inject(AuthService)
+  private userSubscriptionService = inject(UserSubscriptionService)
+  private notifier = inject(Notifier)
+
   follows: ActorFollow[] = []
 
   pagination: ComponentPagination = {
@@ -29,13 +34,6 @@ export class MyFollowersComponent implements OnInit {
   search: string
 
   inputFilters: AdvancedInputFilter[]
-
-  constructor (
-    private route: ActivatedRoute,
-    private auth: AuthService,
-    private userSubscriptionService: UserSubscriptionService,
-    private notifier: Notifier
-  ) {}
 
   ngOnInit () {
     if (this.route.snapshot.queryParams['search']) {

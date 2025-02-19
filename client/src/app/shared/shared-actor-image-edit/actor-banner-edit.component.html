@@ -1,7 +1,7 @@
 <div class="actor">
   <div class="actor-img-edit-container">
     <div class="banner-placeholder">
-      <img *ngIf="hasBanner()" [src]="preview || bannerUrl" alt="Banner" />
+      <img *ngIf="hasBanner()" [src]="preview || bannerUrl()" alt="Banner" />
     </div>
 
     <div *ngIf="!hasBanner()" class="actor-img-edit-button button-file primary-button button-focus-within" [ngbTooltip]="bannerFormat" placement="right" container="body">
@@ -31,5 +31,5 @@
 <ng-template #uploadNewBanner>
   <my-global-icon iconName="upload"></my-global-icon>
   <label for="bannerfile" i18n>Upload a new banner</label>
-  <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
+  <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange()"/>
 </ng-template>

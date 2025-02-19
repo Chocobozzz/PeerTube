@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs'
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
+import { Component, OnChanges, OnDestroy, OnInit, inject, input, output } from '@angular/core'
 import { Notifier, ScreenService, Hotkey, HotkeysService } from '@app/core'
 import { UserVideoRateType } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
@@ -15,12 +15,17 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
   imports: [ NgbPopover, NgClass, NgbTooltip, GlobalIconComponent, NgIf ]
 })
 export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() video: VideoDetails
-  @Input() videoPassword: string
-  @Input() isUserLoggedIn: boolean
+  private videoService = inject(VideoService)
+  private notifier = inject(Notifier)
+  private hotkeysService = inject(HotkeysService)
+  private screenService = inject(ScreenService)
 
-  @Output() userRatingLoaded = new EventEmitter<UserVideoRateType>()
-  @Output() rateUpdated = new EventEmitter<UserVideoRateType>()
+  readonly video = input<VideoDetails>(undefined)
+  readonly videoPassword = input<string>(undefined)
+  readonly isUserLoggedIn = input<boolean>(undefined)
+
+  readonly userRatingLoaded = output<UserVideoRateType>()
+  readonly rateUpdated = output<UserVideoRateType>()
 
   userRating: UserVideoRateType
 
@@ -29,21 +34,15 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
 
   private hotkeys: Hotkey[]
 
-  constructor (
-    private videoService: VideoService,
-    private notifier: Notifier,
-    private hotkeysService: HotkeysService,
-    private screenService: ScreenService
-  ) { }
-
   ngOnInit () {
     // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
-    if (this.isUserLoggedIn || !this.screenService.isInMobileView()) {
+    const isUserLoggedIn = this.isUserLoggedIn()
+    if (isUserLoggedIn || !this.screenService.isInMobileView()) {
       this.tooltipLike = $localize`Like this video`
       this.tooltipDislike = $localize`Dislike this video`
     }
 
-    if (this.isUserLoggedIn) {
+    if (isUserLoggedIn) {
       this.hotkeys = [
         new Hotkey('Shift+l', () => {
           this.setLike()
@@ -69,7 +68,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   setLike () {
-    if (this.isUserLoggedIn === false) return
+    if (this.isUserLoggedIn() === false) return
 
     // Already liked this video
     if (this.userRating === 'like') this.setRating('none')
@@ -77,7 +76,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   setDislike () {
-    if (this.isUserLoggedIn === false) return
+    if (this.isUserLoggedIn() === false) return
 
     // Already disliked this video
     if (this.userRating === 'dislike') this.setRating('none')
@@ -85,26 +84,26 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getRatePopoverText () {
-    if (this.isUserLoggedIn) return undefined
+    if (this.isUserLoggedIn()) return undefined
 
     return $localize`You need to be logged in to rate this video.`
   }
 
   private checkUserRating () {
     // Unlogged users do not have ratings
-    if (this.isUserLoggedIn === false) return
+    if (this.isUserLoggedIn() === false) return
 
-    this.videoService.getUserVideoRating(this.video.uuid)
-        .subscribe({
-          next: ratingObject => {
-            if (!ratingObject) return
+    this.videoService.getUserVideoRating(this.video().uuid)
+      .subscribe({
+        next: ratingObject => {
+          if (!ratingObject) return
 
-            this.userRating = ratingObject.rating
-            this.userRatingLoaded.emit(this.userRating)
-          },
+          this.userRating = ratingObject.rating
+          this.userRatingLoaded.emit(this.userRating)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private setRating (nextRating: UserVideoRateType) {
@@ -114,7 +113,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
       none: this.videoService.unsetVideoLike.bind(this.videoService)
     }
 
-    ratingMethods[nextRating](this.video.uuid, this.videoPassword)
+    ratingMethods[nextRating](this.video().uuid, this.videoPassword())
       .subscribe({
         next: () => {
           // Update the video like attribute
@@ -139,9 +138,10 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
     if (newRating === 'like') likesToIncrement++
     if (newRating === 'dislike') dislikesToIncrement++
 
-    this.video.likes += likesToIncrement
-    this.video.dislikes += dislikesToIncrement
+    const video = this.video()
+    video.likes += likesToIncrement
+    video.dislikes += dislikesToIncrement
 
-    this.video.buildLikeAndDislikePercents()
+    video.buildLikeAndDislikePercents()
   }
 }

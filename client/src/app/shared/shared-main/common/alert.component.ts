@@ -1,6 +1,5 @@
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { booleanAttribute, Component, Input, OnChanges, OnInit } from '@angular/core'
-import { RouterLink } from '@angular/router'
+import { NgClass } from '@angular/common'
+import { booleanAttribute, Component, OnChanges, OnInit, input } from '@angular/core'
 
 export type AlertType = 'success' | 'info' | 'warning' | 'danger' | 'primary'
 
@@ -8,11 +7,11 @@ export type AlertType = 'success' | 'info' | 'warning' | 'danger' | 'primary'
   selector: 'my-alert',
   styleUrls: [ './alert.component.scss' ],
   templateUrl: './alert.component.html',
-  imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet ]
+  imports: [ NgClass ]
 })
 export class AlertComponent implements OnInit, OnChanges {
-  @Input({ required: true }) type: AlertType
-  @Input({ transform: booleanAttribute }) rounded = true
+  readonly type = input.required<AlertType>()
+  readonly rounded = input(true, { transform: booleanAttribute })
 
   builtClasses = ''
 
@@ -27,13 +26,14 @@ export class AlertComponent implements OnInit, OnChanges {
   private buildClasses () {
     this.builtClasses = 'alert'
 
-    if (this.type === 'primary') {
+    const type = this.type()
+    if (type === 'primary') {
       this.builtClasses += ' pt-alert-primary'
     } else {
-      this.builtClasses += ' alert-' + this.type
+      this.builtClasses += ' alert-' + type
     }
 
-    if (this.rounded !== true) {
+    if (this.rounded() !== true) {
       this.builtClasses += ' rounded-0'
     }
   }

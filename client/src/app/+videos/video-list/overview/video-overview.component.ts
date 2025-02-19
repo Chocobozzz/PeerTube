@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { DisableForReuseHook, Notifier, User, UserService } from '@app/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
@@ -24,7 +24,12 @@ import { OverviewService } from './overview.service'
   ]
 })
 export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewChecked, DisableForReuseHook {
-  @ViewChild('quickAccessContent') quickAccessContent: ElementRef
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private overviewService = inject(OverviewService)
+  private cd = inject(ChangeDetectorRef)
+
+  readonly quickAccessContent = viewChild<ElementRef>('quickAccessContent')
 
   onDataSubject = new Subject<any>()
 
@@ -60,13 +65,6 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
 
   private userSub: Subscription
 
-  constructor (
-    private notifier: Notifier,
-    private userService: UserService,
-    private overviewService: OverviewService,
-    private cd: ChangeDetectorRef
-  ) { }
-
   ngOnInit () {
     this.loadMoreResults()
 
@@ -93,7 +91,7 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
 
     this.checkQuickAccessOverflow = false
 
-    const el = this.quickAccessContent.nativeElement as HTMLElement
+    const el = this.quickAccessContent().nativeElement as HTMLElement
     this.quickAccessOverflow = el.scrollWidth > el.clientWidth
     this.cd.detectChanges()
   }
@@ -120,62 +118,62 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
     this.isLoading = true
 
     this.overviewService.getVideosOverview(this.currentPage)
-        .subscribe({
-          next: overview => {
-            this.isLoading = false
+      .subscribe({
+        next: overview => {
+          this.isLoading = false
 
-            if (overview.tags.length === 0 && overview.channels.length === 0 && overview.categories.length === 0) {
-              this.lastWasEmpty = true
-              if (this.loaded === false) this.notResults = true
+          if (overview.tags.length === 0 && overview.channels.length === 0 && overview.categories.length === 0) {
+            this.lastWasEmpty = true
+            if (this.loaded === false) this.notResults = true
 
-              return
-            }
-
-            this.loaded = true
-            this.onDataSubject.next(overview)
-
-            for (const value of overview.categories) {
-              this.objects.push({
-                buttonLabel: $localize`Browse "${value.category.label}" videos`,
-                label: value.category.label,
-                routerLink: [ '/search' ],
-                queryParams: { categoryOneOf: [ value.category.id ] },
-                videos: value.videos,
-                type: $localize`category`
-              })
-            }
-
-            for (const value of overview.tags) {
-              this.objects.push({
-                buttonLabel: $localize`Browse "#${value.tag}" videos`,
-                label: `#${value.tag}`,
-                routerLink: [ '/search' ],
-                queryParams: { tagsOneOf: [ value.tag ] },
-                videos: value.videos,
-                type: $localize`tag`
-              })
-            }
-
-            for (const value of overview.channels) {
-              this.objects.push({
-                buttonLabel: $localize`View the channel`,
-                label: value.videos[0].byVideoChannel,
-                routerLink: [ '/c', value.videos[0].byVideoChannel ],
-                queryParams: {},
-                videos: value.videos,
-                channel: value.channel,
-                type: $localize`channel`
-              })
-            }
-
-            this.quickAccessLinks = this.objects.map(o => o)
-            this.checkQuickAccessOverflow = true
-          },
-
-          error: err => {
-            this.notifier.error(err.message)
-            this.isLoading = false
+            return
           }
-        })
+
+          this.loaded = true
+          this.onDataSubject.next(overview)
+
+          for (const value of overview.categories) {
+            this.objects.push({
+              buttonLabel: $localize`Browse "${value.category.label}" videos`,
+              label: value.category.label,
+              routerLink: [ '/search' ],
+              queryParams: { categoryOneOf: [ value.category.id ] },
+              videos: value.videos,
+              type: $localize`category`
+            })
+          }
+
+          for (const value of overview.tags) {
+            this.objects.push({
+              buttonLabel: $localize`Browse "#${value.tag}" videos`,
+              label: `#${value.tag}`,
+              routerLink: [ '/search' ],
+              queryParams: { tagsOneOf: [ value.tag ] },
+              videos: value.videos,
+              type: $localize`tag`
+            })
+          }
+
+          for (const value of overview.channels) {
+            this.objects.push({
+              buttonLabel: $localize`View the channel`,
+              label: value.videos[0].byVideoChannel,
+              routerLink: [ '/c', value.videos[0].byVideoChannel ],
+              queryParams: {},
+              videos: value.videos,
+              channel: value.channel,
+              type: $localize`channel`
+            })
+          }
+
+          this.quickAccessLinks = this.objects.map(o => o)
+          this.checkQuickAccessOverflow = true
+        },
+
+        error: err => {
+          this.notifier.error(err.message)
+          this.isLoading = false
+        }
+      })
   }
 }

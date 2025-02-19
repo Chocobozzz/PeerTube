@@ -1,5 +1,5 @@
 import { UploaderX, UploadxOptions } from 'ngx-uploadx'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { getUploadXRetryConfig } from '@app/helpers'
@@ -8,14 +8,9 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable()
 export class VideoUploadService {
-
-  constructor (
-    private server: ServerService,
-    private notifier: Notifier,
-    private authService: AuthService
-  ) {
-
-  }
+  private server = inject(ServerService)
+  private notifier = inject(Notifier)
+  private authService = inject(AuthService)
 
   getVideoExtensions () {
     return this.server.getHTMLConfig().video.file.extensions
@@ -30,8 +25,9 @@ export class VideoUploadService {
       const videoQuotaUsedBytes = bytePipes.transform(quotaUsed, 0)
       const videoQuotaBytes = bytePipes.transform(maxQuota, 0)
 
-      // eslint-disable-next-line max-len
-      const msg = $localize`Your video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
+      const msg =
+        // eslint-disable-next-line max-len
+        $localize`Your video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
       this.notifier.error(msg)
 
       return false

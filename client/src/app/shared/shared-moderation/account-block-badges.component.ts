@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, input } from '@angular/core'
 import { NgIf } from '@angular/common'
 import { Account } from '../shared-main/account/account.model'
 
@@ -9,5 +9,5 @@ import { Account } from '../shared-main/account/account.model'
   imports: [ NgIf ]
 })
 export class AccountBlockBadgesComponent {
-  @Input() account: Account
+  readonly account = input<Account>(undefined)
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, input } from '@angular/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 
 const icons = {
@@ -102,19 +102,17 @@ export type GlobalIconName = keyof typeof icons
   standalone: true
 })
 export class GlobalIconComponent implements OnInit {
-  @Input({ required: true }) iconName: GlobalIconName
+  private el = inject(ElementRef)
+  private hooks = inject(HooksService)
 
-  constructor (
-    private el: ElementRef,
-    private hooks: HooksService
-  ) { }
+  readonly iconName = input.required<GlobalIconName>()
 
   async ngOnInit () {
     const nativeElement = this.el.nativeElement as HTMLElement
 
     nativeElement.innerHTML = await this.hooks.wrapFun(
       this.getSVGContent.bind(this),
-      { name: this.iconName },
+      { name: this.iconName() },
       'common',
       'filter:internal.common.svg-icons.get-content.params',
       'filter:internal.common.svg-icons.get-content.result'

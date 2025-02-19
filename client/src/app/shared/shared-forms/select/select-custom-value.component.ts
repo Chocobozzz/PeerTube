@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges } from '@angular/core'
+import { Component, forwardRef, OnChanges, input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { NgIf } from '@angular/common'
@@ -17,16 +17,16 @@ import { SelectOptionsComponent } from './select-options.component'
   imports: [ SelectOptionsComponent, FormsModule, NgIf ]
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {
-  @Input({ required: true }) inputId: string
-  @Input({ required: true }) labelId: string
+  readonly inputId = input.required<string>()
+  readonly labelId = input.required<string>()
 
-  @Input() items: SelectOptionsItem[] = []
+  readonly items = input<SelectOptionsItem[]>([])
 
-  @Input() clearable = false
-  @Input() searchable = false
+  readonly clearable = input(false)
+  readonly searchable = input(false)
 
-  @Input() inputSuffix: string
-  @Input() inputType = 'text'
+  readonly inputSuffix = input<string>(undefined)
+  readonly inputType = input('text')
 
   customValue: number | string = ''
   selectedId: number | string
@@ -38,7 +38,9 @@ export class SelectCustomValueComponent implements ControlValueAccessor, OnChang
     this.itemsWithCustom = this.getItems()
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (id: number | string) {
     this.selectedId = id
@@ -66,7 +68,7 @@ export class SelectCustomValueComponent implements ControlValueAccessor, OnChang
   }
 
   isSelectedIdInItems () {
-    return !!this.items.find(i => i.id === this.selectedId)
+    return !!this.items().find(i => i.id === this.selectedId)
   }
 
   getItems () {
@@ -75,7 +77,7 @@ export class SelectCustomValueComponent implements ControlValueAccessor, OnChang
       label: $localize`Custom value...`
     }
 
-    return this.items.concat([ other ])
+    return this.items().concat([ other ])
   }
 
   isCustomValue () {

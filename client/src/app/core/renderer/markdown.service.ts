@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import {
   buildVideoLink,
   COMPLETE_RULES,
@@ -36,6 +36,8 @@ type MarkdownParserConfigs = {
 
 @Injectable()
 export class MarkdownService {
+  private htmlRenderer = inject(HtmlRendererService)
+
   private markdownParsers: MarkdownParsers = {
     textMarkdownIt: null,
     textWithHTMLMarkdownIt: null,
@@ -60,8 +62,6 @@ export class MarkdownService {
   }
 
   private emojiModule: any
-
-  constructor (private htmlRenderer: HtmlRendererService) {}
 
   textMarkdownToHTML (options: {
     markdown: string

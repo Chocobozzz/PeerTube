@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -8,7 +8,7 @@ import { UserSubscriptionService } from '@app/shared/shared-user-subscription/us
 import { Subject } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 
@@ -16,7 +16,6 @@ import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/
   templateUrl: './my-subscriptions.component.html',
   styleUrls: [ './my-subscriptions.component.scss' ],
   imports: [
-    GlobalIconComponent,
     NgIf,
     AdvancedInputFilterComponent,
     InfiniteScrollerDirective,
@@ -27,6 +26,9 @@ import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/
   ]
 })
 export class MySubscriptionsComponent {
+  private userSubscriptionService = inject(UserSubscriptionService)
+  private notifier = inject(Notifier)
+
   videoChannels: VideoChannel[] = []
 
   pagination: ComponentPagination = {
@@ -38,11 +40,6 @@ export class MySubscriptionsComponent {
   onDataSubject = new Subject<any[]>()
 
   search: string
-
-  constructor (
-    private userSubscriptionService: UserSubscriptionService,
-    private notifier: Notifier
-  ) {}
 
   onNearOfBottom () {
     // Last page
@@ -68,17 +65,17 @@ export class MySubscriptionsComponent {
 
   private loadSubscriptions (more = true) {
     this.userSubscriptionService.listSubscriptions({ pagination: this.pagination, search: this.search })
-        .subscribe({
-          next: res => {
-            this.videoChannels = more
-              ? this.videoChannels.concat(res.data)
-              : res.data
-            this.pagination.totalItems = res.total
+      .subscribe({
+        next: res => {
+          this.videoChannels = more
+            ? this.videoChannels.concat(res.data)
+            : res.data
+          this.pagination.totalItems = res.total
 
-            this.onDataSubject.next(res.data)
-          },
+          this.onDataSubject.next(res.data)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

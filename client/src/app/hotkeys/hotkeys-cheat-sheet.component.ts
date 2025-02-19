@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input, output } from '@angular/core'
 import { LocalStorageService, HotkeysService, Hotkey } from '@app/core'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '../shared/shared-forms/peertube-checkbox.component'
@@ -12,9 +12,12 @@ import { NgClass, NgFor } from '@angular/common'
   imports: [ NgClass, PeertubeCheckboxComponent, FormsModule, NgFor ]
 })
 export class HotkeysCheatSheetComponent implements OnInit, OnDestroy {
-  @Input() title = $localize`Keyboard Shortcuts`
+  private hotkeysService = inject(HotkeysService)
+  private localStorage = inject(LocalStorageService)
 
-  @Output() hotkeysModalStateChange = new EventEmitter<boolean>()
+  readonly title = input($localize`Keyboard Shortcuts`)
+
+  readonly hotkeysModalStateChange = output<boolean>()
 
   hotkeysEnabled = true
 
@@ -24,11 +27,6 @@ export class HotkeysCheatSheetComponent implements OnInit, OnDestroy {
   hotkeys: Hotkey[]
 
   private readonly localStorageHotkeysDisabledKey = 'peertube-hotkeys-disabled'
-
-  constructor (
-    private hotkeysService: HotkeysService,
-    private localStorage: LocalStorageService
-  ) {}
 
   ngOnInit () {
     if (this.localStorage.getItem(this.localStorageHotkeysDisabledKey) === 'true') {

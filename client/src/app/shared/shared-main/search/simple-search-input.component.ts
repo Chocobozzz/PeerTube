@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, input, output, viewChild } from '@angular/core'
 import { NgIf } from '@angular/common'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { FormsModule } from '@angular/forms'
@@ -10,15 +10,15 @@ import { FormsModule } from '@angular/forms'
   imports: [ FormsModule, GlobalIconComponent, NgIf ]
 })
 export class SimpleSearchInputComponent implements OnInit {
-  @ViewChild('ref') input: ElementRef
+  readonly input = viewChild<ElementRef>('ref')
 
-  @Input() name = 'search'
-  @Input() placeholder = $localize`Search`
-  @Input() iconTitle = $localize`Search`
-  @Input() alwaysShow = true
+  readonly name = input('search')
+  readonly placeholder = input($localize`Search`)
+  readonly iconTitle = input($localize`Search`)
+  readonly alwaysShow = input(true)
 
-  @Output() searchChanged = new EventEmitter<string>()
-  @Output() inputDisplayChanged = new EventEmitter<boolean>()
+  readonly searchChanged = output<string>()
+  readonly inputDisplayChanged = output<boolean>()
 
   value = ''
   lastSearch = ''
@@ -29,7 +29,7 @@ export class SimpleSearchInputComponent implements OnInit {
   }
 
   isInputShown () {
-    if (this.alwaysShow) return true
+    if (this.alwaysShow()) return true
 
     return this.inputShown
   }
@@ -48,7 +48,7 @@ export class SimpleSearchInputComponent implements OnInit {
     this.inputDisplayChanged.emit(this.inputShown)
 
     if (focus) {
-      setTimeout(() => this.input.nativeElement.focus())
+      setTimeout(() => this.input().nativeElement.focus())
     }
   }
 
@@ -75,7 +75,7 @@ export class SimpleSearchInputComponent implements OnInit {
 
   onResetFilter () {
     this.value = ''
-    this.input.nativeElement.focus()
+    this.input().nativeElement.focus()
 
     this.sendSearch()
   }

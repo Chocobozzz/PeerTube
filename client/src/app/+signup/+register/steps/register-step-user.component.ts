@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import {
@@ -22,17 +22,13 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
-  @Input() videoUploadDisabled = false
-  @Input() requiresEmailVerification = false
+  protected formReactiveService = inject(FormReactiveService)
+  private signupService = inject(SignupService)
 
-  @Output() formBuilt = new EventEmitter<FormGroup>()
+  readonly videoUploadDisabled = input(false)
+  readonly requiresEmailVerification = input(false)
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private signupService: SignupService
-  ) {
-    super()
-  }
+  readonly formBuilt = output<FormGroup>()
 
   get instanceHost () {
     return window.location.host
@@ -52,7 +48,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
       of(''),
       this.form.get('displayName').valueChanges
     ).pipe(pairwise())
-     .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
+      .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
   }
 
   getMinPasswordLengthMessage () {

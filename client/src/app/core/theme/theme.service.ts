@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { sortBy } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, ServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -17,6 +17,12 @@ const debugLogger = debug('peertube:theme')
 
 @Injectable()
 export class ThemeService {
+  private auth = inject(AuthService)
+  private userService = inject(UserService)
+  private pluginService = inject(PluginService)
+  private server = inject(ServerService)
+  private localStorageService = inject(LocalStorageService)
+
   private oldInjectedProperties: string[] = []
   private oldThemeName: string
 
@@ -27,14 +33,6 @@ export class ThemeService {
   private themeDOMLinksFromLocalStorage: HTMLLinkElement[] = []
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private auth: AuthService,
-    private userService: UserService,
-    private pluginService: PluginService,
-    private server: ServerService,
-    private localStorageService: LocalStorageService
-  ) {}
 
   initialize () {
     this.serverConfig = this.server.getHTMLConfig()

@@ -1,6 +1,6 @@
 import { Clipboard } from '@angular/cdk/clipboard'
 import { NgClass } from '@angular/common'
-import { booleanAttribute, Component, Input } from '@angular/core'
+import { booleanAttribute, Component, inject, input } from '@angular/core'
 import { Notifier } from '@app/core'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 
@@ -12,22 +12,22 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
   imports: [ NgClass, GlobalIconComponent ]
 })
 export class CopyButtonComponent {
-  @Input() value: string
-  @Input() elementContent: HTMLElement
+  private notifier = inject(Notifier)
+  private clipboard = inject(Clipboard)
 
-  @Input() title: string
-  @Input() notification: string
+  readonly value = input<string>(undefined)
+  readonly elementContent = input<HTMLElement>(undefined)
 
-  @Input({ transform: booleanAttribute }) withBorder = false
-  @Input({ transform: booleanAttribute }) isInputGroup = false
+  readonly title = input<string>(undefined)
+  readonly notification = input<string>(undefined)
 
-  constructor (private notifier: Notifier, private clipboard: Clipboard) {
-
-  }
+  readonly withBorder = input(false, { transform: booleanAttribute })
+  readonly isInputGroup = input(false, { transform: booleanAttribute })
 
   copy () {
-    this.clipboard.copy(this.value || this.elementContent?.innerText)
+    this.clipboard.copy(this.value() || this.elementContent()?.innerText)
 
-    if (this.notification) this.notifier.success(this.notification)
+    const notification = this.notification()
+    if (notification) this.notifier.success(notification)
   }
 }

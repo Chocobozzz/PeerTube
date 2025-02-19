@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, booleanAttribute } from '@angular/core'
+import { Component, OnChanges, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
@@ -60,18 +60,29 @@ export type VideoActionsDisplayType = {
   ]
 })
 export class VideoActionsDropdownComponent implements OnChanges {
-  @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown
-  @ViewChild('playlistAdd') playlistAdd: VideoAddToPlaylistComponent
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private blocklistService = inject(BlocklistService)
+  private videoBlocklistService = inject(VideoBlockService)
+  private screenService = inject(ScreenService)
+  private videoService = inject(VideoService)
+  private videoCaptionService = inject(VideoCaptionService)
+  private redundancyService = inject(RedundancyService)
+  private serverService = inject(ServerService)
 
-  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
-  @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
-  @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
-  @ViewChild('liveStreamInformationModal') liveStreamInformationModal: LiveStreamInformationComponent
+  readonly playlistDropdown = viewChild<NgbDropdown>('playlistDropdown')
+  readonly playlistAdd = viewChild<VideoAddToPlaylistComponent>('playlistAdd')
 
-  @Input() video: Video | VideoDetails
-  @Input() videoCaptions: VideoCaption[] = []
+  readonly videoDownloadModal = viewChild<VideoDownloadComponent>('videoDownloadModal')
+  readonly videoReportModal = viewChild<VideoReportComponent>('videoReportModal')
+  readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
+  readonly liveStreamInformationModal = viewChild<LiveStreamInformationComponent>('liveStreamInformationModal')
 
-  @Input() displayOptions: VideoActionsDisplayType = {
+  readonly video = input<Video | VideoDetails>(undefined)
+  readonly videoCaptions = input<VideoCaption[]>([])
+
+  readonly displayOptions = input<VideoActionsDisplayType>({
     playlist: false,
     download: true,
     update: true,
@@ -87,29 +98,31 @@ export class VideoActionsDropdownComponent implements OnChanges {
     stats: true,
     generateTranscription: false,
     transcriptionWidget: false
-  }
-  @Input() placement = 'auto'
-  @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
-  @Input({ transform: booleanAttribute }) actionAvailabilityHint = false
+  })
+  readonly placement = input('auto')
+  readonly moreActions = input<DropdownAction<{
+    video: Video
+  }>[][]>([])
+  readonly actionAvailabilityHint = input(false, { transform: booleanAttribute })
 
-  @Input() label: string
+  readonly label = input<string>(undefined)
 
-  @Input({ transform: booleanAttribute }) buttonStyled = false
-  @Input() buttonSize: DropdownButtonSize = 'normal'
-  @Input() buttonDirection: DropdownDirection = 'vertical'
+  readonly buttonStyled = input(false, { transform: booleanAttribute })
+  readonly buttonSize = input<DropdownButtonSize>('normal')
+  readonly buttonDirection = input<DropdownDirection>('vertical')
 
-  @Input() transcriptionWidgetOpened: boolean
+  readonly transcriptionWidgetOpened = input<boolean>(undefined)
 
-  @Output() videoFilesRemoved = new EventEmitter()
-  @Output() videoRemoved = new EventEmitter()
-  @Output() videoUnblocked = new EventEmitter()
-  @Output() videoBlocked = new EventEmitter()
-  @Output() videoAccountMuted = new EventEmitter()
-  @Output() transcodingCreated = new EventEmitter()
-  @Output() modalOpened = new EventEmitter()
+  readonly videoFilesRemoved = output()
+  readonly videoRemoved = output()
+  readonly videoUnblocked = output()
+  readonly videoBlocked = output()
+  readonly videoAccountMuted = output()
+  readonly transcodingCreated = output()
+  readonly modalOpened = output()
 
-  @Output() showTranscriptionWidget = new EventEmitter()
-  @Output() hideTranscriptionWidget = new EventEmitter()
+  readonly showTranscriptionWidget = output()
+  readonly hideTranscriptionWidget = output()
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
@@ -117,25 +130,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   private hasMutedAccount = false
 
-  constructor (
-    private authService: AuthService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private blocklistService: BlocklistService,
-    private videoBlocklistService: VideoBlockService,
-    private screenService: ScreenService,
-    private videoService: VideoService,
-    private videoCaptionService: VideoCaptionService,
-    private redundancyService: RedundancyService,
-    private serverService: ServerService
-  ) { }
-
   get user () {
     return this.authService.getUser()
   }
 
   ngOnChanges () {
-    if (this.playlistAdd) this.playlistAdd.reload()
+    const playlistAdd = this.playlistAdd()
+    if (playlistAdd) playlistAdd.reload()
 
     this.buildActions()
   }
@@ -151,31 +152,32 @@ export class VideoActionsDropdownComponent implements OnChanges {
   showDownloadModal () {
     this.modalOpened.emit()
 
-    const obs = this.video instanceof VideoDetails
-      ? of(this.video)
-      : this.videoService.getVideo({ videoId: this.video.uuid })
+    const video = this.video()
+    const obs = video instanceof VideoDetails
+      ? of(video)
+      : this.videoService.getVideo({ videoId: video.uuid })
 
     obs.subscribe((videoDetails: VideoDetails) => {
-      this.videoDownloadModal.show(videoDetails, this.videoCaptions)
+      this.videoDownloadModal().show(videoDetails, this.videoCaptions())
     })
   }
 
   showReportModal () {
     this.modalOpened.emit()
 
-    this.videoReportModal.show()
+    this.videoReportModal().show()
   }
 
   showBlockModal () {
     this.modalOpened.emit()
 
-    this.videoBlockModal.show([ this.video ])
+    this.videoBlockModal().show([ this.video() ])
   }
 
   showLiveInfoModal (video: Video) {
     this.modalOpened.emit()
 
-    this.liveStreamInformationModal.show(video)
+    this.liveStreamInformationModal().show(video)
   }
 
   // ---------------------------------------------------------------------------
@@ -185,69 +187,72 @@ export class VideoActionsDropdownComponent implements OnChanges {
   isVideoUpdatable () {
     if (!this.user) return false
 
-    return this.video.isUpdatableBy(this.user)
+    return this.video().isUpdatableBy(this.user)
   }
 
   isVideoEditable () {
     if (!this.user) return false
 
-    return this.video.isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
+    return this.video().isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
   }
 
   isVideoStatsAvailable () {
     if (!this.user) return false
 
-    return this.video.isLocal && this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+    const video = this.video()
+    return video.isLocal && video.isOwnerOrHasSeeAllVideosRight(this.user)
   }
 
   isVideoRemovable () {
     if (!this.user) return false
 
-    return this.video.isRemovableBy(this.user)
+    return this.video().isRemovableBy(this.user)
   }
 
   isVideoBlockable () {
     if (!this.user) return false
 
-    return this.video.isBlockableBy(this.user)
+    return this.video().isBlockableBy(this.user)
   }
 
   isVideoUnblockable () {
     if (!this.user) return false
 
-    return this.video.isUnblockableBy(this.user)
+    return this.video().isUnblockableBy(this.user)
   }
 
   isVideoLiveInfoAvailable () {
     if (!this.user) return false
 
-    return this.video.isLiveInfoAvailableBy(this.user)
+    return this.video().isLiveInfoAvailableBy(this.user)
   }
 
   canGenerateTranscription () {
     if (!this.user) return false
 
-    return this.video.canGenerateTranscription(this.user, this.serverService.getHTMLConfig().videoTranscription.enabled)
+    return this.video().canGenerateTranscription(this.user, this.serverService.getHTMLConfig().videoTranscription.enabled)
   }
 
   // ---------------------------------------------------------------------------
 
   isVideoDownloadableByAnonymous () {
+    const video = this.video()
     return (
-      this.video &&
-      this.video.isLive !== true &&
-      this.video instanceof VideoDetails &&
-      this.video.downloadEnabled
+      video &&
+      video.isLive !== true &&
+      video instanceof VideoDetails &&
+      video.downloadEnabled
     )
   }
 
   isVideoDownloadableByUser () {
     if (!this.user) return false
 
+    const video = this.video()
     return (
-      this.video &&
-      this.video.isLive !== true &&
-      this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+      video &&
+      video.isLive !== true &&
+      video.isOwnerOrHasSeeAllVideosRight(this.user)
     )
   }
 
@@ -256,25 +261,26 @@ export class VideoActionsDropdownComponent implements OnChanges {
   canVideoBeDuplicated () {
     if (!this.user) return false
 
-    return !this.video.isLive && this.video.canBeDuplicatedBy(this.user)
+    const video = this.video()
+    return !video.isLive && video.canBeDuplicatedBy(this.user)
   }
 
   isVideoAccountMutable () {
     if (!this.user) return false
 
-    return this.video.account.id !== this.user.account.id
+    return this.video().account.id !== this.user.account.id
   }
 
   canRemoveVideoFiles () {
     if (!this.user) return false
 
-    return this.video.canRemoveAllHLSOrWebFiles(this.user)
+    return this.video().canRemoveAllHLSOrWebFiles(this.user)
   }
 
   canRunTranscoding () {
     if (!this.user) return false
 
-    return this.video.canRunTranscoding(this.user)
+    return this.video().canRunTranscoding(this.user)
   }
 
   // ---------------------------------------------------------------------------
@@ -282,93 +288,95 @@ export class VideoActionsDropdownComponent implements OnChanges {
   // ---------------------------------------------------------------------------
 
   async unblockVideo () {
-    const confirmMessage = $localize`Do you really want to unblock ${this.video.name}? It will be available again in the videos list.`
+    const confirmMessage = $localize`Do you really want to unblock ${this.video().name}? It will be available again in the videos list.`
 
-    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock ${this.video.name}`)
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock ${this.video().name}`)
     if (res === false) return
 
-    this.videoBlocklistService.unblockVideo(this.video.id)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video ${this.video.name} unblocked.`)
+    this.videoBlocklistService.unblockVideo(this.video().id)
+      .subscribe({
+        next: () => {
+          const video = this.video()
+          this.notifier.success($localize`Video ${video.name} unblocked.`)
 
-            this.video.blacklisted = false
-            this.video.blacklistedReason = null
+          video.blacklisted = false
+          video.blacklistedReason = null
 
-            this.videoUnblocked.emit()
-          },
+          this.videoUnblocked.emit()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async removeVideo () {
     this.modalOpened.emit()
 
-    let message = $localize`Do you really want to delete ${this.video.name}?`
-    if (this.video.isLive) {
+    let message = $localize`Do you really want to delete ${this.video().name}?`
+    const video = this.video()
+    if (video.isLive) {
       message += ' ' + $localize`The live stream will be automatically terminated and replays won't be saved.`
     }
 
-    const res = await this.confirmService.confirm(message, $localize`Delete ${this.video.name}`)
+    const res = await this.confirmService.confirm(message, $localize`Delete ${video.name}`)
     if (res === false) return
 
-    this.videoService.removeVideo(this.video.id)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video ${this.video.name} deleted.`)
-            this.videoRemoved.emit()
-          },
+    this.videoService.removeVideo(video.id)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Video ${this.video().name} deleted.`)
+          this.videoRemoved.emit()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   duplicateVideo () {
-    this.redundancyService.addVideoRedundancy(this.video)
-        .subscribe({
-          next: () => {
-            const message = $localize`${this.video.name} will be duplicated by your platform.`
-            this.notifier.success(message)
-          },
+    this.redundancyService.addVideoRedundancy(this.video())
+      .subscribe({
+        next: () => {
+          const message = $localize`${this.video().name} will be duplicated by your platform.`
+          this.notifier.success(message)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   muteVideoAccount () {
-    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video.account.name, this.video.account.host) }
+    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video().account.name, this.video().account.host) }
 
     this.blocklistService.blockAccountByUser(params)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
-            this.hasMutedAccount = true
-            this.videoAccountMuted.emit()
-          },
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
+          this.hasMutedAccount = true
+          this.videoAccountMuted.emit()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   unmuteVideoAccount () {
-    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video.account.name, this.video.account.host) }
+    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video().account.name, this.video().account.host) }
 
     this.blocklistService.unblockAccountByUser(params)
-        .subscribe({
-          next: () => {
-            this.hasMutedAccount = false
-            this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
-          },
+      .subscribe({
+        next: () => {
+          this.hasMutedAccount = false
+          this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async removeVideoFiles (video: Video, type: 'hls' | 'web-videos') {
-    const confirmMessage = $localize`Do you really want to remove "${this.video.name}" files?`
+    const confirmMessage = $localize`Do you really want to remove "${this.video().name}" files?`
 
-    const res = await this.confirmService.confirm(confirmMessage, $localize`Remove "${this.video.name}" files`)
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Remove "${this.video().name}" files`)
     if (res === false) return
 
     this.videoService.removeVideoFiles([ video.id ], type)
@@ -424,8 +432,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
       [
         {
           label: $localize`Save to playlist`,
-          handler: () => this.playlistDropdown.toggle(),
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.playlist,
+          handler: () => this.playlistDropdown().toggle(),
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().playlist,
           iconName: 'playlist-add'
         }
       ],
@@ -434,13 +442,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
           label: $localize`Download`,
           handler: () => this.showDownloadModal(),
           isDisplayed: () => {
-            if (!this.displayOptions.download) return false
+            if (!this.displayOptions().download) return false
 
             return this.isVideoDownloadableByAnonymous() || this.isVideoDownloadableByUser()
           },
           iconName: 'download',
           ownerOrModeratorPrivilege: () => {
-            if (!this.actionAvailabilityHint) return undefined
+            if (!this.actionAvailabilityHint()) return undefined
             if (this.isVideoDownloadableByAnonymous()) return undefined
 
             return $localize`This option is visible only to you`
@@ -450,10 +458,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
           label: $localize`Show transcription`,
           handler: () => this.showTranscriptionWidget.emit(),
           isDisplayed: () => {
-            if (!this.displayOptions.transcriptionWidget) return false
-            if (this.transcriptionWidgetOpened) return false
+            if (!this.displayOptions().transcriptionWidget) return false
+            if (this.transcriptionWidgetOpened()) return false
 
-            return Array.isArray(this.videoCaptions) && this.videoCaptions.length !== 0
+            const videoCaptions = this.videoCaptions()
+            return Array.isArray(videoCaptions) && videoCaptions.length !== 0
           },
           iconName: 'video-lang'
         },
@@ -461,9 +470,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
           label: $localize`Hide transcription`,
           handler: () => this.hideTranscriptionWidget.emit(),
           isDisplayed: () => {
-            if (!this.displayOptions.transcriptionWidget) return false
+            if (!this.displayOptions().transcriptionWidget) return false
 
-            return this.transcriptionWidgetOpened === true
+            return this.transcriptionWidgetOpened() === true
           },
           iconName: 'video-lang'
         }
@@ -472,55 +481,55 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Display live information`,
           handler: ({ video }) => this.showLiveInfoModal(video),
-          isDisplayed: () => this.displayOptions.liveInfo && this.isVideoLiveInfoAvailable(),
+          isDisplayed: () => this.displayOptions().liveInfo && this.isVideoLiveInfoAvailable(),
           iconName: 'live'
         },
         {
           label: $localize`Update`,
           linkBuilder: ({ video }) => [ '/videos/update', video.shortUUID ],
           iconName: 'edit',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().update && this.isVideoUpdatable()
         },
         {
           label: $localize`Studio`,
           linkBuilder: ({ video }) => [ '/studio/edit', video.shortUUID ],
           iconName: 'film',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.studio && this.isVideoEditable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().studio && this.isVideoEditable()
         },
         {
           label: $localize`Stats`,
           linkBuilder: ({ video }) => [ '/stats/videos', video.shortUUID ],
           iconName: 'stats',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.stats && this.isVideoStatsAvailable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().stats && this.isVideoStatsAvailable()
         },
         {
           label: $localize`Block`,
           handler: () => this.showBlockModal(),
           iconName: 'no',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoBlockable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().blacklist && this.isVideoBlockable()
         },
         {
           label: $localize`Unblock`,
           handler: () => this.unblockVideo(),
           iconName: 'undo',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoUnblockable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().blacklist && this.isVideoUnblockable()
         },
         {
           label: $localize`Mirror`,
           handler: () => this.duplicateVideo(),
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.duplicate && this.canVideoBeDuplicated(),
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().duplicate && this.canVideoBeDuplicated(),
           iconName: 'cloud-download'
         },
         {
           label: $localize`Delete`,
           handler: () => this.removeVideo(),
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.delete && this.isVideoRemovable(),
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().delete && this.isVideoRemovable(),
           iconName: 'delete'
         },
         {
           label: $localize`Report`,
           handler: () => this.showReportModal(),
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.report,
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().report,
           iconName: 'flag'
         }
       ],
@@ -528,25 +537,25 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Run HLS transcoding`,
           handler: ({ video }) => this.runTranscoding(video, 'hls'),
-          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          isDisplayed: () => this.displayOptions().transcoding && this.canRunTranscoding(),
           iconName: 'cog'
         },
         {
           label: $localize`Run Web Video transcoding`,
           handler: ({ video }) => this.runTranscoding(video, 'web-video'),
-          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          isDisplayed: () => this.displayOptions().transcoding && this.canRunTranscoding(),
           iconName: 'cog'
         },
         {
           label: $localize`Delete HLS files`,
           handler: ({ video }) => this.removeVideoFiles(video, 'hls'),
-          isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
+          isDisplayed: () => this.displayOptions().removeFiles && this.canRemoveVideoFiles(),
           iconName: 'delete'
         },
         {
           label: $localize`Delete Web Video files`,
           handler: ({ video }) => this.removeVideoFiles(video, 'web-videos'),
-          isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
+          isDisplayed: () => this.displayOptions().removeFiles && this.canRemoveVideoFiles(),
           iconName: 'delete'
         }
       ],
@@ -554,7 +563,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Generate caption`,
           handler: ({ video }) => this.generateCaption(video),
-          isDisplayed: () => this.displayOptions.generateTranscription && this.canGenerateTranscription(),
+          isDisplayed: () => this.displayOptions().generateTranscription && this.canGenerateTranscription(),
           iconName: 'video-lang'
         }
       ],
@@ -562,20 +571,20 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Mute account`,
           handler: () => this.muteVideoAccount(),
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable(),
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().mute && this.isVideoAccountMutable(),
           iconName: 'no'
         },
         {
           label: $localize`Unmute account`,
           handler: () => this.unmuteVideoAccount(),
           isDisplayed: () => {
-            return this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable() && this.hasMutedAccount
+            return this.authService.isLoggedIn() && this.displayOptions().mute && this.isVideoAccountMutable() && this.hasMutedAccount
           },
           iconName: 'undo'
         }
       ]
     ]
 
-    this.videoActions = this.videoActions.concat(this.moreActions)
+    this.videoActions = this.videoActions.concat(this.moreActions())
   }
 }

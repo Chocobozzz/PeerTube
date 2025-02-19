@@ -2,13 +2,13 @@
 
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
-    [ngClass]="{ 'input-error': formError }"
+    [ngClass]="{ 'input-error': formError() }"
     [attr.disabled]="disabled || null"
-    [id]="inputId" [name]="inputId" [dir]="dir">
+    [id]="inputId()" [name]="inputId()" [dir]="dir()">
   </textarea>
 
   <div ngbNav #nav="ngbNav" class="nav-pills nav-preview">
-    <ng-container ngbNavItem *ngIf="truncateTo3Lines">
+    <ng-container ngbNavItem *ngIf="truncateTo3Lines()">
       <a ngbNavLink i18n>Truncated preview</a>
 
       <ng-template ngbNavContent>
@@ -38,5 +38,5 @@
 
   <div [ngbNavOutlet]="nav"></div>
 
-  <div *ngIf="!isMaximized && formError" class="form-error" role="alert">{{ formError }}</div>
+  <div *ngIf="!isMaximized && formError()" class="form-error" role="alert">{{ formError() }}</div>
 </div>

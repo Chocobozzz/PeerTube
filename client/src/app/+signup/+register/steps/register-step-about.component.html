@@ -1,6 +1,6 @@
 <my-instance-banner class="d-block mb-4" rounded="true"></my-instance-banner>
 
-<my-alert *ngIf="requiresApproval" type="primary" class="text-center">
+<my-alert *ngIf="requiresApproval()" type="primary" class="text-center">
   <p>
     <ng-container i18n>Moderators of {{ instanceName }} will have to approve your registration request once you have finished to fill the form.</ng-container>
 
@@ -21,7 +21,7 @@
     <li i18n><strong>Comment</strong> videos</li>
     <li i18n><strong>Subscribe</strong> to channels to be notified of new videos</li>
     <li i18n>Have access to your <strong>watch history</strong></li>
-    <li *ngIf="!videoUploadDisabled" i18n>Create your channel to <strong>publish videos</strong></li>
+    <li *ngIf="!videoUploadDisabled()" i18n>Create your channel to <strong>publish videos</strong></li>
   </ul>
 </div>
 

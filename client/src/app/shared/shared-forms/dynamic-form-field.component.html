@@ -1,34 +1,34 @@
-<div *ngIf="form" [formGroup]="form">
-  <label *ngIf="setting.label && setting.type !== 'input-checkbox'" [attr.for]="setting.name" [innerHTML]="setting.label"></label>
+<div *ngIf="form()" [formGroup]="form()">
+  <label *ngIf="setting().label && setting().type !== 'input-checkbox'" [attr.for]="setting().name" [innerHTML]="setting().label"></label>
 
   <my-peertube-checkbox
-    *ngIf="setting.type === 'input-checkbox'"
-    [inputName]="setting.name"
-    [formControlName]="setting.name"
-    [labelInnerHTML]="setting.label"
+    *ngIf="setting().type === 'input-checkbox'"
+    [inputName]="setting().name"
+    [formControlName]="setting().name"
+    [labelInnerHTML]="setting().label"
   ></my-peertube-checkbox>
 
-  <div *ngIf="setting.descriptionHTML" class="label-small-info" [innerHTML]="setting.descriptionHTML"></div>
+  <div *ngIf="setting().descriptionHTML" class="label-small-info" [innerHTML]="setting().descriptionHTML"></div>
 
-  @switch (setting.type) {
+  @switch (setting().type) {
     @case ('input') {
-      <input type="text" [id]="setting.name" [formControlName]="setting.name" />
+      <input type="text" [id]="setting().name" [formControlName]="setting().name" />
     }
 
     @case ('select') {
       <div class="peertube-select-container">
-        <select  [id]="setting.name" [formControlName]="setting.name" class="form-control">
-          <option *ngFor="let option of setting.options" [value]="option.value">{{ option.label }}</option>
+        <select  [id]="setting().name" [formControlName]="setting().name" class="form-control">
+          <option *ngFor="let option of setting().options" [value]="option.value">{{ option.label }}</option>
         </select>
       </div>
     }
 
     @case ('input-password') {
-      <my-input-text [formError]="formErrors['settings.name']" [formControlName]="setting.name" [inputId]="setting.name"></my-input-text>
+      <my-input-text [formError]="formErrors()['settings.name']" [formControlName]="setting().name" [inputId]="setting().name"></my-input-text>
     }
 
     @case ('input-textarea') {
-      <textarea type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
+      <textarea type="text" [id]="setting().name" [formControlName]="setting().name"></textarea>
 
     }
 
@@ -36,8 +36,8 @@
       <my-help helpType="markdownText"></my-help>
 
       <my-markdown-textarea
-        markdownType="text" [inputId]="setting.name" [formControlName]="setting.name"
-        [formError]="formErrors['settings.name']"
+        markdownType="text" [inputId]="setting().name" [formControlName]="setting().name"
+        [formError]="formErrors()['settings.name']"
       ></my-markdown-textarea>
     }
 
@@ -45,19 +45,19 @@
       <my-help helpType="markdownEnhanced"></my-help>
 
       <my-markdown-textarea
-        markdownType="enhanced" [inputId]="setting.name" [formControlName]="setting.name"
-        [formError]="formErrors['settings.name']"
+        markdownType="enhanced" [inputId]="setting().name" [formControlName]="setting().name"
+        [formError]="formErrors()['settings.name']"
       ></my-markdown-textarea>
 
     }
 
     @case ('html') {
-      <div [innerHTML]="setting.html"></div>
+      <div [innerHTML]="setting().html"></div>
     }
   }
 
-  <div *ngIf="hasDedicatedFormError() && formErrors[setting.name]" class="form-error" role="alert">
-    {{ formErrors[setting.name] }}
+  <div *ngIf="hasDedicatedFormError() && formErrors()[setting().name]" class="form-error" role="alert">
+    {{ formErrors()[setting().name] }}
   </div>
 
 </div>

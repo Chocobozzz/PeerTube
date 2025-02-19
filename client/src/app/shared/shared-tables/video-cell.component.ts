@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, input } from '@angular/core'
 import { Video } from '../shared-main/video/video.model'
 
 @Component({
@@ -8,9 +8,9 @@ import { Video } from '../shared-main/video/video.model'
   standalone: true
 })
 export class VideoCellComponent {
-  @Input() video: Video
+  readonly video = input<Video>(undefined)
 
   getVideoUrl () {
-    return Video.buildWatchUrl(this.video)
+    return Video.buildWatchUrl(this.video())
   }
 }

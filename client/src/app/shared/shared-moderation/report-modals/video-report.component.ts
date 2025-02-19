@@ -1,5 +1,5 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -36,23 +36,19 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   ]
 })
 export class VideoReportComponent extends FormReactive implements OnInit {
-  @Input() video: Video = null
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private abuseService = inject(AbuseService)
+  private notifier = inject(Notifier)
 
-  @ViewChild('modal', { static: true }) modal: NgbModal
+  readonly video = input<Video>(null)
+
+  readonly modal = viewChild<NgbModal>('modal')
 
   error: string = null
   predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
 
   private openedModal: NgbModalRef
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private abuseService: AbuseService,
-    private notifier: Notifier
-  ) {
-    super()
-  }
 
   get currentHost () {
     return window.location.host
@@ -60,7 +56,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   get originHost () {
     if (this.isRemote()) {
-      return this.video.account.host
+      return this.video().account.host
     }
 
     return ''
@@ -86,7 +82,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   }
 
   show () {
-    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false, size: 'lg' })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false, size: 'lg' })
   }
 
   hide () {
@@ -103,7 +99,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
       reason,
       predefinedReasons,
       video: {
-        id: this.video.id,
+        id: this.video().id,
         startAt: hasStart && startAt ? startAt : undefined,
         endAt: hasEnd && endAt ? endAt : undefined
       }
@@ -118,6 +114,6 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   }
 
   isRemote () {
-    return !this.video.isLocal
+    return !this.video().isLocal
   }
 }

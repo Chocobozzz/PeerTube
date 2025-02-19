@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -28,7 +28,7 @@ import { DeferLoadingDirective } from '../../shared/shared-main/common/defer-loa
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 
-type CustomChartData = (ChartData & { startDate: string, total: number })
+type CustomChartData = ChartData & { startDate: string, total: number }
 
 @Component({
   templateUrl: './my-video-channels.component.html',
@@ -50,6 +50,12 @@ type CustomChartData = (ChartData & { startDate: string, total: number })
   ]
 })
 export class MyVideoChannelsComponent {
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private videoChannelService = inject(VideoChannelService)
+  private screenService = inject(ScreenService)
+
   videoChannels: VideoChannel[] = []
 
   videoChannelsChartData: CustomChartData[]
@@ -68,14 +74,6 @@ export class MyVideoChannelsComponent {
 
   private pagesDone = new Set<number>()
 
-  constructor (
-    private authService: AuthService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private videoChannelService: VideoChannelService,
-    private screenService: ScreenService
-  ) {}
-
   get isInSmallView () {
     return this.screenService.isInSmallView()
   }
@@ -93,17 +91,14 @@ export class MyVideoChannelsComponent {
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithExpectedInput(
       $localize`Do you really want to delete ${videoChannel.displayName}?` +
-      `<br />` +
-      formatICU(
-        // eslint-disable-next-line max-len
-        $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
-        { count: videoChannel.videosCount }
-      ),
-
+        `<br />` +
+        formatICU(
+          // eslint-disable-next-line max-len
+          $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
+          { count: videoChannel.videosCount }
+        ),
       $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
-
       videoChannel.name,
-
       $localize`Delete`
     )
     if (res === false) return

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
@@ -6,10 +6,7 @@ import { FormReactiveErrors, FormReactiveValidationMessages } from './form-react
 
 @Injectable()
 export class FormValidatorService {
-
-  constructor (
-    private formBuilder: FormBuilder
-  ) {}
+  private formBuilder = inject(FormBuilder)
 
   buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
     const formErrors: FormReactiveErrors = {}
@@ -29,7 +26,7 @@ export class FormValidatorService {
         continue
       }
 
-      if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
+      if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [name: string]: string }
 
       const defaultValue = defaultValues[name] ?? ''
 
@@ -67,7 +64,7 @@ export class FormValidatorService {
 
       formErrors[name] = ''
 
-      if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
+      if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [name: string]: string }
 
       const defaultValue = defaultValues[name] ?? ''
 

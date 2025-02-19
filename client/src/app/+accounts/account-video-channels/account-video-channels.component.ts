@@ -1,6 +1,6 @@
 import { from, Subject, Subscription } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService } from '@app/core'
 import { SimpleMemoize } from '@app/helpers'
 import { NSFWPolicyType, VideoSortField } from '@peertube/peertube-models'
@@ -24,12 +24,18 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   imports: [ NgIf, InfiniteScrollerDirective, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
 })
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
+  private accountService = inject(AccountService)
+  private videoChannelService = inject(VideoChannelService)
+  private videoService = inject(VideoService)
+  private markdown = inject(MarkdownService)
+  private userService = inject(UserService)
+
   account: Account
   videoChannels: VideoChannel[] = []
 
   videos: { [id: number]: { total: number, videos: Video[] } } = {}
 
-  channelsDescriptionHTML: { [ id: number ]: string } = {}
+  channelsDescriptionHTML: { [id: number]: string } = {}
 
   channelPagination: ComponentPagination = {
     currentPage: 1,
@@ -61,23 +67,15 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
   private accountSub: Subscription
 
-  constructor (
-    private accountService: AccountService,
-    private videoChannelService: VideoChannelService,
-    private videoService: VideoService,
-    private markdown: MarkdownService,
-    private userService: UserService
-  ) { }
-
   ngOnInit () {
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
-        .subscribe(account => {
-          this.account = account
-          this.videoChannels = []
+      .subscribe(account => {
+        this.account = account
+        this.videoChannels = []
 
-          this.loadMoreChannels()
-        })
+        this.loadMoreChannels()
+      })
 
     this.userService.getAnonymousOrLoggedUser()
       .subscribe(user => {

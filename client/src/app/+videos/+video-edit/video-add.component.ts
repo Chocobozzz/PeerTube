@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
+import { Component, HostListener, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -45,10 +45,17 @@ import { VideoUploadComponent } from './video-add-components/video-upload.compon
   ]
 })
 export class VideoAddComponent implements OnInit, CanComponentDeactivate {
-  @ViewChild('videoUpload') videoUpload: VideoUploadComponent
-  @ViewChild('videoImportUrl') videoImportUrl: VideoImportUrlComponent
-  @ViewChild('videoImportTorrent') videoImportTorrent: VideoImportTorrentComponent
-  @ViewChild('videoGoLive') videoGoLive: VideoGoLiveComponent
+  private auth = inject(AuthService)
+  private userService = inject(UserService)
+  private hooks = inject(HooksService)
+  private serverService = inject(ServerService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+
+  readonly videoUpload = viewChild<VideoUploadComponent>('videoUpload')
+  readonly videoImportUrl = viewChild<VideoImportUrlComponent>('videoImportUrl')
+  readonly videoImportTorrent = viewChild<VideoImportTorrentComponent>('videoImportTorrent')
+  readonly videoGoLive = viewChild<VideoGoLiveComponent>('videoGoLive')
 
   user: AuthUser = null
 
@@ -68,15 +75,6 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   hasNoQuotaLeftDaily = false
 
   serverConfig: HTMLServerConfig
-
-  constructor (
-    private auth: AuthService,
-    private userService: UserService,
-    private hooks: HooksService,
-    private serverService: ServerService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
 
   get isContactFormEnabled () {
     return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
@@ -123,11 +121,14 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
   private async buildUploadMessages () {
     // eslint-disable-next-line max-len
-    const noQuota = $localize`Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.`
-    // eslint-disable-next-line max-len
-    const autoBlock = $localize`Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.`
-    // eslint-disable-next-line max-len
-    const quotaLeftDaily = $localize`Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.`
+    const noQuota =
+      $localize`Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.`
+    const autoBlock =
+      // eslint-disable-next-line max-len
+      $localize`Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.`
+    const quotaLeftDaily =
+      // eslint-disable-next-line max-len
+      $localize`Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.`
     // eslint-disable-next-line max-len
     const quotaLeft = $localize`Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.`
 
@@ -168,10 +169,10 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate (): { canDeactivate: boolean, text?: string } {
-    if (this.secondStepType === 'upload') return this.videoUpload.canDeactivate()
-    if (this.secondStepType === 'import-url') return this.videoImportUrl.canDeactivate()
-    if (this.secondStepType === 'import-torrent') return this.videoImportTorrent.canDeactivate()
-    if (this.secondStepType === 'go-live') return this.videoGoLive.canDeactivate()
+    if (this.secondStepType === 'upload') return this.videoUpload().canDeactivate()
+    if (this.secondStepType === 'import-url') return this.videoImportUrl().canDeactivate()
+    if (this.secondStepType === 'import-torrent') return this.videoImportTorrent().canDeactivate()
+    if (this.secondStepType === 'go-live') return this.videoGoLive().canDeactivate()
 
     return { canDeactivate: true }
   }

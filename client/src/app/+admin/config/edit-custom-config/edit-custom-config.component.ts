@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
@@ -73,6 +73,15 @@ type ComponentCustomConfig = CustomConfig & {
   ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  private notifier = inject(Notifier)
+  private configService = inject(ConfigService)
+  private customPage = inject(CustomPageService)
+  private serverService = inject(ServerService)
+  private editConfigurationService = inject(EditConfigurationService)
+
   activeNav: string
 
   customConfig: ComponentCustomConfig
@@ -83,23 +92,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private notifier: Notifier,
-    private configService: ConfigService,
-    private customPage: CustomPageService,
-    private serverService: ServerService,
-    private editConfigurationService: EditConfigurationService
-  ) {
-    super()
-  }
-
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    const formGroupData: { [key in keyof ComponentCustomConfig ]: any } = {
+    const formGroupData: { [key in keyof ComponentCustomConfig]: any } = {
       instance: {
         name: INSTANCE_NAME_VALIDATOR,
         shortDescription: INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
@@ -193,7 +189,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         videoChannelSynchronization: {
           enabled: null,
           maxPerUser: MAX_SYNC_PER_USER
-
         },
         users: {
           enabled: null

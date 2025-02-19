@@ -1,5 +1,5 @@
 import { filter } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ActivatedRoute, ActivatedRouteSnapshot, Event, NavigationEnd, Router, Scroll } from '@angular/router'
 import { ServerService } from '../server'
 
@@ -11,13 +11,11 @@ export const enum RouterSetting {
 
 @Injectable()
 export class PeerTubeRouterService {
-  static readonly ROUTE_SETTING_NAME = 's'
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private server = inject(ServerService)
 
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private server: ServerService
-  ) { }
+  static readonly ROUTE_SETTING_NAME = 's'
 
   addRouteSetting (toAdd: RouterSetting) {
     if (this.hasRouteSetting(toAdd)) return
@@ -74,5 +72,4 @@ export class PeerTubeRouterService {
 
     return this.router.navigate(baseRoute, { queryParams })
   }
-
 }

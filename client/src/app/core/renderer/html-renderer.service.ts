@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import {
   getDefaultSanitizedHrefAttributes,
   getDefaultSanitizedSchemes,
@@ -9,10 +9,12 @@ import { LinkifierService } from './linkifier.service'
 
 @Injectable()
 export class HtmlRendererService {
+  private linkifier = inject(LinkifierService)
+
   private simpleDomPurify: DOMPurifyI
   private enhancedDomPurify: DOMPurifyI
 
-  constructor (private linkifier: LinkifierService) {
+  constructor () {
     this.simpleDomPurify = DOMPurify()
     this.enhancedDomPurify = DOMPurify()
 

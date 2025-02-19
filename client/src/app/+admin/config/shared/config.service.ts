@@ -1,6 +1,6 @@
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { CustomConfig } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -8,16 +8,16 @@ import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class ConfigService {
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+
   private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/config'
 
   videoQuotaOptions: SelectOptionsItem[] = []
   videoQuotaDailyOptions: SelectOptionsItem[] = []
   transcodingThreadOptions: SelectOptionsItem[] = []
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {
+  constructor () {
     this.videoQuotaOptions = [
       { id: -1, label: $localize`Unlimited` },
       { id: 0, label: $localize`None - no upload possible` },
@@ -60,11 +60,11 @@ export class ConfigService {
 
   getCustomConfig () {
     return this.authHttp.get<CustomConfig>(ConfigService.BASE_APPLICATION_URL + '/custom')
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   updateCustomConfig (data: CustomConfig) {
     return this.authHttp.put<CustomConfig>(ConfigService.BASE_APPLICATION_URL + '/custom', data)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 }

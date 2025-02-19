@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core'
+import { Pipe, PipeTransform, inject } from '@angular/core'
 import { HtmlRendererService } from '@app/core'
 
 @Pipe({
@@ -6,10 +6,7 @@ import { HtmlRendererService } from '@app/core'
   standalone: true
 })
 export class Nl2BrPipe implements PipeTransform {
-
-  constructor (private htmlRenderer: HtmlRendererService) {
-
-  }
+  private htmlRenderer = inject(HtmlRendererService)
 
   transform (value: string): string {
     return this.htmlRenderer.convertToBr(value)

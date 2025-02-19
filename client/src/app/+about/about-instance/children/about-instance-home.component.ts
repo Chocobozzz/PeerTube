@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ServerService } from '@app/core'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
@@ -19,7 +19,11 @@ import { ResolverData } from '../about-instance.resolver'
   ]
 })
 export class AboutInstanceHomeComponent implements OnInit {
-  @ViewChild('supportModal') supportModal: SupportModalComponent
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  private serverService = inject(ServerService)
+
+  readonly supportModal = viewChild<SupportModalComponent>('supportModal')
 
   aboutHTML: AboutHTML
   descriptionElement: HTMLDivElement
@@ -28,12 +32,6 @@ export class AboutInstanceHomeComponent implements OnInit {
   categories: string[] = []
 
   config: HTMLServerConfig
-
-  constructor (
-    private router: Router,
-    private route: ActivatedRoute,
-    private serverService: ServerService
-  ) {}
 
   ngOnInit () {
     this.config = this.serverService.getHTMLConfig()
@@ -55,7 +53,7 @@ export class AboutInstanceHomeComponent implements OnInit {
       if (!data?.isSupport) return
 
       setTimeout(() => {
-        const modal = this.supportModal.show()
+        const modal = this.supportModal().show()
 
         modal.hidden.subscribe(() => this.router.navigateByUrl('/about/instance/home'))
       }, 0)

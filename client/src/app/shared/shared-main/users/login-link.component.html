@@ -2,8 +2,8 @@
   i18n-title title="Go to the login page"
   class="d-flex"
   internalLink="/login" [href]="getExternalLoginHref()"
-  [className]="className"
-  [icon]="icon ? 'sign-in' : undefined"
+  [className]="className()"
+  [icon]="icon() ? 'sign-in' : undefined"
 >
-  {{ label }}
+  {{ label() }}
 </my-link>

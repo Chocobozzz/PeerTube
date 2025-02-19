@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -59,8 +59,20 @@ import { VideoAdminService } from './video-admin.service'
     BytesPipe
   ]
 })
-export class VideoListComponent extends RestTable <Video> implements OnInit {
-  @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
+export class VideoListComponent extends RestTable<Video> implements OnInit {
+  protected route = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private confirmService = inject(ConfirmService)
+  private auth = inject(AuthService)
+  private notifier = inject(Notifier)
+  private videoService = inject(VideoService)
+  private videoAdminService = inject(VideoAdminService)
+  private videoBlockService = inject(VideoBlockService)
+  private videoCaptionService = inject(VideoCaptionService)
+  private server = inject(ServerService)
+  private videoFileTokenService = inject(VideoFileTokenService)
+
+  readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
 
   videos: Video[] = []
 
@@ -91,23 +103,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
   loading = true
 
-  private videoFileTokens: { [ videoId: number ]: string } = {}
-
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private confirmService: ConfirmService,
-    private auth: AuthService,
-    private notifier: Notifier,
-    private videoService: VideoService,
-    private videoAdminService: VideoAdminService,
-    private videoBlockService: VideoBlockService,
-    private videoCaptionService: VideoCaptionService,
-    private server: ServerService,
-    private videoFileTokenService: VideoFileTokenService
-  ) {
-    super()
-  }
+  private videoFileTokens: { [videoId: number]: string } = {}
 
   get authUser () {
     return this.auth.getUser()
@@ -132,7 +128,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
         },
         {
           label: $localize`Block`,
-          handler: videos => this.videoBlockModal.show(videos),
+          handler: videos => this.videoBlockModal().show(videos),
           isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => !v.blacklisted),
           iconName: 'no'
         },

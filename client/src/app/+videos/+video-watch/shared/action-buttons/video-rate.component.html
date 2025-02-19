@@ -9,7 +9,7 @@
   placement="bottom auto"
 >
   <my-global-icon iconName="like"></my-global-icon>
-  <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
+  <span *ngIf="video().likes" class="count">{{ video().likes }}</span>
 </button>
 
 <button
@@ -19,5 +19,5 @@
   placement="bottom auto"
 >
   <my-global-icon iconName="dislike"></my-global-icon>
-  <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
+  <span *ngIf="video().dislikes" class="count">{{ video().dislikes }}</span>
 </button>

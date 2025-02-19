@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AuthService, ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { arrayify, buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
@@ -57,19 +57,17 @@ export type CommonVideoParams = {
 
 @Injectable()
 export class VideoService {
+  private auth = inject(AuthService)
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
+  private serverService = inject(ServerService)
+  private confirmService = inject(ConfirmService)
+
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
-
-  constructor (
-    private auth: AuthService,
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService,
-    private serverService: ServerService,
-    private confirmService: ConfirmService
-  ) {}
 
   getVideoViewUrl (uuid: string) {
     return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
@@ -124,15 +122,15 @@ export class VideoService {
     const data = objectToFormData(body)
 
     return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, data)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   uploadVideo (video: FormData) {
     const req = new HttpRequest('POST', `${VideoService.BASE_VIDEO_URL}/upload`, video, { reportProgress: true })
 
     return this.authHttp
-               .request<{ video: { id: number, uuid: string } }>(req)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .request<{ video: { id: number, uuid: string } }>(req)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   getMyVideos (options: {
@@ -170,43 +168,47 @@ export class VideoService {
     }
 
     return this.authHttp
-               .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  getAccountVideos (parameters: CommonVideoParams & {
-    account: Pick<Account, 'nameWithHost'>
-  }): Observable<ResultList<Video>> {
+  getAccountVideos (
+    parameters: CommonVideoParams & {
+      account: Pick<Account, 'nameWithHost'>
+    }
+  ): Observable<ResultList<Video>> {
     const { account } = parameters
 
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
-               .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  getVideoChannelVideos (parameters: CommonVideoParams & {
-    videoChannel: Pick<VideoChannel, 'nameWithHost'>
-  }): Observable<ResultList<Video>> {
+  getVideoChannelVideos (
+    parameters: CommonVideoParams & {
+      videoChannel: Pick<VideoChannel, 'nameWithHost'>
+    }
+  ): Observable<ResultList<Video>> {
     const { videoChannel } = parameters
 
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   getVideos (parameters: CommonVideoParams): Observable<ResultList<Video>> {
@@ -214,11 +216,11 @@ export class VideoService {
     params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   buildBaseFeedUrls (params: HttpParams, base = VideoService.BASE_FEEDS_URL) {
@@ -295,10 +297,10 @@ export class VideoService {
 
   getVideoFileMetadata (metadataUrl: string) {
     return this.authHttp
-               .get<VideoFileMetadata>(metadataUrl)
-               .pipe(
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<VideoFileMetadata>(metadataUrl)
+      .pipe(
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   removeVideo (idArg: number | number[]) {
@@ -415,16 +417,16 @@ export class VideoService {
 
   getSource (videoId: number) {
     return this.authHttp
-               .get<VideoSource>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
-               .pipe(
-                 catchError(err => {
-                   if (err.status === 404) {
-                     return of(undefined)
-                   }
+      .get<VideoSource>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
+      .pipe(
+        catchError(err => {
+          if (err.status === 404) {
+            return of(undefined)
+          }
 
-                   return this.restExtractor.handleError(err)
-                 })
-               )
+          return this.restExtractor.handleError(err)
+        })
+      )
   }
 
   // ---------------------------------------------------------------------------
@@ -447,24 +449,24 @@ export class VideoService {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
     return this.authHttp.get<UserVideoRate>(url)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   extractVideos (result: ResultList<VideoServerModel>) {
     return this.serverService.getServerLocale()
-               .pipe(
-                 map(translations => {
-                   const videosJson = result.data
-                   const totalVideos = result.total
-                   const videos: Video[] = []
+      .pipe(
+        map(translations => {
+          const videosJson = result.data
+          const totalVideos = result.total
+          const videos: Video[] = []
 
-                   for (const videoJson of videosJson) {
-                     videos.push(new Video(videoJson, translations))
-                   }
+          for (const videoJson of videosJson) {
+            videos.push(new Video(videoJson, translations))
+          }
 
-                   return { total: totalVideos, data: videos }
-                 })
-               )
+          return { total: totalVideos, data: videos }
+        })
+      )
   }
 
   explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacyType>[], defaultPrivacyId: VideoPrivacyType = VideoPrivacy.PUBLIC) {
@@ -598,7 +600,7 @@ export class VideoService {
     const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp
-               .put(url, body, { headers })
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .put(url, body, { headers })
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

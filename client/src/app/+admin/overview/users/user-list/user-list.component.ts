@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
@@ -79,10 +79,21 @@ type UserForList = User & {
     ProgressBarComponent
   ]
 })
-export class UserListComponent extends RestTable <User> implements OnInit, OnDestroy {
+export class UserListComponent extends RestTable<User> implements OnInit, OnDestroy {
+  protected route = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private auth = inject(AuthService)
+  private blocklist = inject(BlocklistService)
+  private userAdminService = inject(UserAdminService)
+  private peertubeLocalStorage = inject(LocalStorageService)
+  private hooks = inject(HooksService)
+  private pluginService = inject(PluginService)
+
   private static readonly LS_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
 
-  @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
+  readonly userBanModal = viewChild<UserBanModalComponent>('userBanModal')
 
   users: (User & { accountMutedStatus: AccountMutedStatus })[] = []
 
@@ -114,21 +125,6 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
   }
 
   private _selectedColumns: string[] = []
-
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private auth: AuthService,
-    private blocklist: BlocklistService,
-    private userAdminService: UserAdminService,
-    private peertubeLocalStorage: LocalStorageService,
-    private hooks: HooksService,
-    private pluginService: PluginService
-  ) {
-    super()
-  }
 
   get authUser () {
     return this.auth.getUser()
@@ -262,7 +258,7 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
       }
     }
 
-    this.userBanModal.openModal(users)
+    this.userBanModal().openModal(users)
   }
 
   onUserChanged () {
@@ -281,19 +277,19 @@ export class UserListComponent extends RestTable <User> implements OnInit, OnDes
     if (res === false) return
 
     this.userAdminService.unbanUsers(users)
-        .subscribe({
-          next: () => {
-            this.notifier.success(
-              formatICU(
-                $localize`{count, plural, =1 {1 user unbanned.} other {{count} users unbanned.}}`,
-                { count: users.length }
-              )
+      .subscribe({
+        next: () => {
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {1 user unbanned.} other {{count} users unbanned.}}`,
+              { count: users.length }
             )
-            this.reloadData()
-          },
+          )
+          this.reloadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async removeUsers (users: User[]) {

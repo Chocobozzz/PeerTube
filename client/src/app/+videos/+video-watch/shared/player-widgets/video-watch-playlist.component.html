@@ -1,10 +1,10 @@
 <div
-  *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)" class="widget-root playlist"
+  *ngIf="playlist() && (currentPlaylistPosition || noPlaylistVideos)" class="widget-root playlist"
   myInfiniteScroller [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
   >
   <div class="widget-header playlist-info">
     <div class="widget-title playlist-display-name">
-      {{ playlist.displayName }}
+      {{ playlist().displayName }}
 
       <span *ngIf="isUnlistedPlaylist()" class="pt-badge badge-warning" i18n>Unlisted</span>
       <span *ngIf="isPrivatePlaylist()" class="pt-badge badge-danger" i18n>Private</span>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="playlist-by-index">
-      <div class="playlist-by">{{ playlist.ownerBy }}</div>
+      <div class="playlist-by">{{ playlist().ownerBy }}</div>
       <div class="playlist-index">
         <span>{{ currentPlaylistPosition }}</span><span>{{ playlistPagination.totalItems }}</span>
       </div>
@@ -39,7 +39,7 @@
 
   <div *ngFor="let playlistElement of playlistElements" [ngClass]="'element-' + playlistElement.position">
     <my-video-playlist-element-miniature
-      [playlistElement]="playlistElement" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
+      [playlistElement]="playlistElement" [playlist]="playlist()" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
       [playing]="currentPlaylistPosition === playlistElement.position" [accountLink]="false" [position]="playlistElement.position"
     ></my-video-playlist-element-miniature>
   </div>

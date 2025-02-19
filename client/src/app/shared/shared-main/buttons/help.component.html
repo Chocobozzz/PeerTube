@@ -20,15 +20,15 @@
 
 <button
   class="help-tooltip-button p-0 border-0 mx-1"
-  [title]="title"
+  [title]="title()"
   popoverClass="help-popover"
   [attr.aria-pressed]="isPopoverOpened"
   [ngbPopover]="tooltipTemplate"
-  [placement]="tooltipPlacement"
-  [autoClose]="autoClose"
+  [placement]="tooltipPlacement()"
+  [autoClose]="autoClose()"
   (onHidden)="onPopoverHidden()"
   (onShown)="onPopoverShown()"
   type="button"
 >
-  <my-global-icon [iconName]="iconName"></my-global-icon>
+  <my-global-icon [iconName]="iconName()"></my-global-icon>
 </button>

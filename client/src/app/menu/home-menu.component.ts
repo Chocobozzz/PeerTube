@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { Subscription } from 'rxjs'
@@ -9,16 +9,12 @@ import { Subscription } from 'rxjs'
   imports: [ HorizontalMenuComponent ]
 })
 export class HomeMenuComponent implements OnInit, OnDestroy {
+  private server = inject(ServerService)
+  private authService = inject(AuthService)
+
   menuEntries: HorizontalMenuEntry[] = []
 
   private sub: Subscription
-
-  constructor (
-    private server: ServerService,
-    private authService: AuthService
-  ) {
-
-  }
 
   ngOnInit () {
     this.buildMenu()

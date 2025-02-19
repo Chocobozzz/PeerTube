@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, resetCurrentPage, updatePaginationOnDelete } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -31,6 +31,11 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
   ]
 })
 export class MyVideoPlaylistsComponent {
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private videoPlaylistService = inject(VideoPlaylistService)
+
   videoPlaylists: VideoPlaylist[] = []
 
   pagination: ComponentPagination = {
@@ -42,13 +47,6 @@ export class MyVideoPlaylistsComponent {
   onDataSubject = new Subject<any[]>()
 
   search: string
-
-  constructor (
-    private authService: AuthService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private videoPlaylistService: VideoPlaylistService
-  ) {}
 
   async deleteVideoPlaylist (videoPlaylist: VideoPlaylist) {
     const res = await this.confirmService.confirm(
@@ -98,17 +96,17 @@ export class MyVideoPlaylistsComponent {
 
   private loadVideoPlaylists (reset = false) {
     this.authService.userInformationLoaded
-        .pipe(mergeMap(() => {
-          const user = this.authService.getUser()
+      .pipe(mergeMap(() => {
+        const user = this.authService.getUser()
 
-          return this.videoPlaylistService.listAccountPlaylists(user.account, this.pagination, '-updatedAt', this.search)
-        })).subscribe(res => {
-          if (reset) this.videoPlaylists = []
+        return this.videoPlaylistService.listAccountPlaylists(user.account, this.pagination, '-updatedAt', this.search)
+      })).subscribe(res => {
+        if (reset) this.videoPlaylists = []
 
-          this.videoPlaylists = this.videoPlaylists.concat(res.data)
-          this.pagination.totalItems = res.total
+        this.videoPlaylists = this.videoPlaylists.concat(res.data)
+        this.pagination.totalItems = res.total
 
-          this.onDataSubject.next(res.data)
-        })
+        this.onDataSubject.next(res.data)
+      })
   }
 }

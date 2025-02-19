@@ -1,7 +1,7 @@
-<a [href]="getVideoUrl()" class="table-video-link" [title]="video.name" target="_blank" rel="noopener noreferrer">
+<a [href]="getVideoUrl()" class="table-video-link" [title]="video().name" target="_blank" rel="noopener noreferrer">
   <div class="table-video">
     <div class="table-video-image">
-      <img [src]="video.thumbnailPath" alt="">
+      <img [src]="video().thumbnailPath" alt="">
 
       <ng-content select="[image]"></ng-content>
     </div>
@@ -10,10 +10,10 @@
       <div>
         <ng-content select="[name]"></ng-content>
 
-        {{ video.name }}
+        {{ video().name }}
       </div>
 
-      <div class="muted">by {{ video.channel?.displayName }} on {{ video.channel?.host }} </div>
+      <div class="muted">by {{ video().channel?.displayName }} on {{ video().channel?.host }} </div>
     </div>
   </div>
 </a>

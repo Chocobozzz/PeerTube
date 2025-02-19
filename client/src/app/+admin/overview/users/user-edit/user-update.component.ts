@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
@@ -52,23 +52,23 @@ import { UserPasswordComponent } from './user-password.component'
   ]
 })
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
+  protected formReactiveService = inject(FormReactiveService)
+  protected serverService = inject(ServerService)
+  protected configService = inject(ConfigService)
+  protected screenService = inject(ScreenService)
+  protected auth = inject(AuthService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private twoFactorService = inject(TwoFactorService)
+  private userAdminService = inject(UserAdminService)
+
   error: string
 
   private paramsSub: Subscription
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    protected serverService: ServerService,
-    protected configService: ConfigService,
-    protected screenService: ScreenService,
-    protected auth: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifier: Notifier,
-    private userService: UserService,
-    private twoFactorService: TwoFactorService,
-    private userAdminService: UserAdminService
-  ) {
+  constructor () {
     super()
 
     this.buildQuotaOptions()
@@ -168,7 +168,6 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
         error: err => this.notifier.error(err.message)
       })
-
   }
 
   private onUserFetched (userJson: UserType) {

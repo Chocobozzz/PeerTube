@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -17,25 +17,20 @@ import { WatchedWordsListService } from './watched-words-list.service'
   templateUrl: './watched-words-list-save-modal.component.html',
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgIf, NgClass ]
 })
-
 export class WatchedWordsListSaveModalComponent extends FormReactive implements OnInit {
-  @Input({ required: true }) accountName: string
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
+  private watchedWordsService = inject(WatchedWordsListService)
 
-  @Output() listAddedOrUpdated = new EventEmitter<void>()
+  readonly accountName = input.required<string>()
 
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  readonly listAddedOrUpdated = output()
+
+  readonly modal = viewChild<ElementRef>('modal')
 
   private openedModal: NgbModalRef
   private listToUpdate: WatchedWordsList
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private watchedWordsService: WatchedWordsListService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -47,7 +42,7 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
   show (list?: WatchedWordsList) {
     this.listToUpdate = list
 
-    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
 
     if (list) {
       this.form.patchValue({
@@ -66,7 +61,7 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
 
   addOrUpdate () {
     const commonParams = {
-      accountName: this.accountName,
+      accountName: this.accountName(),
       listName: this.form.value['listName'],
       words: splitAndGetNotEmpty(this.form.value['words'])
     }

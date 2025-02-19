@@ -1,29 +1,26 @@
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, UserService } from '@app/core'
 import { UserRegister, UserRegistrationRequest } from '@peertube/peertube-models'
 
 @Injectable()
 export class SignupService {
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private userService: UserService
-  ) { }
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private userService = inject(UserService)
 
   directSignup (userCreate: UserRegister) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
-               .pipe(
-                 tap(() => this.userService.setSignupInThisSession(true)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        tap(() => this.userService.setSignupInThisSession(true)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   requestSignup (userCreate: UserRegistrationRequest) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'registrations/request', userCreate)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   // ---------------------------------------------------------------------------
@@ -42,7 +39,7 @@ export class SignupService {
     }
 
     return this.authHttp.post(url, body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   verifyRegistrationEmail (options: {
@@ -55,14 +52,14 @@ export class SignupService {
     const body = { verificationString }
 
     return this.authHttp.post(url, body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   askSendVerifyEmail (email: string) {
     const url = UserService.BASE_USERS_URL + 'ask-send-verify-email'
 
     return this.authHttp.post(url, { email })
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   // ---------------------------------------------------------------------------

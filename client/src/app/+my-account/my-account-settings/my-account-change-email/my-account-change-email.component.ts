@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -18,18 +18,14 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private serverService = inject(ServerService)
+
   error: string
   success: string
   user: User
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private userService: UserService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({

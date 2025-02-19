@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -50,13 +50,21 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
     ButtonComponent
   ]
 })
-
 export class HeaderComponent implements OnInit, OnDestroy {
+  private authService = inject(AuthService)
+  private serverService = inject(ServerService)
+  private redirectService = inject(RedirectService)
+  private hotkeysService = inject(HotkeysService)
+  private screenService = inject(ScreenService)
+  private modalService = inject(PeertubeModalService)
+  private router = inject(Router)
+  private menu = inject(MenuService)
+
   private static LS_HIDE_MOBILE_MSG = 'hide-mobile-msg'
 
-  @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
-  @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
-  @ViewChild('dropdown') dropdown: NgbDropdown
+  readonly languageChooserModal = viewChild<LanguageChooserComponent>('languageChooserModal')
+  readonly quickSettingsModal = viewChild<QuickSettingsModalComponent>('quickSettingsModal')
+  readonly dropdown = viewChild<NgbDropdown>('dropdown')
 
   user: AuthUser
   loggedIn: boolean
@@ -76,19 +84,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private hotkeysSub: Subscription
   private authSub: Subscription
 
-  constructor (
-    private authService: AuthService,
-    private serverService: ServerService,
-    private redirectService: RedirectService,
-    private hotkeysService: HotkeysService,
-    private screenService: ScreenService,
-    private modalService: PeertubeModalService,
-    private router: Router,
-    private menu: MenuService
-  ) { }
-
   get language () {
-    return this.languageChooserModal.getCurrentLanguage()
+    return this.languageChooserModal().getCurrentLanguage()
   }
 
   get requiresApproval () {
@@ -113,7 +110,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.htmlConfig = this.serverService.getHTMLConfig()
-    this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
+    this.currentInterfaceLanguage = this.languageChooserModal().getCurrentLanguage()
 
     this.loggedIn = this.authService.isLoggedIn()
     this.updateUserState()
@@ -257,11 +254,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openLanguageChooser () {
-    this.languageChooserModal.show()
+    this.languageChooserModal().show()
   }
 
   openQuickSettings () {
-    this.quickSettingsModal.show()
+    this.quickSettingsModal().show()
   }
 
   openHotkeysCheatSheet () {

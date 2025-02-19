@@ -1,12 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, booleanAttribute } from '@angular/core'
+import { NgIf } from '@angular/common'
+import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { ActorImage } from '@peertube/peertube-models'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
-import { ActorAvatarInput, ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
-import { ActorImage } from '@peertube/peertube-models'
+import { ActorAvatarComponent, ActorAvatarInput } from '../shared-actor-image/actor-avatar.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgbTooltip, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-actor-avatar-edit',
@@ -18,21 +18,24 @@ import { NgIf } from '@angular/common'
   imports: [ NgIf, ActorAvatarComponent, NgbTooltip, GlobalIconComponent, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu ]
 })
 export class ActorAvatarEditComponent implements OnInit, OnChanges {
-  @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
 
-  @Input({ required: true }) actorType: 'channel' | 'account'
-  @Input({ required: true }) avatars: ActorImage[]
-  @Input({ required: true }) username: string
+  readonly avatarfileInput = viewChild<ElementRef<HTMLInputElement>>('avatarfileInput')
 
-  @Input() displayName: string
-  @Input() subscribers: number
+  readonly actorType = input.required<'channel' | 'account'>()
+  readonly avatars = input.required<ActorImage[]>()
+  readonly username = input.required<string>()
 
-  @Input({ transform: booleanAttribute }) displayUsername = true
-  @Input({ transform: booleanAttribute }) editable = true
-  @Input({ transform: booleanAttribute }) previewImage = false
+  readonly displayName = input<string>(undefined)
+  readonly subscribers = input<number>(undefined)
 
-  @Output() avatarChange = new EventEmitter<FormData>()
-  @Output() avatarDelete = new EventEmitter<void>()
+  readonly displayUsername = input(true, { transform: booleanAttribute })
+  readonly editable = input(true, { transform: booleanAttribute })
+  readonly previewImage = input(false, { transform: booleanAttribute })
+
+  readonly avatarChange = output<FormData>()
+  readonly avatarDelete = output()
 
   avatarFormat = ''
   maxAvatarSize = 0
@@ -41,11 +44,6 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
   preview: string
 
   actor: ActorAvatarInput
-
-  constructor (
-    private serverService: ServerService,
-    private notifier: Notifier
-  ) { }
 
   ngOnInit (): void {
     const config = this.serverService.getHTMLConfig()
@@ -58,15 +56,13 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
 
   ngOnChanges () {
     this.actor = {
-      avatars: this.avatars,
-      name: this.username
+      avatars: this.avatars(),
+      name: this.username()
     }
   }
 
-  onAvatarChange (input: HTMLInputElement) {
-    this.avatarfileInput = new ElementRef(input)
-
-    const avatarfile = this.avatarfileInput.nativeElement.files[0]
+  onAvatarChange () {
+    const avatarfile = this.avatarfileInput().nativeElement.files[0]
     if (avatarfile.size > this.maxAvatarSize) {
       this.notifier.error('Error', $localize`This image is too large.`)
       return
@@ -76,7 +72,7 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
     formData.append('avatarfile', avatarfile)
     this.avatarChange.emit(formData)
 
-    if (this.previewImage) {
+    if (this.previewImage()) {
       imageToDataURL(avatarfile).then(result => this.preview = result)
     }
   }
@@ -87,6 +83,6 @@ export class ActorAvatarEditComponent implements OnInit, OnChanges {
   }
 
   hasAvatar () {
-    return !!this.preview || this.avatars.length !== 0
+    return !!this.preview || this.avatars().length !== 0
   }
 }

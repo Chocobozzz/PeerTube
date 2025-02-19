@@ -1,6 +1,6 @@
 import { NgClass, NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
@@ -40,25 +40,21 @@ import { HelpComponent } from '../../../shared/shared-main/buttons/help.componen
   ]
 })
 export class EditInstanceInformationComponent implements OnInit {
-  @Input() form: FormGroup
-  @Input() formErrors: any
+  private customMarkup = inject(CustomMarkupService)
+  private notifier = inject(Notifier)
+  private instanceService = inject(InstanceService)
+  private server = inject(ServerService)
 
-  @Input() languageItems: SelectOptionsItem[] = []
-  @Input() categoryItems: SelectOptionsItem[] = []
+  readonly form = input<FormGroup>(undefined)
+  readonly formErrors = input<any>(undefined)
+
+  readonly languageItems = input<SelectOptionsItem[]>([])
+  readonly categoryItems = input<SelectOptionsItem[]>([])
 
   instanceBannerUrl: string
   instanceAvatars: ActorImage[] = []
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private customMarkup: CustomMarkupService,
-    private notifier: Notifier,
-    private instanceService: InstanceService,
-    private server: ServerService
-  ) {
-
-  }
 
   get instanceName () {
     return this.server.getHTMLConfig().instance.name
@@ -139,5 +135,4 @@ export class EditInstanceInformationComponent implements OnInit {
         this.updateActorImages()
       })
   }
-
 }

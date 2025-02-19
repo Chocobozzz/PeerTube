@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, UserService } from '@app/core'
 import {
@@ -21,17 +21,13 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private notifier = inject(Notifier)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+
   error: string
   user: User
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private notifier: Notifier,
-    private authService: AuthService,
-    private userService: UserService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -45,8 +41,8 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     const confirmPasswordControl = this.form.get('new-confirmed-password')
 
     confirmPasswordControl.valueChanges
-                          .pipe(filter(v => v !== this.form.value['new-password']))
-                          .subscribe(() => confirmPasswordControl.setErrors({ matchPassword: true }))
+      .pipe(filter(v => v !== this.form.value['new-password']))
+      .subscribe(() => confirmPasswordControl.setErrors({ matchPassword: true }))
   }
 
   changePassword () {

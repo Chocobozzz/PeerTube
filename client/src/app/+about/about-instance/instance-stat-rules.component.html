@@ -5,37 +5,37 @@
 
     <div class="blocks" myPluginSelector pluginSelectorId="about-instance-statistics">
       <div class="stat">
-        <strong>{{ stats.totalModerators + stats.totalAdmins | number }}</strong>
+        <strong>{{ stats().totalModerators + stats().totalAdmins | number }}</strong>
         <div i18n>moderators</div>
         <my-global-icon iconName="moderation"></my-global-icon>
       </div>
 
       <div class="stat">
-        <strong>{{ stats.totalUsers | number }}</strong>
+        <strong>{{ stats().totalUsers | number }}</strong>
         <div i18n>users</div>
         <my-global-icon iconName="user"></my-global-icon>
       </div>
 
       <div class="stat">
-        <strong>{{ stats.totalLocalVideos | number }}</strong>
+        <strong>{{ stats().totalLocalVideos | number }}</strong>
         <a routerLink="/videos/browse" [queryParams]="{ scope: 'local' }" i18n>videos</a>
         <my-global-icon iconName="videos"></my-global-icon>
       </div>
 
       <div class="stat">
-        <strong>{{ stats.totalLocalVideoViews | number }}</strong>
+        <strong>{{ stats().totalLocalVideoViews | number }}</strong>
         <div i18n>views</div>
         <my-global-icon iconName="eye-open"></my-global-icon>
       </div>
 
       <div class="stat">
-        <strong>{{ stats.totalLocalVideoComments | number }}</strong>
+        <strong>{{ stats().totalLocalVideoComments | number }}</strong>
         <div i18n>comments</div>
         <my-global-icon iconName="message-circle"></my-global-icon>
       </div>
 
       <div class="stat">
-        <strong>{{ stats.totalLocalVideoFilesSize | bytes:1 }}</strong>
+        <strong>{{ stats().totalLocalVideoFilesSize | bytes:1 }}</strong>
         <div i18n>hosted videos</div>
         <my-global-icon iconName="film"></my-global-icon>
       </div>
@@ -47,7 +47,7 @@
 
     <div class="blocks">
 
-      <div class="usage-rule" *ngIf="config.instance.serverCountry">
+      <div class="usage-rule" *ngIf="config().instance.serverCountry">
         <div class="icon-container">
           <my-global-icon iconName="message-circle"></my-global-icon>
 
@@ -57,10 +57,10 @@
         </div>
 
         <div>
-          <strong i18n>This platform has been created in {{ config.instance.serverCountry }}</strong>
+          <strong i18n>This platform has been created in {{ config().instance.serverCountry }}</strong>
           <div class="rule-content">
             <ng-container i18n>Your content (comments, videos...) must comply with the legislation in force in this country.</ng-container>
-            <ng-container *ngIf="aboutHTML.codeOfConduct" i18n> You must also follow our <a routerLink="/about/instance/moderation">code of conduct</a>.</ng-container>
+            <ng-container *ngIf="aboutHTML().codeOfConduct" i18n> You must also follow our <a routerLink="/about/instance/moderation">code of conduct</a>.</ng-container>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@
         <div class="icon-container">
           <my-global-icon iconName="user"></my-global-icon>
 
-          @if (config.signup.allowed && config.signup.allowedForCurrentIP) {
+          @if (config().signup.allowed && config().signup.allowedForCurrentIP) {
             <div class="icon-status">
               <my-global-icon iconName="tick"></my-global-icon>
             </div>
@@ -81,12 +81,12 @@
         </div>
 
         <div>
-          @if (config.signup.allowed && config.signup.allowedForCurrentIP) {
-            @if (config.signup.requiresApproval) {
+          @if (config().signup.allowed && config().signup.allowedForCurrentIP) {
+            @if (config().signup.requiresApproval) {
               <strong i18n>You can <a routerLink="/signup">request an account</a> on our platform</strong>
 
-              @if (stats.averageRegistrationRequestResponseTimeMs) {
-                <div class="rule-content" i18n>Our moderator will validate it within a {{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}.</div>
+              @if (stats().averageRegistrationRequestResponseTimeMs) {
+                <div class="rule-content" i18n>Our moderator will validate it within a {{ stats().averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}.</div>
               } @else {
                 <div class="rule-content" i18n>Our moderator will validate it within a few days.</div>
               }
@@ -99,7 +99,7 @@
         </div>
       </div>
 
-      <div class="usage-rule" *ngIf="config.federation.enabled">
+      <div class="usage-rule" *ngIf="config().federation.enabled">
         <div class="icon-container">
           <my-global-icon iconName="fediverse"></my-global-icon>
 

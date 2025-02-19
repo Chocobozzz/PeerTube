@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  forwardRef
-} from '@angular/core'
+import { Component, OnInit, forwardRef, inject, input, viewChild } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import {
   ServerService
@@ -31,9 +25,11 @@ import { PeerTubePlayer } from '../../../../../standalone/embed-player-api/playe
   ]
 })
 export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
-  @ViewChild('embed') embed: EmbedComponent
+  private serverService = inject(ServerService)
 
-  @Input() video: EmbedVideoInput & Pick<Video, 'isLive' | 'state'>
+  readonly embed = viewChild<EmbedComponent>('embed')
+
+  readonly video = input<EmbedVideoInput & Pick<Video, 'isLive' | 'state'>>(undefined)
 
   imageSrc: string
   allowedExtensionsMessage = ''
@@ -47,9 +43,7 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
   player: PeerTubePlayer
 
-  constructor (
-    private serverService: ServerService
-  ) {
+  constructor () {
     this.bytesPipe = new BytesPipe()
     this.maxSizeText = $localize`max size`
   }
@@ -71,7 +65,8 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
   }
 
   canSelectFromVideo () {
-    return this.video && !this.video.isLive && this.video.state.id === VideoState.PUBLISHED
+    const video = this.video()
+    return video && !video.isLive && video.state.id === VideoState.PUBLISHED
   }
 
   getReactiveFileButtonTooltip () {
@@ -91,7 +86,9 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     this.updatePreview()
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (file: any) {
     this.imageFile = file
@@ -120,7 +117,7 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     this.selectingFromVideo = true
 
     setTimeout(() => {
-      this.player = new PeerTubePlayer(this.embed.getIframe())
+      this.player = new PeerTubePlayer(this.embed().getIframe())
     })
   }
 

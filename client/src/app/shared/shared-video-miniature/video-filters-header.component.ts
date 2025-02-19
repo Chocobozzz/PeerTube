@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { AuthService, RedirectService } from '@app/core'
@@ -49,11 +49,19 @@ type QuickFilter = {
   providers: [ InstanceFollowService ]
 })
 export class VideoFiltersHeaderComponent implements OnInit {
-  @Input() filters: VideoFilters
-  @Input() displayModerationBlock = false
-  @Input() hideScope = false
+  private auth = inject(AuthService)
+  private serverService = inject(ServerService)
+  private fb = inject(FormBuilder)
+  private modalService = inject(PeertubeModalService)
+  private redirectService = inject(RedirectService)
+  private server = inject(ServerService)
+  private followService = inject(InstanceFollowService)
 
-  @Output() filtersChanged = new EventEmitter()
+  readonly filters = input<VideoFilters>(undefined)
+  readonly displayModerationBlock = input(false)
+  readonly hideScope = input(false)
+
+  readonly filtersChanged = output()
 
   areFiltersCollapsed = true
 
@@ -70,17 +78,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
   private videoCategories: VideoConstant<number>[] = []
   private videoLanguages: VideoConstant<string>[] = []
 
-  constructor (
-    private auth: AuthService,
-    private serverService: ServerService,
-    private fb: FormBuilder,
-    private modalService: PeertubeModalService,
-    private redirectService: RedirectService,
-    private server: ServerService,
-    private followService: InstanceFollowService
-  ) {
-  }
-
   ngOnInit () {
     this.instanceName = this.server.getHTMLConfig().instance.name
 
@@ -96,14 +93,14 @@ export class VideoFiltersHeaderComponent implements OnInit {
 
     this.patchForm(false)
 
-    this.filters.onChange(() => {
+    this.filters().onChange(() => {
       this.patchForm(false)
     })
 
     this.form.valueChanges.subscribe(values => {
       debugLogger('Loading values from form: %O', values)
 
-      this.filters.load(values)
+      this.filters().load(values)
       this.filtersChanged.emit()
     })
 
@@ -127,7 +124,7 @@ export class VideoFiltersHeaderComponent implements OnInit {
 
   canSeeAllVideos () {
     if (!this.auth.isLoggedIn()) return false
-    if (!this.displayModerationBlock) return false
+    if (!this.displayModerationBlock()) return false
 
     return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
   }
@@ -137,7 +134,7 @@ export class VideoFiltersHeaderComponent implements OnInit {
   onQuickFilter (e: Event, quickFilter: QuickFilter) {
     e.preventDefault()
 
-    this.filters.load(quickFilter.filters)
+    this.filters().load(quickFilter.filters)
     this.filtersChanged.emit()
   }
 
@@ -148,14 +145,14 @@ export class VideoFiltersHeaderComponent implements OnInit {
       {
         label: $localize`Recently added`,
         iconName: 'add',
-        isActive: () => this.filters.sort === '-publishedAt',
+        isActive: () => this.filters().sort === '-publishedAt',
         filters: { sort: '-publishedAt' }
       },
 
       {
         label: $localize`Trending`,
         iconName: 'trending',
-        isActive: () => this.filters.sort === trendingSort,
+        isActive: () => this.filters().sort === trendingSort,
         filters: { sort: trendingSort }
       }
     ]
@@ -225,7 +222,7 @@ export class VideoFiltersHeaderComponent implements OnInit {
   }
 
   private patchForm (emitEvent: boolean) {
-    const defaultValues = this.filters.toFormObject()
+    const defaultValues = this.filters().toFormObject()
     this.form.patchValue(defaultValues, { emitEvent })
 
     debugLogger('Patched form: %O', defaultValues)

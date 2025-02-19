@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { environment } from 'src/environments/environment'
 import { HttpStatusCode, ResultList, UserExport, UserImport } from '@peertube/peertube-models'
@@ -9,14 +9,12 @@ import { peertubeTranslate } from '@peertube/peertube-core-utils'
 
 @Injectable()
 export class UserImportExportService {
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private server = inject(ServerService)
+
   static BASE_USER_EXPORTS_URL = environment.apiUrl + '/api/v1/users/'
   static BASE_USER_IMPORTS_URL = environment.apiUrl + '/api/v1/users/'
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private server: ServerService
-  ) { }
 
   // ---------------------------------------------------------------------------
 

@@ -1,11 +1,11 @@
-import { Directive, EventEmitter, HostListener, Output } from '@angular/core'
+import { Directive, HostListener, output } from '@angular/core'
 
 @Directive({
   selector: '[myTimestampRouteTransformer]',
   standalone: true
 })
 export class TimestampRouteTransformerDirective {
-  @Output() timestampClicked = new EventEmitter<number>()
+  readonly timestampClicked = output<number>()
 
   @HostListener('click', [ '$event' ])
   public onClick ($event: Event) {

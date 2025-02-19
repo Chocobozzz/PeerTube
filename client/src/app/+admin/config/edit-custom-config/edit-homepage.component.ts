@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, inject, input } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgIf } from '@angular/common'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
@@ -12,14 +12,12 @@ import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-mar
   imports: [ FormsModule, ReactiveFormsModule, CustomMarkupHelpComponent, MarkdownTextareaComponent, NgIf ]
 })
 export class EditHomepageComponent {
-  @Input() form: FormGroup
-  @Input() formErrors: any
+  private customMarkup = inject(CustomMarkupService)
+
+  readonly form = input<FormGroup>(undefined)
+  readonly formErrors = input<any>(undefined)
 
   customMarkdownRenderer: (text: string) => Promise<HTMLElement>
-
-  constructor (private customMarkup: CustomMarkupService) {
-
-  }
 
   getCustomMarkdownRenderer () {
     return this.customMarkup.getCustomMarkdownRenderer()

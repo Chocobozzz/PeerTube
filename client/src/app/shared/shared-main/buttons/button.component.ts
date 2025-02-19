@@ -6,10 +6,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Input,
   OnChanges,
-  ViewChild,
-  booleanAttribute
+  booleanAttribute,
+  inject,
+  input,
+  viewChild
 } from '@angular/core'
 import { Params, QueryParamsHandling, RouterLink, RouterLinkActive } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
@@ -37,32 +38,31 @@ const debugLogger = debug('peertube:button')
     RouterLinkActive
   ]
 })
-
 export class ButtonComponent implements OnChanges, AfterViewInit {
-  @Input() label = ''
-  @Input() theme: 'primary' | 'secondary' | 'tertiary' = 'secondary'
-  @Input() icon: GlobalIconName
+  private cd = inject(ChangeDetectorRef)
 
-  @Input() href: string
-  @Input() ptRouterLink: string[] | string
-  @Input() ptQueryParams: Params
-  @Input() ptQueryParamsHandling: QueryParamsHandling
-  @Input() ptRouterLinkActive = ''
+  readonly label = input('')
+  readonly theme = input<'primary' | 'secondary' | 'tertiary'>('secondary')
+  readonly icon = input<GlobalIconName>(undefined)
 
-  @Input() title: string
-  @Input() tooltip: string
-  @Input({ transform: booleanAttribute }) active = false
+  readonly href = input<string>(undefined)
+  readonly ptRouterLink = input<string[] | string>(undefined)
+  readonly ptQueryParams = input<Params>(undefined)
+  readonly ptQueryParamsHandling = input<QueryParamsHandling>(undefined)
+  readonly ptRouterLinkActive = input('')
 
-  @Input({ transform: booleanAttribute }) loading = false
-  @Input({ transform: booleanAttribute }) disabled = false
-  @Input({ transform: booleanAttribute }) responsiveLabel = false
-  @Input({ transform: booleanAttribute }) rounded = false
+  readonly title = input<string>(undefined)
+  readonly tooltip = input<string>(undefined)
+  readonly active = input(false, { transform: booleanAttribute })
 
-  @ViewChild('labelContent') labelContent: ElementRef
+  readonly loading = input(false, { transform: booleanAttribute })
+  readonly disabled = input(false, { transform: booleanAttribute })
+  readonly responsiveLabel = input(false, { transform: booleanAttribute })
+  readonly rounded = input(false, { transform: booleanAttribute })
+
+  readonly labelContent = viewChild<ElementRef>('labelContent')
 
   classes: { [id: string]: boolean } = {}
-
-  constructor (private cd: ChangeDetectorRef) {}
 
   ngOnChanges () {
     this.buildClasses()
@@ -73,22 +73,22 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   }
 
   private buildClasses () {
-    const isButtonLink = !!this.ptRouterLink || !!this.href
+    const isButtonLink = !!this.ptRouterLink() || !!this.href()
 
     this.classes = {
-      'active': this.active,
+      'active': this.active(),
       'peertube-button': !isButtonLink,
       'peertube-button-link': isButtonLink,
-      'primary-button': this.theme === 'primary',
-      'secondary-button': this.theme === 'secondary',
-      'tertiary-button': this.theme === 'tertiary',
-      'has-icon': !!this.icon,
-      'rounded-icon-button': !!this.rounded,
-      'icon-only': !this.label && !(this.labelContent?.nativeElement as HTMLElement)?.innerText,
-      'responsive-label': this.responsiveLabel
+      'primary-button': this.theme() === 'primary',
+      'secondary-button': this.theme() === 'secondary',
+      'tertiary-button': this.theme() === 'tertiary',
+      'has-icon': !!this.icon(),
+      'rounded-icon-button': !!this.rounded(),
+      'icon-only': !this.label() && !(this.labelContent()?.nativeElement as HTMLElement)?.innerText,
+      'responsive-label': this.responsiveLabel()
     }
 
-    debugLogger('Built button classes', { classes: this.classes, labelContent: this.labelContent })
+    debugLogger('Built button classes', { classes: this.classes, labelContent: this.labelContent() })
 
     this.cd.markForCheck()
   }

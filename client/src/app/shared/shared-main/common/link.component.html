@@ -1,15 +1,15 @@
 <ng-template #content>
-  <my-global-icon *ngIf="icon" [iconName]="icon"></my-global-icon>
+  <my-global-icon *ngIf="icon()" [iconName]="icon()"></my-global-icon>
 
   <ng-content></ng-content>
 </ng-template>
 
-@if (href) {
-  <a [href]="href" [target]="target" [attr.title]="title" [ariaLabel]="ariaLabel" [tabindex]="tabindex" [ngClass]="builtClasses">
+@if (href()) {
+  <a [href]="href()" [target]="target()" [attr.title]="title()" [ariaLabel]="ariaLabel()" [tabindex]="tabindex()" [ngClass]="builtClasses">
     <ng-template *ngTemplateOutlet="content"></ng-template>
   </a>
 } @else {
-  <a [routerLink]="internalLink" [attr.title]="title" [ariaLabel]="ariaLabel" [tabindex]="tabindex" [ngClass]="builtClasses">
+  <a [routerLink]="internalLink()" [attr.title]="title()" [ariaLabel]="ariaLabel()" [tabindex]="tabindex()" [ngClass]="builtClasses">
     <ng-template *ngTemplateOutlet="content"></ng-template>
   </a>
 }

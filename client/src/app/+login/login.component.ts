@@ -1,5 +1,5 @@
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { NgClass, NgFor, NgIf } from '@angular/common'
+import { AfterViewInit, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
@@ -32,7 +32,6 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
     ReactiveFormsModule,
     AutofocusDirective,
     NgClass,
-    NgTemplateOutlet,
     InputTextComponent,
     NgFor,
     InstanceBannerComponent,
@@ -41,13 +40,23 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
     AlertComponent
   ]
 })
-
 export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private route = inject(ActivatedRoute)
+  private modalService = inject(NgbModal)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private redirectService = inject(RedirectService)
+  private notifier = inject(Notifier)
+  private hooks = inject(HooksService)
+  private storage = inject(SessionStorageService)
+  private router = inject(Router)
+
   private static SESSION_STORAGE_REDIRECT_URL_KEY = 'login-previous-url'
 
-  @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
-  @ViewChild('otpTokenInput') otpTokenInput: InputTextComponent
-  @ViewChild('instanceAboutAccordion') instanceAboutAccordion: InstanceAboutAccordionComponent
+  readonly forgotPasswordModal = viewChild<ElementRef>('forgotPasswordModal')
+  readonly otpTokenInput = viewChild<InputTextComponent>('otpTokenInput')
+  readonly instanceAboutAccordion = viewChild<InstanceAboutAccordionComponent>('instanceAboutAccordion')
 
   accordion: NgbAccordionDirective
   error: string = null
@@ -72,21 +81,6 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private route: ActivatedRoute,
-    private modalService: NgbModal,
-    private authService: AuthService,
-    private userService: UserService,
-    private redirectService: RedirectService,
-    private notifier: Notifier,
-    private hooks: HooksService,
-    private storage: SessionStorageService,
-    private router: Router
-  ) {
-    super()
-  }
-
   get signupAllowed () {
     return this.serverConfig.signup.allowed === true
   }
@@ -98,8 +92,9 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   onTermsClick (event: Event, instanceInformation: HTMLElement) {
     event.preventDefault()
 
-    if (this.instanceAboutAccordion) {
-      this.instanceAboutAccordion.expandTerms()
+    const instanceAboutAccordion = this.instanceAboutAccordion()
+    if (instanceAboutAccordion) {
+      instanceAboutAccordion.expandTerms()
       instanceInformation.scrollIntoView({ behavior: 'smooth' })
     }
   }
@@ -191,7 +186,7 @@ The link will expire within 1 hour.`
   }
 
   openForgotPasswordModal () {
-    this.openedForgotPasswordModal = this.modalService.open(this.forgotPasswordModal)
+    this.openedForgotPasswordModal = this.modalService.open(this.forgotPasswordModal())
   }
 
   hideForgotPasswordModal () {
@@ -199,7 +194,7 @@ The link will expire within 1 hour.`
   }
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
-    this.accordion = instanceAboutAccordion.accordion
+    this.accordion = instanceAboutAccordion.accordion()
   }
 
   private loadExternalAuthToken (username: string, token: string) {
@@ -230,7 +225,7 @@ The link will expire within 1 hour.`
 
       setTimeout(() => {
         this.form.get('otp-token').setValidators(USER_OTP_TOKEN_VALIDATOR.VALIDATORS)
-        this.otpTokenInput.focus()
+        this.otpTokenInput().focus()
       })
 
       return

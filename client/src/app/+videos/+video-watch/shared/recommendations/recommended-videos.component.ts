@@ -1,5 +1,5 @@
-import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
+import { NgClass, NgFor, NgIf } from '@angular/common'
+import { Component, OnChanges, OnDestroy, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -15,14 +15,19 @@ import { VideoRecommendationService } from './video-recommendation.service'
   selector: 'my-recommended-videos',
   templateUrl: './recommended-videos.component.html',
   styleUrls: [ './recommended-videos.component.scss' ],
-  imports: [ NgClass, NgIf, NgbTooltip, InputSwitchComponent, FormsModule, NgFor, VideoMiniatureComponent, AsyncPipe ]
+  imports: [ NgClass, NgIf, NgbTooltip, InputSwitchComponent, FormsModule, NgFor, VideoMiniatureComponent ]
 })
 export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() currentVideo: VideoDetails
-  @Input() playlist: VideoPlaylist
-  @Input() displayAsRow: boolean
+  private userService = inject(UserService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private videoRecommendation = inject(VideoRecommendationService)
 
-  @Output() gotRecommendations = new EventEmitter<Video[]>()
+  readonly currentVideo = input<VideoDetails>(undefined)
+  readonly playlist = input<VideoPlaylist>(undefined)
+  readonly displayAsRow = input<boolean>(undefined)
+
+  readonly gotRecommendations = output<Video[]>()
 
   videos: Video[] = []
 
@@ -40,12 +45,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
 
   private userSub: Subscription
 
-  constructor (
-    private userService: UserService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private videoRecommendation: VideoRecommendationService
-  ) {
+  constructor () {
     this.autoPlayNextVideoTooltip = $localize`When active, the next video is automatically played after the current one.`
   }
 
@@ -62,7 +62,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnChanges () {
-    if (this.currentVideo) {
+    if (this.currentVideo()) {
       this.loadRecommendations()
     }
   }
@@ -93,7 +93,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private loadRecommendations () {
-    this.videoRecommendation.getRecommendations(this.currentVideo, this.videoRecommendation.getRecommentationHistory())
+    this.videoRecommendation.getRecommendations(this.currentVideo(), this.videoRecommendation.getRecommendationHistory())
       .subscribe({
         next: videos => {
           this.videos = videos

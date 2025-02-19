@@ -1,8 +1,8 @@
 <ng-template #modal>
   <div class="modal-header">
     <h4 class="modal-title">
-      <ng-container i18n *ngIf="isAdminView">Messages with the reporter</ng-container>
-      <ng-container i18n *ngIf="!isAdminView">Messages with the moderation team</ng-container>
+      <ng-container i18n *ngIf="isAdminView()">Messages with the reporter</ng-container>
+      <ng-container i18n *ngIf="!isAdminView()">Messages with the moderation team</ng-container>
     </h4>
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">

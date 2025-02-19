@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
@@ -17,16 +17,14 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
   ]
 })
 export class AboutInstanceComponent implements OnInit {
-  @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
+  private route = inject(ActivatedRoute)
+
+  readonly descriptionWrapper = viewChild<ElementRef<HTMLInputElement>>('descriptionWrapper')
 
   aboutHTML: AboutHTML
   serverStats: ServerStats
   serverConfig: ServerConfig
   menuEntries: HorizontalMenuEntry[] = []
-
-  constructor (
-    private route: ActivatedRoute
-  ) {}
 
   ngOnInit () {
     const {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, ElementRef } from '@angular/core'
+import { Component, OnChanges, ElementRef, inject, input, output, viewChild } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { NgClass, NgIf } from '@angular/common'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
@@ -11,19 +11,17 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
   imports: [ TimestampRouteTransformerDirective, NgClass, NgIf ]
 })
 export class VideoDescriptionComponent implements OnChanges {
-  @ViewChild('descriptionHTML') descriptionHTML: ElementRef<HTMLElement>
+  private markdownService = inject(MarkdownService)
 
-  @Input() video: VideoDetails
+  readonly descriptionHTML = viewChild<ElementRef<HTMLElement>>('descriptionHTML')
 
-  @Output() timestampClicked = new EventEmitter<number>()
+  readonly video = input<VideoDetails>(undefined)
+
+  readonly timestampClicked = output<number>()
 
   completeDescriptionShown = false
 
   videoHTMLDescription = ''
-
-  constructor (
-    private markdownService: MarkdownService
-  ) { }
 
   ngOnChanges () {
     this.completeDescriptionShown = false
@@ -32,7 +30,7 @@ export class VideoDescriptionComponent implements OnChanges {
   }
 
   hasEllipsis () {
-    const el = this.descriptionHTML?.nativeElement
+    const el = this.descriptionHTML()?.nativeElement
     if (!el) return false
 
     return el.offsetHeight < el.scrollHeight
@@ -51,8 +49,8 @@ export class VideoDescriptionComponent implements OnChanges {
   }
 
   private async setVideoDescriptionHTML () {
-    const html = await this.markdownService.textMarkdownToHTML({ markdown: this.video.description, withHtml: true, withEmoji: true })
+    const html = await this.markdownService.textMarkdownToHTML({ markdown: this.video().description, withHtml: true, withEmoji: true })
 
-    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(this.video.shortUUID, html)
+    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(this.video().shortUUID, html)
   }
 }

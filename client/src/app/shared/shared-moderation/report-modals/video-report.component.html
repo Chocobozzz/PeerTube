@@ -1,6 +1,6 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Report video "{{ video.name }}"</h4>
+    <h4 i18n class="modal-title">Report video "{{ video().name }}"</h4>
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
     </button>
@@ -33,7 +33,7 @@
       </div>
 
       <div class="col-12 col-md-7">
-        <my-embed [video]="video"></my-embed>
+        <my-embed [video]="video()"></my-embed>
 
         <div class="mb-1 mt-3 start-at" formGroupName="timestamp">
           <my-peertube-checkbox
@@ -43,7 +43,7 @@
 
           <my-timestamp-input
             [timestamp]="timestamp.startAt"
-            [maxTimestamp]="video.duration"
+            [maxTimestamp]="video().duration"
             formControlName="startAt"
             inputName="startAt"
           >
@@ -58,7 +58,7 @@
 
           <my-timestamp-input
             [timestamp]="timestamp.endAt"
-            [maxTimestamp]="video.duration"
+            [maxTimestamp]="video().duration"
             formControlName="endAt"
             inputName="endAt"
           >

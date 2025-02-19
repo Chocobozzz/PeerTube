@@ -1,6 +1,6 @@
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { VideoChapter, VideoChapterUpdate } from '@peertube/peertube-models'
 import { VideoPasswordService } from './video-password.service'
@@ -10,11 +10,8 @@ import { of } from 'rxjs'
 
 @Injectable()
 export class VideoChapterService {
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
   getChapters (options: { videoId: string, videoPassword?: string }) {
     const headers = VideoPasswordService.buildVideoPasswordHeader(options.videoPassword)

@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
@@ -23,20 +23,16 @@ import { REQUIRED_VALIDATOR } from '@app/shared/form-validators/common-validator
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, SelectChannelComponent, AlertComponent ]
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private router = inject(Router)
+  private notifier = inject(Notifier)
+  private videoChannelSyncService = inject(VideoChannelSyncService)
+  private videoChannelService = inject(VideoChannelService)
+
   error: string
   userVideoChannels: SelectChannelItem[] = []
   existingVideosStrategy: string
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private router: Router,
-    private notifier: Notifier,
-    private videoChannelSyncService: VideoChannelSyncService,
-    private videoChannelService: VideoChannelService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({

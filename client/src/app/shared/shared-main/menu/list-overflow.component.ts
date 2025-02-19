@@ -7,12 +7,12 @@ import {
   Component,
   ElementRef,
   HostListener,
-  Input,
   OnInit,
-  QueryList,
   TemplateRef,
-  ViewChild,
-  ViewChildren
+  inject,
+  input,
+  viewChild,
+  viewChildren
 } from '@angular/core'
 import { ScreenService } from '@app/core'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -43,25 +43,29 @@ export interface ListOverflowItem {
   ]
 })
 export class ListOverflowComponent<T extends ListOverflowItem> implements OnInit, AfterViewInit {
-  @Input() items: T[]
-  @Input() itemTemplate: TemplateRef<{ item: T, dropdown?: boolean, modal?: boolean }>
-  @Input({ transform: booleanAttribute }) hasBorder = false
+  private cdr = inject(ChangeDetectorRef)
+  private modalService = inject(NgbModal)
+  private screenService = inject(ScreenService)
 
-  @ViewChild('modal', { static: true }) modal: ElementRef
-  @ViewChild('itemsParent', { static: true }) parent: ElementRef<HTMLDivElement>
-  @ViewChildren('itemsRendered') itemsRendered: QueryList<ElementRef>
+  readonly items = input<T[]>(undefined)
+  readonly itemTemplate = input<
+    TemplateRef<{
+      item: T
+      dropdown?: boolean
+      modal?: boolean
+    }>
+  >(undefined)
+  readonly hasBorder = input(false, { transform: booleanAttribute })
+
+  readonly modal = viewChild<ElementRef>('modal')
+  readonly parent = viewChild<ElementRef<HTMLDivElement>>('itemsParent')
+  readonly itemsRendered = viewChildren<ElementRef>('itemsRendered')
 
   showItemsUntilIndexExcluded: number
   isInMobileView = false
   initialized = false
 
   private randomInt: number
-
-  constructor (
-    private cdr: ChangeDetectorRef,
-    private modalService: NgbModal,
-    private screenService: ScreenService
-  ) {}
 
   ngOnInit () {
     this.randomInt = randomInt(1, 2000)
@@ -82,13 +86,13 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements OnInit
   onWindowResize () {
     this.isInMobileView = !!this.screenService.isInMobileView()
 
-    const parentWidth = this.parent.nativeElement.getBoundingClientRect().width
+    const parentWidth = this.parent().nativeElement.getBoundingClientRect().width
     let showItemsUntilIndexExcluded: number
     let accWidth = 0
 
     debugLogger('Parent width is %d', parentWidth)
 
-    for (const [ index, el ] of this.itemsRendered.toArray().entries()) {
+    for (const [ index, el ] of this.itemsRendered().entries()) {
       accWidth += el.nativeElement.getBoundingClientRect().width
 
       if (showItemsUntilIndexExcluded === undefined) {
@@ -103,7 +107,7 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements OnInit
   }
 
   toggleModal () {
-    this.modalService.open(this.modal, { centered: true })
+    this.modalService.open(this.modal(), { centered: true })
   }
 
   getId (id: number | string = uniqueId()): string {

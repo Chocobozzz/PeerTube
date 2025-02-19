@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, input, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -35,9 +35,16 @@ import { WatchedWordsListService } from './watched-words-list.service'
   ]
 })
 export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsList> implements OnInit {
-  @Input({ required: true }) mode: 'user' | 'admin'
+  protected router = inject(Router)
+  protected route = inject(ActivatedRoute)
+  private auth = inject(AuthService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private watchedWordsListService = inject(WatchedWordsListService)
 
-  @ViewChild('saveModal', { static: true }) saveModal: WatchedWordsListSaveModalComponent
+  readonly mode = input.required<'user' | 'admin'>()
+
+  readonly saveModal = viewChild<WatchedWordsListSaveModalComponent>('saveModal')
 
   lists: WatchedWordsList[]
   totalRecords = 0
@@ -51,22 +58,15 @@ export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsL
   }
 
   get accountNameParam () {
-    if (this.mode === 'admin') return undefined
+    if (this.mode() === 'admin') return undefined
 
     return this.authUser.account.name
   }
 
-  constructor (
-    protected router: Router,
-    protected route: ActivatedRoute,
-    private auth: AuthService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private watchedWordsListService: WatchedWordsListService
-  ) {
+  constructor () {
     super()
 
-    const isDisplayed = () => this.mode === 'user' || this.authUser.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)
+    const isDisplayed = () => this.mode() === 'user' || this.authUser.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)
 
     this.actions = [
       [
@@ -101,7 +101,7 @@ export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsL
   }
 
   openCreateOrUpdateList (list?: WatchedWordsList) {
-    this.saveModal.show(list)
+    this.saveModal().show(list)
   }
 
   protected reloadDataInternal () {
@@ -134,5 +134,4 @@ export class WatchedWordsListAdminOwnerComponent extends RestTable<WatchedWordsL
       error: err => this.notifier.error(err.message)
     })
   }
-
 }

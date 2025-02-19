@@ -1,5 +1,5 @@
 import { ResultList, VideoPassword } from '@peertube/peertube-models'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { catchError, switchMap } from 'rxjs'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { RestExtractor } from '@app/core'
@@ -7,11 +7,8 @@ import { VideoService } from './video.service'
 
 @Injectable()
 export class VideoPasswordService {
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
   static buildVideoPasswordHeader (videoPassword: string) {
     return videoPassword

@@ -1,6 +1,6 @@
 <div class="mb-5">
   <p i18n>
-    You want to <strong>publish videos</strong> on {{ instanceName }}? Then you need to create your first <strong>channel</strong>.
+    You want to <strong>publish videos</strong> on {{ instanceName() }}? Then you need to create your first <strong>channel</strong>.
   </p>
 
   <p i18n>
@@ -8,8 +8,8 @@
     to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology.
   </p>
 
-  <p i18n *ngIf="videoQuota !== -1">
-    {{ instanceName }} administrators allow you to publish up to <strong>{{ videoQuota | bytes: 0 }} of videos</strong> on their website.
+  <p i18n *ngIf="videoQuota() !== -1">
+    {{ instanceName() }} administrators allow you to publish up to <strong>{{ videoQuota() | bytes: 0 }} of videos</strong> on their website.
   </p>
 </div>
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ServerService, UserService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -11,20 +11,20 @@ import { map, switchMap } from 'rxjs/operators'
 
 @Injectable()
 export class VideoRecommendationService {
+  private videos = inject(VideoService)
+  private searchService = inject(SearchService)
+  private userService = inject(UserService)
+  private serverService = inject(ServerService)
+
   private config: HTMLServerConfig
 
   private readonly videoIdsHistory = new Set<number>()
 
-  constructor (
-    private videos: VideoService,
-    private searchService: SearchService,
-    private userService: UserService,
-    private serverService: ServerService
-  ) {
+  constructor () {
     this.config = this.serverService.getHTMLConfig()
   }
 
-  getRecommentationHistory () {
+  getRecommendationHistory () {
     return this.videoIdsHistory
   }
 
@@ -89,14 +89,14 @@ export class VideoRecommendationService {
                 : undefined
             })
           })
-          .pipe(
-            map(v => v.data),
-            switchMap(videos => {
-              if (videos.length <= 1) return defaultSubscription
+            .pipe(
+              map(v => v.data),
+              switchMap(videos => {
+                if (videos.length <= 1) return defaultSubscription
 
-              return of(videos)
-            })
-          )
+                return of(videos)
+              })
+            )
         })
       )
   }

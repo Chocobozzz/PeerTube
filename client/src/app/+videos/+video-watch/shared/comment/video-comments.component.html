@@ -20,9 +20,9 @@
 
   @if (commentsEnabled) {
     <my-video-comment-add
-      [video]="video"
-      [videoPassword]="videoPassword"
-      [user]="user"
+      [video]="video()"
+      [videoPassword]="videoPassword()"
+      [user]="user()"
       (commentCreated)="onCommentThreadCreated($event)"
       [textValue]="commentThreadRedraftValue"
     ></my-video-comment-add>
@@ -35,8 +35,8 @@
         <my-video-comment
           *ngIf="highlightedThread"
           [comment]="highlightedThread"
-          [video]="video"
-          [videoPassword]="videoPassword"
+          [video]="video()"
+          [videoPassword]="videoPassword()"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[highlightedThread.id]"
           [highlightedComment]="true"
@@ -56,8 +56,8 @@
         <my-video-comment
           *ngIf="!highlightedThread || comment.id !== highlightedThread.id"
           [comment]="comment"
-          [video]="video"
-          [videoPassword]="videoPassword"
+          [video]="video()"
+          [videoPassword]="videoPassword()"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[comment.id]"
           [firstInThread]="i + 1 !== comments.length"
@@ -77,10 +77,10 @@
 
             <ng-template #hasAuthorComments>
               <ng-container *ngIf="comment.totalReplies !== comment.totalRepliesFromVideoAuthor; else onlyAuthorComments" i18n>
-                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video?.account?.displayName || 'the author' }} and others
+                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video()?.account?.displayName || 'the author' }} and others
               </ng-container>
               <ng-template i18n #onlyAuthorComments>
-                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video?.account?.displayName || 'the author' }}
+                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video()?.account?.displayName || 'the author' }}
               </ng-template>
             </ng-template>
 

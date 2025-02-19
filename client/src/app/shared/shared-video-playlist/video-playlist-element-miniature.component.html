@@ -1,58 +1,58 @@
-<div class="video" [ngClass]="{ playing: playing }">
+<div class="video" [ngClass]="{ playing: playing() }">
   <a [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()">
     <div class="position">
-      <my-global-icon *ngIf="playing" iconName="play"></my-global-icon>
-      <ng-container *ngIf="!playing">{{ position }}</ng-container>
+      <my-global-icon *ngIf="playing()" iconName="play"></my-global-icon>
+      <ng-container *ngIf="!playing()">{{ position() }}</ng-container>
     </div>
 
     <my-video-thumbnail
-      *ngIf="playlistElement.video"
-      [video]="playlistElement.video" [nsfw]="isVideoBlur(playlistElement.video)"
+      *ngIf="playlistElement().video"
+      [video]="playlistElement().video" [nsfw]="isVideoBlur(playlistElement().video)"
       [videoRouterLink]="buildRouterLink()" [queryParams]="buildRouterQuery()" [ariaLabel]="getVideoAriaLabel()"
     ></my-video-thumbnail>
 
-    <div class="fake-thumbnail" *ngIf="!playlistElement.video"></div>
+    <div class="fake-thumbnail" *ngIf="!playlistElement().video"></div>
 
     <div class="video-info">
-      <ng-container *ngIf="playlistElement.video">
+      <ng-container *ngIf="playlistElement().video">
         <div class="video-info-header">
           <a
-            tabindex="-1" class="video-info-name" [ariaLabel]="getVideoAriaLabel()" [attr.title]="playlistElement.video.name"
+            tabindex="-1" class="video-info-name" [ariaLabel]="getVideoAriaLabel()" [attr.title]="playlistElement().video.name"
             [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
-          >{{ playlistElement.video.name }}</a>
+          >{{ playlistElement().video.name }}</a>
 
           <span i18n *ngIf="isVideoPrivate()" class="pt-badge badge-yellow">Private</span>
           <span i18n *ngIf="isVideoPasswordProtected()" class="pt-badge badge-yellow">Password protected</span>
         </div>
 
         <span class="date-and-views">
-          <my-date-toggle [date]="playlistElement.video.publishedAt"></my-date-toggle>
+          <my-date-toggle [date]="playlistElement().video.publishedAt"></my-date-toggle>
 
           <span class="views">
-            • <my-video-views-counter [isLive]="playlistElement.video.isLive" [viewers]="playlistElement.video.viewers" [views]="playlistElement.video.views"></my-video-views-counter>
+            • <my-video-views-counter [isLive]="playlistElement().video.isLive" [viewers]="playlistElement().video.viewers" [views]="playlistElement().video.views"></my-video-views-counter>
           </span>
         </span>
 
-        <a *ngIf="accountLink" tabindex="-1" class="video-info-owner" [routerLink]="[ '/c', playlistElement.video.byVideoChannel ]">
-          <ng-container *ngIf="getVideoOwnerDisplayType(playlistElement) === 'account'">{{ playlistElement.video.byAccount }}</ng-container>
-          <ng-container *ngIf="getVideoOwnerDisplayType(playlistElement) === 'videoChannel'">{{ playlistElement.video.byVideoChannel }}</ng-container>
+        <a *ngIf="accountLink()" tabindex="-1" class="video-info-owner" [routerLink]="[ '/c', playlistElement().video.byVideoChannel ]">
+          <ng-container *ngIf="getVideoOwnerDisplayType(playlistElement()) === 'account'">{{ playlistElement().video.byAccount }}</ng-container>
+          <ng-container *ngIf="getVideoOwnerDisplayType(playlistElement()) === 'videoChannel'">{{ playlistElement().video.byVideoChannel }}</ng-container>
         </a>
 
-        <span *ngIf="!accountLink" tabindex="-1" class="video-info-owner">{{ playlistElement.video.byAccount }}</span>
+        <span *ngIf="!accountLink()" tabindex="-1" class="video-info-owner">{{ playlistElement().video.byAccount }}</span>
 
-        <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(playlistElement) }}</span>
+        <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(playlistElement()) }}</span>
       </ng-container>
 
-      <span *ngIf="!playlistElement.video" class="video-info-name">
-        <ng-container i18n *ngIf="isUnavailable(playlistElement)">Unavailable</ng-container>
-        <ng-container i18n *ngIf="isPrivate(playlistElement)">Private</ng-container>
-        <ng-container i18n *ngIf="isDeleted(playlistElement)">Deleted</ng-container>
+      <span *ngIf="!playlistElement().video" class="video-info-name">
+        <ng-container i18n *ngIf="isUnavailable(playlistElement())">Unavailable</ng-container>
+        <ng-container i18n *ngIf="isPrivate(playlistElement())">Private</ng-container>
+        <ng-container i18n *ngIf="isDeleted(playlistElement())">Deleted</ng-container>
       </span>
     </div>
   </a>
 
   <div
-    *ngIf="owned" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
+    *ngIf="owned()" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
     (openChange)="onDropdownOpenChange()" autoClose="outside" container="body"
   >
     <button class="border-0 p-0 more-button" (click)="$event.preventDefault()" ngbDropdownToggle>
@@ -60,8 +60,8 @@
     </button>
 
     <div ngbDropdownMenu>
-      <ng-container *ngIf="playlistElement.video">
-        <button ngbDropdownItem (click)="toggleDisplayTimestampsOptions($event, playlistElement)">
+      <ng-container *ngIf="playlistElement().video">
+        <button ngbDropdownItem (click)="toggleDisplayTimestampsOptions($event, playlistElement())">
           <my-global-icon iconName="edit" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Edit starts/stops at</ng-container>
         </button>
@@ -75,7 +75,7 @@
 
             <my-timestamp-input
               [timestamp]="timestampOptions.startTimestamp"
-              [maxTimestamp]="playlistElement.video.duration"
+              [maxTimestamp]="playlistElement().video.duration"
               [disabled]="!timestampOptions.startTimestampEnabled"
               [(ngModel)]="timestampOptions.startTimestamp"
             ></my-timestamp-input>
@@ -89,19 +89,19 @@
 
             <my-timestamp-input
               [timestamp]="timestampOptions.stopTimestamp"
-              [maxTimestamp]="playlistElement.video.duration"
+              [maxTimestamp]="playlistElement().video.duration"
               [disabled]="!timestampOptions.stopTimestampEnabled"
               [(ngModel)]="timestampOptions.stopTimestamp"
             ></my-timestamp-input>
           </div>
 
-          <input class="peertube-button primary-button mt-2" type="submit" i18n-value value="Save" (click)="updateTimestamps(playlistElement)">
+          <input class="peertube-button primary-button mt-2" type="submit" i18n-value value="Save" (click)="updateTimestamps(playlistElement())">
         </div>
       </ng-container>
 
-      <button ngbDropdownItem (click)="removeFromPlaylist(playlistElement)">
+      <button ngbDropdownItem (click)="removeFromPlaylist(playlistElement())">
         <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
-        <ng-container i18n>Delete from {{ playlist?.displayName }}</ng-container>
+        <ng-container i18n>Delete from {{ playlist()?.displayName }}</ng-container>
       </button>
     </div>
   </div>

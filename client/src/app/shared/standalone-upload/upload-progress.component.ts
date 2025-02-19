@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, input, output } from '@angular/core'
 import { AlertComponent } from '../shared-main/common/alert.component'
 import { ProgressBarComponent } from '../shared-main/common/progress-bar.component'
 
@@ -10,20 +10,21 @@ import { ProgressBarComponent } from '../shared-main/common/progress-bar.compone
   imports: [ CommonModule, ProgressBarComponent, AlertComponent ]
 })
 export class UploadProgressComponent {
-  @Input() isUploading: boolean
-  @Input() uploadPercents: number
-  @Input() error: string
-  @Input() uploaded: boolean
-  @Input() enableRetryAfterError: boolean
+  readonly isUploading = input<boolean>(undefined)
+  readonly uploadPercents = input<number>(undefined)
+  readonly error = input<string>(undefined)
+  readonly uploaded = input<boolean>(undefined)
+  readonly enableRetryAfterError = input<boolean>(undefined)
 
-  @Output() cancelUpload = new EventEmitter()
-  @Output() retry = new EventEmitter()
+  readonly cancelUpload = output()
+  readonly retry = output()
 
   getUploadingLabel () {
-    if (this.uploadPercents === 100 && this.uploaded === false) {
+    const uploadPercents = this.uploadPercents()
+    if (uploadPercents === 100 && this.uploaded() === false) {
       return $localize`Processing…`
     }
 
-    return $localize`${this.uploadPercents}%`
+    return $localize`${uploadPercents}%`
   }
 }

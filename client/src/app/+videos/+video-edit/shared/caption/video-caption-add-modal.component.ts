@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { VIDEO_CAPTION_FILE_VALIDATOR, VIDEO_CAPTION_LANGUAGE_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
@@ -18,34 +18,29 @@ import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon
   templateUrl: './video-caption-add-modal.component.html',
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgIf, ReactiveFileComponent, SelectOptionsComponent ]
 })
-
 export class VideoCaptionAddModalComponent extends FormReactive implements OnInit {
-  @Input() existingCaptions: string[]
-  @Input() serverConfig: HTMLServerConfig
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private serverService = inject(ServerService)
 
-  @Output() captionAdded = new EventEmitter<VideoCaptionEdit>()
+  readonly existingCaptions = input<string[]>(undefined)
+  readonly serverConfig = input<HTMLServerConfig>(undefined)
 
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  readonly captionAdded = output<VideoCaptionEdit>()
+
+  readonly modal = viewChild<ElementRef>('modal')
 
   videoCaptionLanguages: VideoConstant<string>[] = []
 
   private openedModal: NgbModalRef
   private closingModal = false
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private serverService: ServerService
-  ) {
-    super()
-  }
-
   get videoCaptionExtensions () {
-    return this.serverConfig.videoCaption.file.extensions
+    return this.serverConfig().videoCaption.file.extensions
   }
 
   get videoCaptionMaxSize () {
-    return this.serverConfig.videoCaption.file.size.max
+    return this.serverConfig().videoCaption.file.size.max
   }
 
   getReactiveFileButtonTooltip () {
@@ -54,7 +49,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
   ngOnInit () {
     this.serverService.getVideoLanguages()
-        .subscribe(languages => this.videoCaptionLanguages = languages)
+      .subscribe(languages => this.videoCaptionLanguages = languages)
 
     this.buildForm({
       language: VIDEO_CAPTION_LANGUAGE_VALIDATOR,
@@ -65,7 +60,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   show () {
     this.closingModal = false
 
-    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
   }
 
   hide () {
@@ -79,7 +74,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
     const languageId = this.form.value['language']
 
-    return languageId && this.existingCaptions.includes(languageId)
+    return languageId && this.existingCaptions().includes(languageId)
   }
 
   addCaption () {

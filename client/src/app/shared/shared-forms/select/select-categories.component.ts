@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core'
+import { Component, forwardRef, OnInit, inject, input } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -10,7 +10,7 @@ import { NgIf } from '@angular/common'
   template: `
 <my-select-checkbox-default-all
   *ngIf="availableCategories"
-  [inputId]="inputId"
+  [inputId]="inputId()"
   [(ngModel)]="selectedCategories"
   (ngModelChange)="onModelChange()"
   [availableItems]="availableCategories"
@@ -30,16 +30,12 @@ import { NgIf } from '@angular/common'
   imports: [ SelectCheckboxDefaultAllComponent, FormsModule, NgIf ]
 })
 export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
-  @Input({ required: true }) inputId: string
+  private server = inject(ServerService)
+
+  readonly inputId = input.required<string>()
 
   selectedCategories: string[]
   availableCategories: SelectOptionsItem[]
-
-  constructor (
-    private server: ServerService
-  ) {
-
-  }
 
   ngOnInit () {
     this.server.getVideoCategories()
@@ -50,7 +46,9 @@ export class SelectCategoriesComponent implements ControlValueAccessor, OnInit {
       )
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (categories: string[] | number[]) {
     this.selectedCategories = categories

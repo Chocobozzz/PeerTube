@@ -1,20 +1,17 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AbstractControl, FormGroup } from '@angular/forms'
 import { wait } from '@root-helpers/utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormValidatorService } from './form-validator.service'
 
-export type FormReactiveErrors = { [ id: string ]: string | FormReactiveErrors | FormReactiveErrors[] }
+export type FormReactiveErrors = { [id: string]: string | FormReactiveErrors | FormReactiveErrors[] }
 export type FormReactiveValidationMessages = {
-  [ id: string ]: { [ name: string ]: string } | FormReactiveValidationMessages | FormReactiveValidationMessages[]
+  [id: string]: { [name: string]: string } | FormReactiveValidationMessages | FormReactiveValidationMessages[]
 }
 
 @Injectable()
 export class FormReactiveService {
-
-  constructor (private formValidatorService: FormValidatorService) {
-
-  }
+  private formValidatorService = inject(FormValidatorService)
 
   buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
     const { formErrors, validationMessages, form } = this.formValidatorService.buildForm(obj, defaultValues)
@@ -41,7 +38,7 @@ export class FormReactiveService {
     } while (form.status === 'PENDING')
   }
 
-  markAllAsDirty (controlsArg: { [ key: string ]: AbstractControl }) {
+  markAllAsDirty (controlsArg: { [key: string]: AbstractControl }) {
     const controls = controlsArg
 
     for (const key of Object.keys(controls)) {

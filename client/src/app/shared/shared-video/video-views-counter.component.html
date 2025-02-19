@@ -1,11 +1,11 @@
 <span [title]="getExactNumberOfViews()">
-  @if (isLive) {
+  @if (isLive()) {
     <ng-container i18n>
-      {viewers, plural, =1 {1 viewer} other {{{ viewers | myNumberFormatter }} viewers}}
+      {viewers(), plural, =1 {1 viewer} other {{{ viewers() | myNumberFormatter }} viewers}}
     </ng-container>
   } @else {
     <ng-container i18n>
-      {views, plural, =1 {1 view} other {{{ views | myNumberFormatter }} views}}
+      {views(), plural, =1 {1 view} other {{{ views() | myNumberFormatter }} views}}
     </ng-container>
   }
 </span>

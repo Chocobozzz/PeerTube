@@ -1,5 +1,5 @@
 import { DecimalPipe, NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
@@ -29,8 +29,12 @@ import { SubscriptionImageComponent } from './subscription-image.component'
     FollowerImageComponent
   ]
 })
-
 export class AboutFollowsComponent implements OnInit {
+  private server = inject(ServerService)
+  private restService = inject(RestService)
+  private notifier = inject(Notifier)
+  private followService = inject(InstanceFollowService)
+
   instanceName: string
 
   followers: Actor[] = []
@@ -57,13 +61,6 @@ export class AboutFollowsComponent implements OnInit {
     field: 'createdAt',
     order: -1
   }
-
-  constructor (
-    private server: ServerService,
-    private restService: RestService,
-    private notifier: Notifier,
-    private followService: InstanceFollowService
-  ) { }
 
   ngOnInit () {
     this.loadMoreFollowers(true)
@@ -96,20 +93,20 @@ export class AboutFollowsComponent implements OnInit {
     const pagination = this.restService.componentToRestPagination(this.followersPagination)
 
     this.followService.getFollowers({ pagination, sort: this.sort, state: 'accepted' })
-        .subscribe({
-          next: resultList => {
-            if (reset) this.followers = []
+      .subscribe({
+        next: resultList => {
+          if (reset) this.followers = []
 
-            const newFollowers = resultList.data.map(r => this.formatFollow(r.follower))
-            this.followers = this.followers.concat(newFollowers)
+          const newFollowers = resultList.data.map(r => this.formatFollow(r.follower))
+          this.followers = this.followers.concat(newFollowers)
 
-            this.followersPagination.totalItems = resultList.total
-          },
+          this.followersPagination.totalItems = resultList.total
+        },
 
-          error: err => this.notifier.error(err.message),
+        error: err => this.notifier.error(err.message),
 
-          complete: () => this.loadingFollowers = false
-        })
+        complete: () => this.loadingFollowers = false
+      })
   }
 
   loadMoreSubscriptions (reset = false) {
@@ -122,20 +119,20 @@ export class AboutFollowsComponent implements OnInit {
     const pagination = this.restService.componentToRestPagination(this.subscriptionsPagination)
 
     this.followService.getFollowing({ pagination, sort: this.sort, state: 'accepted' })
-        .subscribe({
-          next: resultList => {
-            if (reset) this.subscriptions = []
+      .subscribe({
+        next: resultList => {
+          if (reset) this.subscriptions = []
 
-            const newFollowings = resultList.data.map(r => this.formatFollow(r.following))
-            this.subscriptions = this.subscriptions.concat(newFollowings)
+          const newFollowings = resultList.data.map(r => this.formatFollow(r.following))
+          this.subscriptions = this.subscriptions.concat(newFollowings)
 
-            this.subscriptionsPagination.totalItems = resultList.total
-          },
+          this.subscriptionsPagination.totalItems = resultList.total
+        },
 
-          error: err => this.notifier.error(err.message),
+        error: err => this.notifier.error(err.message),
 
-          complete: () => this.loadingSubscriptions = false
-        })
+        complete: () => this.loadingSubscriptions = false
+      })
   }
 
   private formatFollow (actor: Actor) {

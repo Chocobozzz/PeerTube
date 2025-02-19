@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output } from '@angular/core'
 import { Notifier } from '@app/core'
 import { CustomMarkupComponent } from './shared'
 import { VideoPlaylistMiniatureComponent } from '../../shared-video-playlist/video-playlist-miniature.component'
@@ -10,7 +10,7 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.
 
 /*
  * Markup component that creates a playlist miniature only
-*/
+ */
 
 @Component({
   selector: 'my-playlist-miniature-markup',
@@ -20,9 +20,13 @@ import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.
   imports: [ NgIf, VideoPlaylistMiniatureComponent ]
 })
 export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
-  @Input() uuid: string
+  private findInBulkService = inject(FindInBulkService)
+  private notifier = inject(Notifier)
+  private cd = inject(ChangeDetectorRef)
 
-  @Output() loaded = new EventEmitter<boolean>()
+  readonly uuid = input<string>(undefined)
+
+  readonly loaded = output<boolean>()
 
   playlist: VideoPlaylist
 
@@ -37,14 +41,8 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
     blacklistInfo: false
   }
 
-  constructor (
-    private findInBulkService: FindInBulkService,
-    private notifier: Notifier,
-    private cd: ChangeDetectorRef
-  ) { }
-
   ngOnInit () {
-    this.findInBulkService.getPlaylist(this.uuid)
+    this.findInBulkService.getPlaylist(this.uuid())
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe({
         next: playlist => {

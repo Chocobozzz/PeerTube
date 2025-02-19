@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, booleanAttribute } from '@angular/core'
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, booleanAttribute, inject, input, output } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {
   AuthService,
@@ -63,31 +63,42 @@ enum GroupDate {
   ]
 })
 export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() getVideosObservableFunction: (pagination: ComponentPaginationLight, filters: VideoFilters) => Observable<ResultList<Video>>
-  @Input() getSyndicationItemsFunction: (filters: VideoFilters) => Promise<Syndication[]> | Syndication[]
+  private notifier = inject(Notifier)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private route = inject(ActivatedRoute)
+  private screenService = inject(ScreenService)
+  private peertubeRouter = inject(PeerTubeRouterService)
 
-  @Input() defaultSort: VideoSortField
-  @Input() defaultScope: VideoFilterScope = 'federated'
-  @Input({ transform: booleanAttribute }) displayFilters = false
-  @Input({ transform: booleanAttribute }) displayModerationBlock = false
+  // eslint-disable-next-line max-len
+  readonly getVideosObservableFunction = input<(pagination: ComponentPaginationLight, filters: VideoFilters) => Observable<ResultList<Video>>>(undefined)
+  readonly getSyndicationItemsFunction = input<(filters: VideoFilters) => Promise<Syndication[]> | Syndication[]>(undefined)
 
-  @Input({ transform: booleanAttribute }) loadUserVideoPreferences = false
+  readonly defaultSort = input<VideoSortField>(undefined)
+  readonly defaultScope = input<VideoFilterScope>('federated')
+  readonly displayFilters = input(false, { transform: booleanAttribute })
 
-  @Input({ transform: booleanAttribute }) displayAsRow = false
-  @Input({ transform: booleanAttribute }) displayVideoActions = true
-  @Input({ transform: booleanAttribute }) groupByDate = false
-  @Input({ transform: booleanAttribute }) highlightLives = false
+  readonly displayModerationBlock = input(false, { transform: booleanAttribute })
+  builtDisplayModerationBlock: boolean
 
-  @Input() headerActions: HeaderAction[] = []
+  readonly loadUserVideoPreferences = input(false, { transform: booleanAttribute })
 
-  @Input({ transform: booleanAttribute }) hideScopeFilter = false
+  readonly displayAsRow = input(false, { transform: booleanAttribute })
+  readonly displayVideoActions = input(true, { transform: booleanAttribute })
+  readonly groupByDate = input(false, { transform: booleanAttribute })
+  readonly highlightLives = input(false, { transform: booleanAttribute })
 
-  @Input() displayOptions: MiniatureDisplayOptions
+  readonly headerActions = input<HeaderAction[]>([])
 
-  @Input({ transform: booleanAttribute }) disabled = false
+  readonly hideScopeFilter = input(false, { transform: booleanAttribute })
 
-  @Output() filtersChanged = new EventEmitter<VideoFilters>()
-  @Output() videosLoaded = new EventEmitter<Video[]>()
+  readonly displayOptions = input<MiniatureDisplayOptions>(undefined)
+  builtDisplayOptions: MiniatureDisplayOptions
+
+  readonly disabled = input(false, { transform: booleanAttribute })
+
+  readonly filtersChanged = output<VideoFilters>()
+  readonly videosLoaded = output<Video[]>()
 
   videos: Video[] = []
   highlightedLives: Video[] = []
@@ -133,26 +144,15 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   private alreadyDoneSearch = false
 
-  constructor (
-    private notifier: Notifier,
-    private authService: AuthService,
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private screenService: ScreenService,
-    private peertubeRouter: PeerTubeRouterService
-  ) {
-
-  }
-
   ngOnInit () {
     this.subscribeToVideoRequests()
 
-    const hiddenFilters = this.hideScopeFilter
+    const hiddenFilters = this.hideScopeFilter()
       ? [ 'scope' ]
       : []
 
-    this.filters = new VideoFilters(this.defaultSort, this.defaultScope, hiddenFilters)
-    this.filters.load({ scope: this.defaultScope, ...this.route.snapshot.queryParams })
+    this.filters = new VideoFilters(this.defaultSort(), this.defaultScope(), hiddenFilters)
+    this.filters.load({ scope: this.defaultScope(), ...this.route.snapshot.queryParams })
 
     this.groupedDateLabels = {
       [GroupDate.UNKNOWN]: null,
@@ -174,7 +174,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(user => {
         this.userMiniature = user
 
-        if (this.loadUserVideoPreferences) {
+        if (this.loadUserVideoPreferences()) {
           this.loadUserSettings(user)
         }
 
@@ -183,11 +183,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         this.subscribeToAnonymousUpdate()
         this.subscribeToSearchChange()
       })
-
-    // Display avatar in mobile view
-    if (this.screenService.isInMobileView()) {
-      this.displayOptions.avatar = true
-    }
   }
 
   ngOnDestroy () {
@@ -197,11 +192,20 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges (changes: SimpleChanges) {
-    if (changes['displayOptions'] || !this.displayOptions) {
-      this.displayOptions = {
+    if (changes['displayModerationBlock'] !== undefined) {
+      this.builtDisplayModerationBlock = changes['displayModerationBlock'].currentValue
+    }
+
+    if (changes['displayOptions'] || !this.builtDisplayOptions) {
+      this.builtDisplayOptions = {
         ...this.defaultDisplayOptions,
 
         ...(changes['displayOptions']?.currentValue ?? {})
+      }
+
+      // Display avatar in mobile view
+      if (this.screenService.isInMobileView()) {
+        this.builtDisplayOptions.avatar = true
       }
     }
 
@@ -211,12 +215,12 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (changes['defaultScope']) {
       updated = true
-      this.filters.setDefaultScope(this.defaultScope)
+      this.filters.setDefaultScope(this.defaultScope())
     }
 
     if (changes['defaultSort']) {
       updated = true
-      this.filters.setDefaultSort(this.defaultSort)
+      this.filters.setDefaultSort(this.defaultSort())
     }
 
     if (!updated) return
@@ -224,7 +228,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     const customizedByUser = this.hasBeenCustomizedByUser()
 
     if (!customizedByUser) {
-      if (this.loadUserVideoPreferences) {
+      if (this.loadUserVideoPreferences()) {
         this.loadUserSettings(this.userMiniature)
       }
 
@@ -240,7 +244,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onNearOfBottom () {
-    if (this.disabled) return
+    if (this.disabled()) return
 
     // No more results
     if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
@@ -259,7 +263,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       this.videos = []
       this.highlightedLives = []
 
-      if (this.highlightLives && (!this.filters.live || this.filters.live === 'both')) {
+      if (this.highlightLives() && (!this.filters.live || this.filters.live === 'both')) {
         liveFilters = this.filters.clone()
         liveFilters.live = 'true'
 
@@ -270,11 +274,11 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
     this.videoRequests.next({
       reset,
-      obsVideos: this.getVideosObservableFunction(this.pagination, videoFilters ?? this.filters),
+      obsVideos: this.getVideosObservableFunction()(this.pagination, videoFilters ?? this.filters),
 
       obsHighlightedLives: liveFilters
-        ? this.getVideosObservableFunction(this.pagination, liveFilters)
-        : of(({ data: this.highlightedLives }))
+        ? this.getVideosObservableFunction()(this.pagination, liveFilters)
+        : of({ data: this.highlightedLives })
     })
   }
 
@@ -332,7 +336,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         const period = periods[i]
 
         if (currentGroupedDate <= period.value && period.validator(publishedDate)) {
-
           if (currentGroupedDate !== period.value) {
             if (period.value !== GroupDate.OLDER) onlyOlderPeriod = false
 
@@ -350,7 +353,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getCurrentGroupedDateLabel (video: Video) {
-    if (this.groupByDate === false) return undefined
+    if (this.groupByDate() === false) return undefined
 
     return this.groupedDateLabels[this.groupedDates[video.id]]
   }
@@ -380,7 +383,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     this.authService.userInformationLoaded
       .subscribe(() => {
         const user = this.authService.getUser()
-        this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
+        this.builtDisplayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
       })
   }
 
@@ -400,7 +403,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private reloadSyndicationItems () {
-    Promise.resolve(this.getSyndicationItemsFunction(this.filters))
+    Promise.resolve(this.getSyndicationItemsFunction()(this.filters))
       .then(items => {
         if (!items || items.length === 0) this.syndicationItems = undefined
         else this.syndicationItems = items
@@ -433,7 +436,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     this.userSub = this.userService.listenAnonymousUpdate()
       .pipe(switchMap(() => this.userService.getAnonymousOrLoggedUser()))
       .subscribe(user => {
-        if (this.loadUserVideoPreferences) {
+        if (this.loadUserVideoPreferences()) {
           this.loadUserSettings(user)
         }
 
@@ -475,7 +478,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
           this.videos = this.videos.concat(videos)
 
-          if (this.groupByDate) this.buildGroupedDateLabels()
+          if (this.groupByDate()) this.buildGroupedDateLabels()
 
           this.onVideosDataSubject.next(videos)
           this.videosLoaded.emit(this.videos)

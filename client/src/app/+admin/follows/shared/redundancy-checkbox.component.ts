@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, inject, input } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
@@ -10,24 +10,22 @@ import { RedundancyService } from '@app/shared/shared-main/video/redundancy.serv
   imports: [ PeertubeCheckboxComponent, FormsModule ]
 })
 export class RedundancyCheckboxComponent {
-  @Input() redundancyAllowed: boolean
-  @Input() host: string
+  private notifier = inject(Notifier)
+  private redundancyService = inject(RedundancyService)
 
-  constructor (
-    private notifier: Notifier,
-    private redundancyService: RedundancyService
-  ) { }
+  readonly redundancyAllowed = input<boolean>(undefined)
+  readonly host = input<string>(undefined)
 
   updateRedundancyState () {
-    this.redundancyService.updateRedundancy(this.host, this.redundancyAllowed)
-        .subscribe({
-          next: () => {
-            const stateLabel = this.redundancyAllowed ? $localize`enabled` : $localize`disabled`
+    this.redundancyService.updateRedundancy(this.host(), this.redundancyAllowed())
+      .subscribe({
+        next: () => {
+          const stateLabel = this.redundancyAllowed() ? $localize`enabled` : $localize`disabled`
 
-            this.notifier.success($localize`Redundancy for ${this.host} is ${stateLabel}`)
-          },
+          this.notifier.success($localize`Redundancy for ${this.host()} is ${stateLabel}`)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

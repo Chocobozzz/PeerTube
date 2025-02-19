@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { HTMLServerConfig, VideoResolution } from '@peertube/peertube-models'
 import { BytesPipe } from '../../shared/shared-main/common/bytes.pipe'
@@ -10,11 +10,11 @@ import { NgIf } from '@angular/common'
   imports: [ NgIf, BytesPipe ]
 })
 export class UserRealQuotaInfoComponent implements OnInit {
-  @Input() videoQuota: number | string
+  private server = inject(ServerService)
+
+  readonly videoQuota = input<number | string>(undefined)
 
   private serverConfig: HTMLServerConfig
-
-  constructor (private server: ServerService) { }
 
   ngOnInit () {
     this.serverConfig = this.server.getHTMLConfig()
@@ -41,6 +41,6 @@ export class UserRealQuotaInfoComponent implements OnInit {
   }
 
   getQuotaAsNumber () {
-    return parseInt(this.videoQuota + '', 10)
+    return parseInt(this.videoQuota() + '', 10)
   }
 }

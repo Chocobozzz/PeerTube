@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgStyle } from '@angular/common'
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { Component, OnChanges, inject, input, output, viewChild } from '@angular/core'
 import { RedirectService, ScreenService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoShareComponent } from '@app/shared/shared-share-modal/video-share.component'
@@ -38,25 +38,28 @@ import { VideoRateComponent } from './video-rate.component'
   ]
 })
 export class ActionButtonsComponent implements OnChanges {
-  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('supportModal') supportModal: SupportModalComponent
-  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
+  private screenService = inject(ScreenService)
+  private redirectService = inject(RedirectService)
 
-  @Input() video: VideoDetails
-  @Input() videoPassword: string
-  @Input() videoCaptions: VideoCaption[]
-  @Input() playlist: VideoPlaylist
+  readonly videoShareModal = viewChild<VideoShareComponent>('videoShareModal')
+  readonly supportModal = viewChild<SupportModalComponent>('supportModal')
+  readonly videoDownloadModal = viewChild<VideoDownloadComponent>('videoDownloadModal')
 
-  @Input() isUserLoggedIn: boolean
-  @Input() isUserOwner: boolean
+  readonly video = input<VideoDetails>(undefined)
+  readonly videoPassword = input<string>(undefined)
+  readonly videoCaptions = input<VideoCaption[]>(undefined)
+  readonly playlist = input<VideoPlaylist>(undefined)
 
-  @Input() transcriptionWidgetOpened: boolean
+  readonly isUserLoggedIn = input<boolean>(undefined)
+  readonly isUserOwner = input<boolean>(undefined)
 
-  @Input() currentTime: number
-  @Input() currentPlaylistPosition: number
+  readonly transcriptionWidgetOpened = input<boolean>(undefined)
 
-  @Output() showTranscriptionWidget = new EventEmitter()
-  @Output() hideTranscriptionWidget = new EventEmitter()
+  readonly currentTime = input<number>(undefined)
+  readonly currentPlaylistPosition = input<number>(undefined)
+
+  readonly showTranscriptionWidget = output()
+  readonly hideTranscriptionWidget = output()
 
   likesBarTooltipText = ''
 
@@ -82,15 +85,10 @@ export class ActionButtonsComponent implements OnChanges {
 
   userRating: UserVideoRateType
 
-  constructor (
-    private screenService: ScreenService,
-    private redirectService: RedirectService
-  ) { }
-
   ngOnChanges () {
     this.setVideoLikesBarTooltipText()
 
-    if (this.isUserLoggedIn) {
+    if (this.isUserLoggedIn()) {
       this.videoActionsOptions.download = true
 
       // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
@@ -104,19 +102,20 @@ export class ActionButtonsComponent implements OnChanges {
   }
 
   showDownloadModal () {
-    this.videoDownloadModal.show(this.video, this.videoCaptions)
+    this.videoDownloadModal().show(this.video(), this.videoCaptions())
   }
 
   isVideoDownloadable () {
-    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled && !this.video.isLive
+    const video = this.video()
+    return video && video instanceof VideoDetails && video.downloadEnabled && !video.isLive
   }
 
   showSupportModal () {
-    this.supportModal.show()
+    this.supportModal().show()
   }
 
   showShareModal () {
-    this.videoShareModal.show(this.currentTime, this.currentPlaylistPosition)
+    this.videoShareModal().show(this.currentTime(), this.currentPlaylistPosition())
   }
 
   onRateUpdated (userRating: UserVideoRateType) {
@@ -129,15 +128,15 @@ export class ActionButtonsComponent implements OnChanges {
   }
 
   private setVideoLikesBarTooltipText () {
-    this.likesBarTooltipText = `${this.video.likes} likes / ${this.video.dislikes} dislikes`
+    this.likesBarTooltipText = `${this.video().likes} likes / ${this.video().dislikes} dislikes`
   }
 
   isVideoAddableToPlaylist () {
-    const isPasswordProtected = this.video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+    const isPasswordProtected = this.video().privacy.id === VideoPrivacy.PASSWORD_PROTECTED
 
-    if (!this.isUserLoggedIn) return false
+    if (!this.isUserLoggedIn()) return false
 
-    if (isPasswordProtected) return this.isUserOwner
+    if (isPasswordProtected) return this.isUserOwner()
 
     return true
   }

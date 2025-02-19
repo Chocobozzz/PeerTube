@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import {
   AuthService,
   ComponentPagination,
@@ -27,7 +27,7 @@ import { uniqBy } from 'lodash-es'
 import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peertube-template.directive'
 import {
@@ -40,10 +40,8 @@ import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.c
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ],
   imports: [
-    GlobalIconComponent,
     DeleteButtonComponent,
     NgIf,
-    RouterLink,
     AdvancedInputFilterComponent,
     FormsModule,
     VideosSelectionComponent,
@@ -54,9 +52,19 @@ import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.c
   ]
 })
 export class MyVideosComponent implements OnInit, DisableForReuseHook {
-  @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
-  @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
-  @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
+  protected router = inject(Router)
+  protected serverService = inject(ServerService)
+  protected route = inject(ActivatedRoute)
+  protected authService = inject(AuthService)
+  protected notifier = inject(Notifier)
+  protected screenService = inject(ScreenService)
+  private confirmService = inject(ConfirmService)
+  private videoService = inject(VideoService)
+  private playlistService = inject(VideoPlaylistService)
+
+  readonly videosSelection = viewChild<VideosSelectionComponent>('videosSelection')
+  readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
+  readonly liveStreamInformationModal = viewChild<LiveStreamInformationComponent>('liveStreamInformationModal')
 
   videosContainedInPlaylists: VideosExistInPlaylists = {}
   titlePage: string
@@ -109,17 +117,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   private search: string
   private userChannels: VideoChannel[] = []
 
-  constructor (
-    protected router: Router,
-    protected serverService: ServerService,
-    protected route: ActivatedRoute,
-    protected authService: AuthService,
-    protected notifier: Notifier,
-    protected screenService: ScreenService,
-    private confirmService: ConfirmService,
-    private videoService: VideoService,
-    private playlistService: VideoPlaylistService
-  ) {
+  constructor () {
     this.titlePage = $localize`My videos`
   }
 
@@ -168,11 +166,11 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   reloadData () {
-    this.videosSelection.reloadVideos()
+    this.videosSelection().reloadVideos()
   }
 
   onChangeSortColumn () {
-    this.videosSelection.reloadVideos()
+    this.videosSelection().reloadVideos()
   }
 
   disableForReuse () {
@@ -209,8 +207,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.entries(this.selection)
-                                    .filter(([ _k, v ]) => v === true)
-                                    .map(([ k, _v ]) => parseInt(k, 10))
+      .filter(([ _k, v ]) => v === true)
+      .map(([ k, _v ]) => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
       formatICU(
@@ -224,7 +222,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     const observables: Observable<any>[] = []
     for (const videoId of toDeleteVideosIds) {
       const o = this.videoService.removeVideo(videoId)
-                    .pipe(tap(() => this.removeVideoFromArray(videoId)))
+        .pipe(tap(() => this.removeVideoFromArray(videoId)))
 
       observables.push(o)
     }
@@ -252,7 +250,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   changeOwnership (video: Video) {
-    this.videoChangeOwnershipModal.show(video)
+    this.videoChangeOwnershipModal().show(video)
   }
 
   getTotalTitle () {

@@ -1,18 +1,15 @@
 import { forkJoin, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { AccountService } from '../account/account.service'
 import { VideoChannelService } from '../channel/video-channel.service'
 
 @Injectable()
 export class ActorRedirectGuard {
-
-  constructor (
-    private router: Router,
-    private accountService: AccountService,
-    private channelService: VideoChannelService
-  ) {}
+  private router = inject(Router)
+  private accountService = inject(AccountService)
+  private channelService = inject(VideoChannelService)
 
   canActivate (route: ActivatedRouteSnapshot) {
     const actorName = route.params.actorName

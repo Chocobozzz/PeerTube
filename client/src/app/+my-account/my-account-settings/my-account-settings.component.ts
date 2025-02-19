@@ -1,6 +1,6 @@
 import { ViewportScroller, NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { AfterViewChecked, Component, OnInit } from '@angular/core'
+import { AfterViewChecked, Component, OnInit, inject } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { shallowCopy } from '@peertube/peertube-core-utils'
@@ -38,16 +38,14 @@ import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/a
   ]
 })
 export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
+  private viewportScroller = inject(ViewportScroller)
+  private userService = inject(UserService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+
   user: User
 
   private lastScrollHash: string
-
-  constructor (
-    private viewportScroller: ViewportScroller,
-    private userService: UserService,
-    private authService: AuthService,
-    private notifier: Notifier
-  ) {}
 
   get userInformationLoaded () {
     return this.authService.userInformationLoaded
@@ -77,11 +75,12 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
           this.user.account = shallowCopy(this.user.account)
         },
 
-        error: (err: HttpErrorResponse) => genericUploadErrorHandler({
-          err,
-          name: $localize`avatar`,
-          notifier: this.notifier
-        })
+        error: (err: HttpErrorResponse) =>
+          genericUploadErrorHandler({
+            err,
+            name: $localize`avatar`,
+            notifier: this.notifier
+          })
       })
   }
 

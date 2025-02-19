@@ -1,11 +1,11 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="avatar-and-textarea">
-    <my-actor-avatar [actor]="user?.account" [actorType]="getAvatarActorType()" size="25"></my-actor-avatar>
+    <my-actor-avatar [actor]="user()?.account" [actorType]="getAvatarActorType()" size="25"></my-actor-avatar>
 
     <div class="textarea-wrapper">
       <textarea
         i18n-placeholder placeholder="Add comment..." myAutoResize
-        [readonly]="(user === null) ? true : false"
+        [readonly]="(user() === null) ? true : false"
         (click)="openVisitorModal($event)"
         formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
         (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea

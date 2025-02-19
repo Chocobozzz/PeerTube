@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common'
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { Component, inject, input, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ScreenService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -14,33 +14,37 @@ import { Video } from '../shared-main/video/video.model'
   imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
 })
 export class VideoThumbnailComponent {
-  @ViewChild('watchLaterTooltip') watchLaterTooltip: NgbTooltip
+  private screenService = inject(ScreenService)
 
-  @Input() video: Video
-  @Input() nsfw = false
+  readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
 
-  @Input() videoRouterLink: string | any[]
-  @Input() queryParams: { [ p: string ]: any }
-  @Input() videoHref: string
-  @Input() videoTarget: string
+  readonly video = input<Video>(undefined)
+  readonly nsfw = input(false)
 
-  @Input() displayWatchLaterPlaylist: boolean
-  @Input() inWatchLaterPlaylist: boolean
+  readonly videoRouterLink = input<string | any[]>(undefined)
+  readonly queryParams = input<{
+    [p: string]: any
+  }>(undefined)
+  readonly videoHref = input<string>(undefined)
+  readonly videoTarget = input<string>(undefined)
 
-  @Input({ required: true }) ariaLabel: string
+  readonly displayWatchLaterPlaylist = input<boolean>(undefined)
+  readonly inWatchLaterPlaylist = input<boolean>(undefined)
 
-  @Output() watchLaterClick = new EventEmitter<boolean>()
+  readonly ariaLabel = input.required<string>()
+
+  readonly watchLaterClick = output<boolean>()
 
   addToWatchLaterText: string
   removeFromWatchLaterText: string
 
-  constructor (private screenService: ScreenService) {
+  constructor () {
     this.addToWatchLaterText = $localize`Add to watch later`
     this.removeFromWatchLaterText = $localize`Remove from watch later`
   }
 
   getWatchIconText () {
-    if (this.inWatchLaterPlaylist) return this.removeFromWatchLaterText
+    if (this.inWatchLaterPlaylist()) return this.removeFromWatchLaterText
 
     return this.addToWatchLaterText
   }
@@ -48,48 +52,52 @@ export class VideoThumbnailComponent {
   isLiveStreaming () {
     // In non moderator mode we only display published live
     // If in moderator mode, the server adds the state info to the object
-    if (!this.video.isLive) return false
+    const video = this.video()
+    if (!video.isLive) return false
 
-    return !this.video.state || this.video.state?.id === VideoState.PUBLISHED
+    return !video.state || video.state?.id === VideoState.PUBLISHED
   }
 
   isEndedLive () {
-    return this.video.state?.id === VideoState.LIVE_ENDED
+    return this.video().state?.id === VideoState.LIVE_ENDED
   }
 
   getImageUrl () {
-    if (!this.video) return ''
+    const video = this.video()
+    if (!video) return ''
 
     if (this.screenService.isInMobileView()) {
-      return this.video.previewUrl
+      return video.previewUrl
     }
 
-    return this.video.thumbnailUrl
+    return video.thumbnailUrl
   }
 
   getProgressPercent () {
-    if (!this.video.userHistory) return 0
+    const video = this.video()
+    if (!video.userHistory) return 0
 
-    const currentTime = this.video.userHistory.currentTime
+    const currentTime = video.userHistory.currentTime
 
-    return Math.round(currentTime / this.video.duration * 100)
+    return Math.round(currentTime / video.duration * 100)
   }
 
   getDurationOverlayLabel () {
-    return $localize`Video duration is ${this.video.durationLabel}`
+    return $localize`Video duration is ${this.video().durationLabel}`
   }
 
   getVideoRouterLink () {
-    if (this.videoRouterLink) return this.videoRouterLink
+    const videoRouterLink = this.videoRouterLink()
+    if (videoRouterLink) return videoRouterLink
 
-    return Video.buildWatchUrl(this.video)
+    return Video.buildWatchUrl(this.video())
   }
 
   onWatchLaterClick (event: Event) {
-    this.watchLaterClick.emit(this.inWatchLaterPlaylist)
+    this.watchLaterClick.emit(this.inWatchLaterPlaylist())
 
     event.stopPropagation()
-    this.watchLaterTooltip.close()
+    this.watchLaterTooltip().close()
 
     return false
   }

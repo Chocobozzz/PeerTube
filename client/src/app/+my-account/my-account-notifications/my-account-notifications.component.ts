@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core'
+import { Component, viewChild } from '@angular/core'
 import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
 import { NgIf } from '@angular/common'
 import { FormsModule } from '@angular/forms'
@@ -13,7 +13,7 @@ type NotificationSortType = 'createdAt' | 'read'
   imports: [ RouterLink, GlobalIconComponent, FormsModule, NgIf, UserNotificationsComponent ]
 })
 export class MyAccountNotificationsComponent {
-  @ViewChild('userNotification', { static: true }) userNotification: UserNotificationsComponent
+  readonly userNotification = viewChild<UserNotificationsComponent>('userNotification')
 
   _notificationSortType: NotificationSortType = 'createdAt'
 
@@ -28,14 +28,14 @@ export class MyAccountNotificationsComponent {
   }
 
   markAllAsRead () {
-    this.userNotification.markAllAsRead()
+    this.userNotification().markAllAsRead()
   }
 
   hasUnreadNotifications () {
-    return this.userNotification.notifications.filter(n => n.read === false).length !== 0
+    return this.userNotification().notifications.filter(n => n.read === false).length !== 0
   }
 
   onChangeSortColumn () {
-    this.userNotification.changeSortColumn(this.notificationSortType)
+    this.userNotification().changeSortColumn(this.notificationSortType)
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common'
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
@@ -16,9 +16,14 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   imports: [ CommonModule, FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
 })
 export class InstanceConfigWarningModalComponent implements OnInit {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  private userService = inject(UserService)
+  private location = inject(Location)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
 
-  @Output() created = new EventEmitter<void>()
+  readonly modal = viewChild<ElementRef>('modal')
+
+  readonly created = output()
 
   stopDisplayModal = false
   about: About
@@ -26,13 +31,6 @@ export class InstanceConfigWarningModalComponent implements OnInit {
   private LS_KEYS = {
     NO_INSTANCE_CONFIG_WARNING_MODAL: 'no_instance_config_warning_modal'
   }
-
-  constructor (
-    private userService: UserService,
-    private location: Location,
-    private modalService: NgbModal,
-    private notifier: Notifier
-  ) { }
 
   ngOnInit (): void {
     this.created.emit()
@@ -60,7 +58,7 @@ export class InstanceConfigWarningModalComponent implements OnInit {
 
     this.about = about
 
-    const ref = this.modalService.open(this.modal, { centered: true })
+    const ref = this.modalService.open(this.modal(), { centered: true })
 
     ref.result.finally(() => {
       if (this.stopDisplayModal === true) this.doNotOpenAgain()
@@ -75,10 +73,10 @@ export class InstanceConfigWarningModalComponent implements OnInit {
     peertubeLocalStorage.setItem(this.LS_KEYS.NO_INSTANCE_CONFIG_WARNING_MODAL, 'true')
 
     this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
-        .subscribe({
-          next: () => logger.info('We will not open the instance config warning modal again.'),
+      .subscribe({
+        next: () => logger.info('We will not open the instance config warning modal again.'),
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Meta, Title } from '@angular/platform-browser'
 import { getOriginUrl } from '@app/helpers'
 import { getDefaultRSSFeeds } from '@peertube/peertube-core-utils'
@@ -11,13 +11,13 @@ export interface MetaSettings {
 
 @Injectable()
 export class MetaService {
+  private titleService = inject(Title)
+  private meta = inject(Meta)
+  private server = inject(ServerService)
+
   private config: HTMLServerConfig
 
-  constructor (
-    private titleService: Title,
-    private meta: Meta,
-    private server: ServerService
-  ) {
+  constructor () {
     this.config = this.server.getHTMLConfig()
   }
 
@@ -48,7 +48,7 @@ export class MetaService {
   setRSSFeeds (rssFeeds: { title: string, url: string }[]) {
     const head = document.getElementsByTagName('head')[0]
 
-    head.querySelectorAll('link[rel="alternate"]').forEach((el) => head.removeChild(el))
+    head.querySelectorAll('link[rel="alternate"]').forEach(el => head.removeChild(el))
 
     for (const rssFeed of rssFeeds) {
       const link = document.createElement('link')

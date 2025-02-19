@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
@@ -55,9 +55,25 @@ import { VideoSend } from './video-send'
   ]
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
-  @Output() firstStepDone = new EventEmitter<string>()
-  @Output() firstStepError = new EventEmitter<void>()
-  @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
+  protected formReactiveService = inject(FormReactiveService)
+  protected loadingBar = inject(LoadingBarService)
+  protected notifier = inject(Notifier)
+  protected authService = inject(AuthService)
+  protected serverService = inject(ServerService)
+  protected videoService = inject(VideoService)
+  protected videoCaptionService = inject(VideoCaptionService)
+  protected videoChapterService = inject(VideoChapterService)
+  private userService = inject(UserService)
+  private router = inject(Router)
+  private hooks = inject(HooksService)
+  private resumableUploadService = inject(UploadxService)
+  private metaService = inject(MetaService)
+  private route = inject(ActivatedRoute)
+  private videoUploadService = inject(VideoUploadService)
+
+  readonly firstStepDone = output<string>()
+  readonly firstStepError = output()
+  readonly videofileInput = viewChild<ElementRef<HTMLInputElement>>('videofileInput')
 
   userVideoQuotaUsed = 0
   userVideoQuotaUsedDaily = 0
@@ -86,34 +102,14 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   private uploadServiceSubscription: Subscription
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    protected loadingBar: LoadingBarService,
-    protected notifier: Notifier,
-    protected authService: AuthService,
-    protected serverService: ServerService,
-    protected videoService: VideoService,
-    protected videoCaptionService: VideoCaptionService,
-    protected videoChapterService: VideoChapterService,
-    private userService: UserService,
-    private router: Router,
-    private hooks: HooksService,
-    private resumableUploadService: UploadxService,
-    private metaService: MetaService,
-    private route: ActivatedRoute,
-    private videoUploadService: VideoUploadService
-  ) {
-    super()
-  }
-
   ngOnInit () {
     super.ngOnInit()
 
     this.userService.getMyVideoQuotaUsed()
-        .subscribe(data => {
-          this.userVideoQuotaUsed = data.videoQuotaUsed
-          this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
-        })
+      .subscribe(data => {
+        this.userVideoQuotaUsed = data.videoQuotaUsed
+        this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
+      })
 
     this.uploadServiceSubscription = this.resumableUploadService.events
       .subscribe(state => this.onUploadVideoOngoing(state))
@@ -209,9 +205,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   onFileDropped (files: FileList) {
-    this.videofileInput.nativeElement.files = files
+    const videofileInput = this.videofileInput()
+    videofileInput.nativeElement.files = files
 
-    this.onFileChange({ target: this.videofileInput.nativeElement })
+    this.onFileChange({ target: videofileInput.nativeElement })
   }
 
   onFileChange (event: Event | { target: HTMLInputElement }) {
@@ -278,25 +275,25 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     this.isUpdatingVideo = true
 
     this.updateVideoAndCaptionsAndChapters({ video, captions: this.videoCaptions, chapters: this.chaptersEdit })
-        .subscribe({
-          next: () => {
-            this.isUpdatingVideo = false
-            this.isUploadingVideo = false
+      .subscribe({
+        next: () => {
+          this.isUpdatingVideo = false
+          this.isUploadingVideo = false
 
-            this.notifier.success($localize`Video published.`)
-            this.router.navigateByUrl(Video.buildWatchUrl(video))
-          },
+          this.notifier.success($localize`Video published.`)
+          this.router.navigateByUrl(Video.buildWatchUrl(video))
+        },
 
-          error: err => {
-            this.error = err.message
-            scrollToTop()
-            logger.error(err)
-          }
-        })
+        error: err => {
+          this.error = err.message
+          scrollToTop()
+          logger.error(err)
+        }
+      })
   }
 
   private getInputVideoFile () {
-    return this.videofileInput.nativeElement.files[0]
+    return this.videofileInput().nativeElement.files[0]
   }
 
   private uploadFile (file: File, previewfile?: File) {

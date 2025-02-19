@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { Component, input } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -13,14 +13,15 @@ import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
   imports: [ NgIf, PTDatePipe, AlertComponent ]
 })
 export class VideoAlertComponent {
-  @Input() user: AuthUser
-  @Input() video: VideoDetails
-  @Input() noPlaylistVideoFound: boolean
+  readonly user = input<AuthUser>(undefined)
+  readonly video = input<VideoDetails>(undefined)
+  readonly noPlaylistVideoFound = input<boolean>(undefined)
 
   getAlertWarning () {
-    if (!this.video) return
+    const video = this.video()
+    if (!video) return
 
-    switch (this.video.state.id) {
+    switch (video.state.id) {
       case VideoState.TO_TRANSCODE:
         return $localize`The video is being transcoded, it may not work properly.`
 
@@ -48,18 +49,18 @@ export class VideoAlertComponent {
   }
 
   hasVideoScheduledPublication () {
-    return this.video?.scheduledUpdate !== undefined
+    return this.video()?.scheduledUpdate !== undefined
   }
 
   isWaitingForLive () {
-    return this.video?.state.id === VideoState.WAITING_FOR_LIVE
+    return this.video()?.state.id === VideoState.WAITING_FOR_LIVE
   }
 
   isLiveEnded () {
-    return this.video?.state.id === VideoState.LIVE_ENDED
+    return this.video()?.state.id === VideoState.LIVE_ENDED
   }
 
   isVideoPasswordProtected () {
-    return this.video?.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+    return this.video()?.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
   }
 }

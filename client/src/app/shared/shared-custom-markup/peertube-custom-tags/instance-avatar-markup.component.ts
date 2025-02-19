@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input } from '@angular/core'
 import { CustomMarkupComponent } from './shared'
 import { ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { ServerService } from '@app/core'
@@ -7,7 +7,7 @@ import { NgIf } from '@angular/common'
 
 /*
  * Markup component that creates the img HTML element containing the instance avatar
-*/
+ */
 
 @Component({
   selector: 'my-instance-avatar-markup',
@@ -16,15 +16,13 @@ import { NgIf } from '@angular/common'
   imports: [ NgIf, ActorAvatarComponent ]
 })
 export class InstanceAvatarMarkupComponent implements OnInit, CustomMarkupComponent {
-  @Input() size: number
+  private cd = inject(ChangeDetectorRef)
+  private server = inject(ServerService)
+
+  readonly size = input<number>(undefined)
 
   actor: ActorAvatarInput
   loaded: undefined
-
-  constructor (
-    private cd: ChangeDetectorRef,
-    private server: ServerService
-  ) {}
 
   ngOnInit () {
     const { instance } = this.server.getHTMLConfig()

@@ -2,7 +2,7 @@
   <div class="input-group has-clear" [hidden]="!inputShown">
     <input
       #ref type="text" class="last-in-group"
-      [(ngModel)]="value" (keyup.enter)="sendSearch()" [name]="name" [placeholder]="placeholder"
+      [(ngModel)]="value" (keyup.enter)="sendSearch()" [name]="name()" [placeholder]="placeholder()"
     >
 
     <button class="border-0 p-0 form-control-clear" title="Clear filter" i18n-title (click)="onResetFilter()">
@@ -10,11 +10,11 @@
     </button>
   </div>
 
-  <button class="border-0 p-0 search-button" [title]="iconTitle" (click)="onIconClick()">
+  <button class="border-0 p-0 search-button" [title]="iconTitle()" (click)="onIconClick()">
     <my-global-icon iconName="search"></my-global-icon>
   </button>
 
-  <button *ngIf="!alwaysShow && inputShown" class="border-0 p-0 close-search-button" i18n-title title="Close search" (click)="hideInput()">
+  <button *ngIf="!alwaysShow() && inputShown" class="border-0 p-0 close-search-button" i18n-title title="Close search" (click)="hideInput()">
     <my-global-icon iconName="cross"></my-global-icon>
   </button>
 </div>

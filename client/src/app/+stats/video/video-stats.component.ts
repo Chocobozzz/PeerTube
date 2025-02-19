@@ -2,7 +2,7 @@ import { ChartConfiguration, ChartData, ChartOptions, PluginOptionsByType, Scale
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Observable, of } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { Component, LOCALE_ID, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService } from '@app/core'
 import { secondsToTime } from '@peertube/peertube-core-utils'
@@ -74,12 +74,20 @@ ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--fg')
   ]
 })
 export class VideoStatsComponent implements OnInit {
+  private localeId = inject(LOCALE_ID)
+  private route = inject(ActivatedRoute)
+  private notifier = inject(Notifier)
+  private statsService = inject(VideoStatsService)
+  private peertubeRouter = inject(PeerTubeRouterService)
+  private numberFormatter = inject(NumberFormatterPipe)
+  private liveService = inject(LiveVideoService)
+
   // Cannot handle date filters
   globalStatsCards: Card[] = []
   // Can handle date filters
   overallStatCards: Card[] = []
 
-  chartOptions: { [ id in ActiveGraphId ]?: ChartConfiguration<'line' | 'bar'> } = {}
+  chartOptions: { [id in ActiveGraphId]?: ChartConfiguration<'line' | 'bar'> } = {}
   chartHeight = '300px'
   chartWidth: string = null
 
@@ -104,17 +112,7 @@ export class VideoStatsComponent implements OnInit {
   private statsStartDate: Date
   private statsEndDate: Date
 
-  private chartIngestData: { [ id in ActiveGraphId ]?: ChartIngestData } = {}
-
-  constructor (
-    @Inject(LOCALE_ID) private localeId: string,
-    private route: ActivatedRoute,
-    private notifier: Notifier,
-    private statsService: VideoStatsService,
-    private peertubeRouter: PeerTubeRouterService,
-    private numberFormatter: NumberFormatterPipe,
-    private liveService: LiveVideoService
-  ) {}
+  private chartIngestData: { [id in ActiveGraphId]?: ChartIngestData } = {}
 
   ngOnInit () {
     this.video = this.route.snapshot.data.video
@@ -356,7 +354,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private loadChart () {
-    const obsBuilders: { [ id in ActiveGraphId ]: Observable<ChartIngestData> } = {
+    const obsBuilders: { [id in ActiveGraphId]: Observable<ChartIngestData> } = {
       retention: this.statsService.getRetentionStats(this.video.uuid),
 
       aggregateWatchTime: this.statsService.getTimeserieStats({
@@ -390,7 +388,7 @@ export class VideoStatsComponent implements OnInit {
 
   private buildChartOptions (graphId: ActiveGraphId): ChartConfiguration<'line' | 'bar'> {
     const dataBuilders: {
-      [ id in ActiveGraphId ]: (rawData: ChartIngestData) => ChartBuilderResult
+      [id in ActiveGraphId]: (rawData: ChartIngestData) => ChartBuilderResult
     } = {
       retention: (rawData: VideoStatsRetention) => this.buildRetentionChartOptions(rawData),
       aggregateWatchTime: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),

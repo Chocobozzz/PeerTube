@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { catchError, concatMap, forkJoin, from, map, toArray } from 'rxjs'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
 import { arrayify, peertubeTranslate } from '@peertube/peertube-core-utils'
 import { ResultList, Runner, RunnerJob, RunnerJobAdmin, RunnerJobState, RunnerRegistrationToken } from '@peertube/peertube-models'
@@ -14,14 +14,12 @@ export type RunnerJobFormatted = RunnerJob & {
 
 @Injectable()
 export class RunnerService {
-  private static BASE_RUNNER_URL = environment.apiUrl + '/api/v1/runners'
+  private authHttp = inject(HttpClient)
+  private server = inject(ServerService)
+  private restService = inject(RestService)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private server: ServerService,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) {}
+  private static BASE_RUNNER_URL = environment.apiUrl + '/api/v1/runners'
 
   listRegistrationTokens (options: {
     pagination: RestPagination
@@ -33,7 +31,7 @@ export class RunnerService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<RunnerRegistrationToken>>(RunnerService.BASE_RUNNER_URL + '/registration-tokens', { params })
-                .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   generateToken () {
@@ -147,7 +145,7 @@ export class RunnerService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<Runner>>(RunnerService.BASE_RUNNER_URL + '/', { params })
-                .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   deleteRunner (runner: Runner) {

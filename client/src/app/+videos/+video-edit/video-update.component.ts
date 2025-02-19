@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, HostListener, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
@@ -48,7 +48,23 @@ const debugLogger = debug('peertube:video-update')
   ]
 })
 export class VideoUpdateComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
-  @ViewChild('videoEdit', { static: false }) videoEditComponent: VideoEditComponent
+  protected formReactiveService = inject(FormReactiveService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private notifier = inject(Notifier)
+  private videoService = inject(VideoService)
+  private loadingBar = inject(LoadingBarService)
+  private videoCaptionService = inject(VideoCaptionService)
+  private videoChapterService = inject(VideoChapterService)
+  private server = inject(ServerService)
+  private liveVideoService = inject(LiveVideoService)
+  private videoUploadService = inject(VideoUploadService)
+  private confirmService = inject(ConfirmService)
+  private auth = inject(AuthService)
+  private userService = inject(UserService)
+  private resumableUploadService = inject(UploadxService)
+
+  readonly videoEditComponent = viewChild<VideoEditComponent>('videoEdit')
 
   videoEdit: VideoEdit
   videoDetails: VideoDetails
@@ -76,26 +92,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
   private updateSubcription: Subscription
 
   private chaptersEdit = new VideoChaptersEdit()
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifier: Notifier,
-    private videoService: VideoService,
-    private loadingBar: LoadingBarService,
-    private videoCaptionService: VideoCaptionService,
-    private videoChapterService: VideoChapterService,
-    private server: ServerService,
-    private liveVideoService: LiveVideoService,
-    private videoUploadService: VideoUploadService,
-    private confirmService: ConfirmService,
-    private auth: AuthService,
-    private userService: UserService,
-    private resumableUploadService: UploadxService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -135,7 +131,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
   onFormBuilt () {
     hydrateFormFromVideo(this.form, this.videoEdit, true)
 
-    setTimeout(() => this.videoEditComponent.patchChapters(this.chaptersEdit))
+    setTimeout(() => this.videoEditComponent().patchChapters(this.chaptersEdit))
 
     if (this.liveVideo) {
       this.form.patchValue({
@@ -245,27 +241,25 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
 
         return this.liveVideoService.updateLive(this.videoEdit.id, liveVideoUpdate)
       }),
-
       map(() => true),
-
       catchError(err => {
         this.notifier.error(err.message)
 
         return of(false)
       })
     )
-    .subscribe({
-      next: success => {
-        this.isUpdatingVideo = false
-        this.loadingBar.useRef().complete()
+      .subscribe({
+        next: success => {
+          this.isUpdatingVideo = false
+          this.loadingBar.useRef().complete()
 
-        if (!success) return
+          if (!success) return
 
-        this.updateDone = true
-        this.notifier.success($localize`Video updated.`)
-        this.router.navigateByUrl(Video.buildWatchUrl(this.videoEdit))
-      }
-    })
+          this.updateDone = true
+          this.notifier.success($localize`Video updated.`)
+          this.router.navigateByUrl(Video.buildWatchUrl(this.videoEdit))
+        }
+      })
 
     this.replaceFileIfNeeded()
   }
@@ -294,7 +288,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
     let blockedWarning = ''
     if (willBeBlocked) {
       // eslint-disable-next-line max-len
-      blockedWarning = ' ' + $localize`Your video will also be automatically blocked since video publication requires manual validation by moderators.`
+      blockedWarning = ' ' +
+        $localize`Your video will also be automatically blocked since video publication requires manual validation by moderators.`
     }
 
     const message = $localize`Uploading a new version of your video will completely erase the current version.` +

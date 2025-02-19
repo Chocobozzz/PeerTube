@@ -1,7 +1,7 @@
 import { forkJoin, Observable, of } from 'rxjs'
 import { catchError, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
@@ -12,25 +12,23 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable()
 export class OverviewService {
-  static BASE_OVERVIEW_URL = environment.apiUrl + '/api/v1/overviews/'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private videosService = inject(VideoService)
+  private serverService = inject(ServerService)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private videosService: VideoService,
-    private serverService: ServerService
-  ) {}
+  static BASE_OVERVIEW_URL = environment.apiUrl + '/api/v1/overviews/'
 
   getVideosOverview (page: number): Observable<VideosOverview> {
     let params = new HttpParams()
     params = params.append('page', page + '')
 
     return this.authHttp
-               .get<VideosOverviewServer>(OverviewService.BASE_OVERVIEW_URL + 'videos', { params })
-               .pipe(
-                 switchMap(serverVideosOverview => this.updateVideosOverview(serverVideosOverview)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<VideosOverviewServer>(OverviewService.BASE_OVERVIEW_URL + 'videos', { params })
+      .pipe(
+        switchMap(serverVideosOverview => this.updateVideosOverview(serverVideosOverview)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   private updateVideosOverview (serverVideosOverview: VideosOverviewServer): Observable<VideosOverview> {
@@ -64,16 +62,15 @@ export class OverviewService {
         // Translate categories
         switchMap(() => {
           return this.serverService.getServerLocale()
-              .pipe(
-                tap(translations => {
-                  for (const c of videosOverviewResult.categories) {
-                    c.category.label = peertubeTranslate(c.category.label, translations)
-                  }
-                })
-              )
+            .pipe(
+              tap(translations => {
+                for (const c of videosOverviewResult.categories) {
+                  c.category.label = peertubeTranslate(c.category.label, translations)
+                }
+              })
+            )
         }),
         map(() => videosOverviewResult)
       )
   }
-
 }

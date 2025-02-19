@@ -5,15 +5,15 @@
         type="checkbox"
         [(ngModel)]="checked"
         (ngModelChange)="onModelChange()"
-        [id]="inputName"
-        [disabled]="disabled"
-        [attr.aria-describedby]="inputName + '-description'"
+        [id]="inputName()"
+        [disabled]="disabled()"
+        [attr.aria-describedby]="inputName() + '-description'"
       />
       <span></span>
-      <span *ngIf="labelText">{{ labelText }}</span>
+      <span *ngIf="labelText()">{{ labelText() }}</span>
       <span
-        *ngIf="!labelText && labelInnerHTML"
-        [innerHTML]="labelInnerHTML"
+        *ngIf="!labelText() && labelInnerHTML()"
+        [innerHTML]="labelInnerHTML()"
       ></span>
 
       <span *ngIf="labelTemplate">
@@ -23,7 +23,7 @@
 
     <my-help
       *ngIf="helpTemplate"
-      [tooltipPlacement]="helpPlacement"
+      [tooltipPlacement]="helpPlacement()"
       helpType="custom"
     >
       <ng-template ptTemplate="customHtml">
@@ -31,11 +31,11 @@
       </ng-template>
     </my-help>
 
-    <div *ngIf="recommended" class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>
+    <div *ngIf="recommended()" class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>
   </div>
 
   <div class="d-flex flex-column extra-container ms-4">
-    <div class="wrapper form-group-description" [id]="inputName + '-description'">
+    <div class="wrapper form-group-description" [id]="inputName() + '-description'">
       <ng-content select="description"></ng-content>
     </div>
 

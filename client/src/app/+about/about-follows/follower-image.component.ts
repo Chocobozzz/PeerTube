@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ServerService } from '@app/core'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 
@@ -9,9 +9,9 @@ import { Actor } from '@app/shared/shared-main/account/actor.model'
   standalone: true
 })
 export class FollowerImageComponent implements OnInit {
-  avatarUrl: string
+  private server = inject(ServerService)
 
-  constructor (private server: ServerService) {}
+  avatarUrl: string
 
   ngOnInit () {
     this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.server.getHTMLConfig().instance, 30)

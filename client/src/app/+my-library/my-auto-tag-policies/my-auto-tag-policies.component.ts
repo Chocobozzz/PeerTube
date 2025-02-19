@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
-import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+
 import { AutomaticTagAvailableType } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { AutomaticTagService } from './automatic-tag.service'
@@ -10,21 +10,16 @@ import { AutomaticTagService } from './automatic-tag.service'
 @Component({
   templateUrl: './my-auto-tag-policies.component.html',
   imports: [
-    GlobalIconComponent,
     FormsModule,
     PeertubeCheckboxComponent
   ]
 })
 export class MyAutoTagPoliciesComponent implements OnInit {
+  private authService = inject(AuthService)
+  private autoTagsService = inject(AutomaticTagService)
+  private notifier = inject(Notifier)
+
   tags: { name: string, review: boolean, type: AutomaticTagAvailableType }[] = []
-
-  constructor (
-    private authService: AuthService,
-    private autoTagsService: AutomaticTagService,
-    private notifier: Notifier
-  ) {
-
-  }
 
   ngOnInit () {
     this.loadAvailableTags()

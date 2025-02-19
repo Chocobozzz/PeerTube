@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 i18n class="modal-title">Edit caption "{{ videoCaption.language.label }}"</h4>
+  <h4 i18n class="modal-title">Edit caption "{{ videoCaption().language.label }}"</h4>
 
   <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
     <my-global-icon iconName="cross"></my-global-icon>
@@ -10,9 +10,9 @@
 
   <div class="row">
 
-    <my-embed *ngIf="publishedVideo" #embed class="col-md-12 col-xl-6 mb-3" [video]="publishedVideo" enableAPI="true"></my-embed>
+    <my-embed *ngIf="publishedVideo()" #embed class="col-md-12 col-xl-6 mb-3" [video]="publishedVideo()" enableAPI="true"></my-embed>
 
-    <div [ngClass]="publishedVideo ? 'col-xl-6 col-md-12' : ''">
+    <div [ngClass]="publishedVideo() ? 'col-xl-6 col-md-12' : ''">
 
       <div class="d-flex justify-content-between align-items-center mb-3 ms-2">
         <my-peertube-checkbox
@@ -52,11 +52,11 @@
 
                     <my-timestamp-input
                       class="me-1"
-                      inputName="segmentStart" enableBorder="true" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
+                      inputName="segmentStart" enableBorder="true" [maxTimestamp]="publishedVideo().duration * 1000" mask="99:99:99.999"
                       [(ngModel)]="segment.startMs" [parser]="timestampParser" [formatter]="timestampFormatter"
                     ></my-timestamp-input>
 
-                    <my-button *ngIf="publishedVideo" icon="clock-arrow-down" i18n-title title="Use video current time as start time" (click)="videoTimeForSegmentStart(segment)">
+                    <my-button *ngIf="publishedVideo()" icon="clock-arrow-down" i18n-title title="Use video current time as start time" (click)="videoTimeForSegmentStart(segment)">
                     </my-button>
                   </div>
 
@@ -67,11 +67,11 @@
 
                     <my-timestamp-input
                       class="me-1"
-                      inputName="segmentEnd" enableBorder="true" [maxTimestamp]="publishedVideo.duration * 1000" mask="99:99:99.999"
+                      inputName="segmentEnd" enableBorder="true" [maxTimestamp]="publishedVideo().duration * 1000" mask="99:99:99.999"
                       [(ngModel)]="segment.endMs" [parser]="timestampParser" [formatter]="timestampFormatter"
                     ></my-timestamp-input>
 
-                    <my-button *ngIf="publishedVideo" icon="clock-arrow-down" i18n-title title="Use video current time as end time" (click)="videoTimeForSegmentEnd(segment)">
+                    <my-button *ngIf="publishedVideo()" icon="clock-arrow-down" i18n-title title="Use video current time as end time" (click)="videoTimeForSegmentEnd(segment)">
                     </my-button>
                   </div>
                 </div>

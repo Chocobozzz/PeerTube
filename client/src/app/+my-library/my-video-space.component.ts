@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
@@ -9,13 +9,11 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
   imports: [ RouterOutlet, HorizontalMenuComponent ]
 })
 export class MyVideoSpaceComponent implements OnInit {
+  private serverService = inject(ServerService)
+
   menuEntries: HorizontalMenuEntry[] = []
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private serverService: ServerService
-  ) { }
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getHTMLConfig()
@@ -37,7 +35,7 @@ export class MyVideoSpaceComponent implements OnInit {
         children: [
           {
             label: $localize`Manage`,
-            routerLink:'/my-library/video-channels'
+            routerLink: '/my-library/video-channels'
           },
           {
             label: $localize`Followers`,

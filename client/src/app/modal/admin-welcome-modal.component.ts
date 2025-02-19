@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -12,19 +12,17 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   imports: [ GlobalIconComponent ]
 })
 export class AdminWelcomeModalComponent implements OnInit {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  private userService = inject(UserService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
 
-  @Output() created = new EventEmitter<void>()
+  readonly modal = viewChild<ElementRef>('modal')
+
+  readonly created = output()
 
   private LS_KEYS = {
     NO_WELCOME_MODAL: 'no_welcome_modal'
   }
-
-  constructor (
-    private userService: UserService,
-    private modalService: NgbModal,
-    private notifier: Notifier
-  ) { }
 
   ngOnInit () {
     this.created.emit()
@@ -39,7 +37,7 @@ export class AdminWelcomeModalComponent implements OnInit {
   }
 
   show () {
-    this.modalService.open(this.modal, {
+    this.modalService.open(this.modal(), {
       centered: true,
       backdrop: 'static',
       keyboard: false,

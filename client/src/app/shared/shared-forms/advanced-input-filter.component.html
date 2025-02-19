@@ -5,7 +5,7 @@
     </button>
 
     <div role="menu" ngbDropdownMenu>
-      <ng-container *ngFor="let group of filters">
+      <ng-container *ngFor="let group of filters()">
         <h6 class="dropdown-header">{{ group.title }}</h6>
 
         <button *ngFor="let filter of group.children" (click)="onFilterClick(filter)" class="dropdown-item">

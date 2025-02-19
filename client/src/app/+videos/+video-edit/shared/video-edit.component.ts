@@ -1,16 +1,5 @@
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  booleanAttribute
-} from '@angular/core'
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, HooksService, PluginService, ServerService } from '@app/core'
@@ -131,38 +120,56 @@ type PluginField = {
   ]
 })
 export class VideoEditComponent implements OnInit, OnDestroy {
-  @Input() form: FormGroup
-  @Input() formErrors: FormReactiveErrors & { chapters?: { title: string }[] } = {}
-  @Input() validationMessages: FormReactiveValidationMessages = {}
+  private formValidatorService = inject(FormValidatorService)
+  private videoService = inject(VideoService)
+  private serverService = inject(ServerService)
+  private pluginService = inject(PluginService)
+  private instanceService = inject(InstanceService)
+  private i18nPrimengCalendarService = inject(I18nPrimengCalendarService)
+  private ngZone = inject(NgZone)
+  private hooks = inject(HooksService)
+  private cd = inject(ChangeDetectorRef)
+  private modalService = inject(NgbModal)
+  private confirmService = inject(ConfirmService)
 
-  @Input() publishedVideo: VideoDetails
+  readonly form = input<FormGroup>(undefined)
+  readonly formErrors = input<
+    FormReactiveErrors & {
+      chapters?: {
+        title: string
+      }[]
+    }
+  >({})
+  readonly validationMessages = input<FormReactiveValidationMessages>({})
 
-  @Input() userVideoChannels: SelectChannelItem[] = []
+  readonly publishedVideo = input<VideoDetails>(undefined)
 
-  @Input({ transform: booleanAttribute }) forbidScheduledPublication = true
-  @Input({ transform: booleanAttribute }) displayTranscriptionInfo = true
+  readonly userVideoChannels = input<SelectChannelItem[]>([])
 
-  @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
-  @Input() videoSource: VideoSource
+  readonly forbidScheduledPublication = input(true, { transform: booleanAttribute })
+  readonly displayTranscriptionInfo = input(true, { transform: booleanAttribute })
 
-  @Input() videoChapters: VideoChapter[] = []
+  readonly videoCaptions = input<VideoCaptionWithPathEdit[]>([])
+  readonly videoSource = input<VideoSource>(undefined)
 
-  @Input({ transform: booleanAttribute }) hideWaitTranscoding = false
-  @Input({ transform: booleanAttribute }) updateVideoFileEnabled = false
+  readonly videoChapters = input<VideoChapter[]>([])
 
-  @Input() type: VideoEditType
-  @Input() liveVideo: LiveVideo
+  readonly hideWaitTranscoding = input(false, { transform: booleanAttribute })
+  readonly updateVideoFileEnabled = input(false, { transform: booleanAttribute })
 
-  @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
+  readonly type = input<VideoEditType>(undefined)
+  readonly liveVideo = input<LiveVideo>(undefined)
 
-  @Output() formBuilt = new EventEmitter<void>()
-  @Output() pluginFieldsAdded = new EventEmitter<void>()
+  readonly videoCaptionAddModal = viewChild<VideoCaptionAddModalComponent>('videoCaptionAddModal')
+
+  readonly formBuilt = output()
+  readonly pluginFieldsAdded = output()
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
-  videoPrivacies: VideoConstant<VideoPrivacyType | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY > [] = []
-  replayPrivacies: VideoConstant<VideoPrivacyType> [] = []
+  videoPrivacies: VideoConstant<VideoPrivacyType | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY>[] = []
+  replayPrivacies: VideoConstant<VideoPrivacyType>[] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   commentPolicies: VideoConstant<VideoCommentPolicyType>[] = []
@@ -205,19 +212,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   private firstPatchDone = false
   private initialVideoCaptions: string[] = []
 
-  constructor (
-    private formValidatorService: FormValidatorService,
-    private videoService: VideoService,
-    private serverService: ServerService,
-    private pluginService: PluginService,
-    private instanceService: InstanceService,
-    private i18nPrimengCalendarService: I18nPrimengCalendarService,
-    private ngZone: NgZone,
-    private hooks: HooksService,
-    private cd: ChangeDetectorRef,
-    private modalService: NgbModal,
-    private confirmService: ConfirmService
-  ) {
+  constructor () {
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
   }
@@ -256,18 +251,19 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       replayPrivacy: null
     }
 
+    const form = this.form()
     this.formValidatorService.updateFormGroup(
-      this.form,
-      this.formErrors,
-      this.validationMessages,
+      form,
+      this.formErrors(),
+      this.validationMessages(),
       obj,
       defaultValues
     )
 
-    this.form.addControl('chapters', new FormArray([], VIDEO_CHAPTERS_ARRAY_VALIDATOR.VALIDATORS))
+    form.addControl('chapters', new FormArray([], VIDEO_CHAPTERS_ARRAY_VALIDATOR.VALIDATORS))
     this.addNewChapterControl()
 
-    this.form.get('chapters').valueChanges.subscribe((chapters: { title: string, timecode: string }[]) => {
+    form.get('chapters').valueChanges.subscribe((chapters: { title: string, timecode: string }[]) => {
       const lastChapter = chapters[chapters.length - 1]
 
       if (lastChapter.title || lastChapter.timecode) {
@@ -290,10 +286,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .then(() => this.updatePluginFields())
 
     this.serverService.getVideoCategories()
-        .subscribe(res => this.videoCategories = res)
+      .subscribe(res => this.videoCategories = res)
 
     this.serverService.getVideoLicences()
-        .subscribe(res => this.videoLicences = res)
+      .subscribe(res => this.videoLicences = res)
 
     this.serverService.getCommentPolicies()
       .subscribe(res => this.commentPolicies = res)
@@ -316,11 +312,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(privacies => {
         const videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
         this.videoPrivacies = videoPrivacies
-        this.replayPrivacies = videoPrivacies.filter((privacy) => privacy.id !== VideoPrivacy.PASSWORD_PROTECTED)
+        this.replayPrivacies = videoPrivacies.filter(privacy => privacy.id !== VideoPrivacy.PASSWORD_PROTECTED)
 
         // Can't schedule publication if private privacy is not available (could be deleted by a plugin)
         const hasPrivatePrivacy = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
-        if (this.forbidScheduledPublication || !hasPrivatePrivacy) return
+        if (this.forbidScheduledPublication() || !hasPrivatePrivacy) return
 
         this.videoPrivacies.push({
           id: this.SPECIAL_SCHEDULED_PRIVACY,
@@ -329,20 +325,20 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         })
       })
 
-    this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
+    this.initialVideoCaptions = this.videoCaptions().map(c => c.language.id)
 
     this.ngZone.runOutsideAngular(() => {
       this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
     })
 
     const updateFormForPlugins = (values: any) => {
-      this.form.patchValue(values)
+      this.form().patchValue(values)
       this.cd.detectChanges()
     }
-    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type, updateForm: updateFormForPlugins })
+    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type(), updateForm: updateFormForPlugins })
 
-    this.form.valueChanges.subscribe(() => {
-      this.hooks.runAction('action:video-edit.form.updated', 'video-edit', { type: this.type, formValues: this.form.value })
+    this.form().valueChanges.subscribe(() => {
+      this.hooks.runAction('action:video-edit.form.updated', 'video-edit', { type: this.type(), formValues: this.form().value })
     })
   }
 
@@ -361,19 +357,19 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   getExistingCaptions () {
-    return this.videoCaptions
-               .filter(c => c.action !== 'REMOVE')
-               .map(c => c.language.id)
+    return this.videoCaptions()
+      .filter(c => c.action !== 'REMOVE')
+      .map(c => c.language.id)
   }
 
   onCaptionEdited (caption: VideoCaptionEdit) {
-    const existingCaption = this.videoCaptions.find(c => c.language.id === caption.language.id)
+    const existingCaption = this.videoCaptions().find(c => c.language.id === caption.language.id)
 
     // Replace existing caption?
     if (existingCaption) {
       Object.assign(existingCaption, caption)
     } else {
-      this.videoCaptions.push(
+      this.videoCaptions().push(
         Object.assign(caption, { action: 'CREATE' as 'CREATE' })
       )
     }
@@ -390,7 +386,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     // This caption is not on the server, just remove it from our array
     if (caption.action === 'CREATE' || caption.action === 'UPDATE') {
-      removeElementFromArray(this.videoCaptions, caption)
+      removeElementFromArray(this.videoCaptions(), caption)
       return
     }
 
@@ -398,7 +394,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   openAddCaptionModal () {
-    this.videoCaptionAddModal.show()
+    this.videoCaptionAddModal().show()
   }
 
   openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
@@ -416,7 +412,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     modalRef.componentInstance.videoCaption = videoCaption
     modalRef.componentInstance.serverConfig = this.serverConfig
-    modalRef.componentInstance.publishedVideo = this.publishedVideo
+    modalRef.componentInstance.publishedVideo = this.publishedVideo()
     modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
   }
 
@@ -427,11 +423,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   isSaveReplayEnabled () {
-    return this.form.value['saveReplay'] === true
+    return this.form().value['saveReplay'] === true
   }
 
   isPermanentLiveEnabled () {
-    return this.form.value['permanentLive'] === true
+    return this.form().value['permanentLive'] === true
   }
 
   isLatencyModeEnabled () {
@@ -439,7 +435,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   hasPublicationDate () {
-    return !!this.form.value['originallyPublishedAt']
+    return !!this.form().value['originallyPublishedAt']
   }
 
   isTranscriptionEnabled () {
@@ -453,7 +449,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   resetField (name: string) {
-    this.form.patchValue({ [name]: null })
+    this.form().patchValue({ [name]: null })
   }
 
   // ---------------------------------------------------------------------------
@@ -462,9 +458,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     if (typeof pluginField.commonOptions.hidden !== 'function') return false
 
     return pluginField.commonOptions.hidden({
-      formValues: this.form.value,
-      videoToUpdate: this.publishedVideo,
-      liveVideo: this.liveVideo
+      formValues: this.form().value,
+      videoToUpdate: this.publishedVideo(),
+      liveVideo: this.liveVideo()
     })
   }
 
@@ -477,7 +473,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   private sortVideoCaptions () {
-    this.videoCaptions.sort((v1, v2) => {
+    this.videoCaptions().sort((v1, v2) => {
       if (v1.language.label < v2.language.label) return -1
       if (v1.language.label === v2.language.label) return 0
 
@@ -486,11 +482,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   private async updatePluginFields () {
-    this.pluginFields = this.pluginService.getRegisteredVideoFormFields(this.type)
+    this.pluginFields = this.pluginService.getRegisteredVideoFormFields(this.type())
 
     if (this.pluginFields.length === 0) return
 
-    const pluginObj: { [ id: string ]: BuildFormValidator } = {}
+    const pluginObj: { [id: string]: BuildFormValidator } = {}
     const pluginValidationMessages: FormReactiveValidationMessages = {}
     const pluginFormErrors: any = {}
     const pluginDefaults: any = {}
@@ -504,7 +500,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       const validator = async (control: AbstractControl) => {
         if (!setting.commonOptions.error) return null
 
-        const error = await setting.commonOptions.error({ formValues: this.form.value, value: control.value })
+        const error = await setting.commonOptions.error({ formValues: this.form().value, value: control.value })
 
         return error?.error ? { [setting.commonOptions.name]: error.text } : null
       }
@@ -529,15 +525,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       pluginDefaults
     )
 
-    this.form.addControl('pluginData', this.pluginDataFormGroup)
-    this.formErrors['pluginData'] = pluginFormErrors
-    this.validationMessages['pluginData'] = pluginValidationMessages
+    this.form().addControl('pluginData', this.pluginDataFormGroup)
+    this.formErrors()['pluginData'] = pluginFormErrors
+    this.validationMessages()['pluginData'] = pluginValidationMessages
 
     this.cd.detectChanges()
     this.pluginFieldsAdded.emit()
 
     // Plugins may need other control values to calculate potential errors
-    this.form.valueChanges.subscribe(() => this.formValidatorService.updateTreeValidity(this.pluginDataFormGroup))
+    this.form().valueChanges.subscribe(() => this.formValidatorService.updateTreeValidity(this.pluginDataFormGroup))
   }
 
   // ---------------------------------------------------------------------------
@@ -554,8 +550,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.formValidatorService.addControlInFormArray({
       controlName: 'chapters',
       formArray: chaptersFormArray,
-      formErrors: this.formErrors,
-      validationMessages: this.validationMessages,
+      formErrors: this.formErrors(),
+      validationMessages: this.validationMessages(),
       formToBuild: {
         timecode: null,
         title: VIDEO_CHAPTER_TITLE_VALIDATOR
@@ -567,15 +563,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   getChaptersFormArray () {
-    return this.form.controls['chapters'] as FormArray
+    return this.form().controls['chapters'] as FormArray
   }
 
   deleteChapterControl (index: number) {
     this.formValidatorService.removeControlFromFormArray({
       controlName: 'chapters',
       formArray: this.getChaptersFormArray(),
-      formErrors: this.formErrors,
-      validationMessages: this.validationMessages,
+      formErrors: this.formErrors(),
+      validationMessages: this.validationMessages(),
       index
     })
   }
@@ -593,7 +589,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       this.addNewChapterControl()
     }
 
-    this.form.patchValue(chaptersEdit.toFormPatch())
+    this.form().patchValue(chaptersEdit.toFormPatch())
   }
 
   getChapterArrayErrors () {
@@ -606,17 +602,16 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   private trackPrivacyChange () {
     // We will update the schedule input and the wait transcoding checkbox validators
-    this.form.controls['privacy']
+    this.form().controls['privacy']
       .valueChanges
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
         newPrivacyId => {
-
           this.schedulePublicationSelected = newPrivacyId === this.SPECIAL_SCHEDULED_PRIVACY
 
           // Value changed
-          const scheduleControl = this.form.get('schedulePublicationAt')
-          const waitTranscodingControl = this.form.get('waitTranscoding')
+          const scheduleControl = this.form().get('schedulePublicationAt')
+          const waitTranscodingControl = this.form().get('waitTranscoding')
 
           if (this.schedulePublicationSelected) {
             scheduleControl.setValidators([ Validators.required ])
@@ -640,7 +635,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
           this.firstPatchDone = true
 
           this.passwordProtectionSelected = newPrivacyId === VideoPrivacy.PASSWORD_PROTECTED
-          const videoPasswordControl = this.form.get('videoPassword')
+          const videoPasswordControl = this.form().get('videoPassword')
 
           if (this.passwordProtectionSelected) {
             videoPasswordControl.setValidators([ Validators.required ])
@@ -655,21 +650,21 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   private trackChannelChange () {
     // We will update the "support" field depending on the channel
-    this.form.controls['channelId']
+    this.form().controls['channelId']
       .valueChanges
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
         newChannelId => {
-          const oldChannelId = parseInt(this.form.value['channelId'], 10)
+          const oldChannelId = parseInt(this.form().value['channelId'], 10)
 
           // Not initialized yet
           if (isNaN(newChannelId)) return
-          const newChannel = this.userVideoChannels.find(c => c.id === newChannelId)
+          const newChannel = this.userVideoChannels().find(c => c.id === newChannelId)
           if (!newChannel) return
 
           // Wait support field update
           setTimeout(() => {
-            const currentSupport = this.form.value['support']
+            const currentSupport = this.form().value['support']
 
             // First time we set the channel?
             if (isNaN(oldChannelId)) {
@@ -679,7 +674,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
               return
             }
 
-            const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
+            const oldChannel = this.userVideoChannels().find(c => c.id === oldChannelId)
             if (!newChannel || !oldChannel) {
               logger.error('Cannot find new or old channel.')
               return
@@ -697,6 +692,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   private updateSupportField (support: string) {
-    return this.form.patchValue({ support: support || '' })
+    return this.form().patchValue({ support: support || '' })
   }
 }

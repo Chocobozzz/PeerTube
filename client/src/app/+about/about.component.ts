@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { ServerService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -14,11 +14,12 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
   selector: 'my-about',
   templateUrl: './about.component.html',
   styleUrls: [ './about.component.scss' ],
-  imports: [ CommonModule, RouterOutlet, HorizontalMenuComponent, GlobalIconComponent, ButtonComponent, SupportModalComponent ]
+  imports: [ CommonModule, RouterOutlet, HorizontalMenuComponent, GlobalIconComponent, ButtonComponent ]
 })
-
 export class AboutComponent implements OnInit {
-  @ViewChild('supportModal') supportModal: SupportModalComponent
+  private server = inject(ServerService)
+
+  readonly supportModal = viewChild<SupportModalComponent>('supportModal')
 
   bannerUrl: string
   avatarUrl: string
@@ -26,12 +27,6 @@ export class AboutComponent implements OnInit {
   menuEntries: HorizontalMenuEntry[] = []
 
   config: HTMLServerConfig
-
-  constructor (
-    private server: ServerService
-  ) {
-
-  }
 
   ngOnInit () {
     this.config = this.server.getHTMLConfig()

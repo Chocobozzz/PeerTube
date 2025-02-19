@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, input } from '@angular/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { RedundancyInformation } from '@peertube/peertube-models'
 import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
@@ -10,5 +10,5 @@ import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
   imports: [ PTDatePipe, BytesPipe ]
 })
 export class VideoRedundancyInformationComponent {
-  @Input() redundancyElement: RedundancyInformation
+  readonly redundancyElement = input<RedundancyInformation>(undefined)
 }

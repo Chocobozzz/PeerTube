@@ -1,5 +1,5 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
+import { NgClass, NgIf } from '@angular/common'
+import { Component, OnChanges, OnInit, SimpleChanges, inject, input } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { ThemeService } from '@app/core'
@@ -23,7 +23,6 @@ import { ConfigService } from '../shared/config.service'
     FormsModule,
     ReactiveFormsModule,
     RouterLink,
-    NgFor,
     SelectCustomValueComponent,
     NgIf,
     PeertubeCheckboxComponent,
@@ -36,10 +35,13 @@ import { ConfigService } from '../shared/config.service'
   ]
 })
 export class EditBasicConfigurationComponent implements OnInit, OnChanges {
-  @Input() form: FormGroup
-  @Input() formErrors: any
+  private configService = inject(ConfigService)
+  private themeService = inject(ThemeService)
 
-  @Input() serverConfig: HTMLServerConfig
+  readonly form = input<FormGroup>(undefined)
+  readonly formErrors = input<any>(undefined)
+
+  readonly serverConfig = input<HTMLServerConfig>(undefined)
 
   signupAlertMessage: string
   defaultLandingPageOptions: SelectOptionsItem[] = []
@@ -47,11 +49,6 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   exportExpirationOptions: SelectOptionsItem[] = []
   exportMaxUserVideoQuotaOptions: SelectOptionsItem[] = []
-
-  constructor (
-    private configService: ConfigService,
-    private themeService: ThemeService
-  ) {}
 
   ngOnInit () {
     this.buildLandingPageOptions()
@@ -81,7 +78,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   countExternalAuth () {
-    return this.serverConfig.plugin.registeredExternalAuths.length
+    return this.serverConfig().plugin.registeredExternalAuths.length
   }
 
   getVideoQuotaOptions () {
@@ -93,18 +90,18 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   doesTrendingVideosAlgorithmsEnabledInclude (algorithm: string) {
-    const enabled = this.form.value['trending']['videos']['algorithms']['enabled']
+    const enabled = this.form().value['trending']['videos']['algorithms']['enabled']
     if (!Array.isArray(enabled)) return false
 
     return !!enabled.find((e: string) => e === algorithm)
   }
 
   getUserVideoQuota () {
-    return this.form.value['user']['videoQuota']
+    return this.form().value['user']['videoQuota']
   }
 
   isExportUsersEnabled () {
-    return this.form.value['export']['users']['enabled'] === true
+    return this.form().value['export']['users']['enabled'] === true
   }
 
   getDisabledExportUsersClass () {
@@ -112,7 +109,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   isSignupEnabled () {
-    return this.form.value['signup']['enabled'] === true
+    return this.form().value['signup']['enabled'] === true
   }
 
   getDisabledSignupClass () {
@@ -120,19 +117,19 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   isImportVideosHttpEnabled (): boolean {
-    return this.form.value['import']['videos']['http']['enabled'] === true
+    return this.form().value['import']['videos']['http']['enabled'] === true
   }
 
   importSynchronizationChecked () {
-    return this.isImportVideosHttpEnabled() && this.form.value['import']['videoChannelSynchronization']['enabled']
+    return this.isImportVideosHttpEnabled() && this.form().value['import']['videoChannelSynchronization']['enabled']
   }
 
   hasUnlimitedSignup () {
-    return this.form.value['signup']['limit'] === -1
+    return this.form().value['signup']['limit'] === -1
   }
 
   isSearchIndexEnabled () {
-    return this.form.value['search']['searchIndex']['enabled'] === true
+    return this.form().value['search']['searchIndex']['enabled'] === true
   }
 
   getDisabledSearchIndexClass () {
@@ -142,7 +139,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   // ---------------------------------------------------------------------------
 
   isTranscriptionEnabled () {
-    return this.form.value['videoTranscription']['enabled'] === true
+    return this.form().value['videoTranscription']['enabled'] === true
   }
 
   getTranscriptionRunnerDisabledClass () {
@@ -152,13 +149,13 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   // ---------------------------------------------------------------------------
 
   isAutoFollowIndexEnabled () {
-    return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
+    return this.form().value['followings']['instance']['autoFollowIndex']['enabled'] === true
   }
 
   buildLandingPageOptions () {
     let links: { label: string, path: string }[] = []
 
-    if (this.serverConfig.homepage.enabled) {
+    if (this.serverConfig().homepage.enabled) {
       links.push({ label: $localize`Home`, path: '/home' })
     }
 
@@ -176,11 +173,11 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   private checkImportSyncField () {
-    const importSyncControl = this.form.get('import.videoChannelSynchronization.enabled')
-    const importVideosHttpControl = this.form.get('import.videos.http.enabled')
+    const importSyncControl = this.form().get('import.videoChannelSynchronization.enabled')
+    const importVideosHttpControl = this.form().get('import.videos.http.enabled')
 
     importVideosHttpControl.valueChanges
-      .subscribe((httpImportEnabled) => {
+      .subscribe(httpImportEnabled => {
         importSyncControl.setValue(httpImportEnabled && importSyncControl.value)
         if (httpImportEnabled) {
           importSyncControl.enable()
@@ -191,16 +188,17 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   private checkSignupField () {
-    const signupControl = this.form.get('signup.enabled')
+    const signupControl = this.form().get('signup.enabled')
 
     signupControl.valueChanges
       .pipe(pairwise())
       .subscribe(([ oldValue, newValue ]) => {
         if (oldValue === false && newValue === true) {
           /* eslint-disable max-len */
-          this.signupAlertMessage = $localize`You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.`
+          this.signupAlertMessage =
+            $localize`You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.`
 
-          this.form.patchValue({
+          this.form().patchValue({
             autoBlacklist: {
               videos: {
                 ofUsers: {

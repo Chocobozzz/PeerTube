@@ -1,21 +1,21 @@
 <p-multiSelect
-  [inputId]="inputId"
+  [inputId]="inputId()"
 
-  [options]="availableItems"
+  [options]="availableItems()"
   [(ngModel)]="selectedItems"
   (ngModelChange)="onModelChange()"
 
-  [placeholder]="placeholder"
+  [placeholder]="placeholder()"
 
-  [showClear]="showClear"
+  [showClear]="showClear()"
 
   optionValue="id"
 
-  [selectedItemsLabel]="selectedItemsLabel"
-  [selectionLimit]="selectionLimit"
+  [selectedItemsLabel]="selectedItemsLabel()"
+  [selectionLimit]="selectionLimit()"
 
-  [virtualScroll]="virtualScroll"
-  [virtualScrollItemSize]="virtualScrollItemSize"
+  [virtualScroll]="virtualScroll()"
+  [virtualScrollItemSize]="virtualScrollItemSize()"
 
   (onPanelHide)="panelHide.emit()"
 >

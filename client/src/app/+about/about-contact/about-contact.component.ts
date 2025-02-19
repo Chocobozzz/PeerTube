@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { ServerService } from '@app/core'
@@ -26,19 +26,15 @@ type Prefill = {
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent ]
 })
 export class AboutContactComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private route = inject(ActivatedRoute)
+  private instanceService = inject(InstanceService)
+  private serverService = inject(ServerService)
+
   error: string
   success: string
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private route: ActivatedRoute,
-    private instanceService: InstanceService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
 
   get instanceName () {
     return this.serverConfig.instance.name
@@ -68,17 +64,17 @@ export class AboutContactComponent extends FormReactive implements OnInit {
     const body = this.form.value['body']
 
     this.instanceService.contactAdministrator(fromEmail, fromName, subject, body)
-        .subscribe({
-          next: () => {
-            this.success = $localize`Your message has been sent.`
-          },
+      .subscribe({
+        next: () => {
+          this.success = $localize`Your message has been sent.`
+        },
 
-          error: err => {
-            this.error = err.status === HttpStatusCode.FORBIDDEN_403
-              ? $localize`You already sent this form recently`
-              : err.message
-          }
-        })
+        error: err => {
+          this.error = err.status === HttpStatusCode.FORBIDDEN_403
+            ? $localize`You already sent this form recently`
+            : err.message
+        }
+      })
   }
 
   private prefillForm (prefill: Prefill) {

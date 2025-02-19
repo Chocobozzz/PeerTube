@@ -17,10 +17,10 @@
       </span>
     </div>
 
-    <div *ngIf="displayDescription" class="description-html" [innerHTML]="descriptionHTML"></div>
+    <div *ngIf="displayDescription()" class="description-html" [innerHTML]="descriptionHTML"></div>
   </div>
 
-  <div class="video" *ngIf="video && displayLatestVideo">
+  <div class="video" *ngIf="video && displayLatestVideo()">
     <div i18n class="video-label">Latest published video</div>
 
     <my-video-miniature-markup [video]="video" [onlyDisplayTitle]="true"></my-video-miniature-markup>

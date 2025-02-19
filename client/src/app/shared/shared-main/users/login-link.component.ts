@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, Input } from '@angular/core'
+import { booleanAttribute, Component, inject, input } from '@angular/core'
 import { ServerService } from '@app/core'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { environment } from 'src/environments/environment'
@@ -11,14 +11,12 @@ import { LinkComponent } from '../common/link.component'
   imports: [ LinkComponent ]
 })
 export class LoginLinkComponent {
-  @Input() label = $localize`Login`
-  @Input({ transform: booleanAttribute }) icon = false
+  private server = inject(ServerService)
 
-  @Input() className?: string
+  readonly label = input($localize`Login`)
+  readonly icon = input(false, { transform: booleanAttribute })
 
-  constructor (private server: ServerService) {
-
-  }
+  readonly className = input<string>(undefined)
 
   getExternalLoginHref () {
     return PluginsManager.getDefaultLoginHref(environment.apiUrl, this.server.getHTMLConfig())

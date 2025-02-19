@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
@@ -52,9 +52,21 @@ import { VideoSend } from './video-send'
   ]
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
-  @Output() firstStepDone = new EventEmitter<string>()
-  @Output() firstStepError = new EventEmitter<void>()
-  @ViewChild('torrentfileInput') torrentfileInput: ElementRef<HTMLInputElement>
+  protected formReactiveService = inject(FormReactiveService)
+  protected loadingBar = inject(LoadingBarService)
+  protected notifier = inject(Notifier)
+  protected authService = inject(AuthService)
+  protected serverService = inject(ServerService)
+  protected videoService = inject(VideoService)
+  protected videoCaptionService = inject(VideoCaptionService)
+  protected videoChapterService = inject(VideoChapterService)
+  private router = inject(Router)
+  private videoImportService = inject(VideoImportService)
+  private hooks = inject(HooksService)
+
+  readonly firstStepDone = output<string>()
+  readonly firstStepError = output()
+  readonly torrentfileInput = viewChild<ElementRef<HTMLInputElement>>('torrentfileInput')
 
   magnetUri = ''
 
@@ -64,22 +76,6 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
 
   video: VideoEdit
   error: string
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    protected loadingBar: LoadingBarService,
-    protected notifier: Notifier,
-    protected authService: AuthService,
-    protected serverService: ServerService,
-    protected videoService: VideoService,
-    protected videoCaptionService: VideoCaptionService,
-    protected videoChapterService: VideoChapterService,
-    private router: Router,
-    private videoImportService: VideoImportService,
-    private hooks: HooksService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     super.ngOnInit()
@@ -98,14 +94,14 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
   }
 
   fileChange () {
-    const torrentfile = this.torrentfileInput.nativeElement.files[0]
+    const torrentfile = this.torrentfileInput().nativeElement.files[0]
     if (!torrentfile) return
 
     this.importVideo(torrentfile)
   }
 
   setTorrentFile (files: FileList) {
-    this.torrentfileInput.nativeElement.files = files
+    this.torrentfileInput().nativeElement.files = files
     this.fileChange()
   }
 

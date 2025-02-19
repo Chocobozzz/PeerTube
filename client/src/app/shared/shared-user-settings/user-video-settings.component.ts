@@ -1,13 +1,13 @@
 import { pick } from 'lodash-es'
 import { Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
 import { NgIf } from '@angular/common'
-import { RouterLink } from '@angular/router'
+
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
 import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
@@ -25,28 +25,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     PeerTubeTemplateDirective,
     SelectLanguagesComponent,
     PeertubeCheckboxComponent,
-    RouterLink,
     NgIf
   ]
 })
 export class UserVideoSettingsComponent extends FormReactive implements OnInit, OnDestroy {
-  @Input() user: User = null
-  @Input() reactiveUpdate = false
-  @Input() notifyOnUpdate = true
-  @Input() userInformationLoaded: Subject<any>
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private serverService = inject(ServerService)
+
+  readonly user = input<User>(null)
+  readonly reactiveUpdate = input(false)
+  readonly notifyOnUpdate = input(true)
+  readonly userInformationLoaded = input<Subject<any>>(undefined)
 
   defaultNSFWPolicy: NSFWPolicyType
   formValuesWatcher: Subscription
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private userService: UserService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -57,21 +52,21 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
       videoLanguages: null
     })
 
-    this.userInformationLoaded.pipe(first())
+    this.userInformationLoaded().pipe(first())
       .subscribe(
         () => {
           const serverConfig = this.serverService.getHTMLConfig()
           this.defaultNSFWPolicy = serverConfig.instance.defaultNSFWPolicy
 
           this.form.patchValue({
-            nsfwPolicy: this.user.nsfwPolicy || this.defaultNSFWPolicy,
-            p2pEnabled: this.user.p2pEnabled,
-            autoPlayVideo: this.user.autoPlayVideo === true,
-            autoPlayNextVideo: this.user.autoPlayNextVideo,
-            videoLanguages: this.user.videoLanguages
+            nsfwPolicy: this.user().nsfwPolicy || this.defaultNSFWPolicy,
+            p2pEnabled: this.user().p2pEnabled,
+            autoPlayVideo: this.user().autoPlayVideo === true,
+            autoPlayNextVideo: this.user().autoPlayNextVideo,
+            videoLanguages: this.user().videoLanguages
           })
 
-          if (this.reactiveUpdate) this.handleReactiveUpdate()
+          if (this.reactiveUpdate()) this.handleReactiveUpdate()
         }
       )
   }
@@ -121,7 +116,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
     this.formValuesWatcher = this.form.valueChanges.subscribe((formValue: any) => {
       const updatedKey = Object.keys(formValue)
-                               .find(k => formValue[k] !== oldForm[k])
+        .find(k => formValue[k] !== oldForm[k])
 
       oldForm = { ...this.form.value }
 
@@ -135,7 +130,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
         next: () => {
           this.authService.refreshUserInformation()
 
-          if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`)
+          if (this.notifyOnUpdate()) this.notifier.success($localize`Video settings updated.`)
         },
 
         error: err => this.notifier.error(err.message)
@@ -145,7 +140,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   private updateAnonymousProfile (details: UserUpdateMe) {
     this.userService.updateMyAnonymousProfile(details)
 
-    if (this.notifyOnUpdate) {
+    if (this.notifyOnUpdate()) {
       this.notifier.success($localize`Display/Video settings updated.`)
     }
   }

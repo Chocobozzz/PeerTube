@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
@@ -49,10 +49,22 @@ import { VideoSend } from './video-send'
   ]
 })
 export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
-  @ViewChild('videoEdit', { static: false }) videoEditComponent: VideoEditComponent
+  protected formReactiveService = inject(FormReactiveService)
+  protected loadingBar = inject(LoadingBarService)
+  protected notifier = inject(Notifier)
+  protected authService = inject(AuthService)
+  protected serverService = inject(ServerService)
+  protected videoService = inject(VideoService)
+  protected videoCaptionService = inject(VideoCaptionService)
+  protected videoChapterService = inject(VideoChapterService)
+  private router = inject(Router)
+  private videoImportService = inject(VideoImportService)
+  private hooks = inject(HooksService)
 
-  @Output() firstStepDone = new EventEmitter<string>()
-  @Output() firstStepError = new EventEmitter<void>()
+  readonly videoEditComponent = viewChild<VideoEditComponent>('videoEdit')
+
+  readonly firstStepDone = output<string>()
+  readonly firstStepError = output()
 
   targetUrl = ''
 
@@ -62,22 +74,6 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
 
   video: VideoEdit
   error: string
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    protected loadingBar: LoadingBarService,
-    protected notifier: Notifier,
-    protected authService: AuthService,
-    protected serverService: ServerService,
-    protected videoService: VideoService,
-    protected videoCaptionService: VideoCaptionService,
-    protected videoChapterService: VideoChapterService,
-    private router: Router,
-    private videoImportService: VideoImportService,
-    private hooks: HooksService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     super.ngOnInit()
@@ -111,41 +107,41 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     this.loadingBar.useRef().start()
 
     this.videoImportService
-        .importVideoUrl(this.targetUrl, videoUpdate)
-        .pipe(
-          switchMap(previous => {
-            return forkJoin([
-              this.videoCaptionService.listCaptions(previous.video.uuid),
-              this.videoChapterService.getChapters({ videoId: previous.video.uuid }),
-              this.videoService.getVideo({ videoId: previous.video.uuid })
-            ]).pipe(map(([ videoCaptionsResult, { chapters }, video ]) => ({ videoCaptions: videoCaptionsResult.data, chapters, video })))
-          })
-        )
-        .subscribe({
-          next: ({ video, videoCaptions, chapters }) => {
-            this.loadingBar.useRef().complete()
-            this.firstStepDone.emit(video.name)
-            this.isImportingVideo = false
-            this.hasImportedVideo = true
-
-            this.video = new VideoEdit(video)
-            this.video.patch({ privacy: this.firstStepPrivacyId })
-
-            this.chaptersEdit.loadFromAPI(chapters)
-
-            this.videoCaptions = videoCaptions
-
-            hydrateFormFromVideo(this.form, this.video, true)
-            setTimeout(() => this.videoEditComponent.patchChapters(this.chaptersEdit))
-          },
-
-          error: err => {
-            this.loadingBar.useRef().complete()
-            this.isImportingVideo = false
-            this.firstStepError.emit()
-            this.notifier.error(err.message)
-          }
+      .importVideoUrl(this.targetUrl, videoUpdate)
+      .pipe(
+        switchMap(previous => {
+          return forkJoin([
+            this.videoCaptionService.listCaptions(previous.video.uuid),
+            this.videoChapterService.getChapters({ videoId: previous.video.uuid }),
+            this.videoService.getVideo({ videoId: previous.video.uuid })
+          ]).pipe(map(([ videoCaptionsResult, { chapters }, video ]) => ({ videoCaptions: videoCaptionsResult.data, chapters, video })))
         })
+      )
+      .subscribe({
+        next: ({ video, videoCaptions, chapters }) => {
+          this.loadingBar.useRef().complete()
+          this.firstStepDone.emit(video.name)
+          this.isImportingVideo = false
+          this.hasImportedVideo = true
+
+          this.video = new VideoEdit(video)
+          this.video.patch({ privacy: this.firstStepPrivacyId })
+
+          this.chaptersEdit.loadFromAPI(chapters)
+
+          this.videoCaptions = videoCaptions
+
+          hydrateFormFromVideo(this.form, this.video, true)
+          setTimeout(() => this.videoEditComponent().patchChapters(this.chaptersEdit))
+        },
+
+        error: err => {
+          this.loadingBar.useRef().complete()
+          this.isImportingVideo = false
+          this.firstStepError.emit()
+          this.notifier.error(err.message)
+        }
+      })
   }
 
   async updateSecondStep () {
@@ -158,19 +154,19 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
 
     // Update the video
     this.updateVideoAndCaptionsAndChapters({ video: this.video, captions: this.videoCaptions, chapters: this.chaptersEdit })
-        .subscribe({
-          next: () => {
-            this.isUpdatingVideo = false
-            this.notifier.success($localize`Video to import updated.`)
+      .subscribe({
+        next: () => {
+          this.isUpdatingVideo = false
+          this.notifier.success($localize`Video to import updated.`)
 
-            this.router.navigate([ '/my-library', 'video-imports' ])
-          },
+          this.router.navigate([ '/my-library', 'video-imports' ])
+        },
 
-          error: err => {
-            this.error = err.message
-            scrollToTop()
-            logger.error(err)
-          }
-        })
+        error: err => {
+          this.error = err.message
+          scrollToTop()
+          logger.error(err)
+        }
+      })
   }
 }

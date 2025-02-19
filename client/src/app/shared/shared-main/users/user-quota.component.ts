@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { AuthService, UserService } from '@app/core'
 import { first } from 'rxjs'
 import { BytesPipe } from '../common/bytes.pipe'
@@ -10,8 +10,10 @@ import { ProgressBarComponent } from '../common/progress-bar.component'
   templateUrl: './user-quota.component.html',
   imports: [ NgIf, BytesPipe, ProgressBarComponent ]
 })
-
 export class UserQuotaComponent implements OnInit {
+  private userService = inject(UserService)
+  private auth = inject(AuthService)
+
   userVideoQuota = '0'
   userVideoQuotaUsed = 0
   userVideoQuotaPercentage = 15
@@ -19,11 +21,6 @@ export class UserQuotaComponent implements OnInit {
   userVideoQuotaDaily = '0'
   userVideoQuotaUsedDaily = 0
   userVideoQuotaDailyPercentage = 15
-
-  constructor (
-    private userService: UserService,
-    private auth: AuthService
-  ) { }
 
   get user () {
     return this.auth.getUser()

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, inject, input } from '@angular/core'
 import { PeerTubePlugin, PeerTubePluginIndex, PluginType_Type } from '@peertube/peertube-models'
 import { PluginApiService } from './plugin-api.service'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
@@ -9,18 +9,14 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   styleUrls: [ './plugin-card.component.scss' ],
   imports: [ GlobalIconComponent ]
 })
-
 export class PluginCardComponent {
-  @Input() plugin: PeerTubePluginIndex | PeerTubePlugin
-  @Input() version: string
-  @Input() pluginType: PluginType_Type
+  private pluginApiService = inject(PluginApiService)
 
-  constructor (
-    private pluginApiService: PluginApiService
-  ) {
-  }
+  readonly plugin = input<PeerTubePluginIndex | PeerTubePlugin>(undefined)
+  readonly version = input<string>(undefined)
+  readonly pluginType = input<PluginType_Type>(undefined)
 
   getPluginOrThemeHref (name: string) {
-    return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
+    return this.pluginApiService.getPluginOrThemeHref(this.pluginType(), name)
   }
 }

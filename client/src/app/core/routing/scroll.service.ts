@@ -1,7 +1,7 @@
 import debug from 'debug'
 import { pairwise } from 'rxjs'
 import { ViewportScroller } from '@angular/common'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RouterSetting } from '../'
 import { PeerTubeRouterService } from './peertube-router.service'
 import { logger } from '@root-helpers/logger'
@@ -10,13 +10,10 @@ const debugLogger = debug('peertube:main:ScrollService')
 
 @Injectable()
 export class ScrollService {
+  private viewportScroller = inject(ViewportScroller)
+  private peertubeRouter = inject(PeerTubeRouterService)
 
   private resetScroll = true
-
-  constructor (
-    private viewportScroller: ViewportScroller,
-    private peertubeRouter: PeerTubeRouterService
-  ) { }
 
   enableScrollRestoration () {
     // We'll manage scroll restoration ourselves
@@ -29,40 +26,40 @@ export class ScrollService {
   private produceScroll () {
     // When we add the a-state parameter, we don't want to alter the scroll
     this.peertubeRouter.getNavigationEndEvents().pipe(pairwise())
-                      .subscribe(([ e1, e2 ]) => {
-                        try {
-                          this.resetScroll = false
+      .subscribe(([ e1, e2 ]) => {
+        try {
+          this.resetScroll = false
 
-                          const previousUrl = new URL(window.location.origin + e1.urlAfterRedirects)
-                          const nextUrl = new URL(window.location.origin + e2.urlAfterRedirects)
+          const previousUrl = new URL(window.location.origin + e1.urlAfterRedirects)
+          const nextUrl = new URL(window.location.origin + e2.urlAfterRedirects)
 
-                          if (previousUrl.pathname !== nextUrl.pathname) {
-                            this.resetScroll = true
-                            return
-                          }
+          if (previousUrl.pathname !== nextUrl.pathname) {
+            this.resetScroll = true
+            return
+          }
 
-                          if (this.peertubeRouter.hasRouteSetting(RouterSetting.DISABLE_SCROLL_RESTORE)) {
-                            this.resetScroll = false
-                            return
-                          }
+          if (this.peertubeRouter.hasRouteSetting(RouterSetting.DISABLE_SCROLL_RESTORE)) {
+            this.resetScroll = false
+            return
+          }
 
-                          // Remove route settings from the comparison
-                          const nextSearchParams = nextUrl.searchParams
-                          nextSearchParams.delete(PeerTubeRouterService.ROUTE_SETTING_NAME)
+          // Remove route settings from the comparison
+          const nextSearchParams = nextUrl.searchParams
+          nextSearchParams.delete(PeerTubeRouterService.ROUTE_SETTING_NAME)
 
-                          const previousSearchParams = previousUrl.searchParams
+          const previousSearchParams = previousUrl.searchParams
 
-                          nextSearchParams.sort()
-                          previousSearchParams.sort()
+          nextSearchParams.sort()
+          previousSearchParams.sort()
 
-                          if (nextSearchParams.toString() !== previousSearchParams.toString()) {
-                            this.resetScroll = true
-                          }
-                        } catch (err) {
-                          logger.error('Cannot parse URL to check next scroll.', err)
-                          this.resetScroll = true
-                        }
-                      })
+          if (nextSearchParams.toString() !== previousSearchParams.toString()) {
+            this.resetScroll = true
+          }
+        } catch (err) {
+          logger.error('Cannot parse URL to check next scroll.', err)
+          this.resetScroll = true
+        }
+      })
   }
 
   private consumeScroll () {
@@ -88,5 +85,4 @@ export class ScrollService {
       }
     })
   }
-
 }

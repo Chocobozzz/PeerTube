@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
@@ -15,22 +15,22 @@ import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.
   imports: [ NgIf, NgFor, InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
-  @Input() user: User
+  private userNotificationService = inject(UserNotificationService)
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
+
+  readonly user = input<User>(undefined)
 
   notificationSettingGroups: { label: string, keys: (keyof UserNotificationSetting)[] }[] = []
-  emailNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
-  webNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
-  labelNotifications: { [ id in keyof UserNotificationSetting ]?: string } = {}
-  rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]?: UserRightType } = {}
+  emailNotifications: { [id in keyof UserNotificationSetting]?: boolean } = {}
+  webNotifications: { [id in keyof UserNotificationSetting]?: boolean } = {}
+  labelNotifications: { [id in keyof UserNotificationSetting]?: string } = {}
+  rightNotifications: { [id in keyof Partial<UserNotificationSetting>]?: UserRightType } = {}
   emailEnabled = false
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
 
-  constructor (
-    private userNotificationService: UserNotificationService,
-    private serverService: ServerService,
-    private notifier: Notifier
-  ) {
+  constructor () {
     this.notificationSettingGroups = [
       {
         label: $localize`Social`,
@@ -118,7 +118,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     const rightToHave = this.rightNotifications[field]
     if (!rightToHave) return true // No rights needed
 
-    return this.user.hasRight(rightToHave)
+    return this.user().hasRight(rightToHave)
   }
 
   hasNotificationsInGroup (group: { keys: (keyof UserNotificationSetting)[] }) {
@@ -134,21 +134,21 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   updateEmailSetting (field: keyof UserNotificationSetting, value: boolean) {
-    if (value === true) this.user.notificationSettings[field] |= UserNotificationSettingValue.EMAIL
-    else this.user.notificationSettings[field] &= ~UserNotificationSettingValue.EMAIL
+    if (value === true) this.user().notificationSettings[field] |= UserNotificationSettingValue.EMAIL
+    else this.user().notificationSettings[field] &= ~UserNotificationSettingValue.EMAIL
 
     this.savePreferences()
   }
 
   updateWebSetting (field: keyof UserNotificationSetting, value: boolean) {
-    if (value === true) this.user.notificationSettings[field] |= UserNotificationSettingValue.WEB
-    else this.user.notificationSettings[field] &= ~UserNotificationSettingValue.WEB
+    if (value === true) this.user().notificationSettings[field] |= UserNotificationSettingValue.WEB
+    else this.user().notificationSettings[field] &= ~UserNotificationSettingValue.WEB
 
     this.savePreferences()
   }
 
   private savePreferencesImpl () {
-    this.userNotificationService.updateNotificationSettings(this.user.notificationSettings)
+    this.userNotificationService.updateNotificationSettings(this.user().notificationSettings)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Preferences saved`, undefined, 2000)
@@ -159,8 +159,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   private loadNotificationSettings () {
-    for (const key of objectKeysTyped(this.user.notificationSettings)) {
-      const value = this.user.notificationSettings[key]
+    for (const key of objectKeysTyped(this.user().notificationSettings)) {
+      const value = this.user().notificationSettings[key]
       this.emailNotifications[key] = !!(value & UserNotificationSettingValue.EMAIL)
 
       this.webNotifications[key] = !!(value & UserNotificationSettingValue.WEB)

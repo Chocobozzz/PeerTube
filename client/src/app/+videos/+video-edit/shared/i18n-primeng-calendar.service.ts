@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { PrimeNGConfig } from 'primeng/api'
 
 @Injectable()
 export class I18nPrimengCalendarService {
+  private config = inject(PrimeNGConfig)
 
-  constructor (private config: PrimeNGConfig) {
+  constructor () {
     this.config.setTranslation({
       dayNames: [
         $localize`Sunday`,

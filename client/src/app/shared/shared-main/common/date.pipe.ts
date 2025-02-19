@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common'
-import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core'
+import { LOCALE_ID, Pipe, PipeTransform, inject } from '@angular/core'
 
 // Re-implementation of the angular date pipe that uses the web browser locale to display dates
 
@@ -12,7 +12,9 @@ export class PTDatePipe implements PipeTransform {
   private angularPipe: DatePipe
   private customLocaleId: string
 
-  constructor (@Inject(LOCALE_ID) localeId: string) {
+  constructor () {
+    const localeId = inject(LOCALE_ID)
+
     if (navigator.language.includes('-') && navigator.language.split('-')[0] === localeId.split('-')[0]) {
       this.customLocaleId = navigator.language
     } else {

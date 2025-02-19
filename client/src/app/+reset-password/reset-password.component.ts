@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier, UserService } from '@app/core'
 import { RESET_PASSWORD_CONFIRM_VALIDATOR } from '@app/shared/form-validators/reset-password-validators'
@@ -14,18 +14,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
   imports: [ FormsModule, ReactiveFormsModule, InputTextComponent ]
 })
 export class ResetPasswordComponent extends FormReactive implements OnInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private userService = inject(UserService)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+
   private userId: number
   private verificationString: string
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private userService: UserService,
-    private notifier: Notifier,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({

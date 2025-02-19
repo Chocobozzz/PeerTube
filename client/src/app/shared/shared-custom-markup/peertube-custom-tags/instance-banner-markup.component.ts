@@ -1,12 +1,12 @@
 import { NgIf } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core'
 import { ServerService } from '@app/core'
 import { maxBy } from '@peertube/peertube-core-utils'
 import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component that creates the img HTML element containing the instance banner
-*/
+ */
 
 @Component({
   selector: 'my-instance-banner-markup',
@@ -15,13 +15,11 @@ import { CustomMarkupComponent } from './shared'
   imports: [ NgIf ]
 })
 export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupComponent {
+  private cd = inject(ChangeDetectorRef)
+  private server = inject(ServerService)
+
   instanceBannerUrl: string
   loaded: undefined
-
-  constructor (
-    private cd: ChangeDetectorRef,
-    private server: ServerService
-  ) {}
 
   ngOnInit () {
     const { instance } = this.server.getHTMLConfig()

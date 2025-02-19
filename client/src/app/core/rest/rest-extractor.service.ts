@@ -1,6 +1,6 @@
 import { throwError as observableThrowError } from 'rxjs'
 import { HttpHeaderResponse } from '@angular/common/http'
-import { Inject, Injectable, LOCALE_ID } from '@angular/core'
+import { Injectable, LOCALE_ID, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { DateFormat, dateToHuman } from '@app/helpers'
 import { HttpStatusCode, HttpStatusCodeType, ResultList } from '@peertube/peertube-models'
@@ -8,13 +8,10 @@ import { logger } from '@root-helpers/logger'
 
 @Injectable()
 export class RestExtractor {
+  private localeId = inject(LOCALE_ID)
+  private router = inject(Router)
 
-  constructor (
-    @Inject(LOCALE_ID) private localeId: string,
-    private router: Router
-  ) { }
-
-  applyToResultListData <T, A, U> (
+  applyToResultListData<T, A, U> (
     result: ResultList<T>,
     fun: (data: T, ...args: A[]) => U,
     additionalArgs: A[] = []
@@ -27,7 +24,7 @@ export class RestExtractor {
     }
   }
 
-  convertResultListDateToHuman <T> (
+  convertResultListDateToHuman<T> (
     result: ResultList<T>,
     fieldsToConvert: string[] = [ 'createdAt' ],
     format?: DateFormat

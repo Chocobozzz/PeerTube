@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core'
+import { NgIf } from '@angular/common'
+import { Component, ElementRef, inject, viewChild } from '@angular/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
-import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-custom-modal',
@@ -11,19 +11,17 @@ import { NgIf } from '@angular/common'
   imports: [ NgIf, GlobalIconComponent ]
 })
 export class CustomModalComponent {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  private modalService = inject(NgbModal)
 
-  @Input() title: string
-  @Input() content: string
-  @Input() close?: boolean
-  @Input() cancel?: { value: string, action?: () => void }
-  @Input() confirm?: { value: string, action?: () => void }
+  readonly modal = viewChild<ElementRef>('modal')
+
+  title: string
+  content: string
+  close: boolean
+  cancel: { value: string, action?: () => void }
+  confirm: { value: string, action?: () => void }
 
   private modalRef: NgbModalRef
-
-  constructor (
-    private modalService: NgbModal
-  ) { }
 
   show (input: {
     title: string
@@ -45,7 +43,7 @@ export class CustomModalComponent {
     this.cancel = cancel
     this.confirm = confirm
 
-    this.modalRef = this.modalService.open(this.modal, {
+    this.modalRef = this.modalService.open(this.modal(), {
       centered: true,
       backdrop: 'static',
       keyboard: false,
@@ -56,8 +54,9 @@ export class CustomModalComponent {
   onCancelClick () {
     this.modalRef.close()
 
-    if (typeof this.cancel.action === 'function') {
-      this.cancel.action()
+    const cancel = this.cancel
+    if (typeof cancel.action === 'function') {
+      cancel.action()
     }
 
     this.destroy()
@@ -71,8 +70,9 @@ export class CustomModalComponent {
   onConfirmClick () {
     this.modalRef.close()
 
-    if (typeof this.confirm.action === 'function') {
-      this.confirm.action()
+    const confirm = this.confirm
+    if (typeof confirm.action === 'function') {
+      confirm.action()
     }
 
     this.destroy()

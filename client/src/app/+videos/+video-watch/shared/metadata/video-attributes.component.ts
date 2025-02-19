@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, Input, OnChanges } from '@angular/core'
+import { Component, OnChanges, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { HooksService } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -21,28 +21,29 @@ type PluginMetadata = {
   imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, TimeDurationFormatterPipe, PTDatePipe ]
 })
 export class VideoAttributesComponent implements OnChanges {
-  @Input() video: VideoDetails
+  private hooks = inject(HooksService)
+
+  readonly video = input<VideoDetails>(undefined)
 
   pluginMetadata: PluginMetadata[] = []
-
-  constructor (private hooks: HooksService) { }
 
   async ngOnChanges () {
     this.pluginMetadata = await this.hooks.wrapObject(
       this.pluginMetadata,
       'video-watch',
       'filter:video-watch.video-plugin-metadata.result',
-      { video: this.video }
+      { video: this.video() }
     )
   }
 
   getVideoHost () {
-    return this.video.channel.host
+    return this.video().channel.host
   }
 
   getVideoTags () {
-    if (!this.video || Array.isArray(this.video.tags) === false) return []
+    const video = this.video()
+    if (!video || Array.isArray(video.tags) === false) return []
 
-    return this.video.tags
+    return video.tags
   }
 }

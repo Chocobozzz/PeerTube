@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
 import { getOriginUrl } from '@app/helpers'
@@ -39,8 +39,20 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
   ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
-  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
-  @ViewChild('supportModal') supportModal: SupportModalComponent
+  private route = inject(ActivatedRoute)
+  private authService = inject(AuthService)
+  private videoChannelService = inject(VideoChannelService)
+  private videoService = inject(VideoService)
+  private restExtractor = inject(RestExtractor)
+  private hotkeysService = inject(HotkeysService)
+  private screenService = inject(ScreenService)
+  private markdown = inject(MarkdownService)
+  private blocklist = inject(BlocklistService)
+  private metaService = inject(MetaService)
+  private server = inject(ServerService)
+
+  readonly subscribeButton = viewChild<SubscribeButtonComponent>('subscribeButton')
+  readonly supportModal = viewChild<SupportModalComponent>('supportModal')
 
   videoChannel: VideoChannel
   ownerAccount: Account
@@ -55,30 +67,18 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   private routeSub: Subscription
 
-  constructor (
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private videoChannelService: VideoChannelService,
-    private videoService: VideoService,
-    private restExtractor: RestExtractor,
-    private hotkeysService: HotkeysService,
-    private screenService: ScreenService,
-    private markdown: MarkdownService,
-    private blocklist: BlocklistService,
-    private metaService: MetaService,
-    private server: ServerService
-  ) { }
-
   ngOnInit () {
     this.routeSub = this.route.params
       .pipe(
         map(params => params['videoChannelName']),
         distinctUntilChanged(),
         switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
-          HttpStatusCode.BAD_REQUEST_400,
-          HttpStatusCode.NOT_FOUND_404
-        ]))
+        catchError(err =>
+          this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+            HttpStatusCode.BAD_REQUEST_400,
+            HttpStatusCode.NOT_FOUND_404
+          ])
+        )
       )
       .subscribe(async videoChannel => {
         this.metaService.setTitle(videoChannel.displayName)
@@ -106,8 +106,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
     this.hotkeys = [
       new Hotkey('Shift+s', () => {
-        if (this.subscribeButton.isSubscribedToAll()) this.subscribeButton.unsubscribe()
-        else this.subscribeButton.subscribe()
+        const subscribeButton = this.subscribeButton()
+        if (subscribeButton.isSubscribedToAll()) subscribeButton.unsubscribe()
+        else subscribeButton.subscribe()
 
         return false
       }, $localize`Subscribe to the account`)
@@ -167,7 +168,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   showSupportModal () {
-    this.supportModal.show()
+    this.supportModal().show()
   }
 
   getAccountUrl () {

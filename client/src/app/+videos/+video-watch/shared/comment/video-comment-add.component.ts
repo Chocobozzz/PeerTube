@@ -1,17 +1,5 @@
 import { getLocaleDirection, NgClass, NgFor, NgIf } from '@angular/common'
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  LOCALE_ID,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core'
+import { Component, ElementRef, LOCALE_ID, OnChanges, OnInit, SimpleChanges, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
@@ -51,43 +39,39 @@ import { RemoteSubscribeComponent } from '../../../../shared/shared-user-subscri
   ]
 })
 export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
-  @Input() user: User
-  @Input() video: Video
-  @Input() videoPassword: string
-  @Input() parentComment?: VideoComment
-  @Input() parentComments?: VideoComment[]
-  @Input() focusOnInit = false
-  @Input() textValue?: string
+  protected formReactiveService = inject(FormReactiveService)
+  private notifier = inject(Notifier)
+  private videoCommentService = inject(VideoCommentService)
+  private modalService = inject(NgbModal)
+  private localeId = inject(LOCALE_ID)
 
-  @Output() commentCreated = new EventEmitter<VideoComment>()
-  @Output() cancelEdit = new EventEmitter()
+  readonly user = input<User>(undefined)
+  readonly video = input<Video>(undefined)
+  readonly videoPassword = input<string>(undefined)
+  readonly parentComment = input<VideoComment>(undefined)
+  readonly parentComments = input<VideoComment[]>(undefined)
+  readonly focusOnInit = input(false)
+  readonly textValue = input<string>(undefined)
 
-  @ViewChild('visitorModal', { static: true }) visitorModal: NgbModal
-  @ViewChild('emojiModal', { static: true }) emojiModal: NgbModal
-  @ViewChild('textarea', { static: true }) textareaElement: ElementRef
+  readonly commentCreated = output<VideoComment>()
+  readonly cancelEdit = output()
+
+  readonly visitorModal = viewChild<NgbModal>('visitorModal')
+  readonly emojiModal = viewChild<NgbModal>('emojiModal')
+  readonly textareaElement = viewChild<ElementRef>('textarea')
 
   addingComment = false
   addingCommentButtonValue: string
 
   private emojiMarkupList: { emoji: string, name: string }[]
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private notifier: Notifier,
-    private videoCommentService: VideoCommentService,
-    private modalService: NgbModal,
-    @Inject(LOCALE_ID) private localeId: string
-  ) {
-    super()
-  }
-
   ngOnInit () {
     this.buildForm({
       text: VIDEO_COMMENT_TEXT_VALIDATOR
     })
 
-    if (this.user) {
-      if (!this.parentComment) {
+    if (this.user()) {
+      if (!this.parentComment()) {
         this.addingCommentButtonValue = $localize`Comment`
       } else {
         this.addingCommentButtonValue = $localize`Reply`
@@ -128,18 +112,18 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   openVisitorModal (event: any) {
-    if (this.user === null) { // we only open it for visitors
+    if (this.user() === null) { // we only open it for visitors
       // fixing ng-bootstrap ModalService and the "Expression Changed After It Has Been Checked" Error
       event.srcElement.blur()
       event.preventDefault()
 
-      this.modalService.open(this.visitorModal)
+      this.modalService.open(this.visitorModal())
     }
   }
 
   openEmojiModal (event: any) {
     event.preventDefault()
-    this.modalService.open(this.emojiModal, { backdrop: true, size: 'lg' })
+    this.modalService.open(this.emojiModal(), { backdrop: true, size: 'lg' })
   }
 
   hideModals () {
@@ -155,7 +139,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     const commentCreate: VideoCommentCreate = this.form.value
     let obs: Observable<VideoComment>
 
-    if (this.parentComment) {
+    if (this.parentComment()) {
       obs = this.addCommentReply(commentCreate)
     } else {
       obs = this.addCommentThread(commentCreate)
@@ -186,7 +170,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   cancelCommentReply () {
     this.cancelEdit.emit(null)
-    this.form.value['text'] = this.textareaElement.nativeElement.value = ''
+    this.form.value['text'] = this.textareaElement().nativeElement.value = ''
   }
 
   isRTL () {
@@ -194,7 +178,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   getAvatarActorType () {
-    if (this.user) return 'account'
+    if (this.user()) return 'account'
 
     return 'unlogged'
   }
@@ -202,47 +186,48 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   private addCommentReply (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentReply({
-        videoId: this.video.uuid,
-        inReplyToCommentId: this.parentComment.id,
+        videoId: this.video().uuid,
+        inReplyToCommentId: this.parentComment().id,
         comment: commentCreate,
-        videoPassword: this.videoPassword
+        videoPassword: this.videoPassword()
       })
   }
 
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentThread(this.video.uuid, commentCreate, this.videoPassword)
+      .addCommentThread(this.video().uuid, commentCreate, this.videoPassword())
   }
 
   private initTextValue () {
-    if (this.textValue) {
-      this.patchTextValue(this.textValue, this.focusOnInit)
+    const textValue = this.textValue()
+    if (textValue) {
+      this.patchTextValue(textValue, this.focusOnInit())
       return
     }
 
-    if (this.parentComment) {
-      const mentions = this.parentComments
-        .filter(c => c.account && c.account.id !== this.user.account.id) // Don't add mention of ourselves
+    if (this.parentComment()) {
+      const mentions = this.parentComments()
+        .filter(c => c.account && c.account.id !== this.user().account.id) // Don't add mention of ourselves
         .map(c => '@' + c.by)
 
       const mentionsSet = new Set(mentions)
       const mentionsText = Array.from(mentionsSet).join(' ') + ' '
 
-      this.patchTextValue(mentionsText, this.focusOnInit)
+      this.patchTextValue(mentionsText, this.focusOnInit())
     }
   }
 
   private patchTextValue (text: string, focus: boolean) {
     setTimeout(() => {
       if (focus) {
-        this.textareaElement.nativeElement.focus()
+        this.textareaElement().nativeElement.focus()
       }
 
       // Scroll to textarea
-      this.textareaElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
+      this.textareaElement().nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
 
       // Use the native textarea autosize according to the text's break lines
-      this.textareaElement.nativeElement.dispatchEvent(new Event('input'))
+      this.textareaElement().nativeElement.dispatchEvent(new Event('input'))
     })
 
     this.form.patchValue({ text })

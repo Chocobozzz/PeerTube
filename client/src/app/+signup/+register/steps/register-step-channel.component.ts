@@ -1,6 +1,6 @@
 import { concat, of } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
@@ -16,18 +16,14 @@ import { NgIf, NgClass } from '@angular/common'
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, BytesPipe ]
 })
 export class RegisterStepChannelComponent extends FormReactive implements OnInit {
-  @Input() username: string
-  @Input() instanceName: string
-  @Input() videoQuota: number
+  protected formReactiveService = inject(FormReactiveService)
+  private signupService = inject(SignupService)
 
-  @Output() formBuilt = new EventEmitter<FormGroup>()
+  readonly username = input<string>(undefined)
+  readonly instanceName = input<string>(undefined)
+  readonly videoQuota = input<number>(undefined)
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private signupService: SignupService
-  ) {
-    super()
-  }
+  readonly formBuilt = output<FormGroup>()
 
   get instanceHost () {
     return window.location.host
@@ -45,11 +41,12 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
       of(''),
       this.form.get('displayName').valueChanges
     ).pipe(pairwise())
-     .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
+      .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
   }
 
   isSameThanUsername () {
-    return this.username && this.username === this.form.value['name']
+    const username = this.username()
+    return username && username === this.form.value['name']
   }
 
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {

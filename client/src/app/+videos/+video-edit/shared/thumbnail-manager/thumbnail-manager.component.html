@@ -1,7 +1,7 @@
 <div class="root">
 
-  @if (video && selectingFromVideo) {
-    <my-embed #embed [video]="video" enableAPI="true" mute="true" autoplay="true"></my-embed>
+  @if (video() && selectingFromVideo) {
+    <my-embed #embed [video]="video()" enableAPI="true" mute="true" autoplay="true"></my-embed>
   } @else {
     <div class="preview-container">
       @if (imageSrc) {

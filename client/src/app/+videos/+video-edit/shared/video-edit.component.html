@@ -1,9 +1,9 @@
-<div class="video-edit" [formGroup]="form">
+<div class="video-edit" [formGroup]="form()">
   <div ngbNav #nav="ngbNav" class="nav-tabs">
 
     <ng-template #pluginSettingTemplate let-pluginSetting>
       <div class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
-        <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
+        <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors()['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
       </div>
     </ng-template>
 
@@ -16,8 +16,8 @@
             <div class="form-group">
               <label i18n for="name">Title</label>
               <input type="text" id="name" class="form-control" formControlName="name" />
-              <div *ngIf="formErrors.name" class="form-error" role="alert">
-                {{ formErrors.name }}
+              <div *ngIf="formErrors().name" class="form-error" role="alert">
+                {{ formErrors().name }}
               </div>
             </div>
 
@@ -35,8 +35,8 @@
               </my-help>
 
               <my-select-tags inputId="label-tags" formControlName="tags" class="d-block w-100"></my-select-tags>
-              <div *ngIf="formErrors.tags" class="form-error" role="alert">
-                {{ formErrors.tags }}
+              <div *ngIf="formErrors().tags" class="form-error" role="alert">
+                {{ formErrors().tags }}
               </div>
             </div>
 
@@ -55,8 +55,8 @@
 
               <my-markdown-textarea
                 inputId="description"
-                formControlName="description" [markdownVideo]="publishedVideo"
-                [formError]="formErrors.description" truncateTo3Lines="true" withEmoji="true"
+                formControlName="description" [markdownVideo]="publishedVideo()"
+                [formError]="formErrors().description" truncateTo3Lines="true" withEmoji="true"
               ></my-markdown-textarea>
             </div>
           </div>
@@ -64,15 +64,15 @@
           <div class="col-video-edit">
             <div class="form-group">
               <label i18n for="channel">Channel</label>
-              <my-select-channel class="d-block" inputId="channel" [items]="userVideoChannels" formControlName="channelId"></my-select-channel>
+              <my-select-channel class="d-block" inputId="channel" [items]="userVideoChannels()" formControlName="channelId"></my-select-channel>
             </div>
 
             <div class="form-group">
               <label i18n for="category">Category</label>
               <my-select-options inputId="category" [items]="videoCategories" formControlName="category" clearable="true"></my-select-options>
 
-              <div *ngIf="formErrors.category" class="form-error" role="alert">
-                {{ formErrors.category }}
+              <div *ngIf="formErrors().category" class="form-error" role="alert">
+                {{ formErrors().category }}
               </div>
             </div>
 
@@ -89,8 +89,8 @@
 
               <my-select-options inputId="licence" [items]="videoLicences" formControlName="licence" clearable="true"></my-select-options>
 
-              <div *ngIf="formErrors.licence" class="form-error" role="alert">
-                {{ formErrors.licence }}
+              <div *ngIf="formErrors().licence" class="form-error" role="alert">
+                {{ formErrors().licence }}
               </div>
             </div>
 
@@ -101,8 +101,8 @@
                 clearable="true" filter="true" virtualScroll="true"
               ></my-select-options>
 
-              <div *ngIf="formErrors.language" class="form-error" role="alert">
-                {{ formErrors.language }}
+              <div *ngIf="formErrors().language" class="form-error" role="alert">
+                {{ formErrors().language }}
               </div>
             </div>
 
@@ -110,14 +110,14 @@
               <label i18n for="privacy">Privacy</label>
               <my-select-options inputId="privacy" [items]="videoPrivacies" formControlName="privacy"></my-select-options>
 
-              <div *ngIf="formErrors.privacy" class="form-error" role="alert">
-                {{ formErrors.privacy }}
+              <div *ngIf="formErrors().privacy" class="form-error" role="alert">
+                {{ formErrors().privacy }}
               </div>
             </div>
 
             <div *ngIf="passwordProtectionSelected" class="form-group">
               <label i18n for="videoPassword">Password</label>
-              <my-input-text formControlName="videoPassword" inputId="videoPassword" [withCopy]="true" [formError]="formErrors['videoPassword']"></my-input-text>
+              <my-input-text formControlName="videoPassword" inputId="videoPassword" [withCopy]="true" [formError]="formErrors()['videoPassword']"></my-input-text>
             </div>
 
             <div *ngIf="schedulePublicationSelected" class="form-group">
@@ -129,8 +129,8 @@
               >
               </p-calendar>
 
-              <div *ngIf="formErrors.schedulePublicationAt" class="form-error" role="alert">
-                {{ formErrors.schedulePublicationAt }}
+              <div *ngIf="formErrors().schedulePublicationAt" class="form-error" role="alert">
+                {{ formErrors().schedulePublicationAt }}
               </div>
             </div>
 
@@ -144,7 +144,7 @@
               </ng-template>
             </my-peertube-checkbox>
 
-            <my-peertube-checkbox *ngIf="!hideWaitTranscoding" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
+            <my-peertube-checkbox *ngIf="!hideWaitTranscoding()" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
                 <ng-container i18n>Publish after transcoding</ng-container>
               </ng-template>
@@ -164,16 +164,16 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem *ngIf="!liveVideo">
+    <ng-container ngbNavItem *ngIf="!liveVideo()">
       <a ngbNavLink i18n>Captions</a>
 
       <ng-template ngbNavContent>
         <div class="captions">
-          <my-alert type="primary" *ngIf="displayTranscriptionInfo && isTranscriptionEnabled() && !hasCaptions()" i18n>
+          <my-alert type="primary" *ngIf="displayTranscriptionInfo() && isTranscriptionEnabled() && !hasCaptions()" i18n>
             Subtitles will be automatically generated from your video.
           </my-alert>
 
-          <div class="form-group" *ngFor="let videoCaption of videoCaptions">
+          <div class="form-group" *ngFor="let videoCaption of videoCaptions()">
 
             <div class="caption-entry">
 
@@ -220,7 +220,7 @@
             </div>
           </div>
 
-          <div i18n class="no-caption" *ngIf="videoCaptions?.length === 0">
+          <div i18n class="no-caption" *ngIf="videoCaptions()?.length === 0">
             No captions for now.
           </div>
 
@@ -235,7 +235,7 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem *ngIf="!liveVideo">
+    <ng-container ngbNavItem *ngIf="!liveVideo()">
       <a ngbNavLink i18n>Chapters</a>
 
       <ng-template ngbNavContent>
@@ -263,18 +263,18 @@
 
                 <my-timestamp-input
                   class="d-block" enableBorder="true" [inputName]="'timecode[' + i + ']'"
-                  [maxTimestamp]="publishedVideo?.duration" formControlName="timecode"
+                  [maxTimestamp]="publishedVideo()?.duration" formControlName="timecode"
                 ></my-timestamp-input>
 
                 <div>
                   <input
-                    [ngClass]="{ 'input-error': formErrors.chapters[i].title }"
+                    [ngClass]="{ 'input-error': formErrors().chapters[i].title }"
                     type="text" [id]="'title[' + i + ']'" [name]="'title[' + i + ']'" formControlName="title"
                   />
 
-                  <div [ngClass]="{ 'opacity-0': !formErrors.chapters[i].title }" class="form-error" role="alert">
+                  <div [ngClass]="{ 'opacity-0': !formErrors().chapters[i].title }" class="form-error" role="alert">
                     <span class="opacity-0">t</span> <!-- Ensure we have reserve a correct height -->
-                    {{ formErrors.chapters[i].title }}
+                    {{ formErrors().chapters[i].title }}
                   </div>
                 </div>
 
@@ -287,12 +287,12 @@
             </div>
           </div>
 
-          <my-embed *ngIf="publishedVideo" class="col-md-12 col-xl-6" [video]="publishedVideo"></my-embed>
+          <my-embed *ngIf="publishedVideo()" class="col-md-12 col-xl-6" [video]="publishedVideo()"></my-embed>
         </div>
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem *ngIf="liveVideo">
+    <ng-container ngbNavItem *ngIf="liveVideo()">
       <a ngbNavLink i18n>Live settings</a>
 
       <ng-template ngbNavContent>
@@ -302,19 +302,19 @@
               <my-live-documentation-link></my-live-documentation-link>
             </my-alert>
 
-            <div *ngIf="liveVideo.rtmpUrl" class="form-group">
+            <div *ngIf="liveVideo().rtmpUrl" class="form-group">
               <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-              <my-input-text inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+              <my-input-text inputId="liveVideoRTMPUrl" [value]="liveVideo().rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
 
-            <div *ngIf="liveVideo.rtmpsUrl" class="form-group">
+            <div *ngIf="liveVideo().rtmpsUrl" class="form-group">
               <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
-              <my-input-text inputId="liveVideoRTMPSUrl" [value]="liveVideo.rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+              <my-input-text inputId="liveVideoRTMPSUrl" [value]="liveVideo().rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
 
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
-              <my-input-text inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-text>
+              <my-input-text inputId="liveVideoStreamKey" [value]="liveVideo().streamKey" [withCopy]="true" [readonly]="true"></my-input-text>
 
               <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
             </div>
@@ -360,8 +360,8 @@
               <label i18n for="latencyMode">Latency mode</label>
               <my-select-options inputId="latencyMode" [items]="latencyModes" formControlName="latencyMode" clearable="true"></my-select-options>
 
-              <div *ngIf="formErrors.latencyMode" class="form-error" role="alert">
-                {{ formErrors.latencyMode }}
+              <div *ngIf="formErrors().latencyMode" class="form-error" role="alert">
+                {{ formErrors().latencyMode }}
               </div>
             </div>
           </div>
@@ -382,7 +382,7 @@
             <div class="form-group">
               <label i18n for="previewfile">Video thumbnail</label>
 
-              <my-thumbnail-manager id="previewfile" formControlName="previewfile" [video]="publishedVideo"></my-thumbnail-manager>
+              <my-thumbnail-manager id="previewfile" formControlName="previewfile" [video]="publishedVideo()"></my-thumbnail-manager>
             </div>
 
             <div class="form-group">
@@ -398,14 +398,14 @@
 
               <my-markdown-textarea
                 inputId="support" formControlName="support" markdownType="enhanced"
-                [formError]="formErrors['support']"
+                [formError]="formErrors()['support']"
               ></my-markdown-textarea>
             </div>
           </div>
 
           <div class="col-md-12 col-xl-4">
 
-            <div *ngIf="videoSource" class="form-group">
+            <div *ngIf="videoSource()" class="form-group">
               <label i18n for="filename">Filename</label>
 
               <my-help>
@@ -416,7 +416,7 @@
                 </ng-template>
               </my-help>
 
-              <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoSource.filename" />
+              <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoSource().filename" />
             </div>
 
             <div class="form-group originally-published-at">
@@ -439,8 +439,8 @@
               >
               </p-calendar>
 
-              <div *ngIf="formErrors.originallyPublishedAt" class="form-error" role="alert">
-                {{ formErrors.originallyPublishedAt }}
+              <div *ngIf="formErrors().originallyPublishedAt" class="form-error" role="alert">
+                {{ formErrors().originallyPublishedAt }}
               </div>
             </div>
 
@@ -453,8 +453,8 @@
 
               <my-select-options inputId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy"></my-select-options>
 
-              <div *ngIf="formErrors.commentsPolicy" class="form-error" role="alert">
-                {{ formErrors.commentsPolicy }}
+              <div *ngIf="formErrors().commentsPolicy" class="form-error" role="alert">
+                {{ formErrors().commentsPolicy }}
               </div>
             </div>
 

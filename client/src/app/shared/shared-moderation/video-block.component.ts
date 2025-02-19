@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -20,24 +20,20 @@ import { NgIf, NgClass } from '@angular/common'
   imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
 })
 export class VideoBlockComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: NgbModal
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private videoBlocklistService = inject(VideoBlockService)
+  private notifier = inject(Notifier)
 
-  @Output() videoBlocked = new EventEmitter()
+  readonly modal = viewChild<NgbModal>('modal')
+
+  readonly videoBlocked = output()
 
   videos: Video[]
 
   error: string = null
 
   private openedModal: NgbModalRef
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private videoBlocklistService: VideoBlockService,
-    private notifier: Notifier
-  ) {
-    super()
-  }
 
   ngOnInit () {
     const defaultValues = { unfederate: 'true' }
@@ -67,7 +63,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   show (videos: Video[]) {
     this.videos = videos
 
-    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
   }
 
   hide () {
@@ -85,27 +81,27 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     }))
 
     this.videoBlocklistService.blockVideo(options)
-        .subscribe({
-          next: () => {
-            const message = formatICU(
-              $localize`{count, plural, =1 {Blocked {videoName}.} other {Blocked {count} videos.}}`,
-              { count: this.videos.length, videoName: this.getSingleVideo().name }
-            )
+      .subscribe({
+        next: () => {
+          const message = formatICU(
+            $localize`{count, plural, =1 {Blocked {videoName}.} other {Blocked {count} videos.}}`,
+            { count: this.videos.length, videoName: this.getSingleVideo().name }
+          )
 
-            this.notifier.success(message)
-            this.hide()
+          this.notifier.success(message)
+          this.hide()
 
-            for (const o of options) {
-              const video = this.videos.find(v => v.id === o.videoId)
+          for (const o of options) {
+            const video = this.videos.find(v => v.id === o.videoId)
 
-              video.blacklisted = true
-              video.blacklistedReason = o.reason
-            }
+            video.blacklisted = true
+            video.blacklistedReason = o.reason
+          }
 
-            this.videoBlocked.emit()
-          },
+          this.videoBlocked.emit()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

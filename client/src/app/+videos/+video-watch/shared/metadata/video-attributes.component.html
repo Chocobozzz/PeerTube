@@ -1,58 +1,58 @@
 <div class="attribute attribute-privacy">
   <span i18n class="attribute-label">Privacy</span>
-  <span class="attribute-value">{{ video.privacy.label }}</span>
+  <span class="attribute-value">{{ video().privacy.label }}</span>
 </div>
 
-<div *ngIf="video.isLocal === false" class="attribute attribute-origin">
+<div *ngIf="video().isLocal === false" class="attribute attribute-origin">
   <span i18n class="attribute-label">Origin</span>
   <a
     class="attribute-value" target="_blank" rel="noopener noreferrer"
     routerLink="/search" [queryParams]="{ host: getVideoHost() }"
-  >{{ video.originInstanceHost }}</a>
+  >{{ video().originInstanceHost }}</a>
 
   <a
     i18n-title title="Open the video on the origin instance"
-    target="_blank" rel="noopener noreferrer" [href]="video.url"
+    target="_blank" rel="noopener noreferrer" [href]="video().url"
   >
     <my-global-icon iconName="external-link"></my-global-icon>
   </a>
 </div>
 
-<div *ngIf="!!video.inputFileUpdatedAt" class="attribute attribute-re-uploaded-on">
+<div *ngIf="!!video().inputFileUpdatedAt" class="attribute attribute-re-uploaded-on">
   <span i18n class="attribute-label">Video re-upload</span>
-  <span class="attribute-value">{{ video.inputFileUpdatedAt | ptDate: 'short' }}</span>
+  <span class="attribute-value">{{ video().inputFileUpdatedAt | ptDate: 'short' }}</span>
 </div>
 
-<div *ngIf="!!video.originallyPublishedAt" class="attribute attribute-originally-published-at">
+<div *ngIf="!!video().originallyPublishedAt" class="attribute attribute-originally-published-at">
   <span i18n class="attribute-label">Originally published</span>
-  <span class="attribute-value">{{ video.originallyPublishedAt | ptDate: 'shortDate' }}</span>
+  <span class="attribute-value">{{ video().originallyPublishedAt | ptDate: 'shortDate' }}</span>
 </div>
 
 <div class="attribute attribute-category">
   <span i18n class="attribute-label">Category</span>
-  <span *ngIf="!video.category.id" class="attribute-value">{{ video.category.label }}</span>
+  <span *ngIf="!video().category.id" class="attribute-value">{{ video().category.label }}</span>
   <a
-    *ngIf="video.category.id" class="attribute-value"
-    [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video.category.id ] }"
-  >{{ video.category.label }}</a>
+    *ngIf="video().category.id" class="attribute-value"
+    [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video().category.id ] }"
+  >{{ video().category.label }}</a>
 </div>
 
 <div class="attribute attribute-licence">
   <span i18n class="attribute-label">Licence</span>
-  <span *ngIf="!video.licence.id" class="attribute-value">{{ video.licence.label }}</span>
+  <span *ngIf="!video().licence.id" class="attribute-value">{{ video().licence.label }}</span>
   <a
-    *ngIf="video.licence.id" class="attribute-value"
-    [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video.licence.id ] }"
-  >{{ video.licence.label }}</a>
+    *ngIf="video().licence.id" class="attribute-value"
+    [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video().licence.id ] }"
+  >{{ video().licence.label }}</a>
 </div>
 
 <div class="attribute attribute-language">
   <span i18n class="attribute-label">Language</span>
-  <span *ngIf="!video.language.id" class="attribute-value">{{ video.language.label }}</span>
+  <span *ngIf="!video().language.id" class="attribute-value">{{ video().language.label }}</span>
   <a
-    *ngIf="video.language.id" class="attribute-value"
-    [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video.language.id ] }"
-  >{{ video.language.label }}</a>
+    *ngIf="video().language.id" class="attribute-value"
+    [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video().language.id ] }"
+  >{{ video().language.label }}</a>
 </div>
 
 <div class="attribute attribute-tags">
@@ -63,9 +63,9 @@
   >{{ tag }}</a>
 </div>
 
-<div class="attribute attribute-duration" *ngIf="!video.isLive">
+<div class="attribute attribute-duration" *ngIf="!video().isLive">
   <span i18n class="attribute-label">Duration</span>
-  <span class="attribute-value">{{ video.duration | myTimeDurationFormatter }}</span>
+  <span class="attribute-value">{{ video().duration | myTimeDurationFormatter }}</span>
 </div>
 
 <div class="attribute attribute-plugin" *ngFor="let metadata of pluginMetadata">

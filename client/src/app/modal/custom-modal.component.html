@@ -1,6 +1,6 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 class="modal-title">{{title}}</h4>
+    <h4 class="modal-title">{{ title }}</h4>
 
     <button *ngIf="close" class="border-0 p-0" title="Close this modal" i18n-title (click)="onCloseClick()">
       <my-global-icon iconName="cross"></my-global-icon>
@@ -11,12 +11,12 @@
 
   <div *ngIf="hasCancel() || hasConfirm()" class="modal-footer inputs">
     <input
-      *ngIf="hasCancel()" type="button" role="button" value="{{cancel.value}}" class="peertube-button secondary-button"
+      *ngIf="hasCancel()" type="button" role="button" [value]="cancel.value" class="peertube-button secondary-button"
       (click)="onCancelClick()" (key.enter)="onCancelClick()"
     >
 
     <input
-      *ngIf="hasConfirm()" type="button" role="button" value="{{confirm.value}}" class="peertube-button primary-button"
+      *ngIf="hasConfirm()" type="button" role="button" [value]="confirm.value" class="peertube-button primary-button"
       (click)="onConfirmClick()" (key.enter)="onConfirmClick()"
     >
   </div>

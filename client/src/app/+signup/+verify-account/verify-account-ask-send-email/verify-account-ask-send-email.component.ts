@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { Notifier, RedirectService, ServerService } from '@app/core'
 import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -13,23 +13,18 @@ import { NgIf, NgClass } from '@angular/common'
   styleUrls: [ './verify-account-ask-send-email.component.scss' ],
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass ]
 })
-
 export class VerifyAccountAskSendEmailComponent extends FormReactive implements OnInit {
-  requiresEmailVerification = false
+  protected formReactiveService = inject(FormReactiveService)
+  private signupService = inject(SignupService)
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
+  private redirectService = inject(RedirectService)
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private signupService: SignupService,
-    private serverService: ServerService,
-    private notifier: Notifier,
-    private redirectService: RedirectService
-  ) {
-    super()
-  }
+  requiresEmailVerification = false
 
   ngOnInit () {
     this.serverService.getConfig()
-        .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
+      .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
 
     this.buildForm({
       'verify-email-email': USER_EMAIL_VALIDATOR

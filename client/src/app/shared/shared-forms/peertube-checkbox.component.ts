@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChildren, forwardRef, Input, QueryList, TemplateRef } from '@angular/core'
+import { AfterContentInit, Component, forwardRef, TemplateRef, input, model, contentChildren } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { HelpComponent } from '../shared-main/buttons/help.component'
 import { NgIf, NgTemplateOutlet } from '@angular/common'
@@ -18,37 +18,39 @@ import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-templa
   imports: [ FormsModule, NgIf, NgTemplateOutlet, HelpComponent, PeerTubeTemplateDirective ]
 })
 export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterContentInit {
-  @Input() checked = false
-  @Input() inputName: string
-  @Input() labelText: string
-  @Input() labelInnerHTML: string
-  @Input() helpPlacement = 'top auto'
-  @Input() disabled = false
-  @Input() recommended = false
+  readonly checked = model(false)
+  readonly inputName = input<string>(undefined)
+  readonly labelText = input<string>(undefined)
+  readonly labelInnerHTML = input<string>(undefined)
+  readonly helpPlacement = input('top auto')
+  readonly disabled = model(false)
+  readonly recommended = input(false)
 
   describedby: string
 
-  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'label' | 'help'>>
+  readonly templates = contentChildren(PeerTubeTemplateDirective)
 
   labelTemplate: TemplateRef<any>
   helpTemplate: TemplateRef<any>
 
   ngAfterContentInit () {
     {
-      const t = this.templates.find(t => t.name === 'label')
+      const t = this.templates().find(t => t.name() === 'label')
       if (t) this.labelTemplate = t.template
     }
 
     {
-      const t = this.templates.find(t => t.name === 'help')
+      const t = this.templates().find(t => t.name() === 'help')
       if (t) this.helpTemplate = t.template
     }
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (checked: boolean) {
-    this.checked = checked
+    this.checked.set(checked)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -60,10 +62,10 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterCon
   }
 
   onModelChange () {
-    this.propagateChange(this.checked)
+    this.propagateChange(this.checked())
   }
 
   setDisabledState (isDisabled: boolean) {
-    this.disabled = isDisabled
+    this.disabled.set(isDisabled)
   }
 }

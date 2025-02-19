@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, input } from '@angular/core'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
 import { NgIf } from '@angular/common'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -10,17 +10,17 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   imports: [ NgIf, ActorAvatarComponent ]
 })
 export class VideoAvatarChannelComponent implements OnInit {
-  @Input() video: Video
-  @Input() byAccount: string
+  readonly video = input<Video>(undefined)
+  readonly byAccount = input<string>(undefined)
 
-  @Input() showAccount: boolean
-  @Input() showChannel: boolean
+  readonly showAccount = input<boolean>(undefined)
+  readonly showChannel = input<boolean>(undefined)
 
   channelLinkTitle = ''
   accountLinkTitle = ''
 
   ngOnInit () {
-    this.channelLinkTitle = $localize`${this.video.account.name} (channel page)`
-    this.accountLinkTitle = $localize`${this.video.byAccount} (account page)`
+    this.channelLinkTitle = $localize`${this.video().account.name} (channel page)`
+    this.accountLinkTitle = $localize`${this.video().byAccount} (account page)`
   }
 }

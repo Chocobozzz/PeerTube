@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet, PlatformLocation } from '@angular/common'
-import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, LOCALE_ID, NgZone, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -123,9 +123,33 @@ type URLOptions = {
   ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
-  @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
-  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
-  @ViewChild('playerElement') playerElement: ElementRef<HTMLVideoElement>
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private videoService = inject(VideoService)
+  private playlistService = inject(VideoPlaylistService)
+  private liveVideoService = inject(LiveVideoService)
+  private confirmService = inject(ConfirmService)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private serverService = inject(ServerService)
+  private restExtractor = inject(RestExtractor)
+  private notifier = inject(Notifier)
+  private zone = inject(NgZone)
+  private videoCaptionService = inject(VideoCaptionService)
+  private videoChapterService = inject(VideoChapterService)
+  private hotkeysService = inject(HotkeysService)
+  private hooks = inject(HooksService)
+  private pluginService = inject(PluginService)
+  private peertubeSocket = inject(PeerTubeSocket)
+  private screenService = inject(ScreenService)
+  private videoFileTokenService = inject(VideoFileTokenService)
+  private location = inject(PlatformLocation)
+  private metaService = inject(MetaService)
+  private localeId = inject(LOCALE_ID)
+
+  readonly videoWatchPlaylist = viewChild<VideoWatchPlaylistComponent>('videoWatchPlaylist')
+  readonly subscribeButton = viewChild<SubscribeButtonComponent>('subscribeButton')
+  readonly playerElement = viewChild<ElementRef<HTMLVideoElement>>('playerElement')
 
   peertubePlayer: PeerTubePlayer
   theaterEnabled = false
@@ -160,32 +184,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private serverConfig: HTMLServerConfig
 
   private hotkeys: Hotkey[] = []
-
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private videoService: VideoService,
-    private playlistService: VideoPlaylistService,
-    private liveVideoService: LiveVideoService,
-    private confirmService: ConfirmService,
-    private authService: AuthService,
-    private userService: UserService,
-    private serverService: ServerService,
-    private restExtractor: RestExtractor,
-    private notifier: Notifier,
-    private zone: NgZone,
-    private videoCaptionService: VideoCaptionService,
-    private videoChapterService: VideoChapterService,
-    private hotkeysService: HotkeysService,
-    private hooks: HooksService,
-    private pluginService: PluginService,
-    private peertubeSocket: PeerTubeSocket,
-    private screenService: ScreenService,
-    private videoFileTokenService: VideoFileTokenService,
-    private location: PlatformLocation,
-    private metaService: MetaService,
-    @Inject(LOCALE_ID) private localeId: string
-  ) { }
 
   get user () {
     return this.authService.getUser()
@@ -238,7 +236,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   getCurrentPlaylistPosition () {
-    return this.videoWatchPlaylist.currentPlaylistPosition
+    return this.videoWatchPlaylist().currentPlaylistPosition
   }
 
   onRecommendations (videos: Video[]) {
@@ -324,7 +322,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.playlistPosition = 1
       }
 
-      this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
+      this.videoWatchPlaylist().updatePlaylistIndex(this.playlistPosition)
 
       const start = queryParams['start']
       if (this.peertubePlayer?.getPlayer() && start) {
@@ -358,7 +356,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         return this.liveVideoService.getVideoLive(video.uuid)
           .pipe(map(live => ({ live, video })))
       }),
-
       switchMap(({ video, live }) => {
         if (!videoRequiresFileToken(video)) return of({ video, live, videoFileToken: undefined })
 
@@ -413,7 +410,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         next: playlist => {
           this.playlist = playlist
 
-          this.videoWatchPlaylist.loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
+          this.videoWatchPlaylist().loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
         },
 
         error: err => this.handleRequestError(err)
@@ -611,7 +608,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hasNextVideo () {
     if (this.playlist) {
-      return this.videoWatchPlaylist.hasNextVideo()
+      return this.videoWatchPlaylist().hasNextVideo()
     }
 
     return true
@@ -619,7 +616,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private getNextVideoTitle () {
     if (this.playlist) {
-      return this.videoWatchPlaylist.getNextVideo()?.video?.name || ''
+      return this.videoWatchPlaylist().getNextVideo()?.video?.name || ''
     }
 
     return this.nextRecommendedVideoTitle
@@ -628,7 +625,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private playNextVideoInAngularZone () {
     this.zone.run(() => {
       if (this.playlist) {
-        this.videoWatchPlaylist.navigateToNextPlaylistVideo()
+        this.videoWatchPlaylist().navigateToNextPlaylistVideo()
         return
       }
 
@@ -669,7 +666,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const { urlOptions } = options
 
     return {
-      playerElement: () => this.playerElement.nativeElement,
+      playerElement: () => this.playerElement().nativeElement,
 
       enableHotkeys: true,
       inactivityTimeout: 2500,
@@ -848,10 +845,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoRatio: video.aspectRatio,
 
       previousVideo: {
-        enabled: this.playlist && this.videoWatchPlaylist.hasPreviousVideo(),
+        enabled: this.playlist && this.videoWatchPlaylist().hasPreviousVideo(),
 
         handler: this.playlist
-          ? () => this.zone.run(() => this.videoWatchPlaylist.navigateToPreviousPlaylistVideo())
+          ? () => this.zone.run(() => this.videoWatchPlaylist().navigateToPreviousPlaylistVideo())
           : undefined,
 
         displayControlBarButton: !!this.playlist
@@ -978,8 +975,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.isUserLoggedIn()) {
       this.hotkeys = this.hotkeys.concat([
         new Hotkey('shift+s', () => {
-          if (this.subscribeButton.isSubscribedToAll()) this.subscribeButton.unsubscribe()
-          else this.subscribeButton.subscribe()
+          const subscribeButton = this.subscribeButton()
+          if (subscribeButton.isSubscribedToAll()) subscribeButton.unsubscribe()
+          else subscribeButton.subscribe()
 
           return false
         }, $localize`Subscribe to the account`)

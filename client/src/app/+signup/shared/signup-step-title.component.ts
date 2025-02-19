@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, input } from '@angular/core'
 import { MascotImageName, SignupMascotComponent } from './signup-mascot.component'
 
 @Component({
@@ -8,6 +8,5 @@ import { MascotImageName, SignupMascotComponent } from './signup-mascot.componen
   imports: [ SignupMascotComponent ]
 })
 export class SignupStepTitleComponent {
-  @Input() mascotImageName: MascotImageName
-
+  readonly mascotImageName = input<MascotImageName>(undefined)
 }

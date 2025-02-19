@@ -1,5 +1,5 @@
 import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
@@ -45,6 +45,16 @@ import { SearchFiltersComponent } from './search-filters.component'
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private metaService = inject(MetaService)
+  private notifier = inject(Notifier)
+  private searchService = inject(SearchService)
+  private authService = inject(AuthService)
+  private userService = inject(UserService)
+  private hooks = inject(HooksService)
+  private serverService = inject(ServerService)
+
   error: string
 
   results: (Video | VideoChannel | VideoPlaylist)[] = []
@@ -85,18 +95,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private lastSearchTarget: SearchTargetType
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private metaService: MetaService,
-    private notifier: Notifier,
-    private searchService: SearchService,
-    private authService: AuthService,
-    private userService: UserService,
-    private hooks: HooksService,
-    private serverService: ServerService
-  ) { }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()

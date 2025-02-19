@@ -1,22 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { CanComponentDeactivate, UserService } from '@app/core'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+
 import { MyAccountExportComponent } from './my-account-export.component'
 import { MyAccountImportComponent } from './my-account-import.component'
 
 @Component({
   selector: 'my-account-import-export',
   templateUrl: './my-account-import-export.component.html',
-  imports: [ GlobalIconComponent, MyAccountImportComponent, MyAccountExportComponent ]
+  imports: [ MyAccountImportComponent, MyAccountExportComponent ]
 })
 export class MyAccountImportExportComponent implements OnInit, CanComponentDeactivate {
-  @ViewChild('accountImport') accountImport: MyAccountImportComponent
+  private userService = inject(UserService)
+
+  readonly accountImport = viewChild<MyAccountImportComponent>('accountImport')
 
   videoQuotaUsed: number
-
-  constructor (
-    private userService: UserService
-  ) {}
 
   ngOnInit () {
     this.userService.getMyVideoQuotaUsed()
@@ -24,6 +22,6 @@ export class MyAccountImportExportComponent implements OnInit, CanComponentDeact
   }
 
   canDeactivate () {
-    return this.accountImport?.canDeactivate() || { canDeactivate: true }
+    return this.accountImport()?.canDeactivate() || { canDeactivate: true }
   }
 }

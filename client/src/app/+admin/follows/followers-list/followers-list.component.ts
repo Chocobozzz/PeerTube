@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
@@ -33,7 +33,11 @@ import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-co
     PTDatePipe
   ]
 })
-export class FollowersListComponent extends RestTable <ActorFollow> implements OnInit {
+export class FollowersListComponent extends RestTable<ActorFollow> implements OnInit {
+  private confirmService = inject(ConfirmService)
+  private notifier = inject(Notifier)
+  private followService = inject(InstanceFollowService)
+
   followers: ActorFollow[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -42,14 +46,6 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
   searchFilters: AdvancedInputFilter[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
-
-  constructor (
-    private confirmService: ConfirmService,
-    private notifier: Notifier,
-    private followService: InstanceFollowService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.initialize()
@@ -108,20 +104,20 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     if (res === false) return
 
     this.followService.rejectFollower(follows)
-        .subscribe({
-          next: () => {
-            // eslint-disable-next-line max-len
-            const message = formatICU(
-              $localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
-              { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
-            )
-            this.notifier.success(message)
+      .subscribe({
+        next: () => {
+          // eslint-disable-next-line max-len
+          const message = formatICU(
+            $localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+            { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
+          )
+          this.notifier.success(message)
 
-            this.reloadData()
-          },
+          this.reloadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async deleteFollowers (follows: ActorFollow[]) {
@@ -140,21 +136,21 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     if (res === false) return
 
     this.followService.removeFollower(follows)
-        .subscribe({
-          next: () => {
-            // eslint-disable-next-line max-len
-            const message = formatICU(
-              $localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
-              icuParams
-            )
+      .subscribe({
+        next: () => {
+          // eslint-disable-next-line max-len
+          const message = formatICU(
+            $localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+            icuParams
+          )
 
-            this.notifier.success(message)
+          this.notifier.success(message)
 
-            this.reloadData()
-          },
+          this.reloadData()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   buildFollowerName (follow: ActorFollow) {
@@ -163,13 +159,13 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
 
   protected reloadDataInternal () {
     this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
-                      .subscribe({
-                        next: resultList => {
-                          this.followers = resultList.data
-                          this.totalRecords = resultList.total
-                        },
+      .subscribe({
+        next: resultList => {
+          this.followers = resultList.data
+          this.totalRecords = resultList.total
+        },
 
-                        error: err => this.notifier.error(err.message)
-                      })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

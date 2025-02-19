@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { AutomaticTagAvailable, CommentAutomaticTagPolicies } from '@peertube/peertube-models'
 import { catchError } from 'rxjs/operators'
@@ -7,12 +7,10 @@ import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'root' })
 export class AutomaticTagService {
-  private static BASE_AUTOMATIC_TAGS_URL = environment.apiUrl + '/api/v1/automatic-tags/'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
+  private static BASE_AUTOMATIC_TAGS_URL = environment.apiUrl + '/api/v1/automatic-tags/'
 
   listAvailable (options: {
     accountName: string
@@ -41,5 +39,4 @@ export class AutomaticTagService {
     return this.authHttp.put(url, { review: options.review })
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
-
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService, PluginService } from '@app/core'
 import { logger } from '@root-helpers/logger'
@@ -9,18 +9,14 @@ import { Subscription } from 'rxjs/internal/Subscription'
   standalone: true
 })
 export class PluginPagesComponent implements OnDestroy, AfterViewInit {
-  @ViewChild('root') root: ElementRef
+  private metaService = inject(MetaService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private pluginService = inject(PluginService)
+
+  readonly root = viewChild<ElementRef>('root')
 
   private urlSub: Subscription
-
-  constructor (
-    private metaService: MetaService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private pluginService: PluginService
-  ) {
-
-  }
 
   ngAfterViewInit () {
     this.urlSub = this.route.url.subscribe(() => {
@@ -71,6 +67,6 @@ export class PluginPagesComponent implements OnDestroy, AfterViewInit {
       this.metaService.setTitle(registered.title)
     }
 
-    registered.onMount({ rootEl: this.root.nativeElement })
+    registered.onMount({ rootEl: this.root().nativeElement })
   }
 }

@@ -1,22 +1,11 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core'
+import { NgClass, NgFor } from '@angular/common'
+import { Component, ElementRef, HostListener, OnChanges, OnInit, SimpleChanges, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { durationToString, isInViewport } from '@app/helpers'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
-import { NgbCollapse, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
 import { Video, VideoCaption } from '@peertube/peertube-models'
 import { parse } from '@plussub/srt-vtt-parser'
 import debug from 'debug'
@@ -41,9 +30,7 @@ type Segment = {
   templateUrl: './video-transcription.component.html',
   styleUrls: [ './player-widget.component.scss', './video-transcription.component.scss' ],
   imports: [
-    NgIf,
     NgClass,
-    NgbTooltip,
     GlobalIconComponent,
     NgFor,
     NgbCollapse,
@@ -53,15 +40,19 @@ type Segment = {
   ]
 })
 export class VideoTranscriptionComponent implements OnInit, OnChanges {
-  @ViewChild('settingsPanel') settingsPanel: ElementRef
+  private notifier = inject(Notifier)
+  private captionService = inject(VideoCaptionService)
 
-  @Input() video: Video
-  @Input() captions: VideoCaption[]
-  @Input() currentTime: number
+  readonly settingsPanel = viewChild<ElementRef>('settingsPanel')
+
+  readonly video = input<Video>(undefined)
+  readonly captions = input<VideoCaption[]>(undefined)
+  // Output the duration clicked
+  readonly currentTime = input<number>(undefined)
 
   // Output the duration clicked
-  @Output() segmentClicked = new EventEmitter<number>()
-  @Output() closeTranscription = new EventEmitter<void>()
+  readonly segmentClicked = output<number>()
+  readonly closeTranscription = output()
 
   currentCaption: VideoCaption
   segments: Segment[] = []
@@ -79,17 +70,11 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
   private segmentsStore: Segment[] = []
   private searchSubject = new Subject<string>()
 
-  constructor (
-    private notifier: Notifier,
-    private captionService: VideoCaptionService
-  ) {
-  }
-
   @HostListener('document:click', [ '$event' ])
   clickout (event: Event) {
     if (!this.settingsPanelShown) return
 
-    if (!this.settingsPanel?.nativeElement.contains(event.target)) {
+    if (!this.settingsPanel()?.nativeElement.contains(event.target)) {
       this.isSettingsPanelCollapsed = true
     }
   }
@@ -119,7 +104,7 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
   }
 
   updateCurrentCaption () {
-    this.currentCaption = this.captions.find(c => c.language.id === this.currentLanguage)
+    this.currentCaption = this.captions().find(c => c.language.id === this.currentLanguage)
 
     this.parseCurrentCaption()
   }
@@ -138,13 +123,15 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
 
     this.languagesOptions = []
 
-    if (!this.video || !this.captions || this.captions.length === 0) return
+    const captions = this.captions()
+    const video = this.video()
+    if (!video || !captions || captions.length === 0) return
 
-    this.currentLanguage = this.captions.some(c => c.language.id === this.video.language.id)
-      ? this.video.language.id
-      : this.captions[0].language.id
+    this.currentLanguage = captions.some(c => c.language.id === this.video().language.id)
+      ? video.language.id
+      : captions[0].language.id
 
-    this.languagesOptions = this.captions.map(c => ({
+    this.languagesOptions = captions.map(c => ({
       id: c.language.id,
       label: c.automaticallyGenerated
         ? $localize`${c.language.label} (automatically generated)`
@@ -213,12 +200,13 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
     const lastActiveSegment = this.activeSegment
     this.activeSegment = undefined
 
-    if (isNaN(this.currentTime)) return
+    const currentTime = this.currentTime()
+    if (isNaN(currentTime)) return
 
     for (let i = this.segmentsStore.length - 1; i >= 0; i--) {
       const current = this.segmentsStore[i]
 
-      if (current.start <= this.currentTime) {
+      if (current.start <= currentTime) {
         this.activeSegment = current
         break
       }

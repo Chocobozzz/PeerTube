@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
 import { VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -12,6 +12,10 @@ const debugLogger = debug('peertube:router:RedirectService')
 
 @Injectable()
 export class RedirectService {
+  private router = inject(Router)
+  private serverService = inject(ServerService)
+  private storage = inject(SessionStorageService)
+
   private static SESSION_STORAGE_LATEST_SESSION_URL_KEY = 'redirect-latest-session-url'
 
   // Default route could change according to the instance configuration
@@ -26,14 +30,6 @@ export class RedirectService {
   private redirectingToHomepage = false
   private defaultTrendingAlgorithm = RedirectService.INIT_DEFAULT_TRENDING_ALGORITHM
   private defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
-
-  constructor (
-    private router: Router,
-    private serverService: ServerService,
-    private storage: SessionStorageService
-  ) {
-
-  }
 
   init () {
     const config = this.serverService.getHTMLConfig()
@@ -113,16 +109,15 @@ export class RedirectService {
     logger.info(`Redirecting to ${this.defaultRoute}...`)
 
     this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
-        .then(() => this.redirectingToHomepage = false)
-        .catch(err => {
-          this.redirectingToHomepage = false
+      .then(() => this.redirectingToHomepage = false)
+      .catch(err => {
+        this.redirectingToHomepage = false
 
-          logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`, err)
+        logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`, err)
 
-          this.defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
-          return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
-        })
-
+        this.defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
+        return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
+      })
   }
 
   redirectToLogin () {

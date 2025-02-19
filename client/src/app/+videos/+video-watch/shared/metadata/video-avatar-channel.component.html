@@ -1,19 +1,19 @@
 <div class="wrapper">
   <my-actor-avatar
-    *ngIf="showChannel"
+    *ngIf="showChannel()"
     class="channel"
-    [actor]="video.channel" actorType="channel"
-    [internalHref]="[ '/c', video.byVideoChannel ]"
+    [actor]="video().channel" actorType="channel"
+    [internalHref]="[ '/c', video().byVideoChannel ]"
     [title]="channelLinkTitle"
     size="35"
   ></my-actor-avatar>
 
   <my-actor-avatar
-    *ngIf="showAccount"
+    *ngIf="showAccount()"
     class="account"
-    [class.second-avatar]="showChannel"
-    [actor]="video.account" actorType="account"
-    [internalHref]="[ '/a', video.byAccount ]"
+    [class.second-avatar]="showChannel()"
+    [actor]="video().account" actorType="account"
+    [internalHref]="[ '/a', video().byAccount ]"
     [title]="accountLinkTitle"
     size="35">
   </my-actor-avatar>

@@ -1,7 +1,7 @@
 import debug from 'debug'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, OnInit, inject, input, output } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { RestService } from '@app/core'
 import { FormsModule } from '@angular/forms'
@@ -29,10 +29,14 @@ const debugLogger = debug('peertube:AdvancedInputFilterComponent')
   imports: [ NgbDropdown, NgIf, NgbDropdownToggle, NgbDropdownMenu, NgFor, GlobalIconComponent, NgClass, FormsModule ]
 })
 export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
-  @Input() filters: AdvancedInputFilter[] = []
-  @Input() emitOnInit = true
+  private route = inject(ActivatedRoute)
+  private restService = inject(RestService)
+  private router = inject(Router)
 
-  @Output() search = new EventEmitter<string>()
+  readonly filters = input<AdvancedInputFilter[]>([])
+  readonly emitOnInit = input(true)
+
+  readonly search = output<string>()
 
   searchValue: string
 
@@ -43,12 +47,6 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   private viewInitialized = false
   private emitSearchAfterViewInit = false
 
-  constructor (
-    private route: ActivatedRoute,
-    private restService: RestService,
-    private router: Router
-  ) { }
-
   ngOnInit () {
     this.initSearchStream()
     this.listenToRouteSearchChange()
@@ -58,7 +56,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
     this.viewInitialized = true
 
     // Init after view init to not send an event too early
-    if (this.emitOnInit && this.emitSearchAfterViewInit) this.emitSearch()
+    if (this.emitOnInit() && this.emitSearchAfterViewInit) this.emitSearch()
   }
 
   onInputSearch (event: Event) {
@@ -70,7 +68,8 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   }
 
   hasFilters () {
-    return this.filters && this.filters.length !== 0
+    const filters = this.filters()
+    return filters && filters.length !== 0
   }
 
   isFilterEnabled (filter: AdvancedInputFilterChild) {
@@ -146,7 +145,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
     const queryParams: Params = {}
 
     if (search) Object.assign(queryParams, { search })
-    this.router.navigate([ ], { queryParams })
+    this.router.navigate([], { queryParams })
   }
 
   private removeFilterToSearch (search: string, removedFilter: AdvancedInputFilterChild) {
@@ -173,7 +172,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
 
     this.enabledFilters = new Set()
 
-    for (const group of this.filters) {
+    for (const group of this.filters()) {
       for (const filter of group.children) {
         const filterTokens = this.restService.tokenizeString(filter.value)
 

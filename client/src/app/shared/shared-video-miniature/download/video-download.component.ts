@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, Input, ViewChild } from '@angular/core'
+import { Component, ElementRef, inject, input, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, HooksService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -33,9 +33,15 @@ type DownloadType = 'video-generate' | 'video-files' | 'subtitle-files'
   ]
 })
 export class VideoDownloadComponent {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  private modalService = inject(NgbModal)
+  private authService = inject(AuthService)
+  private videoService = inject(VideoService)
+  private videoFileTokenService = inject(VideoFileTokenService)
+  private hooks = inject(HooksService)
 
-  @Input() videoPassword: string
+  readonly modal = viewChild<ElementRef>('modal')
+
+  readonly videoPassword = input<string>(undefined)
 
   video: VideoDetails
   type: DownloadType = 'video-generate'
@@ -47,14 +53,6 @@ export class VideoDownloadComponent {
 
   private videoCaptions: VideoCaption[]
   private activeModal: NgbModalRef
-
-  constructor (
-    private modalService: NgbModal,
-    private authService: AuthService,
-    private videoService: VideoService,
-    private videoFileTokenService: VideoFileTokenService,
-    private hooks: HooksService
-  ) {}
 
   getCaptions () {
     if (!this.videoCaptions) return []
@@ -71,7 +69,7 @@ export class VideoDownloadComponent {
     this.video = video
     this.videoCaptions = videoCaptions
 
-    this.activeModal = this.modalService.open(this.modal, { centered: true })
+    this.activeModal = this.modalService.open(this.modal(), { centered: true })
 
     this.getOriginalVideoFileObs()
       .subscribe(source => {
@@ -80,7 +78,7 @@ export class VideoDownloadComponent {
         }
 
         if (this.originalVideoFile || videoRequiresFileToken(this.video)) {
-          this.videoFileTokenService.getVideoFileToken({ videoUUID: this.video.uuid, videoPassword: this.videoPassword })
+          this.videoFileTokenService.getVideoFileToken({ videoUUID: this.video.uuid, videoPassword: this.videoPassword() })
             .subscribe(({ token }) => {
               this.videoFileToken = token
 

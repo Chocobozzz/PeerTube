@@ -1,12 +1,12 @@
-import { NgClass, NgForOf, NgIf } from '@angular/common'
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { NgClass, NgIf } from '@angular/common'
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '@app/shared/shared-forms/timestamp-input.component'
-import { Nl2BrPipe } from '@app/shared/shared-main/common/nl2br.pipe'
+
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { EmbedComponent } from '@app/shared/shared-main/video/embed.component'
@@ -42,25 +42,30 @@ type Segment = {
     GlobalIconComponent,
     NgClass,
     NgIf,
-    NgForOf,
     PeertubeCheckboxComponent,
     EmbedComponent,
     EditButtonComponent,
     ButtonComponent,
     TimestampInputComponent,
-    DeleteButtonComponent,
-    Nl2BrPipe
+    DeleteButtonComponent
   ]
 })
 export class VideoCaptionEditModalContentComponent extends FormReactive implements OnInit, AfterViewInit {
-  @Input() videoCaption: VideoCaptionWithPathEdit
-  @Input() serverConfig: HTMLServerConfig
-  @Input() publishedVideo: Video
+  protected openedModal = inject(NgbActiveModal)
+  protected formReactiveService = inject(FormReactiveService)
+  private videoCaptionService = inject(VideoCaptionService)
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
+  private cd = inject(ChangeDetectorRef)
 
-  @Output() captionEdited = new EventEmitter<VideoCaptionEdit>()
+  readonly videoCaption = input<VideoCaptionWithPathEdit>(undefined)
+  readonly serverConfig = input<HTMLServerConfig>(undefined)
+  readonly publishedVideo = input<Video>(undefined)
 
-  @ViewChild('textarea', { static: true }) textarea: ElementRef
-  @ViewChild('embed') embed: EmbedComponent
+  readonly captionEdited = output<VideoCaptionEdit>()
+
+  readonly textarea = viewChild<ElementRef>('textarea')
+  readonly embed = viewChild<EmbedComponent>('embed')
 
   rawEdit = false
   segments: Segment[] = []
@@ -78,17 +83,6 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
 
   private player: PeerTubePlayer
 
-  constructor (
-    protected openedModal: NgbActiveModal,
-    protected formReactiveService: FormReactiveService,
-    private videoCaptionService: VideoCaptionService,
-    private serverService: ServerService,
-    private notifier: Notifier,
-    private cd: ChangeDetectorRef
-  ) {
-    super()
-  }
-
   ngOnInit () {
     this.serverService.getVideoLanguages().subscribe(languages => {
       this.videoCaptionLanguages = languages
@@ -98,12 +92,13 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
 
     this.loadCaptionContent()
 
-    this.openedModal.update({ })
+    this.openedModal.update({})
   }
 
   ngAfterViewInit () {
-    if (this.embed) {
-      this.player = new PeerTubePlayer(this.embed.getIframe())
+    const embed = this.embed()
+    if (embed) {
+      this.player = new PeerTubePlayer(embed.getIframe())
 
       this.player.addEventListener('playbackStatusUpdate', ({ position }) => {
         this.activeSegment = undefined
@@ -128,14 +123,15 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
   loadCaptionContent () {
     this.rawEdit = false
 
-    if (this.videoCaption.action === 'CREATE' || this.videoCaption.action === 'UPDATE') {
-      const file = this.videoCaption.captionfile as File
+    const videoCaption = this.videoCaption()
+    if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
+      const file = videoCaption.captionfile as File
 
       file.text().then(content => this.loadSegments(content))
       return
     }
 
-    const { fileUrl } = this.videoCaption
+    const { fileUrl } = videoCaption
     if (!fileUrl) return
 
     this.videoCaptionService.getCaptionContent({ fileUrl })
@@ -293,7 +289,7 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
   }
 
   private resetTextarea () {
-    const el = this.textarea.nativeElement
+    const el = this.textarea().nativeElement
 
     el.scrollTop = 0
     el.selectionStart = 0
@@ -310,7 +306,7 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
       return
     }
 
-    const languageId = this.videoCaption.language.id
+    const languageId = this.videoCaption().language.id
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 
     if (this.rawEdit) {

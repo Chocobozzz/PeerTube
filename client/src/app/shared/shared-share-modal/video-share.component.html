@@ -10,13 +10,13 @@
 
   <div class="modal-body">
 
-    <div class="playlist" *ngIf="playlist">
-      <h5 *ngIf="video" i18n class="text-center mb-4">Share the playlist</h5>
+    <div class="playlist" *ngIf="playlist()">
+      <h5 *ngIf="video()" i18n class="text-center mb-4">Share the playlist</h5>
 
       <my-alert *ngIf="isPrivatePlaylist()" class="alert-private" type="warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
 
-        <a i18n class="peertube-button-link primary-button" [routerLink]="[ '/my-library/video-playlists/update', playlist.shortUUID ]" target="_blank" rel="noopener noreferrer">
+        <a i18n class="peertube-button-link primary-button" [routerLink]="[ '/my-library/video-playlists/update', playlist().shortUUID ]" target="_blank" rel="noopener noreferrer">
           Update playlist privacy
         </a>
       </my-alert>
@@ -72,7 +72,7 @@
 
       <div class="filters">
 
-        <div class="form-group" *ngIf="video">
+        <div class="form-group" *ngIf="video()">
           <my-peertube-checkbox
             inputName="includeVideoInPlaylist" [(ngModel)]="customizations.includeVideoInPlaylist"
             i18n-labelText labelText="Share the playlist at this video position"
@@ -100,13 +100,13 @@
     </div>
 
 
-    <div class="video" *ngIf="video">
-      <h5 *ngIf="playlist" i18n class="text-center mb-4">Share the video</h5>
+    <div class="video" *ngIf="video()">
+      <h5 *ngIf="playlist()" i18n class="text-center mb-4">Share the video</h5>
 
       <my-alert *ngIf="isPrivateVideo()" class="alert-private" type="warning">
         <div i18n>This video is private so you won't be able to share it with external users</div>
 
-        <a i18n class="peertube-button-link primary-button mt-3" [routerLink]="[ '/videos/', 'update', video.shortUUID ]" target="_blank" rel="noopener noreferrer">
+        <a i18n class="peertube-button-link primary-button mt-3" [routerLink]="[ '/videos/', 'update', video().shortUUID ]" target="_blank" rel="noopener noreferrer">
           Update video privacy
         </a>
       </my-alert>
@@ -165,7 +165,7 @@
       <div [ngbNavOutlet]="nav"></div>
 
       <div class="filters">
-        <div class="form-group start-at" *ngIf="!video.isLive">
+        <div class="form-group start-at" *ngIf="!video().isLive">
           <my-peertube-checkbox
             inputName="startAt" [(ngModel)]="customizations.startAtCheckbox"
             i18n-labelText labelText="Start at"
@@ -173,14 +173,14 @@
 
           <my-timestamp-input
             [timestamp]="customizations.startAt"
-            [maxTimestamp]="video.duration"
+            [maxTimestamp]="video().duration"
             [disabled]="!customizations.startAtCheckbox"
             [(ngModel)]="customizations.startAt"
           >
           </my-timestamp-input>
         </div>
 
-        <div *ngIf="videoCaptions.length !== 0" class="form-group video-caption-block">
+        <div *ngIf="videoCaptions().length !== 0" class="form-group video-caption-block">
           <my-peertube-checkbox
             inputName="subtitleCheckbox" [(ngModel)]="customizations.subtitleCheckbox"
             i18n-labelText labelText="Auto select subtitle"
@@ -188,7 +188,7 @@
 
           <div class="peertube-select-container">
             <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox" class="form-control">
-              <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
+              <option *ngFor="let caption of videoCaptions()" [value]="caption.language.id">{{ caption.language.label }}</option>
             </select>
           </div>
         </div>
@@ -212,7 +212,7 @@
         <my-plugin-placeholder pluginId="share-modal-video-settings"></my-plugin-placeholder>
 
         <div class="advanced-filters" [ngbCollapse]="isAdvancedCustomizationCollapsed" [animation]="true">
-          <div class="form-group stop-at" *ngIf="!video.isLive">
+          <div class="form-group stop-at" *ngIf="!video().isLive">
             <my-peertube-checkbox
               inputName="stopAt" [(ngModel)]="customizations.stopAtCheckbox"
               i18n-labelText labelText="Stop at"
@@ -220,7 +220,7 @@
 
             <my-timestamp-input
               [timestamp]="customizations.stopAt"
-              [maxTimestamp]="video.duration"
+              [maxTimestamp]="video().duration"
               [disabled]="!customizations.stopAtCheckbox"
               [(ngModel)]="customizations.stopAt"
             >
@@ -241,7 +241,7 @@
             ></my-peertube-checkbox>
           </div>
 
-          <div class="form-group" *ngIf="!video.isLive">
+          <div class="form-group" *ngIf="!video().isLive">
             <my-peertube-checkbox
               inputName="loop" [(ngModel)]="customizations.loop"
               i18n-labelText labelText="Loop"

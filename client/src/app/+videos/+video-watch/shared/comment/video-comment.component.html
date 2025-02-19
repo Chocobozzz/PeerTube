@@ -1,34 +1,34 @@
 <div *ngIf="isCommentDisplayed()" class="root-comment" [ngClass]="{ 'is-child': isChild() }">
   <div class="left">
     <my-actor-avatar
-      *ngIf="!comment.isDeleted" [href]="comment.account.url"
-      [actor]="comment.account" actorType="account" [size]="isChild() ? '25' : '36'"
+      *ngIf="!comment().isDeleted" [href]="comment().account.url"
+      [actor]="comment().account" actorType="account" [size]="isChild() ? '25' : '36'"
     ></my-actor-avatar>
 
     <div class="vertical-border"></div>
   </div>
 
-  <div class="right" [ngClass]="{ 'mb-3': firstInThread }">
+  <div class="right" [ngClass]="{ 'mb-3': firstInThread() }">
     <div class="comment">
-      <ng-container *ngIf="!comment.isDeleted">
-        <div *ngIf="highlightedComment === true" class="highlighted-comment" i18n>Highlighted comment</div>
+      <ng-container *ngIf="!comment().isDeleted">
+        <div *ngIf="highlightedComment() === true" class="highlighted-comment" i18n>Highlighted comment</div>
 
         <div class="comment-account-date">
           <div class="comment-account">
-            <a [routerLink]="[ '/a', comment.by ]">
-              <span class="comment-account-name" [ngClass]="{ 'video-author': video.account.id === comment.account.id }">
-                {{ comment.account.displayName }}
+            <a [routerLink]="[ '/a', comment().by ]">
+              <span class="comment-account-name" [ngClass]="{ 'video-author': video().account.id === comment().account.id }">
+                {{ comment().account.displayName }}
               </span>
 
-              <span class="comment-account-fid ms-1">{{ comment.by }}</span>
+              <span class="comment-account-fid ms-1">{{ comment().by }}</span>
             </a>
           </div>
 
-          <a [routerLink]="['/w', video.shortUUID, { 'threadId': comment.threadId }]" class="comment-date" [title]="comment.createdAt">
-            {{ comment.createdAt | myFromNow }}
+          <a [routerLink]="['/w', video().shortUUID, { 'threadId': comment().threadId }]" class="comment-date" [title]="comment().createdAt">
+            {{ comment().createdAt | myFromNow }}
           </a>
 
-          <span *ngIf="comment.heldForReview" class="pt-badge badge-red ms-2" i18n>Pending review</span>
+          <span *ngIf="comment().heldForReview" class="pt-badge badge-red ms-2" i18n>Pending review</span>
         </div>
 
         <div
@@ -48,11 +48,11 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="comment.isDeleted">
+      <ng-container *ngIf="comment().isDeleted">
         <div class="comment-account-date">
           <span class="comment-account" i18n>Deleted</span>
-          <a [routerLink]="['/w', video.shortUUID, { 'threadId': comment.threadId }]"
-             class="comment-date">{{ comment.createdAt | myFromNow }}</a>
+          <a [routerLink]="['/w', video().shortUUID, { 'threadId': comment().threadId }]"
+             class="comment-date">{{ comment().createdAt | myFromNow }}</a>
         </div>
 
         <div class="comment-html comment-html-deleted">
@@ -61,25 +61,25 @@
       </ng-container>
 
       <my-video-comment-add
-        *ngIf="!comment.isDeleted && inReplyToCommentId === comment.id"
+        *ngIf="!comment().isDeleted && inReplyToCommentId() === comment().id"
         [user]="user"
-        [video]="video"
-        [videoPassword]="videoPassword"
-        [parentComment]="comment"
+        [video]="video()"
+        [videoPassword]="videoPassword()"
+        [parentComment]="comment()"
         [parentComments]="newParentComments"
         [focusOnInit]="true"
         (commentCreated)="onCommentReplyCreated($event)"
         (cancelEdit)="onResetReply()"
-        [textValue]="redraftValue"
+        [textValue]="redraftValue()"
       ></my-video-comment-add>
 
-      <div *ngIf="commentTree">
-        <div *ngFor="let commentChild of commentTree.children">
+      <div *ngIf="commentTree()">
+        <div *ngFor="let commentChild of commentTree().children">
           <my-video-comment
             [comment]="commentChild.comment"
-            [video]="video"
-            [videoPassword]="videoPassword"
-            [inReplyToCommentId]="inReplyToCommentId"
+            [video]="video()"
+            [videoPassword]="videoPassword()"
+            [inReplyToCommentId]="inReplyToCommentId()"
             [commentTree]="commentChild"
             [parentComments]="newParentComments"
             (wantedToReply)="onWantToReply($event)"
@@ -88,7 +88,7 @@
             (wantedToApprove)="onWantToApprove($event)"
             (resetReply)="onResetReply()"
             (timestampClicked)="handleTimestampClicked($event)"
-            [redraftValue]="redraftValue"
+            [redraftValue]="redraftValue()"
           ></my-video-comment>
         </div>
       </div>
@@ -99,5 +99,5 @@
 </div>
 
 <ng-container *ngIf="prependModerationActions">
-  <my-comment-report #commentReportModal [comment]="comment"></my-comment-report>
+  <my-comment-report #commentReportModal [comment]="comment()"></my-comment-report>
 </ng-container>

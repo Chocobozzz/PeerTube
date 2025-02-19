@@ -2,7 +2,7 @@
   <my-select-options
     class="flex-grow-1"
 
-    [inputId]="inputId"
+    [inputId]="inputId()"
     [disabled]="disabled"
 
     [items]="itemsWithCustom"
@@ -12,10 +12,10 @@
 
   @if (isCustomValue()) {
     <input
-      [attr.aria-labelledby]="labelId" [(ngModel)]="customValue" (ngModelChange)="onModelChange()"
-      [type]="inputType" class="ms-2 form-control pt-input-text"
+      [attr.aria-labelledby]="labelId()" [(ngModel)]="customValue" (ngModelChange)="onModelChange()"
+      [type]="inputType()" class="ms-2 form-control pt-input-text"
     />
 
-    <span *ngIf="inputSuffix" class="ms-1">{{ inputSuffix }}</span>
+    <span *ngIf="inputSuffix()" class="ms-1">{{ inputSuffix() }}</span>
   }
 </div>

@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, Notifier, User } from '@app/core'
@@ -16,6 +16,12 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent, QRCodeComponent ]
 })
 export class MyAccountTwoFactorComponent implements OnInit {
+  private notifier = inject(Notifier)
+  private twoFactorService = inject(TwoFactorService)
+  private formReactiveService = inject(FormReactiveService)
+  private auth = inject(AuthService)
+  private router = inject(Router)
+
   twoFactorAlreadyEnabled: boolean
 
   step: 'request' | 'confirm' | 'confirmed' = 'request'
@@ -33,15 +39,6 @@ export class MyAccountTwoFactorComponent implements OnInit {
 
   private user: User
   private requestToken: string
-
-  constructor (
-    private notifier: Notifier,
-    private twoFactorService: TwoFactorService,
-    private formReactiveService: FormReactiveService,
-    private auth: AuthService,
-    private router: Router
-  ) {
-  }
 
   ngOnInit () {
     this.buildPasswordForm()

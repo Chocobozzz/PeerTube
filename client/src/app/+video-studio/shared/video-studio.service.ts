@@ -1,6 +1,6 @@
 import { catchError } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
@@ -8,11 +8,8 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable()
 export class VideoStudioService {
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
   editVideo (videoId: number | string, tasks: VideoStudioTask[]) {
     const url = VideoService.BASE_VIDEO_URL + '/' + videoId + '/studio/edit'

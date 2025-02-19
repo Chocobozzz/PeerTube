@@ -1,4 +1,4 @@
-import { ComponentRef, Injectable } from '@angular/core'
+import { ComponentRef, Injectable, inject } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import {
   ButtonMarkupData,
@@ -29,7 +29,10 @@ type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement
 
 @Injectable()
 export class CustomMarkupService {
-  private angularBuilders: { [ selector: string ]: AngularBuilderFunction } = {
+  private dynamicElementService = inject(DynamicElementService)
+  private markdown = inject(MarkdownService)
+
+  private angularBuilders: { [selector: string]: AngularBuilderFunction } = {
     'peertube-instance-banner': el => this.instanceBannerBuilder(el),
     'peertube-instance-avatar': el => this.instanceAvatarBuilder(el),
     'peertube-button': el => this.buttonBuilder(el),
@@ -41,16 +44,13 @@ export class CustomMarkupService {
     'peertube-videos-list': el => this.videosListBuilder(el)
   }
 
-  private htmlBuilders: { [ selector: string ]: HTMLBuilderFunction } = {
+  private htmlBuilders: { [selector: string]: HTMLBuilderFunction } = {
     'peertube-container': el => this.containerBuilder(el)
   }
 
   private customMarkdownRenderer: (text: string) => Promise<HTMLElement>
 
-  constructor (
-    private dynamicElementService: DynamicElementService,
-    private markdown: MarkdownService
-  ) {
+  constructor () {
     this.customMarkdownRenderer = (text: string) => {
       return this.buildElement(text)
         .then(({ rootElement }) => rootElement)

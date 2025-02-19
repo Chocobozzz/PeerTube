@@ -1,27 +1,31 @@
-import { Directive, Output, EventEmitter, HostBinding, HostListener } from '@angular/core'
+import { Directive, HostBinding, HostListener, output } from '@angular/core'
 
 @Directive({
   selector: '[myDragDrop]',
   standalone: true
 })
 export class DragDropDirective {
-  @Output() fileDropped = new EventEmitter<FileList>()
+  readonly fileDropped = output<FileList>()
 
-  @HostBinding('class.dragover') dragover = false
+  @HostBinding('class.dragover')
+  dragover = false
 
-  @HostListener('dragover', [ '$event' ]) onDragOver (e: Event) {
+  @HostListener('dragover', [ '$event' ])
+  onDragOver (e: Event) {
     e.preventDefault()
     e.stopPropagation()
     this.dragover = true
   }
 
-  @HostListener('dragleave', [ '$event' ]) public onDragLeave (e: Event) {
+  @HostListener('dragleave', [ '$event' ])
+  public onDragLeave (e: Event) {
     e.preventDefault()
     e.stopPropagation()
     this.dragover = false
   }
 
-  @HostListener('drop', [ '$event' ]) public ondrop (e: DragEvent) {
+  @HostListener('drop', [ '$event' ])
+  public ondrop (e: DragEvent) {
     e.preventDefault()
     e.stopPropagation()
     this.dragover = false

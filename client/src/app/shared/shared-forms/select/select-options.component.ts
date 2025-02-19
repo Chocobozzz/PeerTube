@@ -4,13 +4,13 @@ import {
   booleanAttribute,
   ChangeDetectorRef,
   Component,
-  ContentChildren,
   forwardRef,
   HostListener,
-  Input,
   numberAttribute,
-  QueryList,
-  TemplateRef
+  TemplateRef,
+  inject,
+  input,
+  contentChildren
 } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
@@ -33,17 +33,19 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
   imports: [ DropdownModule, FormsModule, CommonModule ]
 })
 export class SelectOptionsComponent implements AfterContentInit, ControlValueAccessor {
-  @Input() items: SelectOptionsItem[] = []
+  private cd = inject(ChangeDetectorRef)
 
-  @Input({ required: true }) inputId: string
+  readonly items = input<SelectOptionsItem[]>([])
 
-  @Input({ transform: booleanAttribute }) clearable = false
-  @Input({ transform: booleanAttribute }) filter = false
+  readonly inputId = input.required<string>()
 
-  @Input({ transform: booleanAttribute }) virtualScroll = false
-  @Input({ transform: numberAttribute }) virtualScrollItemSize = 39
+  readonly clearable = input(false, { transform: booleanAttribute })
+  readonly filter = input(false, { transform: booleanAttribute })
 
-  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'item'>>
+  readonly virtualScroll = input(false, { transform: booleanAttribute })
+  readonly virtualScrollItemSize = input(39, { transform: numberAttribute })
+
+  readonly templates = contentChildren(PeerTubeTemplateDirective)
 
   customItemTemplate: TemplateRef<any>
 
@@ -52,18 +54,16 @@ export class SelectOptionsComponent implements AfterContentInit, ControlValueAcc
 
   wroteValue: number | string
 
-  constructor (private cd: ChangeDetectorRef) {
-
-  }
-
   ngAfterContentInit () {
     {
-      const t = this.templates.find(t => t.name === 'item')
+      const t = this.templates().find(t => t.name() === 'item')
       if (t) this.customItemTemplate = t.template
     }
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   // Allow plugins to update our value
   @HostListener('change', [ '$event.target' ])
@@ -106,6 +106,6 @@ export class SelectOptionsComponent implements AfterContentInit, ControlValueAcc
   }
 
   getSelectedItem () {
-    return this.items.find(i => i.id === this.selectedId)
+    return this.items().find(i => i.id === this.selectedId)
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ComponentPaginationLight, DisableForReuseHook, MetaService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -15,6 +15,11 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
   ]
 })
 export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReuseHook {
+  private route = inject(ActivatedRoute)
+  private videoService = inject(VideoService)
+  private hooks = inject(HooksService)
+  private meta = inject(MetaService)
+
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
@@ -32,14 +37,6 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   disabled = false
 
   private routeSub: Subscription
-
-  constructor (
-    private route: ActivatedRoute,
-    private videoService: VideoService,
-    private hooks: HooksService,
-    private meta: MetaService
-  ) {
-  }
 
   ngOnInit () {
     this.defaultSort = '-publishedAt'

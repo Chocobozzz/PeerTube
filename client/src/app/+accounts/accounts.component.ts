@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import { AuthService, MarkdownService, MetaService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
@@ -44,7 +44,22 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
   ]
 })
 export class AccountsComponent implements OnInit, OnDestroy {
-  @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private userService = inject(UserService)
+  private accountService = inject(AccountService)
+  private videoChannelService = inject(VideoChannelService)
+  private notifier = inject(Notifier)
+  private restExtractor = inject(RestExtractor)
+  private redirectService = inject(RedirectService)
+  private authService = inject(AuthService)
+  private videoService = inject(VideoService)
+  private markdown = inject(MarkdownService)
+  private blocklist = inject(BlocklistService)
+  private screenService = inject(ScreenService)
+  private metaService = inject(MetaService)
+
+  readonly accountReportModal = viewChild<AccountReportComponent>('accountReportModal')
 
   account: Account
   accountUser: User
@@ -62,24 +77,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   private routeSub: Subscription
 
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService,
-    private accountService: AccountService,
-    private videoChannelService: VideoChannelService,
-    private notifier: Notifier,
-    private restExtractor: RestExtractor,
-    private redirectService: RedirectService,
-    private authService: AuthService,
-    private videoService: VideoService,
-    private markdown: MarkdownService,
-    private blocklist: BlocklistService,
-    private screenService: ScreenService,
-    private metaService: MetaService
-  ) {
-  }
-
   ngOnInit () {
     this.routeSub = this.route.params
       .pipe(
@@ -88,10 +85,12 @@ export class AccountsComponent implements OnInit, OnDestroy {
         switchMap(accountId => this.accountService.getAccount(accountId)),
         tap(account => this.onAccount(account)),
         switchMap(account => this.videoChannelService.listAccountVideoChannels({ account })),
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
-          HttpStatusCode.BAD_REQUEST_400,
-          HttpStatusCode.NOT_FOUND_404
-        ]))
+        catchError(err =>
+          this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+            HttpStatusCode.BAD_REQUEST_400,
+            HttpStatusCode.NOT_FOUND_404
+          ])
+        )
       )
       .subscribe({
         next: videoChannels => {
@@ -187,7 +186,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private showReportModal () {
-    this.accountReportModal.show(this.account)
+    this.accountReportModal().show(this.account)
   }
 
   private loadUserIfNeeded (account: Account) {

@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core'
-import { RouterLink } from '@angular/router'
+import { Component, OnInit, inject } from '@angular/core'
+
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { RunnerRegistrationToken } from '@peertube/peertube-models'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
 import { CopyButtonComponent } from '../../../../shared/shared-main/buttons/copy-button.component'
@@ -18,8 +18,6 @@ import { RunnerService } from '../runner.service'
   styleUrls: [ './runner-registration-token-list.component.scss' ],
   templateUrl: './runner-registration-token-list.component.html',
   imports: [
-    GlobalIconComponent,
-    RouterLink,
     TableModule,
     SharedModule,
     NgbTooltip,
@@ -30,7 +28,11 @@ import { RunnerService } from '../runner.service'
     PTDatePipe
   ]
 })
-export class RunnerRegistrationTokenListComponent extends RestTable <RunnerRegistrationToken> implements OnInit {
+export class RunnerRegistrationTokenListComponent extends RestTable<RunnerRegistrationToken> implements OnInit {
+  private runnerService = inject(RunnerService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+
   registrationTokens: RunnerRegistrationToken[] = []
   totalRecords = 0
 
@@ -38,14 +40,6 @@ export class RunnerRegistrationTokenListComponent extends RestTable <RunnerRegis
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   actions: DropdownAction<RunnerRegistrationToken>[][] = []
-
-  constructor (
-    private runnerService: RunnerService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.actions = [
@@ -85,14 +79,14 @@ export class RunnerRegistrationTokenListComponent extends RestTable <RunnerRegis
     if (res === false) return
 
     this.runnerService.removeToken(token)
-        .subscribe({
-          next: () => {
-            this.reloadData()
-            this.notifier.success($localize`Registration token removed.`)
-          },
+      .subscribe({
+        next: () => {
+          this.reloadData()
+          this.notifier.success($localize`Registration token removed.`)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   protected reloadDataInternal () {

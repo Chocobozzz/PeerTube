@@ -1,6 +1,6 @@
 import { forkJoin, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ActivatedRouteSnapshot } from '@angular/router'
 import { AuthService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
@@ -14,25 +14,29 @@ import { LiveVideoService } from '@app/shared/shared-video-live/live-video.servi
 
 @Injectable()
 export class VideoUpdateResolver {
-  constructor (
-    private videoService: VideoService,
-    private liveVideoService: LiveVideoService,
-    private authService: AuthService,
-    private videoCaptionService: VideoCaptionService,
-    private videoChapterService: VideoChapterService,
-    private videoPasswordService: VideoPasswordService
-  ) {
-  }
+  private videoService = inject(VideoService)
+  private liveVideoService = inject(LiveVideoService)
+  private authService = inject(AuthService)
+  private videoCaptionService = inject(VideoCaptionService)
+  private videoChapterService = inject(VideoChapterService)
+  private videoPasswordService = inject(VideoPasswordService)
 
   resolve (route: ActivatedRouteSnapshot) {
     const uuid: string = route.params['uuid']
 
     return this.videoService.getVideo({ videoId: uuid })
-                .pipe(
-                  switchMap(video => forkJoin(this.buildVideoObservables(video))),
-                  map(([ video, videoSource, videoChannels, videoCaptions, videoChapters, liveVideo, videoPassword ]) =>
-                    ({ video, videoChannels, videoCaptions, videoChapters, videoSource, liveVideo, videoPassword }))
-                )
+      .pipe(
+        switchMap(video => forkJoin(this.buildVideoObservables(video))),
+        map(([ video, videoSource, videoChannels, videoCaptions, videoChapters, liveVideo, videoPassword ]) => ({
+          video,
+          videoChannels,
+          videoCaptions,
+          videoChapters,
+          videoSource,
+          liveVideo,
+          videoPassword
+        }))
+      )
   }
 
   private buildVideoObservables (video: VideoDetails) {

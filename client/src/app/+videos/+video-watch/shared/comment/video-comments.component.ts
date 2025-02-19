@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, inject, input, output, viewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -37,12 +37,20 @@ import { VideoCommentComponent } from './video-comment.component'
   ]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef
-  @Input() video: VideoDetails
-  @Input() videoPassword: string
-  @Input() user: User
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private videoCommentService = inject(VideoCommentService)
+  private activatedRoute = inject(ActivatedRoute)
+  private hooks = inject(HooksService)
+  private pluginService = inject(PluginService)
 
-  @Output() timestampClicked = new EventEmitter<number>()
+  readonly commentHighlightBlock = viewChild<ElementRef>('commentHighlightBlock')
+  readonly video = input<VideoDetails>(undefined)
+  readonly videoPassword = input<string>(undefined)
+  readonly user = input<User>(undefined)
+
+  readonly timestampClicked = output<number>()
 
   comments: VideoComment[] = []
   highlightedThread: VideoComment
@@ -62,24 +70,14 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   commentsEnabled: boolean
 
-  threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
-  threadLoading: { [ id: number ]: boolean } = {}
+  threadComments: { [id: number]: VideoCommentThreadTree } = {}
+  threadLoading: { [id: number]: boolean } = {}
 
   syndicationItems: Syndication[] = []
 
   onDataSubject = new Subject<any[]>()
 
   private sub: Subscription
-
-  constructor (
-    private authService: AuthService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private videoCommentService: VideoCommentService,
-    private activatedRoute: ActivatedRoute,
-    private hooks: HooksService,
-    private pluginService: PluginService
-  ) {}
 
   ngOnInit () {
     this.pluginService.addAction('video-watch-comment-list:load-data', () => this.loadMoreThreads(true))
@@ -111,9 +109,9 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.threadLoading[commentId] = true
 
     const params = {
-      videoId: this.video.uuid,
+      videoId: this.video().uuid,
       threadId: commentId,
-      videoPassword: this.videoPassword
+      videoPassword: this.videoPassword()
     }
 
     const obs = this.hooks.wrapObsFun(
@@ -134,7 +132,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.highlightedThread = new VideoComment(res.comment)
 
           // Scroll to the highlighted thread
-          setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
+          setTimeout(() => this.commentHighlightBlock().nativeElement.scrollIntoView(), 0)
         }
       },
 
@@ -155,8 +153,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     const params = {
-      videoId: this.video.uuid,
-      videoPassword: this.videoPassword,
+      videoId: this.video().uuid,
+      videoPassword: this.videoPassword(),
       componentPagination: this.componentPagination,
       sort: this.sort
     }
@@ -219,7 +217,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     title = $localize`Delete`,
     message = $localize`Do you really want to delete this comment?`
   ): Promise<boolean> {
-    if (commentToDelete.isLocal || this.video.isLocal) {
+    if (commentToDelete.isLocal || this.video().isLocal) {
       message += $localize` The deletion will be sent to remote platforms so they can reflect the change.`
     } else {
       message += $localize` It is a remote comment, so the deletion will only be effective on your platform.`
@@ -265,7 +263,6 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         this.commentReplyRedraftValue = commentToRedraftText
       }
-
     }
   }
 
@@ -301,7 +298,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private resetVideo () {
-    if (this.video.commentsPolicy.id === VideoCommentPolicy.DISABLED) return
+    const video = this.video()
+    if (video.commentsPolicy.id === VideoCommentPolicy.DISABLED) return
 
     // Reset all our fields
     this.highlightedThread = null
@@ -315,7 +313,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
     this.commentsEnabled = true
 
-    this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video)
+    this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(video)
     this.loadMoreThreads()
 
     if (this.activatedRoute.snapshot.params['threadId']) {

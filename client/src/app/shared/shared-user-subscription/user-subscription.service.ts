@@ -2,7 +2,7 @@ import debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@peertube/peertube-models'
@@ -14,11 +14,16 @@ import { VideoChannelService } from '../shared-main/channel/video-channel.servic
 
 const debugLogger = debug('peertube:subscriptions:UserSubscriptionService')
 
-type SubscriptionExistResult = { [ uri: string ]: boolean }
-type SubscriptionExistResultObservable = { [ uri: string ]: Observable<boolean> }
+type SubscriptionExistResult = { [uri: string]: boolean }
+type SubscriptionExistResultObservable = { [uri: string]: Observable<boolean> }
 
 @Injectable()
 export class UserSubscriptionService {
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private videoService = inject(VideoService)
+  private restService = inject(RestService)
+
   static BASE_USER_SUBSCRIPTIONS_URL = environment.apiUrl + '/api/v1/users/me/subscriptions'
   static BASE_VIDEO_CHANNELS_URL = environment.apiUrl + '/api/v1/video-channels'
   static BASE_ACCOUNTS_URL = environment.apiUrl + '/api/v1/accounts'
@@ -31,19 +36,13 @@ export class UserSubscriptionService {
   private myAccountSubscriptionCacheObservable: SubscriptionExistResultObservable = {}
   private myAccountSubscriptionCacheSubject = new Subject<SubscriptionExistResult>()
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private videoService: VideoService,
-    private restService: RestService
-  ) {
+  constructor () {
     this.existsObservable = merge(
       buildBulkObservable({
         time: 200,
         notifierObservable: this.existsSubject,
         bulkGet: this.doSubscriptionsExist.bind(this)
       }).pipe(map(r => r.response)),
-
       this.myAccountSubscriptionCacheSubject
     )
   }
@@ -95,11 +94,11 @@ export class UserSubscriptionService {
     if (skipCount) params = params.set('skipCount', skipCount + '')
 
     return this.authHttp
-               .get<ResultList<Video>>(UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/videos', { params })
-               .pipe(
-                 switchMap(res => this.videoService.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/videos', { params })
+      .pipe(
+        switchMap(res => this.videoService.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   /**
@@ -110,14 +109,14 @@ export class UserSubscriptionService {
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/' + nameWithHost
 
     return this.authHttp.delete(url)
-               .pipe(
-                 tap(() => {
-                   this.myAccountSubscriptionCache[nameWithHost] = false
+      .pipe(
+        tap(() => {
+          this.myAccountSubscriptionCache[nameWithHost] = false
 
-                   this.myAccountSubscriptionCacheSubject.next(this.myAccountSubscriptionCache)
-                 }),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+          this.myAccountSubscriptionCacheSubject.next(this.myAccountSubscriptionCache)
+        }),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   addSubscription (nameWithHost: string) {
@@ -125,14 +124,14 @@ export class UserSubscriptionService {
 
     const body = { uri: nameWithHost }
     return this.authHttp.post(url, body)
-               .pipe(
-                 tap(() => {
-                   this.myAccountSubscriptionCache[nameWithHost] = true
+      .pipe(
+        tap(() => {
+          this.myAccountSubscriptionCache[nameWithHost] = true
 
-                   this.myAccountSubscriptionCacheSubject.next(this.myAccountSubscriptionCache)
-                 }),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+          this.myAccountSubscriptionCacheSubject.next(this.myAccountSubscriptionCache)
+        }),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   listSubscriptions (parameters: {
@@ -149,10 +148,10 @@ export class UserSubscriptionService {
     if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<VideoChannelServer>>(url, { params })
-               .pipe(
-                 map(res => VideoChannelService.extractVideoChannels(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        map(res => VideoChannelService.extractVideoChannels(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   /**
@@ -169,10 +168,10 @@ export class UserSubscriptionService {
     }
 
     const obs = this.existsObservable
-                    .pipe(
-                      filter(existsResult => existsResult[nameWithHost] !== undefined),
-                      map(existsResult => existsResult[nameWithHost])
-                    )
+      .pipe(
+        filter(existsResult => existsResult[nameWithHost] !== undefined),
+        map(existsResult => existsResult[nameWithHost])
+      )
 
     this.myAccountSubscriptionCacheObservable[nameWithHost] = obs
     return obs
@@ -204,14 +203,14 @@ export class UserSubscriptionService {
     params = this.restService.addObjectParams(params, { uris })
 
     return this.authHttp.get<SubscriptionExistResult>(url, { params })
-               .pipe(
-                 tap(res => {
-                   this.myAccountSubscriptionCache = {
-                     ...this.myAccountSubscriptionCache,
-                     ...res
-                   }
-                 }),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        tap(res => {
+          this.myAccountSubscriptionCache = {
+            ...this.myAccountSubscriptionCache,
+            ...res
+          }
+        }),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 }

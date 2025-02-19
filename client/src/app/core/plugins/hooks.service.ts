@@ -1,6 +1,6 @@
 import { from, Observable } from 'rxjs'
 import { mergeMap, switchMap } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { logger } from '@root-helpers/logger'
 import { ClientActionHookName, ClientFilterHookName, PluginClientScope } from '@peertube/peertube-models'
@@ -11,10 +11,10 @@ type ObservableFunction<U, T> = RawFunction<U, Observable<T>>
 
 @Injectable()
 export class HooksService {
-  constructor (
-    private authService: AuthService,
-    private pluginService: PluginService
-  ) {
+  private authService = inject(AuthService)
+  private pluginService = inject(PluginService)
+
+  constructor () {
     // Run auth hooks
     this.authService.userInformationLoaded
       .subscribe(() => this.runAction('action:auth-user.information-loaded', 'common', { user: this.authService.getUser() }))
@@ -28,8 +28,13 @@ export class HooksService {
     })
   }
 
-  wrapObsFun <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-  (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
+  wrapObsFun<P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName> (
+    fun: ObservableFunction<P, R>,
+    params: P,
+    scope: PluginClientScope,
+    hookParamName: H1,
+    hookResultName: H2
+  ) {
     return from(this.pluginService.ensurePluginsAreLoaded(scope))
       .pipe(
         mergeMap(() => this.wrapObjectWithoutScopeLoad(params, hookParamName)),
@@ -38,8 +43,13 @@ export class HooksService {
       )
   }
 
-  async wrapFun <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-  (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
+  async wrapFun<P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName> (
+    fun: RawFunction<P, R>,
+    params: P,
+    scope: PluginClientScope,
+    hookParamName: H1,
+    hookResultName: H2
+  ) {
     await this.pluginService.ensurePluginsAreLoaded(scope)
 
     const newParams = await this.wrapObjectWithoutScopeLoad(params, hookParamName)

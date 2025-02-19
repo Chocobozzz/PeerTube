@@ -1,5 +1,5 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, input, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -32,9 +32,14 @@ import { VideoComment } from '@app/shared/shared-video-comment/video-comment.mod
   ]
 })
 export class CommentReportComponent extends FormReactive implements OnInit {
-  @Input() comment: VideoComment = null
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private abuseService = inject(AbuseService)
+  private notifier = inject(Notifier)
 
-  @ViewChild('modal', { static: true }) modal: NgbModal
+  readonly comment = input<VideoComment>(null)
+
+  readonly modal = viewChild<NgbModal>('modal')
 
   modalTitle: string
   error: string = null
@@ -42,22 +47,13 @@ export class CommentReportComponent extends FormReactive implements OnInit {
 
   private openedModal: NgbModalRef
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private abuseService: AbuseService,
-    private notifier: Notifier
-  ) {
-    super()
-  }
-
   get currentHost () {
     return window.location.host
   }
 
   get originHost () {
     if (this.isRemote()) {
-      return this.comment.account.host
+      return this.comment().account.host
     }
 
     return ''
@@ -75,7 +71,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
   }
 
   show () {
-    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false, size: 'lg' })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false, size: 'lg' })
   }
 
   hide () {
@@ -91,7 +87,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
       reason,
       predefinedReasons,
       comment: {
-        id: this.comment.id
+        id: this.comment().id
       }
     }).subscribe({
       next: () => {
@@ -104,6 +100,6 @@ export class CommentReportComponent extends FormReactive implements OnInit {
   }
 
   isRemote () {
-    return !this.comment.isLocal
+    return !this.comment().isLocal
   }
 }

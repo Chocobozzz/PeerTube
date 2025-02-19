@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { Notifier, UserService } from '@app/core'
 import { OWNERSHIP_CHANGE_USERNAME_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -18,23 +18,19 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, AutoCompleteModule, NgIf ]
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  protected formReactiveService = inject(FormReactiveService)
+  private videoOwnershipService = inject(VideoOwnershipService)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+  private modalService = inject(NgbModal)
+
+  readonly modal = viewChild<ElementRef>('modal')
 
   usernamePropositions: string[]
 
   error: string = null
 
   private video: Video | undefined = undefined
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private videoOwnershipService: VideoOwnershipService,
-    private notifier: Notifier,
-    private userService: UserService,
-    private modalService: NgbModal
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -46,10 +42,10 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   show (video: Video) {
     this.video = video
     this.modalService
-      .open(this.modal, { centered: true })
+      .open(this.modal(), { centered: true })
       .result
       .then(() => this.changeOwnership())
-      .catch((_) => _) // Called when closing (cancel) the modal without validating, do nothing
+      .catch(_ => _) // Called when closing (cancel) the modal without validating, do nothing
   }
 
   search (event: { query: string }) {

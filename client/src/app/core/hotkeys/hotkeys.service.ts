@@ -1,6 +1,6 @@
 // Thanks to https://github.com/brtnshrdr/angular2-hotkeys
 
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable, NgZone, inject } from '@angular/core'
 import debug from 'debug'
 import { Subject } from 'rxjs'
 import { tinykeys } from 'tinykeys'
@@ -10,6 +10,8 @@ const debugLogger = debug('peertube:hotkeys')
 
 @Injectable()
 export class HotkeysService {
+  private zone = inject(NgZone)
+
   cheatSheetToggle = new Subject<boolean>()
 
   private hotkeys: Hotkey[] = []
@@ -20,7 +22,7 @@ export class HotkeysService {
 
   private removeTinyKeysStore = new Map<Hotkey, (() => void)[]>()
 
-  constructor (private zone: NgZone) {
+  constructor () {
     this.initCheatSheet()
   }
 

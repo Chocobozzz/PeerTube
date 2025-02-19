@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { NgIf, NgTemplateOutlet } from '@angular/common'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
-import { NgbPopover, NgbTooltip, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbPopover, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgIf, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-actor-banner-edit',
@@ -17,14 +17,17 @@ import { NgIf, NgTemplateOutlet } from '@angular/common'
   imports: [ NgIf, NgbTooltip, NgTemplateOutlet, NgbDropdown, NgbDropdownToggle, GlobalIconComponent, NgbDropdownMenu ]
 })
 export class ActorBannerEditComponent implements OnInit {
-  @ViewChild('bannerfileInput') bannerfileInput: ElementRef<HTMLInputElement>
-  @ViewChild('bannerPopover') bannerPopover: NgbPopover
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
 
-  @Input() bannerUrl: string
-  @Input() previewImage = false
+  readonly bannerfileInput = viewChild<ElementRef<HTMLInputElement>>('bannerfileInput')
+  readonly bannerPopover = viewChild<NgbPopover>('bannerPopover')
 
-  @Output() bannerChange = new EventEmitter<FormData>()
-  @Output() bannerDelete = new EventEmitter<void>()
+  readonly bannerUrl = input<string>(undefined)
+  readonly previewImage = input(false)
+
+  readonly bannerChange = output<FormData>()
+  readonly bannerDelete = output()
 
   bannerFormat = ''
   maxBannerSize = 0
@@ -32,24 +35,19 @@ export class ActorBannerEditComponent implements OnInit {
 
   preview: SafeResourceUrl
 
-  constructor (
-    private serverService: ServerService,
-    private notifier: Notifier
-  ) { }
-
   ngOnInit (): void {
     const config = this.serverService.getHTMLConfig()
     this.maxBannerSize = config.banner.file.size.max
     this.bannerExtensions = config.banner.file.extensions.join(', ')
 
     /* eslint-disable max-len */
-    this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${getBytes(this.maxBannerSize)}, extensions: ${this.bannerExtensions}`
+    this.bannerFormat = $localize`ratio 6/1, recommended size: 1920x317, max size: ${
+      getBytes(this.maxBannerSize)
+    }, extensions: ${this.bannerExtensions}`
   }
 
-  onBannerChange (input: HTMLInputElement) {
-    this.bannerfileInput = new ElementRef(input)
-
-    const bannerfile = this.bannerfileInput.nativeElement.files[0]
+  onBannerChange () {
+    const bannerfile = this.bannerfileInput().nativeElement.files[0]
     if (bannerfile.size > this.maxBannerSize) {
       this.notifier.error('Error', $localize`This image is too large.`)
       return
@@ -57,10 +55,10 @@ export class ActorBannerEditComponent implements OnInit {
 
     const formData = new FormData()
     formData.append('bannerfile', bannerfile)
-    this.bannerPopover?.close()
+    this.bannerPopover()?.close()
     this.bannerChange.emit(formData)
 
-    if (this.previewImage) {
+    if (this.previewImage()) {
       imageToDataURL(bannerfile).then(result => this.preview = result)
     }
   }
@@ -71,6 +69,6 @@ export class ActorBannerEditComponent implements OnInit {
   }
 
   hasBanner () {
-    return !!this.preview || !!this.bannerUrl
+    return !!this.preview || !!this.bannerUrl()
   }
 }
