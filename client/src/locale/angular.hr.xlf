@@ -2471,9 +2471,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3203902538239082422" datatype="html">
+      <trans-unit id="3203902538239082422" datatype="html" xml:space="preserve">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="translated">Uključio/la si mogućnost za registraciju: dolje smo automatski uključili opciju „Automatski blokiraj nova videa” u odjeljku „Videa”.</target>
+        <target state="translated">Uključio/la si registraciju: dolje smo automatski uključili opciju „Automatski blokiraj nova videa” u odjeljku „Videa”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">201</context>
@@ -3275,9 +3275,9 @@
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5309195634424105927" datatype="html">
+      <trans-unit id="5309195634424105927" datatype="html" xml:space="preserve">
         <source>Live transcoding threads</source>
-        <target state="translated">Procesi prekodiranja uživo</target>
+        <target state="translated">Procesi transkodiranja uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">177</context>
@@ -3615,57 +3615,57 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1126867109775813762" datatype="html">
+      <trans-unit id="1126867109775813762" datatype="html" xml:space="preserve">
         <source>Transcoding threads</source>
-        <target state="translated">Komponente procesa prekodiranja</target>
+        <target state="translated">Transkodiranje procesa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7815122216882553289" datatype="html">
+      <trans-unit id="7815122216882553289" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">trebat će do <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s prekodiranjem uživo </target>
+        <target state="translated">trebat će do <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s transkodiranjem uživo </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8685484763568827375" datatype="html">
+      <trans-unit id="8685484763568827375" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">trebat će barem <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s prekodiranjem uživo </target>
+        <target state="translated">trebat će barem <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s transkodiranjem uživo </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7185278676178506632" datatype="html">
+      <trans-unit id="7185278676178506632" datatype="html" xml:space="preserve">
         <source>Transcoding jobs concurrency</source>
-        <target state="translated">Istovremeno prekodiranje poslova</target>
+        <target state="translated">Istovremenost transkodiranja poslova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969393594784140832" datatype="html">
+      <trans-unit id="1969393594784140832" datatype="html" xml:space="preserve">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="translated">dozvoljava istovremeno prekodiranje više datoteka. ⚠️ Zahtijeva ponovno pokretanje PeerTubea</target>
+        <target state="translated">dozvoljava istovremeno transkodiranje više datoteka. ⚠️ Zahtijeva ponovno pokretanje PeerTubea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2184317712452071847" datatype="html">
+      <trans-unit id="2184317712452071847" datatype="html" xml:space="preserve">
         <source>Transcoding profile</source>
-        <target state="translated">Profil prekodiranja</target>
+        <target state="translated">Profil transkodiranja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6289966287765074028" datatype="html">
+      <trans-unit id="6289966287765074028" datatype="html" xml:space="preserve">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">novi profili prekodiranja mogu se dodati pomoću PeerTube dodataka</target>
+        <target state="translated">novi profili transkodiranja mogu se dodati pomoću PeerTube dodataka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">240</context>
@@ -3695,9 +3695,9 @@
           <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3313548535394806921" datatype="html">
+      <trans-unit id="3313548535394806921" datatype="html" xml:space="preserve">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="translated">⚠️ Za uključivanje studija za montažu videa, najprije moraš uključiti prekodiranje</target>
+        <target state="translated">⚠️ Za uključivanje studija za montažu videa najprije moraš uključiti transkodiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">269</context>
@@ -3711,25 +3711,25 @@
           <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552130276182854923" datatype="html">
+      <trans-unit id="5552130276182854923" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>eksterne pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu zadataka studio prekodiranja. Eksterni pokretači se najprije moraju registrirati na tvojoj instanci. </target>
+        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>eksterne pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu zadataka transkodiranja u studiju. Eksterni pokretači se najprije moraju registrirati na tvojoj instanci. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671557140564655234" datatype="html">
+      <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Automatski uključi HLS transkodiranje jer barem 1 izlazni format mora biti uključen kada je transkodiranje uključeno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2487046557845958040" datatype="html">
+      <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Automatski uključi transkodiranje web videa jer barem 1 izlazni format mora biti uključen kada je transkodiranje uključeno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">138</context>
@@ -7968,9 +7968,9 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1158912204255103651" datatype="html">
+      <trans-unit id="1158912204255103651" datatype="html" xml:space="preserve">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="translated">Video objavljen (nakon prekodiranje/terminiranog aktualiziranja)</target>
+        <target state="translated">Video objavljen (nakon transkodiranja/terminiranog aktualiziranja)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -12173,17 +12173,17 @@
           <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4895908242997839943" datatype="html">
+      <trans-unit id="4895908242997839943" datatype="html" xml:space="preserve">
         <source>Publish after transcoding</source>
-        <target state="translated">Objavi nakon prekodiranja</target>
+        <target state="translated">Objavi nakon transkodiranja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1124038634267013139" datatype="html">
+      <trans-unit id="1124038634267013139" datatype="html" xml:space="preserve">
         <source>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</source>
-        <target state="translated">Video se možda neće moći reproducirati tijekom procesa prekodiranja. To je razlog zašto radije javno objavljujemo video nakon prekodiranja.</target>
+        <target state="translated">Video se možda neće moći reproducirati tijekom procesa transkodiranja. To je razlog zašto radije javno objavljujemo video nakon transkodiranja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">153</context>
@@ -16496,33 +16496,33 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6172217783476989430" datatype="html">
+      <trans-unit id="6172217783476989430" datatype="html" xml:space="preserve">
         <source>Transcoding threads is required.</source>
-        <target state="translated">Broj komponenti procesa prekodiranja se mora navesti.</target>
+        <target state="needs-translation">Broj komponenti procesa transkodiranja se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5320424292625586941" datatype="html">
+      <trans-unit id="5320424292625586941" datatype="html" xml:space="preserve">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="translated">Broj komponenti procesa prekodiranja mora biti veći ili jednak 0.</target>
+        <target state="needs-translation">Broj komponenti procesa transkodiranja mora biti veći ili jednak 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3683210116632914190" datatype="html">
+      <trans-unit id="3683210116632914190" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS is required.</source>
-        <target state="new">Transcoding max FPS is required.</target>
+        <target state="translated">Maks. FPS transkodiranja se mora zadati.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4345398192434581438" datatype="html">
+      <trans-unit id="4345398192434581438" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS must be greater or equal to 1.</source>
-        <target state="new">Transcoding max FPS must be greater or equal to 1.</target>
+        <target state="translated">Maks. FPS transkodiranja mora biti veći ili jednak 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -18488,9 +18488,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="457567965747150035" datatype="html">
+      <trans-unit id="457567965747150035" datatype="html" xml:space="preserve">
         <source>Transcoding in multiple resolutions</source>
-        <target state="translated">Prekodiranje u više rezolucija</target>
+        <target state="translated">Transkodiranje u više rezolucija</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">31</context>
@@ -18536,9 +18536,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8135461567542503937" datatype="html">
+      <trans-unit id="8135461567542503937" datatype="html" xml:space="preserve">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Prekodiraj videa uživo u više rezolucija</target>
+        <target state="translated">Transkodiraj videa uživo u više rezolucija</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">84</context>
@@ -21760,9 +21760,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">497</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6521421218398377925" datatype="html">
+      <trans-unit id="6521421218398377925" datatype="html" xml:space="preserve">
         <source>Run HLS transcoding</source>
-        <target state="translated">Pokreni HLS prekodiranje</target>
+        <target state="translated">Pokreni HLS transkodiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -21772,9 +21772,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">529</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6726093171366409167" datatype="html">
+      <trans-unit id="6726093171366409167" datatype="html" xml:space="preserve">
         <source>Run Web Video transcoding</source>
-        <target state="translated">Run Web Video prekodiranje</target>
+        <target state="translated">Pokreni transkodiranje web videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">154</context>
@@ -21916,9 +21916,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">398</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7054344823477412274" datatype="html">
+      <trans-unit id="7054344823477412274" datatype="html" xml:space="preserve">
         <source>Transcoding jobs created.</source>
-        <target state="translated">Poslovi prekodiranja su stvoreni.</target>
+        <target state="translated">Poslovi transkodiranja su stvoreni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">410</context>
@@ -22888,9 +22888,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5093002376262354382" datatype="html">
+      <trans-unit id="5093002376262354382" datatype="html" xml:space="preserve">
         <source>Transcoding failed</source>
-        <target state="translated">Prekodiranje neuspjelo</target>
+        <target state="translated">Transkodiranje neuspjelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">216</context>
@@ -22920,17 +22920,17 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="118687079501751948" datatype="html">
+      <trans-unit id="118687079501751948" datatype="html" xml:space="preserve">
         <source>Move to external storage failed</source>
-        <target state="translated">Premještanje na vanjsku memoriju neuspjelo</target>
+        <target state="translated">Premještanje u vanjsku memoriju neuspjelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4887724548587271148" datatype="html">
+      <trans-unit id="4887724548587271148" datatype="html" xml:space="preserve">
         <source>Waiting transcoding</source>
-        <target state="translated">Čeka na prekodiranje</target>
+        <target state="translated">Čeka na transkodiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">232</context>
