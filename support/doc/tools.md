@@ -359,6 +359,26 @@ sudo -u prunner peertube-runner list-registered
 
 :::
 
+### List jobs
+
+**Runner >= 0.1.0**
+
+To list jobs that are processed by the runner:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner list-jobs
+peertube-runner list-jobs --include-payload
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner list-jobs
+sudo -u prunner peertube-runner list-jobs --include-payload
+```
+
+:::
+
 ### Graceful shutdown
 
 Ask the runner to shutdown when it has finished all of its current tasks:
@@ -424,7 +444,7 @@ docker compose exec -u peertube peertube npm run parse-log -- --level info
 
 `--level` is optional and could be `info`/`warn`/`error`
 
-You can also remove SQL or HTTP logs using `--not-tags` (PeerTube >= 3.2):
+You can also remove SQL or HTTP logs using `--not-tags`:
 
 ::: code-group
 

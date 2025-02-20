@@ -53,6 +53,13 @@ describe('Test Live transcoding in peertube-runner program', function () {
         transcoded: true
       })
 
+      // Check jobs output
+      {
+        const jobsList = await peertubeRunner.listJobs()
+        expect(jobsList).to.contain(servers[0].url)
+        expect(jobsList).to.contain('live-rtmp-hls-transcoding')
+      }
+
       await stopFfmpeg(ffmpegCommand)
       await waitUntilLiveWaitingOnAllServers(servers, video.uuid)
 

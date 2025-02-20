@@ -89,6 +89,13 @@ export class PeerTubeRunnerProcess {
     return stdout
   }
 
+  async listJobs () {
+    const args = [ 'list-jobs', ...this.buildIdArg() ]
+    const { stdout } = await this.runCommand(this.getRunnerPath(), args)
+
+    return stdout
+  }
+
   // ---------------------------------------------------------------------------
 
   gracefulShutdown () {
