@@ -49,14 +49,12 @@
     </div>
   </div>
 
-  <div class="modal-footer">
-    <div class="form-group inputs">
-      <input type="button" role="button" i18n-value value="Close" class="peertube-button secondary-button" (click)="dismiss()" />
+  <div class="modal-footer inputs">
+    <input type="button" role="button" i18n-value value="Close" class="peertube-button secondary-button" (click)="dismiss()" />
 
-      <my-edit-button
-        i18n-label label="Update live settings"
-        [ptRouterLink]="[ '/videos', 'update', video.shortUUID ]" (click)="dismiss()"
-      ></my-edit-button>
-    </div>
+    <my-edit-button
+      i18n-label label="Update live settings"
+      [ptRouterLink]="[ '/videos', 'update', video.shortUUID ]" (click)="dismiss()"
+    ></my-edit-button>
   </div>
 </ng-template>
