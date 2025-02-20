@@ -723,9 +723,9 @@
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8343217707114977013" datatype="html">
+      <trans-unit id="8343217707114977013" datatype="html" xml:space="preserve">
         <source>The contact form is not enabled on this instance.</source>
-        <target state="translated">Na ovoj instanci nije uključen obrazac za kontaktiranje.</target>
+        <target state="translated">Na ovoj instanci nije aktiviran obrazac za kontaktiranje.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-contact/about-contact.component.html</context>
           <context context-type="linenumber">54</context>
@@ -1739,9 +1739,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6608125149782412086" datatype="html">
+      <trans-unit id="6608125149782412086" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="translated">⚠️ Imaš više uključenih dodataka za vanjsku autentifikaciju.</target>
+        <target state="translated">⚠️ Imaš više aktiviranih dodataka za eksternu autentifikaciju.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">77</context>
@@ -1763,9 +1763,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4686199497574248459" datatype="html">
+      <trans-unit id="4686199497574248459" datatype="html" xml:space="preserve">
         <source>Enable broadcast message</source>
-        <target state="translated">Uključi poruku emitiranja</target>
+        <target state="translated">Aktiviraj poruku emitiranja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">103</context>
@@ -1811,9 +1811,9 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7456307533995141215" datatype="html">
+      <trans-unit id="7456307533995141215" datatype="html" xml:space="preserve">
         <source>Enable Signup</source>
-        <target state="translated">Uključi registraciju</target>
+        <target state="translated">Aktiviraj registraciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">158</context>
@@ -2005,7 +2005,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html" xml:space="preserve">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Ako je uključeno, preporučujemo koristiti <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP posrednika<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za sprečavanje pristupa privatnom URL-u s tvog PeerTube servera</target>
+        <target state="translated">⚠️ Ako je aktivirano, preporučujemo koristiti <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP posrednika<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za sprečavanje pristupa privatnom URL-u s tvog PeerTube servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">293</context>
@@ -2019,9 +2019,9 @@
           <context context-type="linenumber">301</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6801844913630625451" datatype="html">
+      <trans-unit id="6801844913630625451" datatype="html" xml:space="preserve">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="translated">⚠️ Ne preporučujemo uključivanje ove značajke ako ne vjeruješ svojim korisnicima</target>
+        <target state="translated">⚠️ Ne preporučujemo aktivirati ove funkcije ako ne vjeruješ svojim korisnicima</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">304</context>
@@ -2171,9 +2171,9 @@
           <context context-type="linenumber">466</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6476750382562952780" datatype="html">
+      <trans-unit id="6476750382562952780" datatype="html" xml:space="preserve">
         <source>Enable global search</source>
-        <target state="translated">Uključi globalno pretraživanje</target>
+        <target state="translated">Aktiviraj globalnu pretragu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">477</context>
@@ -2203,9 +2203,9 @@
           <context context-type="linenumber">488,489</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8524278911521465398" datatype="html">
+      <trans-unit id="8524278911521465398" datatype="html" xml:space="preserve">
         <source>Disable local search in search bar</source>
-        <target state="translated">Isključi lokalno pretraživanje u traci pretrage</target>
+        <target state="translated">Deativiraj lokalno pretraživanje u traci pretrage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">502</context>
@@ -2387,9 +2387,9 @@
           <context context-type="linenumber">689</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4722881456283329321" datatype="html">
+      <trans-unit id="4722881456283329321" datatype="html" xml:space="preserve">
         <source>Enable contact form</source>
-        <target state="translated">Uključi obrazac za kontakte</target>
+        <target state="translated">Aktiviraj obrazac za kontakte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">702</context>
@@ -2473,7 +2473,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html" xml:space="preserve">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="translated">Uključio/la si registraciju: dolje smo automatski uključili opciju „Automatski blokiraj nova videa” u odjeljku „Videa”.</target>
+        <target state="translated">Aktivirao/la si registraciju: dolje smo automatski aktivirali opciju „Automatski blokiraj nova videa” u odjeljku „Videa”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">201</context>
@@ -2567,9 +2567,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="709846045064893539" datatype="html">
+      <trans-unit id="709846045064893539" datatype="html" xml:space="preserve">
         <source>Updating instance configuration from the web interface is disabled by the system administrator.</source>
-        <target state="translated">Administrator sustava je isključio aktualiziranje instance s web sučelja.</target>
+        <target state="translated">Administrator sustava je deaktivirao aktualiziranje instance s web sučelja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">4</context>
@@ -3099,9 +3099,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1429138002697017359" datatype="html">
+      <trans-unit id="1429138002697017359" datatype="html" xml:space="preserve">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">Uključi prijenos uživo korisnicima tvoje instance.</target>
+        <target state="translated">Aktiviraj prijenos uživo korisnicima tvoje instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">8</context>
@@ -3125,7 +3125,7 @@
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html" xml:space="preserve">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></source>
-        <target state="translated">Ako je uključeno, tvoj server mora prihvatiti dolazni TCP promet na priključku <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
+        <target state="translated">Ako je aktivirano, tvoj server mora prihvatiti dolazni TCP promet na priključku <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3147,9 +3147,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6422195560028891534" datatype="html">
+      <trans-unit id="6422195560028891534" datatype="html" xml:space="preserve">
         <source>Small latency disables P2P and high latency can increase P2P ratio</source>
-        <target state="translated">Kratko kašnjene isključuje P2P a dugo kašnjenje može povećati P2P omjer</target>
+        <target state="translated">Kratko kašnjene deativira P2P a dugo kašnjenje može povećati P2P omjer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3261,7 +3261,7 @@
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="translated">Čak i ako je veća od tvoje maksimalne uključene rezolucije</target>
+        <target state="translated">Čak i ako je veća od tvoje maksimalne aktivirane rezolucije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">153</context>
@@ -3393,7 +3393,7 @@
       </trans-unit>
       <trans-unit id="4560217482714993155" datatype="html" xml:space="preserve">
         <source>Transcoding enabled</source>
-        <target state="translated">Transkodiranje uključeno</target>
+        <target state="translated">Transkodiranje aktivirano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">38</context>
@@ -3511,17 +3511,17 @@
           <context context-type="linenumber">119,121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8373385486403101567" datatype="html">
+      <trans-unit id="8373385486403101567" datatype="html" xml:space="preserve">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target state="translated">Ako uklučiš i HLS podršku, to će udvostručiti memoriju videa</target>
+        <target state="translated">Ako aktiviraš i HLS podršku, to će udvostručiti memoriju videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3839590624406770455" datatype="html">
+      <trans-unit id="3839590624406770455" datatype="html" xml:space="preserve">
         <source>HLS with P2P support enabled</source>
-        <target state="translated">HLS s P2P podrškom uključena</target>
+        <target state="translated">HLS s P2P podrškom aktivirana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">103</context>
@@ -3601,7 +3601,7 @@
       </trans-unit>
       <trans-unit id="2720128810058691158" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="translated">Čak i ako je veća od tvoje maksimalne uključene rezolucije</target>
+        <target state="translated">Čak i ako je veća od tvoje maksimalne aktivirane rezolucije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">178</context>
@@ -3687,9 +3687,9 @@
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="252604800845369275" datatype="html">
+      <trans-unit id="252604800845369275" datatype="html" xml:space="preserve">
         <source>Enable video studio</source>
-        <target state="translated">Uključi studio za montažu videa</target>
+        <target state="translated">Aktiviraj studio za montažu videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">266</context>
@@ -3697,7 +3697,7 @@
       </trans-unit>
       <trans-unit id="3313548535394806921" datatype="html" xml:space="preserve">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="translated">⚠️ Za uključivanje studija za montažu videa najprije moraš uključiti transkodiranje</target>
+        <target state="translated">⚠️ Za aktiviranje studija za montažu videa najprije moraš aktivirati transkodiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">269</context>
@@ -3721,7 +3721,7 @@
       </trans-unit>
       <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="translated">Automatski uključi HLS transkodiranje jer barem 1 izlazni format mora biti uključen kada je transkodiranje uključeno</target>
+        <target state="translated">Automatski aktiviraj HLS transkodiranje jer barem 1 izlazni format mora biti aktiviran kada je transkodiranje aktivirano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">128</context>
@@ -3729,7 +3729,7 @@
       </trans-unit>
       <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="translated">Automatski uključi transkodiranje web videa jer barem 1 izlazni format mora biti uključen kada je transkodiranje uključeno</target>
+        <target state="translated">Automatski aktiviraj transkodiranje web videa jer barem 1 izlazni format mora biti aktiviran kada je transkodiranje aktivirano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">138</context>
@@ -4359,17 +4359,17 @@
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7292311893283564173" datatype="html">
+      <trans-unit id="7292311893283564173" datatype="html" xml:space="preserve">
         <source>Enabled strategies stats</source>
-        <target state="translated">Uključi statistiku strategija</target>
+        <target state="translated">Aktiviraj statistiku strategija</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7595922272001217567" datatype="html">
+      <trans-unit id="7595922272001217567" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">Na tvojoj instanci nije uključena strategija redundantnosti.</target>
+        <target state="translated">Na tvojoj instanci nije aktivirana strategija redundantnosti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">92</context>
@@ -4467,9 +4467,9 @@
           <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2237982448344718491" datatype="html">
+      <trans-unit id="2237982448344718491" datatype="html" xml:space="preserve">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="translated">Email za registraciju nije potvrđen. Isporuka e-maila je standardno isključena.</target>
+        <target state="translated">E-mail za registraciju nije potvrđen. Isporuka e-maila je standardno deativirana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">17</context>
@@ -6611,9 +6611,9 @@
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8975798495439347971" datatype="html">
+      <trans-unit id="8975798495439347971" datatype="html" xml:space="preserve">
         <source>Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.</source>
-        <target state="translated">Označi ovu opciju ako moderatori ne moraju pregledati videa ovog korisnika.</target>
+        <target state="translated">Aktiviraj ovu opciju ako moderatori ne moraju pregledati videa ovog korisnika.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">205</context>
@@ -8296,9 +8296,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="872237557319890340" datatype="html">
+      <trans-unit id="872237557319890340" datatype="html" xml:space="preserve">
         <source>Two factor authentication is already enabled.</source>
-        <target state="translated">Dvofaktorska autentifikacija je već deaktivirana.</target>
+        <target state="translated">Dvofaktorska autentifikacija je već aktivirana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">2</context>
@@ -8780,17 +8780,17 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="111295045776045026" datatype="html">
+      <trans-unit id="111295045776045026" datatype="html" xml:space="preserve">
         <source>Video history is enabled</source>
-        <target state="translated">Povijest videa je uključena</target>
+        <target state="translated">Povijest videa je aktivirana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1869266307786648674" datatype="html">
+      <trans-unit id="1869266307786648674" datatype="html" xml:space="preserve">
         <source>Video history is disabled</source>
-        <target state="translated">Povijest videa je isključena</target>
+        <target state="translated">Povijest videa je deativirana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">123</context>
@@ -10671,9 +10671,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2770947245861951784" datatype="html">
+      <trans-unit id="2770947245861951784" datatype="html" xml:space="preserve">
         <source>Signup is not enabled on this instance.</source>
-        <target state="translated">Ragistriranje nije uključeno na ovoj instanci.</target>
+        <target state="translated">Ragistriranje nije aktivirano na ovoj instanci.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -10751,9 +10751,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1081343670550705648" datatype="html">
+      <trans-unit id="1081343670550705648" datatype="html" xml:space="preserve">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="translated">Učitavanje videa je u ovoj instanci isključeno, stoga tvoj račun neće moći učitavati videa.</target>
+        <target state="translated">Prijenos videa je u ovoj instanci deativirano, stoga tvoj račun neće moći prenijeti videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">2</context>
@@ -12349,9 +12349,9 @@
           <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4022826795131920912" datatype="html">
+      <trans-unit id="4022826795131920912" datatype="html" xml:space="preserve">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="translated">Možeš prenositi samo jednom u normalnom prijenosu uživo. Ako uključiš reprizu, ona će se spremiti pod istim URL-om kao i tvoj prijenos uživo</target>
+        <target state="translated">Možeš prenositi samo jednom u normalnom prijenosu uživo. Ako aktiviraš reprizu, ona će se spremiti pod istim URL-om kao i tvoj prijenos uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">328</context>
@@ -12365,9 +12365,9 @@
           <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8986073791327847979" datatype="html">
+      <trans-unit id="8986073791327847979" datatype="html" xml:space="preserve">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="translated">Može prenositi više puta u stalnom/ponavljajućem prijenosu uživo. Ako uključiš reprize, one će se spremiti kao zasebna videa</target>
+        <target state="translated">Možeš prenositi više puta u stalnom/ponavljajućem prijenosu uživo. Ako aktiviraš reprize, one će se spremiti kao zasebna videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">337</context>
@@ -12383,7 +12383,7 @@
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html" xml:space="preserve">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ Ako uključiš ovu opciju, tvoj će se prijenos uživo prekinuti ako premašiš tvoju kvotu za videa</target>
+        <target state="translated">⚠️ Ako aktiviraš ovu opciju, tvoj će se prijenos uživo prekinuti ako premašiš tvoju kvotu za videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">349</context>
@@ -12571,9 +12571,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">451</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8896564060463626070" datatype="html">
+      <trans-unit id="8896564060463626070" datatype="html" xml:space="preserve">
         <source>Enable download</source>
-        <target state="translated">Uključi preuzimanje</target>
+        <target state="translated">Aktiviraj preuzimanje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">463</context>
@@ -13226,7 +13226,7 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
       </trans-unit>
       <trans-unit id="285180972645018518" datatype="html" xml:space="preserve">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="translated">Žao nam je, funkcija prijenosa je isključena za tvoj račun. Ako želiš dodati videa, administrator mora otključati tvoju kvotu.</target>
+        <target state="translated">Žao nam je, funkcija prijenosa je deativirana za tvoj račun. Ako želiš dodati videa, administrator mora otključati tvoju kvotu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -15924,9 +15924,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2026328843059071368" datatype="html">
+      <trans-unit id="2026328843059071368" datatype="html" xml:space="preserve">
         <source>Two factor authentication has been enabled.</source>
-        <target state="translated">Dvofaktorska autentifikacija je deaktivirana.</target>
+        <target state="translated">Dvofaktorska autentifikacija je aktivirana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -15956,9 +15956,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8901933019590352016" datatype="html">
+      <trans-unit id="8901933019590352016" datatype="html" xml:space="preserve">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">Na tvojoj instanci je uključena registracija korisnika, ali sljedeća polja nisu konfigurirana:</target>
+        <target state="translated">Na tvojoj instanci si aktivirao/la registraciju korisnika, ali sljedeća polja nisu konfigurirana:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -16440,9 +16440,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630311719329022718" datatype="html">
+      <trans-unit id="5630311719329022718" datatype="html" xml:space="preserve">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="translated">Granica registracija mora biti veća od 1. Koristi -1 za isključivanje granice.</target>
+        <target state="translated">Granica registracija mora biti veća od 1. Koristi -1 za deativiranje granice.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">38</context>
@@ -18528,9 +18528,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="330610135077253864" datatype="html">
+      <trans-unit id="330610135077253864" datatype="html" xml:space="preserve">
         <source>Live streaming enabled</source>
-        <target state="translated">Prijenos uživo uključen</target>
+        <target state="translated">Prijenos uživo aktiviran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">77</context>
