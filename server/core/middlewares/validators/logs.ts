@@ -58,7 +58,7 @@ const getLogsValidator = [
   query('tagsOneOf')
     .optional()
     .customSanitizer(arrayify)
-    .custom(isStringArray).withMessage('Should have a valid one of tags array'),
+    .custom(isStringArray).withMessage('Should have a valid tags one of array'),
   query('endDate')
     .optional()
     .custom(isDateValid).withMessage('Should have an end date that conforms to ISO 8601'),

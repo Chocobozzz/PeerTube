@@ -1,12 +1,14 @@
-import { Sequelize } from 'sequelize'
+import { ActorImageType, UserNotificationType_Type } from '@peertube/peertube-models'
 import { AbstractRunQuery, ModelBuilder } from '@server/models/shared/index.js'
 import { UserNotificationModelForApi } from '@server/types/models/index.js'
-import { ActorImageType } from '@peertube/peertube-models'
+import { Sequelize } from 'sequelize'
 import { getSort } from '../../shared/index.js'
 
 export interface ListNotificationsOptions {
   userId: number
   unread?: boolean
+  typeOneOf?: UserNotificationType_Type[]
+
   sort: string
   offset: number
   limit: number
@@ -59,6 +61,11 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       base += 'AND "UserNotificationModel"."read" IS FALSE '
     } else if (this.options.unread === false) {
       base += 'AND "UserNotificationModel"."read" IS TRUE '
+    }
+
+    if (this.options.typeOneOf) {
+      base += 'AND "UserNotificationModel"."type" IN (:typeOneOf) '
+      this.replacements.typeOneOf = this.options.typeOneOf
     }
 
     return `WHERE ${base}`
