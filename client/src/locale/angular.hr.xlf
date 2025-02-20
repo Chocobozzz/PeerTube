@@ -3283,33 +3283,33 @@
           <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4240037618955024499" datatype="html">
+      <trans-unit id="4240037618955024499" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">trebat će do <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s prekodiranjem videa na zahtjev </target>
+        <target state="translated">trebat će do <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s transkodiranjem videa na zahtjev </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8489317904250057957" datatype="html">
+      <trans-unit id="8489317904250057957" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">trebat će barem <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s prekodiranjem videa na zahtjev </target>
+        <target state="translated">trebat će barem <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> s transkodiranjem videa na zahtjev </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417246074503129277" datatype="html">
+      <trans-unit id="1417246074503129277" datatype="html" xml:space="preserve">
         <source>Live transcoding profile</source>
-        <target state="translated">Profil prekodiranja uživo</target>
+        <target state="translated">Profil transkodiranja uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8294583621306221742" datatype="html">
+      <trans-unit id="8294583621306221742" datatype="html" xml:space="preserve">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">novi profili za prekodiranje uživo mogu se dodati pomoću PeerTube dodataka</target>
+        <target state="translated">novi profili za transkodiranje uživo mogu se dodati pomoću PeerTube dodataka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">201</context>
@@ -3369,7 +3369,7 @@
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html" xml:space="preserve">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="translated">Procjenjivanje kapaciteta servera za prekodiranje i prijenose videa nije laka i ne možemo automatski podesiti PeerTube.</target>
+        <target state="translated">Procjenjivanje kapaciteta servera za transkodiranje i prijenose videa nije lako i ne možemo automatski podesiti PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">9</context>
@@ -3391,9 +3391,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4560217482714993155" datatype="html">
+      <trans-unit id="4560217482714993155" datatype="html" xml:space="preserve">
         <source>Transcoding enabled</source>
-        <target state="translated">Prekodiranje uključeno</target>
+        <target state="translated">Transkodiranje uključeno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">38</context>
@@ -3407,9 +3407,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8646250517331978259" datatype="html">
+      <trans-unit id="8646250517331978259" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>eksterne pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu prekodiranja videa na zahtjev. Eksterni pokretači se najprije moraju registrirati na tvojoj instanci. </target>
+        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>eksterne pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu transkodiranja videa na zahtjev. Eksterni pokretači se najprije moraju registrirati na tvojoj instanci. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">195</context>
@@ -22936,9 +22936,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4517785179607945981" datatype="html">
+      <trans-unit id="4517785179607945981" datatype="html" xml:space="preserve">
         <source>To transcode</source>
-        <target state="translated">Za prekodiranje</target>
+        <target state="translated">Za transkodiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">233</context>
