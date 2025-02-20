@@ -227,7 +227,12 @@ export class ProcessLiveRTMPHLSTranscoding {
 
     // Wait last ffmpeg chunks generation
     await wait(1500)
-    await this.sendPendingChunks()
+
+    try {
+      await this.sendPendingChunks()
+    } catch (err) {
+      logger.error(err, 'Cannot send latest chunks after ffmpeg ended')
+    }
 
     this.ended = true
 
@@ -301,14 +306,18 @@ export class ProcessLiveRTMPHLSTranscoding {
           if (this.allPlaylistsCreated) {
             const playlistName = this.getPlaylistName(videoChunkFilename)
 
-            await this.updatePlaylistContent(playlistName, videoChunkFilename)
+            try {
+              await this.updatePlaylistContent(playlistName, videoChunkFilename)
 
-            payload = {
-              ...payload,
+              payload = {
+                ...payload,
 
-              masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
-              resolutionPlaylistFilename: playlistName,
-              resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
+                masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
+                resolutionPlaylistFilename: playlistName,
+                resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
+              }
+            } catch (err) {
+              logger.warn(err, `Cannot fetch/update playlist content ${playlistName}`)
             }
           }
 
