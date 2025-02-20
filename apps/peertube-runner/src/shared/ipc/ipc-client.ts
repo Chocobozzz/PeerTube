@@ -105,7 +105,17 @@ export class IPCClient {
     })
 
     for (const { serverUrl, job } of data.processingJobs) {
-      const row = [ serverUrl, job.type, job.startedAt.toLocaleString(), `${job.progress}%` ]
+      const row = [
+        serverUrl,
+        job.type,
+
+        job.startedAt?.toLocaleString(),
+
+        job.progress !== undefined && job.progress !== null
+          ? `${job.progress}%`
+          : ''
+      ]
+
       if (options.includePayload) row.push(JSON.stringify(job.payload, undefined, 2))
 
       table.push(row)
