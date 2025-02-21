@@ -15,17 +15,17 @@ export type MVideoRedundancyFileUrl = Pick<MVideoRedundancy, 'fileUrl'>
 // ############################################################################
 
 export type MVideoRedundancyStreamingPlaylistVideo =
-  MVideoRedundancy &
-  Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
+  & MVideoRedundancy
+  & Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
 
 export type MVideoRedundancyVideo =
-  MVideoRedundancy &
-  Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
+  & MVideoRedundancy
+  & Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
 
 // ############################################################################
 
 // Format for API or AP object
 
 export type MVideoRedundancyAP =
-  MVideoRedundancy &
-  PickWithOpt<VideoRedundancyModel, 'VideoStreamingPlaylist', PickWith<VideoStreamingPlaylistModel, 'Video', MVideoUrl>>
+  & MVideoRedundancy
+  & PickWithOpt<VideoRedundancyModel, 'VideoStreamingPlaylist', PickWith<VideoStreamingPlaylistModel, 'Video', MVideoUrl>>

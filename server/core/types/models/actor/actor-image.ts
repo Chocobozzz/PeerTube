@@ -10,5 +10,5 @@ export type MActorImagePath = Pick<MActorImage, 'type' | 'filename' | 'getStatic
 // Format for API or AP object
 
 export type MActorImageFormattable =
-  FunctionProperties<MActorImage> &
-  Pick<MActorImage, 'type' | 'getStaticPath' | 'width' | 'filename' | 'createdAt' | 'updatedAt'>
+  & FunctionProperties<MActorImage>
+  & Pick<MActorImage, 'type' | 'getStaticPath' | 'width' | 'filename' | 'createdAt' | 'updatedAt'>

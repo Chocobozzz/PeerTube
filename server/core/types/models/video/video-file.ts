@@ -10,20 +10,20 @@ type Use<K extends keyof VideoFileModel, M> = PickWith<VideoFileModel, K, M>
 export type MVideoFile = Omit<VideoFileModel, 'Video' | 'VideoStreamingPlaylist'>
 
 export type MVideoFileVideo =
-  MVideoFile &
-  Use<'Video', MVideo>
+  & MVideoFile
+  & Use<'Video', MVideo>
 
 export type MVideoFileStreamingPlaylist =
-  MVideoFile &
-  Use<'VideoStreamingPlaylist', MStreamingPlaylist>
+  & MVideoFile
+  & Use<'VideoStreamingPlaylist', MStreamingPlaylist>
 
 export type MVideoFileStreamingPlaylistVideo =
-  MVideoFile &
-  Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
+  & MVideoFile
+  & Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
 
 export type MVideoFileVideoUUID =
-  MVideoFile &
-  Use<'Video', MVideoUUID>
+  & MVideoFile
+  & Use<'Video', MVideoUUID>
 
 export function isStreamingPlaylistFile (file: any): file is MVideoFileStreamingPlaylist {
   return !!file.videoStreamingPlaylistId

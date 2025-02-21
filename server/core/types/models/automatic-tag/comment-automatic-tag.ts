@@ -11,5 +11,5 @@ export type MCommentAutomaticTag = Omit<CommentAutomaticTagModel, 'Account' | 'V
 // ############################################################################
 
 export type MCommentAutomaticTagWithTag =
-  MCommentAutomaticTag &
-  Use<'AutomaticTag', MAutomaticTag>
+  & MCommentAutomaticTag
+  & Use<'AutomaticTag', MAutomaticTag>

@@ -10,7 +10,7 @@ export interface RegisterServerAuthenticatedResult {
   // Update the user profile if it already exists
   // Default behaviour is no update
   // Introduced in PeerTube >= 5.1
-  userUpdater?: <T> (options: {
+  userUpdater?: <T>(options: {
     fieldName: AuthenticatedResultUpdaterFieldName
     currentValue: T
     newValue: T
@@ -68,5 +68,5 @@ export interface RegisterServerAuthExternalOptions extends RegisterServerAuthBas
 }
 
 export interface RegisterServerAuthExternalResult {
-  userAuthenticated (options: RegisterServerExternalAuthenticatedResult): void
+  userAuthenticated(options: RegisterServerExternalAuthenticatedResult): void
 }

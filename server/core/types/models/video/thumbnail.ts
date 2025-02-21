@@ -11,5 +11,5 @@ export type MThumbnail = Omit<ThumbnailModel, 'Video' | 'VideoPlaylist'>
 // ############################################################################
 
 export type MThumbnailVideo =
-  MThumbnail &
-  Use<'Video', MVideo>
+  & MThumbnail
+  & Use<'Video', MVideo>

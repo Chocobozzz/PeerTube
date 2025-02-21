@@ -31,29 +31,29 @@ export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 
 export type MActorHostOnly = Use<'Server', MServerHost>
 export type MActorHost =
-  MActorLight &
-  Use<'Server', MServerHost>
+  & MActorLight
+  & Use<'Server', MServerHost>
 
 export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServerRedundancyAllowed>
 
 export type MActorDefaultLight =
-  MActorLight &
-  Use<'Server', MServerHost> &
-  Use<'Avatars', MActorImage[]>
+  & MActorLight
+  & Use<'Server', MServerHost>
+  & Use<'Avatars', MActorImage[]>
 
 export type MActorAccountId =
-  MActor &
-  Use<'Account', MAccountId>
+  & MActor
+  & Use<'Account', MAccountId>
 export type MActorAccountIdActor =
-  MActor &
-  Use<'Account', MAccountIdActor>
+  & MActor
+  & Use<'Account', MAccountIdActor>
 
 export type MActorChannelId =
-  MActor &
-  Use<'VideoChannel', MChannelId>
+  & MActor
+  & Use<'VideoChannel', MChannelId>
 export type MActorChannelIdActor =
-  MActor &
-  Use<'VideoChannel', MChannelIdActor>
+  & MActor
+  & Use<'VideoChannel', MChannelIdActor>
 
 export type MActorAccountChannelId = MActorAccountId & MActorChannelId
 export type MActorAccountChannelIdActor = MActorAccountIdActor & MActorChannelIdActor
@@ -63,108 +63,117 @@ export type MActorAccountChannelIdActor = MActorAccountIdActor & MActorChannelId
 // Include raw account/channel/server
 
 export type MActorAccount =
-  MActor &
-  Use<'Account', MAccount>
+  & MActor
+  & Use<'Account', MAccount>
 
 export type MActorChannel =
-  MActor &
-  Use<'VideoChannel', MChannel>
+  & MActor
+  & Use<'VideoChannel', MChannel>
 
 export type MActorDefaultAccountChannel = MActorDefault & MActorAccount & MActorChannel
 
 export type MActorServerLight =
-  MActorLight &
-  Use<'Server', MServer>
+  & MActorLight
+  & Use<'Server', MServer>
 
 // ############################################################################
 
 // Complex actor associations
 
 export type MActorImages =
-  MActor &
-  Use<'Avatars', MActorImage[]> &
-  UseOpt<'Banners', MActorImage[]>
+  & MActor
+  & Use<'Avatars', MActorImage[]>
+  & UseOpt<'Banners', MActorImage[]>
 
 export type MActorDefault =
-  MActor &
-  Use<'Server', MServer> &
-  Use<'Avatars', MActorImage[]>
+  & MActor
+  & Use<'Server', MServer>
+  & Use<'Avatars', MActorImage[]>
 
 export type MActorDefaultChannelId =
-  MActorDefault &
-  Use<'VideoChannel', MChannelId>
+  & MActorDefault
+  & Use<'VideoChannel', MChannelId>
 
 export type MActorDefaultBanner =
-  MActor &
-  Use<'Server', MServer> &
-  Use<'Avatars', MActorImage[]> &
-  Use<'Banners', MActorImage[]>
+  & MActor
+  & Use<'Server', MServer>
+  & Use<'Avatars', MActorImage[]>
+  & Use<'Banners', MActorImage[]>
 
 // Actor with channel that is associated to an account and its actor
 // Actor -> VideoChannel -> Account -> Actor
 export type MActorChannelAccountActor =
-  MActor &
-  Use<'VideoChannel', MChannelAccountActor>
+  & MActor
+  & Use<'VideoChannel', MChannelAccountActor>
 
 export type MActorFull =
-  MActor &
-  Use<'Server', MServer> &
-  Use<'Avatars', MActorImage[]> &
-  Use<'Banners', MActorImage[]> &
-  Use<'Account', MAccount> &
-  Use<'VideoChannel', MChannelAccountActor>
+  & MActor
+  & Use<'Server', MServer>
+  & Use<'Avatars', MActorImage[]>
+  & Use<'Banners', MActorImage[]>
+  & Use<'Account', MAccount>
+  & Use<'VideoChannel', MChannelAccountActor>
 
 // Same than ActorFull, but the account and the channel have their actor
 export type MActorFullActor =
-  MActor &
-  Use<'Server', MServer> &
-  Use<'Avatars', MActorImage[]> &
-  Use<'Banners', MActorImage[]> &
-  Use<'Account', MAccountDefault> &
-  Use<'VideoChannel', MChannelAccountDefault>
+  & MActor
+  & Use<'Server', MServer>
+  & Use<'Avatars', MActorImage[]>
+  & Use<'Banners', MActorImage[]>
+  & Use<'Account', MAccountDefault>
+  & Use<'VideoChannel', MChannelAccountDefault>
 
 // ############################################################################
 
 // API
 
 export type MActorSummary =
-  FunctionProperties<MActor> &
-  Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId'> &
-  Use<'Server', MServerHost> &
-  Use<'Avatars', MActorImage[]>
+  & FunctionProperties<MActor>
+  & Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId'>
+  & Use<'Server', MServerHost>
+  & Use<'Avatars', MActorImage[]>
 
 export type MActorSummaryBlocks =
-  MActorSummary &
-  Use<'Server', MServerHostBlocks>
+  & MActorSummary
+  & Use<'Server', MServerHostBlocks>
 
-export type MActorAPI =
-  Omit<MActorDefault, 'publicKey' | 'privateKey' | 'inboxUrl' | 'outboxUrl' | 'sharedInboxUrl' |
-  'followersUrl' | 'followingUrl' | 'url' | 'createdAt' | 'updatedAt'>
+export type MActorAPI = Omit<
+  MActorDefault,
+  | 'publicKey'
+  | 'privateKey'
+  | 'inboxUrl'
+  | 'outboxUrl'
+  | 'sharedInboxUrl'
+  | 'followersUrl'
+  | 'followingUrl'
+  | 'url'
+  | 'createdAt'
+  | 'updatedAt'
+>
 
 // ############################################################################
 
 // Format for API or AP object
 
 export type MActorSummaryFormattable =
-  FunctionProperties<MActor> &
-  Pick<MActor, 'url' | 'preferredUsername'> &
-  Use<'Server', MServerHost> &
-  Use<'Avatars', MActorImageFormattable[]>
+  & FunctionProperties<MActor>
+  & Pick<MActor, 'url' | 'preferredUsername'>
+  & Use<'Server', MServerHost>
+  & Use<'Avatars', MActorImageFormattable[]>
 
 export type MActorFormattable =
-  MActorSummaryFormattable &
-  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'remoteCreatedAt'> &
-  Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>> &
-  UseOpt<'Banners', MActorImageFormattable[]> &
-  UseOpt<'Avatars', MActorImageFormattable[]>
+  & MActorSummaryFormattable
+  & Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt' | 'remoteCreatedAt'>
+  & Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>>
+  & UseOpt<'Banners', MActorImageFormattable[]>
+  & UseOpt<'Avatars', MActorImageFormattable[]>
 
 type MActorAPBase =
-  MActor &
-  Use<'Avatars', MActorImage[]>
+  & MActor
+  & Use<'Avatars', MActorImage[]>
 
-export type MActorAPAccount =
-  MActorAPBase
+export type MActorAPAccount = MActorAPBase
 
 export type MActorAPChannel =
-  MActorAPBase &
-  Use<'Banners', MActorImage[]>
+  & MActorAPBase
+  & Use<'Banners', MActorImage[]>
