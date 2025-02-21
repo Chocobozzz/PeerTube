@@ -3655,6 +3655,7 @@ paths:
   '/api/v1/videos/{id}/source':
     get:
       summary: Get video source file metadata
+      description: Get metadata and download link of original video file
       operationId: getVideoSource
       security:
         - OAuth2: []

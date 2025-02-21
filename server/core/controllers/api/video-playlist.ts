@@ -18,7 +18,7 @@ import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
 import express from 'express'
-import { resetSequelizeInstance } from '../../helpers/database-utils.js'
+import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils.js'
 import { createReqFiles } from '../../helpers/express-utils.js'
 import { logger } from '../../helpers/logger.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
@@ -60,7 +60,8 @@ videoPlaylistRouter.use(apiRateLimiter)
 
 videoPlaylistRouter.get('/privacies', listVideoPlaylistPrivacies)
 
-videoPlaylistRouter.get('/',
+videoPlaylistRouter.get(
+  '/',
   paginationValidator,
   videoPlaylistsSortValidator,
   setDefaultSort,
@@ -69,32 +70,33 @@ videoPlaylistRouter.get('/',
   asyncMiddleware(listVideoPlaylists)
 )
 
-videoPlaylistRouter.get('/:playlistId',
-  asyncMiddleware(videoPlaylistsGetValidator('summary')),
-  getVideoPlaylist
-)
+videoPlaylistRouter.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
 
-videoPlaylistRouter.post('/',
+videoPlaylistRouter.post(
+  '/',
   authenticate,
   reqThumbnailFile,
   asyncMiddleware(videoPlaylistsAddValidator),
-  asyncRetryTransactionMiddleware(createVideoPlaylist)
+  asyncMiddleware(createVideoPlaylist)
 )
 
-videoPlaylistRouter.put('/:playlistId',
+videoPlaylistRouter.put(
+  '/:playlistId',
   authenticate,
   reqThumbnailFile,
   asyncMiddleware(videoPlaylistsUpdateValidator),
   asyncRetryTransactionMiddleware(updateVideoPlaylist)
 )
 
-videoPlaylistRouter.delete('/:playlistId',
+videoPlaylistRouter.delete(
+  '/:playlistId',
   authenticate,
   asyncMiddleware(videoPlaylistsDeleteValidator),
   asyncRetryTransactionMiddleware(removeVideoPlaylist)
 )
 
-videoPlaylistRouter.get('/:playlistId/videos',
+videoPlaylistRouter.get(
+  '/:playlistId/videos',
   asyncMiddleware(videoPlaylistsGetValidator('summary')),
   paginationValidator,
   setDefaultPagination,
@@ -102,25 +104,29 @@ videoPlaylistRouter.get('/:playlistId/videos',
   asyncMiddleware(getVideoPlaylistVideos)
 )
 
-videoPlaylistRouter.post('/:playlistId/videos',
+videoPlaylistRouter.post(
+  '/:playlistId/videos',
   authenticate,
   asyncMiddleware(videoPlaylistsAddVideoValidator),
   asyncRetryTransactionMiddleware(addVideoInPlaylist)
 )
 
-videoPlaylistRouter.post('/:playlistId/videos/reorder',
+videoPlaylistRouter.post(
+  '/:playlistId/videos/reorder',
   authenticate,
   asyncMiddleware(videoPlaylistsReorderVideosValidator),
   asyncRetryTransactionMiddleware(reorderVideosPlaylist)
 )
 
-videoPlaylistRouter.put('/:playlistId/videos/:playlistElementId',
+videoPlaylistRouter.put(
+  '/:playlistId/videos/:playlistElementId',
   authenticate,
   asyncMiddleware(videoPlaylistsUpdateOrRemoveVideoValidator),
   asyncRetryTransactionMiddleware(updateVideoPlaylistElement)
 )
 
-videoPlaylistRouter.delete('/:playlistId/videos/:playlistElementId',
+videoPlaylistRouter.delete(
+  '/:playlistId/videos/:playlistElementId',
   authenticate,
   asyncMiddleware(videoPlaylistsUpdateOrRemoveVideoValidator),
   asyncRetryTransactionMiddleware(removeVideoFromPlaylist)
@@ -188,18 +194,20 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
     })
     : undefined
 
-  const videoPlaylistCreated = await sequelizeTypescript.transaction(async t => {
-    const videoPlaylistCreated = await videoPlaylist.save({ transaction: t }) as MVideoPlaylistFull
+  const videoPlaylistCreated = await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async t => {
+      const videoPlaylistCreated = await videoPlaylist.save({ transaction: t }) as MVideoPlaylistFull
 
-    if (thumbnailModel) {
-      await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
-    }
+      if (thumbnailModel) {
+        await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
+      }
 
-    // We need more attributes for the federation
-    videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
-    await sendCreateVideoPlaylist(videoPlaylistCreated, t)
+      // We need more attributes for the federation
+      videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
+      await sendCreateVideoPlaylist(videoPlaylistCreated, t)
 
-    return videoPlaylistCreated
+      return videoPlaylistCreated
+    })
   })
 
   logger.info('Video playlist with uuid %s created.', videoPlaylist.uuid)
@@ -452,7 +460,10 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
   logger.info(
     'Reordered playlist %s (inserted after position %d elements %d - %d).',
-    videoPlaylist.uuid, insertAfter, start, start + reorderLength - 1
+    videoPlaylist.uuid,
+    insertAfter,
+    start,
+    start + reorderLength - 1
   )
 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
