@@ -15,6 +15,12 @@ export function getChannelRSSFeeds (url: string, instanceName: string, channel: 
     {
       url: `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}`,
       // TODO: translate
+      title: `${channel.name} podcast feed`
+    },
+
+    {
+      url: `${url}/feeds/videos.xml?videoChannelId=${channel.id}`,
+      // TODO: translate
       title: `${channel.name} feed`
     },
 
