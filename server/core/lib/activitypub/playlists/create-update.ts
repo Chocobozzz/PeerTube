@@ -1,7 +1,9 @@
-import Bluebird from 'bluebird'
+import { HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { updateRemotePlaylistMiniatureFromUrl } from '@server/lib/thumbnail.js'
@@ -9,8 +11,7 @@ import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-e
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
 import { MThumbnail, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
-import { PlaylistObject } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import Bluebird from 'bluebird'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
 import { crawlCollectionPage } from '../crawl.js'
@@ -38,7 +39,7 @@ async function createAccountPlaylists (playlistUrls: string[]) {
 
       return createOrUpdateVideoPlaylist(playlistObject)
     } catch (err) {
-      logger.warn('Cannot add playlist element ' + playlistUrl, { err, ...lTags(playlistUrl) })
+      logger.warn(`Cannot create or update playlist ${playlistUrl}`, { err, ...lTags(playlistUrl) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
@@ -125,13 +126,15 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
 async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MVideoPlaylist) {
   const elementsToCreate = await buildElementsDBAttributes(elementUrls, playlist)
 
-  await retryTransactionWrapper(() => sequelizeTypescript.transaction(async t => {
-    await VideoPlaylistElementModel.deleteAllOf(playlist.id, t)
+  await retryTransactionWrapper(() =>
+    sequelizeTypescript.transaction(async t => {
+      await VideoPlaylistElementModel.deleteAllOf(playlist.id, t)
 
-    for (const element of elementsToCreate) {
-      await VideoPlaylistElementModel.create(element, { transaction: t })
-    }
-  }))
+      for (const element of elementsToCreate) {
+        await VideoPlaylistElementModel.create(element, { transaction: t })
+      }
+    })
+  )
 
   logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length, lTags(playlist.uuid, playlist.url))
 
@@ -149,7 +152,11 @@ async function buildElementsDBAttributes (elementUrls: string[], playlist: MVide
 
       elementsToCreate.push(playlistElementObjectToDBAttributes(elementObject, playlist, video))
     } catch (err) {
-      logger.warn('Cannot add playlist element ' + elementUrl, { err, ...lTags(playlist.uuid, playlist.url) })
+      const logLevel = (err as PeerTubeRequestError).statusCode === HttpStatusCode.UNAUTHORIZED_401
+        ? 'debug'
+        : 'warn'
+
+      logger.log(logLevel, `Cannot add playlist element ${elementUrl}`, { err, ...lTags(playlist.uuid, playlist.url) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 
