@@ -1854,10 +1854,10 @@
     bufferutil "^4.0.8"
     utf-8-validate "^6.0.4"
 
-"@peertube/feed@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.3.0.tgz#133f35aee89bec3af5505ef923f4271e1a75d283"
-  integrity sha512-NyAf+bBcDhgmxxLHGDSvjedPUE6nEWP2fsntKM8dWCwLCii/niMVrft/fYy1EE4sW1ERLBsuj/jgn4SihAYErw==
+"@peertube/feed@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.3.1.tgz#ee502cceaf747e41dbe88eb238ea0ee9ea72b746"
+  integrity sha512-DtJrgDqhzQZiT7QpUCI28dO9nCsE/JGKh7lgzlUNnoMxE/UusLzd5CGBsCyAwPjYlK+BiKdyi0S7DueQw7w03w==
   dependencies:
     xml-js "^1.6.11"
 
