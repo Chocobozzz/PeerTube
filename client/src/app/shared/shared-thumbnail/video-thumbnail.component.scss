@@ -10,12 +10,14 @@
   height: 3px;
   width: 100%;
   position: absolute;
+  z-index: z(miniature);
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.2);
 
   div {
     height: 100%;
-    background-color: pvar(--primary);
+    background-color: pvar(--border-primary);
+    border-radius: 6px;
   }
 }
 
@@ -64,7 +66,7 @@
       width: 6px;
       height: 6px;
       border-radius: 100%;
-      background-color: pvar(--primary);
+      background-color: pvar(--border-primary);
       position: relative;
       top: -1px;
 

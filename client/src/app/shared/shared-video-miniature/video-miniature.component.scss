@@ -118,6 +118,7 @@ my-actor-host {
     position: absolute;
     top: -20px;
     background: pvar(--bg);
+    z-index: z(miniature);
 
     @include left(-2px);
 
