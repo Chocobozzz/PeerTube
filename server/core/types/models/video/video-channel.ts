@@ -88,6 +88,10 @@ export type MChannelHost =
   & MChannel
   & Use<'Actor', MActorHost>
 
+export type MChannelIdHost =
+  & MChannelId
+  & Use<'Actor', MActorHost>
+
 export type MChannelHostOnly =
   & MChannelId
   & Use<'Actor', MActorHostOnly>
@@ -155,6 +159,6 @@ export type MChannelFormattable =
   & PickWithOpt<VideoChannelModel, 'Account', MAccountFormattable>
 
 export type MChannelAP =
-  & Pick<MChannel, 'name' | 'description' | 'support'>
+  & Pick<MChannel, 'id' | 'name' | 'description' | 'support' | 'getClientUrl'>
   & Use<'Actor', MActorAPChannel>
   & Use<'Account', MAccountUrl>

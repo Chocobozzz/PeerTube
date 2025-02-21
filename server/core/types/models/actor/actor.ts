@@ -170,6 +170,7 @@ export type MActorFormattable =
 
 type MActorAPBase =
   & MActor
+  & MActorHost
   & Use<'Avatars', MActorImage[]>
 
 export type MActorAPAccount = MActorAPBase

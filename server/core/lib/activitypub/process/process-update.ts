@@ -113,7 +113,7 @@ async function processUpdateCacheFile (
 }
 
 async function processUpdateActor (actor: MActorFull, actorObject: ActivityPubActor) {
-  logger.debug('Updating remote account "%s".', actorObject.url)
+  logger.debug(`Updating remote account "${actorObject.id}".`)
 
   const updater = new APActorUpdater(actorObject, actor)
   return updater.update()

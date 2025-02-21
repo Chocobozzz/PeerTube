@@ -1,18 +1,20 @@
-import { Account, AccountSummary, VideoPrivacy } from '@peertube/peertube-models'
+import { Account, AccountSummary, ActivityPubActor, VideoPrivacy } from '@peertube/peertube-models'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions, literal } from 'sequelize'
 import {
   AfterDestroy,
   AllowNull,
   BeforeDestroy,
-  BelongsTo, Column,
+  BelongsTo,
+  Column,
   CreatedAt,
   DataType,
   Default,
   DefaultScope,
   ForeignKey,
   HasMany,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -20,12 +22,14 @@ import { isAccountDescriptionValid } from '../../helpers/custom-validators/accou
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteActor } from '../../lib/activitypub/send/send-delete.js'
 import {
-  MAccount, MAccountAP,
+  MAccount,
+  MAccountAP,
   MAccountDefault,
   MAccountFormattable,
   MAccountHost,
+  MAccountIdHost,
   MAccountSummaryFormattable,
-  MChannelHost
+  MChannelIdHost
 } from '../../types/models/index.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
@@ -145,7 +149,6 @@ export type SummaryOptions = {
   ]
 })
 export class AccountModel extends SequelizeModel<AccountModel> {
-
   @AllowNull(false)
   @Column
   name: string
@@ -423,7 +426,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
 
   static listLocalsForSitemap (sort: string): Promise<MAccountHost[]> {
     return AccountModel.unscoped().findAll({
-      attributes: [ ],
+      attributes: [],
       offset: 0,
       order: getSort(sort),
       include: [
@@ -474,10 +477,30 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     }
   }
 
-  async toActivityPubObject (this: MAccountAP) {
+  async toActivityPubObject (this: MAccountAP): Promise<ActivityPubActor> {
     const obj = await this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
+      // // TODO: Uncomment in v8 for backward compatibility
+      // url: [
+      //   {
+      //     type: 'Link',
+      //     mediaType: 'text/html',
+      //     href: this.getClientUrl(true)
+      //   },
+      //   {
+      //     type: 'Link',
+      //     mediaType: 'text/html',
+      //     href: this.getClientUrl(false)
+      //   },
+      //   {
+      //     type: 'Link',
+      //     mediaType: 'text/html',
+      //     href: this.Actor.url
+      //   }
+      // ] as ActivityUrlObject[],
+
+      url: this.Actor.url,
       summary: this.description
     })
   }
@@ -495,8 +518,12 @@ export class AccountModel extends SequelizeModel<AccountModel> {
   }
 
   // Avoid error when running this method on MAccount... | MChannel...
-  getClientUrl (this: MAccountHost | MChannelHost) {
-    return WEBSERVER.URL + '/a/' + this.Actor.getIdentifier() + '/video-channels'
+  getClientUrl (this: MAccountIdHost | MChannelIdHost, channelsSuffix = true) {
+    const suffix = channelsSuffix
+      ? '/video-channels'
+      : ''
+
+    return WEBSERVER.URL + '/a/' + this.Actor.getIdentifier() + suffix
   }
 
   isBlocked () {

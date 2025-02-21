@@ -69,6 +69,10 @@ export type MAccountActor =
   & MAccount
   & Use<'Actor', MActor>
 
+export type MAccountIdHost =
+  & MAccountId
+  & Use<'Actor', MActorHost>
+
 export type MAccountHost =
   & MAccount
   & Use<'Actor', MActorHost>
@@ -105,5 +109,5 @@ export type MAccountFormattable =
   & Use<'Actor', MActorFormattable>
 
 export type MAccountAP =
-  & Pick<MAccount, 'name' | 'description'>
+  & Pick<MAccount, 'id' | 'name' | 'description' | 'getClientUrl'>
   & Use<'Actor', MActorAPAccount>

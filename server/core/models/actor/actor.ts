@@ -1,5 +1,10 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
-import { ActivityIconObject, ActorImageType, ActorImageType_Type, type ActivityPubActorType } from '@peertube/peertube-models'
+import {
+  ActivityIconObject,
+  ActorImageType,
+  ActorImageType_Type,
+  type ActivityPubActorType
+} from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
@@ -15,7 +20,8 @@ import {
   ForeignKey,
   HasMany,
   HasOne,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -31,7 +37,8 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import {
   ACTIVITY_PUB,
   ACTIVITY_PUB_ACTOR_TYPES,
-  CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME,
+  CONSTRAINTS_FIELDS,
+  SERVER_ACTOR_NAME,
   WEBSERVER
 } from '../../initializers/constants.js'
 import {
@@ -159,7 +166,6 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
   ]
 })
 export class ActorModel extends SequelizeModel<ActorModel> {
-
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))
   type: ActivityPubActorType
@@ -346,10 +352,10 @@ export class ActorModel extends SequelizeModel<ActorModel> {
 
   static loadAccountActorFollowerUrlByVideoId (videoId: number, transaction: Transaction) {
     const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
-                  `FROM "actor" ` +
-                  `INNER JOIN "account" ON "actor"."id" = "account"."actorId" ` +
-                  `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
-                  `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
+      `FROM "actor" ` +
+      `INNER JOIN "account" ON "actor"."id" = "account"."actorId" ` +
+      `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
+      `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
 
     const options = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
@@ -584,7 +590,6 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       inbox: this.inboxUrl,
       outbox: this.outboxUrl,
       preferredUsername: this.preferredUsername,
-      url: this.url,
       name,
       endpoints: {
         sharedInbox: this.sharedInboxUrl

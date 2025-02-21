@@ -12,8 +12,7 @@
     "singleBodyPosition": "maintain",
     "nextControlFlowPosition": "sameLine",
     "trailingCommas": "never",
-    "operatorPosition": "sameLine",
-    "conditionalExpression.operatorPosition": "nextLine",
+    "operatorPosition": "maintain",
     "preferHanging": false,
     "preferSingleLine": false,
     "arrowFunction.useParentheses": "preferNone",
@@ -64,12 +63,9 @@
     "arrayExpression.spaceAround": true,
     "arrayPattern.spaceAround": true
   },
-  "json": {
-  },
-  "markdown": {
-  },
-  "toml": {
-  },
+  "json": {},
+  "markdown": {},
+  "toml": {},
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",

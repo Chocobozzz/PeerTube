@@ -2,7 +2,7 @@ import { forceNumber, pick } from '@peertube/peertube-core-utils'
 import { ActivityPubActor, VideoChannel, VideoChannelSummary, VideoPrivacy } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
-import { MAccountHost } from '@server/types/models/index.js'
+import { MAccountIdHost } from '@server/types/models/index.js'
 import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import {
   AfterCreate,
@@ -18,7 +18,8 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  Is, Scopes,
+  Is,
+  Scopes,
   Sequelize,
   Table,
   UpdatedAt
@@ -36,6 +37,7 @@ import {
   MChannelDefault,
   MChannelFormattable,
   MChannelHost,
+  MChannelIdHost,
   MChannelSummaryFormattable,
   type MChannel
 } from '../../types/models/video/index.js'
@@ -142,7 +144,7 @@ export type SummaryOptions = {
             `(` +
               `LOWER("preferredUsername") = ${sanitizedPreferredUsername} ` +
               `AND "host" = ${sanitizedHost}` +
-            `)`
+              `)`
           )
         }
       }
@@ -303,33 +305,33 @@ export type SummaryOptions = {
           [
             literal(
               '(' +
-              `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
-              'FROM ( ' +
+                `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
+                'FROM ( ' +
                 'WITH ' +
-                  'days AS ( ' +
-                    `SELECT generate_series(date_trunc('day', now()) - '${daysPrior} day'::interval, ` +
-                          `date_trunc('day', now()), '1 day'::interval) AS day ` +
-                  ') ' +
-                  'SELECT days.day AS day, COALESCE(SUM("videoView".views), 0) AS views ' +
-                  'FROM days ' +
-                  'LEFT JOIN (' +
-                    '"videoView" INNER JOIN "video" ON "videoView"."videoId" = "video"."id" ' +
-                    'AND "video"."channelId" = "VideoChannelModel"."id"' +
-                  `) ON date_trunc('day', "videoView"."startDate") = date_trunc('day', days.day) ` +
-                  'GROUP BY day ' +
-                  'ORDER BY day ' +
+                'days AS ( ' +
+                `SELECT generate_series(date_trunc('day', now()) - '${daysPrior} day'::interval, ` +
+                `date_trunc('day', now()), '1 day'::interval) AS day ` +
+                ') ' +
+                'SELECT days.day AS day, COALESCE(SUM("videoView".views), 0) AS views ' +
+                'FROM days ' +
+                'LEFT JOIN (' +
+                '"videoView" INNER JOIN "video" ON "videoView"."videoId" = "video"."id" ' +
+                'AND "video"."channelId" = "VideoChannelModel"."id"' +
+                `) ON date_trunc('day', "videoView"."startDate") = date_trunc('day', days.day) ` +
+                'GROUP BY day ' +
+                'ORDER BY day ' +
                 ') t' +
-              ')'
+                ')'
             ),
             'viewsPerDay'
           ],
           [
             literal(
               '(' +
-              'SELECT COALESCE(SUM("video".views), 0) AS totalViews ' +
-              'FROM "video" ' +
-              'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
-              ')'
+                'SELECT COALESCE(SUM("video".views), 0) AS totalViews ' +
+                'FROM "video" ' +
+                'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
+                ')'
             ),
             'totalViews'
           ]
@@ -352,7 +354,6 @@ export type SummaryOptions = {
   ]
 })
 export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
-
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'name'))
   @Column
@@ -471,7 +472,6 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   }
 
   static async getStats () {
-
     function getLocalVideoChannelStats (days?: number) {
       const options = {
         type: QueryTypes.SELECT as QueryTypes.SELECT,
@@ -480,7 +480,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
       const videoJoin = days
         ? `INNER JOIN "video" AS "Videos" ON "VideoChannelModel"."id" = "Videos"."channelId" ` +
-             `AND ("Videos"."publishedAt" > Now() - interval '${days}d')`
+          `AND ("Videos"."publishedAt" > Now() - interval '${days}d')`
         : ''
 
       const query = `
@@ -492,7 +492,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
         AND "Account->Actor"."serverId" IS NULL`
 
       return VideoChannelModel.sequelize.query<{ count: string }>(query, options)
-                              .then(r => parseInt(r[0].count, 10))
+        .then(r => parseInt(r[0].count, 10))
     }
 
     const totalLocalVideoChannels = await getLocalVideoChannelStats()
@@ -512,7 +512,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
   static listLocalsForSitemap (sort: string): Promise<MChannelHost[]> {
     const query = {
-      attributes: [ ],
+      attributes: [],
       offset: 0,
       order: getSort(sort),
       include: [
@@ -536,11 +536,13 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       .findAll(query)
   }
 
-  static listForApi (parameters: Pick<AvailableForListOptions, 'actorId'> & {
-    start: number
-    count: number
-    sort: string
-  }) {
+  static listForApi (
+    parameters: Pick<AvailableForListOptions, 'actorId'> & {
+      start: number
+      count: number
+      sort: string
+    }
+  ) {
     const { actorId } = parameters
 
     const query = {
@@ -559,11 +561,13 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static searchForApi (options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
-    start: number
-    count: number
-    sort: string
-  }) {
+  static searchForApi (
+    options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
+      start: number
+      count: number
+      sort: string
+    }
+  ) {
     let attributesInclude: any[] = [ literal('0 as similarity') ]
     let where: WhereOptions
 
@@ -597,7 +601,8 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     const getScope = (forCount: boolean) => {
       return {
         method: [
-          ScopeNames.FOR_API, {
+          ScopeNames.FOR_API,
+          {
             ...pick(options, [ 'actorId', 'host', 'handles' ]),
 
             forCount
@@ -846,6 +851,27 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     return {
       ...obj,
 
+      // // TODO: Uncomment in v8 for backward compatibility
+      // url: [
+      //   {
+      //     type: 'Link',
+      //     mediaType: 'text/html',
+      //     href: this.getClientUrl(true)
+      //   },
+      //   {
+      //     type: 'Link',
+      //     mediaType: 'text/html',
+      //     href: this.getClientUrl(false)
+      //   },
+      //   {
+      //     type: 'Link',
+      //     mediaType: 'text/html',
+      //     href: this.Actor.url
+      //   }
+      // ] as ActivityUrlObject[],
+
+      url: this.Actor.url,
+
       summary: this.description,
       support: this.support,
       postingRestrictedToMods: true,
@@ -859,8 +885,12 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   }
 
   // Avoid error when running this method on MAccount... | MChannel...
-  getClientUrl (this: MAccountHost | MChannelHost) {
-    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier() + '/videos'
+  getClientUrl (this: MAccountIdHost | MChannelIdHost, videosSuffix = true) {
+    const suffix = videosSuffix
+      ? '/videos'
+      : ''
+
+    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier() + suffix
   }
 
   getDisplayName () {

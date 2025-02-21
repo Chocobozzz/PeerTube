@@ -1,4 +1,4 @@
-import { ActivityIconObject, ActivityPubAttributedTo } from './objects/common-objects.js'
+import { ActivityIconObject, ActivityPubAttributedTo, ActivityUrlObject } from './objects/common-objects.js'
 
 export type ActivityPubActorType = 'Person' | 'Application' | 'Group' | 'Service' | 'Organization'
 
@@ -12,7 +12,7 @@ export interface ActivityPubActor {
   inbox: string
   outbox: string
   preferredUsername: string
-  url: string
+  url: ActivityUrlObject[] | string
   name: string
   endpoints: {
     sharedInbox: string

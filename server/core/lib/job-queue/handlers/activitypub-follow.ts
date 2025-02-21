@@ -18,9 +18,8 @@ async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 
-  const handle = host
-    ? `${payload.name}@${host}`
-    : payload.name
+  const identifier = [ payload.name || SERVER_ACTOR_NAME, host ]
+    .filter(v => !!v).join('@')
 
   logger.info('Processing ActivityPub follow in job %s.', job.id)
 
@@ -40,18 +39,18 @@ async function processActivityPubFollow (job: Job) {
 
       targetActor = await getOrCreateAPActor(actorUrl, 'all')
     } catch (err) {
-      logger.warn(`Do not follow ${handle} because we could not find the actor URL (in database or using webfinger)`, { err })
+      logger.warn(`Do not follow ${identifier} because we could not find the actor URL (in database or using webfinger)`, { err })
       return
     }
   }
 
   if (!targetActor) {
-    logger.warn(`Do not follow ${handle} because we could not fetch/load the actor`)
+    logger.warn(`Do not follow ${identifier} because we could not fetch/load the actor`)
     return
   }
 
   if (payload.assertIsChannel && !targetActor.VideoChannel) {
-    logger.warn(`Do not follow ${handle} because it is not a channel.`)
+    logger.warn(`Do not follow ${identifier} because it is not a channel.`)
     return
   }
 
