@@ -1,5 +1,5 @@
+import { ActivityHtmlUrlObject } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
-import { ActivityHtmlUrlObject } from 'packages/models/src/activitypub/index.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { exists } from '../misc.js'

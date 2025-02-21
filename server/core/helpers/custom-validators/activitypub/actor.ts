@@ -1,6 +1,6 @@
 import { arrayify } from '@peertube/peertube-core-utils'
+import { ActivityPubActor } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@server/helpers/core-utils.js'
-import { ActivityPubActor } from 'packages/models/src/activitypub/activitypub-actor.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { exists, isArray, isDateValid } from '../misc.js'
