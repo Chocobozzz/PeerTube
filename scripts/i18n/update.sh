@@ -4,6 +4,8 @@ set -eu
 
 git fetch weblate && git merge weblate/develop
 
+npm run build:embed
+
 cd client
 npm run ng -- extract-i18n --out-file src/locale/angular.xlf
 
