@@ -11,7 +11,7 @@ import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, V
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-options.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
+import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -324,9 +324,12 @@ export async function muxToMergeVideoFiles (options: {
 
       logger.warn(`Cannot mux files of video ${video.url}`, { err, inputs: inputsToLog, ...lTags(video.uuid) })
 
+      if (err.inputStreamError) {
+        err.inputStreamError = buildRequestError(err.inputStreamError)
+      }
+
       throw err
     }
-
   } finally {
     for (const destination of tmpDestinations) {
       await remove(destination)
@@ -338,7 +341,6 @@ async function buildMuxInput (
   video: MVideo,
   videoFile: MVideoFile
 ): Promise<{ input: Readable, isTmpDestination: false } | { input: string, isTmpDestination: boolean }> {
-
   // ---------------------------------------------------------------------------
   // Remote
   // ---------------------------------------------------------------------------
