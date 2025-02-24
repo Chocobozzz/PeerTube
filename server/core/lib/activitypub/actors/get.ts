@@ -91,17 +91,17 @@ async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: strin
   }
 }
 
-async function findOwner (rootId: string, attributedTo: APObjectId[] | APObjectId, type: 'Person' | 'Group') {
+async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObjectId, type: 'Person' | 'Group') {
   for (const actorToCheck of arrayify(attributedTo)) {
     const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(getAPId(actorToCheck))
 
     if (!actorObject) {
-      logger.warn(`Unknown attributed to actor ${actorToCheck} for owner ${rootId}`)
+      logger.warn(`Unknown attributed to actor ${actorToCheck} for owner ${rootUrl}`)
       continue
     }
 
-    if (checkUrlsSameHost(actorObject.id, rootId) !== true) {
-      logger.warn(`Account attributed to ${actorObject.id} does not have the same host than owner actor url ${rootId}`)
+    if (checkUrlsSameHost(actorObject.id, rootUrl) !== true) {
+      logger.warn(`Account attributed to ${actorObject.id} does not have the same host than owner actor url ${rootUrl}`)
       continue
     }
 
