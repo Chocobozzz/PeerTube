@@ -31,9 +31,8 @@ describe('Test <head> HTML tags', function () {
   }
 
   before(async function () {
-    this.timeout(120000);
-
-    ({
+    this.timeout(120000)
+    ;({
       servers,
       instanceConfig,
       account,
@@ -49,7 +48,6 @@ describe('Test <head> HTML tags', function () {
   })
 
   describe('Open Graph', function () {
-
     async function indexPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
@@ -153,7 +151,6 @@ describe('Test <head> HTML tags', function () {
   })
 
   describe('Twitter card', async function () {
-
     before(async function () {
       const config = await servers[0].config.getCustomConfig()
       config.services.twitter = {
@@ -229,7 +226,6 @@ describe('Test <head> HTML tags', function () {
   })
 
   describe('Escaping', function () {
-
     it('Should correctly escape values', async function () {
       await servers[0].users.updateMe({ description: '<strong>"super description"</strong>' })
 
@@ -242,14 +238,13 @@ describe('Test <head> HTML tags', function () {
   })
 
   describe('Mastodon link', function () {
-
     async function check (path: string, mastoLink: string, exist = true) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
       const expected = `<link href="${mastoLink}" rel="me">`
 
-      if (exist)expect(text).to.contain(expected)
+      if (exist) expect(text).to.contain(expected)
       else expect(text).to.not.contain(expected)
     }
 
@@ -287,14 +282,14 @@ describe('Test <head> HTML tags', function () {
   })
 
   describe('RSS links', function () {
-
     async function commonPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
       const feedUrl = `${servers[0].url}/feeds/videos.xml`
-      // eslint-disable-next-line max-len
-      expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="super instance title - Videos feed" href="${feedUrl}" />`)
+      expect(text).to.contain(
+        `<link rel="alternate" type="application/rss+xml" title="super instance title - Videos feed" href="${feedUrl}" />`
+      )
     }
 
     async function channelPageTest (path: string) {
@@ -305,8 +300,9 @@ describe('Test <head> HTML tags', function () {
 
       const feedUrl = `${servers[0].url}/feeds/podcast/videos.xml?videoChannelId=${servers[0].store.channel.id}`
 
-      // eslint-disable-next-line max-len
-      expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="${servers[0].store.channel.displayName} feed" href="${feedUrl}" />`)
+      expect(text).to.contain(
+        `<link rel="alternate" type="application/rss+xml" title="${servers[0].store.channel.displayName} podcast feed" href="${feedUrl}" />`
+      )
     }
 
     async function watchVideoPageTest (path: string) {
