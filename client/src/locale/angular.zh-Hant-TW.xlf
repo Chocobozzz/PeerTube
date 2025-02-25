@@ -15299,9 +15299,9 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3013441103054072216" datatype="html">
+      <trans-unit id="3013441103054072216" datatype="html" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your platform.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your platform.</target>
+        <target state="translated">請僅安裝您信任的外掛程式或佈景主題，因為它們可以在您的平台上執行任何程式碼。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -15869,9 +15869,9 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3586102125640292723" datatype="html">
+      <trans-unit id="3586102125640292723" datatype="html" xml:space="preserve">
         <source>Muted platforms</source>
-        <target state="new">Muted platforms</target>
+        <target state="translated">已靜音的平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">115</context>
@@ -16369,9 +16369,9 @@
           <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6648970559549602356" datatype="html">
+      <trans-unit id="6648970559549602356" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your platform.</source>
-        <target state="new">Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your platform.</target>
+        <target state="translated">您的平台已靜音帳號 <x id="PH" equiv-text="blockedAccount.nameWithHost"/>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -16605,9 +16605,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8151720483850400105" datatype="html">
+      <trans-unit id="8151720483850400105" datatype="html" xml:space="preserve">
         <source>A new user registered on <x id="PH" equiv-text="config.instance.name"/></source>
-        <target state="new">A new user registered on <x id="PH" equiv-text="config.instance.name"/></target>
+        <target state="translated">有新使用者在 <x id="PH" equiv-text="config.instance.name"/> 上註冊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -16629,17 +16629,17 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658016127287571612" datatype="html">
+      <trans-unit id="658016127287571612" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="config.instance.name"/> has a new follower</source>
-        <target state="new"><x id="PH" equiv-text="config.instance.name"/> has a new follower</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/> 有新的追蹤者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3589797681512953578" datatype="html">
+      <trans-unit id="3589797681512953578" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="config.instance.name"/> automatically followed another platform</source>
-        <target state="new"><x id="PH" equiv-text="config.instance.name"/> automatically followed another platform</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/> 自動被其他平台追蹤</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -16861,9 +16861,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5894454946898586762" datatype="html">
+      <trans-unit id="5894454946898586762" datatype="html" xml:space="preserve">
         <source>This name already exists on this platform.</source>
-        <target state="new">This name already exists on this platform.</target>
+        <target state="translated">此平台已有此名稱。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -17271,9 +17271,9 @@
           <context context-type="linenumber">327</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7435577479985600212" datatype="html">
+      <trans-unit id="7435577479985600212" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.video().name"/> will be duplicated by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="this.video().name"/> will be duplicated by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video().name"/> 將會被您的平台再製。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">339</context>
@@ -18075,9 +18075,9 @@
           <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3573790660310399182" datatype="html">
+      <trans-unit id="3573790660310399182" datatype="html" xml:space="preserve">
         <source>Host filter is invalid</source>
-        <target state="new">Host filter is invalid</target>
+        <target state="translated">主機過濾器無效</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -18535,17 +18535,17 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6722592581141834318" datatype="html">
+      <trans-unit id="6722592581141834318" datatype="html" xml:space="preserve">
         <source>Max lives is required.</source>
-        <target state="new">Max lives is required.</target>
+        <target state="translated">最大直播數為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4718923616998868965" datatype="html">
+      <trans-unit id="4718923616998868965" datatype="html" xml:space="preserve">
         <source>Max lives must be greater or equal to -1.</source>
-        <target state="new">Max lives must be greater or equal to -1.</target>
+        <target state="translated">最大直播數必須大於等於 -1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -19167,9 +19167,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3743508579385077788" datatype="html">
+      <trans-unit id="3743508579385077788" datatype="html" xml:space="preserve">
         <source>Platform name is required.</source>
-        <target state="new">Platform name is required.</target>
+        <target state="translated">平台名稱為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -20584,9 +20584,9 @@
           <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8327414932006661175" datatype="html">
+      <trans-unit id="8327414932006661175" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> muted.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> 已靜音。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -20704,65 +20704,65 @@
           <context context-type="linenumber">368</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931091080719598584" datatype="html">
+      <trans-unit id="8931091080719598584" datatype="html" xml:space="preserve">
         <source>Hide any content from that user from you, your platform and its users.</source>
-        <target state="new">Hide any content from that user from you, your platform and its users.</target>
+        <target state="translated">對您、您的平台及其使用者隱藏來自該使用者的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">386</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591567430811860823" datatype="html">
+      <trans-unit id="2591567430811860823" datatype="html" xml:space="preserve">
         <source>Show this user's content to the users of this platform again.</source>
-        <target state="new">Show this user's content to the users of this platform again.</target>
+        <target state="translated">再次將此使用者的內容顯示給此平台的使用者。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5804354060253520825" datatype="html">
+      <trans-unit id="5804354060253520825" datatype="html" xml:space="preserve">
         <source>Hide any content from that platform from you, your platform and its users.</source>
-        <target state="new">Hide any content from that platform from you, your platform and its users.</target>
+        <target state="translated">對您、您的平台及其使用者隱藏來自該平台的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5636556831757427625" datatype="html">
+      <trans-unit id="5636556831757427625" datatype="html" xml:space="preserve">
         <source>Unmute the platform by your platform</source>
-        <target state="new">Unmute the platform by your platform</target>
+        <target state="translated">由您的平台解除靜音</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7469865015995142386" datatype="html">
+      <trans-unit id="7469865015995142386" datatype="html" xml:space="preserve">
         <source>Show back content from that platform for you, your platform and its users.</source>
-        <target state="new">Show back content from that platform for you, your platform and its users.</target>
+        <target state="translated">為您、您的平台及其使用者顯示該平台的回傳內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3174336986672205632" datatype="html">
+      <trans-unit id="3174336986672205632" datatype="html" xml:space="preserve">
         <source>Remove comments from your platform</source>
-        <target state="new">Remove comments from your platform</target>
+        <target state="translated">從您的平台移除留言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">420</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2970277936786210016" datatype="html">
+      <trans-unit id="2970277936786210016" datatype="html" xml:space="preserve">
         <source>Remove comments made by this account from your platform.</source>
-        <target state="new">Remove comments made by this account from your platform.</target>
+        <target state="translated">從您的平台移除此帳號發表的留言。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">421</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="14165999502236506" datatype="html">
+      <trans-unit id="14165999502236506" datatype="html" xml:space="preserve">
         <source>Platform moderation</source>
-        <target state="new">Platform moderation</target>
+        <target state="translated">平台管理</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">430</context>
@@ -20808,9 +20808,9 @@
           <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738499036919555877" datatype="html">
+      <trans-unit id="738499036919555877" datatype="html" xml:space="preserve">
         <source>Mute the platform</source>
-        <target state="new">Mute the platform</target>
+        <target state="translated">靜音平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">316</context>
@@ -20820,25 +20820,25 @@
           <context context-type="linenumber">403</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1849364081331046417" datatype="html">
+      <trans-unit id="1849364081331046417" datatype="html" xml:space="preserve">
         <source>Hide any content from that platform for you.</source>
-        <target state="new">Hide any content from that platform for you.</target>
+        <target state="translated">為您隱藏來自該平台的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3404874513484375253" datatype="html">
+      <trans-unit id="3404874513484375253" datatype="html" xml:space="preserve">
         <source>Unmute the platform</source>
-        <target state="new">Unmute the platform</target>
+        <target state="translated">取消靜音平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">322</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099316309417806930" datatype="html">
+      <trans-unit id="6099316309417806930" datatype="html" xml:space="preserve">
         <source>Show back content from that platform for you.</source>
-        <target state="new">Show back content from that platform for you.</target>
+        <target state="translated">為您顯示該平台的回傳內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">323</context>
@@ -21222,17 +21222,17 @@
           <context context-type="linenumber">470</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8622134676231789456" datatype="html">
+      <trans-unit id="8622134676231789456" datatype="html" xml:space="preserve">
         <source>The deletion will be sent to remote platforms so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote platforms so they can reflect the change.</target>
+        <target state="translated">刪除會傳送到遠端平台，讓它們可以反映內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7794689773907080825" datatype="html">
+      <trans-unit id="7794689773907080825" datatype="html" xml:space="preserve">
         <source>It is a remote comment, so the deletion will only be effective on your platform.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your platform.</target>
+        <target state="translated">這是遠端留言，因此刪除只會在您的平台上生效。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">223</context>
@@ -21246,9 +21246,9 @@
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099744911889532030" datatype="html">
+      <trans-unit id="6099744911889532030" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</source>
-        <target state="new">Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</target>
+        <target state="translated">您的平台已靜音帳號 <x id="PH" equiv-text="account.nameWithHost"/>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">494</context>
@@ -21258,9 +21258,9 @@
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4653820703858524784" datatype="html">
+      <trans-unit id="4653820703858524784" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> muted by your platform.</target>
+        <target state="translated">您的平台已靜音 <x id="PH" equiv-text="host"/>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">506</context>
@@ -22590,9 +22590,9 @@
           <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5731228558519519588" datatype="html">
+      <trans-unit id="5731228558519519588" datatype="html" xml:space="preserve">
         <source>Only users of this platform can see this video</source>
-        <target state="new">Only users of this platform can see this video</target>
+        <target state="translated">僅此平台的使用者才能看到此影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">477</context>
