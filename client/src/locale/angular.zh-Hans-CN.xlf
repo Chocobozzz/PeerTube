@@ -10587,9 +10587,9 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2134381456844896041" datatype="html">
+      <trans-unit id="2134381456844896041" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">使用 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>远程运行者<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 处理实时转码。远程运行者必须先在您的实例上注册。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">169</context>
@@ -10651,9 +10651,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8646250517331978259" datatype="html">
+      <trans-unit id="8646250517331978259" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">使用 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>远程运行者<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 处理 VOD 转码。远程运行者必须先在您的实例上注册。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">195</context>
@@ -10699,9 +10699,9 @@
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8718102504014634857" datatype="html">
+      <trans-unit id="8718102504014634857" datatype="html" xml:space="preserve">
         <source>Keep a version of the input file</source>
-        <target state="new">Keep a version of the input file</target>
+        <target state="translated">保留输入文件的版本</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">72</context>
@@ -10715,17 +10715,17 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8968030053137661433" datatype="html">
+      <trans-unit id="8968030053137661433" datatype="html" xml:space="preserve">
         <source>Output</source>
-        <target state="new">Output</target>
+        <target state="translated">输出</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2093595615152706886" datatype="html">
+      <trans-unit id="2093595615152706886" datatype="html" xml:space="preserve">
         <source>Web Videos enabled</source>
-        <target state="new">Web Videos enabled</target>
+        <target state="translated">已启用 Web 视频</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">88</context>
@@ -10739,17 +10739,17 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4693864826145148757" datatype="html">
+      <trans-unit id="4693864826145148757" datatype="html" xml:space="preserve">
         <source>Max live FPS</source>
-        <target state="new">Max live FPS</target>
+        <target state="translated">最大实时 FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">117,119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6315342359958880564" datatype="html">
+      <trans-unit id="6315342359958880564" datatype="html" xml:space="preserve">
         <source>Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</source>
-        <target state="new">Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</target>
+        <target state="translated">限制转码后的实时 FPS。最大分辨率流仍保留原始 FPS。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,121</context>
@@ -10771,9 +10771,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4354548488369167450" datatype="html">
+      <trans-unit id="4354548488369167450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>需要 ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>生成 HLS 播放列表和碎片化的 MP4 文件，从而实现比 Web 视频更好的播放效果：<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>分辨率变化更平滑<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>播放速度更快，尤其是长视频<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>播放更稳定（更少错误/无限加载）<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>如果你还启用了 Web 视频支持，视频存储量将增加 2 倍<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">108</context>
@@ -10787,49 +10787,49 @@
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="443904340561625146" datatype="html">
+      <trans-unit id="443904340561625146" datatype="html" xml:space="preserve">
         <source>If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</source>
-        <target state="new">If enabled, remote PeerTube instances &lt; 6.3.0 won't be able to play these videos</target>
+        <target state="translated">如果启用，远程 PeerTube 实例 &lt; 6.3.0 无法播放这些视频</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8778692018772808354" datatype="html">
+      <trans-unit id="8778692018772808354" datatype="html" xml:space="preserve">
         <source>Store the audio stream in a separate file from the video.</source>
-        <target state="new">Store the audio stream in a separate file from the video.</target>
+        <target state="translated">将音频流存储在与视频分开的文件中。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4806060468959678872" datatype="html">
+      <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="new">This option adds the ability for the HLS player to propose the "Audio only" quality to users.</target>
+        <target state="translated">此选项增加了 HLS 播放器向用户建议“仅音频”质量的功能。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7702925566184017292" datatype="html">
+      <trans-unit id="7702925566184017292" datatype="html" xml:space="preserve">
         <source>It also saves disk space by not duplicating the audio stream in each resolution file</source>
-        <target state="new">It also saves disk space by not duplicating the audio stream in each resolution file</target>
+        <target state="translated">通过不在每个分辨率文件中复制音频流，它还可以节省磁盘空间</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2798443406255719006" datatype="html">
+      <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="new">Max video FPS</target>
+        <target state="translated">最大视频 FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145,147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">限制转码视频的 FPS。最大分辨率文件仍保留原始 FPS。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147,149</context>
@@ -10843,17 +10843,17 @@
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2720128810058691158" datatype="html">
+      <trans-unit id="2720128810058691158" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new">Even if it's above your maximum enabled resolution</target>
+        <target state="translated">即使它高于你启用的最大分辨率</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8056487097039524924" datatype="html">
+      <trans-unit id="8056487097039524924" datatype="html" xml:space="preserve">
         <source>Enable remote runners for VOD</source>
-        <target state="new">Enable remote runners for VOD</target>
+        <target state="translated">为 VOD 启用远程运行者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">191</context>
@@ -10947,33 +10947,33 @@
           <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7185229240632050966" datatype="html">
+      <trans-unit id="7185229240632050966" datatype="html" xml:space="preserve">
         <source>Enable remote runners for studio</source>
-        <target state="new">Enable remote runners for studio</target>
+        <target state="translated">为工作室启用远程运行者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552130276182854923" datatype="html">
+      <trans-unit id="5552130276182854923" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </target>
+        <target state="translated">使用 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>远程运行者<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 处理工作室转码任务。远程运行者必须先在您的实例上注册。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671557140564655234" datatype="html">
+      <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">自动启用 HLS 转码，因为启用转码时必须启用至少 1 种输出格式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2487046557845958040" datatype="html">
+      <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">自动启用 Web 视频转码，因为启用转码时必须启用至少 1 种输出格式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -11043,9 +11043,9 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9180372875725189823" datatype="html">
+      <trans-unit id="9180372875725189823" datatype="html" xml:space="preserve">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="new">Number of video storyboard images to keep in cache</target>
+        <target state="translated">缓存中保存的视频故事板图像数量</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
@@ -11083,23 +11083,17 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7207368259170794965" datatype="html">
+      <trans-unit id="7207368259170794965" datatype="html" xml:space="preserve">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write JavaScript code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write JavaScript code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>直接编写 JavaScript 代码。例如：<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127946625874930162" datatype="html">
+      <trans-unit id="127946625874930162" datatype="html" xml:space="preserve">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-<x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-<x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>直接编写 CSS 代码。示例：<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">111,122</context>
@@ -11173,9 +11167,9 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4543888618160534551" datatype="html">
+      <trans-unit id="4543888618160534551" datatype="html" xml:space="preserve">
         <source>TWO-FACTOR AUTHENTICATION</source>
-        <target state="new">TWO-FACTOR AUTHENTICATION</target>
+        <target state="translated">双因素身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">66,67</context>
@@ -11189,74 +11183,73 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4309045590850686400" datatype="html">
+      <trans-unit id="4309045590850686400" datatype="html" xml:space="preserve">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">双重身份验证通过在您登录时要求从另一台设备（最常见的是手机）输入数字代码，为您的帐户增加了额外的安全保障。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2955617286542082394" datatype="html">
+      <trans-unit id="2955617286542082394" datatype="html" xml:space="preserve">
         <source>Enable two-factor authentication</source>
-        <target state="new">Enable two-factor authentication</target>
+        <target state="translated">启用双重身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2658424416565652268" datatype="html">
+      <trans-unit id="2658424416565652268" datatype="html" xml:space="preserve">
         <source>Disable two-factor authentication</source>
-        <target state="new">Disable two-factor authentication</target>
+        <target state="translated">禁用双重身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4561231095368496452" datatype="html">
+      <trans-unit id="4561231095368496452" datatype="html" xml:space="preserve">
         <source>Are you sure you want to disable two factor authentication of your account?</source>
-        <target state="new">Are you sure you want to disable two factor authentication of your account?</target>
+        <target state="translated">您确定要禁用帐户的双重身份验证吗？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757273554886026258" datatype="html">
+      <trans-unit id="3757273554886026258" datatype="html" xml:space="preserve">
         <source>Disable two factor</source>
-        <target state="new">Disable two factor</target>
+        <target state="translated">禁用双重因素</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7121657131608757909" datatype="html">
+      <trans-unit id="7121657131608757909" datatype="html" xml:space="preserve">
         <source>Two factor authentication disabled</source>
-        <target state="new">Two factor authentication disabled</target>
+        <target state="translated">已禁用双因素身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="872237557319890340" datatype="html">
+      <trans-unit id="872237557319890340" datatype="html" xml:space="preserve">
         <source>Two factor authentication is already enabled.</source>
-        <target state="new"> Two factor authentication is already enabled.
-</target>
+        <target state="translated">双重身份验证已启用。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4921687518561446633" datatype="html">
+      <trans-unit id="4921687518561446633" datatype="html" xml:space="preserve">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">您的密码</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2990026202987449106" datatype="html">
+      <trans-unit id="2990026202987449106" datatype="html" xml:space="preserve">
         <source>Confirm your password to enable two factor authentication</source>
-        <target state="new">Confirm your password to enable two factor authentication</target>
+        <target state="translated">确认您的密码以启用双因素身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">10</context>
@@ -11342,9 +11335,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8917573897450243216" datatype="html">
+      <trans-unit id="8917573897450243216" datatype="html" xml:space="preserve">
         <source>Include audio</source>
-        <target state="new">Include audio</target>
+        <target state="translated">包括音频</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-generate-download.component.html</context>
           <context context-type="linenumber">36</context>
@@ -11374,25 +11367,25 @@
           <context context-type="linenumber">52,54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5790604788861392297" datatype="html">
+      <trans-unit id="5790604788861392297" datatype="html" xml:space="preserve">
         <source>Content preferences</source>
-        <target state="new">Content preferences</target>
+        <target state="translated">内容偏好</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2579809064600486610" datatype="html">
+      <trans-unit id="2579809064600486610" datatype="html" xml:space="preserve">
         <source>You always use the same preferences?</source>
-        <target state="new">You always use the same preferences?</target>
+        <target state="translated">您总是使用相同的偏好吗？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2939244215860150958" datatype="html">
+      <trans-unit id="2939244215860150958" datatype="html" xml:space="preserve">
         <source>Update your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>default settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Update your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>default settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">更新您的 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>默认设置<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">68,69</context>
@@ -11406,9 +11399,9 @@
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3021884317141422270" datatype="html">
+      <trans-unit id="3021884317141422270" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected or not yet published)</source>
-        <target state="new">Display all videos (private, unlisted, password protected or not yet published)</target>
+        <target state="translated">显示所有视频（私人、未公开、受密码保护或尚未发布）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">148</context>
@@ -11430,41 +11423,41 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6234119003440125809" datatype="html">
+      <trans-unit id="6234119003440125809" datatype="html" xml:space="preserve">
         <source>Recently Added</source>
-        <target state="new">Recently Added</target>
+        <target state="translated">最近添加</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2925767298386605760" datatype="html">
+      <trans-unit id="2925767298386605760" datatype="html" xml:space="preserve">
         <source>Original Publication Date</source>
-        <target state="new">Original Publication Date</target>
+        <target state="translated">原始发布日期</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7780562759861344168" datatype="html">
+      <trans-unit id="7780562759861344168" datatype="html" xml:space="preserve">
         <source>Recent Views</source>
-        <target state="new">Recent Views</target>
+        <target state="translated">最近浏览</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="676860092433275829" datatype="html">
+      <trans-unit id="676860092433275829" datatype="html" xml:space="preserve">
         <source>Hot</source>
-        <target state="new">Hot</target>
+        <target state="translated">热的</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3456598716931498601" datatype="html">
+      <trans-unit id="3456598716931498601" datatype="html" xml:space="preserve">
         <source>Global Views</source>
-        <target state="new">Global Views</target>
+        <target state="translated">全局视图</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">182</context>
@@ -11570,81 +11563,81 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4349815973140201821" datatype="html">
+      <trans-unit id="4349815973140201821" datatype="html" xml:space="preserve">
         <source>Server country</source>
-        <target state="new">Server country</target>
+        <target state="translated">服务器国家</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">103,104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8534731544752464794" datatype="html">
+      <trans-unit id="8534731544752464794" datatype="html" xml:space="preserve">
         <source>PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</source>
-        <target state="new">PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</target>
+        <target state="translated">PeerTube 使用此设置在“关于”页面中向用户解释他们必须遵守哪些法律</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">104,106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4956359062784445953" datatype="html">
+      <trans-unit id="4956359062784445953" datatype="html" xml:space="preserve">
         <source>SOCIAL</source>
-        <target state="new">SOCIAL</target>
+        <target state="translated">社交</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">119,120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4364641327642273311" datatype="html">
+      <trans-unit id="4364641327642273311" datatype="html" xml:space="preserve">
         <source>Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </source>
-        <target state="new"> Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </target>
+        <target state="translated">社交链接和支持信息显示在 <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>关于<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> 页面 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">121,123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3612093728661654722" datatype="html">
+      <trans-unit id="3612093728661654722" datatype="html" xml:space="preserve">
         <source>Support text</source>
-        <target state="new">Support text</target>
+        <target state="translated">支持文本</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3532587780731641584" datatype="html">
+      <trans-unit id="3532587780731641584" datatype="html" xml:space="preserve">
         <source>Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</source>
-        <target state="new">Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</target>
+        <target state="translated">向您的用户解释如何支持您的平台。如果设置，PeerTube 将在“关于”实例页面中显示“支持”按钮</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4183792958965659941" datatype="html">
+      <trans-unit id="4183792958965659941" datatype="html" xml:space="preserve">
         <source>External link</source>
-        <target state="new">External link</target>
+        <target state="translated">外部链接</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">139,140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8355387577210576572" datatype="html">
+      <trans-unit id="8355387577210576572" datatype="html" xml:space="preserve">
         <source>Link to your main website</source>
-        <target state="new">Link to your main website</target>
+        <target state="translated">链接到您的主网站</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">140,142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1456146786867743695" datatype="html">
+      <trans-unit id="1456146786867743695" datatype="html" xml:space="preserve">
         <source>Mastodon link</source>
-        <target state="new">Mastodon link</target>
+        <target state="translated">Mastodon 链接</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">151,153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3938009584903861509" datatype="html">
+      <trans-unit id="3938009584903861509" datatype="html" xml:space="preserve">
         <source>Bluesky link</source>
-        <target state="new">Bluesky link</target>
+        <target state="translated">Bluesky 链接</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -11826,17 +11819,17 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2959404232331504155" datatype="html">
+      <trans-unit id="2959404232331504155" datatype="html" xml:space="preserve">
         <source>You don't have channel synchronisation configured.</source>
-        <target state="new">You don't have channel synchronisation configured.</target>
+        <target state="translated">您没有配置频道同步。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2015493719998914454" datatype="html">
+      <trans-unit id="2015493719998914454" datatype="html" xml:space="preserve">
         <source>List imports</source>
-        <target state="new">List imports</target>
+        <target state="translated">列出导入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -11898,9 +11891,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3169881590124056773" datatype="html">
+      <trans-unit id="3169881590124056773" datatype="html" xml:space="preserve">
         <source>Video channel</source>
-        <target state="new">Video channel</target>
+        <target state="translated">视频频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -11946,9 +11939,9 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5863226045830598109" datatype="html">
+      <trans-unit id="5863226045830598109" datatype="html" xml:space="preserve">
         <source>Two factor authentication</source>
-        <target state="new">Two factor authentication</target>
+        <target state="translated">两因素身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">59</context>
@@ -12260,9 +12253,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3686251233087069053" datatype="html">
+      <trans-unit id="3686251233087069053" datatype="html" xml:space="preserve">
         <source>UPDATE PLAYLIST</source>
-        <target state="new">UPDATE PLAYLIST</target>
+        <target state="translated">更新播放列表</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12352,9 +12345,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6904641160356013310" datatype="html">
+      <trans-unit id="6904641160356013310" datatype="html" xml:space="preserve">
         <source>Account request sent</source>
-        <target state="new">Account request sent</target>
+        <target state="translated">帐户请求已发送</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12368,9 +12361,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8741939424112857854" datatype="html">
+      <trans-unit id="8741939424112857854" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ video.name }}"/> statistics</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ video.name }}"/> statistics</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ video.name }}"/> 统计数据</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -12460,9 +12453,9 @@
           <context context-type="linenumber">292</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2405893290244253562" datatype="html">
+      <trans-unit id="2405893290244253562" datatype="html" xml:space="preserve">
         <source>A view means that someone watched the video for several seconds (10 seconds by default)</source>
-        <target state="new">A view means that someone watched the video for several seconds (10 seconds by default)</target>
+        <target state="translated">一次观看意味着某人观看了视频几秒钟（默认为 10 秒）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">311</context>
@@ -12480,9 +12473,9 @@
           <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="699590710757792843" datatype="html">
+      <trans-unit id="699590710757792843" datatype="html" xml:space="preserve">
         <source>Regions</source>
-        <target state="new">Regions</target>
+        <target state="translated">区域</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">138</context>
@@ -12568,25 +12561,25 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3458449147454605646" datatype="html">
+      <trans-unit id="3458449147454605646" datatype="html" xml:space="preserve">
         <source>Request a new verification email</source>
-        <target state="new"> Request a new verification email </target>
+        <target state="translated">请求新的验证电子邮件</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6001536520193131937" datatype="html">
+      <trans-unit id="6001536520193131937" datatype="html" xml:space="preserve">
         <source>Unable to find verification string in URL query.</source>
-        <target state="new">Unable to find verification string in URL query.</target>
+        <target state="translated">无法在 URL 查询中找到验证字符串。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7264033009244104285" datatype="html">
+      <trans-unit id="7264033009244104285" datatype="html" xml:space="preserve">
         <source>Unable to find user id or registration id in URL query.</source>
-        <target state="new">Unable to find user id or registration id in URL query.</target>
+        <target state="translated">无法在 URL 查询中找到用户 ID 或注册 ID。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -12632,25 +12625,25 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5634180635200972996" datatype="html">
+      <trans-unit id="5634180635200972996" datatype="html" xml:space="preserve">
         <source>Email verified!</source>
-        <target state="new">Email verified!</target>
+        <target state="translated">电子邮件已验证！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2584956257063845668" datatype="html">
+      <trans-unit id="2584956257063845668" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="new">Your email has been verified and your account request has been sent!</target>
+        <target state="translated">您的电子邮件已经验证，您的帐户请求已发送！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4255980289409848252" datatype="html">
+      <trans-unit id="4255980289409848252" datatype="html" xml:space="preserve">
         <source>A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.</source>
-        <target state="new"> A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected. </target>
+        <target state="translated">主持人将很快检查您的注册请求，当请求被接受或拒绝时，您将收到一封电子邮件。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">10</context>
@@ -12660,17 +12653,17 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="381800444567495906" datatype="html">
+      <trans-unit id="381800444567495906" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="new">Your email has been verified and your account has been created!</target>
+        <target state="translated">您的电子邮件已经验证并且您的帐户已创建！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2448802938372065840" datatype="html">
+      <trans-unit id="2448802938372065840" datatype="html" xml:space="preserve">
         <source>If you need help using PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> If you need help using PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">如果你需要使用 PeerTube 的帮助，你可以看看 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use/setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>文档<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">18</context>
@@ -12688,9 +12681,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8412827353958624080" datatype="html">
+      <trans-unit id="8412827353958624080" datatype="html" xml:space="preserve">
         <source>Your account request has been sent!</source>
-        <target state="new">Your account request has been sent!</target>
+        <target state="translated">您的帐户请求已发送！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">13</context>
@@ -12704,17 +12697,17 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7273859988396814188" datatype="html">
+      <trans-unit id="7273859988396814188" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>检查你的电子邮件<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 验证您的帐户并完成您的注册请求。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7056036938435794110" datatype="html">
+      <trans-unit id="7056036938435794110" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>检查你的电子邮件<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 验证您的帐户并完成注册。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -12912,9 +12905,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4257078540065035665" datatype="html">
+      <trans-unit id="4257078540065035665" datatype="html" xml:space="preserve">
         <source>UPDATE CHANNEL</source>
-        <target state="new">UPDATE CHANNEL</target>
+        <target state="translated">更新频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-edit.component.html</context>
           <context context-type="linenumber">11</context>
@@ -13020,49 +13013,49 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4369572538341036106" datatype="html">
+      <trans-unit id="4369572538341036106" datatype="html" xml:space="preserve">
         <source>Show more followers</source>
-        <target state="new">Show more followers</target>
+        <target state="translated">显示更多关注者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6439365426343089851" datatype="html">
+      <trans-unit id="6439365426343089851" datatype="html" xml:space="preserve">
         <source>General</source>
-        <target state="new">General</target>
+        <target state="translated">一般的</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3724068243287682962" datatype="html">
+      <trans-unit id="3724068243287682962" datatype="html" xml:space="preserve">
         <source>Team</source>
-        <target state="new">Team</target>
+        <target state="translated">团队</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4843885358288366928" datatype="html">
+      <trans-unit id="4843885358288366928" datatype="html" xml:space="preserve">
         <source>Moderation and code of conduct</source>
-        <target state="new">Moderation and code of conduct</target>
+        <target state="translated">适度和行为准则</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1548157236003897753" datatype="html">
+      <trans-unit id="1548157236003897753" datatype="html" xml:space="preserve">
         <source>Technical information</source>
-        <target state="new">Technical information</target>
+        <target state="translated">技术信息</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3230710025556647729" datatype="html">
+      <trans-unit id="3230710025556647729" datatype="html" xml:space="preserve">
         <source>About this platform</source>
-        <target state="new">About this platform</target>
+        <target state="translated">关于此平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.routes.ts</context>
           <context context-type="linenumber">16</context>
@@ -13120,25 +13113,25 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="855761351954776278" datatype="html">
+      <trans-unit id="855761351954776278" datatype="html" xml:space="preserve">
         <source>Why we created <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Why we created <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">为什么我们创建 <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6871360459693149470" datatype="html">
+      <trans-unit id="6871360459693149470" datatype="html" xml:space="preserve">
         <source>How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">我们计划维持多长时间 <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">12,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1808344369245431716" datatype="html">
+      <trans-unit id="1808344369245431716" datatype="html" xml:space="preserve">
         <source>How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</source>
-        <target state="new">How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</target>
+        <target state="translated">我们将如何支付维持 <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> 运行</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -13160,17 +13153,17 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6389858719039477750" datatype="html">
+      <trans-unit id="6389858719039477750" datatype="html" xml:space="preserve">
         <source>Our platform in figures</source>
-        <target state="new">Our platform in figures</target>
+        <target state="translated">我们的平台数据</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3831303895296608550" datatype="html">
+      <trans-unit id="3831303895296608550" datatype="html" xml:space="preserve">
         <source>moderators</source>
-        <target state="new">moderators</target>
+        <target state="translated">版主</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -13260,49 +13253,49 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="962765493084218985" datatype="html">
+      <trans-unit id="962765493084218985" datatype="html" xml:space="preserve">
         <source>Platform</source>
-        <target state="new">Platform</target>
+        <target state="translated">平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6039800040694117968" datatype="html">
+      <trans-unit id="6039800040694117968" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not have subscriptions.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not have subscriptions.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> 没有订阅。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6484900422964834651" datatype="html">
+      <trans-unit id="6484900422964834651" datatype="html" xml:space="preserve">
         <source>Show more subscriptions</source>
-        <target state="new">Show more subscriptions</target>
+        <target state="translated">显示更多订阅</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8050300132367756765" datatype="html">
+      <trans-unit id="8050300132367756765" datatype="html" xml:space="preserve">
         <source>Our network in figures</source>
-        <target state="new">Our network in figures</target>
+        <target state="translated">我们的网络数据</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3526345455397325538" datatype="html">
+      <trans-unit id="3526345455397325538" datatype="html" xml:space="preserve">
         <source>total videos</source>
-        <target state="new">total videos</target>
+        <target state="translated">视频总数</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6590979139539706305" datatype="html">
+      <trans-unit id="6590979139539706305" datatype="html" xml:space="preserve">
         <source>total comments</source>
-        <target state="new">total comments</target>
+        <target state="translated">总评论数</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">45,46</context>
@@ -13316,41 +13309,41 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="219716072784558792" datatype="html">
+      <trans-unit id="219716072784558792" datatype="html" xml:space="preserve">
         <source>Our subscribers automatically display videos of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> on their platforms. </source>
-        <target state="new"> Our subscribers automatically display videos of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> on their platforms. </target>
+        <target state="translated">我们的订阅者会自动显示 <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> 在他们的平台上。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">58,60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8806514301719228076" datatype="html">
+      <trans-unit id="8806514301719228076" datatype="html" xml:space="preserve">
         <source>Specifics</source>
-        <target state="new">Specifics</target>
+        <target state="translated">具体内容</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4156810045795717114" datatype="html">
+      <trans-unit id="4156810045795717114" datatype="html" xml:space="preserve">
         <source>Language:</source>
-        <target state="new">Language: </target>
+        <target state="translated">语言:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8047881417431814560" datatype="html">
+      <trans-unit id="8047881417431814560" datatype="html" xml:space="preserve">
         <source>Categories:</source>
-        <target state="new">Categories: </target>
+        <target state="translated">类别:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1381866989532931408" datatype="html">
+      <trans-unit id="1381866989532931408" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> 致力于敏感/NSFW内容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -13364,17 +13357,17 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2831322084739765298" datatype="html">
+      <trans-unit id="2831322084739765298" datatype="html" xml:space="preserve">
         <source>About this platform's network</source>
-        <target state="new">About this platform's network</target>
+        <target state="translated">关于此平台的网络</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/routes.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5322177163493113456" datatype="html">
+      <trans-unit id="5322177163493113456" datatype="html" xml:space="preserve">
         <source>Close this modal</source>
-        <target state="new">Close this modal</target>
+        <target state="translated">关闭此模式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -13640,17 +13633,17 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3273586660042053098" datatype="html">
+      <trans-unit id="3273586660042053098" datatype="html" xml:space="preserve">
         <source>Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</source>
-        <target state="new">Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</target>
+        <target state="translated">你为什么想加入 <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="603966779971722604" datatype="html">
+      <trans-unit id="603966779971722604" datatype="html" xml:space="preserve">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </source>
-        <target state="new"> I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
+        <target state="translated">我至少 <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> 岁并同意 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> 以及 <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>行为守则<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> 的 <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">18</context>
@@ -13760,9 +13753,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6977387630045865297" datatype="html">
+      <trans-unit id="6977387630045865297" datatype="html" xml:space="preserve">
         <source>You must agree with the platform terms in order to register on it.</source>
-        <target state="new">You must agree with the platform terms in order to register on it.</target>
+        <target state="translated">您必须同意平台条款才能在平台上注册。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13804,25 +13797,25 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5859845485947900894" datatype="html">
+      <trans-unit id="5859845485947900894" datatype="html" xml:space="preserve">
         <source>Platforms order</source>
-        <target state="new">Platforms order</target>
+        <target state="translated">平台订购</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1541005328084571131" datatype="html">
+      <trans-unit id="1541005328084571131" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> 平台订阅的内容来自 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> 其他平台<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99,101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8603409827386793098" datatype="html">
+      <trans-unit id="8603409827386793098" datatype="html" xml:space="preserve">
         <source>Set your display preferences here.</source>
-        <target state="new">Set your display preferences here.</target>
+        <target state="translated">在此设置您的显示偏好。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">101,102</context>
@@ -13860,9 +13853,9 @@
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8317194248349445422" datatype="html">
+      <trans-unit id="8317194248349445422" datatype="html" xml:space="preserve">
         <source>This platform</source>
-        <target state="new">This platform</target>
+        <target state="translated">这个平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">160</context>
@@ -13900,17 +13893,17 @@
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019185430150596533" datatype="html">
+      <trans-unit id="4019185430150596533" datatype="html" xml:space="preserve">
         <source>Only lives</source>
-        <target state="new">Only lives</target>
+        <target state="translated">仅直播</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="403276015827477743" datatype="html">
+      <trans-unit id="403276015827477743" datatype="html" xml:space="preserve">
         <source>Only VOD</source>
-        <target state="new">Only VOD</target>
+        <target state="translated">仅 VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">201</context>
@@ -13948,9 +13941,9 @@
           <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="166448092104563965" datatype="html">
+      <trans-unit id="166448092104563965" datatype="html" xml:space="preserve">
         <source>Password protected</source>
-        <target state="new">Password protected</target>
+        <target state="translated">密码保护</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13968,9 +13961,9 @@
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5693037411428190538" datatype="html">
+      <trans-unit id="5693037411428190538" datatype="html" xml:space="preserve">
         <source>Skip the sub menu</source>
-        <target state="new">Skip the sub menu</target>
+        <target state="translated">跳过子菜单</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -14036,9 +14029,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5508725342419733476" datatype="html">
+      <trans-unit id="5508725342419733476" datatype="html" xml:space="preserve">
         <source>"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</source>
-        <target state="new">"Split audio and video" must be enabled for the PeerTube player to propose an "Audio only" resolution to users</target>
+        <target state="translated">必须启用“分离音频和视频”，PeerTube 播放器才能向用户推荐“仅音频”分辨率</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -15017,17 +15010,17 @@
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7822423019936222997" datatype="html">
+      <trans-unit id="7822423019936222997" datatype="html" xml:space="preserve">
         <source>Send a message to the reporter (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
-        <target state="new">Send a message to the reporter (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</target>
+        <target state="translated">向记者发送消息（目前 {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}}）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4116081436059310531" datatype="html">
+      <trans-unit id="4116081436059310531" datatype="html" xml:space="preserve">
         <source>Send a message to the admins/moderators (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
-        <target state="new">Send a message to the admins/moderators (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</target>
+        <target state="translated">向管理员/版主发送消息（目前 {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}}）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">235</context>
@@ -15121,17 +15114,17 @@
           <context context-type="linenumber">300</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5841439724861780893" datatype="html">
+      <trans-unit id="5841439724861780893" datatype="html" xml:space="preserve">
         <source>Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="new">Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</target>
+        <target state="translated">包含任何观看词语的视频名称/描述和评论都会自动标记列表名称。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5485804110353816120" datatype="html">
+      <trans-unit id="5485804110353816120" datatype="html" xml:space="preserve">
         <source>These automatic tags can be used to filter comments and videos.</source>
-        <target state="new">These automatic tags can be used to filter comments and videos.</target>
+        <target state="translated">这些自动标签可用于过滤评论和视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">2</context>
@@ -15271,9 +15264,9 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3013441103054072216" datatype="html">
+      <trans-unit id="3013441103054072216" datatype="html" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your platform.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your platform.</target>
+        <target state="translated">请仅安装您信任的插件或主题，因为它们可以在您的平台上执行任何代码。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -15321,17 +15314,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7715366001202984222" datatype="html">
+      <trans-unit id="7715366001202984222" datatype="html" xml:space="preserve">
         <source>Homepage (new window)</source>
-        <target state="new">Homepage (new window)</target>
+        <target state="translated">主页（新窗口）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216768473834595914" datatype="html">
+      <trans-unit id="5216768473834595914" datatype="html" xml:space="preserve">
         <source>NPM page (new window)</source>
-        <target state="new">NPM page (new window)</target>
+        <target state="translated">NPM 页面（新窗口）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -15493,9 +15486,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="725311187158639317" datatype="html">
+      <trans-unit id="725311187158639317" datatype="html" xml:space="preserve">
         <source>Files <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;localVideoFilesSize&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Files <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;localVideoFilesSize&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">文件 <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;localVideoFilesSize&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">40</context>
@@ -15517,89 +15510,89 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8447575918459582040" datatype="html">
+      <trans-unit id="8447575918459582040" datatype="html" xml:space="preserve">
         <source>Comments are disabled</source>
-        <target state="new">Comments are disabled</target>
+        <target state="translated">评论已被禁用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5018413305553485964" datatype="html">
+      <trans-unit id="5018413305553485964" datatype="html" xml:space="preserve">
         <source>Comments are enabled</source>
-        <target state="new">Comments are enabled</target>
+        <target state="translated">已启用评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="63077766244971546" datatype="html">
+      <trans-unit id="63077766244971546" datatype="html" xml:space="preserve">
         <source>Comments may require approval depending on your auto tag policies</source>
-        <target state="new">Comments may require approval depending on your auto tag policies</target>
+        <target state="translated">根据您的自动标签政策，评论可能需要批准</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8069667549070509050" datatype="html">
+      <trans-unit id="8069667549070509050" datatype="html" xml:space="preserve">
         <source>Any new comment requires approval</source>
-        <target state="new">Any new comment requires approval</target>
+        <target state="translated">任何新评论均需获得批准</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5217863338130648698" datatype="html">
+      <trans-unit id="5217863338130648698" datatype="html" xml:space="preserve">
         <source>Light (Beige) or Dark (Brown)</source>
-        <target state="new">Light (Beige) or Dark (Brown)</target>
+        <target state="translated">浅色（米色）或深色（棕色）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4012645514712660678" datatype="html">
+      <trans-unit id="4012645514712660678" datatype="html" xml:space="preserve">
         <source>PeerTube selects the appropriate theme depending on web browser preferences</source>
-        <target state="new">PeerTube selects the appropriate theme depending on web browser preferences</target>
+        <target state="translated">PeerTube 根据网络浏览器偏好选择适当的主题</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8421126018613018698" datatype="html">
+      <trans-unit id="8421126018613018698" datatype="html" xml:space="preserve">
         <source>Dark (Brown)</source>
-        <target state="new">Dark (Brown)</target>
+        <target state="translated">深色（棕色）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="258909519768317409" datatype="html">
+      <trans-unit id="258909519768317409" datatype="html" xml:space="preserve">
         <source>Light (Beige)</source>
-        <target state="new">Light (Beige)</target>
+        <target state="translated">浅色（米色）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="839435106282863105" datatype="html">
+      <trans-unit id="839435106282863105" datatype="html" xml:space="preserve">
         <source>Open in the application?</source>
-        <target state="new">Open in the application?</target>
+        <target state="translated">在应用程序中打开？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5538640554435353258" datatype="html">
+      <trans-unit id="5538640554435353258" datatype="html" xml:space="preserve">
         <source>Open settings modal</source>
-        <target state="new">Open settings modal</target>
+        <target state="translated">打开设置模式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4070550899383572841" datatype="html">
+      <trans-unit id="4070550899383572841" datatype="html" xml:space="preserve">
         <source>Go to the manage your account page</source>
-        <target state="new">Go to the manage your account page</target>
+        <target state="translated">前往管理您的帐户页面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">37</context>
@@ -15617,9 +15610,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6250956071546896586" datatype="html">
+      <trans-unit id="6250956071546896586" datatype="html" xml:space="preserve">
         <source>You need to reconnect</source>
-        <target state="new">You need to reconnect</target>
+        <target state="translated">您需要重新连接</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">203</context>
@@ -15629,9 +15622,9 @@
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784250050046176017" datatype="html">
+      <trans-unit id="2784250050046176017" datatype="html" xml:space="preserve">
         <source>Your authentication has expired, you need to reconnect.</source>
-        <target state="new">Your authentication has expired, you need to reconnect.</target>
+        <target state="translated">您的身份验证已过期，您需要重新连接。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">228</context>
@@ -15669,57 +15662,57 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="736603280382549123" datatype="html">
+      <trans-unit id="736603280382549123" datatype="html" xml:space="preserve">
         <source>Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">进步 <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="492731212914442494" datatype="html">
+      <trans-unit id="492731212914442494" datatype="html" xml:space="preserve">
         <source>Runner</source>
-        <target state="new">Runner</target>
+        <target state="translated">跑步者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5944078821855011619" datatype="html">
+      <trans-unit id="5944078821855011619" datatype="html" xml:space="preserve">
         <source>Payload:</source>
-        <target state="new">Payload:</target>
+        <target state="translated">有效载荷:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1046771510013067927" datatype="html">
+      <trans-unit id="1046771510013067927" datatype="html" xml:space="preserve">
         <source>Private payload:</source>
-        <target state="new">Private payload:</target>
+        <target state="translated">私有载荷:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6133673901299224277" datatype="html">
+      <trans-unit id="6133673901299224277" datatype="html" xml:space="preserve">
         <source>No runner jobs found.</source>
-        <target state="new">No runner jobs found.</target>
+        <target state="translated">未找到跑步者职位。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7146070362549250677" datatype="html">
+      <trans-unit id="7146070362549250677" datatype="html" xml:space="preserve">
         <source>Completed jobs</source>
-        <target state="new">Completed jobs</target>
+        <target state="translated">已完成的工作</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2841995988789172579" datatype="html">
+      <trans-unit id="2841995988789172579" datatype="html" xml:space="preserve">
         <source>Pending jobs</source>
-        <target state="new">Pending jobs</target>
+        <target state="translated">待处理作业</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">58</context>
