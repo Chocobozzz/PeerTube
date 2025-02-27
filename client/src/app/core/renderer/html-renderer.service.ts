@@ -33,8 +33,11 @@ export class HtmlRendererService {
         const rel = node.hasAttribute('rel')
           ? node.getAttribute('rel') + ' '
           : ''
+        const relValues = new Set(rel.split(' '))
+        relValues.add('noopener')
+        relValues.add('noreferrer')
 
-        node.setAttribute('rel', rel + 'noopener noreferrer')
+        node.setAttribute('rel', [...relValues].join(' '))
       }
     })
   }
