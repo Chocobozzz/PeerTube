@@ -3,18 +3,19 @@ import { Piscina } from 'piscina'
 import { JOB_CONCURRENCY, WORKER_THREADS } from '@server/initializers/constants.js'
 import type httpBroadcast from './workers/http-broadcast.js'
 import type downloadImage from './workers/image-downloader.js'
-import type processImage from './workers/image-processor.js'
+import processImage from './workers/image-processor.js'
 import type getImageSize from './workers/get-image-size.js'
 import type signJsonLDObject from './workers/sign-json-ld-object.js'
 import type buildDigest from './workers/build-digest.js'
 import type httpUnicast from './workers/http-unicast.js'
 import { logger } from '@server/helpers/logger.js'
+import { Readable } from 'stream'
 
 let downloadImageWorker: Piscina
 
-export function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]): Promise<ReturnType<typeof downloadImage>> {
+export async function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]): Promise<ReturnType<typeof downloadImage>> {
   if (!downloadImageWorker) {
-    downloadImageWorker = new Piscina({
+    downloadImageWorker = new Piscina<any, Readable>({
       filename: new URL(join('workers', 'image-downloader.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.DOWNLOAD_IMAGE.CONCURRENCY,
       maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS,
@@ -24,16 +25,21 @@ export function downloadImageFromWorker (options: Parameters<typeof downloadImag
     downloadImageWorker.on('error', err => logger.error('Error in download image worker', { err }))
   }
 
-  return downloadImageWorker.run(options)
+  const processedImage = await downloadImageWorker.run(options)
+
+  return processedImage
+
 }
 
 // ---------------------------------------------------------------------------
 
 let processImageWorker: Piscina
 
-export function processImageFromWorker (options: Parameters<typeof processImage>[0]): Promise<ReturnType<typeof processImage>> {
+export async function processImageFromWorker (
+  options: Parameters<typeof processImage>[0]
+): Promise<ReturnType<typeof processImage>> {
   if (!processImageWorker) {
-    processImageWorker = new Piscina({
+    processImageWorker = new Piscina<any, Readable>({
       filename: new URL(join('workers', 'image-processor.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.PROCESS_IMAGE.CONCURRENCY,
       maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS,
@@ -43,7 +49,9 @@ export function processImageFromWorker (options: Parameters<typeof processImage>
     processImageWorker.on('error', err => logger.error('Error in process image worker', { err }))
   }
 
-  return processImageWorker.run(options)
+  const processedImage = await processImageWorker.run(options)
+
+  return processedImage
 }
 
 // ---------------------------------------------------------------------------

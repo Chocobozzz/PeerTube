@@ -1,9 +1,8 @@
-import { ThumbnailType, ThumbnailType_Type, VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, ThumbnailType, ThumbnailType_Type, VideoFileStream } from '@peertube/peertube-models'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import Bluebird from 'bluebird'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { generateImageFilename } from '../helpers/image-utils.js'
 import { CONFIG } from '../initializers/config.js'
@@ -14,10 +13,33 @@ import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { VideoPathManager } from './video-path-manager.js'
 import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process.js'
+import { copyThumbnailFile, storeThumbnailFile } from './object-storage/thumbnail.js'
 
 const lTags = loggerTagsFactory('thumbnail')
 
 type ImageSize = { height?: number, width?: number }
+
+export async function copyLocalPlaylistMiniatureFromObjectStorage (options: {
+  sourceThumbnail: MThumbnail
+  playlist: MVideoPlaylistThumbnail
+}) {
+  const { playlist, sourceThumbnail } = options
+  const { filename, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist)
+
+  const thumbnail = buildThumbnailModel({
+    automaticallyGenerated: true,
+    existingThumbnail,
+    filename,
+    height,
+    type: ThumbnailType.MINIATURE,
+    width
+  })
+
+  thumbnail.storage = FileStorage.OBJECT_STORAGE
+  thumbnail.fileUrl = await copyThumbnailFile(sourceThumbnail, thumbnail)
+
+  return thumbnail
+}
 
 export function updateLocalPlaylistMiniatureFromExisting (options: {
   inputPath: string
@@ -29,9 +51,15 @@ export function updateLocalPlaylistMiniatureFromExisting (options: {
   const { inputPath, playlist, automaticallyGenerated, keepOriginal = false, size } = options
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED ? FileStorage.OBJECT_STORAGE : FileStorage.FILE_SYSTEM
 
-  const thumbnailCreator = () => {
-    return processImageFromWorker({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
+  const thumbnailCreator = async () => {
+    return await processImageFromWorker({
+      source: inputPath,
+      destination: outputPath,
+      newSize: { width, height },
+      keepOriginal
+    })
   }
 
   return updateThumbnailFromFunction({
@@ -41,7 +69,7 @@ export function updateLocalPlaylistMiniatureFromExisting (options: {
     width,
     type,
     automaticallyGenerated,
-    onDisk: true,
+    onDisk: storage === FileStorage.FILE_SYSTEM,
     existingThumbnail
   })
 }
@@ -54,17 +82,33 @@ export function updateRemotePlaylistMiniatureFromUrl (options: {
   const { downloadUrl, playlist, size } = options
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED ? FileStorage.OBJECT_STORAGE : FileStorage.FILE_SYSTEM
 
   // Only save the file URL if it is a remote playlist
   const fileUrl = playlist.isOwned()
     ? null
     : downloadUrl
 
-  const thumbnailCreator = () => {
-    return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+  const thumbnailCreator = async () => {
+    return await downloadImageFromWorker({
+      url: downloadUrl,
+      destDir: basePath,
+      destName: filename,
+      size: { width, height },
+      saveOnDisk: storage === FileStorage.FILE_SYSTEM
+    })
   }
 
-  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
+  return updateThumbnailFromFunction({
+    thumbnailCreator,
+    filename,
+    height,
+    width,
+    type,
+    existingThumbnail,
+    fileUrl,
+    onDisk: storage === FileStorage.FILE_SYSTEM
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -80,9 +124,15 @@ export function updateLocalVideoMiniatureFromExisting (options: {
   const { inputPath, video, type, automaticallyGenerated, size, keepOriginal = false } = options
 
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED ? FileStorage.OBJECT_STORAGE : FileStorage.FILE_SYSTEM
 
-  const thumbnailCreator = () => {
-    return processImageFromWorker({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
+  const thumbnailCreator = async () => {
+    return await processImageFromWorker({
+      source: inputPath,
+      destination: outputPath,
+      newSize: { width, height },
+      keepOriginal
+    })
   }
 
   return updateThumbnailFromFunction({
@@ -93,7 +143,7 @@ export function updateLocalVideoMiniatureFromExisting (options: {
     type,
     automaticallyGenerated,
     existingThumbnail,
-    onDisk: true
+    onDisk: storage === FileStorage.FILE_SYSTEM
   })
 }
 
@@ -117,37 +167,39 @@ export function generateLocalVideoMiniature (options: {
         return -1
       })
 
-    let biggestImagePath: string
+    let biggestImage: Buffer
     return Bluebird.mapSeries(metadatas, metadata => {
-      const { filename, basePath, height, width, existingThumbnail, outputPath, type } = metadata
+      const { filename, height, width, existingThumbnail, outputPath, type } = metadata
 
-      let thumbnailCreator: () => Promise<any>
+      const storage = CONFIG.OBJECT_STORAGE.ENABLED ? FileStorage.OBJECT_STORAGE : FileStorage.FILE_SYSTEM
+      let thumbnailCreator: () => Promise<Buffer>
 
       if (videoFile.isAudio()) {
-        thumbnailCreator = () => processImageFromWorker({
-          path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
+        thumbnailCreator = async () => await processImageFromWorker({
+          source: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
           destination: outputPath,
           newSize: { width, height },
           keepOriginal: true
         })
-      } else if (biggestImagePath) {
-        thumbnailCreator = () => processImageFromWorker({
-          path: biggestImagePath,
+      } else if (biggestImage) {
+        thumbnailCreator = async () => await processImageFromWorker({
+          source: biggestImage,
           destination: outputPath,
           newSize: { width, height },
           keepOriginal: true
         })
       } else {
-        thumbnailCreator = () => generateImageFromVideoFile({
-          fromPath: input,
-          folder: basePath,
-          imageName: filename,
-          size: { height, width },
-          ffprobe
-        })
-      }
+        thumbnailCreator = async () => {
+          biggestImage = await generateImageFromVideoFile({
+            fromPath: input,
+            destination: outputPath,
+            size: { height, width },
+            ffprobe
+          })
 
-      if (!biggestImagePath) biggestImagePath = outputPath
+          return biggestImage
+        }
+      }
 
       return updateThumbnailFromFunction({
         thumbnailCreator,
@@ -156,7 +208,7 @@ export function generateLocalVideoMiniature (options: {
         width,
         type,
         automaticallyGenerated: true,
-        onDisk: true,
+        onDisk: storage === FileStorage.FILE_SYSTEM,
         existingThumbnail
       })
     })
@@ -180,21 +232,37 @@ export function updateLocalVideoMiniatureFromUrl (options: {
     : downloadUrl
 
   const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED ? FileStorage.OBJECT_STORAGE : FileStorage.FILE_SYSTEM
 
   // Do not change the thumbnail filename if the file did not change
   const filename = thumbnailUrlChanged
     ? updatedFilename
     : existingThumbnail.filename
 
-  const thumbnailCreator = () => {
+  const thumbnailCreator = async () => {
     if (thumbnailUrlChanged) {
-      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+      return await downloadImageFromWorker({
+        url: downloadUrl,
+        destDir: basePath,
+        destName: filename,
+        size: { width, height },
+        saveOnDisk: storage === FileStorage.FILE_SYSTEM
+      })
     }
 
-    return Promise.resolve()
+    return Promise.resolve(undefined)
   }
 
-  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
+  return updateThumbnailFromFunction({
+    thumbnailCreator,
+    filename,
+    height,
+    width,
+    type,
+    existingThumbnail,
+    fileUrl,
+    onDisk: storage === FileStorage.FILE_SYSTEM
+  })
 }
 
 export function updateRemoteVideoThumbnail (options: {
@@ -262,7 +330,7 @@ function hasThumbnailUrlChanged (existingThumbnail: MThumbnail, downloadUrl: str
   return !existingUrl || existingUrl !== downloadUrl || downloadUrl.endsWith(`${video.uuid}.jpg`)
 }
 
-function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: ImageSize) {
+function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size?: ImageSize) {
   const filename = playlist.generateThumbnailName()
   const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
@@ -290,7 +358,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Typ
       filename,
       basePath,
       existingThumbnail,
-      outputPath: join(basePath, filename),
+      outputPath: CONFIG.OBJECT_STORAGE.ENABLED ? null : join(basePath, filename),
       height: size ? size.height : THUMBNAILS_SIZE.height,
       width: size ? size.width : THUMBNAILS_SIZE.width
     }
@@ -305,7 +373,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Typ
       filename,
       basePath,
       existingThumbnail,
-      outputPath: join(basePath, filename),
+      outputPath: CONFIG.OBJECT_STORAGE.ENABLED ? null : join(basePath, filename),
       height: size ? size.height : PREVIEWS_SIZE.height,
       width: size ? size.width : PREVIEWS_SIZE.width
     }
@@ -315,7 +383,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Typ
 }
 
 async function updateThumbnailFromFunction (parameters: {
-  thumbnailCreator: () => Promise<any>
+  thumbnailCreator: () => Promise<Buffer>
   filename: string
   height: number
   width: number
@@ -330,12 +398,43 @@ async function updateThumbnailFromFunction (parameters: {
     filename,
     width,
     height,
-    type,
     existingThumbnail,
     onDisk,
     automaticallyGenerated = null,
     fileUrl = null
   } = parameters
+
+  const thumbnail = buildThumbnailModel({
+    automaticallyGenerated,
+    existingThumbnail,
+    filename,
+    height,
+    type: ThumbnailType.MINIATURE,
+    width
+  })
+
+  const thumbnailDestination = await thumbnailCreator()
+
+  if (onDisk) {
+    thumbnail.fileUrl = fileUrl
+    thumbnail.storage = FileStorage.FILE_SYSTEM
+  } else {
+    thumbnail.storage = FileStorage.OBJECT_STORAGE
+    thumbnail.fileUrl = await storeThumbnailFile(thumbnailDestination, thumbnail)
+  }
+
+  return thumbnail
+}
+
+function buildThumbnailModel (options: {
+  automaticallyGenerated: boolean
+  existingThumbnail?: MThumbnail
+  filename: string
+  height: number
+  type: ThumbnailType_Type
+  width: number
+}) {
+  const { automaticallyGenerated, existingThumbnail, filename, height, type, width } = options
 
   const oldFilename = existingThumbnail && existingThumbnail.filename !== filename
     ? existingThumbnail.filename
@@ -347,45 +446,39 @@ async function updateThumbnailFromFunction (parameters: {
   thumbnail.height = height
   thumbnail.width = width
   thumbnail.type = type
-  thumbnail.fileUrl = fileUrl
   thumbnail.automaticallyGenerated = automaticallyGenerated
-  thumbnail.onDisk = onDisk
+  thumbnail.onDisk = false
 
   if (oldFilename) thumbnail.previousThumbnailFilename = oldFilename
-
-  await thumbnailCreator()
 
   return thumbnail
 }
 
 async function generateImageFromVideoFile (options: {
   fromPath: string
-  folder: string
-  imageName: string
+  destination: string
   size: { width: number, height: number }
   ffprobe?: FfprobeData
 }) {
-  const { fromPath, folder, imageName, size, ffprobe } = options
-
-  const pendingImageName = 'pending-' + imageName
-  const pendingImagePath = join(folder, pendingImageName)
+  const { destination, fromPath, size, ffprobe } = options
 
   try {
     const framesToAnalyze = CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE
-    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe, scale: size })
+    const thumbnailSource = await generateThumbnailFromVideo({
+      fromPath,
+      output: null,
+      framesToAnalyze,
+      ffprobe,
+      scale: size
+    })
 
-    const destination = join(folder, imageName)
-    await processImageFromWorker({ path: pendingImagePath, destination, newSize: size })
-
-    return destination
+    return processImageFromWorker({
+      source: thumbnailSource,
+      destination,
+      newSize: size
+    })
   } catch (err) {
     logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
-
-    try {
-      await remove(pendingImagePath)
-    } catch (err) {
-      logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
-    }
 
     throw err
   }

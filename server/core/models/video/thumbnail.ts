@@ -1,6 +1,6 @@
-import { ActivityIconObject, ThumbnailType, type ThumbnailType_Type } from '@peertube/peertube-models'
+import { ActivityIconObject, ThumbnailType, type ThumbnailType_Type, type FileStorageType, FileStorage } from '@peertube/peertube-models'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
-import { MThumbnail, MThumbnailVideo, MVideo, MVideoPlaylist } from '@server/types/models/index.js'
+import { MThumbnail, MThumbnailVideo, MVideo, MVideoOwned, MVideoPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import {
@@ -22,6 +22,7 @@ import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initiali
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
+import { getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
 
 @Table({
   tableName: 'thumbnail',
@@ -74,6 +75,10 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
+
+  @AllowNull(false)
+  @Column
+  storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -188,11 +193,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
 
   // ---------------------------------------------------------------------------
 
-  getOriginFileUrl (videoOrPlaylist: MVideo | MVideoPlaylist) {
+  getOriginFileUrl (videoOrPlaylist: MVideoOwned | MVideoPlaylist) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
     // FIXME: typings
-    if ((videoOrPlaylist as MVideo).isOwned()) return WEBSERVER.URL + staticPath
+    if ((videoOrPlaylist as MVideo).isOwned() && this.storage === FileStorage.FILE_SYSTEM) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
   }
@@ -224,7 +229,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   }
 
   isOwned () {
-    return !this.fileUrl
+    return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.THUMBNAILS) !== this.fileUrl
   }
 
   // ---------------------------------------------------------------------------

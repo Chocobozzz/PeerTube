@@ -110,8 +110,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
 
     likes: video.likes,
     dislikes: video.dislikes,
-    thumbnailPath: video.getMiniatureStaticPath(),
-    previewPath: video.getPreviewStaticPath(),
+    thumbnailUrl: video.getMiniatureStaticPath(),
+    previewUrl: video.getPreviewStaticPath(),
     embedPath: video.getEmbedStaticPath(),
     createdAt: video.createdAt,
     updatedAt: video.updatedAt,

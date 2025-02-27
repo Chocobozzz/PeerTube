@@ -17,8 +17,7 @@ export interface VideoPlaylist {
   description: string
   privacy: VideoConstant<VideoPlaylistPrivacyType>
 
-  thumbnailPath: string
-  thumbnailUrl?: string
+  thumbnailUrl: string
 
   videosLength: number
 

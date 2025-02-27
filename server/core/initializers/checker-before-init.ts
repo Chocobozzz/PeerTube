@@ -73,6 +73,7 @@ function checkMissedConfig () {
     'object_storage.web_videos.prefix', 'object_storage.web_videos.base_url', 'object_storage.original_video_files.bucket_name',
     'object_storage.original_video_files.prefix', 'object_storage.original_video_files.base_url', 'object_storage.max_request_attempts',
     'object_storage.captions.bucket_name', 'object_storage.captions.prefix', 'object_storage.captions.base_url',
+    'object_storage.thumbnails.bucket_name', 'object_storage.thumbnails.prefix', 'object_storage.thumbnails.base_url',
     'theme.default',
     'feeds.videos.count', 'feeds.comments.count',
     'geo_ip.enabled', 'geo_ip.country.database_url', 'geo_ip.city.database_url',

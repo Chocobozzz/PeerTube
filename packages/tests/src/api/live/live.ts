@@ -129,8 +129,8 @@ describe('Test live', function () {
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewUrl)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailUrl)
 
         const live = await server.live.get({ videoId: liveVideoUUID })
 

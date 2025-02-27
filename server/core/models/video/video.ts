@@ -25,6 +25,7 @@ import { getPrivaciesForFederation } from '@server/helpers/video.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { LiveManager } from '@server/lib/live/live-manager.js'
 import {
+  getObjectStoragePublicFileUrl,
   removeHLSFileObjectStorageByFilename,
   removeHLSObjectStorage,
   removeOriginalFileObjectStorage,
@@ -205,7 +206,7 @@ export type ForAPIOptions = {
         required: true
       },
       {
-        attributes: [ 'type', 'filename' ],
+        attributes: [ 'type', 'filename', 'fileUrl' ],
         model: ThumbnailModel,
         required: false
       }
@@ -1899,18 +1900,26 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return buildVideoEmbedPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
-  getMiniatureStaticPath (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails'>) {
+  getMiniatureStaticPath (this: Pick<MVideoThumbnail, 'getMiniature' | 'Thumbnails' | 'isOwned' | 'remote'>) {
     const thumbnail = this.getMiniature()
     if (!thumbnail) return null
 
-    return thumbnail.getLocalStaticPath()
+    if (thumbnail.storage === FileStorage.FILE_SYSTEM) {
+      return thumbnail.getLocalStaticPath()
+    }
+
+    return thumbnail.getOriginFileUrl(this)
   }
 
   getPreviewStaticPath (this: Pick<MVideoThumbnail, 'getPreview' | 'Thumbnails'>) {
     const preview = this.getPreview()
     if (!preview) return null
 
-    return preview.getLocalStaticPath()
+    if (preview.storage === FileStorage.FILE_SYSTEM) {
+      return preview.getLocalStaticPath()
+    }
+
+    return getObjectStoragePublicFileUrl(preview.fileUrl, CONFIG.OBJECT_STORAGE.THUMBNAILS)
   }
 
   toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {

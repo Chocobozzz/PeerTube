@@ -182,6 +182,11 @@ const CONFIG = {
       PREFIX: config.get<string>('object_storage.user_exports.prefix'),
       BASE_URL: config.get<string>('object_storage.user_exports.base_url')
     },
+    THUMBNAILS: {
+      BUCKET_NAME: config.get<string>('object_storage.thumbnails.bucket_name'),
+      PREFIX: config.get<string>('object_storage.thumbnails.prefix'),
+      BASE_URL: config.get<string>('object_storage.thumbnails.base_url')
+    },
     ORIGINAL_VIDEO_FILES: {
       BUCKET_NAME: config.get<string>('object_storage.original_video_files.bucket_name'),
       PREFIX: config.get<string>('object_storage.original_video_files.prefix'),

@@ -266,6 +266,12 @@ object_storage:
     prefix: ''
     base_url: ''
 
+  # Video thumbnails
+  thumbnails:
+    bucket_name: 'thumbnails'
+    prefix: ''
+    base_url: ''
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 

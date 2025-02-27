@@ -8381,12 +8381,12 @@ components:
           example: What is PeerTube?
           minLength: 3
           maxLength: 120
-        thumbnailPath:
+        thumbnailUrl:
           type: string
-          example: /lazy-static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
-        previewPath:
+          example: https://peertube.cpy.re/lazy-static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
+        previewUrl:
           type: string
-          example: /lazy-static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
+          example: https://peertube.cpy.re/lazy-static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
         embedPath:
           type: string
           example: /videos/embed/a65bc12f-9383-462e-81ae-8207e8b434ee
@@ -8763,7 +8763,7 @@ components:
         videoLength:
           type: integer
           minimum: 0
-        thumbnailPath:
+        thumbnailUrl:
           type: string
         privacy:
           $ref: '#/components/schemas/VideoPlaylistPrivacyConstant'

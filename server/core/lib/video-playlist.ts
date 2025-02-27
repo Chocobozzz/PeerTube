@@ -1,11 +1,11 @@
 import * as Sequelize from 'sequelize'
-import { VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
+import { FileStorage, VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
-import { MAccount, MVideoThumbnail } from '../types/models/index.js'
+import { MAccount, MThumbnail, MVideoThumbnail } from '../types/models/index.js'
 import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
 import { VideoMiniaturePermanentFileCache } from './files-cache/video-miniature-permanent-file-cache.js'
-import { updateLocalPlaylistMiniatureFromExisting } from './thumbnail.js'
+import { copyLocalPlaylistMiniatureFromObjectStorage, updateLocalPlaylistMiniatureFromExisting } from './thumbnail.js'
 import { logger } from '@server/helpers/logger.js'
 
 export async function createWatchLaterPlaylist (account: MAccount, t: Sequelize.Transaction) {
@@ -34,18 +34,32 @@ export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylis
     return
   }
 
-  // Ensure the file is on disk
-  const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
-  const inputPath = videoMiniature.isOwned()
-    ? videoMiniature.getPath()
-    : await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
+  const copyFileFromDisk = (video.isOwned && videoMiniature.storage === FileStorage.FILE_SYSTEM) || !video.isOwned()
+  let thumbnailModel: MThumbnail
 
-  const thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
-    inputPath,
-    playlist: videoPlaylist,
-    automaticallyGenerated: true,
-    keepOriginal: true
-  })
+  if (copyFileFromDisk) {
+  // Ensure the file is on disk
+    const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
+    let inputPath: string
+
+    if (video.isOwned() && videoMiniature.storage === FileStorage.FILE_SYSTEM) {
+      inputPath = videoMiniature.getPath()
+    } else {
+      inputPath = await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature) as string
+    }
+
+    thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
+      inputPath,
+      playlist: videoPlaylist,
+      automaticallyGenerated: true,
+      keepOriginal: true
+    })
+  } else {
+    thumbnailModel = await copyLocalPlaylistMiniatureFromObjectStorage({
+      sourceThumbnail: videoMiniature,
+      playlist: videoPlaylist
+    })
+  }
 
   thumbnailModel.videoPlaylistId = videoPlaylist.id
 

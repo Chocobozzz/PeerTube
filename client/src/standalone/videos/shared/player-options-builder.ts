@@ -294,7 +294,7 @@ export class PlayerOptionsBuilder {
       duration: video.duration,
       videoRatio: video.aspectRatio,
 
-      poster: getBackendUrl() + video.previewPath,
+      poster: video.previewUrl,
 
       embedUrl: getBackendUrl() + video.embedPath,
       embedTitle: video.name,

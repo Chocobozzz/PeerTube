@@ -154,9 +154,9 @@ describe('Save replay setting', function () {
   async function checkVideoThumbnail (videoId: string, thumbnailfile: string, previewfile?: string) {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoId })
-      await testImageGeneratedByFFmpeg(server.url, thumbnailfile, video.thumbnailPath, '')
+      await testImageGeneratedByFFmpeg(server.url, thumbnailfile, video.thumbnailUrl, '')
 
-      if (previewfile) await testImageGeneratedByFFmpeg(server.url, previewfile, video.previewPath, '')
+      if (previewfile) await testImageGeneratedByFFmpeg(server.url, previewfile, video.previewUrl, '')
     }
   }
 
