@@ -316,11 +316,11 @@ describe('Test video playlists', function () {
 
         const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
         expect(playlist2).to.not.be.undefined
-        await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', playlist2.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', playlist2.thumbnailUrl)
 
         const playlist3 = body.data.find(p => p.displayName === 'playlist 3')
         expect(playlist3).to.not.be.undefined
-        await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', playlist3.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', playlist3.thumbnailUrl)
       }
 
       const body = await servers[2].playlists.list({ start: 0, count: 5 })
@@ -338,7 +338,7 @@ describe('Test video playlists', function () {
 
       const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
       expect(playlist2).to.not.be.undefined
-      await testImageGeneratedByFFmpeg(servers[2].url, 'thumbnail-playlist', playlist2.thumbnailPath)
+      await testImageGeneratedByFFmpeg(servers[2].url, 'thumbnail-playlist', playlist2.thumbnailUrl)
 
       expect(body.data.find(p => p.displayName === 'playlist 3')).to.not.be.undefined
     })

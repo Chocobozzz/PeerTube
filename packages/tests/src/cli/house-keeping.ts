@@ -28,8 +28,8 @@ describe('House keeping CLI', function () {
     {
       const { data } = await servers[0].videos.list()
       for (const video of data) {
-        await makeGetRequest({ url: servers[0].url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: servers[0].url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: servers[0].url, path: video.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: servers[0].url, path: video.previewUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     }
 

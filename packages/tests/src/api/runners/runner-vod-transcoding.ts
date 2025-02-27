@@ -464,8 +464,7 @@ describe('Test runner VOD transcoding', function () {
 
         const video = await servers[0].videos.get({ id: videoUUID })
         const { body: inputFile } = await makeGetRequest({
-          url: servers[0].url,
-          path: video.previewPath,
+          url: video.previewUrl,
           expectedStatus: HttpStatusCode.OK_200
         })
 

@@ -170,8 +170,8 @@ describe('Test live', function () {
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
-        await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: video.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: video.previewUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
 

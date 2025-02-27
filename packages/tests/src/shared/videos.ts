@@ -271,12 +271,12 @@ export async function completeVideoCheck (options: {
   expect(video.channel.createdAt).to.exist
   expect(dateIsValid(video.channel.updatedAt.toString())).to.be.true
 
-  expect(video.thumbnailPath).to.exist
-  await testImageGeneratedByFFmpeg(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailPath)
+  expect(video.thumbnailUrl).to.exist
+  await testImageGeneratedByFFmpeg(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailUrl)
 
   if (attributes.previewfile) {
-    expect(video.previewPath).to.exist
-    await testImageGeneratedByFFmpeg(server.url, attributes.previewfile, video.previewPath)
+    expect(video.previewUrl).to.exist
+    await testImageGeneratedByFFmpeg(server.url, attributes.previewfile, video.previewUrl)
   }
 
   if (attributes.files) {
@@ -313,8 +313,8 @@ export async function checkVideoFilesWereRemoved (options: {
   const webVideoFiles = video.files || []
   const hlsFiles = video.streamingPlaylists[0]?.files || []
 
-  const thumbnailName = basename(video.thumbnailPath)
-  const previewName = basename(video.previewPath)
+  const thumbnailName = basename(video.thumbnailUrl)
+  const previewName = basename(video.previewUrl)
 
   const torrentNames = webVideoFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
 
