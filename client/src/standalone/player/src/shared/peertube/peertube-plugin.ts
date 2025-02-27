@@ -103,7 +103,6 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.player.ready(() => {
-
       this.player.on('volumechange', () => {
         saveVolumeInStore(this.player.volume())
         saveMuteInStore(this.player.muted())
@@ -300,7 +299,7 @@ class PeerTubePlugin extends Plugin {
       ? defaultRatio
       : ratio
 
-    el.style.setProperty('--player-ratio', currentRatio + '')
+    el.style.setProperty(this.options.autoPlayerRatio.cssRatioVariable, currentRatio + '')
   }
 
   // ---------------------------------------------------------------------------
@@ -503,7 +502,7 @@ class PeerTubePlugin extends Plugin {
   }
 
   private setInactivityTimeout (timeout: number) {
-    (this.player as any).cache_.inactivityTimeout = timeout
+    ;(this.player as any).cache_.inactivityTimeout = timeout
     this.player.options_.inactivityTimeout = timeout
   }
 

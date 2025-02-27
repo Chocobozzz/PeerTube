@@ -705,8 +705,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       pluginsManager: this.pluginService.getPluginsManager(),
 
       autoPlayerRatio: {
-        cssRatioVariable: '--player-ratio',
-        cssPlayerPortraitModeVariable: '--player-portrait-mode'
+        cssRatioVariable: '--co-player-ratio',
+        cssPlayerPortraitModeVariable: '--co-player-portrait-mode'
       }
     }
   }
