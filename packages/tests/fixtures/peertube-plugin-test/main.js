@@ -1,3 +1,5 @@
+const path = require('path')
+
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
   {
     registerSetting({
@@ -442,6 +444,28 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       }
 
       return object
+    }
+  })
+
+  registerHook({
+    target: 'filter:email.template-path.result',
+    handler: (templatePath, { view }) => {
+      if (view === 'password-reset/html') {
+        return path.join(__dirname, 'emails', 'password-reset.pug')
+      }
+
+      return templatePath
+    }
+  })
+
+  registerHook({
+    target: 'filter:email.subject.result',
+    handler: (subject, { template }) => {
+      if (template === 'password-reset') {
+        return 'Custom subject'
+      }
+
+      return subject
     }
   })
 
