@@ -5314,7 +5314,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">87,88</context>
+          <context context-type="linenumber">92,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2478877938420291792" datatype="html">
@@ -6531,7 +6531,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">83,84</context>
+          <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3599756099880307592" datatype="html">
@@ -13853,7 +13853,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
@@ -14681,7 +14681,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source> View all </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5158930137081704296" datatype="html">
@@ -19988,84 +19988,84 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Published</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
         <source>Transcoding failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1831940730037919560" datatype="html">
         <source>Moving to file system</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4707274274243790782" datatype="html">
         <source>Moving to file system failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1792259951302458040" datatype="html">
         <source>Moving to external storage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4887724548587271148" datatype="html">
         <source>Waiting transcoding</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4517785179607945981" datatype="html">
         <source>To transcode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3299576663551440736" datatype="html">
         <source>To import</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">236</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6963802198225789806" datatype="html">
         <source>To edit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="76275487642696165" datatype="html">
         <source>Watch video <x id="PH" equiv-text="this.video().name"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">275</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
@@ -20235,18 +20235,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7708270344948043036" datatype="html">
-        <source> <x id="INTERPOLATION" equiv-text="{{ playlist().videoChannelBy }}"/> </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
-          <context context-type="linenumber">26,29</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3044142083883783523" datatype="html">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist().updatedAt | myFromNow }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
-          <context context-type="linenumber">32,33</context>
+          <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
@@ -20302,7 +20295,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Get more information on <x id="PH" equiv-text="this.host()"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">

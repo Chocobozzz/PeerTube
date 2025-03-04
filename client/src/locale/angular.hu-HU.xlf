@@ -562,11 +562,8 @@
       <trans-unit id="4429589272373948258" datatype="html">
         <source>Get more information on <x id="PH" equiv-text="this.host"/></source>
         <target state="new">Get more information on <x id="PH" equiv-text="this.host"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.ts</context><context context-type="linenumber">28</context></context-group></trans-unit>
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
         <target state="translated">A PeerTube úgy tekinti, hogy a(z) „<x id="PH" equiv-text="video.name"/>” már átkódolás alatt van.</target>
@@ -984,15 +981,9 @@
       <trans-unit id="9081463435738465430" datatype="html">
         <source>Blocked</source>
         <target state="translated">Letiltva</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
-          <context context-type="linenumber">84</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">83</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">88</context></context-group></trans-unit>
       <trans-unit id="3599756099880307592" datatype="html" xml:space="preserve">
         <source>Only display videos with this tag</source>
         <target state="translated">Csak az ezzel a címkével rendelkező videók megjelenítése</target>
@@ -1142,24 +1133,12 @@
         <target state="translated">{count, plural, =1 {1 videó már leiratozás alatt van.} other {<x id="count"/> videó már leiratozás alatt van.}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">441</context></context-group></trans-unit>
-      <trans-unit id="7708270344948043036" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </source>
-        <target state="translated">
-          <x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/>
-        </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
+      
       <trans-unit id="3044142083883783523">
         <source>Updated <x id="INTERPOLATION"/></source>
         <target><x id="INTERPOLATION"/> frissítve</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">36</context></context-group></trans-unit>
       <trans-unit id="5643561794785412000" datatype="html">
         <source>Unavailable</source>
         <target state="translated">Nem érhető el</target>
@@ -3164,11 +3143,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3519474815325884386" datatype="html" xml:space="preserve">
         <source>View all</source>
         <target state="translated">Összes megtekintése</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context><context context-type="linenumber">76</context></context-group></trans-unit>
       <trans-unit id="5158930137081704296" datatype="html" xml:space="preserve">
         <source>Search videos, channels…</source>
         <target state="translated">Videók, csatornák keresése…</target>
@@ -6920,15 +6896,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7574091010118901399">
         <source>Sensitive</source>
         <target>Érzékeny</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
-          <context context-type="linenumber">87</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">92</context></context-group></trans-unit>
       <trans-unit id="2478877938420291792" datatype="html">
         <source>Unfederated</source>
         <target state="translated">Nincs föderálva</target>
@@ -17672,7 +17642,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">155</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">161</context></context-group></trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
         <target state="translated">
@@ -19135,97 +19105,64 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4058575476871566236" datatype="html">
         <source>Published</source>
         <target state="translated">Közzétéve</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">206</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">235</context></context-group></trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
         <target state="translated">Közzététel ütemezve: <x id="PH" equiv-text="updateAt"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">211</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">240</context></context-group></trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
         <source>Transcoding failed</source>
         <target state="translated">Átkódolás sikertelen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">216</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">245</context></context-group></trans-unit>
       <trans-unit id="1831940730037919560" datatype="html">
         <source>Moving to file system</source>
         <target state="translated">Áthelyezés a fájlrendszerre</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">219</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">248</context></context-group></trans-unit>
       <trans-unit id="4707274274243790782" datatype="html">
         <source>Moving to file system failed</source>
         <target state="translated">Áthelyezés a fájlrendszerre sikertelen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">222</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">251</context></context-group></trans-unit>
       <trans-unit id="1792259951302458040" datatype="html">
         <source>Moving to external storage</source>
         <target state="translated">Áthelyezés a távoli tárhelyre</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">225</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">254</context></context-group></trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
         <target state="translated">Áthelyezés a távoli tárhelyre sikertelen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">228</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">257</context></context-group></trans-unit>
       <trans-unit id="4887724548587271148" datatype="html">
         <source>Waiting transcoding</source>
         <target state="translated">Átkódolásra vár</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">232</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">261</context></context-group></trans-unit>
       <trans-unit id="4517785179607945981" datatype="html">
         <source>To transcode</source>
         <target state="translated">Átkódolási sorban</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">233</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">262</context></context-group></trans-unit>
       <trans-unit id="3299576663551440736" datatype="html">
         <source>To import</source>
         <target state="translated">Importálási sorban</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">236</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">265</context></context-group></trans-unit>
       <trans-unit id="6963802198225789806" datatype="html">
         <source>To edit</source>
         <target state="translated">Szerkesztési sorban</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
-          <context context-type="linenumber">239</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">268</context></context-group></trans-unit>
       <trans-unit id="76275487642696165" datatype="html">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
         <target state="translated"><x id="PH" equiv-text="this.video.name"/> videó megtekintése</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">246</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">82</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">275</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">82</context></context-group></trans-unit>
       <trans-unit id="7659756233411947529" datatype="html">
         <source>Current lives</source>
         <target state="new">Current lives</target>
