@@ -1,15 +1,18 @@
-import { of } from 'rxjs'
-import { first, tap } from 'rxjs/operators'
 import { ListKeyManager } from '@angular/cdk/a11y'
-import { AfterViewChecked, Component, OnDestroy, OnInit, inject, viewChildren } from '@angular/core'
+import { NgFor, NgIf } from '@angular/common'
+import { AfterViewChecked, Component, Injector, OnDestroy, OnInit, inject, viewChildren } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
-import { logger } from '@root-helpers/logger'
 import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
-import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
-import { NgFor, NgIf } from '@angular/common'
+import { logger } from '@root-helpers/logger'
+import debug from 'debug'
+import { of } from 'rxjs'
+import { first, tap } from 'rxjs/operators'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
-import { FormsModule } from '@angular/forms'
+import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
+
+const debugLogger = debug('peertube:search')
 
 @Component({
   selector: 'my-search-typeahead',
@@ -22,6 +25,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
   private router = inject(Router)
   private route = inject(ActivatedRoute)
   private serverService = inject(ServerService)
+  private injector = inject(Injector)
 
   readonly suggestionItems = viewChildren(SuggestionComponent)
 
@@ -86,7 +90,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
   initKeyboardEventsManager () {
     if (this.keyboardEventsManager) return
 
-    this.keyboardEventsManager = new ListKeyManager(this.suggestionItems())
+    this.keyboardEventsManager = new ListKeyManager(this.suggestionItems, this.injector)
 
     const activeIndex = this.suggestionItems().findIndex(i => i.result().default === true)
     if (activeIndex === -1) {
@@ -133,9 +137,13 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
     }
 
     this.scheduleKeyboardEventsInit = true
+
+    debugLogger('Typeahead rebuilt', this.results)
   }
 
   updateItemsState (index?: number) {
+    if (!this.keyboardEventsManager) return
+
     if (index !== undefined) {
       this.keyboardEventsManager.setActiveItem(index)
     }
