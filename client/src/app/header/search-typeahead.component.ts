@@ -76,8 +76,6 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
   }
 
   canSearchAnyURI () {
-    if (!this.serverConfig) return false
-
     return this.authService.isLoggedIn()
       ? this.serverConfig.search.remoteUri.users
       : this.serverConfig.search.remoteUri.anonymous
