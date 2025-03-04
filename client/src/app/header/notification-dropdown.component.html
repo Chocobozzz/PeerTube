@@ -61,19 +61,15 @@
         </div>
 
         @defer (when opened) {
-          <div *ngIf="!loaded" class="loader mt-4">
-            <my-loader size="xl" [loading]="loaded"></my-loader>
-          </div>
-
           <my-user-notifications
             [ignoreLoadingBar]="true" [infiniteScroll]="false" [itemsPerPage]="10"
             [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
           ></my-user-notifications>
-        } @placeholder {
-          <div class="loader mt-4">
-            <my-loader size="xl" loading="true"></my-loader>
-          </div>
         }
+
+        <div *ngIf="!loaded" class="loader mt-4">
+          <my-loader size="xl" loading="true"></my-loader>
+        </div>
 
         <div class="all-notifications">
           <a *ngIf="loaded" class="text-decoration-underline" routerLink="/my-account/notifications" #notifications (click)="onNavigate(notifications)" i18n>
