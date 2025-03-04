@@ -2,6 +2,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 @use '_button-mixins' as *;
+@use '_bootstrap-variables' as *;
 
 .mobile-msg {
   display: flex;
@@ -72,6 +73,14 @@
 my-search-typeahead {
   max-width: 270px;
   width: 100%;
+
+  @media screen and (min-width: #{breakpoint(xl)}) {
+    max-width: 310px;
+  }
+
+  @media screen and (min-width: #{breakpoint(xxl)}) {
+    max-width: 350px;
+  }
 
   @include margin-right(1.5rem);
 }
