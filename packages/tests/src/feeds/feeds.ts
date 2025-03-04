@@ -34,7 +34,7 @@ describe('Test syndication feeds', () => {
 
   let userAccessToken: string
   let rootAccountId: number
-  let rootChannelId: number
+  let rootChannelIdServer1: number
 
   let userAccountId: number
   let userChannelId: number
@@ -53,7 +53,7 @@ describe('Test syndication feeds', () => {
 
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
     await setDefaultChannelAvatar([ servers[0], serverHLSOnly ])
-    await setDefaultVideoChannel(servers)
+    await setDefaultVideoChannel([ ...servers, serverHLSOnly ])
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
@@ -62,7 +62,7 @@ describe('Test syndication feeds', () => {
     {
       const user = await servers[0].users.getMyInfo()
       rootAccountId = user.account.id
-      rootChannelId = user.videoChannels[0].id
+      rootChannelIdServer1 = user.videoChannels[0].id
     }
 
     {
@@ -116,7 +116,6 @@ describe('Test syndication feeds', () => {
   })
 
   describe('All feed', function () {
-
     it('Should be well formed XML (covers RSS 2.0 and ATOM 1.0 endpoints)', async function () {
       for (const feed of [ 'video-comments' as 'video-comments', 'videos' as 'videos' ]) {
         const rss = await servers[0].feed.getXML({ feed, ignoreCache: true })
@@ -128,7 +127,7 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should be well formed XML (covers Podcast endpoint)', async function () {
-      const podcast = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      const podcast = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelIdServer1 })
       expect(podcast).xml.to.be.valid()
     })
 
@@ -154,13 +153,11 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Videos feed', function () {
-
     describe('Podcast feed', function () {
-
       it('Should contain a valid podcast enclosures', async function () {
         // Since podcast feeds should only work on the server they originate on,
         // only test the first server where the videos reside
-        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -192,7 +189,7 @@ describe('Test syndication feeds', () => {
       })
 
       it('Should contain a valid podcast enclosures with HLS only', async function () {
-        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: serverHLSOnly.store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -230,7 +227,7 @@ describe('Test syndication feeds', () => {
       })
 
       it('Should contain a valid podcast:socialInteract', async function () {
-        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -284,7 +281,7 @@ describe('Test syndication feeds', () => {
           fields: {
             name: 'live-0',
             privacy: VideoPrivacy.PUBLIC,
-            channelId: rootChannelId,
+            channelId: rootChannelIdServer1,
             permanentLive: false
           }
         })
@@ -293,7 +290,7 @@ describe('Test syndication feeds', () => {
         const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
         await servers[0].live.waitUntilPublished({ videoId: liveId })
 
-        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -321,7 +318,7 @@ describe('Test syndication feeds', () => {
       })
 
       it('Should have valid itunes metadata', async function () {
-        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: serverHLSOnly.store.channel.id })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -345,10 +342,49 @@ describe('Test syndication feeds', () => {
 
         expect(item['itunes:duration']).to.equal(5)
       })
+
+      it('Should have p20url podcast txt attribute with local podcast feed', async function () {
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
+        expect(podcastUrlEl).to.exist
+        expect(podcastUrlEl['@_purpose']).to.equal('p20url')
+        expect(podcastUrlEl['#text']).to.equal(
+          servers[0].url + '/feeds/podcast/videos.xml?videoChannelId=' + servers[0].store.channel.id
+        )
+      })
+
+      it('Should have p20url podcast txt attribute with remote classic RSS feed with channel', async function () {
+        const videoChannelId = await servers[1].channels.getIdOf({ channelName: 'root_channel@' + servers[0].host })
+
+        const rss = await servers[1].feed.getXML({
+          feed: 'videos',
+          ignoreCache: true,
+          query: { videoChannelId }
+        })
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
+        expect(podcastUrlEl).to.exist
+        expect(podcastUrlEl['@_purpose']).to.equal('p20url')
+        expect(podcastUrlEl['#text']).to.equal(servers[0].url + '/feeds/podcast/videos.xml?videoChannelId=' + videoChannelId)
+      })
+
+      it('Should not have p20url podcast txt attribute with classic RSS feed without channel', async function () {
+        const rss = await serverHLSOnly.feed.getXML({ feed: 'videos', ignoreCache: true })
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
+        expect(podcastUrlEl).to.not.exist
+      })
     })
 
     describe('JSON feed', function () {
-
       it('Should contain a valid \'attachments\' object', async function () {
         for (const server of servers) {
           const json = await server.feed.getJSON({ feed: 'videos', ignoreCache: true })
@@ -398,7 +434,7 @@ describe('Test syndication feeds', () => {
 
       it('Should filter by video channel', async function () {
         {
-          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelIdServer1 }, ignoreCache: true })
           const jsonObj = JSON.parse(json)
           expect(jsonObj.items.length).to.be.equal(1)
           expect(jsonObj.items[0].title).to.equal('my super name for server 1')
@@ -453,7 +489,7 @@ describe('Test syndication feeds', () => {
           fields: {
             name: 'live',
             privacy: VideoPrivacy.PUBLIC,
-            channelId: rootChannelId
+            channelId: rootChannelIdServer1
           }
         })
         liveId = uuid
@@ -484,7 +520,7 @@ describe('Test syndication feeds', () => {
       })
 
       it('Should have the channel avatar as feed icon', async function () {
-        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelIdServer1 }, ignoreCache: true })
 
         const jsonObj = JSON.parse(json)
         const imageUrl = jsonObj.icon
@@ -494,7 +530,6 @@ describe('Test syndication feeds', () => {
     })
 
     describe('XML feed', function () {
-
       it('Should correctly have video mime types feed with HLS only', async function () {
         this.timeout(120000)
 
@@ -514,7 +549,6 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Video comments feed', function () {
-
     it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted/password protected videos', async function () {
       for (const server of servers) {
         const json = await server.feed.getJSON({ feed: 'video-comments', ignoreCache: true })
@@ -544,7 +578,11 @@ describe('Test syndication feeds', () => {
 
     it('Should filter by videoChannelId/videoChannelName', async function () {
       {
-        const json = await servers[0].feed.getJSON({ feed: 'video-comments', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+        const json = await servers[0].feed.getJSON({
+          feed: 'video-comments',
+          query: { videoChannelId: rootChannelIdServer1 },
+          ignoreCache: true
+        })
         expect(JSON.parse(json).items.length).to.be.equal(2)
       }
 
@@ -744,7 +782,6 @@ describe('Test syndication feeds', () => {
       const query = { accountId: userAccountId, token: userFeedToken }
       await servers[0].feed.getJSON({ feed: 'subscriptions', query, ignoreCache: true })
     })
-
   })
 
   describe('Cache', function () {
@@ -830,7 +867,6 @@ describe('Test syndication feeds', () => {
       const res = await doPodcastRequest()
       expect(res.headers['x-api-cache-cached']).to.not.exist
     })
-
   })
 
   after(async function () {

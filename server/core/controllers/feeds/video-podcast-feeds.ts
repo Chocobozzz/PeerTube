@@ -16,7 +16,7 @@ import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '..
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares/index.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { VideoModel } from '../../models/video/video.js'
-import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed } from './shared/index.js'
+import { buildFeedMetadata, getCommonVideoFeedAttributes, getPodcastFeedUrlCustomTag, getVideosForFeeds, initFeed } from './shared/index.js'
 
 const videoPodcastFeedsRouter = express.Router()
 
@@ -42,7 +42,8 @@ for (const event of ([ 'channel-updated', 'channel-deleted' ] as const)) {
 
 // ---------------------------------------------------------------------------
 
-videoPodcastFeedsRouter.get('/podcast/videos.xml',
+videoPodcastFeedsRouter.get(
+  '/podcast/videos.xml',
   setFeedPodcastContentType,
   videoFeedsPodcastSetCacheKey,
   podcastCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
@@ -85,7 +86,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     : false
 
   const customTags: CustomTag[] = await Hooks.wrapObject(
-    [],
+    [ getPodcastFeedUrlCustomTag(videoChannel) ],
     'filter:feed.podcast.channel.create-custom-tags.result',
     { videoChannel }
   )
@@ -128,15 +129,15 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
 }
 
 type PodcastMedia =
-  {
+  | {
     type: string
     length: number
     bitrate: number
     sources: { uri: string, contentType?: string }[]
     title: string
     language?: string
-  } |
-  {
+  }
+  | {
     sources: { uri: string }[]
     type: string
     title: string
@@ -209,7 +210,7 @@ async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[]) {
 async function addVODPodcastItem (options: {
   feed: Feed
   video: VideoModel
-  captionsGroup: { [ id: number ]: MVideoCaptionVideo[] }
+  captionsGroup: { [id: number]: MVideoCaptionVideo[] }
 }) {
   const { feed, video, captionsGroup } = options
 
@@ -350,7 +351,7 @@ function buildVODCaptions (video: MVideo, videoCaptions: MVideoCaptionVideo[]) {
 }
 
 function categoryToItunes (category: number) {
-  const itunesMap: { [ id in keyof typeof VIDEO_CATEGORIES ]: string } = {
+  const itunesMap: { [id in keyof typeof VIDEO_CATEGORIES]: string } = {
     1: 'Music',
     2: 'TV &amp; Film',
     3: 'Leisure',

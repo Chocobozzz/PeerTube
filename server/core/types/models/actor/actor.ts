@@ -29,7 +29,10 @@ export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 
 // Some association attributes
 
-export type MActorHostOnly = Use<'Server', MServerHost>
+export type MActorHostOnly =
+  & Pick<ActorModel, 'serverId' | 'getHost'>
+  & Use<'Server', MServerHost>
+
 export type MActorHost =
   & MActorLight
   & Use<'Server', MServerHost>
@@ -157,7 +160,7 @@ export type MActorAPI = Omit<
 
 export type MActorSummaryFormattable =
   & FunctionProperties<MActor>
-  & Pick<MActor, 'url' | 'preferredUsername'>
+  & Pick<MActor, 'url' | 'preferredUsername' | 'serverId'>
   & Use<'Server', MServerHost>
   & Use<'Avatars', MActorImageFormattable[]>
 

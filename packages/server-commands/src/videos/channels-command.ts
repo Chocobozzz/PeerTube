@@ -13,7 +13,6 @@ import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ChannelsCommand extends AbstractCommand {
-
   list (options: OverrideCommandOptions & {
     start?: number
     count?: number
@@ -32,14 +31,16 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  listByAccount (options: OverrideCommandOptions & {
-    accountName: string
-    start?: number
-    count?: number
-    sort?: string
-    withStats?: boolean
-    search?: string
-  }) {
+  listByAccount (
+    options: OverrideCommandOptions & {
+      accountName: string
+      start?: number
+      count?: number
+      sort?: string
+      withStats?: boolean
+      search?: string
+    }
+  ) {
     const { accountName, sort = 'createdAt' } = options
     const path = '/api/v1/accounts/' + accountName + '/video-channels'
 
@@ -53,9 +54,11 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  async create (options: OverrideCommandOptions & {
-    attributes: Partial<VideoChannelCreate>
-  }) {
+  async create (
+    options: OverrideCommandOptions & {
+      attributes: Partial<VideoChannelCreate>
+    }
+  ) {
     const path = '/api/v1/video-channels/'
 
     // Default attributes
@@ -78,10 +81,12 @@ export class ChannelsCommand extends AbstractCommand {
     return body.videoChannel
   }
 
-  update (options: OverrideCommandOptions & {
-    channelName: string
-    attributes: VideoChannelUpdate
-  }) {
+  update (
+    options: OverrideCommandOptions & {
+      channelName: string
+      attributes: VideoChannelUpdate
+    }
+  ) {
     const { channelName, attributes } = options
     const path = '/api/v1/video-channels/' + channelName
 
@@ -95,9 +100,11 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  delete (options: OverrideCommandOptions & {
-    channelName: string
-  }) {
+  delete (
+    options: OverrideCommandOptions & {
+      channelName: string
+    }
+  ) {
     const path = '/api/v1/video-channels/' + options.channelName
 
     return this.deleteRequest({
@@ -109,9 +116,13 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  get (options: OverrideCommandOptions & {
-    channelName: string
-  }) {
+  // ---------------------------------------------------------------------------
+
+  get (
+    options: OverrideCommandOptions & {
+      channelName: string
+    }
+  ) {
     const path = '/api/v1/video-channels/' + options.channelName
 
     return this.getRequestBody<VideoChannel>({
@@ -123,11 +134,25 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  updateImage (options: OverrideCommandOptions & {
-    fixture: string
-    channelName: string | number
-    type: 'avatar' | 'banner'
-  }) {
+  async getIdOf (
+    options: OverrideCommandOptions & {
+      channelName: string
+    }
+  ) {
+    const { id } = await this.get(options)
+
+    return id
+  }
+
+  // ---------------------------------------------------------------------------
+
+  updateImage (
+    options: OverrideCommandOptions & {
+      fixture: string
+      channelName: string | number
+      type: 'avatar' | 'banner'
+    }
+  ) {
     const { channelName, fixture, type } = options
 
     const path = `/api/v1/video-channels/${channelName}/${type}/pick`
@@ -144,10 +169,12 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  deleteImage (options: OverrideCommandOptions & {
-    channelName: string | number
-    type: 'avatar' | 'banner'
-  }) {
+  deleteImage (
+    options: OverrideCommandOptions & {
+      channelName: string | number
+      type: 'avatar' | 'banner'
+    }
+  ) {
     const { channelName, type } = options
 
     const path = `/api/v1/video-channels/${channelName}/${type}`
@@ -161,13 +188,15 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  listFollowers (options: OverrideCommandOptions & {
-    channelName: string
-    start?: number
-    count?: number
-    sort?: string
-    search?: string
-  }) {
+  listFollowers (
+    options: OverrideCommandOptions & {
+      channelName: string
+      start?: number
+      count?: number
+      sort?: string
+      search?: string
+    }
+  ) {
     const { channelName, start, count, sort, search } = options
     const path = '/api/v1/video-channels/' + channelName + '/followers'
 
@@ -183,9 +212,11 @@ export class ChannelsCommand extends AbstractCommand {
     })
   }
 
-  importVideos (options: OverrideCommandOptions & VideosImportInChannelCreate & {
-    channelName: string
-  }) {
+  importVideos (
+    options: OverrideCommandOptions & VideosImportInChannelCreate & {
+      channelName: string
+    }
+  ) {
     const { channelName, externalChannelUrl, videoChannelSyncId } = options
 
     const path = `/api/v1/video-channels/${channelName}/import-videos`

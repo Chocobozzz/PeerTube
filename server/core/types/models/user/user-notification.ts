@@ -31,7 +31,7 @@ export module UserNotificationIncludes {
     & PickWith<VideoModel, 'VideoChannel', VideoChannelIncludeActor>
 
   export type ActorInclude =
-    & Pick<ActorModel, 'preferredUsername' | 'getHost'>
+    & Pick<ActorModel, 'preferredUsername' | 'getHost' | 'serverId'>
     & PickWith<ActorModel, 'Avatars', ActorImageInclude[]>
     & PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>
 
@@ -78,13 +78,13 @@ export module UserNotificationIncludes {
     & PickWith<VideoImportModel, 'Video', VideoInclude>
 
   export type ActorFollower =
-    & Pick<ActorModel, 'preferredUsername' | 'getHost'>
+    & Pick<ActorModel, 'preferredUsername' | 'getHost' | 'serverId'>
     & PickWith<ActorModel, 'Account', AccountInclude>
     & PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>
     & PickWithOpt<ActorModel, 'Avatars', ActorImageInclude[]>
 
   export type ActorFollowing =
-    & Pick<ActorModel, 'preferredUsername' | 'type' | 'getHost'>
+    & Pick<ActorModel, 'preferredUsername' | 'type' | 'getHost' | 'serverId'>
     & PickWith<ActorModel, 'VideoChannel', VideoChannelInclude>
     & PickWith<ActorModel, 'Account', AccountInclude>
     & PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>

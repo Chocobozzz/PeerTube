@@ -5,35 +5,39 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 type FeedType = 'videos' | 'video-comments' | 'subscriptions'
 
 export class FeedCommand extends AbstractCommand {
-
-  getXML (options: OverrideCommandOptions & {
-    feed: FeedType
-    ignoreCache: boolean
-    format?: string
-  }) {
-    const { feed, format, ignoreCache } = options
+  getXML (
+    options: OverrideCommandOptions & {
+      feed: FeedType
+      ignoreCache: boolean
+      format?: string
+      query?: { [id: string]: any }
+    }
+  ) {
+    const { feed, format, ignoreCache, query = {} } = options
     const path = '/feeds/' + feed + '.xml'
 
-    const query: { [id: string]: string } = {}
+    const internalQuery: { [id: string]: string } = {}
 
-    if (ignoreCache) query.v = buildUUID()
-    if (format) query.format = format
+    if (ignoreCache) internalQuery.v = buildUUID()
+    if (format) internalQuery.format = format
 
     return this.getRequestText({
       ...options,
 
       path,
-      query,
+      query: { ...internalQuery, ...query },
       accept: 'application/xml',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 
-  getPodcastXML (options: OverrideCommandOptions & {
-    ignoreCache: boolean
-    channelId: number
-  }) {
+  getPodcastXML (
+    options: OverrideCommandOptions & {
+      ignoreCache: boolean
+      channelId: number
+    }
+  ) {
     const { ignoreCache, channelId } = options
     const path = `/feeds/podcast/videos.xml`
 
@@ -53,11 +57,13 @@ export class FeedCommand extends AbstractCommand {
     })
   }
 
-  getJSON (options: OverrideCommandOptions & {
-    feed: FeedType
-    ignoreCache: boolean
-    query?: { [ id: string ]: any }
-  }) {
+  getJSON (
+    options: OverrideCommandOptions & {
+      feed: FeedType
+      ignoreCache: boolean
+      query?: { [id: string]: any }
+    }
+  ) {
     const { feed, query = {}, ignoreCache } = options
     const path = '/feeds/' + feed + '.json'
 

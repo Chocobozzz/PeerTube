@@ -664,6 +664,8 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   }
 
   getHost (this: MActorHostOnly) {
+    if (this.serverId && !this.Server) throw new Error('Server is not loaded in the object')
+
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 

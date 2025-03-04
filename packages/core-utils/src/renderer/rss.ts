@@ -10,10 +10,14 @@ export function getDefaultRSSFeeds (url: string, instanceName: string) {
   ]
 }
 
+export function getChannelPodcastFeed (url: string, channel: { id: number }) {
+  return `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}`
+}
+
 export function getChannelRSSFeeds (url: string, instanceName: string, channel: { name: string, id: number }) {
   return [
     {
-      url: `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}`,
+      url: getChannelPodcastFeed(url, channel),
       // TODO: translate
       title: `${channel.name} podcast feed`
     },

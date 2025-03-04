@@ -18,7 +18,14 @@ import {
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../../middlewares/index.js'
-import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed, sendFeed } from './shared/index.js'
+import {
+  buildFeedMetadata,
+  getCommonVideoFeedAttributes,
+  getPodcastFeedUrlCustomTag,
+  getVideosForFeeds,
+  initFeed,
+  sendFeed
+} from './shared/index.js'
 
 const videoFeedsRouter = express.Router()
 
@@ -28,7 +35,8 @@ const { middleware: cacheRouteMiddleware } = cacheRouteFactory({
 
 // ---------------------------------------------------------------------------
 
-videoFeedsRouter.get('/videos.:format',
+videoFeedsRouter.get(
+  '/videos.:format',
   videosSortValidator,
   setDefaultVideosSort,
   feedsFormatValidator,
@@ -39,7 +47,8 @@ videoFeedsRouter.get('/videos.:format',
   asyncMiddleware(generateVideoFeed)
 )
 
-videoFeedsRouter.get('/subscriptions.:format',
+videoFeedsRouter.get(
+  '/subscriptions.:format',
   videosSortValidator,
   setDefaultVideosSort,
   feedsFormatValidator,
@@ -72,7 +81,10 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     imageUrl: ownerImageUrl || imageUrl,
     author: { name, link: ownerLink },
     resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search
+    queryString: new URL(WEBSERVER.URL + req.url).search,
+    customTags: videoChannel
+      ? [ getPodcastFeedUrlCustomTag(videoChannel) ]
+      : []
   })
 
   const data = await getVideosForFeeds({
