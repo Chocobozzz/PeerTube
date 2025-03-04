@@ -54,8 +54,6 @@
 }
 
 .instance-name {
-  width: 100%;
-
   @include ellipsis;
   @include margin-left(10px);
 }
