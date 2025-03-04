@@ -31,10 +31,15 @@ export class HtmlRendererService {
         node.setAttribute('target', '_blank')
 
         const rel = node.hasAttribute('rel')
-          ? node.getAttribute('rel') + ' '
+          ? node.getAttribute('rel')
           : ''
 
-        node.setAttribute('rel', rel + 'noopener noreferrer')
+        const relValues = new Set(rel.split(' '))
+        relValues.add('noopener')
+        relValues.add('noreferrer')
+        relValues.add('ugc')
+
+        node.setAttribute('rel', [ ...relValues ].join(' '))
       }
     })
   }

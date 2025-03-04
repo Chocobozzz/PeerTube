@@ -1,17 +1,16 @@
-import { LinkType } from 'src/types/link.type'
-import { Component, OnInit, inject, input } from '@angular/core'
-import { VideoPlaylist } from './video-playlist.model'
-import { MarkdownService } from '@app/core'
-import { FromNowPipe } from '../shared-main/date/from-now.pipe'
-import { RouterLink } from '@angular/router'
-import { LinkComponent } from '../shared-main/common/link.component'
 import { NgClass, NgIf } from '@angular/common'
+import { Component, OnInit, inject, input } from '@angular/core'
+import { MarkdownService } from '@app/core'
+import { LinkType } from 'src/types/link.type'
+import { LinkComponent } from '../shared-main/common/link.component'
+import { FromNowPipe } from '../shared-main/date/from-now.pipe'
+import { VideoPlaylist } from './video-playlist.model'
 
 @Component({
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
   templateUrl: './video-playlist-miniature.component.html',
-  imports: [ NgClass, LinkComponent, NgIf, RouterLink, FromNowPipe ]
+  imports: [ NgClass, LinkComponent, NgIf, FromNowPipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {
   private markdownService = inject(MarkdownService)
