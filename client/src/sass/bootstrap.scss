@@ -157,8 +157,6 @@ body {
   }
 
   .modal-dialog {
-    text-align: start;
-
     &:not(.modal-lg):not(.modal-xl) {
       min-width: 500px;
       width: 40vw;
@@ -168,8 +166,6 @@ body {
 }
 
 .modal {
-  text-align: center;
-
   .modal-content {
     background-color: pvar(--bg);
     word-break: break-word;
