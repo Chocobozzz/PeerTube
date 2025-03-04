@@ -196,7 +196,7 @@ function register ({
 }
 ```
 
-You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`) **in PeerTube >= 3.2**.
+You can also store files in the plugin data directory (`/{plugins-directory}/data/{npm-plugin-name}`).
 This directory and its content won't be deleted when your plugin is uninstalled/upgraded.
 
 ```js
@@ -923,6 +923,8 @@ function register ({ registerClientRoute }) {
 You can then access the page on `/p/my-super/route` (please note the additional `/p/` in the path).
 
 #### Run actions
+
+**PeerTube >= 7.1**
 
 Plugin can trigger actions in the client by calling `doAction` with a specific action.
 This can be used in combination with a hook to add custom admin actions, for instance:

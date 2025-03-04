@@ -1,5 +1,107 @@
 # Changelog
 
+## v7.1.0-rc.1
+
+### IMPORTANT NOTES
+
+ * Remove NodeJS 18 support. Please upgrade to NodeJS 20 before upgrading PeerTube
+ * Due to a bug in the remote video thumbnail update, we recommend running the [prune storage](https://docs.joinpeertube.org/maintain/tools#prune-filesystem-object-storage) script to clean up the filesystem
+ * Let's encrypt is removing [OCSP support in 2025](https://letsencrypt.org/2024/12/05/ending-ocsp/), so remove SSL stapling from your nginx configuration: https://github.com/Chocobozzz/PeerTube/commit/0abaaa8ccbce19deb6fcd09c8bf00d4cf4248505
+ * Safari desktop versions < 14 are not supported anymore
+
+### Plugins/Themes/Embed API
+
+  * Add server plugin hooks:
+    * `filter:oauth.password-grant.get-user.params` [#6752](https://github.com/Chocobozzz/PeerTube/pull/6752)
+    * `filter:api.email-verification.ask-send-verify-email.body` [#6752](https://github.com/Chocobozzz/PeerTube/pull/6752)
+    * `filter:api.users.ask-reset-password.body` [#6752](https://github.com/Chocobozzz/PeerTube/pull/6752)
+  * Call `action:api.user.deleted` server hook when users delete their own account [#6860](https://github.com/Chocobozzz/PeerTube/pull/6860)
+  * Add client plugin support for external links in the left menu [#6784](https://github.com/Chocobozzz/PeerTube/pull/6784)
+  * Add new client scopes: `admin-users`, `admin-comments` and `moderation` [#6692](https://github.com/Chocobozzz/PeerTube/pull/6692)
+  * Add client plugin hooks [#6692](https://github.com/Chocobozzz/PeerTube/pull/6692):
+    * `filter:internal.player.p2p-media-loader.options.result`
+    * `filter:admin-users-list.bulk-actions.create.result`
+    * `filter:admin-video-comments-list.actions.create.result`
+    * `filter:admin-video-comments-list.bulk-actions.create.result`
+    * `filter:user-moderation.actions.create.result`
+    * `filter:admin-abuse-list.actions.create.result`
+  * Introduce a new client API to run actions (reload the user table, reload video comments, etc.): https://docs.joinpeertube.org/contribute/plugins#run-actions
+
+### Docker
+
+ * Add the ability to specify peertube UID and GID via environment variables [#6809](https://github.com/Chocobozzz/PeerTube/pull/6809)
+ * Fix RTMPS port non exposed by Docker container
+
+### NGINX
+
+ * Remove SSL stapling: https://github.com/Chocobozzz/PeerTube/commit/0abaaa8ccbce19deb6fcd09c8bf00d4cf4248505
+ * Support RSS feed gzip compression: https://github.com/Chocobozzz/PeerTube/commit/70dae47f08547f2749afb9ee9dfa805b8a94b028
+
+### Maintenance
+
+ * Remove WebTorrent redundancy support (HLS redundancy is still supported). It hasn't been used in the player for several major versions, so there's no point in continuing to store these video files
+ * Upgrade [p2p-media-loader](https://github.com/novage/p2p-media-loader) to v2
+ * Reduce logging on object storage request error
+ * Introduce `npm run install-node-dependencies` to install PeerTube `yarn` dependencies, so we can easily migrate from `yarn` in the future
+
+### Configuration
+
+ * Add SepiaSearch URL as default search index
+
+### Features
+
+ * :tada: Redesign *About Platform*, *About PeerTube* and *About Network* pages :tada:
+ * Highlight author host on video miniatures using a new dropdown component that explains where the content is coming from
+ * Add ability to put video captions in object storage
+ * Add ability for [Mastodon to verify](https://joinmastodon.org/verification) PeerTube links
+ * Enable V2 viewer protocol for better [concurrent viewer scalability](https://joinpeertube.org/news/stress-test-2023)
+ * Add ability for admins to set the default player auto play behaviour [#6167](https://github.com/Chocobozzz/PeerTube/pull/6788)
+ * Improve notification label when a subscription is live streaming
+ * Add "Open in mobile app" button when opening the website using a mobile device (can be disabled in the configuration)
+ * Login, email verification and password reset use a case-insensitive email if they can [#6648](https://github.com/Chocobozzz/PeerTube/pull/6648)
+ * Increase image max upload size from 4MB to 8MB
+ * REST API:
+   * Add `host` filter to list videos endpoints
+   * Add `channelUpdatedAt` sort option to list subscriptions endpoint
+   * Add `playlistUrl` metadata to HLS video file JSON representation
+   * Add `typeOneOf` filter to list notifications endpoint
+ * Support `host` filter attribute to `<peertube-videos-list>` custom markup element
+ * Prefer short UUID for embed URLs
+ * Add RSS feed discovery in HTML head tag
+ * Improve podcast feed:
+   * Add missing tag so it's now possible to submit the feed to Apple Podcast
+   * Use the audio file as default enclosure if possible
+   * Use the download video file link to generate files that can be easily played by podcast applications
+ * Add video public link to ActivityPub representation to fix federation discoverability issue with short video URL (Akkoma, Sharkey, etc.)
+ * Increase search bar width on big screens
+ * Add `ugc` to `<a>` `rel` attribute to HTML generated by users
+
+### Bug fixes
+
+ * Fix chapter marker click precision on long videos
+ * Fix HTTP signature key ID
+ * Fix auto block list link in notification email
+ * Add missing localization for admin plugin menu entries
+ * Fix running transcoding on videos that only contain an audio resolution
+ * Fix theme colors in embed and chapter markers visibility
+ * Correctly delete remote thumbnails/previews on update
+ * Don't mark video as transcoded before the audio is available
+ * Fix adding an intro/outro with split HLS
+ * Various UI inconsistencies/new theme/contrast fixes
+ * Fix live ending when using remote runners
+ * Fix selecting an entry in a select box after a search
+ * More robust live handler on invalid ffprobe
+ * Respect original frame rate of input file, as stated in max FPS configuration documentation
+ * Don't crash on GeoIP download problem
+ * Fix live replay desynchronized audio/video
+ * Fix player portrait mode
+ * Fix instance name link width in header
+ * Fix modal text align on mobile
+ * Fix select and tags height consistency
+ * Fix notification loading icon
+ * Fix channel lazy loading in search results
+
+
 ## v7.0.1
 
 ### Features
