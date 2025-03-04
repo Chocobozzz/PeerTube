@@ -127,6 +127,10 @@ export class VideoMiniatureComponent implements OnInit {
   videoHref: string
   videoTarget: string
 
+  ownerRouterLink: string | any[] = []
+  ownerHref: string
+  ownerTarget: string
+
   private ownerDisplayType: 'account' | 'videoChannel'
   private actionsLoaded = false
 
@@ -148,7 +152,9 @@ export class VideoMiniatureComponent implements OnInit {
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+
     this.buildVideoLink()
+    this.buildOwnerLink()
 
     this.setUpBy()
 
@@ -178,6 +184,29 @@ export class VideoMiniatureComponent implements OnInit {
     // Lazy load
     this.videoRouterLink = [ '/search/lazy-load-video', { url: video.url } ]
   }
+
+  buildOwnerLink () {
+    const video = this.video()
+
+    const linkType = this.videoLinkType()
+
+    if (linkType === 'internal' || !video.channel.url) {
+      this.ownerRouterLink = `/c/${video.byVideoChannel}`
+      return
+    }
+
+    if (linkType === 'external') {
+      this.ownerRouterLink = null
+      this.ownerHref = video.channel.url
+      this.ownerTarget = '_blank'
+      return
+    }
+
+    // Lazy load
+    this.ownerRouterLink = [ '/search/lazy-load-channel', { url: video.channel.url } ]
+  }
+
+  // ---------------------------------------------------------------------------
 
   displayOwnerAccount () {
     return this.ownerDisplayType === 'account'

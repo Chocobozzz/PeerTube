@@ -29,13 +29,18 @@
       }
 
       <div class="owner-container" *ngIf="displayOptions().by">
-        <a class="owner-label ellipsis" [routerLink]="[ '/c', video().byVideoChannel ]" [title]="displayOwnerAccount() ? authorAccount : authorChannel">
+        <my-link
+          class="owner-label" className="ellipsis"
+          [internalLink]="ownerRouterLink" [href]="ownerHref" [target]="ownerTarget" inheritParentStyle="true"
+          [ariaLabel]="getAriaLabel()"
+          [title]="displayOwnerAccount() ? authorAccount : authorChannel"
+        >
           @if (displayOwnerAccount()) {
             {{ authorAccount }}
           } @else if (displayOwnerVideoChannel()) {
             {{ authorChannel }}
           }
-        </a>
+        </my-link>
 
         <my-actor-host *ngIf="!video().isLocal" [host]="video().account.host"></my-actor-host>
       </div>
