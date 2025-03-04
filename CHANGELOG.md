@@ -30,7 +30,7 @@
 ### Docker
 
  * Add the ability to specify peertube UID and GID via environment variables [#6809](https://github.com/Chocobozzz/PeerTube/pull/6809)
- * Fix RTMPS port non exposed by Docker container
+ * Fix RTMPS port non exposed by the Docker container
 
 ### NGINX
 
@@ -43,23 +43,23 @@
  * Upgrade [p2p-media-loader](https://github.com/novage/p2p-media-loader) to v2
  * Reduce logging on object storage request error
  * Introduce `npm run install-node-dependencies` to install PeerTube `yarn` dependencies, so we can easily migrate from `yarn` in the future
+ * Increase image max upload size from 4MB to 8MB
 
 ### Configuration
 
- * Add SepiaSearch URL as default search index
+ * Add SepiaSearch URL as default search index. Global search is still disabled by default
 
 ### Features
 
  * :tada: Redesign *About Platform*, *About PeerTube* and *About Network* pages :tada:
- * Highlight author host on video miniatures using a new dropdown component that explains where the content is coming from
+ * Highlight author host in video miniature using a new dropdown component that explains where the content is coming from
  * Add ability to put video captions in object storage
  * Add ability for [Mastodon to verify](https://joinmastodon.org/verification) PeerTube links
- * Enable V2 viewer protocol for better [concurrent viewer scalability](https://joinpeertube.org/news/stress-test-2023)
+ * Enable viewer protocol V2 for better [concurrent viewer scalability](https://joinpeertube.org/news/stress-test-2023)
  * Add ability for admins to set the default player auto play behaviour [#6167](https://github.com/Chocobozzz/PeerTube/pull/6788)
  * Improve notification label when a subscription is live streaming
- * Add "Open in mobile app" button when opening the website using a mobile device (can be disabled in the configuration)
+ * Add *Open in mobile app* button when opening the website using a mobile device (can be disabled in the configuration)
  * Login, email verification and password reset use a case-insensitive email if they can [#6648](https://github.com/Chocobozzz/PeerTube/pull/6648)
- * Increase image max upload size from 4MB to 8MB
  * REST API:
    * Add `host` filter to list videos endpoints
    * Add `channelUpdatedAt` sort option to list subscriptions endpoint
@@ -68,8 +68,8 @@
  * Support `host` filter attribute to `<peertube-videos-list>` custom markup element
  * Prefer short UUID for embed URLs
  * Add RSS feed discovery in HTML head tag
- * Improve podcast feed:
-   * Add missing tag so it's now possible to submit the feed to Apple Podcast
+ * Improve channel podcast feed:
+   * Add missing tags so it's now possible to submit the feed to Apple Podcast
    * Use the audio file as default enclosure if possible
    * Use the download video file link to generate files that can be easily played by podcast applications
  * Add video public link to ActivityPub representation to fix federation discoverability issue with short video URL (Akkoma, Sharkey, etc.)
@@ -86,14 +86,14 @@
  * Fix theme colors in embed and chapter markers visibility
  * Correctly delete remote thumbnails/previews on update
  * Don't mark video as transcoded before the audio is available
- * Fix adding an intro/outro with split HLS
+ * Fix adding an intro/outro on videos with split HLS streams
  * Various UI inconsistencies/new theme/contrast fixes
  * Fix live ending when using remote runners
  * Fix selecting an entry in a select box after a search
  * More robust live handler on invalid ffprobe
  * Respect original frame rate of input file, as stated in max FPS configuration documentation
  * Don't crash on GeoIP download problem
- * Fix live replay desynchronized audio/video
+ * Fix desynchronized audio/video on live replay
  * Fix player portrait mode
  * Fix instance name link width in header
  * Fix modal text align on mobile
