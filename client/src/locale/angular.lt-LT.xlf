@@ -283,22 +283,17 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3780281836273462589" datatype="html">
+      <trans-unit id="3780281836273462589" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> paskelbė naują vaizdo įrašą: 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION"/> paskelbė naują vaizdo įrašą: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3861380964267994829" datatype="html">
+      <trans-unit id="3861380964267994829" datatype="html" xml:space="preserve">
         <source>The notification concerns a video now unavailable</source>
-        <target state="translated">Pranešimas apie vaizdo įrašą, kuris šiuo metu neprieinamas</target>
+        <target state="translated">Pranešimas susijęs su vaizdo įrašu, kuris dabar nepasiekiamas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">21</context>
@@ -308,43 +303,25 @@
           <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5067946665521007036" datatype="html">
+      <trans-unit id="5067946665521007036" datatype="html" xml:space="preserve">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been unblocked </source>
-        <target state="new">
-          Your video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblocked
-        
-        </target>
+        <target state="translated">Jūsų vaizdo įrašas <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> atblokuotas </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7127745751169269971" datatype="html">
+      <trans-unit id="7127745751169269971" datatype="html" xml:space="preserve">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="new">
-          Your video 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blocked
-        
-        </target>
+        <target state="translated">Jūsų vaizdo įrašas <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> užblokuotas </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="506794214492992969" datatype="html">
+      <trans-unit id="506794214492992969" datatype="html" xml:space="preserve">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new video abuse
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video 
-          <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/>
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK"/>Naujas piktnaudžiavimo vaizdo įrašas<x id="CLOSE_LINK"/> sukurtas vaizdo įraše <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">46</context>
