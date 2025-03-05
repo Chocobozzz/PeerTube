@@ -6433,7 +6433,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html" xml:space="preserve">
         <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated"> Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> di <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> e altri </target>
+        <target state="translated"> Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/> di <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> e altri </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">80</context>
@@ -6457,7 +6457,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated"> Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> di <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated"> Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/> di <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">83</context>
@@ -8169,7 +8169,7 @@
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html" xml:space="preserve">
         <source> <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
-        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 segnalazione} other {{{ abuse.countReportsForReporter }} segnalazioni}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
+        <target state="translated"> <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 segnalazione} other {{{ abuse.countReportsForReporter }} segnalazioni}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">20</context>
@@ -20720,7 +20720,7 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
       </trans-unit>
       <trans-unit id="5636556831757427625" datatype="html" xml:space="preserve">
         <source>Unmute the platform by your platform</source>
-        <target state="translated">Rimuovi il mute dalla piattaforma dalla tua piattaforma.</target>
+        <target state="translated">Rimuovi il mute della piattaforma dalla tua piattaforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">409</context>
@@ -22582,7 +22582,7 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
       </trans-unit>
       <trans-unit id="5731228558519519588" datatype="html" xml:space="preserve">
         <source>Only users of this platform can see this video</source>
-        <target state="translated">Solo gli utenti di questa piattaforma possono vedere questo video.</target>
+        <target state="translated">Solo gli utenti di questa piattaforma possono vedere questo video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">477</context>
