@@ -6433,7 +6433,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html" xml:space="preserve">
         <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> e altri </target>
+        <target state="translated"> Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> di <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> e altri </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">80</context>
@@ -6457,7 +6457,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated"> Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> di <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">83</context>
@@ -20574,9 +20574,9 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8327414932006661175" datatype="html">
+      <trans-unit id="8327414932006661175" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> muted.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> mutato.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -20694,65 +20694,65 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">368</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931091080719598584" datatype="html">
+      <trans-unit id="8931091080719598584" datatype="html" xml:space="preserve">
         <source>Hide any content from that user from you, your platform and its users.</source>
-        <target state="new">Hide any content from that user from you, your platform and its users.</target>
+        <target state="translated">Nascondi qualsiasi contenuto da quell'utente per te, la tua piattaforma e i suoi utenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">386</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591567430811860823" datatype="html">
+      <trans-unit id="2591567430811860823" datatype="html" xml:space="preserve">
         <source>Show this user's content to the users of this platform again.</source>
-        <target state="new">Show this user's content to the users of this platform again.</target>
+        <target state="translated">Mostra di nuovo il contenuto di questo utente agli utenti di questa piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5804354060253520825" datatype="html">
+      <trans-unit id="5804354060253520825" datatype="html" xml:space="preserve">
         <source>Hide any content from that platform from you, your platform and its users.</source>
-        <target state="new">Hide any content from that platform from you, your platform and its users.</target>
+        <target state="translated">Nascondi qualsiasi contenuto da quella piattaforma per te, la tua piattaforma e i suoi utenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5636556831757427625" datatype="html">
+      <trans-unit id="5636556831757427625" datatype="html" xml:space="preserve">
         <source>Unmute the platform by your platform</source>
-        <target state="new">Unmute the platform by your platform</target>
+        <target state="translated">Rimuovi il mute dalla piattaforma dalla tua piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7469865015995142386" datatype="html">
+      <trans-unit id="7469865015995142386" datatype="html" xml:space="preserve">
         <source>Show back content from that platform for you, your platform and its users.</source>
-        <target state="new">Show back content from that platform for you, your platform and its users.</target>
+        <target state="translated">Mostra di nuovo il contenuto da quella piattaforma per te, la tua piattaforma e i suoi utenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3174336986672205632" datatype="html">
+      <trans-unit id="3174336986672205632" datatype="html" xml:space="preserve">
         <source>Remove comments from your platform</source>
-        <target state="new">Remove comments from your platform</target>
+        <target state="translated">Rimuovi commenti dalla tua piattaforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">420</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2970277936786210016" datatype="html">
+      <trans-unit id="2970277936786210016" datatype="html" xml:space="preserve">
         <source>Remove comments made by this account from your platform.</source>
-        <target state="new">Remove comments made by this account from your platform.</target>
+        <target state="translated">Rimuovi i commenti fatti da questo account dalla tua piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">421</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="14165999502236506" datatype="html">
+      <trans-unit id="14165999502236506" datatype="html" xml:space="preserve">
         <source>Platform moderation</source>
-        <target state="new">Platform moderation</target>
+        <target state="translated">Moderazione piattaforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">430</context>
@@ -20798,9 +20798,9 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738499036919555877" datatype="html">
+      <trans-unit id="738499036919555877" datatype="html" xml:space="preserve">
         <source>Mute the platform</source>
-        <target state="new">Mute the platform</target>
+        <target state="translated">Muta la piattaforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">316</context>
@@ -20810,25 +20810,25 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">403</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1849364081331046417" datatype="html">
+      <trans-unit id="1849364081331046417" datatype="html" xml:space="preserve">
         <source>Hide any content from that platform for you.</source>
-        <target state="new">Hide any content from that platform for you.</target>
+        <target state="translated">Nascondi qualsiasi contenuto da quella piattaforma per te.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3404874513484375253" datatype="html">
+      <trans-unit id="3404874513484375253" datatype="html" xml:space="preserve">
         <source>Unmute the platform</source>
-        <target state="new">Unmute the platform</target>
+        <target state="translated">Non mutare più la piattaforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">322</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099316309417806930" datatype="html">
+      <trans-unit id="6099316309417806930" datatype="html" xml:space="preserve">
         <source>Show back content from that platform for you.</source>
-        <target state="new">Show back content from that platform for you.</target>
+        <target state="translated">Mostra di nuovo il contenuto da quella piattaforma per te.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">323</context>
@@ -21212,17 +21212,17 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">470</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8622134676231789456" datatype="html">
+      <trans-unit id="8622134676231789456" datatype="html" xml:space="preserve">
         <source>The deletion will be sent to remote platforms so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote platforms so they can reflect the change.</target>
+        <target state="translated">La cancellazione verrà inviata alle piattaforme remote affinché possano replicare la modifica.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7794689773907080825" datatype="html">
+      <trans-unit id="7794689773907080825" datatype="html" xml:space="preserve">
         <source>It is a remote comment, so the deletion will only be effective on your platform.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your platform.</target>
+        <target state="translated">Questo è un commento remoto, quindi la cancellazione avverrà solo sulla tua piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">223</context>
@@ -21236,9 +21236,9 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099744911889532030" datatype="html">
+      <trans-unit id="6099744911889532030" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</source>
-        <target state="new">Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</target>
+        <target state="translated">L'account <x id="PH" equiv-text="account.nameWithHost"/> è stato silenziato dalla tua piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">494</context>
@@ -21248,9 +21248,9 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4653820703858524784" datatype="html">
+      <trans-unit id="4653820703858524784" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> muted by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> mutato dalla tua piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">506</context>
@@ -22580,9 +22580,9 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
           <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5731228558519519588" datatype="html">
+      <trans-unit id="5731228558519519588" datatype="html" xml:space="preserve">
         <source>Only users of this platform can see this video</source>
-        <target state="new">Only users of this platform can see this video</target>
+        <target state="translated">Solo gli utenti di questa piattaforma possono vedere questo video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">477</context>
