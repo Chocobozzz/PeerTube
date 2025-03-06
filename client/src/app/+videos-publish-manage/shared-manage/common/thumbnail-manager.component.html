@@ -1,0 +1,54 @@
+<div class="root" myDragDrop (fileDropped)="onFileDropped($event)">
+
+  @if (selectingFromVideo) {
+    <my-embed #embed [video]="videoEdit().getVideoAttributes()" enableAPI="true" mute="true" autoplay="true"></my-embed>
+
+    <div class="mt-3">
+      <button i18n type="button" class="peertube-button primary-button me-2" (click)="selectFrame()">Use this frame</button>
+
+      <button i18n type="button" i18n class="peertube-button secondary-button" (click)="resetSelectFromVideo()">Cancel</button>
+    </div>
+  } @else {
+    <div class="preview-container">
+      @if (imageSrc) {
+        <img [src]="imageSrc" alt="Current thumbnail" i18n-alt />
+
+        <div class="muted-2 fs-8 mt-1">Current thumbnail</div>
+      } @else {
+        <div class="no-image">
+          <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.07133 1.61298L24.1845 4.56992C25.1509 4.72768 25.8511 5.6793 25.6766 6.74787L24.0362 16.7967C23.8617 17.8652 22.8953 18.5448 21.9289 18.387L3.81571 15.4301C2.84933 15.2723 2.14915 14.3207 2.32359 13.2521L3.96404 3.20333C4.13848 2.13476 5.10494 1.45522 6.07133 1.61298Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M11.5786 6.21294L10.4508 13.1215L16.9362 10.6345L11.5786 6.21294Z" fill="currentColor"/>
+          </svg>
+        </div>
+      }
+    </div>
+
+    <div class="mt-3">
+      <div class="muted-1">
+        <strong>Drag and drop your thumbnail here</strong> or click on the button below to modify it:
+      </div>
+
+      <div class="muted-2 fs-7">
+        <div i18n>In {{ videoImageExtensions }} formats, {{ maxVideoImageSizeInBytes }} maximum.</div>
+        <div i18n>Recommended size: 1280x720px.</div>
+      </div>
+
+      <div class="d-flex flex-wrap mt-4 justify-content-center gap-3">
+        <my-reactive-file
+          class="d-inline-block me-3"
+          inputName="uploadNewThumbnail" i18n-inputLabel inputLabel="Upload" [extensions]="videoImageExtensions"
+          [maxFileSize]="maxVideoImageSize" placement="right" (fileChanged)="onFileChanged($event)"
+          theme="secondary" icon="upload"
+        >
+        </my-reactive-file>
+
+        @if (canSelectFromVideo()) {
+          <my-button icon="film" theme="secondary" i18n (click)="selectFromVideo()">
+            Select from video
+          </my-button>
+        }
+      </div>
+    </div>
+  }
+</div>

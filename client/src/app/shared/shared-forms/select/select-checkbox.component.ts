@@ -34,6 +34,8 @@ export class SelectCheckboxComponent implements ControlValueAccessor {
   readonly virtualScrollItemSize = input(33, { transform: numberAttribute })
 
   readonly showClear = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+  readonly showHeader = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+  readonly showToggleAll = input<boolean, unknown>(undefined, { transform: booleanAttribute })
 
   readonly panelHide = output()
 

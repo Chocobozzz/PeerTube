@@ -1,0 +1,47 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root {
+  min-height: 260px;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 4px;
+  border: 1px dashed pvar(--secondary-icon-color);
+
+  @include on-mobile-main-col {
+    border: 0;
+  }
+}
+
+img {
+  width: $video-thumbnail-width;
+  height: $video-thumbnail-height;
+  border-radius: 4px;
+}
+
+.no-image {
+  color: pvar(--bg-secondary-450);
+
+  svg {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+my-embed {
+  max-width: 500px;
+  width: 500px;
+
+  max-height: 280px;
+  height: 280px;
+}
+
+.root.dragover {
+  background-color: pvar(--bg-secondary-400);
+  border-color: pvar(--primary);
+
+  .no-image {
+    color: pvar(--primary);
+  }
+}

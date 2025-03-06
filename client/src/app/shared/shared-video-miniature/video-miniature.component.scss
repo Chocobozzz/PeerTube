@@ -50,6 +50,8 @@ $more-button-width: 40px;
 my-actor-host {
   flex-shrink: 1;
   min-width: 1px;
+
+  @include margin-left(0.25rem);
 }
 
 .owner-label {
@@ -62,10 +64,6 @@ my-actor-host {
     color: pvar(--fg);
     opacity: 1;
   }
-}
-
-my-actor-host {
-  @include margin-left(0.25rem);
 }
 
 .video-actions {
@@ -124,13 +122,11 @@ my-actor-host {
     @include left(-2px);
 
     &[actorType=account] {
-      // TODO: use SASS var in sync with thumbnail component
-      border-radius: 100%;
+      border-radius: $account-avatar-radius;
     }
 
     &[actorType=channel] {
-      // TODO: use SASS var in sync with thumbnail component
-      border-radius: 5px;
+      border-radius: $channel-avatar-radius;
     }
 
     & + .owner-container {

@@ -13,7 +13,7 @@ import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.c
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { FileStorage, UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { FileStorage, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule, TableRowExpandEvent } from 'primeng/table'
@@ -31,6 +31,7 @@ import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { VideoPrivacyBadgeComponent } from '../../../shared/shared-video/video-privacy-badge.component'
 import { VideoAdminService } from './video-admin.service'
 
 @Component({
@@ -56,7 +57,8 @@ import { VideoAdminService } from './video-admin.service'
     VideoBlockComponent,
     PTDatePipe,
     RouterLink,
-    BytesPipe
+    BytesPipe,
+    VideoPrivacyBadgeComponent
   ]
 })
 export class VideoListComponent extends RestTable<Video> implements OnInit {
@@ -178,12 +180,6 @@ export class VideoListComponent extends RestTable<Video> implements OnInit {
 
   getIdentifier () {
     return 'VideoListComponent'
-  }
-
-  getPrivacyBadgeClass (video: Video) {
-    if (video.privacy.id === VideoPrivacy.PUBLIC) return 'badge-green'
-
-    return 'badge-yellow'
   }
 
   isUnpublished (video: Video) {

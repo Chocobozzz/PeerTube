@@ -99,7 +99,8 @@
     cursor: default;
   }
 
-  &:active {
+  &:active,
+  &.active {
     background-color: pvar(--bg-secondary-450);
   }
 
@@ -117,9 +118,31 @@
   }
 }
 
+@mixin button-as-link {
+  border: 0;
+  padding: 0;
+  color: pvar(--fg);
+  text-decoration: underline;
+
+  &:hover {
+    color: pvar(--fg-300);
+  }
+}
+
 @mixin rounded-icon-button {
   padding: 0.5rem !important;
   border-radius: 100% !important;
+
+  &.small-button {
+    padding: 6px !important;
+    line-height: 0 !important;
+
+    my-global-icon {
+      line-height: 0;
+
+      @include global-icon-size(12px);
+    }
+  }
 }
 
 @mixin danger-button {
@@ -154,7 +177,7 @@
   font-size: $button-font-size;
   line-height: 1.5;
 
-  my-global-icon + *:not(:empty) {
+  &:not(.icon-only) my-global-icon + *:not(:empty) {
     @include margin-left(8px);
   }
 

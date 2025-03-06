@@ -1,34 +1,19 @@
 import { environment } from '../../../environments/environment'
 
-export function getAbsoluteAPIUrl () {
-  let absoluteAPIUrl = environment.hmr === true
-    ? 'http://localhost:9000'
-    : environment.apiUrl
-
-  if (!absoluteAPIUrl) {
-    // The API is on the same domain
-    absoluteAPIUrl = window.location.origin
-  }
-
-  return absoluteAPIUrl
+export function getAPIUrl () {
+  return environment.apiUrl || window.location.origin
 }
 
 export function getOriginUrl () {
   return environment.originServerUrl || window.location.origin
 }
 
-export function getAPIHost () {
-  return new URL(getAbsoluteAPIUrl()).host
+export function getBackendUrl () {
+  return environment.apiUrl || environment.originServerUrl || window.location.origin
 }
 
-export function getAbsoluteEmbedUrl () {
-  let absoluteEmbedUrl = environment.originServerUrl
-  if (!absoluteEmbedUrl) {
-    // The Embed is on the same domain
-    absoluteEmbedUrl = window.location.origin
-  }
-
-  return absoluteEmbedUrl
+export function getBackendHost () {
+  return new URL(getBackendUrl()).host
 }
 
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34

@@ -32,6 +32,15 @@ module.exports = {
           prefs
         }
       }
+      // {
+      //   'browserName': 'firefox',
+      //   'moz:firefoxOptions': {
+      //     binary: '/usr/bin/firefox-developer-edition',
+      //     args: [ '--headless', windowSizeArg ],
+
+      //     prefs
+      //   }
+      // }
     ],
 
     services: [ 'shared-store' ],

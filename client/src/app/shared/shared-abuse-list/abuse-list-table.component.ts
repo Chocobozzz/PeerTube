@@ -128,11 +128,11 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
       this.buildAccountActions()
     ]
 
+    this.initialize()
+
     this.abuseActions = viewType === 'admin'
       ? await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
       : abuseActions
-
-    this.initialize()
   }
 
   ngOnDestroy () {

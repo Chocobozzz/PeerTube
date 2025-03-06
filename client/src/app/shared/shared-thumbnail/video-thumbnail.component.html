@@ -38,11 +38,11 @@
         <ng-container i18n>WAIT LIVE</ng-container>
       }
     </div>
-  } @else {
-    <div class="duration-overlay" [ariaLabel]="getDurationOverlayLabel()">{{ video().durationLabel }}</div>
+  } @else if (getDurationLabel()) {
+    <div class="duration-overlay" [ariaLabel]="getDurationOverlayLabel()">{{ getDurationLabel() }}</div>
   }
 
-  <div class="play-overlay">
+  <div *ngIf="playOverlay()" class="play-overlay">
     <div class="icon"></div>
   </div>
 

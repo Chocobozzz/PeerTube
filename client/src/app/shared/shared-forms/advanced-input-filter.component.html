@@ -1,4 +1,4 @@
-<div class="input-group has-clear flex-nowrap" ngbDropdown placement="bottom-left auto" container="body">
+<div class="input-group has-clear flex-nowrap" [ngClass]="{ 'has-icon': icon() }" ngbDropdown placement="bottom-left auto" container="body">
 
   <ng-container *ngIf="hasFilters()">
     <button class="input-group-text c-hand" title="Open quick filters" i18n-title ngbDropdownToggle>
@@ -17,9 +17,14 @@
     </div>
   </ng-container>
 
+  <button *ngIf="icon()" class="button-unstyle search-button" title="Search" i18n-title (click)="onSearchClick()">
+    <my-global-icon iconName="search"></my-global-icon>
+  </button>
+
   <input
-    type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+    type="text" [name]="inputId()" [id]="inputId()" [placeholder]="placeholder()"
     class="last-in-group"
+    [ngClass]="{ 'first-in-group': !hasFilters() }"
     [(ngModel)]="searchValue"
     (keyup)="onInputSearch($event)"
     #input

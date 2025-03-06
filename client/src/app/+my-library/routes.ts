@@ -2,6 +2,7 @@ import { Route, Routes, UrlSegment } from '@angular/router'
 import { userResolver } from '@app/core/routing/user.resolver'
 import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
@@ -27,7 +28,7 @@ import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlis
 import { MyVideoSpaceComponent } from './my-video-space.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
 import { MyWatchedWordsListComponent } from './my-watched-words-list/my-watched-words-list.component'
-import { BulkService } from '@app/shared/shared-moderation/bulk.service'
+import { MyChannelSpaceComponent } from './my-channel-space.component'
 
 const commonConfig = {
   path: '',
@@ -50,55 +51,6 @@ const commonConfig = {
 }
 
 const videoSpaceRoutes = [
-  // ---------------------------------------------------------------------------
-  // Channels
-  // ---------------------------------------------------------------------------
-
-  {
-    path: '',
-    redirectTo: 'video-channels',
-    pathMatch: 'full'
-  },
-
-  {
-    path: 'video-channels',
-    loadChildren: () => import('./+my-video-channels/routes')
-  },
-
-  {
-    path: 'followers',
-    component: MyFollowersComponent,
-    data: {
-      meta: {
-        title: $localize`My followers`
-      }
-    }
-  },
-
-  {
-    path: 'video-channel-syncs',
-    component: MyVideoChannelSyncsComponent,
-    data: {
-      meta: {
-        title: $localize`My synchronizations`
-      }
-    }
-  },
-
-  {
-    path: 'video-channel-syncs/create',
-    component: VideoChannelSyncEditComponent,
-    data: {
-      meta: {
-        title: $localize`Create new synchronization`
-      }
-    }
-  },
-
-  // ---------------------------------------------------------------------------
-  // Videos
-  // ---------------------------------------------------------------------------
-
   {
     path: 'videos/comments',
     redirectTo: 'comments-on-my-videos',
@@ -168,8 +120,50 @@ const videoSpaceRoutes = [
   }
 ] satisfies Routes
 
-const libraryRoutes = [
+const channelSpaceRoutes = [
+  {
+    path: '',
+    redirectTo: 'video-channels',
+    pathMatch: 'full'
+  },
 
+  {
+    path: 'video-channels',
+    loadChildren: () => import('./+my-video-channels/routes')
+  },
+
+  {
+    path: 'followers',
+    component: MyFollowersComponent,
+    data: {
+      meta: {
+        title: $localize`My followers`
+      }
+    }
+  },
+
+  {
+    path: 'video-channel-syncs',
+    component: MyVideoChannelSyncsComponent,
+    data: {
+      meta: {
+        title: $localize`My synchronizations`
+      }
+    }
+  },
+
+  {
+    path: 'video-channel-syncs/create',
+    component: VideoChannelSyncEditComponent,
+    data: {
+      meta: {
+        title: $localize`Create new synchronization`
+      }
+    }
+  }
+] satisfies Routes
+
+const libraryRoutes = [
   // ---------------------------------------------------------------------------
   // Playlists
   // ---------------------------------------------------------------------------
@@ -248,6 +242,14 @@ function isVideoSpaceRoute (segments: UrlSegment[]) {
   return videoSpaceRoutes.some(r => r.path === rootPath || r.path.startsWith(`${rootPath}/`))
 }
 
+function isChannelSpaceRoute (segments: UrlSegment[]) {
+  if (segments.length === 0) return false
+
+  const rootPath = segments[0].path
+
+  return channelSpaceRoutes.some(r => r.path === rootPath || r.path.startsWith(`${rootPath}/`))
+}
+
 export default [
   {
     ...commonConfig,
@@ -264,10 +266,22 @@ export default [
   {
     ...commonConfig,
 
+    component: MyChannelSpaceComponent,
+    canMatch: [
+      (_route: Route, segments: UrlSegment[]) => {
+        return isChannelSpaceRoute(segments)
+      }
+    ],
+
+    children: channelSpaceRoutes
+  },
+  {
+    ...commonConfig,
+
     component: MyLibraryComponent,
     canMatch: [
       (_route: Route, segments: UrlSegment[]) => {
-        return !isVideoSpaceRoute(segments)
+        return !isVideoSpaceRoute(segments) && !isChannelSpaceRoute(segments)
       }
     ],
     children: libraryRoutes

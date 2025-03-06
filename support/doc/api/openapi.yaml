@@ -2176,9 +2176,27 @@ paths:
         - My User
         - Videos
       parameters:
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/channelNameOneOf'
       responses:
         '200':
           description: successful operation
@@ -7490,6 +7508,19 @@ components:
             type: string
       style: form
       explode: true
+    channelNameOneOf:
+      name: channelNameOneOf
+      in: query
+      required: false
+      description: "**PeerTube >= 7.2** Filter on videos that are published by a channel with one of these names"
+      schema:
+        oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+      style: form
+      explode: true
     autoTagOneOfComment:
       name: autoTagOneOf
       in: query
@@ -7538,13 +7569,12 @@ components:
       name: nsfw
       in: query
       required: false
-      description: Whether to include nsfw videos, if any. The default value is set by the admin.
+      description: whether to include nsfw videos, if any
       schema:
         type: string
         enum:
         - 'true'
         - 'false'
-        - 'both'
     isLocal:
       name: isLocal
       in: query
@@ -7571,27 +7601,8 @@ components:
       in: query
       required: false
       schema:
-        allOf:
-         - $ref: '#/components/schemas/VideoPrivacySet'
-      description: >
-        **Only administrators and moderators can use this parameter**
-
-
-        Display only videos in this specific privacy/privacies. By default, list public videos for anonymous users and public/internal videos for authenticated users
-
-        - `1` PUBLIC
-
-        - `2` UNLISTED
-
-        - `3` PRIVATE
-
-        - `4` INTERNAL
-
-        - `5` PASSWORD_PROTECTED
-      examples:
-        password:
-          value: 5
-          summary: Display only password protected videos
+        $ref: '#/components/schemas/VideoPrivacySet'
+      description: '**PeerTube >= 4.0** Display only videos in this specific privacy/privacies'
     excludeAlreadyWatched:
       name: excludeAlreadyWatched
       in: query
@@ -7635,14 +7646,11 @@ components:
         - 8
         - 16
         - 32
-        - 64
-        - 128
       description: >
         **Only administrators and moderators can use this parameter**
 
 
-        Include additional videos in results (can be combined using bitwise or operator).
-        By default PeerTube only list published videos that are not blocked.
+        Include additional videos in results (can be combined using bitwise or operator)
 
         - `0` NONE
 
@@ -7657,17 +7665,6 @@ components:
         - `16` CAPTIONS
 
         - `32` VIDEO SOURCE
-
-        - `64`: AUTOMATIC_TAGS
-
-        - `128`: TAGS
-      examples:
-        includeAll:
-          value: 3
-          summary: Include not published and blacklisted videos (1 + 2)
-        includeAllWithFiles:
-          value: 24
-          summary: Add files and captions to video JSON representation (8 + 16)
     subscriptionsUris:
       name: uris
       in: query
@@ -8733,7 +8730,32 @@ components:
           minLength: 2
           maxLength: 3000
         video:
-          $ref: '#/components/schemas/VideoInfo'
+          type: object
+          properties:
+            id:
+              type: integer
+            uuid:
+              $ref: '#/components/schemas/UUIDv4'
+            shortUUID:
+              $ref: '#/components/schemas/shortUUID'
+            name:
+              type: string
+            nsfw:
+              type: boolean
+            startAt:
+              type: string
+              format: date-time
+            endAt:
+              type: string
+              format: date-time
+            deleted:
+              type: boolean
+            blacklisted:
+              type: boolean
+            thumbnailPath:
+              type: string
+            channel:
+              $ref: '#/components/schemas/VideoChannel'
         createdAt:
           type: string
           format: date-time

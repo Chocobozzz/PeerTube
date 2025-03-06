@@ -40,7 +40,7 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
-import { FindOptions, Includeable, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Includeable, Op, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -59,13 +59,14 @@ import {
   Is,
   IsInt,
   IsUUID,
-  Min, Scopes,
+  Min,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { peertubeTruncate } from '../../helpers/core-utils.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { exists, isArray, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
+import { isArray, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
 import {
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -93,7 +94,6 @@ import {
   MVideoCaptionLanguageUrl,
   MVideoDetails,
   MVideoFileVideo,
-  MVideoForUser,
   MVideoFormattable,
   MVideoFormattableDetails,
   MVideoFullLight,
@@ -171,7 +171,6 @@ export enum ScopeNames {
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
   WITH_WEB_VIDEO_FILES = 'WITH_WEB_VIDEO_FILES',
-  WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
   WITH_IMMUTABLE_ATTRIBUTES = 'WITH_IMMUTABLE_ATTRIBUTES',
@@ -196,7 +195,8 @@ export type ForAPIOptions = {
       {
         model: VideoChannelModel.scope({
           method: [
-            VideoChannelScopeNames.SUMMARY, {
+            VideoChannelScopeNames.SUMMARY,
+            {
               withAccount: true,
               withAccountBlockerIds: options.withAccountBlockerIds
             } as SummaryOptions
@@ -337,14 +337,6 @@ export type ForAPIOptions = {
       ]
     }
   },
-  [ScopeNames.WITH_SCHEDULED_UPDATE]: {
-    include: [
-      {
-        model: ScheduleVideoUpdateModel.unscoped(),
-        required: false
-      }
-    ]
-  },
   [ScopeNames.WITH_USER_HISTORY]: (userId: number) => {
     return {
       include: [
@@ -441,7 +433,6 @@ export type ForAPIOptions = {
   ]
 })
 export class VideoModel extends SequelizeModel<VideoModel> {
-
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
@@ -1041,85 +1032,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return result.map(v => v.uuid)
   }
 
-  static listUserVideosForApi (options: {
-    accountId: number
-    start: number
-    count: number
-    sort: string
-
-    channelId?: number
-    isLive?: boolean
-    search?: string
-  }) {
-    const { accountId, channelId, start, count, sort, search, isLive } = options
-
-    function buildBaseQuery (forCount: boolean): FindOptions {
-      const where: WhereOptions = {}
-
-      if (search) {
-        where.name = {
-          [Op.iLike]: '%' + search + '%'
-        }
-      }
-
-      if (exists(isLive)) {
-        where.isLive = isLive
-      }
-
-      const channelWhere = channelId
-        ? { id: channelId }
-        : {}
-
-      const baseQuery = {
-        offset: start,
-        limit: count,
-        where,
-        order: getVideoSort(sort),
-        include: [
-          {
-            model: forCount
-              ? VideoChannelModel.unscoped()
-              : VideoChannelModel,
-            required: true,
-            where: channelWhere,
-            include: [
-              {
-                model: forCount
-                  ? AccountModel.unscoped()
-                  : AccountModel,
-                where: {
-                  id: accountId
-                },
-                required: true
-              }
-            ]
-          }
-        ]
-      }
-
-      return baseQuery
-    }
-
-    const countQuery = buildBaseQuery(true)
-    const findQuery = buildBaseQuery(false)
-
-    const findScopes: (string | ScopeOptions)[] = [
-      ScopeNames.WITH_SCHEDULED_UPDATE,
-      ScopeNames.WITH_BLACKLISTED,
-      ScopeNames.WITH_THUMBNAILS
-    ]
-
-    return Promise.all([
-      VideoModel.count(countQuery),
-      VideoModel.scope(findScopes).findAll<MVideoForUser>(findQuery)
-    ]).then(([ count, rows ]) => {
-      return {
-        data: rows,
-        total: count
-      }
-    })
-  }
-
   static async listForApi (options: {
     start: number
     count: number
@@ -1146,7 +1058,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     host?: string
 
     accountId?: number
+
     videoChannelId?: number
+    channelNameOneOf?: string[]
 
     displayOnlyForFollower: DisplayOnlyForFollowerOptions | null
 
@@ -1157,16 +1071,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     user?: MUserAccountId
     historyOfUser?: MUserId
 
-    countVideos?: boolean
+    countVideos?: boolean // default true
 
     search?: string
 
-    excludeAlreadyWatched?: boolean
+    excludeAlreadyWatched?: boolean // default false
 
     autoTagOneOf?: string[]
   }) {
-    VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
-    VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
+    VideoModel.throwIfPrivateIncludeWithoutUser(options)
+    VideoModel.throwIfPrivacyOneOfWithoutUser(options)
 
     const trendingDays = options.sort.endsWith('trending')
       ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
@@ -1199,6 +1113,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'hasFiles',
         'accountId',
         'videoChannelId',
+        'channelNameOneOf',
         'videoPlaylistId',
         'user',
         'historyOfUser',
@@ -1259,8 +1174,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     autoTagOneOf?: string[]
   }) {
-    VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
-    VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
+    VideoModel.throwIfPrivateIncludeWithoutUser(options)
+    VideoModel.throwIfPrivacyOneOfWithoutUser(options)
 
     const serverActor = await getServerActor()
 
@@ -1560,7 +1475,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     const rawQuery = `UPDATE "video" SET "${field}" = ` +
       '(' +
-        'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
+      'SELECT COUNT(id) FROM "accountVideoRate" WHERE "accountVideoRate"."videoId" = "video"."id" AND type = :rateType' +
       ') ' +
       'WHERE "video"."id" = :videoId'
 
@@ -1591,7 +1506,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     }
 
     return VideoModel.sequelize.query(query, options)
-                     .then(results => results.length === 1)
+      .then(results => results.length === 1)
   }
 
   static bulkUpdateSupportField (ofChannel: MChannel, t: Transaction) {
@@ -1729,22 +1644,40 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     }
   }
 
-  private static throwIfPrivateIncludeWithoutUser (include: VideoIncludeType, user: MUserAccountId) {
-    if (VideoModel.isPrivateInclude(include) && !user?.hasRight(UserRight.SEE_ALL_VIDEOS)) {
-      throw new Error('Try to include protected videos but user cannot see all videos')
-    }
+  private static throwIfPrivateIncludeWithoutUser (options: {
+    include?: VideoIncludeType
+    user?: MUserAccountId
+    accountId?: number
+  }) {
+    const { include, user, accountId } = options
+
+    if (!VideoModel.isPrivateInclude(include)) return
+    if (user?.hasRight(UserRight.SEE_ALL_VIDEOS)) return
+    if (user.Account.id === accountId) return
+
+    throw new Error('Try to include protected videos but user cannot see all videos')
   }
 
-  private static throwIfPrivacyOneOfWithoutUser (privacyOneOf: VideoPrivacyType[], user: MUserAccountId) {
-    if (privacyOneOf && !user?.hasRight(UserRight.SEE_ALL_VIDEOS)) {
-      throw new Error('Try to choose video privacies but user cannot see all videos')
-    }
+  private static throwIfPrivacyOneOfWithoutUser (options: {
+    user?: MUserAccountId
+    privacyOneOf?: VideoPrivacyType[]
+    accountId?: number
+  }) {
+    const { user, privacyOneOf, accountId } = options
+
+    if (!privacyOneOf) return
+    if (user?.hasRight(UserRight.SEE_ALL_VIDEOS)) return
+    if (user.Account.id === accountId) return
+
+    throw new Error('Try to choose video privacies but user cannot see all videos')
   }
 
   private static isPrivateInclude (include: VideoIncludeType) {
-    return include & VideoInclude.BLACKLISTED ||
-           include & VideoInclude.BLOCKED_OWNER ||
-           include & VideoInclude.NOT_PUBLISHED_STATE
+    return !!(
+      include & VideoInclude.BLACKLISTED ||
+      include & VideoInclude.BLOCKED_OWNER ||
+      include & VideoInclude.NOT_PUBLISHED_STATE
+    )
   }
 
   isBlacklisted () {
@@ -1757,7 +1690,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  getMaxQualityAudioAndVideoFiles <T extends MVideoWithFile> (this: T) {
+  getMaxQualityAudioAndVideoFiles<T extends MVideoWithFile> (this: T) {
     const videoFile = this.getMaxQualityFile(VideoFileStream.VIDEO)
 
     if (!videoFile) {
@@ -1783,7 +1716,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return this.getQualityFileBy(streamFilter, maxBy)
   }
 
-  getMaxQualityBytes <T extends MVideoWithFile> (this: T) {
+  getMaxQualityBytes<T extends MVideoWithFile> (this: T) {
     const { videoFile, separatedAudioFile } = this.getMaxQualityAudioAndVideoFiles()
 
     let size = videoFile?.size || 0
@@ -2022,7 +1955,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   setHLSPlaylist (playlist: MStreamingPlaylist) {
-    const toAdd = [ playlist ] as [ VideoStreamingPlaylistModel ]
+    const toAdd = [ playlist ] as [VideoStreamingPlaylistModel]
 
     if (Array.isArray(this.VideoStreamingPlaylists) === false || this.VideoStreamingPlaylists.length === 0) {
       this.VideoStreamingPlaylists = toAdd
@@ -2030,8 +1963,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     }
 
     this.VideoStreamingPlaylists = this.VideoStreamingPlaylists
-                                       .filter(s => s.type !== VideoStreamingPlaylistType.HLS)
-                                       .concat(toAdd)
+      .filter(s => s.type !== VideoStreamingPlaylistType.HLS)
+      .concat(toAdd)
   }
 
   // ---------------------------------------------------------------------------

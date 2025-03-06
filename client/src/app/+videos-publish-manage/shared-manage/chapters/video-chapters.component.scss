@@ -1,0 +1,25 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.chapter {
+  display: grid;
+  grid-template-columns: auto auto minmax(150px, 350px) 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+
+  .position {
+    height: 38px;
+    min-width: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  my-delete-button {
+    width: fit-content;
+  }
+
+  .form-error {
+    margin-top: 0;
+  }
+}

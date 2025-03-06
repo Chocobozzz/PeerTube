@@ -117,6 +117,7 @@
     "tinykeys": "^2.1.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.4.0",
+    "type-fest": "^4.37.0",
     "typescript": "~5.7.3",
     "video.js": "^7.19.2",
     "vite": "^6.0.11",

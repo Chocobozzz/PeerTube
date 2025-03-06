@@ -8,6 +8,7 @@ export interface AdminVideoAbuse {
   id: number
   name: string
   uuid: string
+  shortUUID: string
   nsfw: boolean
 
   deleted: boolean
@@ -66,5 +67,7 @@ export type UserVideoAbuse = Omit<AdminVideoAbuse, 'countReports' | 'nthReport'>
 
 export type UserVideoCommentAbuse = AdminVideoCommentAbuse
 
-export type UserAbuse = Omit<AdminAbuse, 'reporterAccount' | 'countReportsForReportee' | 'countReportsForReporter' | 'startAt' | 'endAt'
-| 'count' | 'nth' | 'moderationComment'>
+export type UserAbuse = Omit<
+  AdminAbuse,
+  'reporterAccount' | 'countReportsForReportee' | 'countReportsForReporter' | 'startAt' | 'endAt' | 'count' | 'nth' | 'moderationComment'
+>

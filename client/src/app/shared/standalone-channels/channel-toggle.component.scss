@@ -1,0 +1,48 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  // Don't use mixin, we need the exact value
+  padding-inline-start: 17px;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.name {
+  border-radius: 4px;
+  color: pvar(--fg-400);
+  background-color: pvar(--bg-secondary-400);
+  max-width: 130px;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+
+  @include padding-right(0.5rem);
+  @include padding-left(24px);
+  @include font-size(14px);
+  @include ellipsis;
+}
+
+my-actor-avatar {
+  position: absolute;
+  left: 0;
+  border: 2px solid pvar(--bg-secondary-400);
+  border-radius: $channel-avatar-radius;
+}
+
+.root.active {
+  .name {
+    font-weight: $font-bold;
+    background-color: pvar(--bg-secondary-450);
+  }
+
+  my-actor-avatar {
+    border-color: pvar(--bg-secondary-450);
+    background-color: pvar(--bg-secondary-450);
+  }
+}

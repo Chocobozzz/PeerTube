@@ -103,6 +103,8 @@ function decorateVideoLink (options: {
   p2p?: boolean
 
   api?: boolean
+
+  version?: number
 }) {
   const { url } = options
 
@@ -133,6 +135,8 @@ function decorateVideoLink (options: {
   if (options.p2p !== undefined) params.set('p2p', options.p2p ? '1' : '0')
 
   if (options.api !== undefined) params.set('api', options.api ? '1' : '0')
+
+  if (options.version !== undefined) params.set('v', options.version + '')
 
   return buildUrl(url, params)
 }

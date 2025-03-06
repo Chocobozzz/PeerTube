@@ -9,9 +9,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { MActorAccount } from '@server/types/models/index.js'
 
 /**
- *
  * Build videos list SQL query and create video models
- *
  */
 
 export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
@@ -111,6 +109,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
 
     if (options.include & VideoInclude.TAGS) {
       this.includeTags()
+    }
+
+    if (options.include & VideoInclude.NOT_PUBLISHED_STATE) {
+      this.includeScheduleUpdate()
     }
 
     const select = this.buildSelect()

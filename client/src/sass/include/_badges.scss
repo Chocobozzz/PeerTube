@@ -3,11 +3,11 @@
 
 @mixin peertube-badge {
   display: inline-block;
-  border-radius: .25rem;
-  padding: .25em .4em;
-  font-size: 75%;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
   font-weight: $font-semibold;
-  line-height: 1.1;
+  line-height: normal;
   max-width: 100%;
   white-space: normal;
   word-break: normal;
@@ -39,29 +39,34 @@
 
   &.badge-yellow,
   &.badge-warning {
-    background-color: #feedaf;
-    color: #8a5340;
+    background-color: #FEEDAF;
+    color: #7E432E;
   }
 
   &.badge-brown {
-    background-color: #ffd8b2;
-    color: #805b36;
+    background-color: #FBC98D;
+    color: #7B2F1A;
   }
 
   &.badge-green,
   &.badge-success {
-    background-color: #c8e6c9;
-    color: #256029;
+    background-color: #8FEBA4;
+    color: #213B2D;
   }
 
   &.badge-blue,
   &.badge-info {
-    background-color: #b3e5fc;
-    color: #23547b;
+    background-color: #B3E4E6;
+    color: #273236;
   }
 
   &.badge-purple {
-    background-color: #eccfff;
-    color: #694382;
+    background-color: #DCBCFA;
+    color: #50386E;
+  }
+
+  &.badge-grey {
+    color: #2D3448;
+    background-color: #CBD7E0;
   }
 }

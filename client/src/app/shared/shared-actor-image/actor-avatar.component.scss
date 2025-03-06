@@ -10,11 +10,11 @@
 
   &.account {
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: $account-avatar-radius;
   }
 
   &.channel {
-    border-radius: 5px;
+    border-radius: $channel-avatar-radius;
   }
 
   &.instance {

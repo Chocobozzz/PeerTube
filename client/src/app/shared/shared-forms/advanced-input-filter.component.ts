@@ -1,13 +1,13 @@
+import { NgClass, NgFor, NgIf } from '@angular/common'
+import { AfterViewInit, Component, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
+import { RestService } from '@app/core'
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import debug from 'debug'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { AfterViewInit, Component, OnInit, inject, input, output } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
-import { RestService } from '@app/core'
-import { FormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgIf, NgFor, NgClass } from '@angular/common'
-import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 
 export type AdvancedInputFilter = {
   title: string
@@ -34,7 +34,10 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   private router = inject(Router)
 
   readonly filters = input<AdvancedInputFilter[]>([])
-  readonly emitOnInit = input(true)
+  readonly emitOnInit = input(true, { transform: booleanAttribute })
+  readonly icon = input(false, { transform: booleanAttribute })
+  readonly placeholder = input($localize`Filter...`)
+  readonly inputId = input('table-filter')
 
   readonly search = output<string>()
 
@@ -63,6 +66,10 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
     this.scheduleSearchUpdate((event.target as HTMLInputElement).value)
   }
 
+  onSearchClick () {
+    this.scheduleSearchUpdate(this.searchValue)
+  }
+
   onResetTableFilter () {
     this.immediateSearchUpdate('')
   }
@@ -81,7 +88,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
       ? this.removeFilterToSearch(this.searchValue, filter)
       : this.addFilterToSearch(this.searchValue, filter)
 
-    this.router.navigate([ '.' ], { relativeTo: this.route, queryParams: { search: newSearch.trim() } })
+    this.setQueryParams(newSearch)
   }
 
   private scheduleSearchUpdate (value: string) {
@@ -142,10 +149,11 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   }
 
   private setQueryParams (search: string) {
-    const queryParams: Params = {}
+    const searchParams = search
+      ? { search: search.trim() }
+      : {}
 
-    if (search) Object.assign(queryParams, { search })
-    this.router.navigate([], { queryParams })
+    this.router.navigate([ '.' ], { relativeTo: this.route, queryParams: { ...this.route.snapshot.queryParams, ...searchParams } })
   }
 
   private removeFilterToSearch (search: string, removedFilter: AdvancedInputFilterChild) {

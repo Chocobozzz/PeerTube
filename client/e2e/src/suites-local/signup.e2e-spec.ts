@@ -75,7 +75,6 @@ describe('Signup', () => {
   }) {
     await loginPage.loginAsRootUser()
 
-    await adminConfigPage.navigateTo('basic-configuration')
     await adminConfigPage.toggleSignup(options.enabled)
 
     if (options.enabled) {
@@ -116,9 +115,7 @@ describe('Signup', () => {
   })
 
   describe('Email verification disabled', function () {
-
     describe('Direct registration', function () {
-
       it('Should enable signup without approval', async () => {
         await prepareSignup({ enabled: true, requiresApproval: false, requiresEmailVerification: false })
 
@@ -171,7 +168,6 @@ describe('Signup', () => {
     })
 
     describe('Registration with approval', function () {
-
       it('Should enable signup with approval', async () => {
         await prepareSignup({ enabled: true, requiresApproval: true, requiresEmailVerification: false })
 
@@ -252,7 +248,6 @@ describe('Signup', () => {
     })
 
     describe('Direct registration', function () {
-
       it('Should enable signup without approval', async () => {
         await prepareSignup({ enabled: true, requiresApproval: false, requiresEmailVerification: true })
 
@@ -320,7 +315,6 @@ describe('Signup', () => {
     })
 
     describe('Registration with approval', function () {
-
       it('Should enable signup without approval', async () => {
         await prepareSignup({ enabled: true, requiresApproval: true, requiresEmailVerification: true })
 

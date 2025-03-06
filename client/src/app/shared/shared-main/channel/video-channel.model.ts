@@ -1,4 +1,4 @@
-import { getAbsoluteAPIUrl } from '@app/helpers'
+import { getAPIUrl } from '@app/helpers'
 import { maxBy } from '@peertube/peertube-core-utils'
 import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
 import { Actor } from '../account/actor.model'
@@ -43,7 +43,8 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     if (!banner) return ''
 
     if (banner.url) return banner.url
-    return getAbsoluteAPIUrl() + banner.path
+
+    return getAPIUrl() + banner.path
   }
 
   static GET_DEFAULT_AVATAR_URL (size: number) {
@@ -52,6 +53,10 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     }
 
     return `${window.location.origin}/client/assets/images/default-avatar-video-channel.png`
+  }
+
+  static buildPublicUrl (channel: Pick<ServerVideoChannel, 'name' | 'host'>) {
+    return `/c/${Actor.CREATE_BY_STRING(channel.name, channel.host)}`
   }
 
   constructor (hash: Partial<ServerVideoChannel>) {

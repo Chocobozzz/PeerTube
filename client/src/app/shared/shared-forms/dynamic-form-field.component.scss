@@ -21,12 +21,6 @@ textarea {
   @include peertube-select-container(340px);
 }
 
-.label-small-info {
-  font-style: italic;
-  margin-bottom: 10px;
-  font-size: 13px;
-}
-
 my-peertube-checkbox + .label-small-info {
   margin-top: 5px;
 }

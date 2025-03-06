@@ -7,7 +7,8 @@ my-embed {
   width: 50%;
 }
 
-.pt-badge {
+.pt-badge,
+my-video-privacy-badge {
   @include margin-right(5px);
 }
 

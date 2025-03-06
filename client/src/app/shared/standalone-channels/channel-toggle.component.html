@@ -1,0 +1,5 @@
+<button class="root button-unstyle" [ngClass]="{ active: checked() }" [title]="label()" (click)="toggle()">
+  <my-actor-avatar [actor]="channel()" actorType="channel" size="34"></my-actor-avatar>
+
+  <div class="name">{{ channel().displayName }}</div>
+</button>

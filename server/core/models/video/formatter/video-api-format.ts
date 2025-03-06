@@ -43,7 +43,7 @@ export type VideoFormattingJSONOptions = {
   }
 }
 
-export function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSanitize): VideoFormattingJSONOptions {
+export function guessAdditionalAttributesFromQuery (query: Pick<VideosCommonQueryAfterSanitize, 'include'>): VideoFormattingJSONOptions {
   if (!query?.include) return {}
 
   return {
@@ -336,10 +336,9 @@ function buildAdditionalAttributes (video: MVideoFormattable, options: VideoForm
 
   if (add?.blacklistInfo === true) {
     result.blacklisted = !!video.VideoBlacklist
-    result.blacklistedReason =
-      video.VideoBlacklist
-        ? video.VideoBlacklist.reason
-        : null
+    result.blacklistedReason = video.VideoBlacklist
+      ? video.VideoBlacklist.reason
+      : null
   }
 
   if (add?.blockedOwner === true) {

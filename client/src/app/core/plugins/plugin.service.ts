@@ -1,8 +1,6 @@
-import { firstValueFrom, Observable, of } from 'rxjs'
-import { catchError, map, shareReplay } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable, LOCALE_ID, NgZone, inject } from '@angular/core'
-import { VideoEditType } from '@app/+videos/+video-edit/shared/video-edit.type'
+import { inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
+import { VideoManageType } from '@app/+videos-publish-manage/shared-manage/common/video-manage.type'
 import { AuthService } from '@app/core/auth'
 import { Notifier } from '@app/core/notification'
 import { MarkdownService } from '@app/core/renderer'
@@ -27,10 +25,12 @@ import {
   RegisterClientVideoFieldOptions,
   ServerConfigPlugin
 } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { PluginInfo, PluginsManager } from '@root-helpers/plugins-manager'
+import { firstValueFrom, Observable, of } from 'rxjs'
+import { catchError, map, shareReplay } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
-import { logger } from '@root-helpers/logger'
 
 type FormFields = {
   video: {
@@ -136,7 +136,7 @@ export class PluginService implements ClientHook {
     return prefix + name
   }
 
-  getRegisteredVideoFormFields (type: VideoEditType) {
+  getRegisteredVideoFormFields (type: VideoManageType) {
     return this.formFields.video.filter(f => f.videoFormOptions.type === type)
   }
 

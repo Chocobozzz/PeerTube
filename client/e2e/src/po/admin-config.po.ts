@@ -1,19 +1,26 @@
-import { browserSleep, getCheckbox, go, isCheckboxSelected } from '../utils'
+import { browserSleep, go, setCheckboxEnabled } from '../utils'
 
 export class AdminConfigPage {
-
-  async navigateTo (tab: 'instance-homepage' | 'basic-configuration' | 'instance-information') {
+  async navigateTo (tab: 'instance-homepage' | 'basic-configuration' | 'instance-information' | 'live') {
     const waitTitles = {
       'instance-homepage': 'INSTANCE HOMEPAGE',
       'basic-configuration': 'APPEARANCE',
-      'instance-information': 'INSTANCE'
+      'instance-information': 'INSTANCE',
+      'live': 'LIVE'
     }
-    await go('/admin/settings/config/edit-custom#' + tab)
+
+    const url = '/admin/settings/config/edit-custom#' + tab
+
+    if (await browser.getUrl() !== url) {
+      await go('/admin/settings/config/edit-custom#' + tab)
+    }
 
     await $('h2=' + waitTitles[tab]).waitForDisplayed()
   }
 
   async updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
+    await this.navigateTo('instance-information')
+
     const elem = $('#instanceDefaultNSFWPolicy')
 
     await elem.waitForDisplayed()
@@ -23,35 +30,34 @@ export class AdminConfigPage {
     return elem.selectByAttribute('value', newValue)
   }
 
-  updateHomepage (newValue: string) {
+  async updateHomepage (newValue: string) {
+    await this.navigateTo('instance-homepage')
+
     return $('#instanceCustomHomepageContent').setValue(newValue)
   }
 
   async toggleSignup (enabled: boolean) {
-    if (await isCheckboxSelected('signupEnabled') === enabled) return
+    await this.navigateTo('basic-configuration')
 
-    const checkbox = await getCheckbox('signupEnabled')
-
-    await checkbox.waitForClickable()
-    await checkbox.click()
+    return setCheckboxEnabled('signupEnabled', enabled)
   }
 
   async toggleSignupApproval (required: boolean) {
-    if (await isCheckboxSelected('signupRequiresApproval') === required) return
+    await this.navigateTo('basic-configuration')
 
-    const checkbox = await getCheckbox('signupRequiresApproval')
-
-    await checkbox.waitForClickable()
-    await checkbox.click()
+    return setCheckboxEnabled('signupRequiresApproval', required)
   }
 
   async toggleSignupEmailVerification (required: boolean) {
-    if (await isCheckboxSelected('signupRequiresEmailVerification') === required) return
+    await this.navigateTo('basic-configuration')
 
-    const checkbox = await getCheckbox('signupRequiresEmailVerification')
+    return setCheckboxEnabled('signupRequiresEmailVerification', required)
+  }
 
-    await checkbox.waitForClickable()
-    await checkbox.click()
+  async toggleLive (enabled: boolean) {
+    await this.navigateTo('live')
+
+    return setCheckboxEnabled('liveEnabled', enabled)
   }
 
   async save () {

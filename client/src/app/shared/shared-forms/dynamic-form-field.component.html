@@ -1,4 +1,4 @@
-<div *ngIf="form()" [formGroup]="form()">
+<div *ngIf="form()" [formGroup]="form()" class="form-group">
   <label *ngIf="setting().label && setting().type !== 'input-checkbox'" [attr.for]="setting().name" [innerHTML]="setting().label"></label>
 
   <my-peertube-checkbox
@@ -8,7 +8,7 @@
     [labelInnerHTML]="setting().label"
   ></my-peertube-checkbox>
 
-  <div *ngIf="setting().descriptionHTML" class="label-small-info" [innerHTML]="setting().descriptionHTML"></div>
+  <div *ngIf="setting().descriptionHTML" class="form-group-description" [innerHTML]="setting().descriptionHTML"></div>
 
   @switch (setting().type) {
     @case ('input') {

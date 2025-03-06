@@ -12,7 +12,7 @@ import {
   RestPagination,
   RestTable
 } from '@app/core'
-import { formatICU, getAPIHost } from '@app/helpers'
+import { formatICU, getBackendHost } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { ProgressBarComponent } from '@app/shared/shared-main/common/progress-bar.component'
@@ -373,10 +373,10 @@ export class UserListComponent extends RestTable<User> implements OnInit, OnDest
   }
 
   private loadMutedStatus () {
-    this.blocklist.getStatus({ accounts: this.users.map(u => u.username + '@' + getAPIHost()) })
+    this.blocklist.getStatus({ accounts: this.users.map(u => u.username + '@' + getBackendHost()) })
       .subscribe(blockStatus => {
         for (const user of this.users) {
-          user.accountMutedStatus.mutedByInstance = blockStatus.accounts[user.username + '@' + getAPIHost()].blockedByServer
+          user.accountMutedStatus.mutedByInstance = blockStatus.accounts[user.username + '@' + getBackendHost()].blockedByServer
         }
       })
   }

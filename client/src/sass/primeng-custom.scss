@@ -13,7 +13,7 @@ input[type=button] {
 }
 
 p-table .p-datatable-header .caption {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 // Taken from old nova light theme
@@ -544,12 +544,13 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 .p-multiselect .p-multiselect-label {
   padding: pvar(--input-y-padding) pvar(--input-x-padding);
-  line-height: normal;
+  line-height: 1.5rem;
   font-weight: normal;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .p-multiselect .p-multiselect-label.p-placeholder {
   color: pvar(--input-placeholder);
+  font-size: 14px;
 }
 .p-multiselect.p-multiselect-chip .p-multiselect-token {
   padding: 2px 7px;
@@ -770,7 +771,9 @@ p-table {
       gap: 0.5rem;
 
       .left-buttons {
-        @include padding-left(1rem);
+        @include font-size(22px);
+
+        color: pvar(--fg-300);
       }
     }
   }
@@ -790,16 +793,10 @@ p-table {
   }
 
   td {
-    @include padding-left(15px !important);
+    @include padding-left(1rem !important);
 
     &.expand-cell {
-      padding: 10px 15px;
-    }
-
-    &:not(.action-cell):not(.expand-cell):not(.checkbox-cell) {
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      white-space: nowrap !important;
+      padding: 10px 1rem;
     }
   }
 
@@ -893,6 +890,15 @@ p-table {
       .pi-sort-amount-down {
         @include arrow-down(5px);
       }
+    }
+  }
+
+  .checkbox-cell {
+    @include padding-left(0.25rem !important);
+    @include padding-right(0 !important);
+
+    @media screen and (max-width: $mobile-view) {
+      @include padding-left(0 !important);
     }
   }
 
@@ -1021,8 +1027,15 @@ p-table {
   }
 
   .pt-badge {
-    font-size: 12px;
     text-transform: uppercase;
+  }
+}
+
+p-table:not(.cell-wrap) {
+  td:not(.action-cell):not(.expand-cell):not(.checkbox-cell) {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
 }
 
@@ -1055,6 +1068,32 @@ p-table {
     p-paginator {
       .p-paginator-pages > .p-paginator-page:not(.p-highlight) {
         display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  p-table {
+    td {
+      &.expand-cell {
+        padding: 5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  p-table {
+    th,
+    td {
+      @include padding-left(0.5rem !important);
+    }
+
+    .p-datatable-header {
+      .caption > div {
+        width: 100%;
+        padding: 0 !important;
       }
     }
   }
@@ -1153,38 +1192,6 @@ p-toast {
   }
 }
 
-@media screen and (max-width: $primeng-breakpoint) {
-  p-table {
-    td {
-      padding: 3px 0;
-
-      &.expand-cell {
-        padding: 5px;
-      }
-    }
-
-    .p-datatable-tbody {
-
-      td:last-child {
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid $separator-border-color !important;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: $mobile-view) {
-  p-table {
-    .p-datatable-header {
-      .caption > div {
-        width: 100%;
-        padding: 0 !important;
-      }
-    }
-  }
-}
-
 p-chips {
   .p-input-wrapper {
     display: flex;
@@ -1229,5 +1236,140 @@ p-chips {
   .p-dropdown-label {
     line-height: normal;
     min-height: 29px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+.new-p-table {
+  .column-toggle {
+    .tertiary-button:not(.active) {
+      color: pvar(--fg-300) !important;
+    }
+  }
+
+  &.loading table {
+    opacity: 0.5;
+  }
+
+  thead {
+    tr {
+      height: 1.5rem;
+    }
+  }
+
+  th {
+    font-size: 14px !important;
+    color: pvar(--fg-200) !important;
+    font-weight: normal !important;
+
+    &.p-highlight {
+      background-color: pvar(--bg) !important;
+    }
+
+    .column-toggle {
+      .dropdown > my-button::after {
+        display: none;
+      }
+    }
+  }
+
+  th,
+  .p-paginator {
+    border-color: pvar(--bg-secondary-450) !important;
+  }
+
+  .p-sortable-column-icon {
+    display: inline-block;
+    position: relative;
+    top: -1px;
+
+    .tertiary-button:not(.active) {
+      color: pvar(--secondary-icon-color) !important;
+    }
+  }
+
+  p-paginator {
+    .p-paginator {
+      padding-top: 1.5rem;
+      margin-top: 0.75rem;
+      height: auto !important;
+
+      .p-paginator-pages {
+        .p-paginator-page {
+          font-weight: normal !important;
+          height: 34px !important;
+          width: 34px !important;
+          border-radius: 100% !important;
+
+          &.p-highlight {
+            &, &:hover, &:active, &:focus {
+              background-color: pvar(--bg-secondary-450) !important;
+              color: pvar(--fg) !important;
+              font-weight: $font-bold !important;
+            }
+          }
+        }
+      }
+
+      .p-dropdown,
+      .p-dropdown-trigger {
+        color: pvar(--input-fg);
+        background-color: pvar(--input-bg);
+      }
+
+      .p-paginator-element .p-icon-wrapper {
+        color: pvar(--fg-300) !important;
+      }
+    }
+  }
+
+  .p-paginator-right-content {
+    margin-left: 0;
+    margin-right: 0;
+    color: pvar(--fg-300);
+
+    @include margin-left(1rem);
+  }
+
+  .action-cell {
+    width: 0 !important;
+
+    @include padding-right(0.25rem);
+  }
+}
+
+.sticky-p-table {
+  table {
+    table-layout: auto;
+  }
+
+  @media screen and (min-width: $small-view) {
+    .action-cell,
+    .action-head {
+      position: sticky;
+      right: 0;
+      background-color: inherit;
+    }
+
+    .action-cell {
+      z-index: 10;
+    }
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: pvar(--bg);
+  }
+
+  .p-datatable,
+  .p-datatable-wrapper {
+    max-height: inherit;
+  }
+
+  .p-datatable-wrapper {
+    overflow: auto;
   }
 }

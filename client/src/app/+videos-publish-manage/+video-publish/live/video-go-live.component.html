@@ -1,0 +1,37 @@
+@if (firstStep) {
+  <div class="upload-video-container">
+    <div class="first-step-block">
+      <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
+
+      <div class="form-group">
+        <label i18n for="first-step-channel">Channel</label>
+        <my-select-channel inputId="first-step-channel" [items]="userChannels()" [(ngModel)]="firstStepChannelId"></my-select-channel>
+      </div>
+
+      <div class="form-group live-type">
+        <div class="peertube-radio-container">
+          <input type="radio" id="permanentLiveFalse" [(ngModel)]="firstStepPermanentLive" [value]="false">
+          <label i18n for="permanentLiveFalse" class="radio">Normal live</label>
+
+          <span class="form-group-description">{{ getNormalLiveDescription() }}</span>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" id="permanentLiveTrue" [(ngModel)]="firstStepPermanentLive" [value]="true">
+          <label i18n for="permanentLiveTrue" class="radio">Permanent/recurring live</label>
+
+          <span class="form-group-description" i18n>{{ getPermanentLiveDescription() }}</span>
+        </div>
+      </div>
+
+      <input
+        class="peertube-button primary-button"
+        [disabled]="firstStepPermanentLive !== true && firstStepPermanentLive !== false"
+        type="button" i18n-value value="Go Live" (click)="goLive()"
+      />
+    </div>
+  </div>
+} @else {
+  <my-video-manage-container canUpdate="true" canWatch="true" cancelLink="/my-library/videos" (videoUpdated)="onVideoUpdated()">
+  </my-video-manage-container>
+}

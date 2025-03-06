@@ -1,24 +1,16 @@
 import { browserSleep, FIXTURE_URLS, go } from '../utils'
 
 export class VideoWatchPage {
-
   constructor (private isMobileDevice: boolean, private isSafari: boolean) {
-
   }
 
-  waitWatchVideoName (videoName: string) {
+  waitWatchVideoName (videoName: string, maxTime?: number) {
     if (this.isSafari) return browserSleep(5000)
 
     // On mobile we display the first node, on desktop the second one
-    const index = this.isMobileDevice ? 0 : 1
-
     return browser.waitUntil(async () => {
-      if (!await $('.video-info .video-info-name').isExisting()) return false
-
-      const elem = await $$('.video-info .video-info-name')[index]
-
-      return (await elem.getText()).includes(videoName) && elem.isDisplayed()
-    })
+      return (await this.getVideoName()) === videoName
+    }, { timeout: maxTime })
   }
 
   getVideoName () {
@@ -82,16 +74,17 @@ export class VideoWatchPage {
     return go(FIXTURE_URLS.HLS_PLAYLIST_EMBED)
   }
 
-  async clickOnUpdate () {
+  async clickOnManage () {
     await this.clickOnMoreDropdownIcon()
 
     const items = await $$('.dropdown-menu.show .dropdown-item')
 
     for (const item of items) {
-      const href = await item.getAttribute('href')
+      const content = await item.getText()
 
-      if (href?.includes('/update/')) {
+      if (content.includes('Manage')) {
         await item.click()
+        await $('#name').waitForClickable()
         return
       }
     }
@@ -121,12 +114,6 @@ export class VideoWatchPage {
     await playlist().waitForDisplayed()
 
     return playlist().click()
-  }
-
-  waitUntilVideoName (name: string, maxTime: number) {
-    return browser.waitUntil(async () => {
-      return (await this.getVideoName()) === name
-    }, { timeout: maxTime })
   }
 
   async clickOnMoreDropdownIcon () {

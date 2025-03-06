@@ -12,6 +12,7 @@
 h1 {
   margin-bottom: 1.5rem;
   color: pvar(--fg-400);
+  font-weight: $font-bold;
 
   @include font-size(2rem);
 

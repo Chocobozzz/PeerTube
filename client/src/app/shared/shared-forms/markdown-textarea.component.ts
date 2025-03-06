@@ -1,9 +1,9 @@
-import { NgClass, NgIf, ViewportScroller } from '@angular/common'
+import { CommonModule, ViewportScroller } from '@angular/common'
 import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, model, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
-import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap'
 import { Video } from '@peertube/peertube-models'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
@@ -22,17 +22,10 @@ import { FormReactiveErrors } from './form-reactive.service'
     }
   ],
   imports: [
-    NgClass,
+    CommonModule,
     FormsModule,
-    NgbNav,
-    NgIf,
-    NgbNavItem,
-    NgbNavLink,
-    NgbNavLinkBase,
-    NgbNavContent,
-    GlobalIconComponent,
-    NgbTooltip,
-    NgbNavOutlet
+    NgbCollapseModule,
+    GlobalIconComponent
   ]
 })
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, OnDestroy {
@@ -44,21 +37,22 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   readonly formError = input<string | FormReactiveErrors | FormReactiveErrors[]>(undefined)
 
-  readonly truncateTo3Lines = input<boolean, unknown>(undefined, { transform: booleanAttribute })
-
   readonly markdownType = input<'text' | 'enhanced' | 'to-unsafe-html'>('text')
   readonly customMarkdownRenderer = input<(text: string) => Promise<string | HTMLElement>>(undefined)
 
   readonly debounceTime = input(150)
 
-  readonly markdownVideo = input<Video>(undefined)
+  readonly markdownVideo = input<Pick<Video, 'shortUUID'>>(undefined)
 
   readonly inputId = input.required<string>()
 
   readonly dir = input<string>(undefined)
 
+  readonly withPreview = input(true, { transform: booleanAttribute })
   readonly withHtml = input(false, { transform: booleanAttribute })
   readonly withEmoji = input(false, { transform: booleanAttribute })
+
+  readonly monospace = input(false, { transform: booleanAttribute })
 
   readonly textareaElement = viewChild<ElementRef>('textarea')
   readonly previewElement = viewChild<ElementRef>('previewElement')
@@ -67,9 +61,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   isMaximized = false
   disabled = false
-
-  maximizeInText = $localize`Maximize editor`
-  maximizeOutText = $localize`Exit maximized editor`
+  previewCollapsed = true
 
   private contentChanged = new Subject<string>()
   private scrollPosition: [number, number]
@@ -167,7 +159,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
       if (result instanceof HTMLElement) {
         setTimeout(() => {
-          const wrapperElement = this.previewElement().nativeElement as HTMLElement
+          const wrapperElement = this.previewElement()?.nativeElement as HTMLElement
+          if (!wrapperElement) return
+
           wrapperElement.innerHTML = ''
           wrapperElement.appendChild(result)
         })

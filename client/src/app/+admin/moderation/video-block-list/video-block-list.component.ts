@@ -14,7 +14,6 @@ import { TableModule } from 'primeng/table'
 import { switchMap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
@@ -26,7 +25,6 @@ import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.com
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
   imports: [
-    GlobalIconComponent,
     TableModule,
     SharedModule,
     AdvancedInputFilterComponent,

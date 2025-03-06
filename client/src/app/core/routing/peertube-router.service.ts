@@ -1,6 +1,6 @@
-import { filter } from 'rxjs/operators'
 import { Injectable, inject } from '@angular/core'
-import { ActivatedRoute, ActivatedRouteSnapshot, Event, NavigationEnd, Router, Scroll } from '@angular/router'
+import { ActivatedRoute, ActivatedRouteSnapshot, Event, NavigationEnd, Params, Router, Scroll } from '@angular/router'
+import { filter } from 'rxjs/operators'
 import { ServerService } from '../server'
 
 export const enum RouterSetting {
@@ -60,16 +60,16 @@ export class PeerTubeRouterService {
     )
   }
 
-  silentNavigate (baseRoute: string[], queryParams: { [id: string]: string }) {
+  silentNavigate (baseRoute: string[], existingParams: Params, relativeTo?: ActivatedRoute) {
     let routeSetting = this.getRouteSetting() ?? RouterSetting.NONE
     routeSetting |= RouterSetting.DISABLE_SCROLL_RESTORE
 
-    queryParams = {
-      ...queryParams,
+    const queryParams = {
+      ...existingParams,
 
       [PeerTubeRouterService.ROUTE_SETTING_NAME]: routeSetting
     }
 
-    return this.router.navigate(baseRoute, { queryParams })
+    return this.router.navigate(baseRoute, { queryParams, relativeTo })
   }
 }

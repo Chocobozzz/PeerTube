@@ -44,7 +44,6 @@ describe('Test video filters validators', function () {
   })
 
   describe('When setting video filters', function () {
-
     const validIncludes = [
       VideoInclude.NONE,
       VideoInclude.BLOCKED_OWNER,
@@ -69,6 +68,10 @@ describe('Test video filters validators', function () {
         '/api/v1/videos',
         '/api/v1/search/videos'
       ]
+
+      if (options.unauthenticatedUser !== true) {
+        paths.push('/api/v1/users/me/videos')
+      }
 
       for (const path of paths) {
         const token = options.unauthenticatedUser

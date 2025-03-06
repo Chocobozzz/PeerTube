@@ -59,3 +59,15 @@
     display: none !important;
   }
 }
+
+.d-inline-block-mw {
+  @include on-mobile-main-col {
+    display: inline-block !important;
+  }
+}
+
+.d-inline-block-sw {
+  @include on-small-main-col {
+    display: none !important;
+  }
+}

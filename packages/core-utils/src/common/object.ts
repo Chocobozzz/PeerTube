@@ -1,4 +1,6 @@
-function pick <O extends object, K extends keyof O> (object: O, keys: K[]): Pick<O, K> {
+import { Jsonify } from 'type-fest'
+
+export function pick<O extends object, K extends keyof O> (object: O, keys: K[]): Pick<O, K> {
   const result: any = {}
 
   for (const key of keys) {
@@ -10,7 +12,7 @@ function pick <O extends object, K extends keyof O> (object: O, keys: K[]): Pick
   return result
 }
 
-function omit <O extends object, K extends keyof O> (object: O, keys: K[]): Exclude<O, K> {
+export function omit<O extends object, K extends keyof O> (object: O, keys: K[]): Exclude<O, K> {
   const result: any = {}
   const keysSet = new Set(keys) as Set<string>
 
@@ -23,19 +25,19 @@ function omit <O extends object, K extends keyof O> (object: O, keys: K[]): Excl
   return result
 }
 
-function objectKeysTyped <O extends object, K extends keyof O> (object: O): K[] {
+export function objectKeysTyped<O extends object, K extends keyof O> (object: O): K[] {
   return (Object.keys(object) as K[])
 }
 
-function getKeys <O extends object, K extends keyof O> (object: O, keys: K[]): K[] {
+export function getKeys<O extends object, K extends keyof O> (object: O, keys: K[]): K[] {
   return (Object.keys(object) as K[]).filter(k => keys.includes(k))
 }
 
-function hasKey <T extends object> (obj: T, k: keyof any): k is keyof T {
+export function hasKey<T extends object> (obj: T, k: keyof any): k is keyof T {
   return k in obj
 }
 
-function sortObjectComparator (key: string, order: 'asc' | 'desc') {
+export function sortObjectComparator (key: string, order: 'asc' | 'desc') {
   return (a: any, b: any) => {
     if (a[key] < b[key]) {
       return order === 'asc' ? -1 : 1
@@ -49,12 +51,19 @@ function sortObjectComparator (key: string, order: 'asc' | 'desc') {
   }
 }
 
-function shallowCopy <T> (o: T): T {
+export function shallowCopy<T> (o: T): T {
   return Object.assign(Object.create(Object.getPrototypeOf(o)), o)
 }
 
-function simpleObjectsDeepEqual (a: any, b: any) {
-  if (a === b) return true
+export function exists (value: any) {
+  return value !== undefined && value !== null
+}
+
+// ---------------------------------------------------------------------------
+
+export function simpleObjectsDeepEqual<T, U> (a: Jsonify<T>, b: Jsonify<U>) {
+  if (a as any === b as any) return true
+  if (a === undefined && b === undefined) return true
 
   if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) {
     return false
@@ -72,15 +81,4 @@ function simpleObjectsDeepEqual (a: any, b: any) {
   }
 
   return true
-}
-
-export {
-  pick,
-  omit,
-  objectKeysTyped,
-  getKeys,
-  hasKey,
-  shallowCopy,
-  sortObjectComparator,
-  simpleObjectsDeepEqual
 }

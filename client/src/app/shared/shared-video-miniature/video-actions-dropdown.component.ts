@@ -20,7 +20,6 @@ import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoReportComponent } from '../shared-moderation/report-modals'
 import { VideoBlockComponent } from '../shared-moderation/video-block.component'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
-import { LiveStreamInformationComponent } from '../shared-video-live/live-stream-information.component'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist/video-add-to-playlist.component'
 import { VideoDownloadComponent } from './download/video-download.component'
 
@@ -55,8 +54,7 @@ export type VideoActionsDisplayType = {
     ActionDropdownComponent,
     VideoDownloadComponent,
     VideoReportComponent,
-    VideoBlockComponent,
-    LiveStreamInformationComponent
+    VideoBlockComponent
   ]
 })
 export class VideoActionsDropdownComponent implements OnChanges {
@@ -77,7 +75,6 @@ export class VideoActionsDropdownComponent implements OnChanges {
   readonly videoDownloadModal = viewChild<VideoDownloadComponent>('videoDownloadModal')
   readonly videoReportModal = viewChild<VideoReportComponent>('videoReportModal')
   readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
-  readonly liveStreamInformationModal = viewChild<LiveStreamInformationComponent>('liveStreamInformationModal')
 
   readonly video = input<Video | VideoDetails>(undefined)
   readonly videoCaptions = input<VideoCaption[]>([])
@@ -172,12 +169,6 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.modalOpened.emit()
 
     this.videoBlockModal().show([ this.video() ])
-  }
-
-  showLiveInfoModal (video: Video) {
-    this.modalOpened.emit()
-
-    this.liveStreamInformationModal().show(video)
   }
 
   // ---------------------------------------------------------------------------
@@ -479,28 +470,16 @@ export class VideoActionsDropdownComponent implements OnChanges {
       ],
       [ // private actions regarding the video
         {
-          label: $localize`Display live information`,
-          handler: ({ video }) => this.showLiveInfoModal(video),
+          label: $localize`Live information`,
+          linkBuilder: ({ video }) => [ '/videos/manage', video.shortUUID, 'live-settings' ],
           isDisplayed: () => this.displayOptions().liveInfo && this.isVideoLiveInfoAvailable(),
           iconName: 'live'
         },
         {
-          label: $localize`Update`,
-          linkBuilder: ({ video }) => [ '/videos/update', video.shortUUID ],
-          iconName: 'edit',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().update && this.isVideoUpdatable()
-        },
-        {
-          label: $localize`Studio`,
-          linkBuilder: ({ video }) => [ '/studio/edit', video.shortUUID ],
+          label: $localize`Manage`,
+          linkBuilder: ({ video }) => [ '/videos/manage', video.shortUUID ],
           iconName: 'film',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().studio && this.isVideoEditable()
-        },
-        {
-          label: $localize`Stats`,
-          linkBuilder: ({ video }) => [ '/stats/videos', video.shortUUID ],
-          iconName: 'stats',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().stats && this.isVideoStatsAvailable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().update && this.isVideoUpdatable()
         },
         {
           label: $localize`Block`,

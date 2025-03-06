@@ -8,7 +8,7 @@ import { FormReactiveErrors, FormReactiveValidationMessages } from './form-react
 export class FormValidatorService {
   private formBuilder = inject(FormBuilder)
 
-  buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
+  internalBuildForm<T = any> (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
     const formErrors: FormReactiveErrors = {}
     const validationMessages: FormReactiveValidationMessages = {}
     const group: { [key: string]: any } = {}
@@ -18,7 +18,7 @@ export class FormValidatorService {
 
       const field = obj[name]
       if (this.isRecursiveField(field)) {
-        const result = this.buildForm(field as BuildFormArgument, defaultValues[name] as BuildFormDefaultValues)
+        const result = this.internalBuildForm(field as BuildFormArgument, defaultValues[name] as BuildFormDefaultValues)
         group[name] = result.form
         formErrors[name] = result.formErrors
         validationMessages[name] = result.validationMessages
@@ -34,7 +34,7 @@ export class FormValidatorService {
       else group[name] = [ defaultValue ]
     }
 
-    const form = this.formBuilder.group(group)
+    const form = this.formBuilder.group<T>(group as any)
     return { form, formErrors, validationMessages }
   }
 

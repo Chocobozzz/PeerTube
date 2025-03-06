@@ -106,7 +106,7 @@
       <my-alert *ngIf="isPrivateVideo()" class="alert-private" type="warning">
         <div i18n>This video is private so you won't be able to share it with external users</div>
 
-        <a i18n class="peertube-button-link primary-button mt-3" [routerLink]="[ '/videos/', 'update', video().shortUUID ]" target="_blank" rel="noopener noreferrer">
+        <a i18n class="peertube-button-link primary-button mt-3" [routerLink]="[ '/videos/', 'manage', video().shortUUID ]" target="_blank" rel="noopener noreferrer">
           Update video privacy
         </a>
       </my-alert>

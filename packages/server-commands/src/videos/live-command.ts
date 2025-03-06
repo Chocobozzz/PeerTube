@@ -23,10 +23,11 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 import { sendRTMPStream, testFfmpegStreamError } from './live.js'
 
 export class LiveCommand extends AbstractCommand {
-
-  get (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  get (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const path = '/api/v1/videos/live'
 
     return this.getRequestBody<LiveVideo>({
@@ -40,9 +41,11 @@ export class LiveCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  listSessions (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  listSessions (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const path = `/api/v1/videos/live/${options.videoId}/sessions`
 
     return this.getRequestBody<ResultList<LiveVideoSession>>({
@@ -54,17 +57,21 @@ export class LiveCommand extends AbstractCommand {
     })
   }
 
-  async findLatestSession (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  async findLatestSession (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const { data: sessions } = await this.listSessions(options)
 
     return sessions[sessions.length - 1]
   }
 
-  getReplaySession (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  getReplaySession (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const path = `/api/v1/videos/${options.videoId}/live-session`
 
     return this.getRequestBody<LiveVideoSession>({
@@ -78,10 +85,12 @@ export class LiveCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  update (options: OverrideCommandOptions & {
-    videoId: number | string
-    fields: LiveVideoUpdate
-  }) {
+  update (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      fields: LiveVideoUpdate
+    }
+  ) {
     const { videoId, fields } = options
     const path = '/api/v1/videos/live'
 
@@ -95,9 +104,11 @@ export class LiveCommand extends AbstractCommand {
     })
   }
 
-  async create (options: OverrideCommandOptions & {
-    fields: LiveVideoCreate
-  }) {
+  async create (
+    options: OverrideCommandOptions & {
+      fields: Omit<LiveVideoCreate, 'thumbnailfile' | 'previewfile'> & { thumbnailfile?: string | Blob, previewfile?: string | Blob }
+    }
+  ) {
     const { fields } = options
     const path = '/api/v1/videos/live'
 
@@ -118,13 +129,15 @@ export class LiveCommand extends AbstractCommand {
     return body.video
   }
 
-  async quickCreate (options: OverrideCommandOptions & {
-    saveReplay: boolean
-    permanentLive: boolean
-    name?: string
-    privacy?: VideoPrivacyType
-    videoPasswords?: string[]
-  }) {
+  async quickCreate (
+    options: OverrideCommandOptions & {
+      saveReplay: boolean
+      permanentLive: boolean
+      name?: string
+      privacy?: VideoPrivacyType
+      videoPasswords?: string[]
+    }
+  ) {
     const { name = 'live', saveReplay, permanentLive, privacy = VideoPrivacy.PUBLIC, videoPasswords } = options
 
     const replaySettings = privacy === VideoPrivacy.PASSWORD_PROTECTED
@@ -153,22 +166,26 @@ export class LiveCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  async sendRTMPStreamInVideo (options: OverrideCommandOptions & {
-    videoId: number | string
-    fixtureName?: string
-    copyCodecs?: boolean
-  }) {
+  async sendRTMPStreamInVideo (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      fixtureName?: string
+      copyCodecs?: boolean
+    }
+  ) {
     const { videoId, fixtureName, copyCodecs } = options
     const videoLive = await this.get({ videoId })
 
     return sendRTMPStream({ rtmpBaseUrl: videoLive.rtmpUrl, streamKey: videoLive.streamKey, fixtureName, copyCodecs })
   }
 
-  async runAndTestStreamError (options: OverrideCommandOptions & {
-    videoId: number | string
-    shouldHaveError: boolean
-    fixtureName?: string
-  }) {
+  async runAndTestStreamError (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      shouldHaveError: boolean
+      fixtureName?: string
+    }
+  ) {
     const command = await this.sendRTMPStreamInVideo(options)
 
     return testFfmpegStreamError(command, options.shouldHaveError)
@@ -176,35 +193,43 @@ export class LiveCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  waitUntilPublished (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  waitUntilPublished (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const { videoId } = options
     return this.waitUntilState({ videoId, state: VideoState.PUBLISHED })
   }
 
-  waitUntilWaiting (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  waitUntilWaiting (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const { videoId } = options
     return this.waitUntilState({ videoId, state: VideoState.WAITING_FOR_LIVE })
   }
 
-  waitUntilEnded (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  waitUntilEnded (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const { videoId } = options
     return this.waitUntilState({ videoId, state: VideoState.LIVE_ENDED })
   }
 
-  async waitUntilSegmentGeneration (options: OverrideCommandOptions & {
-    server: PeerTubeServer
-    videoUUID: string
-    playlistNumber: number
-    segment: number
-    objectStorage?: ObjectStorageCommand
-    objectStorageBaseUrl?: string
-  }) {
+  async waitUntilSegmentGeneration (
+    options: OverrideCommandOptions & {
+      server: PeerTubeServer
+      videoUUID: string
+      playlistNumber: number
+      segment: number
+      objectStorage?: ObjectStorageCommand
+      objectStorageBaseUrl?: string
+    }
+  ) {
     const {
       server,
       objectStorage,
@@ -253,9 +278,11 @@ export class LiveCommand extends AbstractCommand {
     }
   }
 
-  async waitUntilReplacedByReplay (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  async waitUntilReplacedByReplay (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     let video: VideoDetails
 
     do {
@@ -267,12 +294,14 @@ export class LiveCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getSegmentFile (options: OverrideCommandOptions & {
-    videoUUID: string
-    playlistNumber: number
-    segment: number
-    objectStorage?: ObjectStorageCommand
-  }) {
+  getSegmentFile (
+    options: OverrideCommandOptions & {
+      videoUUID: string
+      playlistNumber: number
+      segment: number
+      objectStorage?: ObjectStorageCommand
+    }
+  ) {
     const { playlistNumber, segment, videoUUID, objectStorage } = options
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
@@ -291,11 +320,13 @@ export class LiveCommand extends AbstractCommand {
     })
   }
 
-  getPlaylistFile (options: OverrideCommandOptions & {
-    videoUUID: string
-    playlistName: string
-    objectStorage?: ObjectStorageCommand
-  }) {
+  getPlaylistFile (
+    options: OverrideCommandOptions & {
+      videoUUID: string
+      playlistName: string
+      objectStorage?: ObjectStorageCommand
+    }
+  ) {
     const { playlistName, videoUUID, objectStorage } = options
 
     const baseUrl = objectStorage
@@ -315,9 +346,11 @@ export class LiveCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  async countPlaylists (options: OverrideCommandOptions & {
-    videoUUID: string
-  }) {
+  async countPlaylists (
+    options: OverrideCommandOptions & {
+      videoUUID: string
+    }
+  ) {
     const basePath = this.server.servers.buildDirectory('streaming-playlists')
     const hlsPath = join(basePath, 'hls', options.videoUUID)
 
@@ -326,10 +359,12 @@ export class LiveCommand extends AbstractCommand {
     return files.filter(f => f.endsWith('.m3u8')).length
   }
 
-  private async waitUntilState (options: OverrideCommandOptions & {
-    videoId: number | string
-    state: VideoStateType
-  }) {
+  private async waitUntilState (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      state: VideoStateType
+    }
+  ) {
     let video: VideoDetails
 
     do {

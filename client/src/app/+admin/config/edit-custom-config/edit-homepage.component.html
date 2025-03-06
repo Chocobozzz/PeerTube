@@ -19,7 +19,7 @@
             inputId="instanceCustomHomepageContent" formControlName="content"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors()['instanceCustomHomepage.content']"
-            dir="ltr"
+            dir="ltr" monospace="true"
           ></my-markdown-textarea>
 
           <div *ngIf="formErrors().instanceCustomHomepage.content" class="form-error" role="alert">{{ formErrors().instanceCustomHomepage.content }}</div>

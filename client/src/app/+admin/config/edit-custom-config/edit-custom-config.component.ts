@@ -439,23 +439,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     this.router.navigate([], { fragment: this.activeNav })
   }
 
-  grabAllErrors (errorObjectArg?: any) {
-    const errorObject = errorObjectArg || this.formErrors
-
-    let acc: string[] = []
-
-    for (const key of Object.keys(errorObject)) {
-      const value = errorObject[key]
-      if (!value) continue
-
-      if (typeof value === 'string') {
-        acc.push(value)
-      } else {
-        acc = acc.concat(this.grabAllErrors(value))
-      }
-    }
-
-    return acc
+  grabAllErrors () {
+    return this.formReactiveService.grabAllErrors(this.formErrors)
   }
 
   private updateForm () {

@@ -1,16 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { Params, RouterLink, RouterLinkActive } from '@angular/router'
-import {
-  AuthService,
-  AuthStatus,
-  AuthUser,
-  HooksService,
-  MenuService,
-  RedirectService,
-  ServerService,
-  UserService
-} from '@app/core'
+import { AuthService, AuthStatus, AuthUser, HooksService, MenuService, RedirectService, ServerService, UserService } from '@app/core'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
@@ -193,7 +184,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         },
 
         {
-          path: '/videos/upload',
+          path: '/videos/publish',
           icon: 'upload' as GlobalIconName,
           label: $localize`Publish`,
           isPrimaryButton: true,

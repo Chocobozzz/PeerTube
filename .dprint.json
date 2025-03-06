@@ -61,7 +61,8 @@
     "exportDeclaration.forceMultiLine": "never",
     "importDeclaration.forceMultiLine": "never",
     "arrayExpression.spaceAround": true,
-    "arrayPattern.spaceAround": true
+    "arrayPattern.spaceAround": true,
+    "importDeclaration.preferSingleLine": true
   },
   "json": {},
   "markdown": {},

@@ -1,0 +1,86 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+h2 {
+  font-weight: $font-bold;
+  color: pvar(--fg-350);
+  line-height: 1;
+
+  @include font-size(2rem);
+  @include rfs(2rem, margin-bottom);
+
+  my-global-icon {
+    @include global-icon-size(28px);
+    @include margin-right(0.5rem);
+  }
+
+  @include on-small-main-col {
+    text-align: center;
+  }
+}
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
+my-peertube-checkbox {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+my-timestamp-input {
+  width: 100px;
+}
+
+input[type=text] {
+  display: block;
+
+  @include peertube-input-text(100%);
+}
+
+p-calendar {
+  display: block;
+
+  ::ng-deep {
+    .p-calendar {
+      width: 100%;
+    }
+  }
+}
+
+.form-columns {
+  display: grid;
+  grid-template-columns: fit-content(66%) 1fr;
+
+  @include rfs(40px, grid-gap);
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &.reverse {
+    > *:nth-child(1) {
+      order: 1;
+    }
+
+    > *:nth-child(2) {
+      order: -1;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plugin-fields {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 2.5rem;
+
+  > *:nth-child(2n + 1) {
+    width: 66%
+  }
+}

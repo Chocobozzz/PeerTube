@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
-import { getAbsoluteAPIUrl } from '@app/helpers/utils'
-import type * as LinkifyJS from 'linkifyjs'
+import { getAPIUrl } from '@app/helpers/utils'
 import type LinkifyHTML from 'linkify-html'
+import type * as LinkifyJS from 'linkifyjs'
 
 @Injectable()
 export class LinkifierService {
@@ -19,7 +19,7 @@ export class LinkifierService {
     },
     formatHref: {
       mention: (href: string) => {
-        return getAbsoluteAPIUrl() + '/services/redirect/accounts/' + href.substring(1)
+        return getAPIUrl() + '/services/redirect/accounts/' + href.substring(1)
       }
     }
   }

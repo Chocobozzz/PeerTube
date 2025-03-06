@@ -63,78 +63,80 @@ if (environment.production) {
 
 logger.registerServerSending(environment.apiUrl)
 
-const bootstrap = () => bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+const bootstrap = () =>
+  bootstrapApplication(AppComponent, {
+    providers: [
+      provideZoneChangeDetection({ eventCoalescing: true }),
 
-    importProvidersFrom(
-      BrowserModule,
-      BrowserAnimationsModule,
-      ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
-    ),
+      importProvidersFrom(
+        BrowserModule,
+        BrowserAnimationsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+      ),
 
-    provideHttpClient(),
+      provideHttpClient(),
 
-    importProvidersFrom(
-      LoadingBarHttpClientModule,
-      LoadingBarModule,
-      ToastModule,
-      NgbModalModule
-    ),
+      importProvidersFrom(
+        LoadingBarHttpClientModule,
+        LoadingBarModule,
+        ToastModule,
+        NgbModalModule
+      ),
 
-    getCoreProviders(),
-    getMainProviders(),
-    getFormProviders(),
+      getCoreProviders(),
+      getMainProviders(),
+      getFormProviders(),
 
-    PreloadSelectedModulesList,
-    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+      PreloadSelectedModulesList,
+      { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
 
-    provideRouter(routes,
-      withPreloading(PreloadSelectedModulesList),
-      withInMemoryScrolling({
-        anchorScrolling: 'disabled',
-        // Redefined in app component
-        scrollPositionRestoration: 'disabled'
+      provideRouter(
+        routes,
+        withPreloading(PreloadSelectedModulesList),
+        withInMemoryScrolling({
+          anchorScrolling: 'disabled',
+          // Redefined in app component
+          scrollPositionRestoration: 'disabled'
+        })
+      ),
+
+      {
+        provide: APP_BASE_HREF,
+        useValue: '/'
+      },
+      provideAppInitializer(() => {
+        const initializerFn = loadConfigFactory(inject(ServerService), inject(PluginService), inject(ThemeService), inject(RedirectService))
+
+        return initializerFn()
       })
-    ),
-
-    {
-      provide: APP_BASE_HREF,
-      useValue: '/'
-    },
-    provideAppInitializer(() => {
-      const initializerFn = loadConfigFactory(inject(ServerService), inject(PluginService), inject(ThemeService), inject(RedirectService))
-
-      return initializerFn()
-    })
-  ]
-})
-  .then(bootstrapModule => {
-    if (!environment.production) {
-      const applicationRef = bootstrapModule.injector.get(ApplicationRef)
-      const componentRef = applicationRef.components[0]
-
-      // allows to run `ng.profiler.timeChangeDetection();`
-      enableDebugTools(componentRef)
-    }
-
-    return bootstrapModule
+    ]
   })
-  .catch(err => {
-    try {
-      logger.error(err)
-    } catch (err2) {
-      console.error('Cannot log error', { err, err2 })
-    }
+    .then(bootstrapModule => {
+      if (!environment.production) {
+        const applicationRef = bootstrapModule.injector.get(ApplicationRef)
+        const componentRef = applicationRef.components[0]
 
-    // Ensure we display an "incompatible message" on Angular bootstrap error
-    setTimeout(() => {
-      if (document.querySelector('my-app').innerHTML === '') {
-        throw err
+        // allows to run `ng.profiler.timeChangeDetection();`
+        enableDebugTools(componentRef)
       }
-    }, 1000)
 
-    return null as any
-  })
+      return bootstrapModule
+    })
+    .catch(err => {
+      try {
+        logger.error(err)
+      } catch (err2) {
+        console.error('Cannot log error', { err, err2 })
+      }
+
+      // Ensure we display an "incompatible message" on Angular bootstrap error
+      setTimeout(() => {
+        if (document.querySelector('my-app').innerHTML === '') {
+          throw err
+        }
+      }, 1000)
+
+      return null as any
+    })
 
 bootstrap()

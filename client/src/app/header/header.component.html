@@ -8,14 +8,14 @@
   </button>
 </div>
 
-<div class="root">
+<div class="root" [ngClass]="{ 'search-hidden': searchHidden }">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
 
     <span class="icon-logo"></span>
     <span class="instance-name">{{ instanceName }}</span>
   </a>
 
-  <my-search-typeahead [hidden]="!isLoaded()"></my-search-typeahead>
+  <my-search-typeahead *ngIf="!searchHidden" [hidden]="!isLoaded()"></my-search-typeahead>
 
   <div class="d-flex align-items-center buttons-container" [hidden]="!isLoaded()">
     @if (!loggedIn) {

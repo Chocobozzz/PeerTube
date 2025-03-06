@@ -1,11 +1,27 @@
 import { NgClass, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common'
-import { Component, inject, input, output, viewChild } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ScreenService } from '@app/core'
+import { getAPIUrl } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { VideoState } from '@peertube/peertube-models'
+import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Video } from '../shared-main/video/video.model'
+
+export type VideoThumbnailInput = Pick<
+  VideoServerModel,
+  | 'duration'
+  | 'id'
+  | 'uuid'
+  | 'shortUUID'
+  | 'isLive'
+  | 'state'
+  | 'previewPath'
+  | 'previewUrl'
+  | 'thumbnailPath'
+  | 'thumbnailUrl'
+  | 'userHistory'
+>
 
 @Component({
   selector: 'my-video-thumbnail',
@@ -13,12 +29,10 @@ import { Video } from '../shared-main/video/video.model'
   templateUrl: './video-thumbnail.component.html',
   imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
 })
-export class VideoThumbnailComponent {
+export class VideoThumbnailComponent implements OnChanges {
   private screenService = inject(ScreenService)
 
-  readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
-
-  readonly video = input<Video>(undefined)
+  readonly video = input.required<VideoThumbnailInput>()
   readonly nsfw = input(false)
 
   readonly videoRouterLink = input<string | any[]>(undefined)
@@ -28,19 +42,29 @@ export class VideoThumbnailComponent {
   readonly videoHref = input<string>(undefined)
   readonly videoTarget = input<string>(undefined)
 
-  readonly displayWatchLaterPlaylist = input<boolean>(undefined)
-  readonly inWatchLaterPlaylist = input<boolean>(undefined)
+  readonly displayWatchLaterPlaylist = input<boolean, boolean | string>(false, { transform: booleanAttribute })
+  readonly inWatchLaterPlaylist = input<boolean, boolean | string>(false, { transform: booleanAttribute })
+  readonly playOverlay = input<boolean, boolean | string>(true, { transform: booleanAttribute })
 
   readonly ariaLabel = input.required<string>()
 
+  readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
   readonly watchLaterClick = output<boolean>()
 
   addToWatchLaterText: string
   removeFromWatchLaterText: string
 
+  durationLabel: string
+
   constructor () {
     this.addToWatchLaterText = $localize`Add to watch later`
     this.removeFromWatchLaterText = $localize`Remove from watch later`
+  }
+
+  ngOnChanges () {
+    this.durationLabel = this.video().duration
+      ? Video.buildDurationLabel(this.video())
+      : undefined
   }
 
   getWatchIconText () {
@@ -67,10 +91,10 @@ export class VideoThumbnailComponent {
     if (!video) return ''
 
     if (this.screenService.isInMobileView()) {
-      return video.previewUrl
+      return video.previewUrl || getAPIUrl() + video.previewPath
     }
 
-    return video.thumbnailUrl
+    return video.thumbnailUrl || getAPIUrl() + video.thumbnailPath
   }
 
   getProgressPercent () {
@@ -83,7 +107,7 @@ export class VideoThumbnailComponent {
   }
 
   getDurationOverlayLabel () {
-    return $localize`Video duration is ${this.video().durationLabel}`
+    return $localize`Video duration is ${this.getDurationLabel()}`
   }
 
   getVideoRouterLink () {
@@ -100,5 +124,9 @@ export class VideoThumbnailComponent {
     this.watchLaterTooltip().close()
 
     return false
+  }
+
+  getDurationLabel () {
+    return this.durationLabel
   }
 }

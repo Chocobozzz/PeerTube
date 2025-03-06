@@ -1,8 +1,17 @@
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
-import { AuthService, ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService, UserService } from '@app/core'
+import { inject, Injectable } from '@angular/core'
+import {
+  AuthService,
+  ComponentPaginationLight,
+  ConfirmService,
+  RestExtractor,
+  RestPagination,
+  RestService,
+  ServerService,
+  UserService
+} from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { arrayify, buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
+import { arrayify, buildDownloadFilesUrl, exists } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -21,6 +30,7 @@ import {
   VideoIncludeType,
   VideoPrivacy,
   VideoPrivacyType,
+  VideosCommonQuery,
   Video as VideoServerModel,
   VideoSortField,
   VideoSource,
@@ -36,7 +46,6 @@ import { AccountService } from '../account/account.service'
 import { VideoChannel } from '../channel/video-channel.model'
 import { VideoChannelService } from '../channel/video-channel.service'
 import { VideoDetails } from './video-details.model'
-import { VideoEdit } from './video-edit.model'
 import { VideoPasswordService } from './video-password.service'
 import { Video } from './video.model'
 
@@ -86,42 +95,10 @@ export class VideoService {
     )
   }
 
-  updateVideo (video: VideoEdit) {
-    const language = video.language || null
-    const licence = video.licence || null
-    const category = video.category || null
-    const description = video.description || null
-    const support = video.support || null
-    const scheduleUpdate = video.scheduleUpdate || null
-    const originallyPublishedAt = video.originallyPublishedAt || null
+  updateVideo (id: number | string, video: VideoUpdate) {
+    const data = objectToFormData(video)
 
-    const body: VideoUpdate = {
-      name: video.name,
-      category,
-      licence,
-      language,
-      support,
-      description,
-      channelId: video.channelId,
-      privacy: video.privacy,
-      videoPasswords: video.privacy === VideoPrivacy.PASSWORD_PROTECTED
-        ? [ video.videoPassword ]
-        : undefined,
-      tags: video.tags,
-      nsfw: video.nsfw,
-      waitTranscoding: video.waitTranscoding,
-      commentsPolicy: video.commentsPolicy,
-      downloadEnabled: video.downloadEnabled,
-      thumbnailfile: video.thumbnailfile,
-      previewfile: video.previewfile,
-      pluginData: video.pluginData,
-      scheduleUpdate,
-      originallyPublishedAt
-    }
-
-    const data = objectToFormData(body)
-
-    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, data)
+    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${id}`, data)
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
@@ -133,38 +110,37 @@ export class VideoService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (options: {
-    videoPagination: ComponentPaginationLight
-    sort: VideoSortField
+  listMyVideos (options: {
+    videoPagination?: ComponentPaginationLight
+    restPagination?: RestPagination
+
+    sort: VideoSortField | SortMeta
     userChannels?: VideoChannelServerModel[]
+
+    isLive?: boolean
+    privacyOneOf?: VideoPrivacyType[]
+    channelNameOneOf: string[]
     search?: string
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, userChannels = [], search } = options
+    const { videoPagination, restPagination, sort, channelNameOneOf, privacyOneOf, search } = options
 
-    const pagination = this.restService.componentToRestPagination(videoPagination)
+    const pagination = videoPagination
+      ? this.restService.componentToRestPagination(videoPagination)
+      : restPagination
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
+    params = this.restService.addRestGetParams(params, pagination, this.buildListSort(sort))
 
-    if (search) {
-      const filters = this.restService.parseQueryStringFilter(search, {
-        isLive: {
-          prefix: 'isLive:',
-          isBoolean: true
-        },
-        channelId: {
-          prefix: 'channel:',
-          handler: (name: string) => {
-            const channel = userChannels.find(c => c.name === name)
+    const commonFilters: VideosCommonQuery = {}
 
-            if (channel) return channel.id
+    if (exists(options.isLive)) commonFilters.isLive = options.isLive
+    if (options.search) commonFilters.search = search
+    if (options.privacyOneOf) commonFilters.privacyOneOf = privacyOneOf
 
-            return undefined
-          }
-        }
-      })
+    params = this.restService.addObjectParams(params, commonFilters)
 
-      params = this.restService.addObjectParams(params, filters)
+    if (channelNameOneOf !== undefined && channelNameOneOf.length !== 0) {
+      params = this.restService.addArrayParams(params, 'channelNameOneOf', channelNameOneOf)
     }
 
     return this.authHttp

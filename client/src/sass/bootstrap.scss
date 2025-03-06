@@ -346,6 +346,11 @@ body {
     border-top-right-radius: pvar(--input-border-radius) !important;
     border-bottom-right-radius: pvar(--input-border-radius) !important;
   }
+
+  .first-in-group {
+    border-top-left-radius: pvar(--input-border-radius) !important;
+    border-bottom-left-radius: pvar(--input-border-radius) !important;
+  }
 }
 
 .has-clear {

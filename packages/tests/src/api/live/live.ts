@@ -5,7 +5,6 @@ import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import {
   HttpStatusCode,
   LiveVideo,
-  LiveVideoCreate,
   LiveVideoLatencyMode,
   VideoCommentPolicy,
   VideoDetails,
@@ -79,28 +78,28 @@ describe('Test live', function () {
     it('Should create a live with the appropriate parameters', async function () {
       this.timeout(20000)
 
-      const attributes: LiveVideoCreate = {
-        category: 1,
-        licence: 2,
-        language: 'fr',
-        description: 'super live description',
-        support: 'support field',
-        channelId: servers[0].store.channel.id,
-        nsfw: false,
-        waitTranscoding: false,
-        name: 'my super live',
-        tags: [ 'tag1', 'tag2' ],
-        commentsPolicy: VideoCommentPolicy.DISABLED,
-        downloadEnabled: false,
-        saveReplay: true,
-        replaySettings: { privacy: VideoPrivacy.PUBLIC },
-        latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
-        privacy: VideoPrivacy.PUBLIC,
-        previewfile: 'video_short1-preview.webm.jpg',
-        thumbnailfile: 'video_short1.webm.jpg'
-      }
-
-      const live = await commands[0].create({ fields: attributes })
+      const live = await commands[0].create({
+        fields: {
+          category: 1,
+          licence: 2,
+          language: 'fr',
+          description: 'super live description',
+          support: 'support field',
+          channelId: servers[0].store.channel.id,
+          nsfw: false,
+          waitTranscoding: false,
+          name: 'my super live',
+          tags: [ 'tag1', 'tag2' ],
+          commentsPolicy: VideoCommentPolicy.DISABLED,
+          downloadEnabled: false,
+          saveReplay: true,
+          replaySettings: { privacy: VideoPrivacy.PUBLIC },
+          latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
+          privacy: VideoPrivacy.PUBLIC,
+          previewfile: 'video_short1-preview.webm.jpg',
+          thumbnailfile: 'video_short1.webm.jpg'
+        }
+      })
       liveVideoUUID = live.uuid
 
       await waitJobs(servers)
@@ -153,14 +152,14 @@ describe('Test live', function () {
     it('Should have a default preview and thumbnail', async function () {
       this.timeout(20000)
 
-      const attributes: LiveVideoCreate = {
-        name: 'default live thumbnail',
-        channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.UNLISTED,
-        nsfw: true
-      }
-
-      const live = await commands[0].create({ fields: attributes })
+      const live = await commands[0].create({
+        fields: {
+          name: 'default live thumbnail',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.UNLISTED,
+          nsfw: true
+        }
+      })
       const videoId = live.uuid
 
       await waitJobs(servers)
@@ -675,15 +674,15 @@ describe('Test live', function () {
     let beforeServerRestart: Date
 
     async function createLiveWrapper (options: { saveReplay: boolean, permanent: boolean }) {
-      const liveAttributes: LiveVideoCreate = {
-        name: 'live video',
-        channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.PUBLIC,
-        saveReplay: options.saveReplay,
-        permanentLive: options.permanent
-      }
-
-      const { uuid } = await commands[0].create({ fields: liveAttributes })
+      const { uuid } = await commands[0].create({
+        fields: {
+          name: 'live video',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          saveReplay: options.saveReplay,
+          permanentLive: options.permanent
+        }
+      })
       return uuid
     }
 

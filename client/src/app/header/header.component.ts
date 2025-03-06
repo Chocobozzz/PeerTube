@@ -1,16 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
-import {
-  AuthService,
-  AuthStatus,
-  AuthUser,
-  HotkeysService,
-  MenuService,
-  RedirectService,
-  ScreenService,
-  ServerService
-} from '@app/core'
+import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/menu/quick-settings-modal.component'
@@ -27,6 +18,7 @@ import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
 import { SearchTypeaheadComponent } from './search-typeahead.component'
+import { HeaderService } from './header.service'
 
 @Component({
   selector: 'my-header',
@@ -59,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private modalService = inject(PeertubeModalService)
   private router = inject(Router)
   private menu = inject(MenuService)
+  private headerService = inject(HeaderService)
 
   private static LS_HIDE_MOBILE_MSG = 'hide-mobile-msg'
 
@@ -77,10 +70,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   androidAppUrl = ''
   iosAppUrl = ''
 
+  searchHidden = false
+
   private config: ServerConfig
   private htmlConfig: HTMLServerConfig
 
   private quickSettingsModalSub: Subscription
+  private getSearchHiddenSub: Subscription
   private hotkeysSub: Subscription
   private authSub: Subscription
 
@@ -134,6 +130,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.quickSettingsModalSub = this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
 
+    this.getSearchHiddenSub = this.headerService.getSearchHiddenObs()
+      .subscribe(hidden => {
+        if (hidden) document.body.classList.add('global-search-hidden')
+        else document.body.classList.remove('global-search-hidden')
+
+        this.searchHidden = hidden
+      })
+
     this.setupMobileMsg()
   }
 
@@ -141,6 +145,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.quickSettingsModalSub) this.quickSettingsModalSub.unsubscribe()
     if (this.hotkeysSub) this.hotkeysSub.unsubscribe()
     if (this.authSub) this.authSub.unsubscribe()
+    if (this.getSearchHiddenSub) this.getSearchHiddenSub.unsubscribe()
   }
 
   // ---------------------------------------------------------------------------

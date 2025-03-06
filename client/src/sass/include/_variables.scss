@@ -21,8 +21,9 @@ $white: #fff;
 $button-font-size: 1rem;
 
 $header-height: 94px;
-$header-height-small-view: 74px;
-$header-height-mobile-view: 124px;
+$header-height-small-view: 78px;
+$header-height-mobile-view: 128px;
+$header-height-mobile-view-without-search: 80px;
 $header-mobile-msg-height: 48px;
 
 $menu-width: 248px;
@@ -61,6 +62,8 @@ $video-thumbnail-small-width: 125px;
 // ---------------------------------------------------------------------------
 
 $instance-img-radius: 31%;
+$channel-avatar-radius: 5px;
+$account-avatar-radius: 50%;
 
 // ---------------------------------------------------------------------------
 
@@ -84,7 +87,7 @@ $primeng-breakpoint: 960px;
 
 $variables: (
   --x-margin-content: var(--x-margin-content),
-  --main-col-width: var(--main-col-width),
+  --tmp-header-height: var(--tmp-header-height),
   --header-height: var(--header-height),
 
   --fg: var(--fg),
@@ -109,6 +112,8 @@ $variables: (
   --input-x-padding: var(--input-x-padding),
   --input-y-padding: var(--input-y-padding),
 
+  --textarea-x-padding: var(--textarea-x-padding),
+  --textarea-y-padding: var(--textarea-y-padding),
   --textarea-fg: var(--textarea-fg),
   --textarea-bg: var(--textarea-bg),
 
@@ -166,6 +171,9 @@ $variables: (
   --menu-bg-250: var(--menu-bg-250),
   --menu-bg-200: var(--menu-bg-200),
 
+  --menu-margin-left: var(--menu-margin-left),
+  --menu-width: var(--menu-width),
+
   --on-primary: var(--on-primary),
   --on-primary-700: var(--on-primary-700),
   --on-primary-650: var(--on-primary-650),
@@ -204,8 +212,6 @@ $variables: (
   --alert-primary-fg: var(--alert-primary-fg),
   --alert-primary-bg: var(--alert-primary-bg),
   --alert-primary-border-color: var(--alert-primary-border-color),
-
-  --menu-margin-left: var(--menu-margin-left),
 
   --embed-fg: var(--embed-fg),
   --embed-big-play-bg: var(--embed-big-play-bg),
