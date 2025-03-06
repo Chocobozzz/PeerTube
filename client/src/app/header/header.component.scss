@@ -41,7 +41,7 @@
 .peertube-title {
   flex-shrink: 1;
   min-width: var(--co-logo-size);
-  flex-grow: 1;
+  flex-grow: 0;
   font-size: 24px;
   font-weight: $font-bold;
   color: inherit !important;
@@ -50,7 +50,8 @@
   min-height: 46px; // Prevent layout shifting when waiting for the right part of the header to load
 
   @include padding-left(18px);
-  @include margin-right(0.5rem);
+  @include padding-right(0.5rem);
+  @include margin-right(auto);
   @include disable-default-a-behaviour;
 }
 
