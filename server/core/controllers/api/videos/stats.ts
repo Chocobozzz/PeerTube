@@ -6,7 +6,8 @@ import {
   authenticate,
   videoOverallStatsValidator,
   videoRetentionStatsValidator,
-  videoTimeserieStatsValidator
+  videoTimeserieStatsValidator,
+  videoUserAgentStatsValidator
 } from '../../../middlewares/index.js'
 
 const statsRouter = express.Router()
@@ -27,6 +28,12 @@ statsRouter.get('/:videoId/stats/retention',
   authenticate,
   asyncMiddleware(videoRetentionStatsValidator),
   asyncMiddleware(getRetentionStats)
+)
+
+statsRouter.get('/:videoId/stats/user-agent',
+  authenticate,
+  asyncMiddleware(videoUserAgentStatsValidator),
+  asyncMiddleware(getUserAgentStats)
 )
 
 // ---------------------------------------------------------------------------
@@ -54,6 +61,14 @@ async function getRetentionStats (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const stats = await LocalVideoViewerModel.getRetentionStats(video)
+
+  return res.json(stats)
+}
+
+async function getUserAgentStats (req: express.Request, res: express.Response) {
+  const video = res.locals.videoAll
+
+  const stats = await LocalVideoViewerModel.getUserAgentStats(video)
 
   return res.json(stats)
 }
