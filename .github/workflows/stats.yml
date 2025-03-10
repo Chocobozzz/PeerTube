@@ -46,7 +46,7 @@ jobs:
         run: |
           sudo apt-get install chromium-browser
           sudo npm install -g lighthouse
-          lighthouse --chrome-flags="--headless" https://peertube2.cpy.re --output=json --output-path=./lighthouse.json
+          lighthouse --chrome-flags="--disable-gpu --no-sandbox --no-zygote" https://peertube2.cpy.re --output=json --output-path=./lighthouse.json
 
       - name: Display stats
         if: github.event_name != 'pull_request'
