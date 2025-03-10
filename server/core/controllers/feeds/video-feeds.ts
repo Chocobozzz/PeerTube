@@ -82,6 +82,13 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     author: { name, link: ownerLink },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
+
+    customXMLNS: [
+      {
+        name: 'podcast',
+        value: 'https://podcastindex.org/namespace/1.0'
+      }
+    ],
     customTags: videoChannel
       ? [ getPodcastFeedUrlCustomTag(videoChannel) ]
       : []
