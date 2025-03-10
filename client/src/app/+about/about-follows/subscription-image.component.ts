@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ServerService } from '@app/core'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
@@ -6,7 +7,8 @@ import { Actor } from '@app/shared/shared-main/account/actor.model'
   selector: 'my-subscription-image',
   templateUrl: './subscription-image.component.html',
   styleUrls: [ './subscription-image.component.scss' ],
-  standalone: true
+  standalone: true,
+  imports: [ CommonModule ]
 })
 export class SubscriptionImageComponent implements OnInit {
   private server = inject(ServerService)
