@@ -371,7 +371,7 @@ describe('Test syndication feeds', () => {
         const podcastUrlEl = xmlDoc.rss.channel['podcast:txt']
         expect(podcastUrlEl).to.exist
         expect(podcastUrlEl['@_purpose']).to.equal('p20url')
-        expect(podcastUrlEl['#text']).to.equal(servers[0].url + '/feeds/podcast/videos.xml?videoChannelId=' + videoChannelId)
+        expect(podcastUrlEl['#text']).to.equal(servers[1].url + '/feeds/podcast/videos.xml?videoChannelId=' + videoChannelId)
       })
 
       it('Should not have p20url podcast txt attribute with classic RSS feed without channel', async function () {
