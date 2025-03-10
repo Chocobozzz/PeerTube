@@ -8,7 +8,7 @@ import { HtmlRendererService } from '@app/core'
 export class Nl2BrPipe implements PipeTransform {
   private htmlRenderer = inject(HtmlRendererService)
 
-  transform (value: string): string {
-    return this.htmlRenderer.convertToBr(value)
+  transform (value: string, allowFormatting = false): string {
+    return this.htmlRenderer.convertToBr(value, allowFormatting)
   }
 }

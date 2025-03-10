@@ -14,8 +14,7 @@ input[type=text] {
 }
 
 .settings-button my-global-icon {
-  width: 18px;
-  height: 18px;
+  @include global-icon-size(18px);
 }
 
 .settings-panel {

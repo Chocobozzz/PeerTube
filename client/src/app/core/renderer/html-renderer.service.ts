@@ -60,11 +60,15 @@ export class HtmlRendererService {
     })
   }
 
-  convertToBr (text: string) {
+  convertToBr (text: string, allowFormatting = false) {
     const html = text.replace(/\r?\n/g, '<br />')
 
+    const additionalAllowed = allowFormatting
+      ? [ 'b', 'i', 'u', 'strong', 'em' ]
+      : []
+
     return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [ 'br' ]
+      ALLOWED_TAGS: [ ...additionalAllowed, 'br' ]
     })
   }
 
