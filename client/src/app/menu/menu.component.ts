@@ -65,6 +65,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   menuSections: MenuSection[] = []
   loggedIn: boolean
+  moreInfoLabel = $localize`More info`
 
   private user: AuthUser
   private canSeeVideoMakerBlock: boolean

@@ -58,6 +58,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   readonly loading = input(false, { transform: booleanAttribute })
   readonly disabled = input(false, { transform: booleanAttribute })
   readonly responsiveLabel = input(false, { transform: booleanAttribute })
+  readonly autoFontSize = input(false, { transform: booleanAttribute })
   readonly rounded = input(false, { transform: booleanAttribute })
 
   readonly labelContent = viewChild<ElementRef>('labelContent')
@@ -74,6 +75,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
 
   private buildClasses () {
     const isButtonLink = !!this.ptRouterLink() || !!this.href()
+    const label = this.getLabel() || ''
 
     this.classes = {
       'active': this.active(),
@@ -84,12 +86,17 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
       'tertiary-button': this.theme() === 'tertiary',
       'has-icon': !!this.icon(),
       'rounded-icon-button': !!this.rounded(),
-      'icon-only': !this.label() && !(this.labelContent()?.nativeElement as HTMLElement)?.innerText,
+      'icon-only': !label,
+      'label-xl': this.autoFontSize() && label.length > 10,
       'responsive-label': this.responsiveLabel()
     }
 
-    debugLogger('Built button classes', { classes: this.classes, labelContent: this.labelContent() })
+    debugLogger('Built button classes', { classes: this.classes, label, labelContent: this.labelContent() })
 
     this.cd.markForCheck()
+  }
+
+  private getLabel () {
+    return this.label() || (this.labelContent()?.nativeElement as HTMLElement)?.innerText
   }
 }

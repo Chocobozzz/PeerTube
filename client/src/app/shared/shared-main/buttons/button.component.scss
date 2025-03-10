@@ -2,6 +2,16 @@
 @use '_mixins' as *;
 @use '_button-mixins' as *;
 
+@mixin reduced-padding {
+  padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2) !important;
+}
+
+@mixin hide-label {
+  .button-label {
+    display: none;
+  }
+}
+
 :host {
   display: inline-block;
 }
@@ -23,27 +33,17 @@
       @include button-with-icon(24px, 0);
     }
   }
-}
 
-@mixin responsive-label {
-  .action-button {
-    padding: pvar(--input-y-padding) 8px !important;
-  }
+  &.label-xl {
+    font-size: 90%;
 
-  .button-label {
-    display: none;
-  }
-}
-
-// In a table, try to minimize the space taken by this button
-@media screen and (max-width: 1400px) {
-  :host-context(td) {
-    @include responsive-label;
+    @include reduced-padding();
   }
 }
 
 @media screen and (max-width: $small-view) {
   .responsive-label {
-    @include responsive-label;
+    @include hide-label();
+    @include reduced-padding();
   }
 }

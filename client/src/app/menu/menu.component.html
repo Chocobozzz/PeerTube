@@ -1,13 +1,13 @@
 <ng-template #moreInfoButton>
   <div class="more-info-btn-container">
     <a
-      class="more-info-btn peertube-button-link peertube-button-icon mt-2 d-block ellipsis" [ngClass]="{ 'icon-only': collapsed }"
+      class="more-info-btn peertube-button-link peertube-button-icon mt-2 d-block ellipsis" [ngClass]="{ 'icon-only': collapsed, 'label-xl': moreInfoLabel.length > 10 }"
       routerLink="/about" i18n-title title="More info" routerLinkActive="active"
     >
       <my-global-icon iconName="help"></my-global-icon>
 
       @if (!collapsed) {
-        <ng-container i18n>More info</ng-container>
+        {{ moreInfoLabel }}
       }
     </a>
   </div>
