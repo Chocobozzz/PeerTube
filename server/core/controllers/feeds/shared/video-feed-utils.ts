@@ -2,7 +2,7 @@ import { getChannelPodcastFeed } from '@peertube/peertube-core-utils'
 import { VideoIncludeType } from '@peertube/peertube-models'
 import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { REMOTE_SCHEME, WEBSERVER } from '@server/initializers/constants.js'
+import { WEBSERVER } from '@server/initializers/constants.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { getCategoryLabel } from '@server/models/video/formatter/index.js'
 import { DisplayOnlyForFollowerOptions } from '@server/models/video/sql/video/index.js'
@@ -67,14 +67,12 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
 }
 
 export function getPodcastFeedUrlCustomTag (videoChannel: MChannelHostOnly) {
-  const rootHost = videoChannel.Actor.getHost()
-  const originUrl = `${REMOTE_SCHEME.HTTP}://${rootHost}`
-
   return {
     name: 'podcast:txt',
     attributes: {
       purpose: 'p20url'
     },
-    value: getChannelPodcastFeed(originUrl, videoChannel)
+    // TODO: use remote channel podcast feed URL
+    value: getChannelPodcastFeed(WEBSERVER.URL, videoChannel)
   }
 }
