@@ -1800,6 +1800,7 @@ paths:
       tags:
         - User Imports
       parameters:
+        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
         - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
       requestBody:
@@ -1828,6 +1829,7 @@ paths:
       tags:
         - User Imports
       parameters:
+        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/resumableUploadId'
         - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
         - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
@@ -1860,6 +1862,7 @@ paths:
       tags:
         - User Imports
       parameters:
+        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/resumableUploadId'
         - name: Content-Length
           in: header
@@ -3700,6 +3703,7 @@ paths:
         - Video
         - Video Upload
       parameters:
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
         - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
       requestBody:
@@ -3739,6 +3743,7 @@ paths:
         - Video
         - Video Upload
       parameters:
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/resumableUploadId'
         - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
         - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
@@ -3789,6 +3794,7 @@ paths:
         - Video
         - Video Upload
       parameters:
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/resumableUploadId'
         - name: Content-Length
           in: header
@@ -4246,6 +4252,8 @@ paths:
           - user
       tags:
         - Video Captions
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
       requestBody:
         content:
           application/json:
@@ -8474,7 +8482,7 @@ components:
               type: string
               nullable: true
               example: |
-               	"**[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
+                "**[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
                 **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network,
                 based on free/libre software!*\r\n\r\n**Animation Produced by:** [LILA](https://libreart.info) - [ZeMarmot Team](https://film.zemarmot.net)\r\n
                 *Directed by* Aryeom\r\n*Assistant* Jehan\r\n**Licence**: [CC-By-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)\r\n\r\n
