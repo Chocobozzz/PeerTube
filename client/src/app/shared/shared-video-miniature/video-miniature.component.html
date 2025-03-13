@@ -30,7 +30,7 @@
 
       <div class="owner-container" *ngIf="displayOptions().by">
         <my-link
-          class="owner-label" className="ellipsis"
+          class="owner-label ellipsis"
           [internalLink]="ownerRouterLink" [href]="ownerHref" [target]="ownerTarget" inheritParentStyle="true"
           [ariaLabel]="getAriaLabel()"
           [title]="displayOwnerAccount() ? authorAccount : authorChannel"
