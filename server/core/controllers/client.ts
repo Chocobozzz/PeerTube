@@ -11,6 +11,7 @@ import { currentDir, root } from '@peertube/peertube-node-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants.js'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/html/client-html.js'
 import { asyncMiddleware, buildRateLimiter, embedCSP } from '../middlewares/index.js'
+import { VideoModel } from '@server/models/video/video.js'
 
 const clientsRouter = express.Router()
 
@@ -146,6 +147,11 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
   return res.status(HttpStatusCode.NOT_FOUND_404).end()
 }
 
+const botUserAgents = [
+  "Discordbot",
+  "Telegram"
+]
+
 async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Response) {
   const allowParameters = { req }
 
@@ -155,15 +161,29 @@ async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Re
     'filter:html.embed.video.allowed.result'
   )
 
+  let html: string = allowedResult?.html || ''
   if (!allowedResult || allowedResult.allowed !== true) {
     logger.info('Embed is not allowed.', { allowedResult })
 
-    return sendHTML(allowedResult?.html || '', res)
+    return sendHTML(html, res)
   }
 
-  const html = await ClientHtml.getVideoEmbedHTML(req.params.id)
+  try {
+    const reqUserAgent = req.get('User-Agent') || ''
+    if (botUserAgents.some(agent => reqUserAgent.includes(agent))) {
+      const p = await VideoModel.loadWithFiles(req.params.id)
+      const file = p.VideoFiles.at(0)
+      if (file) {
+        return res.status(HttpStatusCode.TEMPORARY_REDIRECT_307).redirect(file.fileUrl)
+      }
+    }
 
-  return sendHTML(html, res)
+    html = await ClientHtml.getVideoEmbedHTML(req.params.id)
+  } catch (error) {
+    logger.error('Error in generateVideoEmbedHtmlPage', { error })
+  } finally {
+    return sendHTML(html, res)
+  }
 }
 
 async function generateVideoPlaylistEmbedHtmlPage (req: express.Request, res: express.Response) {
