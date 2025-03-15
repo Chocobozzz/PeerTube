@@ -148,8 +148,8 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
 }
 
 const botUserAgents = [
-  "Discordbot",
-  "Telegram"
+  'Discordbot',
+  'Telegram'
 ]
 
 async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Response) {
@@ -169,7 +169,7 @@ async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Re
   }
 
   try {
-    const reqUserAgent = req.get('User-Agent') || ''
+    const reqUserAgent = req.get('User-Agent') || req.get('user-agent') || ''
     if (botUserAgents.some(agent => reqUserAgent.includes(agent))) {
       const p = await VideoModel.loadWithFiles(req.params.id)
       const file = p.VideoFiles.at(0)
@@ -179,9 +179,10 @@ async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Re
     }
 
     html = await ClientHtml.getVideoEmbedHTML(req.params.id)
+
+    return sendHTML(html, res)
   } catch (error) {
     logger.error('Error in generateVideoEmbedHtmlPage', { error })
-  } finally {
     return sendHTML(html, res)
   }
 }
