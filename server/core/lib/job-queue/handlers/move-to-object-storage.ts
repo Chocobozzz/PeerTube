@@ -20,7 +20,7 @@ export async function processMoveToObjectStorage (job: Job) {
   const payload = job.data as MoveStoragePayload
 
   if (isMoveVideoStoragePayload(payload)) { // Move all video related files
-    logger.info('Moving video %s to object storage in job %s.', payload.videoUUID, job.id)
+    logger.info(`Moving video ${payload.videoUUID} to object storage in job ${job.id}`, lTagsBase(payload.videoUUID))
 
     await moveVideoToStorageJob({
       jobId: job.id,
@@ -39,7 +39,7 @@ export async function processMoveToObjectStorage (job: Job) {
       moveToFailedState: moveToFailedMoveToObjectStorageState
     })
   } else if (isMoveCaptionPayload(payload)) { // Only caption file
-    logger.info(`Moving video caption ${payload.captionId} to object storage in job ${job.id}.`)
+    logger.info(`Moving video caption ${payload.captionId} to object storage in job ${job.id}.`, lTagsBase(payload.captionId))
 
     await moveCaptionToStorageJob({
       jobId: job.id,

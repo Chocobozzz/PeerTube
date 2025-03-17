@@ -19,7 +19,6 @@ export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode' | 'pendi
     }
   ]
 })
-
 export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   @CreatedAt
   createdAt: Date
@@ -70,7 +69,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
     const amount = forceNumber(amountArg)
 
-    const [ result ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    const [ result ] = await VideoJobInfoModel.sequelize.query(
+      `
     INSERT INTO "videoJobInfo" ("videoId", "${column}", "createdAt", "updatedAt")
     SELECT
       "video"."id" AS "videoId", ${amount}, NOW(), NOW()
@@ -84,7 +84,9 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
       "updatedAt" = NOW()
     RETURNING
       "${column}"
-    `, options)
+    `,
+      options
+    )
 
     return result[column]
   }
@@ -92,7 +94,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const result = await VideoJobInfoModel.sequelize.query(`
+    const result = await VideoJobInfoModel.sequelize.query(
+      `
     UPDATE
       "videoJobInfo"
     SET
@@ -103,7 +106,9 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
       "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
     RETURNING
       "${column}";
-    `, options)
+    `,
+      options
+    )
 
     if (result.length === 0) return undefined
 
@@ -113,7 +118,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   static async abortAllTasks (videoUUID: string, column: VideoJobInfoColumnType): Promise<void> {
     const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE, bind: { videoUUID } }
 
-    await VideoJobInfoModel.sequelize.query(`
+    await VideoJobInfoModel.sequelize.query(
+      `
     UPDATE
       "videoJobInfo"
     SET
@@ -122,6 +128,8 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     FROM "video"
     WHERE
       "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
-    `, options)
+    `,
+      options
+    )
   }
 }

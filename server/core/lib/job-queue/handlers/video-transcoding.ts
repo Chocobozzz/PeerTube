@@ -21,7 +21,7 @@ import { VideoModel } from '../../../models/video/video.js'
 
 type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
-const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } = {
+const handlers: { [id in VideoTranscodingPayload['type']]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
   'new-resolution-to-web-video': handleNewWebVideoResolutionJob,
   'merge-audio-to-web-video': handleWebVideoMergeAudioJob,
@@ -37,7 +37,7 @@ async function processVideoTranscoding (job: Job) {
   const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id, lTags(payload.videoUUID))
+    logger.info(`Do not process job ${job.id}, video does not exist.`, lTags(payload.videoUUID))
     return undefined
   }
 

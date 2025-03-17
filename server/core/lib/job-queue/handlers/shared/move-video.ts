@@ -39,7 +39,7 @@ export async function moveVideoToStorageJob (options: {
   const video = await VideoModel.loadWithFiles(videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Can\'t process job %d, video does not exist.', jobId, lTagsBase(videoUUID))
+    logger.info(`Can't process job ${jobId}, video does not exist.`, lTagsBase(videoUUID))
     fileMutexReleaser()
     return undefined
   }
@@ -55,27 +55,30 @@ export async function moveVideoToStorageJob (options: {
     }
 
     if (video.VideoFiles) {
-      logger.debug('Moving %d web video files for video %s.', video.VideoFiles.length, video.uuid, lTags)
+      logger.debug(`Moving ${video.VideoFiles.length} web video files for video ${video.uuid}.`, lTags)
 
       await moveWebVideoFiles(video)
     }
 
     if (video.VideoStreamingPlaylists) {
-      logger.debug('Moving HLS playlist of %s.', video.uuid, lTags)
+      logger.debug(`Moving HLS playlist of ${video.uuid}.`, lTags)
 
       await moveHLSFiles(video)
     }
 
     const captions = await VideoCaptionModel.listVideoCaptions(video.id)
     if (captions.length !== 0) {
-      logger.debug('Moving captions of %s.', video.uuid, lTags)
+      logger.debug(`Moving captions of ${video.uuid}.`, lTags)
 
       await moveCaptionFiles(captions)
     }
 
     const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
+
+    logger.info(`Moved video ${video.uuid}. Checking pending move.`, lTags, { pendingMove })
+
     if (pendingMove === 0) {
-      logger.info('Running cleanup after moving files (video %s in job %s)', video.uuid, jobId, lTags)
+      logger.info(`Running cleanup after moving files (video ${video.uuid} in job ${jobId})`, lTags)
 
       await doAfterLastMove(video)
     }
@@ -99,7 +102,7 @@ export async function onMoveVideoToStorageFailure (options: {
   const video = await VideoModel.loadWithFiles(videoUUID)
   if (!video) return
 
-  logger.error('Cannot move video %s storage.', video.url, { err, ...lTags })
+  logger.error(`Cannot move video ${video.url} storage.`, { err, ...lTags })
 
   await moveToFailedState(video)
   await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingMove')

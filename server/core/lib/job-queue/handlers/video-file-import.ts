@@ -20,7 +20,7 @@ async function processVideoFileImport (job: Job) {
   const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id)
+    logger.info(`Do not process job ${job.id}, video does not exist.`)
     return undefined
   }
 
