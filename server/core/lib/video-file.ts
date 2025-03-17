@@ -334,6 +334,12 @@ export async function muxToMergeVideoFiles (options: {
     for (const destination of tmpDestinations) {
       await remove(destination)
     }
+
+    for (const input of inputs) {
+      if (input instanceof Readable) {
+        if (!input.destroyed) input.destroy()
+      }
+    }
   }
 }
 

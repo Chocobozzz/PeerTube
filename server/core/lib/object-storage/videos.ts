@@ -160,6 +160,8 @@ export async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, f
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
   })
 
+  logger.debug('Fetched HLS file %s from object storage to %s.', key, destination, lTags())
+
   return destination
 }
 
