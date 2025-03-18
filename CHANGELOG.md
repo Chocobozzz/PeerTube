@@ -1,6 +1,6 @@
 # Changelog
 
-## v7.1.0-rc.1
+## v7.1.0
 
 ### IMPORTANT NOTES
 
