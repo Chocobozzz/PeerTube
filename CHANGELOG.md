@@ -54,7 +54,7 @@
 
  * :tada: Redesign *About Platform*, *About PeerTube* and *About Network* pages :tada:
  * Highlight author host in video miniature using a new dropdown component that explains where the content is coming from
- * Add ability to put video captions in object storage
+ * Add ability to put video captions in object storage. Use the [CLI](https://docs.joinpeertube.org/maintain/tools#move-video-files-from-filesystem-to-object-storage) after the upgrade to move existing captions to object storage
  * Add ability for [Mastodon to verify](https://joinmastodon.org/verification) PeerTube links
  * Enable viewer protocol V2 for better [concurrent viewer scalability](https://joinpeertube.org/news/stress-test-2023)
  * Add ability for admins to set the default player auto play behaviour [#6167](https://github.com/Chocobozzz/PeerTube/pull/6788)
