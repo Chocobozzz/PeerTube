@@ -49,7 +49,7 @@ export class ServersCommand extends AbstractCommand {
       if (!isGithubCI()) return
 
       await ensureDir('artifacts')
-      const destname = join('artifacts', 'databases', `peertube-${this.server.internalServerNumber}.sql`)
+      const destname = join('artifacts', `peertube-${this.server.internalServerNumber}.sql`)
       console.log('Saving database %s.', destname)
 
       exec(`pg_dump peertube_test${this.server.internalServerNumber} > ${destname}`)

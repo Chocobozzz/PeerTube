@@ -111,7 +111,7 @@ jobs:
           ) || \
           echo "parse-log.js script does not exist, skipping."
 
-      - name: Upload logs
+      - name: Upload logs and database
         uses: actions/upload-artifact@v4
         if: failure()
         with:
