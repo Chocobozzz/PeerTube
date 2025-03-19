@@ -8,6 +8,7 @@
  * Due to a bug in the remote video thumbnail update, we recommend running the [prune storage](https://docs.joinpeertube.org/maintain/tools#prune-filesystem-object-storage) script to clean up the filesystem
  * Let's encrypt is removing [OCSP support in 2025](https://letsencrypt.org/2024/12/05/ending-ocsp/), so remove SSL stapling from your nginx configuration: https://github.com/Chocobozzz/PeerTube/commit/0abaaa8ccbce19deb6fcd09c8bf00d4cf4248505
  * Safari desktop versions < 14 are not supported anymore
+ * If you are using object storage, you will need to create the captions bucket or configure PeerTube to use an existing one [in the configuration file](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L262) or using environment variables if you use Docker (`PEERTUBE_OBJECT_STORAGE_CAPTIONS_BUCKET_NAME`, `PEERTUBE_OBJECT_STORAGE_CAPTIONS_PREFIX`, `PEERTUBE_OBJECT_STORAGE_CAPTIONS_BASE_URL`)
 
 ### Plugins/Themes/Embed API
 
