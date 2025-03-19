@@ -1503,6 +1503,13 @@ paths:
       description: With your [client id and secret](#operation/getOAuthClient), you can retrieve an access and refresh tokens.
       tags:
         - Session
+      parameters:
+        - name: x-peertube-otp
+          in: header
+          schema:
+            type: string
+          required: false
+          description: If the user enabled two factor authentication, you need to provide the OTP code in this header
       requestBody:
         content:
           application/x-www-form-urlencoded:
