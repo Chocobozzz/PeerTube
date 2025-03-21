@@ -129,8 +129,8 @@ describe('Test live', function () {
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewUrl)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailUrl)
 
         const live = await server.live.get({ videoId: liveVideoUUID })
 
@@ -170,8 +170,8 @@ describe('Test live', function () {
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
-        await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: video.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: video.previewUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
 

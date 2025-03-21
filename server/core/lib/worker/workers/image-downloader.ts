@@ -9,23 +9,26 @@ async function downloadImage (options: {
   destDir: string
   destName: string
   size?: { width: number, height: number }
+  saveOnDisk?: boolean
 }) {
-  const { url, destDir, destName, size } = options
+  const { url, destDir, destName, size, saveOnDisk = true } = options
 
   const tmpPath = join(CONFIG.STORAGE.TMP_DIR, 'pending-' + destName)
   await doRequestAndSaveToFile(url, tmpPath)
 
-  const destPath = join(destDir, destName)
+  const destination = saveOnDisk ? join(destDir, destName) : null
 
   try {
-    await processImage({ path: tmpPath, destination: destPath, newSize: size })
+    return await processImage({
+      source: tmpPath,
+      destination,
+      newSize: size
+    })
   } catch (err) {
     await remove(tmpPath)
 
     throw err
   }
-
-  return destPath
 }
 
 export default downloadImage

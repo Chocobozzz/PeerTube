@@ -83,7 +83,7 @@ class PlaylistMenuItem extends Component {
     positionBlock.appendChild(player)
 
     const thumbnail = super.createEl('img', {
-      src: window.location.origin + videoElement.video.thumbnailPath
+      src: window.location.origin + videoElement.video.thumbnailUrl
     })
 
     const infoBlock = super.createEl('div', {

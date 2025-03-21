@@ -1,4 +1,3 @@
-import { getAbsoluteAPIUrl } from '@app/helpers'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import {
   VideoCommentPolicyType,
@@ -62,8 +61,8 @@ export class VideoEdit implements VideoUpdate {
     this.commentsPolicy = video.commentsPolicy.id
     this.downloadEnabled = video.downloadEnabled
 
-    if (video.thumbnailPath) this.thumbnailUrl = getAbsoluteAPIUrl() + video.thumbnailPath
-    if (video.previewPath) this.previewUrl = getAbsoluteAPIUrl() + video.previewPath
+    if (video.thumbnailUrl) this.thumbnailUrl = video.thumbnailUrl
+    if (video.previewUrl) this.previewUrl = video.previewUrl
 
     this.scheduleUpdate = video.scheduledUpdate
     this.originallyPublishedAt = video.originallyPublishedAt

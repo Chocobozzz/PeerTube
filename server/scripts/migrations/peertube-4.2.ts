@@ -108,7 +108,12 @@ async function generateSmallerAvatar (actor: MActorDefault) {
   const source = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, sourceFilename)
   const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, newImageName)
 
-  await processImage({ path: source, destination, newSize: imageSize, keepOriginal: true })
+  await processImage({
+    source,
+    destination,
+    newSize: imageSize,
+    keepOriginal: true
+  })
 
   const actorImageInfo = {
     name: newImageName,

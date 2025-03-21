@@ -43,7 +43,12 @@ export async function updateLocalActorImageFiles (options: {
 
     const imageName = buildUUID() + extension
     const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
-    await processImageFromWorker({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
+    await processImageFromWorker({
+      source: imagePhysicalFile.path,
+      destination,
+      newSize: imageSize,
+      keepOriginal: true
+    })
 
     return {
       imageName,

@@ -143,8 +143,8 @@ describe('Test user videos', function () {
 
       const video = data[0]
       expect(video.name).to.equal('super user video')
-      expect(video.thumbnailPath).to.not.be.null
-      expect(video.previewPath).to.not.be.null
+      expect(video.thumbnailUrl).to.not.be.null
+      expect(video.previewUrl).to.not.be.null
     })
 
     it('Should be able to filter by channel in my videos', async function () {
@@ -159,8 +159,8 @@ describe('Test user videos', function () {
 
         const video = data[0]
         expect(video.name).to.equal('super user video')
-        expect(video.thumbnailPath).to.not.be.null
-        expect(video.previewPath).to.not.be.null
+        expect(video.thumbnailUrl).to.not.be.null
+        expect(video.previewUrl).to.not.be.null
       }
 
       {

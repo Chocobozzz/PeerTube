@@ -82,7 +82,7 @@ describe('Test services', function () {
           `title="${video.name}" src="http://${server.host}/videos/embed/${video.shortUUID}${suffix.output}" ` +
           'frameborder="0" allowfullscreen></iframe>'
 
-        const expectedThumbnailUrl = 'http://' + server.host + video.previewPath
+        const expectedThumbnailUrl = video.previewUrl
 
         expect(res.body.html).to.equal(expectedHtml)
         expect(res.body.title).to.equal(video.name)

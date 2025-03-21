@@ -1,54 +1,56 @@
 import { copy, remove } from 'fs-extra/esm'
-import { readFile, rename } from 'fs/promises'
-import { ColorActionName } from '@jimp/plugin-color'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { convertWebPToJPG, processGIF } from './ffmpeg/index.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
+import { processGIF } from './ffmpeg/index.js'
 import { logger } from './logger.js'
-
-import type Jimp from 'jimp'
+import sharp from 'sharp'
 
 export function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
 }
 
 export async function processImage (options: {
-  path: string
-  destination: string
+  source: string | Buffer
+  destination: string | null
   newSize?: { width: number, height: number }
   keepOriginal?: boolean // default false
 }) {
-  const { path, destination, newSize, keepOriginal = false } = options
+  const { source, destination, newSize, keepOriginal = false } = options
+  const sourcePath = typeof source === 'string' ? source : null
 
-  const extension = getLowercaseExtension(path)
+  const extension = sourcePath ? getLowercaseExtension(sourcePath) : '.jpg'
 
-  if (path === destination) {
-    throw new Error('Jimp/FFmpeg needs an input path different that the output path.')
+  if (source === destination) {
+    throw new Error('sharp/FFmpeg needs an input path different than the output path.')
   }
 
-  logger.debug('Processing image %s to %s.', path, destination)
+  logger.debug('Processing image %s to %s.', sourcePath ?? 'from buffer', destination ?? 'to buffer')
+
+  let processDestination
 
   // Use FFmpeg to process GIF
   if (extension === '.gif') {
-    await processGIF({ path, destination, newSize })
+    processDestination = await processGIF({ source, destination, newSize })
   } else {
-    await jimpProcessor({ path, destination, newSize, inputExt: extension })
+    processDestination = await sharpProcessor({ source, destination, newSize, inputExt: extension })
   }
 
-  if (keepOriginal !== true) await remove(path)
+  if (keepOriginal !== true && !!sourcePath) await remove(sourcePath)
 
-  logger.debug('Finished processing image %s to %s.', path, destination)
+  logger.debug(
+    'Finished processing image %s to %s.',
+    sourcePath ?? 'from buffer', destination ?? 'to buffer'
+  )
+
+  return processDestination
 }
 
 export async function getImageSize (path: string) {
-  const inputBuffer = await readFile(path)
-
-  const Jimp = await import('jimp')
-
-  const image = await Jimp.default.read(inputBuffer)
+  const image = await sharp(path).metadata()
 
   return {
-    width: image.getWidth(),
-    height: image.getHeight()
+    width: image.width,
+    height: image.height
   }
 }
 
@@ -56,90 +58,103 @@ export async function getImageSize (path: string) {
 // Private
 // ---------------------------------------------------------------------------
 
-async function jimpProcessor (options: {
-  path: string
-  destination: string
+async function sharpProcessor (options: {
+  source: string | Buffer
+  destination: string | null
   newSize?: {
     width: number
     height: number
   }
   inputExt: string
-}) {
-  const { path, destination, newSize, inputExt } = options
+}): Promise<Buffer> {
+  const { source, destination, newSize, inputExt } = options
 
-  let sourceImage: Jimp
-  const inputBuffer = await readFile(path)
-
-  const Jimp = await import('jimp')
-
-  try {
-    sourceImage = await Jimp.default.read(inputBuffer)
-  } catch (err) {
-    logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
-
-    const newName = path + '.jpg'
-    await convertWebPToJPG({ path, destination: newName })
-    await rename(newName, path)
-
-    sourceImage = await Jimp.default.read(path)
-  }
-
-  await remove(destination)
+  const sourceImage = sharp(source)
+  const sourceImageMetadata = await sourceImage.metadata()
 
   // Optimization if the source file has the appropriate size
-  const outputExt = getLowercaseExtension(destination)
-  if (skipProcessing({ sourceImage, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt })) {
-    return copy(path, destination)
+  const outputExt = typeof destination === 'string' ? getLowercaseExtension(destination) : null
+  const mimeType = MIMETYPES.IMAGE.EXT_MIMETYPE[inputExt]
+  // TODO: Remove null check, just for debug
+  if (skipProcessing({ sourceImageMetadata, newSize, imageBytes: sourceImageMetadata.size, inputExt, outputExt }) && source === null) {
+    if (destination === null) {
+      return sourceImage.toFormat('jpg').toBuffer()
+    }
+
+    if (typeof source === 'string') {
+      await copy(source, destination)
+    } else {
+      await write(sourceImage, destination)
+    }
+
+    return sourceImage.toFormat('jpg').toBuffer()
   }
 
   if (newSize) {
-    await autoResize({ sourceImage, newSize, destination })
-  } else {
+    const processedImage = await autoResize({ mimeType, sourceImage, sourceImageMetadata, newSize, destination })
+    return processedImage.toFormat('jpg').toBuffer()
+  }
+
+  if (typeof destination === 'string') {
     await write(sourceImage, destination)
   }
+
+  return sourceImage.toFormat('jpg').toBuffer()
 }
 
 async function autoResize (options: {
-  sourceImage: Jimp
+  sourceImage: sharp.Sharp
+  sourceImageMetadata: sharp.Metadata
+  mimeType: string
   newSize: { width: number, height: number }
-  destination: string
+  destination: string | null
 }) {
-  const { sourceImage, newSize, destination } = options
+  const { sourceImage, sourceImageMetadata, newSize, destination } = options
 
   // Portrait mode targeting a landscape, apply some effect on the image
-  const sourceIsPortrait = sourceImage.getWidth() <= sourceImage.getHeight()
+  const sourceIsPortrait = sourceImageMetadata.width <= sourceImageMetadata.height
   const destIsPortraitOrSquare = newSize.width <= newSize.height
 
-  removeExif(sourceImage)
+  let processedImage: sharp.Sharp
 
   if (sourceIsPortrait && !destIsPortraitOrSquare) {
-    const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
-                                              .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
+    const portrait = await sourceImage.toBuffer()
+    const background = await sourceImage
+      .resize({ fit: 'cover', height: newSize.height, width: newSize.width })
+      .modulate({ brightness: 0.5 })
+      .toBuffer()
 
-    const topImage = sourceImage.cloneQuiet().contain(newSize.width, newSize.height)
-
-    return write(baseImage.blit(topImage, 0, 0), destination)
+    processedImage = sharp(portrait)
+      .resize({ width: newSize.width, height: newSize.height, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .composite([ { blend: 'dest-over', input: background } ])
+  } else {
+    processedImage = sourceImage.resize(newSize.width, newSize.height)
   }
 
-  return write(sourceImage.cover(newSize.width, newSize.height), destination)
+  if (typeof destination === 'string') {
+    await write(processedImage, destination)
+    return processedImage
+  }
+
+  return processedImage
 }
 
-function write (image: Jimp, destination: string) {
-  return image.quality(80).writeAsync(destination)
+function write (image: sharp.Sharp, destination: string) {
+  return image.jpeg({ quality: 80 }).toFile(destination)
 }
 
 function skipProcessing (options: {
-  sourceImage: Jimp
+  sourceImageMetadata: sharp.Metadata
   newSize?: { width: number, height: number }
   imageBytes: number
   inputExt: string
-  outputExt: string
+  outputExt: string | null
 }) {
-  const { sourceImage, newSize, imageBytes, inputExt, outputExt } = options
+  const { sourceImageMetadata, newSize, imageBytes, inputExt, outputExt } = options
 
-  if (hasExif(sourceImage)) return false
-  if (newSize && (sourceImage.getWidth() !== newSize.width || sourceImage.getHeight() !== newSize.height)) return false
-  if (inputExt !== outputExt) return false
+  if (sourceImageMetadata.exif) return false
+  if (newSize && (sourceImageMetadata.width !== newSize.width || sourceImageMetadata.height !== newSize.height)) return false
+  if (outputExt !== null && inputExt !== outputExt) return false
 
   const kB = 1000
 
@@ -149,12 +164,4 @@ function skipProcessing (options: {
   }
 
   return imageBytes <= 15 * kB
-}
-
-function hasExif (image: Jimp) {
-  return !!(image.bitmap as any).exifBuffer
-}
-
-function removeExif (image: Jimp) {
-  (image.bitmap as any).exifBuffer = null
 }

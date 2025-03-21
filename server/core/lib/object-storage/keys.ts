@@ -24,3 +24,7 @@ export function generateCaptionObjectStorageKey (filename: string) {
 export function generateUserExportObjectStorageKey (filename: string) {
   return filename
 }
+
+export function generateThumbnailObjectStorageKey (filename: string) {
+  return filename
+}

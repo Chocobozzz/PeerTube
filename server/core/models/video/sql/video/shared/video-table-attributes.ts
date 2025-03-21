@@ -53,13 +53,12 @@ export class VideoTableAttributes {
   }
 
   getThumbnailAttributes () {
-    let attributeKeys = [ 'id', 'type', 'filename' ]
+    let attributeKeys = [ 'id', 'type', 'filename', 'fileUrl' ]
 
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
         'height',
         'width',
-        'fileUrl',
         'onDisk',
         'automaticallyGenerated',
         'videoId',

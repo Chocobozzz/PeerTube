@@ -153,7 +153,7 @@ export enum ScopeNames {
           model: VideoAbuseModel.unscoped(),
           include: [
             {
-              attributes: [ 'id', 'uuid', 'name', 'nsfw' ],
+              attributes: [ 'id', 'uuid', 'name', 'nsfw', 'remote' ],
               model: VideoModel.unscoped(),
               include: [
                 {

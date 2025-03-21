@@ -932,7 +932,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private updatePlayerOnNoLive () {
     this.peertubePlayer.unload()
     this.peertubePlayer.disable()
-    this.peertubePlayer.setPoster(this.video.previewPath)
+    this.peertubePlayer.setPoster(this.video.previewUrl)
   }
 
   private buildHotkeysHelp (video: Video) {

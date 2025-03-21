@@ -35,8 +35,8 @@ describe('Test lazy static endpoinds', function () {
 
     const fetchRemoteImages = async () => {
       const video = await servers[1].videos.get({ id: videoId })
-      await makeGetRequest({ url: servers[1].url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-      await makeGetRequest({ url: servers[1].url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: servers[1].url, path: video.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: servers[1].url, path: video.previewUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
 
     await fetchRemoteImages()

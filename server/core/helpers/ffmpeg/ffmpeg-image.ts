@@ -8,7 +8,3 @@ export function processGIF (options: Parameters<FFmpegImage['processGIF']>[0]) {
 export function generateThumbnailFromVideo (options: Parameters<FFmpegImage['generateThumbnailFromVideo']>[0]) {
   return new FFmpegImage(getFFmpegCommandWrapperOptions('thumbnail')).generateThumbnailFromVideo(options)
 }
-
-export function convertWebPToJPG (options: Parameters<FFmpegImage['convertWebPToJPG']>[0]) {
-  return new FFmpegImage(getFFmpegCommandWrapperOptions('thumbnail')).convertWebPToJPG(options)
-}

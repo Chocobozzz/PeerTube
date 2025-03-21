@@ -71,7 +71,7 @@ async function checkVideoServer2 (server: PeerTubeServer, id: number | string) {
   expect(video.description).to.equal('my super description')
   expect(video.tags).to.deep.equal([ 'supertag1', 'supertag2' ])
 
-  await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', video.thumbnailPath)
+  await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', video.thumbnailUrl)
 
   expect(video.files).to.have.lengthOf(1)
 
@@ -119,15 +119,15 @@ describe('Test video imports', function () {
         expect(video.name).to.equal('small video - youtube')
 
         {
-          expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.jpg$`))
-          expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
+          expect(video.thumbnailUrl).to.match(new RegExp(`.+.jpg$`))
+          expect(video.previewUrl).to.match(new RegExp(`.+.jpg$`))
 
           const suffix = mode === 'yt-dlp'
             ? '_yt_dlp'
             : ''
 
-          await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_thumbnail' + suffix, video.thumbnailPath)
-          await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_preview' + suffix, video.previewPath)
+          await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_thumbnail' + suffix, video.thumbnailUrl)
+          await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_preview' + suffix, video.previewUrl)
         }
 
         const bodyCaptions = await servers[0].captions.list({ videoId: video.id })

@@ -70,6 +70,8 @@ import {
 import { ThumbnailModel } from './thumbnail.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoPlaylistElementModel } from './video-playlist-element.js'
+import { getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -646,7 +648,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   getThumbnailUrl () {
     if (!this.hasThumbnail()) return null
 
-    return WEBSERVER.URL + LAZY_STATIC_PATHS.THUMBNAILS + this.Thumbnail.filename
+    return getObjectStoragePublicFileUrl(this.Thumbnail.fileUrl, CONFIG.OBJECT_STORAGE.THUMBNAILS)
   }
 
   getThumbnailStaticPath () {
@@ -725,7 +727,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
         label: VideoPlaylistModel.getPrivacyLabel(this.privacy)
       },
 
-      thumbnailPath: this.getThumbnailStaticPath(),
+      thumbnailUrl: this.getThumbnailUrl(),
       embedPath: this.getEmbedStaticPath(),
 
       type: {
