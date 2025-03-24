@@ -1,4 +1,3 @@
-import { Transaction } from 'sequelize'
 import { VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
@@ -8,12 +7,14 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import {
-  MActor,
+  MActorHost,
   MChannelAccountLight,
   MChannelId,
   MVideoAccountLightBlacklistAllFiles,
   MVideoFullLight
 } from '@server/types/models/index.js'
+import { Transaction } from 'sequelize'
+import { haveActorsSameRemoteHost } from '../actors/check-actor.js'
 import { APVideoAbstractBuilder, getVideoAttributesFromObject, updateVideoRates } from './shared/index.js'
 
 export class APVideoUpdater extends APVideoAbstractBuilder {
@@ -40,7 +41,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
   async update (overrideTo?: string[]) {
     logger.debug(
-      'Updating remote video "%s".', this.videoObject.uuid,
+      'Updating remote video "%s".',
+      this.videoObject.uuid,
       { videoObject: this.videoObject, ...this.lTags() }
     )
 
@@ -111,13 +113,9 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   }
 
   // Check we can update the channel: we trust the remote server
-  private checkChannelUpdateOrThrow (newChannelActor: MActor) {
-    if (!this.oldVideoChannel.Actor.serverId || !newChannelActor.serverId) {
-      throw new Error('Cannot check old channel/new channel validity because `serverId` is null')
-    }
-
-    if (this.oldVideoChannel.Actor.serverId !== newChannelActor.serverId) {
-      throw new Error(`New channel ${newChannelActor.url} is not on the same server than new channel ${this.oldVideoChannel.Actor.url}`)
+  private checkChannelUpdateOrThrow (newChannelActor: MActorHost) {
+    if (haveActorsSameRemoteHost(this.oldVideoChannel.Actor, newChannelActor) !== true) {
+      throw new Error(`Actor ${this.oldVideoChannel.Actor.url} is not on the same host as ${newChannelActor.url}`)
     }
   }
 

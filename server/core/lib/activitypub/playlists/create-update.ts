@@ -1,5 +1,4 @@
 import { HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
@@ -10,11 +9,18 @@ import { updateRemotePlaylistMiniatureFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MThumbnail, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
+import {
+  MAccountHost,
+  MThumbnail,
+  MVideoPlaylist,
+  MVideoPlaylistFull,
+  MVideoPlaylistVideosLength
+} from '@server/types/models/index.js'
 import Bluebird from 'bluebird'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
 import { crawlCollectionPage } from '../crawl.js'
+import { checkUrlsSameHost } from '../url.js'
 import { getOrCreateAPVideo } from '../videos/index.js'
 import {
   fetchRemotePlaylistElement,
@@ -22,11 +28,17 @@ import {
   playlistElementObjectToDBAttributes,
   playlistObjectToDBAttributes
 } from './shared/index.js'
+import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 
 const lTags = loggerTagsFactory('ap', 'video-playlist')
 
-async function createAccountPlaylists (playlistUrls: string[]) {
+export async function createAccountPlaylists (playlistUrls: string[], account: MAccountHost) {
   await Bluebird.map(playlistUrls, async playlistUrl => {
+    if (!checkUrlsSameHost(playlistUrl, account.Actor.url)) {
+      logger.warn(`Playlist ${playlistUrl} is not on the same host as owner account ${account.Actor.url}`, lTags(playlistUrl))
+      return
+    }
+
     try {
       const exists = await VideoPlaylistModel.doesPlaylistExist(playlistUrl)
       if (exists === true) return
@@ -37,17 +49,23 @@ async function createAccountPlaylists (playlistUrls: string[]) {
         throw new Error(`Cannot refresh remote playlist ${playlistUrl}: invalid body.`)
       }
 
-      return createOrUpdateVideoPlaylist(playlistObject)
+      return createOrUpdateVideoPlaylist({ playlistObject })
     } catch (err) {
       logger.warn(`Cannot create or update playlist ${playlistUrl}`, { err, ...lTags(playlistUrl) })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, to?: string[]) {
+export async function createOrUpdateVideoPlaylist (options: {
+  playlistObject: PlaylistObject
+  to?: string[]
+}) {
+  const { playlistObject, to } = options
   const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
 
-  await setVideoChannel(playlistObject, playlistAttributes)
+  const channel = await getRemotePlaylistChannel(playlistObject)
+  playlistAttributes.videoChannelId = channel.id
+  playlistAttributes.ownerAccountId = channel.accountId
 
   const [ upsertPlaylist ] = await VideoPlaylistModel.upsert<MVideoPlaylistVideosLength>(playlistAttributes, { returning: true })
 
@@ -64,30 +82,28 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, to?:
   return playlist
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  createAccountPlaylists,
-  createOrUpdateVideoPlaylist
-}
-
-// ---------------------------------------------------------------------------
-
-async function setVideoChannel (playlistObject: PlaylistObject, playlistAttributes: AttributesOnly<VideoPlaylistModel>) {
+export async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
   if (!isArray(playlistObject.attributedTo) || playlistObject.attributedTo.length !== 1) {
     throw new Error('Not attributed to for playlist object ' + getAPId(playlistObject))
   }
 
-  const actor = await getOrCreateAPActor(getAPId(playlistObject.attributedTo[0]), 'all')
-
-  if (!actor.VideoChannel) {
-    logger.warn('Playlist "attributedTo" %s is not a video channel.', playlistObject.id, { playlistObject, ...lTags(playlistObject.id) })
-    return
+  const channelUrl = getAPId(playlistObject.attributedTo[0])
+  if (!checkUrlsSameHost(channelUrl, playlistObject.id)) {
+    throw new Error(`Playlist ${playlistObject.id} and "attributedTo" channel ${channelUrl} are not on the same host`)
   }
 
-  playlistAttributes.videoChannelId = actor.VideoChannel.id
-  playlistAttributes.ownerAccountId = actor.VideoChannel.Account.id
+  const actor = await getOrCreateAPActor(channelUrl, 'all')
+
+  if (!actor.VideoChannel) {
+    throw new Error(`Playlist ${playlistObject.id} "attributedTo" is not a video channel.`)
+  }
+
+  return actor.VideoChannel
 }
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
 async function fetchElementUrls (playlistObject: PlaylistObject) {
   let accItems: string[] = []
@@ -97,7 +113,7 @@ async function fetchElementUrls (playlistObject: PlaylistObject) {
     return Promise.resolve()
   })
 
-  return accItems
+  return accItems.filter(i => isActivityPubUrlValid(i))
 }
 
 async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist: MVideoPlaylistFull) {

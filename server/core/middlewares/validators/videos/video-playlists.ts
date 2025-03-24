@@ -1,5 +1,3 @@
-import express from 'express'
-import { body, param, query, ValidationChain } from 'express-validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -12,6 +10,8 @@ import {
 } from '@peertube/peertube-models'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId } from '@server/types/models/index.js'
+import express from 'express'
+import { body, param, query, ValidationChain } from 'express-validator'
 import {
   isArrayOf,
   isIdOrUUIDValid,
@@ -37,7 +37,7 @@ import { MVideoPlaylist } from '../../../types/models/video/video-playlist.js'
 import { authenticatePromise } from '../../auth.js'
 import {
   areValidationErrors,
-  doesVideoChannelIdExist,
+  doesVideoChannelOfAccountExist,
   doesVideoExist,
   doesVideoPlaylistExist,
   isValidPlaylistIdParam,
@@ -52,7 +52,9 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     const body: VideoPlaylistCreate = req.body
-    if (body.videoChannelId && !await doesVideoChannelIdExist(body.videoChannelId, res)) return cleanUpReqFiles(req)
+    if (body.videoChannelId && !await doesVideoChannelOfAccountExist(body.videoChannelId, res.locals.oauth.token.User, res)) {
+      return cleanUpReqFiles(req)
+    }
 
     if (
       !body.videoChannelId &&
@@ -88,7 +90,8 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
     const body: VideoPlaylistUpdate = req.body
 
     const newPrivacy = body.privacy || videoPlaylist.privacy
-    if (newPrivacy === VideoPlaylistPrivacy.PUBLIC &&
+    if (
+      newPrivacy === VideoPlaylistPrivacy.PUBLIC &&
       (
         (!videoPlaylist.videoChannelId && !body.videoChannelId) ||
         body.videoChannelId === null
@@ -105,7 +108,9 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
       return res.fail({ message: 'Cannot update a watch later playlist.' })
     }
 
-    if (body.videoChannelId && !await doesVideoChannelIdExist(body.videoChannelId, res)) return cleanUpReqFiles(req)
+    if (body.videoChannelId && !await doesVideoChannelOfAccountExist(body.videoChannelId, res.locals.oauth.token.User, res)) {
+      return cleanUpReqFiles(req)
+    }
 
     return next()
   }
@@ -350,21 +355,17 @@ const doVideosInPlaylistExistValidator = [
 // ---------------------------------------------------------------------------
 
 export {
+  commonVideoPlaylistFiltersValidator,
+  doVideosInPlaylistExistValidator,
+  videoPlaylistElementAPGetValidator,
   videoPlaylistsAddValidator,
-  videoPlaylistsUpdateValidator,
+  videoPlaylistsAddVideoValidator,
   videoPlaylistsDeleteValidator,
   videoPlaylistsGetValidator,
-  videoPlaylistsSearchValidator,
-
-  videoPlaylistsAddVideoValidator,
-  videoPlaylistsUpdateOrRemoveVideoValidator,
   videoPlaylistsReorderVideosValidator,
-
-  videoPlaylistElementAPGetValidator,
-
-  commonVideoPlaylistFiltersValidator,
-
-  doVideosInPlaylistExistValidator
+  videoPlaylistsSearchValidator,
+  videoPlaylistsUpdateOrRemoveVideoValidator,
+  videoPlaylistsUpdateValidator
 }
 
 // ---------------------------------------------------------------------------
@@ -375,7 +376,7 @@ function getCommonPlaylistEditAttributes () {
       .custom((value, { req }) => isVideoImageValid(req.files, 'thumbnailfile'))
       .withMessage(
         'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
-        CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.EXTNAME.join(', ')
+          CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.EXTNAME.join(', ')
       ),
 
     body('description')

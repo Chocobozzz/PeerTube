@@ -72,6 +72,7 @@ export type ActivitypubHttpFetcherPayload = {
   uri: string
   type: FetchType
   videoId?: number
+  accountId?: number
 }
 
 export type ActivitypubHttpUnicastPayload = {
@@ -129,19 +130,18 @@ export type VideoRedundancyPayload = {
   videoId: number
 }
 
-export type ManageVideoTorrentPayload =
-  {
-    action: 'create'
-    videoId: number
-    videoFileId: number
-  } | {
-    action: 'update-metadata'
+export type ManageVideoTorrentPayload = {
+  action: 'create'
+  videoId: number
+  videoFileId: number
+} | {
+  action: 'update-metadata'
 
-    videoId?: number
-    streamingPlaylistId?: number
+  videoId?: number
+  streamingPlaylistId?: number
 
-    videoFileId: number
-  }
+  videoFileId: number
+}
 
 // Video transcoding payloads
 
@@ -182,7 +182,7 @@ export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
 }
 
 export type VideoTranscodingPayload =
-  HLSTranscodingPayload
+  | HLSTranscodingPayload
   | NewWebVideoResolutionTranscodingPayload
   | OptimizeTranscodingPayload
   | MergeAudioTranscodingPayload
@@ -255,10 +255,10 @@ export type VideoStudioTaskWatermarkPayload = {
 }
 
 export type VideoStudioTaskPayload =
-  VideoStudioTaskCutPayload |
-  VideoStudioTaskIntroPayload |
-  VideoStudioTaskOutroPayload |
-  VideoStudioTaskWatermarkPayload
+  | VideoStudioTaskCutPayload
+  | VideoStudioTaskIntroPayload
+  | VideoStudioTaskOutroPayload
+  | VideoStudioTaskWatermarkPayload
 
 export interface VideoStudioEditionPayload {
   videoUUID: string
@@ -280,11 +280,10 @@ export interface AfterVideoChannelImportPayload {
 
 // ---------------------------------------------------------------------------
 
-export type NotifyPayload =
-  {
-    action: 'new-video'
-    videoUUID: string
-  }
+export type NotifyPayload = {
+  action: 'new-video'
+  videoUUID: string
+}
 
 // ---------------------------------------------------------------------------
 

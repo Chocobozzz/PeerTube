@@ -4,12 +4,13 @@ import { logger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
-import { MVideoFullLight } from '../../../types/models/index.js'
+import { MAccountDefault, MVideoFullLight } from '../../../types/models/index.js'
 import { crawlCollectionPage } from '../../activitypub/crawl.js'
 import { createAccountPlaylists } from '../../activitypub/playlists/index.js'
 import { processActivities } from '../../activitypub/process/index.js'
 import { addVideoShares } from '../../activitypub/share.js'
 import { addVideoComments } from '../../activitypub/video-comments.js'
+import { AccountModel } from '@server/models/account/account.js'
 
 async function processActivityPubHttpFetcher (job: Job) {
   logger.info('Processing ActivityPub fetcher in job %s.', job.id)
@@ -19,14 +20,17 @@ async function processActivityPubHttpFetcher (job: Job) {
   let video: MVideoFullLight
   if (payload.videoId) video = await VideoModel.loadFull(payload.videoId)
 
-  const fetcherType: { [ id in FetchType ]: (items: any[]) => Promise<any> } = {
+  let account: MAccountDefault
+  if (payload.accountId) account = await AccountModel.load(payload.accountId)
+
+  const fetcherType: { [id in FetchType]: (items: any[]) => Promise<any> } = {
     'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),
     'video-shares': items => addVideoShares(items, video),
     'video-comments': items => addVideoComments(items),
-    'account-playlists': items => createAccountPlaylists(items)
+    'account-playlists': items => createAccountPlaylists(items, account)
   }
 
-  const cleanerType: { [ id in FetchType ]?: (crawlStartDate: Date) => Promise<any> } = {
+  const cleanerType: { [id in FetchType]?: (crawlStartDate: Date) => Promise<any> } = {
     'video-shares': crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate),
     'video-comments': crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
   }

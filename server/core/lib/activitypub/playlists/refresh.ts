@@ -1,8 +1,8 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
-import { MVideoPlaylist, MVideoPlaylistOwner } from '@server/types/models/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { MVideoPlaylist, MVideoPlaylistOwnerDefault } from '@server/types/models/index.js'
 import { createOrUpdateVideoPlaylist } from './create-update.js'
 import { fetchRemoteVideoPlaylist } from './shared/index.js'
 
@@ -12,7 +12,7 @@ function scheduleRefreshIfNeeded (playlist: MVideoPlaylist) {
   JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: playlist.url } })
 }
 
-async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner): Promise<MVideoPlaylistOwner> {
+async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwnerDefault): Promise<MVideoPlaylistOwnerDefault> {
   if (!videoPlaylist.isOutdated()) return videoPlaylist
 
   const lTags = loggerTagsFactory('ap', 'video-playlist', 'refresh', videoPlaylist.uuid, videoPlaylist.url)
@@ -29,7 +29,7 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
       return videoPlaylist
     }
 
-    await createOrUpdateVideoPlaylist(playlistObject)
+    await createOrUpdateVideoPlaylist({ playlistObject })
 
     return videoPlaylist
   } catch (err) {
@@ -50,6 +50,6 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 }
 
 export {
-  scheduleRefreshIfNeeded,
-  refreshVideoPlaylistIfNeeded
+  refreshVideoPlaylistIfNeeded,
+  scheduleRefreshIfNeeded
 }
