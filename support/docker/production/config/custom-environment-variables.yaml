@@ -216,3 +216,105 @@ instance:
   name: "PEERTUBE_INSTANCE_NAME"
   description: "PEERTUBE_INSTANCE_DESCRIPTION"
   terms: "PEERTUBE_INSTANCE_TERMS"
+
+live:
+  enabled:
+    __name: "PEERTUBE_LIVE_ENABLED"
+    __format: "json"
+
+  max_duration:
+    __name: "PEERTUBE_LIVE_MAX_DURATION"
+    __format: "json"
+
+  max_instance_lives:
+    __name: "PEERTUBE_LIVE_MAX_INSTANCE_LIVES"
+    __format: "json"
+
+  max_user_lives:
+    __name: "PEERTUBE_LIVE_MAX_USER_LIVES"
+    __format: "json"
+
+  allow_replay:
+    __name: "PEERTUBE_LIVE_ALLOW_REPLAY"
+    __format: "json"
+
+  latency_setting:
+    enabled:
+      __name: "PEERTUBE_LIVE_LATENCY_SETTING_ENABLED"
+      __format: "json"
+
+  rtmp:
+    enabled:
+      __name: "PEERTUBE_LIVE_RTMP_ENABLED"
+      __format: "json"
+    port:
+      __name: "PEERTUBE_LIVE_RTMP_PORT"
+      __format: "json"
+    hostname: "PEERTUBE_LIVE_RTMP_HOSTNAME"
+    public_hostname: "PEERTUBE_LIVE_RTMP_PUBLIC_HOSTNAME"
+  rtmps:
+    enabled:
+      __name: "PEERTUBE_LIVE_RTMPS_ENABLED"
+      __format: "json"
+    port:
+      __name: "PEERTUBE_LIVE_RTMPS_PORT"
+      __format: "json"
+    hostname: "PEERTUBE_LIVE_RTMPS_HOSTNAME"
+    public_hostname: "PEERTUBE_LIVE_RTMPS_PUBLIC_HOSTNAME"
+    key_file: "PEERTUBE_LIVE_RTMPS_KEY_FILE"
+    cert_file: "PEERTUBE_LIVE_RTMPS_CERT_FILE"
+
+  transcoding:
+    enabled:
+      __name: "PEERTUBE_LIVE_TRANSCODING_ENABLED"
+      __format: "json"
+
+    remote_runners:
+      enabled:
+        __name: "PEERTUBE_LIVE_TRANSCODING_REMOTE_RUNNERS_ENABLED"
+        __format: "json"
+
+    threads:
+      __name: "PEERTUBE_LIVE_TRANSCODING_THREADS"
+      __format: "json"
+
+    profile: "PEERTUBE_LIVE_TRANSCODING_PROFILE"
+
+    resolutions:
+      0p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_0P"
+        __format: "json"
+      144p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_144P"
+        __format: "json"
+      240p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_240P"
+        __format: "json"
+      360p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_360P"
+        __format: "json"
+      480p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_480P"
+        __format: "json"
+      720p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_720P"
+        __format: "json"
+      1080p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_1080P"
+        __format: "json"
+      1440p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_1440P"
+        __format: "json"
+      2160p:
+        __name: "PEERTUBE_LIVE_TRANSCODING_2160P"
+        __format: "json"
+
+    always_transcode_original_resolution:
+      __name: "PEERTUBE_LIVE_TRANSCODING_ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION"
+      __format: "json"
+
+    fps:
+      max:
+        __name: "PEERTUBE_LIVE_TRANSCODING_FPS_MAX"
+        __format: "json"
+
