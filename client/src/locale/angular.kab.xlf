@@ -2655,9 +2655,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7736587919193927267" datatype="html">
+      <trans-unit id="7736587919193927267" datatype="html" xml:space="preserve">
         <source>I forgot my password</source>
-        <target state="new"> I forgot my password </target>
+        <target state="translated">Ttuɣ awal-iw n uɛeddi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">80</context>
@@ -2719,9 +2719,9 @@
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1190256911880544559" datatype="html">
+      <trans-unit id="1190256911880544559" datatype="html" xml:space="preserve">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">Imayl d yiwellihen n uwennez n wawal uffir ttwaznen ɣer <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Aseɣwen ad yemmet deg ssaεa.</target>
+        <target state="translated">Imayl degs iwellihen n uwennez n wawal uffir yettwaznen ɣer <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Aseɣwen ad yemmet deg ssaεa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">177</context>
