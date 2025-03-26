@@ -16528,9 +16528,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422757693184001803" datatype="html">
+      <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="new">Save email settings</target>
+        <target state="translated">Guardar ajustes de correo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">20</context>
@@ -16596,9 +16596,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8151720483850400105" datatype="html">
+      <trans-unit id="8151720483850400105" datatype="html" xml:space="preserve">
         <source>A new user registered on <x id="PH" equiv-text="config.instance.name"/></source>
-        <target state="new">A new user registered on <x id="PH" equiv-text="config.instance.name"/></target>
+        <target state="translated">Un nuevo usuario registrado en <x id="PH" equiv-text="config.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -16620,9 +16620,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658016127287571612" datatype="html">
+      <trans-unit id="658016127287571612" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="config.instance.name"/> has a new follower</source>
-        <target state="new"><x id="PH" equiv-text="config.instance.name"/> has a new follower</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/> tiene un nuevo seguidor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -16668,17 +16668,17 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5775303587459901718" datatype="html">
+      <trans-unit id="5775303587459901718" datatype="html" xml:space="preserve">
         <source>Processing of edits has finished</source>
-        <target state="new">Processing of edits has finished</target>
+        <target state="translated">El procesamiento de la edición ha finalizado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4190395479539865710" datatype="html">
+      <trans-unit id="4190395479539865710" datatype="html" xml:space="preserve">
         <source>The transcription of your video has been generated</source>
-        <target state="new">The transcription of your video has been generated</target>
+        <target state="translated">Se ha generado la transcripción de tu vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -16724,9 +16724,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">Grabar perfil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">42</context>
@@ -16788,17 +16788,17 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1645193489541371451" datatype="html">
+      <trans-unit id="1645193489541371451" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">No se han encontrado resultados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5031056422346819348" datatype="html">
+      <trans-unit id="5031056422346819348" datatype="html" xml:space="preserve">
         <source>No items available</source>
-        <target state="new">No items available</target>
+        <target state="translated">No hay elementos disponibles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -16836,9 +16836,9 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="432723159292175437" datatype="html">
+      <trans-unit id="432723159292175437" datatype="html" xml:space="preserve">
         <source>Remote subscribe</source>
-        <target state="new">Remote subscribe</target>
+        <target state="translated">Subscripción remota</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -16852,17 +16852,17 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5894454946898586762" datatype="html">
+      <trans-unit id="5894454946898586762" datatype="html" xml:space="preserve">
         <source>This name already exists on this platform.</source>
-        <target state="new">This name already exists on this platform.</target>
+        <target state="translated">Este nombre ya existe en esta plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6723130720822791647" datatype="html">
+      <trans-unit id="6723130720822791647" datatype="html" xml:space="preserve">
         <source>Create your channel</source>
-        <target state="new">Create your channel</target>
+        <target state="translated">Crea tu canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">124</context>
@@ -16876,9 +16876,9 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6697109866731379499" datatype="html">
+      <trans-unit id="6697109866731379499" datatype="html" xml:space="preserve">
         <source>Update <x id="PH" equiv-text="this.videoChannel?.name"/></source>
-        <target state="new">Update <x id="PH" equiv-text="this.videoChannel?.name"/></target>
+        <target state="translated">Actualizar <x id="PH" equiv-text="this.videoChannel?.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-update.component.ts</context>
           <context context-type="linenumber">199</context>
@@ -17246,9 +17246,9 @@
           <context context-type="linenumber">315</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8501241441398968873" datatype="html">
+      <trans-unit id="8501241441398968873" datatype="html" xml:space="preserve">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="new">It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">Borrará {count, plural, =1 {1 video} other {<x id="count"/> videos}} subidos a este canal, y no podrás creas otros canales o cuenta con el mismo nombre (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -17262,9 +17262,9 @@
           <context context-type="linenumber">327</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7435577479985600212" datatype="html">
+      <trans-unit id="7435577479985600212" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.video().name"/> will be duplicated by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="this.video().name"/> will be duplicated by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video().name"/> será duplicado por tu plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">339</context>
@@ -17330,9 +17330,9 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7484325899601915135" datatype="html">
+      <trans-unit id="7484325899601915135" datatype="html" xml:space="preserve">
         <source>Your watched words</source>
-        <target state="new">Your watched words</target>
+        <target state="translated">Tus palabras vigiladas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">123</context>
@@ -17410,9 +17410,9 @@
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3897348120591552265" datatype="html">
+      <trans-unit id="3897348120591552265" datatype="html" xml:space="preserve">
         <source>Manage</source>
-        <target state="new">Manage</target>
+        <target state="translated">Gestionar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -17426,17 +17426,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7731752234233950482" datatype="html">
+      <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
-        <target state="new">Synchronizations</target>
+        <target state="translated">Sincronizaciones</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7607713563510753803" datatype="html">
+      <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
-        <target state="new">Imports</target>
+        <target state="translated">Importa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -17674,25 +17674,25 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3783275427834327194" datatype="html">
+      <trans-unit id="3783275427834327194" datatype="html" xml:space="preserve">
         <source>Apply edits</source>
-        <target state="new">Apply edits</target>
+        <target state="translated">Aplicar edición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8504752363237381923" datatype="html">
+      <trans-unit id="8504752363237381923" datatype="html" xml:space="preserve">
         <source>Original video</source>
-        <target state="new">Original video</target>
+        <target state="translated">Vídeo original</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6519405814717060342" datatype="html">
+      <trans-unit id="6519405814717060342" datatype="html" xml:space="preserve">
         <source>Edits to apply:</source>
-        <target state="new">Edits to apply:</target>
+        <target state="translated">Ediciones a aplicar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">82,84</context>
