@@ -358,7 +358,7 @@ describe('Test users admin API validators', function () {
         path: path + userId,
         token: server.accessToken,
         fields,
-        expectedStatus: HttpStatusCode.CONFLICT_409
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 
