@@ -50,7 +50,6 @@ describe('Test video studio', function () {
 
   function runCommonTests () {
     describe('Cutting', function () {
-
       it('Should cut the beginning of the video', async function () {
         this.timeout(120_000)
 
@@ -116,9 +115,10 @@ describe('Test video studio', function () {
       it('Should cut start/end of the audio', async function () {
         this.timeout(120_000)
 
+        await servers[0].config.save()
         await servers[0].config.enableMinimumTranscoding({ splitAudioAndVideo: true })
         await renewVideo('video_short1.webm')
-        await servers[0].config.enableMinimumTranscoding()
+        await servers[0].config.rollback()
 
         const video = await servers[0].videos.get({ id: videoUUID })
         for (const file of video.files) {
@@ -150,7 +150,6 @@ describe('Test video studio', function () {
     })
 
     describe('Intro/Outro', function () {
-
       it('Should add an intro', async function () {
         this.timeout(120_000)
         await renewVideo()
@@ -268,7 +267,6 @@ describe('Test video studio', function () {
     })
 
     describe('Watermark', function () {
-
       it('Should add a watermark to the video', async function () {
         this.timeout(120_000)
         await renewVideo()
@@ -298,7 +296,6 @@ describe('Test video studio', function () {
   }
 
   describe('Web videos enabled', function () {
-
     it('Should run a complex task', async function () {
       this.timeout(240_000)
       await renewVideo()
@@ -312,7 +309,6 @@ describe('Test video studio', function () {
   })
 
   describe('HLS only studio edition', function () {
-
     before(async function () {
       await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true })
     })
@@ -337,7 +333,6 @@ describe('Test video studio', function () {
   })
 
   describe('HLS with splitted audio studio edition', function () {
-
     before(async function () {
       await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true, splitAudioAndVideo: true })
     })
@@ -362,7 +357,6 @@ describe('Test video studio', function () {
   })
 
   describe('Server restart', function () {
-
     it('Should still be able to run video edition after a server restart', async function () {
       this.timeout(240_000)
 

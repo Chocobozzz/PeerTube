@@ -22,10 +22,12 @@ export class FFmpegEdition {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
 
-  async cutVideo (options: BaseStudioOptions & {
-    start?: number
-    end?: number
-  }) {
+  async cutVideo (
+    options: BaseStudioOptions & {
+      start?: number
+      end?: number
+    }
+  ) {
     const { videoInputPath, separatedAudioInputPath, outputPath, inputFileMutexReleaser } = options
 
     const mainProbe = await ffprobePromise(videoInputPath)
@@ -59,20 +61,22 @@ export class FFmpegEdition {
     await this.commandWrapper.runCommand()
   }
 
-  async addWatermark (options: BaseStudioOptions & {
-    watermarkPath: string
+  async addWatermark (
+    options: BaseStudioOptions & {
+      watermarkPath: string
 
-    videoFilters: {
-      watermarkSizeRatio: number
-      horitonzalMarginRatio: number
-      verticalMarginRatio: number
+      videoFilters: {
+        watermarkSizeRatio: number
+        horitonzalMarginRatio: number
+        verticalMarginRatio: number
+      }
     }
-  }) {
+  ) {
     const { watermarkPath, videoInputPath, separatedAudioInputPath, outputPath, videoFilters, inputFileMutexReleaser } = options
 
     const videoProbe = await ffprobePromise(videoInputPath)
     const fps = await getVideoStreamFPS(videoInputPath, videoProbe)
-    const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, videoProbe)
+    const { resolution, height } = await getVideoStreamDimensionsInfo(videoInputPath, videoProbe)
 
     const command = this.commandWrapper.buildCommand([ ...this.buildInputs(options), watermarkPath ], inputFileMutexReleaser)
       .output(outputPath)
@@ -90,20 +94,25 @@ export class FFmpegEdition {
       canCopyVideo: false
     })
 
+    const videoInput = 0
+    const imageInput = separatedAudioInputPath
+      ? 2
+      : 1
+
     const complexFilter: FilterSpecification[] = [
       // Scale watermark
       {
-        inputs: [ '[1]', '[0]' ],
-        filter: 'scale2ref',
+        inputs: [ `[${imageInput}]` ],
+        filter: 'scale',
         options: {
-          w: 'oh*mdar',
-          h: `ih*${videoFilters.watermarkSizeRatio}`
+          w: '-1',
+          h: `${height * videoFilters.watermarkSizeRatio}`
         },
-        outputs: [ '[watermark]', '[video]' ]
+        outputs: [ '[watermark]' ]
       },
 
       {
-        inputs: [ '[video]', '[watermark]' ],
+        inputs: [ `[${videoInput}]`, '[watermark]' ],
         filter: 'overlay',
         options: {
           x: `main_w - overlay_w - (main_h * ${videoFilters.horitonzalMarginRatio})`,
@@ -117,11 +126,13 @@ export class FFmpegEdition {
     await this.commandWrapper.runCommand()
   }
 
-  async addIntroOutro (options: BaseStudioOptions & {
-    introOutroPath: string
+  async addIntroOutro (
+    options: BaseStudioOptions & {
+      introOutroPath: string
 
-    type: 'intro' | 'outro'
-  }) {
+      type: 'intro' | 'outro'
+    }
+  ) {
     const { introOutroPath, videoInputPath, separatedAudioInputPath, outputPath, type, inputFileMutexReleaser } = options
 
     const mainProbe = await ffprobePromise(videoInputPath)
