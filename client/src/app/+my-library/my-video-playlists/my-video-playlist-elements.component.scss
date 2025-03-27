@@ -9,14 +9,11 @@
 
 .playlist-info {
   grid-column: 1;
-  margin-top: -$sub-menu-margin-bottom;
-
-  padding: 15px;
 
   display: flex;
   flex-direction: column;
 
-  @include margin-left(calc(#{pvar(--x-margin-content)} * -1));
+  @include margin-right(1rem);
 }
 
 .playlist-buttons {

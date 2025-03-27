@@ -9,31 +9,27 @@ import { getTranscodingJobPriority } from '../../transcoding-priority.js'
 import { AbstractJobBuilder } from './abstract-job-builder.js'
 
 /**
- *
  * Class to build transcoding job in the local job queue
- *
  */
 
 type Payload = {
-  Builder: new () => VODHLSTranscodingJobHandler
+  Builder: new() => VODHLSTranscodingJobHandler
   options: Omit<Parameters<VODHLSTranscodingJobHandler['create']>[0], 'priority'>
 } | {
-  Builder: new () => VODAudioMergeTranscodingJobHandler
+  Builder: new() => VODAudioMergeTranscodingJobHandler
   options: Omit<Parameters<VODAudioMergeTranscodingJobHandler['create']>[0], 'priority'>
-} |
-{
-  Builder: new () => VODWebVideoTranscodingJobHandler
+} | {
+  Builder: new() => VODWebVideoTranscodingJobHandler
   options: Omit<Parameters<VODWebVideoTranscodingJobHandler['create']>[0], 'priority'>
 }
 
 type PayloadWithPriority = Payload & { higherPriority?: boolean }
 
 // eslint-disable-next-line max-len
-export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
-
+export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<Payload> {
   protected async createJobs (options: {
     video: MVideo
-    payloads: [ [ PayloadWithPriority ], ...(PayloadWithPriority[][]) ] // Array of sequential jobs to create that depend on parent job
+    payloads: [[PayloadWithPriority], ...(PayloadWithPriority[][])] // Array of sequential jobs to create that depend on parent job
     user: MUserId | null
   }): Promise<void> {
     const { payloads, user } = options
@@ -63,7 +59,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder <Payload> {
     }
   }
 
-  private async createJob (options: {
+  private createJob (options: {
     payload: Payload
     priority: number
     dependsOnRunnerJob?: MRunnerJob
