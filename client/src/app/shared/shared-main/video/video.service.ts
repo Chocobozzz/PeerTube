@@ -279,7 +279,7 @@ export class VideoService {
     const feedUrls = this.buildBaseFeedUrls(params)
 
     feedUrls.push({
-      format: FeedFormat.RSS,
+      format: FeedFormat.PODCAST,
       label: 'podcast rss 2.0',
       url: VideoService.PODCAST_FEEDS_URL + `?videoChannelId=${videoChannelId}`
     })

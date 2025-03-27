@@ -67,6 +67,7 @@ export class SubscribeButtonComponent implements OnChanges {
 
   get rssUri () {
     const account = this.account()
+
     const rssFeed = account
       ? this.videoService
         .getAccountFeedUrls(account.id)
@@ -76,6 +77,15 @@ export class SubscribeButtonComponent implements OnChanges {
         .find(i => i.format === FeedFormat.RSS)
 
     return rssFeed.url
+  }
+
+  get podcastFeedUri () {
+    return this.account()
+      ? undefined
+      : this.videoService
+        .getVideoChannelFeedUrls(this.videoChannels()[0].id)
+        .find(i => i.format === FeedFormat.PODCAST)
+        .url
   }
 
   get videoChannel () {
