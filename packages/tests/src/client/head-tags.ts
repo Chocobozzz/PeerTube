@@ -238,11 +238,11 @@ describe('Test <head> HTML tags', function () {
   })
 
   describe('Mastodon link', function () {
-    async function check (path: string, mastoLink: string, exist = true) {
+    async function check (path: string, href: string, exist = true) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
-      const expected = `<link href="${mastoLink}" rel="me">`
+      const expected = `<link href="${href}" rel="me">`
 
       if (exist) expect(text).to.contain(expected)
       else expect(text).to.not.contain(expected)
@@ -250,10 +250,12 @@ describe('Test <head> HTML tags', function () {
 
     it('Should correctly include Mastodon link in account', async function () {
       await servers[0].users.updateMe({
-        description: 'hi, please <a href="https://social.example.com/@username" rel="me">Follow me on Mastodon!</a>'
+        description: 'hi, please <a href="https://social.example.com/@username" rel="me">Follow me on Mastodon!</a> and ' +
+          '<a href="https://social.example.com/@username2" rel="me">Follow me on Mastodon 2!</a>'
       })
 
       await check('/a/root', 'https://social.example.com/@username')
+      await check('/a/root', 'https://social.example.com/@username2')
     })
 
     it('Should correctly include Mastodon link in channel', async function () {
