@@ -57,7 +57,6 @@ describe('Test my user API validators', function () {
   })
 
   describe('When updating my account', function () {
-
     it('Should fail with an invalid email attribute', async function () {
       const fields = {
         email: 'blabla',
@@ -84,6 +83,19 @@ describe('Test my user API validators', function () {
           expectedStatus: HttpStatusCode.CONFLICT_409
         })
       }
+    })
+
+    it('Should succeed with the same email', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + 'me',
+        token: userToken,
+        fields: {
+          email: 'user1@example.com',
+          currentPassword: 'password'
+        },
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
     })
 
     it('Should fail with a too small password', async function () {
@@ -318,14 +330,12 @@ describe('Test my user API validators', function () {
   })
 
   describe('When managing my scoped tokens', function () {
-
     it('Should fail to get my scoped tokens with an non authenticated user', async function () {
       await server.users.getMyScopedTokens({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail to get my scoped tokens with a bad token', async function () {
       await server.users.getMyScopedTokens({ token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
-
     })
 
     it('Should succeed to get my scoped tokens', async function () {
@@ -448,7 +458,6 @@ describe('Test my user API validators', function () {
   })
 
   describe('When blocking/unblocking/removing user', function () {
-
     it('Should fail with an incorrect id', async function () {
       const options = { userId: 'blabla' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
 
@@ -498,7 +507,6 @@ describe('Test my user API validators', function () {
   })
 
   describe('When deleting our account', function () {
-
     it('Should fail with with the root account', async function () {
       await server.users.deleteMe({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })

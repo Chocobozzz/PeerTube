@@ -200,7 +200,7 @@ export const usersUpdateValidator = [
       return res.fail({ message: 'Cannot change root role.' })
     }
 
-    if (req.body.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
+    if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
 
     return next()
   }
@@ -281,7 +281,7 @@ export const usersUpdateMeValidator = [
 
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
 
-    if (req.body.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
+    if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
 
     return next()
   }
