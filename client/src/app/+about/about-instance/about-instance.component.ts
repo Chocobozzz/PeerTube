@@ -59,11 +59,10 @@ export class AboutInstanceComponent implements OnInit {
       })
     }
 
-    if (aboutHTML.hardwareInformation) {
-      this.menuEntries.push({
-        label: $localize`Technical information`,
-        routerLink: '/about/instance/tech'
-      })
-    }
+    // Always displayed, we have the "features found on this instance" table on this page
+    this.menuEntries.push({
+      label: $localize`Technical information`,
+      routerLink: '/about/instance/tech'
+    })
   }
 }
