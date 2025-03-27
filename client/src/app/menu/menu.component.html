@@ -54,7 +54,11 @@
                 <ul class="ul-unstyle">
                   <li *ngFor="let link of menuSection.links">
                     @if (link.isPrimaryButton === true) {
-                      <my-button class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon" [title]="link.label" [ptRouterLink]="link.path" [ptQueryParams]="link.query" [href]="link.url">
+                      <my-button
+                        class="d-block menu-button" [ngClass]="link.ngClass" theme="primary" [icon]="link.icon"
+                        [title]="link.label" [ptRouterLink]="link.path" [ptQueryParams]="link.query" [href]="link.url"
+                        autoFontSize="true"
+                      >
                         @if (!collapsed) {
                           {{ link.label }}
                         }
