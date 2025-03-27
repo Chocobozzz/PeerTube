@@ -125,6 +125,7 @@
 @mixin danger-button {
   background-color: pvar(--red);
   color: pvar(--on-red);
+  border: 1px solid pvar(--red);
 
   @include button-focus(pvar(--red));
 
@@ -136,8 +137,8 @@
   }
 
   &[disabled] {
-    cursor: default;
-    opacity: 0.7;
+    pointer-events: none;
+    opacity: 0.6;
   }
 }
 
