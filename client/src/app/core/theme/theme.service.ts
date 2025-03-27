@@ -224,7 +224,8 @@ export class ThemeService {
         continue
       }
 
-      const mainColorHSL = toHSLA(parse(mainColor))
+      // Use trim for some web browsers: https://github.com/Chocobozzz/PeerTube/issues/6952
+      const mainColorHSL = toHSLA(parse(mainColor.trim()))
       debugLogger(`Theme main variable ${mainColor} -> ${this.toHSLStr(mainColorHSL)}`)
 
       // Inject in alphabetical order for easy debug
