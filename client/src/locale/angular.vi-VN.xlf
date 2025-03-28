@@ -543,9 +543,9 @@
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6548380581349467642" datatype="html">
+      <trans-unit id="6548380581349467642" datatype="html" xml:space="preserve">
         <source>Show all our subscriptions</source>
-        <target state="new">Show all our subscriptions</target>
+        <target state="translated">Hiển thị tất cả các đăng ký của chúng tôi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-actor/actor-host.component.html</context>
           <context context-type="linenumber">24,26</context>
@@ -4122,33 +4122,33 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5203899665906572487" datatype="html">
+      <trans-unit id="5203899665906572487" datatype="html" xml:space="preserve">
         <source>Add a new segment</source>
-        <target state="new">Add a new segment</target>
+        <target state="translated">Thêm một phân cảnh mới</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="936472574168973902" datatype="html">
+      <trans-unit id="936472574168973902" datatype="html" xml:space="preserve">
         <source>Segment start timestamp</source>
-        <target state="new">Segment start timestamp</target>
+        <target state="translated">Thời điểm bắt đầu phân cảnh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2831765880579689127" datatype="html">
+      <trans-unit id="2831765880579689127" datatype="html" xml:space="preserve">
         <source>Use video current time as start time</source>
-        <target state="new">Use video current time as start time</target>
+        <target state="translated">Dùng thời điểm hiện tại của video làm thời gian bắt đầu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1031856574257335431" datatype="html">
+      <trans-unit id="1031856574257335431" datatype="html" xml:space="preserve">
         <source>Segment end timestamp</source>
-        <target state="new">Segment end timestamp</target>
+        <target state="translated">Thời điểm kết thúc phân cảnh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">67</context>
@@ -4158,9 +4158,9 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2534468682040754093" datatype="html">
+      <trans-unit id="2534468682040754093" datatype="html" xml:space="preserve">
         <source>Use video current time as end time</source>
-        <target state="new">Use video current time as end time</target>
+        <target state="translated">Dùng thời điểm hiện tại của video làm thời gian kết thúc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">75</context>
@@ -4174,33 +4174,33 @@
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4592694974533956701" datatype="html">
+      <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
-        <target state="new">Start segment must be before end segment time</target>
+        <target state="translated">Thời điểm bắt đầu phải trước thời điểm kết thúc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9131593410297043344" datatype="html">
+      <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="new">Segment must have a text content</target>
+        <target state="translated">Phân cảnh phải có nội dung văn bản</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7846454630805382470" datatype="html">
+      <trans-unit id="7846454630805382470" datatype="html" xml:space="preserve">
         <source>Cannot parse subtitles</source>
-        <target state="new">Cannot parse subtitles</target>
+        <target state="translated">Không thể phân tích phụ đề</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">312</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4777421441933211511" datatype="html">
+      <trans-unit id="4777421441933211511" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel your edits first.</source>
-        <target state="new">A segment is being edited. Save or cancel your edits first.</target>
+        <target state="translated">Một phân cảnh đang được chỉnh sửa. Trước tiên hãy lưu hoặc hủy chỉnh sửa của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">338</context>
@@ -4258,9 +4258,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691672602205005718" datatype="html">
+      <trans-unit id="6691672602205005718" datatype="html" xml:space="preserve">
         <source>Use a comma (,) to add a tag</source>
-        <target state="new">Use a comma (,) to add a tag</target>
+        <target state="translated">Dùng dấu phẩu (,) để thêm thẻ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -4310,26 +4310,25 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8797603333570754589" datatype="html">
+      <trans-unit id="8797603333570754589" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.actor.name"/> (instance page)</source>
-        <target state="new"><x id="PH" equiv-text="this.actor.name"/> (instance page)</target>
+        <target state="translated"><x id="PH" equiv-text="this.actor.name"/> (trang máy chủ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3171444589366264129" datatype="html">
+      <trans-unit id="3171444589366264129" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-</target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> cũng được hỗ trợ <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>tùy chỉnh thẻ HTML PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8725224976466294458" datatype="html">
+      <trans-unit id="8725224976466294458" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinmastodon.org/user/profile/#verification&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Mastodon verification link<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is also supported. </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinmastodon.org/user/profile/#verification&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Mastodon verification link<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is also supported. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinmastodon.org/user/profile/#verification&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Xác minh liên kết Mastodon<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> cũng được hỗ trợ. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -4695,9 +4694,9 @@
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8107526517508236784" datatype="html">
+      <trans-unit id="8107526517508236784" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Bỏ tạo <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Bỏ chỉnh sửa <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Hủy xóa <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">198</context>
@@ -4931,9 +4930,9 @@
           <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6206893322435329922" datatype="html">
+      <trans-unit id="6206893322435329922" datatype="html" xml:space="preserve">
         <source>You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Bạn có thể yêu cầu phê duyệt bình luận tùy thuộc vào <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>chính sách tag tự động<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">450</context>
@@ -5127,17 +5126,17 @@
           <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7968397949464882917" datatype="html">
+      <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
-        <target state="new">Are you sure you want to close this modal without saving your changes?</target>
+        <target state="translated">Bạn có chắc muốn đóng cửa sổ này mà không lưu thay đổi?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="428505402001501653" datatype="html">
+      <trans-unit id="428505402001501653" datatype="html" xml:space="preserve">
         <source>Closing caption editing modal</source>
-        <target state="new">Closing caption editing modal</target>
+        <target state="translated">Đóng cửa sổ chỉnh sửa phụ đề</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">116</context>
@@ -5183,9 +5182,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6288814204222524322" datatype="html">
+      <trans-unit id="6288814204222524322" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.uploadPercents"/>%</source>
-        <target state="new"><x id="PH" equiv-text="this.uploadPercents"/>%</target>
+        <target state="translated"><x id="PH" equiv-text="this.uploadPercents"/>%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -5394,9 +5393,9 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5187630100687163794" datatype="html">
+      <trans-unit id="5187630100687163794" datatype="html" xml:space="preserve">
         <source>Update <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></source>
-        <target state="new">Update <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></target>
+        <target state="translated">Tải lên <x id="INTERPOLATION" equiv-text="{{ videoDetails?.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -5434,17 +5433,17 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9106564905888443672" datatype="html">
+      <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="new">We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</target>
+        <target state="translated">Chúng tôi khuyên bạn không nên sử dụng tài khoản <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> để đăng video, vì đó là tài khoản siêu quản trị của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4434906642654067529" datatype="html">
+      <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="new">Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</target>
+        <target state="translated">Thay vào đó, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>tạo một tài khoản riêng<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> để tải lên video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5558,9 +5557,9 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2867809426996281788" datatype="html">
+      <trans-unit id="2867809426996281788" datatype="html" xml:space="preserve">
         <source>Cannot create live because this platform have too many created lives</source>
-        <target state="new">Cannot create live because this platform have too many created lives</target>
+        <target state="translated">Không thể phát trực tiếp vì nền tảng này có quá nhiều phát trực tiếp đã tạo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -5682,9 +5681,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3522196594292220614" datatype="html">
+      <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="new">Playlist URL</target>
+        <target state="translated">URL Danh sách phát</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -5754,17 +5753,17 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">URL Video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7906169354857781172" datatype="html">
+      <trans-unit id="7906169354857781172" datatype="html" xml:space="preserve">
         <source>Video embed URL</source>
-        <target state="new">Video embed URL</target>
+        <target state="translated">URL Nhúng video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">149,150</context>
@@ -5806,9 +5805,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5460870961303000256" datatype="html">
+      <trans-unit id="5460870961303000256" datatype="html" xml:space="preserve">
         <source>Playlist embed URL</source>
-        <target state="new">Playlist embed URL</target>
+        <target state="translated">URL Nhúng danh sách phát</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -6102,9 +6101,9 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8556648414940559453" datatype="html">
+      <trans-unit id="8556648414940559453" datatype="html" xml:space="preserve">
         <source>This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</source>
-        <target state="new">This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</target>
+        <target state="translated">Video này không khả dụng trên <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Bạn có muốn chuyển hướng đến nền tảng gốc: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">434</context>
@@ -6126,9 +6125,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4133860569932613370" datatype="html">
+      <trans-unit id="4133860569932613370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> channels subscribed </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ subscribeStatus(true).length }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ subscribed.size }}"/> kênh đã đăng ký </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -6202,17 +6201,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1036346152557749708" datatype="html">
+      <trans-unit id="1036346152557749708" datatype="html" xml:space="preserve">
         <source>Edit this segment</source>
-        <target state="new">Edit this segment</target>
+        <target state="translated">Sửa phân cảnh này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6855898148869474963" datatype="html">
+      <trans-unit id="6855898148869474963" datatype="html" xml:space="preserve">
         <source>Delete this segment</source>
-        <target state="new">Delete this segment</target>
+        <target state="translated">Xóa phân cảnh này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/caption/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">109</context>
@@ -7598,9 +7597,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867580290622941314" datatype="html">
+      <trans-unit id="5867580290622941314" datatype="html" xml:space="preserve">
         <source>Mutes</source>
-        <target state="new">Mutes</target>
+        <target state="translated">Lượt ẩn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -7738,9 +7737,9 @@
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9214278301049416708" datatype="html">
+      <trans-unit id="9214278301049416708" datatype="html" xml:space="preserve">
         <source>Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </source>
-        <target state="new">Redundancy strategy "<x id="PH" equiv-text="stats.strategy"/>". </target>
+        <target state="translated">Chiến lược dự phòng "<x id="PH" equiv-text="stats.strategy"/>". </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -8398,9 +8397,9 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3223753904455402496" datatype="html">
+      <trans-unit id="3223753904455402496" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> unmuted.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> unmuted.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> đã được bỏ ẩn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -8410,25 +8409,25 @@
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8024366868273320899" datatype="html">
+      <trans-unit id="8024366868273320899" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> unmuted by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> unmuted by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> đã được bỏ ẩn bởi nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9025984970788474055" datatype="html">
+      <trans-unit id="9025984970788474055" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted.</target>
+        <target state="translated">Nền tảng <x id="PH" equiv-text="domain"/> đã bị ẩn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6750929335415365131" datatype="html">
+      <trans-unit id="6750929335415365131" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted by your platform.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted by your platform.</target>
+        <target state="translated">Nền tảng <x id="PH" equiv-text="domain"/> đã bị ẩn bởi nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -8534,17 +8533,17 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5533643003593202766" datatype="html">
+      <trans-unit id="5533643003593202766" datatype="html" xml:space="preserve">
         <source>Installed themes</source>
-        <target state="new">Installed themes</target>
+        <target state="translated">Chủ đề có sẵn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7602762965940763238" datatype="html">
+      <trans-unit id="7602762965940763238" datatype="html" xml:space="preserve">
         <source>Search themes</source>
-        <target state="new">Search themes</target>
+        <target state="translated">Tìm chủ đề</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -8566,17 +8565,17 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1217842609094113552" datatype="html">
+      <trans-unit id="1217842609094113552" datatype="html" xml:space="preserve">
         <source>Installed plugins</source>
-        <target state="new">Installed plugins</target>
+        <target state="translated">Tiện ích có sẵn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3204334247986678419" datatype="html">
+      <trans-unit id="3204334247986678419" datatype="html" xml:space="preserve">
         <source>Runners</source>
-        <target state="new">Runners</target>
+        <target state="translated">Runners</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -8598,9 +8597,9 @@
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8852490424970169127" datatype="html">
+      <trans-unit id="8852490424970169127" datatype="html" xml:space="preserve">
         <source>Official</source>
-        <target state="new">Official</target>
+        <target state="translated">Chính thức</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">46</context>
@@ -8742,9 +8741,9 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9093336259390347521" datatype="html">
+      <trans-unit id="9093336259390347521" datatype="html" xml:space="preserve">
         <source>Registration tokens</source>
-        <target state="new">Registration tokens</target>
+        <target state="translated">Mã đăng ký</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">123</context>
@@ -8954,17 +8953,17 @@
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653926345388884833" datatype="html">
+      <trans-unit id="1653926345388884833" datatype="html" xml:space="preserve">
         <source>Log type</source>
-        <target state="new">Log type</target>
+        <target state="translated">Loại log</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="888341446683346521" datatype="html">
+      <trans-unit id="888341446683346521" datatype="html" xml:space="preserve">
         <source>Start date</source>
-        <target state="new">Start date</target>
+        <target state="translated">Ngày bắt đầu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">15</context>
@@ -9010,9 +9009,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5311176376484381099" datatype="html">
+      <trans-unit id="5311176376484381099" datatype="html" xml:space="preserve">
         <source>Log level</source>
-        <target state="new">Log level</target>
+        <target state="translated">Mức độ log</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">25</context>
@@ -9026,9 +9025,9 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9053612499880707554" datatype="html">
+      <trans-unit id="9053612499880707554" datatype="html" xml:space="preserve">
         <source>Example: ffmpeg, api</source>
-        <target state="new">Example: ffmpeg, api</target>
+        <target state="translated">Ví dụ: ffmpeg, api</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">40</context>
@@ -9490,9 +9489,9 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="589280645445401478" datatype="html">
+      <trans-unit id="589280645445401478" datatype="html" xml:space="preserve">
         <source>Default trending algorithm</source>
-        <target state="new">Default trending algorithm</target>
+        <target state="translated">Thuật toán xu hướng mặc định</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">39,41</context>
@@ -9642,9 +9641,9 @@
           <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1255320588719339650" datatype="html">
+      <trans-unit id="1255320588719339650" datatype="html" xml:space="preserve">
         <source>When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</source>
-        <target state="new">When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</target>
+        <target state="translated">Khi tổng số người dùng trên máy chủ của bạn đạt đến giới hạn này, việc đăng ký sẽ bị tắt. -1 == không hạn chế</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">183,185</context>
@@ -9906,17 +9905,17 @@
           <context context-type="linenumber">319</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5239500638742740142" datatype="html">
+      <trans-unit id="5239500638742740142" datatype="html" xml:space="preserve">
         <source>Max channel synchronization per user</source>
-        <target state="new">Max channel synchronization per user</target>
+        <target state="translated">Đồng bộ hóa kênh tối đa cho mỗi người dùng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">326,328</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7725203429401574666" datatype="html">
+      <trans-unit id="7725203429401574666" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {sync} other {syncs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {sync} other {syncs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {đồng bộ} other {đồng bộ}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">333</context>
@@ -9962,9 +9961,9 @@
           <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8008057374731814667" datatype="html">
+      <trans-unit id="8008057374731814667" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Automatically create subtitles<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for uploaded/imported VOD videos</source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Automatically create subtitles<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for uploaded/imported VOD videos</target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Tự động tạo phụ đề<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> cho video VOD đã tải lên/nhập</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">393,394</context>
@@ -10074,9 +10073,9 @@
           <context context-type="linenumber">485</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1672554591873419319" datatype="html">
+      <trans-unit id="1672554591873419319" datatype="html" xml:space="preserve">
         <source>Use your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </source>
-        <target state="new"> Use your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
+        <target state="translated">Dùng <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>phương thức lập chỉ mục của bạn<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hoặc chọn phương thức chính thức, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, nó sẽ không có kiểm duyệt. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">488,489</context>
@@ -10458,9 +10457,9 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="587451913482781730" datatype="html">
+      <trans-unit id="587451913482781730" datatype="html" xml:space="preserve">
         <source>(-1 for "unlimited")</source>
-        <target state="new">(-1 for "unlimited")</target>
+        <target state="translated">(-1 là "không giới hạn")</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -10742,17 +10741,17 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4693864826145148757" datatype="html">
+      <trans-unit id="4693864826145148757" datatype="html" xml:space="preserve">
         <source>Max live FPS</source>
-        <target state="new">Max live FPS</target>
+        <target state="translated">FPS trực tiếp tối đa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">117,119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6315342359958880564" datatype="html">
+      <trans-unit id="6315342359958880564" datatype="html" xml:space="preserve">
         <source>Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</source>
-        <target state="new">Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</target>
+        <target state="translated">Cap đã chuyển mã FPS trực tiếp. Luồng có độ phân giải tối đa vẫn giữ nguyên FPS gốc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,121</context>
@@ -10822,17 +10821,17 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2798443406255719006" datatype="html">
+      <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="new">Max video FPS</target>
+        <target state="translated">FPS video tối đa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145,147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">FPS video được chuyển mã. Tệp có độ phân giải tối đa vẫn giữ nguyên FPS gốc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147,149</context>
@@ -11170,9 +11169,9 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4543888618160534551" datatype="html">
+      <trans-unit id="4543888618160534551" datatype="html" xml:space="preserve">
         <source>TWO-FACTOR AUTHENTICATION</source>
-        <target state="new">TWO-FACTOR AUTHENTICATION</target>
+        <target state="translated">XÁC MINH 2 BƯỚC</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">66,67</context>
@@ -11362,33 +11361,33 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1218302359178184742" datatype="html">
+      <trans-unit id="1218302359178184742" datatype="html" xml:space="preserve">
         <source>Sort by:</source>
-        <target state="new">Sort by:</target>
+        <target state="translated">Xếp theo:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">52,54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5790604788861392297" datatype="html">
+      <trans-unit id="5790604788861392297" datatype="html" xml:space="preserve">
         <source>Content preferences</source>
-        <target state="new">Content preferences</target>
+        <target state="translated">Tùy chọn nội dung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2579809064600486610" datatype="html">
+      <trans-unit id="2579809064600486610" datatype="html" xml:space="preserve">
         <source>You always use the same preferences?</source>
-        <target state="new">You always use the same preferences?</target>
+        <target state="translated">Bạn luôn sử dụng cùng một tùy chọn?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2939244215860150958" datatype="html">
+      <trans-unit id="2939244215860150958" datatype="html" xml:space="preserve">
         <source>Update your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>default settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Update your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>default settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Cập nhật <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>thiết lập mặc định<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">68,69</context>
@@ -11410,57 +11409,57 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2128860191118589382" datatype="html">
+      <trans-unit id="2128860191118589382" datatype="html" xml:space="preserve">
         <source>Only videos from this platform</source>
-        <target state="new">Only videos from this platform</target>
+        <target state="translated">Chỉ video từ nền tảng này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2237691602500209129" datatype="html">
+      <trans-unit id="2237691602500209129" datatype="html" xml:space="preserve">
         <source>Videos from all platforms</source>
-        <target state="new">Videos from all platforms</target>
+        <target state="translated">Video từ nền tảng khác</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6234119003440125809" datatype="html">
+      <trans-unit id="6234119003440125809" datatype="html" xml:space="preserve">
         <source>Recently Added</source>
-        <target state="new">Recently Added</target>
+        <target state="translated">Mới nhất</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2925767298386605760" datatype="html">
+      <trans-unit id="2925767298386605760" datatype="html" xml:space="preserve">
         <source>Original Publication Date</source>
-        <target state="new">Original Publication Date</target>
+        <target state="translated">Ngày phát hành</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7780562759861344168" datatype="html">
+      <trans-unit id="7780562759861344168" datatype="html" xml:space="preserve">
         <source>Recent Views</source>
-        <target state="new">Recent Views</target>
+        <target state="translated">Được xem gần đây</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="676860092433275829" datatype="html">
+      <trans-unit id="676860092433275829" datatype="html" xml:space="preserve">
         <source>Hot</source>
-        <target state="new">Hot</target>
+        <target state="translated">Hot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3456598716931498601" datatype="html">
+      <trans-unit id="3456598716931498601" datatype="html" xml:space="preserve">
         <source>Global Views</source>
-        <target state="new">Global Views</target>
+        <target state="translated">Lượt xem toàn cầu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">182</context>
@@ -11566,81 +11565,81 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4349815973140201821" datatype="html">
+      <trans-unit id="4349815973140201821" datatype="html" xml:space="preserve">
         <source>Server country</source>
-        <target state="new">Server country</target>
+        <target state="translated">Quốc gia máy chủ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">103,104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8534731544752464794" datatype="html">
+      <trans-unit id="8534731544752464794" datatype="html" xml:space="preserve">
         <source>PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</source>
-        <target state="new">PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</target>
+        <target state="translated">PeerTube sử dụng cài đặt này để giải thích cho thành viên của bạn về luật mà họ phải tuân theo trong trang "Giới thiệu"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">104,106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4956359062784445953" datatype="html">
+      <trans-unit id="4956359062784445953" datatype="html" xml:space="preserve">
         <source>SOCIAL</source>
-        <target state="new">SOCIAL</target>
+        <target state="translated">MẠNG XÃ HỘI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">119,120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4364641327642273311" datatype="html">
+      <trans-unit id="4364641327642273311" datatype="html" xml:space="preserve">
         <source>Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </source>
-        <target state="new"> Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </target>
+        <target state="translated">Liên kết xã hội và thông tin hỗ trợ được hiển thị trong trang <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>Giới thiệu<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">121,123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3612093728661654722" datatype="html">
+      <trans-unit id="3612093728661654722" datatype="html" xml:space="preserve">
         <source>Support text</source>
-        <target state="new">Support text</target>
+        <target state="translated">Văn bản hỗ trợ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3532587780731641584" datatype="html">
+      <trans-unit id="3532587780731641584" datatype="html" xml:space="preserve">
         <source>Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</source>
-        <target state="new">Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</target>
+        <target state="translated">Giải thích cho người dùng cách hỗ trợ nền tảng của bạn. Nếu được thiết lập, PeerTube sẽ hiển thị nút "Hỗ trợ" trong trang "Giới thiệu" máy chủ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4183792958965659941" datatype="html">
+      <trans-unit id="4183792958965659941" datatype="html" xml:space="preserve">
         <source>External link</source>
-        <target state="new">External link</target>
+        <target state="translated">Liên kết ngoài</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">139,140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8355387577210576572" datatype="html">
+      <trans-unit id="8355387577210576572" datatype="html" xml:space="preserve">
         <source>Link to your main website</source>
-        <target state="new">Link to your main website</target>
+        <target state="translated">Website chính của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">140,142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1456146786867743695" datatype="html">
+      <trans-unit id="1456146786867743695" datatype="html" xml:space="preserve">
         <source>Mastodon link</source>
-        <target state="new">Mastodon link</target>
+        <target state="translated">Trang Mastodon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">151,153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3938009584903861509" datatype="html">
+      <trans-unit id="3938009584903861509" datatype="html" xml:space="preserve">
         <source>Bluesky link</source>
-        <target state="new">Bluesky link</target>
+        <target state="translated">Trang Bluesky</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -11822,9 +11821,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2959404232331504155" datatype="html">
+      <trans-unit id="2959404232331504155" datatype="html" xml:space="preserve">
         <source>You don't have channel synchronisation configured.</source>
-        <target state="new">You don't have channel synchronisation configured.</target>
+        <target state="translated">Bạn chưa cấu hình đồng bộ hóa kênh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">82</context>
@@ -11894,9 +11893,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3169881590124056773" datatype="html">
+      <trans-unit id="3169881590124056773" datatype="html" xml:space="preserve">
         <source>Video channel</source>
-        <target state="new">Video channel</target>
+        <target state="translated">Kênh video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -12086,9 +12085,9 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4546188098867041457" datatype="html">
+      <trans-unit id="4546188098867041457" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {đăng ký} other {đăng ký}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -12274,17 +12273,17 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4752280144823756067" datatype="html">
+      <trans-unit id="4752280144823756067" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {playlist} other {playlists}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {playlist} other {playlists}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {danh sách phát} other {danh sách phát}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2191782228095209497" datatype="html">
+      <trans-unit id="2191782228095209497" datatype="html" xml:space="preserve">
         <source>My video space</source>
-        <target state="new">My video space</target>
+        <target state="translated">Không gian video của tôi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.html</context>
           <context context-type="linenumber">6</context>
@@ -12362,9 +12361,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8741939424112857854" datatype="html">
+      <trans-unit id="8741939424112857854" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ video.name }}"/> statistics</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ video.name }}"/> statistics</target>
+        <target state="translated">Thống kê <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -12998,49 +12997,49 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4369572538341036106" datatype="html">
+      <trans-unit id="4369572538341036106" datatype="html" xml:space="preserve">
         <source>Show more followers</source>
-        <target state="new">Show more followers</target>
+        <target state="translated">Hiện thêm người theo dõi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6439365426343089851" datatype="html">
+      <trans-unit id="6439365426343089851" datatype="html" xml:space="preserve">
         <source>General</source>
-        <target state="new">General</target>
+        <target state="translated">Tổng quan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3724068243287682962" datatype="html">
+      <trans-unit id="3724068243287682962" datatype="html" xml:space="preserve">
         <source>Team</source>
-        <target state="new">Team</target>
+        <target state="translated">Đội ngũ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4843885358288366928" datatype="html">
+      <trans-unit id="4843885358288366928" datatype="html" xml:space="preserve">
         <source>Moderation and code of conduct</source>
-        <target state="new">Moderation and code of conduct</target>
+        <target state="translated">Kiểm duyệt và quy tắc ứng xử</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1548157236003897753" datatype="html">
+      <trans-unit id="1548157236003897753" datatype="html" xml:space="preserve">
         <source>Technical information</source>
-        <target state="new">Technical information</target>
+        <target state="translated">Thông số kỹ thuật</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3230710025556647729" datatype="html">
+      <trans-unit id="3230710025556647729" datatype="html" xml:space="preserve">
         <source>About this platform</source>
-        <target state="new">About this platform</target>
+        <target state="translated">Về nền tảng này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.routes.ts</context>
           <context context-type="linenumber">16</context>
@@ -13098,25 +13097,25 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="855761351954776278" datatype="html">
+      <trans-unit id="855761351954776278" datatype="html" xml:space="preserve">
         <source>Why we created <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Why we created <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Lý do ra đời <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6871360459693149470" datatype="html">
+      <trans-unit id="6871360459693149470" datatype="html" xml:space="preserve">
         <source>How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">How long we plan to maintain <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Thời gian dự kiến vận hành <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">12,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1808344369245431716" datatype="html">
+      <trans-unit id="1808344369245431716" datatype="html" xml:space="preserve">
         <source>How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</source>
-        <target state="new">How we will pay for keeping <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> running</target>
+        <target state="translated">Cách gây quỹ vận hành <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-team.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -13138,17 +13137,17 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6389858719039477750" datatype="html">
+      <trans-unit id="6389858719039477750" datatype="html" xml:space="preserve">
         <source>Our platform in figures</source>
-        <target state="new">Our platform in figures</target>
+        <target state="translated">Những con số nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3831303895296608550" datatype="html">
+      <trans-unit id="3831303895296608550" datatype="html" xml:space="preserve">
         <source>moderators</source>
-        <target state="new">moderators</target>
+        <target state="translated">kiểm duyệt viên</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -13238,9 +13237,9 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="962765493084218985" datatype="html">
+      <trans-unit id="962765493084218985" datatype="html" xml:space="preserve">
         <source>Platform</source>
-        <target state="new">Platform</target>
+        <target state="translated">Nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -13254,81 +13253,81 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6484900422964834651" datatype="html">
+      <trans-unit id="6484900422964834651" datatype="html" xml:space="preserve">
         <source>Show more subscriptions</source>
-        <target state="new">Show more subscriptions</target>
+        <target state="translated">Hiện thêm lượt đăng ký</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8050300132367756765" datatype="html">
+      <trans-unit id="8050300132367756765" datatype="html" xml:space="preserve">
         <source>Our network in figures</source>
-        <target state="new">Our network in figures</target>
+        <target state="translated">Mạng lưới kết nối</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3526345455397325538" datatype="html">
+      <trans-unit id="3526345455397325538" datatype="html" xml:space="preserve">
         <source>total videos</source>
-        <target state="new">total videos</target>
+        <target state="translated">tổng video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6590979139539706305" datatype="html">
+      <trans-unit id="6590979139539706305" datatype="html" xml:space="preserve">
         <source>total comments</source>
-        <target state="new">total comments</target>
+        <target state="translated">tổng bình luận</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">45,46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1481887811671001508" datatype="html">
+      <trans-unit id="1481887811671001508" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {follower} other {followers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {follower} other {followers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {người theo dõi} other {người theo dõi}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="219716072784558792" datatype="html">
+      <trans-unit id="219716072784558792" datatype="html" xml:space="preserve">
         <source>Our subscribers automatically display videos of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> on their platforms. </source>
-        <target state="new"> Our subscribers automatically display videos of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> on their platforms. </target>
+        <target state="translated">Người đăng ký của chúng tôi tự động hiển thị video của <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> trên nền tảng của họ. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">58,60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8806514301719228076" datatype="html">
+      <trans-unit id="8806514301719228076" datatype="html" xml:space="preserve">
         <source>Specifics</source>
-        <target state="new">Specifics</target>
+        <target state="translated">Chi tiết cụ thể</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4156810045795717114" datatype="html">
+      <trans-unit id="4156810045795717114" datatype="html" xml:space="preserve">
         <source>Language:</source>
-        <target state="new">Language: </target>
+        <target state="translated">Ngôn ngữ:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8047881417431814560" datatype="html">
+      <trans-unit id="8047881417431814560" datatype="html" xml:space="preserve">
         <source>Categories:</source>
-        <target state="new">Categories: </target>
+        <target state="translated">Thể loại:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1381866989532931408" datatype="html">
+      <trans-unit id="1381866989532931408" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive/NSFW content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> dành riêng cho nội dung nhạy cảm/NSFW.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -13342,9 +13341,9 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2831322084739765298" datatype="html">
+      <trans-unit id="2831322084739765298" datatype="html" xml:space="preserve">
         <source>About this platform's network</source>
-        <target state="new">About this platform's network</target>
+        <target state="translated">Về mạng kết nối của nền tảng này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/routes.ts</context>
           <context context-type="linenumber">44</context>
@@ -13738,9 +13737,9 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6977387630045865297" datatype="html">
+      <trans-unit id="6977387630045865297" datatype="html" xml:space="preserve">
         <source>You must agree with the platform terms in order to register on it.</source>
-        <target state="new">You must agree with the platform terms in order to register on it.</target>
+        <target state="translated">Bạn phải đồng ý với các điều khoản của nền tảng để có thể đăng ký trên đó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13782,41 +13781,41 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5859845485947900894" datatype="html">
+      <trans-unit id="5859845485947900894" datatype="html" xml:space="preserve">
         <source>Platforms order</source>
-        <target state="new">Platforms order</target>
+        <target state="translated">Yêu cầu nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1541005328084571131" datatype="html">
+      <trans-unit id="1541005328084571131" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Nền tảng <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>đăng ký nội dung từ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> nền tảng khác<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99,101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8603409827386793098" datatype="html">
+      <trans-unit id="8603409827386793098" datatype="html" xml:space="preserve">
         <source>Set your display preferences here.</source>
-        <target state="new">Set your display preferences here.</target>
+        <target state="translated">Thiết lập tùy chọn hiển thị của bạn tại đây.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">101,102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1753457183754409152" datatype="html">
+      <trans-unit id="1753457183754409152" datatype="html" xml:space="preserve">
         <source>Displayed videos</source>
-        <target state="new">Displayed videos</target>
+        <target state="translated">Video hiển thị</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">106,108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3029609593829675670" datatype="html">
+      <trans-unit id="3029609593829675670" datatype="html" xml:space="preserve">
         <source>Content type</source>
-        <target state="new">Content type</target>
+        <target state="translated">Loại nội dung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">113,115</context>
@@ -13830,17 +13829,17 @@
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1840036002282013872" datatype="html">
+      <trans-unit id="1840036002282013872" datatype="html" xml:space="preserve">
         <source>All platforms</source>
-        <target state="new">All platforms</target>
+        <target state="translated">Toàn bộ nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8317194248349445422" datatype="html">
+      <trans-unit id="8317194248349445422" datatype="html" xml:space="preserve">
         <source>This platform</source>
-        <target state="new">This platform</target>
+        <target state="translated">Nền tảng này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">160</context>
@@ -13878,17 +13877,17 @@
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019185430150596533" datatype="html">
+      <trans-unit id="4019185430150596533" datatype="html" xml:space="preserve">
         <source>Only lives</source>
-        <target state="new">Only lives</target>
+        <target state="translated">Chỉ phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="403276015827477743" datatype="html">
+      <trans-unit id="403276015827477743" datatype="html" xml:space="preserve">
         <source>Only VOD</source>
-        <target state="new">Only VOD</target>
+        <target state="translated">Chỉ VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">201</context>
@@ -13946,9 +13945,9 @@
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5693037411428190538" datatype="html">
+      <trans-unit id="5693037411428190538" datatype="html" xml:space="preserve">
         <source>Skip the sub menu</source>
-        <target state="new">Skip the sub menu</target>
+        <target state="translated">Skip the sub menu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -15242,9 +15241,9 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3013441103054072216" datatype="html">
+      <trans-unit id="3013441103054072216" datatype="html" xml:space="preserve">
         <source>Please only install plugins or themes you trust, since they can execute any code on your platform.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your platform.</target>
+        <target state="translated">Vui lòng chỉ cài đặt các tiện ích hoặc chủ đề mà bạn tin tưởng vì chúng có thể thực thi bất kỳ mã nào trên nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -15290,17 +15289,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7715366001202984222" datatype="html">
+      <trans-unit id="7715366001202984222" datatype="html" xml:space="preserve">
         <source>Homepage (new window)</source>
-        <target state="new">Homepage (new window)</target>
+        <target state="translated">Trang chủ (cửa sổ mới)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216768473834595914" datatype="html">
+      <trans-unit id="5216768473834595914" datatype="html" xml:space="preserve">
         <source>NPM page (new window)</source>
-        <target state="new">NPM page (new window)</target>
+        <target state="translated">Trang NPM (cửa sổ mới)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -15518,57 +15517,57 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5217863338130648698" datatype="html">
+      <trans-unit id="5217863338130648698" datatype="html" xml:space="preserve">
         <source>Light (Beige) or Dark (Brown)</source>
-        <target state="new">Light (Beige) or Dark (Brown)</target>
+        <target state="translated">Sáng (Be) hoặc Tối (Nâu)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4012645514712660678" datatype="html">
+      <trans-unit id="4012645514712660678" datatype="html" xml:space="preserve">
         <source>PeerTube selects the appropriate theme depending on web browser preferences</source>
-        <target state="new">PeerTube selects the appropriate theme depending on web browser preferences</target>
+        <target state="translated">PeerTube chọn chủ đề phù hợp tùy thuộc vào tùy chọn của trình duyệt web</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8421126018613018698" datatype="html">
+      <trans-unit id="8421126018613018698" datatype="html" xml:space="preserve">
         <source>Dark (Brown)</source>
-        <target state="new">Dark (Brown)</target>
+        <target state="translated">Tối (Nâu)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="258909519768317409" datatype="html">
+      <trans-unit id="258909519768317409" datatype="html" xml:space="preserve">
         <source>Light (Beige)</source>
-        <target state="new">Light (Beige)</target>
+        <target state="translated">Sáng (Be)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="839435106282863105" datatype="html">
+      <trans-unit id="839435106282863105" datatype="html" xml:space="preserve">
         <source>Open in the application?</source>
-        <target state="new">Open in the application?</target>
+        <target state="translated">Mở trong ứng dụng?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5538640554435353258" datatype="html">
+      <trans-unit id="5538640554435353258" datatype="html" xml:space="preserve">
         <source>Open settings modal</source>
-        <target state="new">Open settings modal</target>
+        <target state="translated">Mở chế độ cài đặt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4070550899383572841" datatype="html">
+      <trans-unit id="4070550899383572841" datatype="html" xml:space="preserve">
         <source>Go to the manage your account page</source>
-        <target state="new">Go to the manage your account page</target>
+        <target state="translated">Đến trang quản lý tài khoản của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">37</context>
@@ -15586,9 +15585,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6250956071546896586" datatype="html">
+      <trans-unit id="6250956071546896586" datatype="html" xml:space="preserve">
         <source>You need to reconnect</source>
-        <target state="new">You need to reconnect</target>
+        <target state="translated">Bạn cần kết nối lại</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">203</context>
@@ -15598,9 +15597,9 @@
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784250050046176017" datatype="html">
+      <trans-unit id="2784250050046176017" datatype="html" xml:space="preserve">
         <source>Your authentication has expired, you need to reconnect.</source>
-        <target state="new">Your authentication has expired, you need to reconnect.</target>
+        <target state="translated">Xác minh của bạn đã hết hạn, bạn cần kết nối lại.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">228</context>
@@ -15810,9 +15809,9 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3586102125640292723" datatype="html">
+      <trans-unit id="3586102125640292723" datatype="html" xml:space="preserve">
         <source>Muted platforms</source>
-        <target state="new">Muted platforms</target>
+        <target state="translated">Nền tảng đã ẩn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">115</context>
@@ -15994,17 +15993,17 @@
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6715412930390975308" datatype="html">
+      <trans-unit id="6715412930390975308" datatype="html" xml:space="preserve">
         <source>Open table configuration</source>
-        <target state="new">Open table configuration</target>
+        <target state="translated">Mở bảng thiết lập</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="13024139774181011" datatype="html">
+      <trans-unit id="13024139774181011" datatype="html" xml:space="preserve">
         <source>Select the columns to display</source>
-        <target state="new">Select the columns to display</target>
+        <target state="translated">Chọn cột hiển thị</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">47</context>
@@ -16310,9 +16309,9 @@
           <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6648970559549602356" datatype="html">
+      <trans-unit id="6648970559549602356" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your platform.</source>
-        <target state="new">Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your platform.</target>
+        <target state="translated">Tài khoản <x id="PH" equiv-text="blockedAccount.nameWithHost"/> được bỏ ẩn bởi nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -16338,9 +16337,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7485962171644689376" datatype="html">
+      <trans-unit id="7485962171644689376" datatype="html" xml:space="preserve">
         <source>Clear all history</source>
-        <target state="new">Clear all history</target>
+        <target state="translated">Xóa tất cả lịch sử</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">11</context>
@@ -16546,9 +16545,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8151720483850400105" datatype="html">
+      <trans-unit id="8151720483850400105" datatype="html" xml:space="preserve">
         <source>A new user registered on <x id="PH" equiv-text="config.instance.name"/></source>
-        <target state="new">A new user registered on <x id="PH" equiv-text="config.instance.name"/></target>
+        <target state="translated">Một thành viên mới trên <x id="PH" equiv-text="config.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -16570,17 +16569,17 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658016127287571612" datatype="html">
+      <trans-unit id="658016127287571612" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="config.instance.name"/> has a new follower</source>
-        <target state="new"><x id="PH" equiv-text="config.instance.name"/> has a new follower</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/> có một người theo dõi mới</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3589797681512953578" datatype="html">
+      <trans-unit id="3589797681512953578" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="config.instance.name"/> automatically followed another platform</source>
-        <target state="new"><x id="PH" equiv-text="config.instance.name"/> automatically followed another platform</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/> tự động theo dõi một nền tảng khác</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -16618,9 +16617,9 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5775303587459901718" datatype="html">
+      <trans-unit id="5775303587459901718" datatype="html" xml:space="preserve">
         <source>Processing of edits has finished</source>
-        <target state="new">Processing of edits has finished</target>
+        <target state="translated">Quá trình xử lý chỉnh sửa đã hoàn tất</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -16738,17 +16737,17 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1645193489541371451" datatype="html">
+      <trans-unit id="1645193489541371451" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">Không tìm thấy kết quả</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5031056422346819348" datatype="html">
+      <trans-unit id="5031056422346819348" datatype="html" xml:space="preserve">
         <source>No items available</source>
-        <target state="new">No items available</target>
+        <target state="translated">Không có mục nào có sẵn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-options.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -16778,17 +16777,17 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3931294879857217619" datatype="html">
+      <trans-unit id="3931294879857217619" datatype="html" xml:space="preserve">
         <source>Remote interact</source>
-        <target state="new">Remote interact</target>
+        <target state="translated">Tương tác từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="432723159292175437" datatype="html">
+      <trans-unit id="432723159292175437" datatype="html" xml:space="preserve">
         <source>Remote subscribe</source>
-        <target state="new">Remote subscribe</target>
+        <target state="translated">Đăng ký từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -16802,9 +16801,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5894454946898586762" datatype="html">
+      <trans-unit id="5894454946898586762" datatype="html" xml:space="preserve">
         <source>This name already exists on this platform.</source>
-        <target state="new">This name already exists on this platform.</target>
+        <target state="translated">Đã có tên này trên nền tảng này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-create.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -16886,17 +16885,17 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6184963353282561988" datatype="html">
+      <trans-unit id="6184963353282561988" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></source>
-        <target state="new"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {view} other {views}} since <x id="PH_1" equiv-text="data.startDate"/></target>
+        <target state="translated"><x id="PH" equiv-text="data.total"/> {value, plural, =1 {lượt xem} other {lượt xem}} từ <x id="PH_1" equiv-text="data.startDate"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6337200167647767274" datatype="html">
+      <trans-unit id="6337200167647767274" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {channel} other {channels}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {kênh} other {kênh}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">234</context>
@@ -16954,9 +16953,9 @@
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="782403351079933650" datatype="html">
+      <trans-unit id="782403351079933650" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {người theo dõi} other {người theo dõi}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -17158,9 +17157,9 @@
           <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="705850529168776436" datatype="html">
+      <trans-unit id="705850529168776436" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {videos}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {video} other {video}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">258</context>
@@ -17210,9 +17209,9 @@
           <context context-type="linenumber">327</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7435577479985600212" datatype="html">
+      <trans-unit id="7435577479985600212" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.video().name"/> will be duplicated by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="this.video().name"/> will be duplicated by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video().name"/> sẽ được sao chép trên nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">339</context>
@@ -17358,9 +17357,9 @@
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3897348120591552265" datatype="html">
+      <trans-unit id="3897348120591552265" datatype="html" xml:space="preserve">
         <source>Manage</source>
-        <target state="new">Manage</target>
+        <target state="translated">Quản lý</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -17374,17 +17373,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7731752234233950482" datatype="html">
+      <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
-        <target state="new">Synchronizations</target>
+        <target state="translated">Đồng bộ hóa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7607713563510753803" datatype="html">
+      <trans-unit id="7607713563510753803" datatype="html" xml:space="preserve">
         <source>Imports</source>
-        <target state="new">Imports</target>
+        <target state="translated">Lượt nhập</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -17622,25 +17621,25 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3783275427834327194" datatype="html">
+      <trans-unit id="3783275427834327194" datatype="html" xml:space="preserve">
         <source>Apply edits</source>
-        <target state="new">Apply edits</target>
+        <target state="translated">Áp dụng chỉnh sửa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8504752363237381923" datatype="html">
+      <trans-unit id="8504752363237381923" datatype="html" xml:space="preserve">
         <source>Original video</source>
-        <target state="new">Original video</target>
+        <target state="translated">Video gốc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6519405814717060342" datatype="html">
+      <trans-unit id="6519405814717060342" datatype="html" xml:space="preserve">
         <source>Edits to apply:</source>
-        <target state="new">Edits to apply:</target>
+        <target state="translated">Các chỉnh sửa sẽ áp dụng:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">82,84</context>
@@ -17670,9 +17669,9 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2150635874774701699" datatype="html">
+      <trans-unit id="2150635874774701699" datatype="html" xml:space="preserve">
         <source>Editing tasks created.</source>
-        <target state="new">Editing tasks created.</target>
+        <target state="translated">Đã tạo tác vụ chỉnh sửa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -17694,25 +17693,25 @@
           <context context-type="linenumber">348</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4482153685775394919" datatype="html">
+      <trans-unit id="4482153685775394919" datatype="html" xml:space="preserve">
         <source>Go to the "Discover videos" page</source>
-        <target state="new">Go to the "Discover videos" page</target>
+        <target state="translated">Đến trang "Khám phá video"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6123131701694052862" datatype="html">
+      <trans-unit id="6123131701694052862" datatype="html" xml:space="preserve">
         <source>Go to the "Browse videos" page</source>
-        <target state="new">Go to the "Browse videos" page</target>
+        <target state="translated">Đến trang "Tìm video"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5260039955239962053" datatype="html">
+      <trans-unit id="5260039955239962053" datatype="html" xml:space="preserve">
         <source>Go to the "Publish video" page</source>
-        <target state="new">Go to the "Publish video" page</target>
+        <target state="translated">Đến trang "Đăng video"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">363</context>
@@ -17998,9 +17997,9 @@
           <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2357625293346946918" datatype="html">
+      <trans-unit id="2357625293346946918" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</source>
-        <target state="new"><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</target>
+        <target state="translated"><x id="PH" equiv-text="this.numberOfFilters()"/> bộ lọc đang hoạt động, mở bảng bộ lọc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">280</context>
@@ -18014,9 +18013,9 @@
           <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3573790660310399182" datatype="html">
+      <trans-unit id="3573790660310399182" datatype="html" xml:space="preserve">
         <source>Host filter is invalid</source>
-        <target state="new">Host filter is invalid</target>
+        <target state="translated">Bộ lọc máy chủ không hợp lệ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -18102,17 +18101,17 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2781455366919684095" datatype="html">
+      <trans-unit id="2781455366919684095" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {subscription} other {subscriptions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {subscription} other {subscriptions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {đăng ký} other {đăng ký}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2213349488139662070" datatype="html">
+      <trans-unit id="2213349488139662070" datatype="html" xml:space="preserve">
         <source>This is content to which we have subscribed. This allows us to display their videos directly on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </source>
-        <target state="new"> This is content to which we have subscribed. This allows us to display their videos directly on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </target>
+        <target state="translated">Đây là nội dung mà chúng tôi đã đăng ký. Điều này cho phép chúng tôi hiển thị video của họ trực tiếp trên <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -18438,17 +18437,17 @@
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3683210116632914190" datatype="html">
+      <trans-unit id="3683210116632914190" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS is required.</source>
-        <target state="new">Transcoding max FPS is required.</target>
+        <target state="translated">Cần phải chuyển mã ở mức FPS tối đa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4345398192434581438" datatype="html">
+      <trans-unit id="4345398192434581438" datatype="html" xml:space="preserve">
         <source>Transcoding max FPS must be greater or equal to 1.</source>
-        <target state="new">Transcoding max FPS must be greater or equal to 1.</target>
+        <target state="translated">Chuyển mã FPS tối đa phải lớn hơn hoặc bằng 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -18470,17 +18469,17 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6722592581141834318" datatype="html">
+      <trans-unit id="6722592581141834318" datatype="html" xml:space="preserve">
         <source>Max lives is required.</source>
-        <target state="new">Max lives is required.</target>
+        <target state="translated">Cần có số lượt phát trực tiếp tối đa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4718923616998868965" datatype="html">
+      <trans-unit id="4718923616998868965" datatype="html" xml:space="preserve">
         <source>Max lives must be greater or equal to -1.</source>
-        <target state="new">Max lives must be greater or equal to -1.</target>
+        <target state="translated">Số lượt phát tối đa phải lớn hơn hoặc bằng -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -18526,25 +18525,25 @@
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6274027958678461128" datatype="html">
+      <trans-unit id="6274027958678461128" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user is required.</source>
-        <target state="new">Max synchronizations per user is required.</target>
+        <target state="translated">Yêu cầu số lần đồng bộ hóa tối đa cho mỗi người dùng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8998234411272282626" datatype="html">
+      <trans-unit id="8998234411272282626" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be greater or equal to 1.</source>
-        <target state="new">Max synchronizations per user must be greater or equal to 1.</target>
+        <target state="translated">Max synchronizations per user must be greater or equal to 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6409680643108400586" datatype="html">
+      <trans-unit id="6409680643108400586" datatype="html" xml:space="preserve">
         <source>Max synchronizations per user must be a number.</source>
-        <target state="new">Max synchronizations per user must be a number.</target>
+        <target state="translated">Số lần đồng bộ hóa tối đa cho mỗi người dùng phải là một con số.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">114</context>
@@ -19086,25 +19085,25 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417693714872528491" datatype="html">
+      <trans-unit id="1417693714872528491" datatype="html" xml:space="preserve">
         <source>This field is required.</source>
-        <target state="new">This field is required.</target>
+        <target state="translated">Bắt buộc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5590037753298590410" datatype="html">
+      <trans-unit id="5590037753298590410" datatype="html" xml:space="preserve">
         <source>This field must be a URL</source>
-        <target state="new">This field must be a URL</target>
+        <target state="translated">Phải là URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3743508579385077788" datatype="html">
+      <trans-unit id="3743508579385077788" datatype="html" xml:space="preserve">
         <source>Platform name is required.</source>
-        <target state="new">Platform name is required.</target>
+        <target state="translated">Bắt buộc có tên nền tảng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -19694,9 +19693,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4682186700066917562" datatype="html">
+      <trans-unit id="4682186700066917562" datatype="html" xml:space="preserve">
         <source>{1} categories selected</source>
-        <target state="new">{1} categories selected</target>
+        <target state="translated">đã chọn {1} thể lọai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">19,21</context>
@@ -20163,9 +20162,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8413618684534157435" datatype="html">
+      <trans-unit id="8413618684534157435" datatype="html" xml:space="preserve">
         <source>{1} languages selected</source>
-        <target state="new">{1} languages selected</target>
+        <target state="translated">đã chọn {1} ngôn ngữ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">26,27</context>
@@ -20385,25 +20384,25 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2762554571133839421" datatype="html">
+      <trans-unit id="2762554571133839421" datatype="html" xml:space="preserve">
         <source>Go to the login page</source>
-        <target state="new">Go to the login page</target>
+        <target state="translated">Đến trang đăng nhập</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/login-link.component.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7941320871431436228" datatype="html">
+      <trans-unit id="7941320871431436228" datatype="html" xml:space="preserve">
         <source>Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Request an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Yêu cầu tạo tài khoản <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8545791785518058029" datatype="html">
+      <trans-unit id="8545791785518058029" datatype="html" xml:space="preserve">
         <source>Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Create an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Tạo tài khoản <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -20521,9 +20520,9 @@
           <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8327414932006661175" datatype="html">
+      <trans-unit id="8327414932006661175" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> muted.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> đã bị ẩn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -20641,65 +20640,65 @@
           <context context-type="linenumber">368</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931091080719598584" datatype="html">
+      <trans-unit id="8931091080719598584" datatype="html" xml:space="preserve">
         <source>Hide any content from that user from you, your platform and its users.</source>
-        <target state="new">Hide any content from that user from you, your platform and its users.</target>
+        <target state="translated">Ẩn mọi nội dung của người dùng đó cho bạn, nền tảng của bạn và người dùng nền tảng đó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">386</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591567430811860823" datatype="html">
+      <trans-unit id="2591567430811860823" datatype="html" xml:space="preserve">
         <source>Show this user's content to the users of this platform again.</source>
-        <target state="new">Show this user's content to the users of this platform again.</target>
+        <target state="translated">Hiển thị lại nội dung của người dùng này cho người dùng nền tảng này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5804354060253520825" datatype="html">
+      <trans-unit id="5804354060253520825" datatype="html" xml:space="preserve">
         <source>Hide any content from that platform from you, your platform and its users.</source>
-        <target state="new">Hide any content from that platform from you, your platform and its users.</target>
+        <target state="translated">Ẩn mọi nội dung từ nền tảng đó chobạn, nền tảng của bạn và người dùng nền tảng đó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5636556831757427625" datatype="html">
+      <trans-unit id="5636556831757427625" datatype="html" xml:space="preserve">
         <source>Unmute the platform by your platform</source>
-        <target state="new">Unmute the platform by your platform</target>
+        <target state="translated">Bỏ ẩn nền tảng theo nền tảng của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7469865015995142386" datatype="html">
+      <trans-unit id="7469865015995142386" datatype="html" xml:space="preserve">
         <source>Show back content from that platform for you, your platform and its users.</source>
-        <target state="new">Show back content from that platform for you, your platform and its users.</target>
+        <target state="translated">Hiển thị lại nội dung từ nền tảng đó cho bạn, nền tảng của bạn và người dùng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3174336986672205632" datatype="html">
+      <trans-unit id="3174336986672205632" datatype="html" xml:space="preserve">
         <source>Remove comments from your platform</source>
-        <target state="new">Remove comments from your platform</target>
+        <target state="translated">Xóa bình luận khỏi nền tảng của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">420</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2970277936786210016" datatype="html">
+      <trans-unit id="2970277936786210016" datatype="html" xml:space="preserve">
         <source>Remove comments made by this account from your platform.</source>
-        <target state="new">Remove comments made by this account from your platform.</target>
+        <target state="translated">Xóa bình luận của tài khoản này khỏi nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">421</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="14165999502236506" datatype="html">
+      <trans-unit id="14165999502236506" datatype="html" xml:space="preserve">
         <source>Platform moderation</source>
-        <target state="new">Platform moderation</target>
+        <target state="translated">Kiểm duyệt nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">430</context>
@@ -20745,9 +20744,9 @@
           <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738499036919555877" datatype="html">
+      <trans-unit id="738499036919555877" datatype="html" xml:space="preserve">
         <source>Mute the platform</source>
-        <target state="new">Mute the platform</target>
+        <target state="translated">Ẩn nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">316</context>
@@ -20757,25 +20756,25 @@
           <context context-type="linenumber">403</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1849364081331046417" datatype="html">
+      <trans-unit id="1849364081331046417" datatype="html" xml:space="preserve">
         <source>Hide any content from that platform for you.</source>
-        <target state="new">Hide any content from that platform for you.</target>
+        <target state="translated">Ẩn mọi nội dung khỏi nền tảng đó cho bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3404874513484375253" datatype="html">
+      <trans-unit id="3404874513484375253" datatype="html" xml:space="preserve">
         <source>Unmute the platform</source>
-        <target state="new">Unmute the platform</target>
+        <target state="translated">Bỏ ẩn nền tảng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">322</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099316309417806930" datatype="html">
+      <trans-unit id="6099316309417806930" datatype="html" xml:space="preserve">
         <source>Show back content from that platform for you.</source>
-        <target state="new">Show back content from that platform for you.</target>
+        <target state="translated">Hiển thị lại nội dung từ nền tảng đó cho bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">323</context>
@@ -20917,9 +20916,9 @@
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2340556570629614156" datatype="html">
+      <trans-unit id="2340556570629614156" datatype="html" xml:space="preserve">
         <source>Subtitles will be automatically generated from your video.</source>
-        <target state="new"> Subtitles will be automatically generated from your video. </target>
+        <target state="translated">Phụ đề sẽ được tự động tạo từ video của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">173</context>
@@ -21157,17 +21156,17 @@
           <context context-type="linenumber">470</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8622134676231789456" datatype="html">
+      <trans-unit id="8622134676231789456" datatype="html" xml:space="preserve">
         <source>The deletion will be sent to remote platforms so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote platforms so they can reflect the change.</target>
+        <target state="translated">Thông tin xóa sẽ được gửi đến các nền tảng từ xa để họ có thể phản ánh sự thay đổi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7794689773907080825" datatype="html">
+      <trans-unit id="7794689773907080825" datatype="html" xml:space="preserve">
         <source>It is a remote comment, so the deletion will only be effective on your platform.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your platform.</target>
+        <target state="translated">Đây là bình luận từ xa nên việc xóa chỉ có hiệu lực trên nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">223</context>
@@ -21181,9 +21180,9 @@
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099744911889532030" datatype="html">
+      <trans-unit id="6099744911889532030" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</source>
-        <target state="new">Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</target>
+        <target state="translated">Tài khoản<x id="PH" equiv-text="account.nameWithHost"/> đã bị ẩn bởi nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">494</context>
@@ -21193,9 +21192,9 @@
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4653820703858524784" datatype="html">
+      <trans-unit id="4653820703858524784" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> muted by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> muted by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> đã bị ẩn bởi nền tảng của bạn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">506</context>
@@ -21653,9 +21652,9 @@
           <context context-type="linenumber">2,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2607405360701033266" datatype="html">
+      <trans-unit id="2607405360701033266" datatype="html" xml:space="preserve">
         <source>Video file link</source>
-        <target state="new">Video file link</target>
+        <target state="translated">Liên kết tệp video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-files-download.component.html</context>
           <context context-type="linenumber">11,12</context>
@@ -21905,25 +21904,25 @@
           <context context-type="linenumber">578</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6941992199451163843" datatype="html">
+      <trans-unit id="6941992199451163843" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Video trên <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3942718333651219385" datatype="html">
+      <trans-unit id="3942718333651219385" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</target>
+        <target state="translated">Video trên <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> và <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> nền tảng khác</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2247270192251966992" datatype="html">
+      <trans-unit id="2247270192251966992" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ filter.label }}"/>: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -22345,9 +22344,9 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7659756233411947529" datatype="html">
+      <trans-unit id="7659756233411947529" datatype="html" xml:space="preserve">
         <source>Current lives</source>
-        <target state="new">Current lives</target>
+        <target state="translated">Những lượt phát trực tiếp gần đây</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">28</context>
@@ -22453,9 +22452,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3386106491172606235" datatype="html">
+      <trans-unit id="3386106491172606235" datatype="html" xml:space="preserve">
         <source>Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></source>
-        <target state="new">Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></target>
+        <target state="translated">Thời lượng video là <x id="PH" equiv-text="this.video.durationLabel"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -22469,9 +22468,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7570883748440392027" datatype="html">
+      <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
-        <target state="new"><x id="PH" equiv-text="this.instanceName"/> theme</target>
+        <target state="translated">Chủ đề <x id="PH" equiv-text="this.instanceName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -22485,17 +22484,17 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="704703576647033533" datatype="html">
+      <trans-unit id="704703576647033533" datatype="html" xml:space="preserve">
         <source>WAIT LIVE</source>
-        <target state="new">WAIT LIVE</target>
+        <target state="translated">ĐỢI PHÁT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4020649426522537303" datatype="html">
+      <trans-unit id="4020649426522537303" datatype="html" xml:space="preserve">
         <source>You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</source>
-        <target state="new">You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</target>
+        <target state="translated">Bạn đã xem <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% video này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">51</context>
@@ -22525,9 +22524,9 @@
           <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5731228558519519588" datatype="html">
+      <trans-unit id="5731228558519519588" datatype="html" xml:space="preserve">
         <source>Only users of this platform can see this video</source>
-        <target state="new">Only users of this platform can see this video</target>
+        <target state="translated">Chỉ thành viên của nền tảng này mới có thể xem video này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">477</context>
