@@ -30,4 +30,10 @@ export class FFmpegContainer {
 
     return this.commandWrapper.runCommand({ silent: !logError })
   }
+
+  forceKill () {
+    if (!this.commandWrapper) return
+
+    this.commandWrapper.getCommand().kill('SIGKILL')
+  }
 }

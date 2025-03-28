@@ -303,8 +303,10 @@ export async function muxToMergeVideoFiles (options: {
 
     logger.info(`Muxing files for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
 
+    const ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
+
     try {
-      await new FFmpegContainer(getFFmpegCommandWrapperOptions('vod')).mergeInputs({
+      await ffmpegContainer.mergeInputs({
         inputs,
         output,
         logError: false,
@@ -329,6 +331,8 @@ export async function muxToMergeVideoFiles (options: {
       }
 
       throw err
+    } finally {
+      ffmpegContainer.forceKill()
     }
   } finally {
     for (const destination of tmpDestinations) {
