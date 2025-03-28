@@ -75,7 +75,7 @@ export class VideoWatchPlaylistComponent {
     if (this.playlistPagination.totalItems <= (this.playlistPagination.currentPage * this.playlistPagination.itemsPerPage)) return
 
     this.playlistPagination.currentPage += 1
-    this.loadPlaylistElements(this.playlist(), false, position)
+    this.loadPlaylistElements({ playlist: this.playlist(), redirectToFirst: false, position })
   }
 
   onElementRemoved (playlistElement: VideoPlaylistElement) {
@@ -103,7 +103,14 @@ export class VideoWatchPlaylistComponent {
     return this.playlist().privacy.id === VideoPlaylistPrivacy.PUBLIC
   }
 
-  loadPlaylistElements (playlist: VideoPlaylist, redirectToFirst = false, position?: number) {
+  loadPlaylistElements (options: {
+    playlist: VideoPlaylist
+    redirectToFirst?: boolean // default false
+    reset?: boolean // default false
+    position?: number
+  }) {
+    const { playlist, redirectToFirst = false, reset = false, position } = options
+
     const obs = this.hooks.wrapObsFun(
       this.videoPlaylist.getPlaylistVideos.bind(this.videoPlaylist),
       { videoPlaylistId: playlist.uuid, componentPagination: this.playlistPagination },
@@ -113,6 +120,8 @@ export class VideoWatchPlaylistComponent {
     )
 
     obs.subscribe(({ total, data: playlistElements }) => {
+      if (reset) this.playlistElements = []
+
       this.playlistElements = this.playlistElements.concat(playlistElements)
       this.playlistPagination.totalItems = total
 

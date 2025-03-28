@@ -1,6 +1,6 @@
 import { NgClass, NgIf, NgTemplateOutlet, PlatformLocation } from '@angular/common'
 import { Component, ElementRef, LOCALE_ID, NgZone, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthUser,
@@ -309,18 +309,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private loadRouteQuery () {
     this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
-      // Handle the ?playlistPosition
-      const positionParam = queryParams['playlistPosition']
-      if (!positionParam) return
-
-      this.playlistPosition = positionParam === 'last'
-        ? -1 // Handle the "last" index
-        : parseInt(positionParam + '', 10)
-
-      if (isNaN(this.playlistPosition)) {
-        logger.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
-        this.playlistPosition = 1
-      }
+      if (!this.parsePlaylistPosition(queryParams)) return
 
       this.videoWatchPlaylist().updatePlaylistIndex(this.playlistPosition)
 
@@ -329,6 +318,23 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.peertubePlayer.setCurrentTime(parseInt(start, 10))
       }
     })
+  }
+
+  private parsePlaylistPosition (queryParams: Params) {
+    // Handle the ?playlistPosition
+    const positionParam = queryParams['playlistPosition']
+    if (!positionParam) return false
+
+    this.playlistPosition = positionParam === 'last'
+      ? -1 // Handle the "last" index
+      : parseInt(positionParam + '', 10)
+
+    if (isNaN(this.playlistPosition)) {
+      logger.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
+      this.playlistPosition = 1
+    }
+
+    return true
   }
 
   private loadVideo (options: {
@@ -403,6 +409,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadPlaylist (playlistId: string) {
     if (this.isSameElement(this.playlist, playlistId)) return
 
+    this.playlistPosition = undefined
     this.noPlaylistVideoFound = false
 
     this.playlistService.getVideoPlaylist(playlistId)
@@ -410,7 +417,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         next: playlist => {
           this.playlist = playlist
 
-          this.videoWatchPlaylist().loadPlaylistElements(playlist, !this.playlistPosition, this.playlistPosition)
+          this.parsePlaylistPosition(this.route.snapshot.queryParams)
+
+          this.videoWatchPlaylist().loadPlaylistElements({
+            playlist,
+            redirectToFirst: !this.playlistPosition,
+            position: this.playlistPosition,
+            reset: true
+          })
         },
 
         error: err => this.handleRequestError(err)
