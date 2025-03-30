@@ -5,6 +5,7 @@ import { generateImageFilename, processImage } from '@server/helpers/image-utils
 import { THUMBNAILS_SIZE } from '@server/initializers/constants.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { VideoModel } from '@server/models/video/video.js'
+import { storeThumbnailFile } from '@server/lib/object-storage/thumbnail.js'
 
 program
   .description('Regenerate local thumbnails using preview files')
@@ -35,6 +36,9 @@ async function processVideo (id: number) {
 
   const previewPath = preview.getPath()
 
+  /**
+   * TODO: Handle object storage
+   */
   if (!await pathExists(previewPath)) {
     throw new Error(`Preview ${previewPath} does not exist on disk`)
   }
@@ -51,8 +55,16 @@ async function processVideo (id: number) {
   thumbnail.width = size.width
   thumbnail.height = size.height
 
-  const thumbnailPath = thumbnail.getPath()
-  await processImage({ path: previewPath, destination: thumbnailPath, newSize: size, keepOriginal: true })
+  const destination = await processImage({
+    source: previewPath,
+    destination: thumbnail.getPath(),
+    newSize: size,
+    keepOriginal: true
+  })
+
+  if (Buffer.isBuffer(destination)) {
+    await storeThumbnailFile(destination, thumbnail)
+  }
 
   // Save new attributes
   await thumbnail.save()

@@ -11,11 +11,23 @@ import { getInternalUrl } from './urls.js'
 import { getClient } from './shared/client.js'
 import { lTags } from './shared/logger.js'
 
-import type { _Object, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
+import {
+  CopyObjectCommand,
+  CopyObjectCommandInput,
+  type
+  _Object,
+  type
+  ObjectCannedACL,
+  type
+  PutObjectCommandInput,
+  type
+  S3Client
+} from '@aws-sdk/client-s3'
 
 type BucketInfo = {
   BUCKET_NAME: string
   PREFIX?: string
+  BASE_URL?: string
 }
 
 async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo, continuationToken?: string) {
@@ -90,6 +102,34 @@ async function storeStream (options: {
   logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
   return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate, contentType })
+}
+
+async function storeBuffer (options: {
+  buffer: Buffer
+  objectStorageKey: string
+  bucketInfo: BucketInfo
+  isPrivate: boolean
+
+  contentType?: string
+}): Promise<string> {
+  const { buffer, objectStorageKey, bucketInfo, isPrivate, contentType } = options
+
+  logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+
+  return uploadToStorage({ objectStorageKey, content: buffer, bucketInfo, isPrivate, contentType })
+}
+
+async function copyObjectKey (options: {
+  bucketInfo: BucketInfo
+  destinationKey: string
+  isPrivate: boolean
+  sourceKey: string
+}) {
+  const { bucketInfo, destinationKey, isPrivate, sourceKey } = options
+
+  logger.debug('Copying object from %s to %s in bucket %s', sourceKey, destinationKey, bucketInfo.BUCKET_NAME, lTags())
+
+  return copyOnStorage({ bucketInfo, destinationKey, isPrivate, sourceKey })
 }
 
 // ---------------------------------------------------------------------------
@@ -276,9 +316,12 @@ export {
 
   buildKey,
 
+  copyObjectKey,
+
   storeObject,
   storeContent,
   storeStream,
+  storeBuffer,
 
   removeObject,
   removeObjectByFullKey,
@@ -298,7 +341,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function uploadToStorage (options: {
-  content: Readable | string
+  content: Buffer | Readable | string
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
@@ -351,6 +394,31 @@ async function uploadToStorage (options: {
   } catch (err) {
     throw parseS3Error(err)
   }
+}
+
+async function copyOnStorage (options: {
+  bucketInfo: BucketInfo
+  destinationKey: string
+  isPrivate: boolean
+  sourceKey: string
+}) {
+  const { bucketInfo, destinationKey, isPrivate, sourceKey } = options
+  const s3Client = await getClient()
+
+  const CopySource = `/${bucketInfo.BUCKET_NAME}${(sourceKey)}`
+
+  const input: CopyObjectCommandInput = {
+    Bucket: bucketInfo.BUCKET_NAME,
+    CopySource,
+    Key: buildKey(destinationKey, CONFIG.OBJECT_STORAGE.THUMBNAILS)
+  }
+
+  const acl = getACL(isPrivate)
+  if (acl) input.ACL = acl
+
+  const command = new CopyObjectCommand(input)
+
+  return s3Client.send(command)
 }
 
 async function applyOnPrefix (options: {

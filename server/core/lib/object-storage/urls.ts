@@ -15,6 +15,10 @@ export function getObjectStoragePublicFileUrl (fileUrl: string, objectStorageCon
   return replaceByBaseUrl(fileUrl, baseUrl)
 }
 
+export function getObjectStorageKey (publicUrl: string, bucketInfo: BucketInfo) {
+  return publicUrl.replace(getBaseUrl(bucketInfo, bucketInfo.BASE_URL), '/')
+}
+
 // ---------------------------------------------------------------------------
 
 export function getHLSPrivateFileUrl (video: MVideoUUID, filename: string) {

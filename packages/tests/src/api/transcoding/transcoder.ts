@@ -327,8 +327,8 @@ describe('Test video transcoding', function () {
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
-          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: videoDetails.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: videoDetails.previewUrl, expectedStatus: HttpStatusCode.OK_200 })
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')
@@ -351,8 +351,8 @@ describe('Test video transcoding', function () {
 
           expect(videoDetails.files).to.have.lengthOf(1)
 
-          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
-          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, expectedStatus: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: videoDetails.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: videoDetails.previewUrl, expectedStatus: HttpStatusCode.OK_200 })
 
           const magnetUri = videoDetails.files[0].magnetUri
           expect(magnetUri).to.contain('.mp4')

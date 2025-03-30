@@ -83,7 +83,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailUrl)
     }
   })
 
@@ -110,7 +110,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailUrl)
     }
   })
 
@@ -135,7 +135,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailUrl)
     }
   })
 
@@ -160,7 +160,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailUrl)
     }
   })
 
@@ -176,7 +176,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailUrl)
     }
   })
 
@@ -192,7 +192,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailUrl)
     }
   })
 
@@ -208,7 +208,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      expect(p.thumbnailPath).to.be.null
+      expect(p.thumbnailUrl).to.be.null
     }
   })
 
@@ -224,7 +224,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailUrl)
     }
   })
 

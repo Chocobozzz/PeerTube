@@ -35,11 +35,9 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
 
   isLive: boolean
 
-  thumbnailPath: string
-  thumbnailUrl?: string
+  thumbnailUrl: string
 
-  previewPath: string
-  previewUrl?: string
+  previewUrl: string
 
   embedPath: string
   embedUrl?: string

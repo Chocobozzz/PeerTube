@@ -785,7 +785,10 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
 
-        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
+        /**
+         * TODO: Change to work with previewUrl
+         */
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewUrl)
       }
     })
   })

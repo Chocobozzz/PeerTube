@@ -1,8 +1,31 @@
 import { MutexInterface } from 'async-mutex'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { Duplex, PassThrough, Readable, Stream, Writable } from 'node:stream'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { getVideoStreamDuration } from './ffprobe.js'
 
+async function streamToBuffer (readableStream: Stream): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = []
+
+    readableStream.on('data', data => {
+      if (typeof data === 'string') {
+        chunks.push(Buffer.from(data, 'utf-8'))
+      } else if (data instanceof Buffer) {
+        chunks.push(data)
+      } else {
+        const jsonData = JSON.stringify(data)
+        chunks.push(Buffer.from(jsonData, 'utf-8'))
+      }
+    })
+
+    readableStream.on('end', () => {
+      resolve(Buffer.concat(chunks))
+    })
+
+    readableStream.on('error', reject)
+  })
+}
 export class FFmpegImage {
   private readonly commandWrapper: FFmpegCommandWrapper
 
@@ -10,39 +33,30 @@ export class FFmpegImage {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
 
-  convertWebPToJPG (options: {
-    path: string
-    destination: string
-  }): Promise<void> {
-    const { path, destination } = options
-
-    this.commandWrapper.buildCommand(path)
-      .output(destination)
-
-    return this.commandWrapper.runCommand({ silent: true })
-  }
-
-  processGIF (options: {
-    path: string
-    destination: string
+  async processGIF (options: {
+    source: string | Buffer
+    destination: string | null
     newSize?: { width: number, height: number }
-  }): Promise<void> {
-    const { path, destination, newSize } = options
+  }) {
+    const { source, destination, newSize } = options
 
-    const command = this.commandWrapper.buildCommand(path)
+    const command = this.commandWrapper.buildCommand(source === 'string' ? source : Readable.from(source))
 
     if (newSize) command.size(`${newSize.width}x${newSize.height}`)
 
-    command.output(destination)
+    const stream = new Duplex()
+    command.output(destination ?? stream)
 
-    return this.commandWrapper.runCommand()
+    await this.commandWrapper.runCommand()
+
+    return streamToBuffer(stream)
   }
 
   // ---------------------------------------------------------------------------
 
   async generateThumbnailFromVideo (options: {
     fromPath: string
-    output: string
+    output: string | null
     framesToAnalyze: number
     scale?: {
       width: number
@@ -54,26 +68,32 @@ export class FFmpegImage {
 
     let duration = await getVideoStreamDuration(fromPath, ffprobe)
     if (isNaN(duration)) duration = 0
+    const outputPath = options.output
+    const outputStream = new PassThrough()
 
-    this.buildGenerateThumbnailFromVideo(options)
+    this.buildGenerateThumbnailFromVideo({ ...options, output: outputPath ?? outputStream })
       .seekInput(duration / 2)
 
     try {
-      return await this.commandWrapper.runCommand()
+      await this.commandWrapper.runCommand()
+
+      return outputPath ?? await streamToBuffer(outputStream)
     } catch (err) {
       this.commandWrapper.debugLog('Cannot generate thumbnail from video using seek input, fallback to no seek', { err })
 
       this.commandWrapper.resetCommand()
 
-      this.buildGenerateThumbnailFromVideo(options)
+      this.buildGenerateThumbnailFromVideo({ ...options, output: outputPath ?? outputStream })
 
-      return this.commandWrapper.runCommand()
+      await this.commandWrapper.runCommand()
+
+      return outputPath ?? await streamToBuffer(outputStream)
     }
   }
 
   private buildGenerateThumbnailFromVideo (options: {
     fromPath: string
-    output: string
+    output: string | Writable
     framesToAnalyze: number
     scale?: {
       width: number
@@ -87,7 +107,13 @@ export class FFmpegImage {
       .outputOption('-frames:v 1')
       .outputOption('-q:v 5')
       .outputOption('-abort_on empty_output')
-      .output(output)
+
+    if (output instanceof Writable) {
+      command.outputOption('-f image2')
+      command.pipe(output)
+    } else {
+      command.addOutput(output)
+    }
 
     if (scale) {
       command.videoFilter(`scale=${scale.width}x${scale.height}:force_original_aspect_ratio=decrease`)

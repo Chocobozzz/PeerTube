@@ -34,7 +34,6 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   ownerAccount: AccountSummary
   videoChannel?: VideoChannelSummary
 
-  thumbnailPath: string
   thumbnailUrl: string
 
   embedPath: string
@@ -63,11 +62,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.description = hash.description
     this.privacy = hash.privacy
 
-    this.thumbnailPath = hash.thumbnailPath
-
-    this.thumbnailUrl = this.thumbnailPath
-      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
-      : absoluteAPIUrl + '/client/assets/images/default-playlist.jpg'
+    this.thumbnailUrl = hash.thumbnailUrl || absoluteAPIUrl + '/client/assets/images/default-playlist.jpg'
 
     this.embedPath = hash.embedPath
     this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)

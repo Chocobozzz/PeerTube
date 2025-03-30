@@ -16,8 +16,8 @@ async function testThumbnail (server: PeerTubeServer, videoId: number | string) 
   const video = await server.videos.get({ id: videoId })
 
   const requests = [
-    makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 }),
-    makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+    makeGetRequest({ url: server.url, path: video.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 }),
+    makeGetRequest({ url: server.url, path: video.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
   ]
 
   for (const req of requests) {
@@ -48,7 +48,7 @@ describe('Test regenerate thumbnails CLI', function () {
       const videoUUID1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).uuid
       video1 = await servers[0].videos.get({ id: videoUUID1 })
 
-      thumbnail1Path = join(servers[0].servers.buildDirectory('thumbnails'), basename(video1.thumbnailPath))
+      thumbnail1Path = join(servers[0].servers.buildDirectory('thumbnails'), basename(video1.thumbnailUrl))
 
       const videoUUID2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).uuid
       video2 = await servers[0].videos.get({ id: videoUUID2 })
@@ -61,9 +61,9 @@ describe('Test regenerate thumbnails CLI', function () {
       remoteVideo = await servers[0].videos.get({ id: videoUUID })
 
       // Load remote thumbnail on disk
-      await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-      thumbnailRemotePath = join(servers[0].servers.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
+      thumbnailRemotePath = join(servers[0].servers.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailUrl))
     }
 
     await writeFile(thumbnail1Path, '')
@@ -72,17 +72,17 @@ describe('Test regenerate thumbnails CLI', function () {
 
   it('Should have empty thumbnails', async function () {
     {
-      const res = await makeGetRequest({ url: servers[0].url, path: video1.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path: video1.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.have.lengthOf(0)
     }
 
     {
-      const res = await makeGetRequest({ url: servers[0].url, path: video2.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path: video2.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.not.have.lengthOf(0)
     }
 
     {
-      const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.have.lengthOf(0)
     }
   })
@@ -97,21 +97,21 @@ describe('Test regenerate thumbnails CLI', function () {
     await testThumbnail(servers[0], video1.uuid)
     await testThumbnail(servers[0], video2.uuid)
 
-    const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+    const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
     expect(res.body).to.have.lengthOf(0)
   })
 
   it('Should have deleted old thumbnail files', async function () {
     {
-      await makeGetRequest({ url: servers[0].url, path: video1.thumbnailPath, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await makeGetRequest({ url: servers[0].url, path: video1.thumbnailUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
 
     {
-      await makeGetRequest({ url: servers[0].url, path: video2.thumbnailPath, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await makeGetRequest({ url: servers[0].url, path: video2.thumbnailUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
 
     {
-      const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+      const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.have.lengthOf(0)
     }
   })

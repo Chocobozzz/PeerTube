@@ -261,7 +261,7 @@ describe('Test a single server', function () {
 
       for (const video of data) {
         const videoName = video.name.replace(' name', '')
-        await testImageGeneratedByFFmpeg(server.url, videoName, video.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, videoName, video.thumbnailUrl)
       }
     })
 
