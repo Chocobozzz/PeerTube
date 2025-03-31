@@ -12067,15 +12067,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1783173774503340906" datatype="html">
         <source>Subscribe to the account</source>
         <target state="translated">Gerast áskrifandi að aðgangnum</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
-          <context context-type="linenumber">114</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">983</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">114</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">997</context></context-group></trans-unit>
       <trans-unit id="1593265243494758679" datatype="html">
         <source>Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
         <target state="translated">Upptökustúdíó fyrir <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
@@ -15122,35 +15116,23 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6775540171466219199" datatype="html">
         <source>Stop autoplaying next video</source>
         <target state="translated">Hætta að spila sjálfkrafa næsta myndskeið</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">266</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">275</context></context-group></trans-unit>
       <trans-unit id="5149234672404299151" datatype="html">
         <source>Autoplay next video</source>
         <target state="translated">Spila sjálfkrafa næsta myndskeið</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">267</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">276</context></context-group></trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
         <target state="translated">Hætta að endurspila myndskeið spilunarlistans</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">272</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">281</context></context-group></trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
         <target state="translated">Endurtaka myndskeið spilunarlistans</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">273</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
         <source>Other videos</source>
         <target state="translated">Önnur myndskeið</target>
@@ -15238,163 +15220,103 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8556648414940559453" datatype="html" xml:space="preserve">
         <source>This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"><x id="PH_2" equiv-text="originUrl"/>&lt;/a>?</source>
         <target state="translated">Þetta myndskeið er ekki tiltækt á <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Viltu að þér sé endurbeint á upprunalegan netþjón: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"><x id="PH_2" equiv-text="originUrl"/>&lt;/a>?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">434</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">448</context></context-group></trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source>
         <target state="translated">Endurbeining</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">435</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">449</context></context-group></trans-unit>
       <trans-unit id="6851759241723629925" datatype="html">
         <source>You need a password to watch this video</source>
         <target state="translated">Þú þarft lykilorð til að skoða þetta myndskeið</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">467</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">481</context></context-group></trans-unit>
       <trans-unit id="7116606560384080593" datatype="html">
         <source>This video is password protected</source>
         <target state="translated">Þetta myndskeið er varið með lykilorði</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">468</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">482</context></context-group></trans-unit>
       <trans-unit id="6566384659758828708" datatype="html">
         <source>Incorrect password, please enter a correct password</source>
         <target state="translated">Rangt lykilorð, settu inn rétt lykilorð</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">469</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">483</context></context-group></trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
         <target state="translated">Þetta myndskeið inniheldur fullorðinsefni eða viðkvæmt efni. Ertu viss að þú viljir horfa á það?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">517</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">531</context></context-group></trans-unit>
       <trans-unit id="3937119019020041049" datatype="html">
         <source>Mature or explicit content</source>
         <target state="translated">Fullorðins eða viðkvæmt efni</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">518</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">532</context></context-group></trans-unit>
       <trans-unit id="5856931617181450881" datatype="html">
         <source>Enter/exit fullscreen</source>
         <target state="translated">Fara í/Hætta í skjáfylli</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">945</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">959</context></context-group></trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
         <target state="translated">Spila/Setja myndskeið í bið</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">946</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">960</context></context-group></trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source>
         <target state="translated">Þagga/Kveikja á hljóði</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">947</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">961</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="translated">Hoppa yfir á prósentu myndskeiðsins: 0 er 0% og 9 er 90%</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">962</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">976</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
         <target state="translated">Auka hljóðstyrk</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">949</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">963</context></context-group></trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
         <target state="translated">Minnka hljóðstyrk</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">950</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">964</context></context-group></trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
         <target state="translated">Leita áfram í myndskeiðinu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">964</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">978</context></context-group></trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
         <target state="translated">Leita afturábak í myndskeiðinu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">965</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">979</context></context-group></trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
         <target state="translated">Auka afspilunarhraða</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">967</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">981</context></context-group></trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
         <target state="translated">Minnka afspilunarhraða</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">968</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">982</context></context-group></trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
         <target state="translated">Fara á fyrri ramma í myndskeiðinu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">970</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">984</context></context-group></trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
         <target state="translated">Fara á næsta ramma í myndskeiðinu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">971</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">985</context></context-group></trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
         <target state="translated">Víxla bíóham af/á</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">955</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">969</context></context-group></trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
         <source>Discover</source>
         <target state="translated">Uppgötva</target>
@@ -16108,19 +16030,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3433184700415677129" datatype="html" xml:space="preserve">
         <source>Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></source>
         <target state="translated">Kerfið er keyrt með <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
-          <context context-type="linenumber">96</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">100</context></context-group></trans-unit>
       <trans-unit id="9205975870261474064" datatype="html" xml:space="preserve">
         <source>Discover more platforms</source>
         <target state="translated">Sjá fleiri kerfi</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">103</context></context-group></trans-unit>
       <trans-unit id="8056406592648751808" datatype="html" xml:space="preserve">
         <source>Quick access</source>
         <target state="translated">Flýtiaðgangur</target>
@@ -21413,11 +21329,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3267631941074558910" datatype="html">
         <source>Cannot fetch information of this remote account</source>
         <target state="translated">Tekst ekki að sækja upplýsingar af þessum fjartengda aðgangi</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">68</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
         <target state="translated">Gerast áskrifandi</target>
@@ -21441,15 +21354,20 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="8426539297729416784" datatype="html">
-        <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Afpanta áskrift} other {Afpanta áskrift að öllum rásum}}</target>
+      </trans-unit><trans-unit id="6995933519629969124" datatype="html">
+        <source>Unsubscribe from all channels</source><target state="new">Unsubscribe from all channels</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit><trans-unit id="1698114086921246480" datatype="html">
+        <source>Unsubscribe</source><target state="new">Unsubscribe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
+      
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
         <target state="translated">Margar leiðir til að gerast áskrifandi að fyrirliggjandi rás</target>
@@ -21461,99 +21379,69 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="1779391511451594552" datatype="html">
         <source>Using an ActivityPub account</source>
         <target state="translated">Með því að nota ActivityPub-aðgang</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">46</context></context-group></trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
         <target state="translated">Gerast áskrifandi með aðgangi á þessum netþjóni</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">52</context></context-group></trans-unit>
       <trans-unit id="1740917574463702967" datatype="html">
         <source>Subscribe with your local account</source>
         <target state="translated">Gerast áskrifandi með aðgangnum þínum hér</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
         <target state="translated">Gerast áskrifandi með fjartengdum aðgangi:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group></trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
         <target state="translated">Nota fréttastreymi</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit><trans-unit id="2414550489713494400" datatype="html">
+        <source>Subscribe via Podcast Feed</source><target state="new">Subscribe via Podcast Feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">64,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420" datatype="html">
         <source>Subscribe via RSS</source>
         <target state="translated">Gerast áskrifandi í gegnum RSS</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">65</context></context-group></trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH" equiv-text="this.account.displayName"/>. You will be notified of all their new videos.</source>
         <target state="translated">Gerðist áskrifandi að öllum fyrirliggjandi rásum hjá <x id="PH" equiv-text="this.account.displayName"/>. Þú verður látin/n vita um öll ný myndskeið.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">135</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">145</context></context-group></trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH" equiv-text="this.videoChannels[0].displayName"/>. You will be notified of all their new videos.</source>
         <target state="translated">Gerðist áskrifandi að <x id="PH" equiv-text="this.videoChannels[0].displayName"/>. Þú verður látin/n vita um öll ný myndskeið frá viðkomandi.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">136</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">146</context></context-group></trans-unit>
       <trans-unit id="7019115336138470191" datatype="html">
         <source>Subscribed</source>
         <target state="translated">Í áskrift</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">137</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">147</context></context-group></trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH" equiv-text="this.account.nameWithHost"/></source>
         <target state="translated">Sagði upp áskrift að öllum rásum hjá <x id="PH" equiv-text="this.account.nameWithHost"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">172</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">182</context></context-group></trans-unit>
       <trans-unit id="9201562016527884133" datatype="html">
         <source>Unsubscribed from <x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/></source>
         <target state="translated">Sagði upp áskrift að <x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">173</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit>
       <trans-unit id="516954136005961440" datatype="html">
         <source>Unsubscribed</source>
         <target state="translated">Ekki áskrifandi</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">174</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">184</context></context-group></trans-unit>
       <trans-unit id="929597387091598826" datatype="html" xml:space="preserve">
         <source>Auto tags</source>
         <target state="translated">Sjálfvirk úthlutun merkja</target>

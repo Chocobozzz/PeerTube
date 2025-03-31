@@ -1008,11 +1008,8 @@
       <trans-unit id="3267631941074558910" datatype="html">
         <source>Cannot fetch information of this remote account</source>
         <target state="translated">Impossibile recuperare le informazioni di questo account remoto</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">68</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
         <source>Blocked</source>
         <target state="translated">Bloccato</target>
@@ -1516,35 +1513,23 @@
       <trans-unit id="1779391511451594552">
         <source>Using an ActivityPub account</source>
         <target>Utilizzando un account ActivityPub</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">46</context></context-group></trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
         <target state="translated">Iscriviti con un account remoto:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group></trans-unit>
       <trans-unit id="6691897331062834756" datatype="html" xml:space="preserve">
         <source>Subscribe with an account on this instance</source>
         <target state="translated">Iscriviti con un account su questa istanza</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">52</context></context-group></trans-unit>
       <trans-unit id="1740917574463702967">
         <source>Subscribe with your local account</source>
         <target>Iscriviti con il tuo account locale</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
       <trans-unit id="4140366911638662173" datatype="html" xml:space="preserve">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
         <target state="translated">Vuoi davvero rimuovere i file di "<x id="PH" equiv-text="this.video.name"/>"?</target>
@@ -1604,19 +1589,19 @@
       <trans-unit id="2949829240129672512" xml:space="preserve">
         <source>Using a syndication feed</source>
         <target state="translated">Utilizzando un feed di syndication</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit><trans-unit id="2414550489713494400" datatype="html">
+        <source>Subscribe via Podcast Feed</source><target state="new">Subscribe via Podcast Feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">64,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420" xml:space="preserve">
         <source>Subscribe via RSS</source>
         <target state="translated">Iscriviti tramite RSS</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">65</context></context-group></trans-unit>
       <trans-unit id="6086125715086510222" datatype="html">
         <source>PROFILE SETTINGS</source>
         <target state="translated">IMPOSTAZIONI PROFILO</target>
@@ -3109,19 +3094,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3433184700415677129" datatype="html" xml:space="preserve">
         <source>Platform powered by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></source>
         <target state="translated">Piattaforma basata su <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;&quot; href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
-          <context context-type="linenumber">96</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">100</context></context-group></trans-unit>
       <trans-unit id="9205975870261474064" datatype="html" xml:space="preserve">
         <source>Discover more platforms</source>
         <target state="translated">Scopri altre piattaforme</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">103</context></context-group></trans-unit>
       <trans-unit id="8056406592648751808" datatype="html" xml:space="preserve">
         <source>Quick access</source>
         <target state="translated">Accesso rapido</target>
@@ -6080,11 +6059,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8556648414940559453" datatype="html" xml:space="preserve">
         <source>This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"><x id="PH_2" equiv-text="originUrl"/>&lt;/a>?</source>
         <target state="translated">Questo video non è disponibile su <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Vuoi essere reindirizzato alla piattaforma di origine: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"><x id="PH_2" equiv-text="originUrl"/>&lt;/a>?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">434</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">448</context></context-group></trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
         <target state="translated">Iscriviti</target>
@@ -6108,15 +6084,20 @@ The link will expire within 1 hour.</source>
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">16,18</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="8426539297729416784" datatype="html">
-        <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Disiscriviti} other {Disiscriviti da tutti i canali} }</target>
+      </trans-unit><trans-unit id="6995933519629969124" datatype="html">
+        <source>Unsubscribe from all channels</source><target state="new">Unsubscribe from all channels</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit><trans-unit id="1698114086921246480" datatype="html">
+        <source>Unsubscribe</source><target state="new">Unsubscribe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
+      
       <trans-unit id="7215101881367554791">
         <source>Show more</source>
         <target>Mostra di più</target>
@@ -17451,15 +17432,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1783173774503340906" xml:space="preserve">
         <source>Subscribe to the account</source>
         <target state="translated">Iscriviti all'account</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
-          <context context-type="linenumber">114</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">983</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">114</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">997</context></context-group></trans-unit>
       <trans-unit id="1593265243494758679" datatype="html" xml:space="preserve">
         <source>Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
         <target state="translated">Studio per <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
@@ -20914,53 +20889,35 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
       <trans-unit id="5927402622550505067" datatype="html" xml:space="preserve">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Iscritto a tutti i canali attualmente disponibili di <x id="PH"/>. Riceverai una notifica per tutti i loro nuovi video.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">135</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">145</context></context-group></trans-unit>
       <trans-unit id="2780460651686172544" datatype="html" xml:space="preserve">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Iscritto a <x id="PH"/>. Riceverai una notifica per tutti i loro nuovi video.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">136</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">146</context></context-group></trans-unit>
       <trans-unit id="7019115336138470191">
         <source>Subscribed</source>
         <target>Iscritto</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">137</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">147</context></context-group></trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
         <target state="translated">Disiscritto da tutti i canali di <x id="PH"/> </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">172</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">182</context></context-group></trans-unit>
       <trans-unit id="9201562016527884133">
         <source>Unsubscribed from <x id="PH"/> </source>
         <target>Disiscritto da
           <x id="PH"/>
         </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">173</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit>
       <trans-unit id="516954136005961440">
         <source>Unsubscribed</source>
         <target>Disiscritto</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">174</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">184</context></context-group></trans-unit>
       <trans-unit id="929597387091598826" datatype="html" xml:space="preserve">
         <source>Auto tags</source>
         <target state="translated">Tag auto</target>
@@ -22652,35 +22609,23 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
       <trans-unit id="6775540171466219199" datatype="html">
         <source>Stop autoplaying next video</source>
         <target state="translated">Interrompi la riproduzione automatica del video successivo</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">266</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">275</context></context-group></trans-unit>
       <trans-unit id="5149234672404299151" datatype="html">
         <source>Autoplay next video</source>
         <target state="translated">Riproduci automaticamente il video successivo</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">267</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">276</context></context-group></trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
         <target state="translated">Smetti di riprodurre in loop i video delle playlist</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">272</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">281</context></context-group></trans-unit>
       <trans-unit id="1599585307037758139" datatype="html" xml:space="preserve">
         <source>Loop playlist videos</source>
         <target state="translated">Ripeti a rotazione i video delle playlist</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
-          <context context-type="linenumber">273</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit>
       <trans-unit id="1254111869788332501" datatype="html" xml:space="preserve">
         <source>Other videos</source>
         <target state="translated">Altri video</target>
@@ -22692,51 +22637,33 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
       <trans-unit id="5761611056224181752" datatype="html" xml:space="preserve">
         <source>Redirection</source>
         <target state="translated">Reindirizzamento</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">435</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">449</context></context-group></trans-unit>
       <trans-unit id="6851759241723629925" datatype="html" xml:space="preserve">
         <source>You need a password to watch this video</source>
         <target state="translated">Devi avere una password per vedere questo video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">467</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">481</context></context-group></trans-unit>
       <trans-unit id="7116606560384080593" datatype="html" xml:space="preserve">
         <source>This video is password protected</source>
         <target state="translated">Questo video è protetto da password</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">468</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">482</context></context-group></trans-unit>
       <trans-unit id="6566384659758828708" datatype="html" xml:space="preserve">
         <source>Incorrect password, please enter a correct password</source>
         <target state="translated">Password errata, inserisci una password corretta</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">469</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">483</context></context-group></trans-unit>
       <trans-unit id="8858527736400081688" xml:space="preserve">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
         <target state="translated">Questo video ha un contenuto per adulti o esplicito. Sei sicuro di volerlo guardare?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">517</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">531</context></context-group></trans-unit>
       <trans-unit id="3937119019020041049">
         <source>Mature or explicit content</source>
         <target>Contenuto per adulti o esplicito</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">518</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">532</context></context-group></trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
         <target state="translated">Annulla</target>
@@ -22844,107 +22771,68 @@ Assicurati di aver configurato correttamente PeerTube (cartella config/), in par
       <trans-unit id="5856931617181450881" datatype="html" xml:space="preserve">
         <source>Enter/exit fullscreen</source>
         <target state="translated">Entra/Esci dallo schermo intero</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">945</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">959</context></context-group></trans-unit>
       <trans-unit id="2971009377468404076" datatype="html" xml:space="preserve">
         <source>Play/Pause the video</source>
         <target state="translated">Riproduci/Pausa il video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">946</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">960</context></context-group></trans-unit>
       <trans-unit id="4147087312411482964" datatype="html" xml:space="preserve">
         <source>Mute/unmute the video</source>
         <target state="translated">Silenzia/Non silenziare più il video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">947</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">961</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html" xml:space="preserve">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="translated">Passa a una percentuale del video: 0 è 0% e 9 è 90%</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">962</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">976</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html" xml:space="preserve">
         <source>Increase the volume</source>
         <target state="translated">Aumenta il volume</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">949</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">963</context></context-group></trans-unit>
       <trans-unit id="1363382131573461910" datatype="html" xml:space="preserve">
         <source>Decrease the volume</source>
         <target state="translated">Riduci il volume</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">950</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">964</context></context-group></trans-unit>
       <trans-unit id="2541031516422557760" datatype="html" xml:space="preserve">
         <source>Seek the video forward</source>
         <target state="translated">Avanza nel video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">964</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">978</context></context-group></trans-unit>
       <trans-unit id="8813023402019364882" datatype="html" xml:space="preserve">
         <source>Seek the video backward</source>
         <target state="translated">Riavvolgi il video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">965</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">979</context></context-group></trans-unit>
       <trans-unit id="581757752202843950" datatype="html" xml:space="preserve">
         <source>Increase playback rate</source>
         <target state="translated">Aumenta la velocità di riproduzione</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">967</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">981</context></context-group></trans-unit>
       <trans-unit id="5467642834854681120" datatype="html" xml:space="preserve">
         <source>Decrease playback rate</source>
         <target state="translated">Riduci la velocità di riproduzione</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">968</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">982</context></context-group></trans-unit>
       <trans-unit id="3860402955823859506" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the previous frame</source>
         <target state="translated">Naviga nel video al fotogramma precedente</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">970</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">984</context></context-group></trans-unit>
       <trans-unit id="8232494782895420700" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the next frame</source>
         <target state="translated">Naviga nel video al fotogramma successivo</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">971</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">985</context></context-group></trans-unit>
       <trans-unit id="8223917068580581095" datatype="html" xml:space="preserve">
         <source>Toggle theater mode</source>
         <target state="translated">Attiva/Disattiva la modalità teatro</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">955</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">969</context></context-group></trans-unit>
       <trans-unit id="8025996572234182184" xml:space="preserve">
         <source>Like the video</source>
         <target state="translated">Aggiungi like al video</target>
