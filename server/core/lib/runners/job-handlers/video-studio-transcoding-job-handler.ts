@@ -31,10 +31,9 @@ type CreateOptions = {
   priority: number
 }
 
+// dprint-ignore
 // eslint-disable-next-line max-len
-export class VideoStudioTranscodingJobHandler
-  extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
-{
+export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess> {
   async create (options: CreateOptions) {
     const { video, priority, tasks } = options
 
