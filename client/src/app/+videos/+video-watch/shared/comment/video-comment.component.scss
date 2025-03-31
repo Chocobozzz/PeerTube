@@ -97,17 +97,12 @@
 .comment-html {
   @include peertube-word-wrap;
 
-  // Mentions
   ::ng-deep a {
+    color: pvar(--fg);
 
-    &:not(.linkified-url) {
-      color: pvar(--fg);
+    font-weight: $font-semibold;
 
-      font-weight: $font-semibold;
-
-      @include disable-default-a-behaviour;
-    }
-
+    @include disable-default-a-behaviour;
   }
 
   // Paragraphs

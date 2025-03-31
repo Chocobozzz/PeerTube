@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core'
 import { getAbsoluteAPIUrl } from '@app/helpers/utils'
-import * as LinkifyJS from 'linkifyjs'
+import type * as LinkifyJS from 'linkifyjs'
+import type LinkifyHTML from 'linkify-html'
 
 @Injectable()
 export class LinkifierService {
   static CLASSNAME = 'linkified'
 
   private linkifyModule: typeof LinkifyJS
-  private linkifyHtmlModule: any
+  private linkifyHtmlModule: typeof LinkifyHTML
 
   private mentionPluginInitialized = false
 
-  private linkifyOptions = {
+  private linkifyOptions: LinkifyJS.Opts = {
     className: {
       mention: LinkifierService.CLASSNAME + '-mention',
       url: LinkifierService.CLASSNAME + '-url'

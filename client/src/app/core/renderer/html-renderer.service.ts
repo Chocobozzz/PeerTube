@@ -22,7 +22,7 @@ export class HtmlRendererService {
     this.addHrefHook(this.enhancedDomPurify)
 
     this.addCheckSchemesHook(this.simpleDomPurify, getDefaultSanitizedSchemes())
-    this.addCheckSchemesHook(this.simpleDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
+    this.addCheckSchemesHook(this.enhancedDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
   }
 
   private addHrefHook (dompurifyInstance: DOMPurifyI) {
@@ -72,8 +72,17 @@ export class HtmlRendererService {
     })
   }
 
+  removeClassAttributes (html: string) {
+    return DOMPurify().sanitize(html, {
+      ALLOWED_TAGS: getDefaultSanitizedTags(),
+      ALLOWED_ATTR: getDefaultSanitizedHrefAttributes().filter(a => a !== 'class'),
+      ALLOW_DATA_ATTR: true
+    })
+  }
+
   async toSimpleSafeHtml (text: string) {
-    const html = await this.linkifier.linkify(text)
+    let html = this.removeClassAttributes(text)
+    html = await this.linkifier.linkify(html)
 
     return this.sanitize(this.simpleDomPurify, html)
   }
