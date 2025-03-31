@@ -12,5 +12,5 @@ export function buildEmptyEmbedHTML (options: {
   let htmlResult = TagsHtml.addTitleTag(html)
   htmlResult = TagsHtml.addDescriptionTag(htmlResult)
 
-  return TagsHtml.addTags(htmlResult, { forbidIndexation: true }, { playlist, video })
+  return TagsHtml.addTags(htmlResult, { forbidIndexation: true, embedIndexation: true }, { playlist, video })
 }

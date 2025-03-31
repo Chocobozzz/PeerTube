@@ -15,7 +15,6 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class VideoHtml {
-
   static async getWatchVideoHTML (videoIdArg: string, req: express.Request, res: express.Response) {
     const videoId = toCompleteUUID(videoIdArg)
 
@@ -42,7 +41,8 @@ export class VideoHtml {
       currentQuery: req.query,
       addEmbedInfo: true,
       addOG: true,
-      addTwitterCard: true
+      addTwitterCard: true,
+      isEmbed: false
     })
   }
 
@@ -66,6 +66,7 @@ export class VideoHtml {
       addEmbedInfo: true,
       addOG: false,
       addTwitterCard: false,
+      isEmbed: true,
 
       // TODO: Implement it so we can send query params to oembed service
       currentQuery: {}
@@ -84,9 +85,11 @@ export class VideoHtml {
     addTwitterCard: boolean
     addEmbedInfo: boolean
 
+    isEmbed: boolean
+
     currentQuery: Record<string, string>
   }) {
-    const { html, video, addEmbedInfo, addOG, addTwitterCard, currentQuery = {} } = options
+    const { html, video, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(video.description)
 
     let customHTML = TagsHtml.addTitleTag(html, video.name)
@@ -120,7 +123,11 @@ export class VideoHtml {
       escapedTitle: escapeHTML(video.name),
       escapedTruncatedDescription,
 
-      forbidIndexation: video.remote || video.privacy !== VideoPrivacy.PUBLIC,
+      forbidIndexation: isEmbed
+        ? video.privacy !== VideoPrivacy.PUBLIC && video.privacy !== VideoPrivacy.UNLISTED
+        : video.remote || video.privacy !== VideoPrivacy.PUBLIC,
+
+      embedIndexation: isEmbed,
 
       image: preview
         ? { url: WEBSERVER.URL + video.getPreviewStaticPath(), width: preview.width, height: preview.height }

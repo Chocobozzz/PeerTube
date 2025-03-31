@@ -9,6 +9,7 @@ import { Hooks } from '../../plugins/hooks.js'
 
 export type TagsOptions = {
   forbidIndexation: boolean
+  embedIndexation: boolean
 
   url?: string
 
@@ -93,7 +94,7 @@ export class TagsHtml {
     }
     const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
 
-    const { url, escapedTitle, oembedUrl, forbidIndexation, relMe, rssFeeds } = tagsValues
+    const { url, escapedTitle, oembedUrl, forbidIndexation, embedIndexation, relMe, rssFeeds } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
 
@@ -133,13 +134,12 @@ export class TagsHtml {
       }
     }
 
-    // SEO, use origin URL
-    if (forbidIndexation !== true && url) {
-      tagsStr += `<link rel="canonical" href="${url}" />`
-    }
-
     if (forbidIndexation === true) {
       tagsStr += `<meta name="robots" content="noindex" />`
+    } else if (embedIndexation) {
+      tagsStr += `<meta name="robots" content="noindex, indexifembedded" />`
+    } else if (url) { // SEO, use origin URL
+      tagsStr += `<link rel="canonical" href="${url}" />`
     }
 
     for (const rssLink of (rssFeeds || [])) {

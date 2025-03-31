@@ -13,7 +13,6 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class PlaylistHtml {
-
   static async getWatchPlaylistHTML (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
     const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
 
@@ -40,6 +39,7 @@ export class PlaylistHtml {
       addEmbedInfo: true,
       addOG: true,
       addTwitterCard: true,
+      isEmbed: false,
 
       currentQuery: req.query
     })
@@ -65,6 +65,7 @@ export class PlaylistHtml {
       addEmbedInfo: true,
       addOG: false,
       addTwitterCard: false,
+      isEmbed: true,
 
       // TODO: Implement it so we can send query params to oembed service
       currentQuery: {}
@@ -83,9 +84,11 @@ export class PlaylistHtml {
     addTwitterCard: boolean
     addEmbedInfo: boolean
 
+    isEmbed: boolean
+
     currentQuery: Record<string, string>
   }) {
-    const { html, playlist, addEmbedInfo, addOG, addTwitterCard, currentQuery = {} } = options
+    const { html, playlist, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(playlist.description)
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
@@ -113,7 +116,11 @@ export class PlaylistHtml {
       escapedTitle: escapeHTML(playlist.name),
       escapedTruncatedDescription,
 
-      forbidIndexation: !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
+      forbidIndexation: isEmbed
+        ? playlist.privacy !== VideoPlaylistPrivacy.PUBLIC && playlist.privacy !== VideoPlaylistPrivacy.UNLISTED
+        : !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
+
+      embedIndexation: isEmbed,
 
       image: playlist.hasThumbnail()
         ? { url: playlist.getThumbnailUrl(), width: playlist.Thumbnail.width, height: playlist.Thumbnail.height }

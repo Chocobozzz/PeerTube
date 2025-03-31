@@ -11,7 +11,6 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml, TagsOptions } from './tags-html.js'
 
 export class ActorHtml {
-
   static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
     const accountModelPromise = AccountModel.loadByNameWithHost(nameWithHost)
 
@@ -43,9 +42,10 @@ export class ActorHtml {
     return this.getAccountOrChannelHTMLPage({
       loader: () => Promise.resolve(account || channel),
 
-      getRSSFeeds: () => account
-        ? getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
-        : getChannelRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, channel),
+      getRSSFeeds: () =>
+        account
+          ? getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
+          : getChannelRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME, channel),
 
       req,
       res
@@ -109,6 +109,7 @@ export class ActorHtml {
       },
 
       forbidIndexation: !entity.Actor.isOwned(),
+      embedIndexation: false,
 
       rssFeeds: getRSSFeeds(entity)
     }, {})
