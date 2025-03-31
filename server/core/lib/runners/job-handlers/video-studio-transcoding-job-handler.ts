@@ -32,8 +32,9 @@ type CreateOptions = {
 }
 
 // eslint-disable-next-line max-len
-export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess> {
-
+export class VideoStudioTranscodingJobHandler
+  extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
+{
   async create (options: CreateOptions) {
     const { video, priority, tasks } = options
 
@@ -122,7 +123,6 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
     const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) {
       await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
-
     }
 
     const videoFilePath = resultPayload.videoFile as string
@@ -131,7 +131,9 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
 
     logger.info(
       'Runner video edition transcoding job %s for %s ended.',
-      runnerJob.uuid, video.uuid, this.lTags(video.uuid, runnerJob.uuid)
+      runnerJob.uuid,
+      video.uuid,
+      this.lTags(video.uuid, runnerJob.uuid)
     )
   }
 
