@@ -2389,9 +2389,9 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2101170466365500913" datatype="html">
+      <trans-unit id="2101170466365500913" datatype="html" xml:space="preserve">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">Chỉ có thể đăng video sau khi đăng nhập</target>
+        <target state="translated">Bạn phải đăng nhập để đăng video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">8</context>
@@ -11451,7 +11451,7 @@
       </trans-unit>
       <trans-unit id="2925767298386605760" datatype="html" xml:space="preserve">
         <source>Original Publication Date</source>
-        <target state="translated">Ngày phát hành</target>
+        <target state="translated">Ngày công chiếu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">166</context>
@@ -11459,7 +11459,7 @@
       </trans-unit>
       <trans-unit id="7780562759861344168" datatype="html" xml:space="preserve">
         <source>Recent Views</source>
-        <target state="translated">Được xem gần đây</target>
+        <target state="translated">Lượt xem gần đây</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -11467,7 +11467,7 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html" xml:space="preserve">
         <source>Hot</source>
-        <target state="translated">Hot</target>
+        <target state="translated">Thịnh hành</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -11475,7 +11475,7 @@
       </trans-unit>
       <trans-unit id="3456598716931498601" datatype="html" xml:space="preserve">
         <source>Global Views</source>
-        <target state="translated">Lượt xem toàn cầu</target>
+        <target state="translated">Tổng lượt xem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">182</context>
@@ -12181,9 +12181,9 @@
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="687236465759862933" datatype="html">
+      <trans-unit id="687236465759862933" datatype="html" xml:space="preserve">
         <source>Open syndication dropdown</source>
-        <target state="translated">Mở trình đọc xổ xuống</target>
+        <target state="translated">Mở danh sách trình đọc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -18015,7 +18015,7 @@
       </trans-unit>
       <trans-unit id="2357625293346946918" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.numberOfFilters()"/> active filters, open the filters panel</source>
-        <target state="translated"><x id="PH" equiv-text="this.numberOfFilters()"/> bộ lọc đang hoạt động, mở bảng bộ lọc</target>
+        <target state="translated">Đã áp dụng <x id="PH" equiv-text="this.numberOfFilters()"/> bộ lọc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">280</context>
