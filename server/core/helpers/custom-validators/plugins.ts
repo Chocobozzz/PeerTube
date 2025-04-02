@@ -6,10 +6,6 @@ import { exists, isArray, isSafePath } from './misc.js'
 
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
 
-const NPM_VALIDATION_RE = new RegExp(
-	/^(@[^\._][a-z-_\.~0-9]+\/)?([a-z-0-9]+)$/,
-);
-
 function isPluginTypeValid (value: any) {
   return exists(value) &&
     (value === PluginType.PLUGIN || value === PluginType.THEME)
@@ -18,16 +14,14 @@ function isPluginTypeValid (value: any) {
 function isPluginNameValid (value: string) {
   return exists(value) &&
     validator.default.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
-    validator.default.matches(value, NPM_VALIDATION_RE)
+    validator.default.matches(value, /^[a-z-0-9]+$/)
 }
 
 function isNpmPluginNameValid (value: string) {
-  const match = value.match(NPM_VALIDATION_RE);
   return exists(value) &&
     validator.default.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
-    validator.default.matches(value, NPM_VALIDATION_RE) &&
-    (match[2].startsWith("peertube-plugin-") ||
-      match[2].startsWith("peertube-theme-"))
+    validator.default.matches(value, /^[a-z\-._0-9]+$/) &&
+    (value.startsWith('peertube-plugin-') || value.startsWith('peertube-theme-'))
 }
 
 function isPluginDescriptionValid (value: string) {
