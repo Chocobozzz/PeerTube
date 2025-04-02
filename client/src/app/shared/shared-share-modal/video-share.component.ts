@@ -1,5 +1,5 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, ElementRef, Input, ViewChild } from '@angular/core'
+import { NgFor, NgIf } from '@angular/common'
+import { Component, ElementRef, inject, input, model, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { RouterLink } from '@angular/router'
@@ -18,7 +18,7 @@ import {
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { QRCodeModule } from 'angularx-qrcode'
+import { QRCodeComponent } from 'angularx-qrcode'
 import { InputTextComponent } from '../shared-forms/input-text.component'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
@@ -59,7 +59,6 @@ type TabId = 'url' | 'qrcode' | 'embed'
   selector: 'my-video-share',
   templateUrl: './video-share.component.html',
   styleUrls: [ './video-share.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     NgIf,
@@ -70,25 +69,29 @@ type TabId = 'url' | 'qrcode' | 'embed'
     NgbNavLinkBase,
     NgbNavContent,
     InputTextComponent,
-    QRCodeModule,
+    QRCodeComponent,
     NgbNavOutlet,
     PeertubeCheckboxComponent,
     FormsModule,
     PluginPlaceholderComponent,
     TimestampInputComponent,
-    NgClass,
     NgFor,
     NgbCollapse,
     AlertComponent
   ]
 })
 export class VideoShareComponent {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  private modalService = inject(NgbModal)
+  private sanitizer = inject(DomSanitizer)
+  private server = inject(ServerService)
+  private hooks = inject(HooksService)
 
-  @Input() video: VideoDetails = null
-  @Input() videoCaptions: VideoCaption[] = []
-  @Input() playlist: VideoPlaylist = null
-  @Input() playlistPosition: number = null
+  readonly modal = viewChild<ElementRef>('modal')
+
+  readonly video = input<VideoDetails>(null)
+  readonly videoCaptions = input<VideoCaption[]>([])
+  readonly playlist = input<VideoPlaylist>(null)
+  readonly playlistPosition = model<number>(null)
 
   activeVideoId: TabId = 'url'
   activePlaylistId: TabId = 'url'
@@ -107,17 +110,11 @@ export class VideoShareComponent {
   playlistEmbedHTML: string
   playlistEmbedSafeHTML: SafeHtml
 
-  constructor (
-    private modalService: NgbModal,
-    private sanitizer: DomSanitizer,
-    private server: ServerService,
-    private hooks: HooksService
-  ) { }
-
   show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
     let subtitle: string
-    if (this.videoCaptions && this.videoCaptions.length !== 0) {
-      subtitle = this.videoCaptions[0].language.id
+    const videoCaptions = this.videoCaptions()
+    if (videoCaptions && videoCaptions.length !== 0) {
+      subtitle = videoCaptions[0].language.id
     }
 
     this.customizations = new Proxy({
@@ -125,7 +122,7 @@ export class VideoShareComponent {
       startAt: currentVideoTimestamp ? Math.floor(currentVideoTimestamp) : 0,
 
       stopAtCheckbox: false,
-      stopAt: this.video?.duration,
+      stopAt: this.video()?.duration,
 
       subtitleCheckbox: false,
       subtitle,
@@ -147,7 +144,7 @@ export class VideoShareComponent {
       includeVideoInPlaylist: false
     }, {
       set: (target, prop, value) => {
-        (target as any)[prop] = value
+        ;(target as any)[prop] = value
 
         if (prop === 'embedP2P') {
           // Auto enabled warning title if P2P is enabled
@@ -160,12 +157,12 @@ export class VideoShareComponent {
       }
     })
 
-    this.playlistPosition = currentPlaylistPosition
+    this.playlistPosition.set(currentPlaylistPosition)
 
     this.onUpdate()
 
-    this.modalService.open(this.modal, { centered: true }).shown.subscribe(() => {
-      this.hooks.runAction('action:modal.share.shown', 'video-watch', { video: this.video, playlist: this.playlist })
+    this.modalService.open(this.modal(), { centered: true }).shown.subscribe(() => {
+      this.hooks.runAction('action:modal.share.shown', 'video-watch', { video: this.video(), playlist: this.playlist() })
     })
   }
 
@@ -173,8 +170,8 @@ export class VideoShareComponent {
 
   getVideoUrl () {
     const url = this.customizations.originUrl
-      ? this.video.url
-      : buildVideoLink(this.video, window.location.origin)
+      ? this.video().url
+      : buildVideoLink(this.video(), window.location.origin)
 
     return this.hooks.wrapFun(
       decorateVideoLink,
@@ -188,7 +185,7 @@ export class VideoShareComponent {
   getVideoEmbedUrl () {
     return this.hooks.wrapFun(
       decorateVideoLink,
-      { url: this.video.embedUrl, ...this.getVideoOptions(true) },
+      { url: this.video().embedUrl, ...this.getVideoOptions(true) },
       'video-watch',
       'filter:share.video-embed-url.build.params',
       'filter:share.video-embed-url.build.result'
@@ -199,7 +196,7 @@ export class VideoShareComponent {
     const { responsive } = options
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
-      { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video.name, responsive, aspectRatio: this.video.aspectRatio },
+      { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video().name, responsive, aspectRatio: this.video().aspectRatio },
       'video-watch',
       'filter:share.video-embed-code.build.params',
       'filter:share.video-embed-code.build.result'
@@ -209,7 +206,7 @@ export class VideoShareComponent {
   // ---------------------------------------------------------------------------
 
   getPlaylistUrl () {
-    const url = buildPlaylistLink(this.playlist)
+    const url = buildPlaylistLink(this.playlist())
 
     return this.hooks.wrapFun(
       decoratePlaylistLink,
@@ -223,7 +220,7 @@ export class VideoShareComponent {
   getPlaylistEmbedUrl () {
     return this.hooks.wrapFun(
       decoratePlaylistLink,
-      { url: this.playlist.embedUrl, ...this.getPlaylistOptions() },
+      { url: this.playlist().embedUrl, ...this.getPlaylistOptions() },
       'video-watch',
       'filter:share.video-playlist-embed-url.build.params',
       'filter:share.video-playlist-embed-url.build.result'
@@ -236,9 +233,9 @@ export class VideoShareComponent {
       buildVideoOrPlaylistEmbed,
       {
         embedUrl: await this.getPlaylistEmbedUrl(),
-        embedTitle: this.playlist.displayName,
+        embedTitle: this.playlist().displayName,
         responsive,
-        aspectRatio: this.video?.aspectRatio
+        aspectRatio: this.video()?.aspectRatio
       },
       'video-watch',
       'filter:share.video-playlist-embed-code.build.params',
@@ -249,14 +246,14 @@ export class VideoShareComponent {
   // ---------------------------------------------------------------------------
 
   async onUpdate () {
-    if (this.playlist) {
+    if (this.playlist()) {
       this.playlistUrl = await this.getPlaylistUrl()
       this.playlistEmbedUrl = await this.getPlaylistEmbedUrl()
       this.playlistEmbedHTML = await this.getPlaylistEmbedCode({ responsive: this.customizations.responsive })
       this.playlistEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(await this.getPlaylistEmbedCode({ responsive: false }))
     }
 
-    if (this.video) {
+    if (this.video()) {
       this.videoUrl = await this.getVideoUrl()
       this.videoEmbedUrl = await this.getVideoEmbedUrl()
       this.videoEmbedHTML = await this.getVideoEmbedCode({ responsive: this.customizations.responsive })
@@ -277,27 +274,28 @@ export class VideoShareComponent {
   }
 
   isLocalVideo () {
-    return this.video.isLocal
+    return this.video().isLocal
   }
 
   isPrivateVideo () {
-    return this.video.privacy.id === VideoPrivacy.PRIVATE
+    return this.video().privacy.id === VideoPrivacy.PRIVATE
   }
 
   isPrivatePlaylist () {
-    return this.playlist.privacy.id === VideoPlaylistPrivacy.PRIVATE
+    return this.playlist().privacy.id === VideoPlaylistPrivacy.PRIVATE
   }
 
   isPasswordProtectedVideo () {
-    return this.video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+    return this.video().privacy.id === VideoPrivacy.PASSWORD_PROTECTED
   }
 
   private getPlaylistOptions (baseUrl?: string) {
+    const playlistPosition = this.playlistPosition()
     return {
       baseUrl,
 
-      playlistPosition: this.playlistPosition && this.customizations.includeVideoInPlaylist
-        ? this.playlistPosition
+      playlistPosition: playlistPosition && this.customizations.includeVideoInPlaylist
+        ? playlistPosition
         : undefined
     }
   }

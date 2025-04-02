@@ -1,7 +1,7 @@
 <div class="margin-content">
   <div class="videos-header">
-    <div *ngIf="headerActions.length !== 0" class="action-block mb-4">
-      <ng-container *ngFor="let action of headerActions">
+    <div *ngIf="headerActions().length !== 0" class="action-block mb-4">
+      <ng-container *ngFor="let action of headerActions()">
         @if (action.routerLink) {
           <my-button theme="secondary" [ptRouterLink]="action.routerLink" [icon]="action.iconName">{{ action.label }}</my-button>
         }
@@ -10,8 +10,8 @@
   </div>
 
   <my-video-filters-header
-    *ngIf="displayFilters" class="d-block"
-    [displayModerationBlock]="displayModerationBlock" [hideScope]="hideScopeFilter" [filters]="filters"
+    *ngIf="displayFilters()" class="d-block"
+    [displayModerationBlock]="builtDisplayModerationBlock" [hideScope]="hideScopeFilter()" [filters]="filters"
     (filtersChanged)="onFiltersChanged(true)"
   ></my-video-filters-header>
 
@@ -19,8 +19,8 @@
 
   <div
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
-    [setAngularState]="true" [parentDisabled]="disabled"
-    class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
+    [setAngularState]="true" [parentDisabled]="disabled()"
+    class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
     <ng-container *ngIf="highlightedLives.length !== 0">
       <h2 class="date-title">
@@ -31,15 +31,15 @@
       <ng-container *ngFor="let live of highlightedLives; trackBy: videoById;">
         <div class="video-wrapper">
           <my-video-miniature
-            [video]="live" [user]="userMiniature" [displayAsRow]="displayAsRow"
-            [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
+            [video]="live" [user]="userMiniature" [displayAsRow]="displayAsRow()"
+            [displayVideoActions]="displayVideoActions()" [displayOptions]="builtDisplayOptions"
             (videoBlocked)="removeVideoFromArray(live)" (videoRemoved)="removeVideoFromArray(live)"
           >
           </my-video-miniature>
         </div>
       </ng-container>
 
-      <h2 *ngIf="!groupByDate" class="date-title">
+      <h2 *ngIf="!groupByDate()" class="date-title">
         <my-global-icon class="pt-icon me-1" iconName="videos"></my-global-icon> Videos
       </h2>
     </ng-container>
@@ -51,8 +51,8 @@
 
       <div class="video-wrapper">
         <my-video-miniature
-          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
-          [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
+          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow()"
+          [displayVideoActions]="displayVideoActions()" [displayOptions]="builtDisplayOptions"
           (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
         >
         </my-video-miniature>

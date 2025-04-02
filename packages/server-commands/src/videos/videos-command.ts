@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import validator from 'validator'
 import { getAllPrivacies, omit, pick, wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
-  HttpStatusCodeType, ResultList,
+  HttpStatusCodeType,
+  ResultList,
   UserVideoRateType,
   Video,
   VideoCommentPolicy,
@@ -20,6 +20,7 @@ import {
   VideoTranscodingCreate
 } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath, buildUUID } from '@peertube/peertube-node-utils'
+import validator from 'validator'
 import { unwrapBody } from '../requests/index.js'
 import { waitJobs } from '../server/jobs.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
@@ -31,7 +32,6 @@ export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile
 }
 
 export class VideosCommand extends AbstractCommand {
-
   getCategories (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/videos/categories'
 
@@ -82,9 +82,11 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getFileMetadata (options: OverrideCommandOptions & {
-    url: string
-  }) {
+  getFileMetadata (
+    options: OverrideCommandOptions & {
+      url: string
+    }
+  ) {
     return unwrapBody<VideoFileMetadata>(this.getRawRequest({
       ...options,
 
@@ -96,11 +98,13 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  rate (options: OverrideCommandOptions & {
-    id: number | string
-    rating: UserVideoRateType
-    videoPassword?: string
-  }) {
+  rate (
+    options: OverrideCommandOptions & {
+      id: number | string
+      rating: UserVideoRateType
+      videoPassword?: string
+    }
+  ) {
     const { id, rating, videoPassword } = options
     const path = '/api/v1/videos/' + id + '/rate'
 
@@ -117,9 +121,11 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  get (options: OverrideCommandOptions & {
-    id: number | string
-  }) {
+  get (
+    options: OverrideCommandOptions & {
+      id: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.id
 
     return this.getRequestBody<VideoDetails>({
@@ -131,9 +137,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  getWithToken (options: OverrideCommandOptions & {
-    id: number | string
-  }) {
+  getWithToken (
+    options: OverrideCommandOptions & {
+      id: number | string
+    }
+  ) {
     return this.get({
       ...options,
 
@@ -141,15 +149,17 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  getWithPassword (options: OverrideCommandOptions & {
-    id: number | string
-    password?: string
-  }) {
+  getWithPassword (
+    options: OverrideCommandOptions & {
+      id: number | string
+      password?: string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.id
 
     return this.getRequestBody<VideoDetails>({
       ...options,
-      headers:{
+      headers: {
         'x-peertube-video-password': options.password
       },
       path,
@@ -158,9 +168,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  getSource (options: OverrideCommandOptions & {
-    id: number | string
-  }) {
+  getSource (
+    options: OverrideCommandOptions & {
+      id: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.id + '/source'
 
     return this.getRequestBody<VideoSource>({
@@ -172,9 +184,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  deleteSource (options: OverrideCommandOptions & {
-    id: number | string
-  }) {
+  deleteSource (
+    options: OverrideCommandOptions & {
+      id: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.id + '/source/file'
 
     return this.deleteRequest({
@@ -186,9 +200,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  async getId (options: OverrideCommandOptions & {
-    uuid: number | string
-  }) {
+  async getId (
+    options: OverrideCommandOptions & {
+      uuid: number | string
+    }
+  ) {
     const { uuid } = options
 
     if (validator.default.isUUID('' + uuid) === false) return uuid as number
@@ -198,9 +214,11 @@ export class VideosCommand extends AbstractCommand {
     return id
   }
 
-  async listFiles (options: OverrideCommandOptions & {
-    id: number | string
-  }) {
+  async listFiles (
+    options: OverrideCommandOptions & {
+      id: number | string
+    }
+  ) {
     const video = await this.get(options)
 
     const files = video.files || []
@@ -211,22 +229,14 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  listMyVideos (options: OverrideCommandOptions & {
-    start?: number
-    count?: number
-    sort?: string
-    search?: string
-    isLive?: boolean
-    channelId?: number
-    autoTagOneOf?: string[]
-  } = {}) {
+  listMyVideos (options: OverrideCommandOptions & VideosCommonQuery & { channelId?: number, channelNameOneOf?: string[] } = {}) {
     const path = '/api/v1/users/me/videos'
 
     return this.getRequestBody<ResultList<Video>>({
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive', 'channelId', 'autoTagOneOf' ]),
+      query: { ...this.buildListQuery(options), ...pick(options, [ 'channelId', 'channelNameOneOf' ]) },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -287,9 +297,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  listByAccount (options: OverrideCommandOptions & VideosCommonQuery & {
-    handle: string
-  }) {
+  listByAccount (
+    options: OverrideCommandOptions & VideosCommonQuery & {
+      handle: string
+    }
+  ) {
     const { handle, search } = options
     const path = '/api/v1/accounts/' + handle + '/videos'
 
@@ -303,9 +315,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  listByChannel (options: OverrideCommandOptions & VideosCommonQuery & {
-    handle: string
-  }) {
+  listByChannel (
+    options: OverrideCommandOptions & VideosCommonQuery & {
+      handle: string
+    }
+  ) {
     const { handle } = options
     const path = '/api/v1/video-channels/' + handle + '/videos'
 
@@ -321,17 +335,21 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  async find (options: OverrideCommandOptions & {
-    name: string
-  }) {
+  async find (
+    options: OverrideCommandOptions & {
+      name: string
+    }
+  ) {
     const { data } = await this.list(options)
 
     return data.find(v => v.name === options.name)
   }
 
-  async findFull (options: OverrideCommandOptions & {
-    name: string
-  }) {
+  async findFull (
+    options: OverrideCommandOptions & {
+      name: string
+    }
+  ) {
     const { uuid } = await this.find(options)
 
     return this.get({ id: uuid })
@@ -339,10 +357,12 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  update (options: OverrideCommandOptions & {
-    id: number | string
-    attributes?: VideoEdit
-  }) {
+  update (
+    options: OverrideCommandOptions & {
+      id: number | string
+      attributes?: VideoEdit
+    }
+  ) {
     const { id, attributes = {} } = options
     const path = '/api/v1/videos/' + id
 
@@ -376,9 +396,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  remove (options: OverrideCommandOptions & {
-    id: number | string
-  }) {
+  remove (
+    options: OverrideCommandOptions & {
+      id: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.id
 
     return unwrapBody(this.deleteRequest({
@@ -462,9 +484,11 @@ export class VideosCommand extends AbstractCommand {
     return created
   }
 
-  async buildLegacyUpload (options: OverrideCommandOptions & {
-    attributes: VideoEdit
-  }): Promise<VideoCreateResult> {
+  async buildLegacyUpload (
+    options: OverrideCommandOptions & {
+      attributes: VideoEdit
+    }
+  ): Promise<VideoCreateResult> {
     const path = '/api/v1/videos/upload'
 
     return unwrapBody<{ video: VideoCreateResult }>(this.postUploadRequest({
@@ -478,14 +502,16 @@ export class VideosCommand extends AbstractCommand {
     })).then(body => body.video || body as any)
   }
 
-  quickUpload (options: OverrideCommandOptions & {
-    name: string
-    nsfw?: boolean
-    privacy?: VideoPrivacyType
-    fixture?: string
-    videoPasswords?: string[]
-    channelId?: number
-  }) {
+  quickUpload (
+    options: OverrideCommandOptions & {
+      name: string
+      nsfw?: boolean
+      privacy?: VideoPrivacyType
+      fixture?: string
+      videoPasswords?: string[]
+      channelId?: number
+    }
+  ) {
     const attributes: VideoEdit = { name: options.name }
     if (options.nsfw) attributes.nsfw = options.nsfw
     if (options.privacy) attributes.privacy = options.privacy
@@ -515,11 +541,13 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  replaceSourceFile (options: OverrideCommandOptions & {
-    videoId: number | string
-    fixture: string
-    completedExpectedStatus?: HttpStatusCodeType
-  }) {
+  replaceSourceFile (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      fixture: string
+      completedExpectedStatus?: HttpStatusCodeType
+    }
+  ) {
     return this.buildResumeUpload({
       ...options,
 
@@ -530,9 +558,11 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  removeHLSPlaylist (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  removeHLSPlaylist (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.videoId + '/hls'
 
     return this.deleteRequest({
@@ -544,10 +574,12 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  removeHLSFile (options: OverrideCommandOptions & {
-    videoId: number | string
-    fileId: number
-  }) {
+  removeHLSFile (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      fileId: number
+    }
+  ) {
     const path = '/api/v1/videos/' + options.videoId + '/hls/' + options.fileId
 
     return this.deleteRequest({
@@ -559,9 +591,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  removeAllWebVideoFiles (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  removeAllWebVideoFiles (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.videoId + '/web-videos'
 
     return this.deleteRequest({
@@ -573,10 +607,12 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  removeWebVideoFile (options: OverrideCommandOptions & {
-    videoId: number | string
-    fileId: number
-  }) {
+  removeWebVideoFile (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      fileId: number
+    }
+  ) {
     const path = '/api/v1/videos/' + options.videoId + '/web-videos/' + options.fileId
 
     return this.deleteRequest({
@@ -588,9 +624,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  runTranscoding (options: OverrideCommandOptions & VideoTranscodingCreate & {
-    videoId: number | string
-  }) {
+  runTranscoding (
+    options: OverrideCommandOptions & VideoTranscodingCreate & {
+      videoId: number | string
+    }
+  ) {
     const path = '/api/v1/videos/' + options.videoId + '/transcoding'
 
     return this.postBodyRequest({
@@ -615,13 +653,15 @@ export class VideosCommand extends AbstractCommand {
       'categoryOneOf',
       'licenceOneOf',
       'languageOneOf',
+      'host',
       'privacyOneOf',
       'tagsOneOf',
       'tagsAllOf',
       'isLocal',
       'include',
       'skipCount',
-      'autoTagOneOf'
+      'autoTagOneOf',
+      'search'
     ])
   }
 
@@ -630,7 +670,7 @@ export class VideosCommand extends AbstractCommand {
   }
 
   buildUploadAttaches (attributes: VideoEdit, includeFixture: boolean) {
-    const attaches: { [ name: string ]: string } = {}
+    const attaches: { [name: string]: string } = {}
 
     for (const key of [ 'thumbnailfile', 'previewfile' ]) {
       if (attributes[key]) attaches[key] = buildAbsoluteFixturePath(attributes[key])
@@ -664,11 +704,13 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  generateDownload (options: OverrideCommandOptions & {
-    videoId: number | string
-    videoFileIds: number[]
-    query?: Record<string, string>
-  }) {
+  generateDownload (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      videoFileIds: number[]
+      query?: Record<string, string>
+    }
+  ) {
     const { videoFileIds, videoId, query = {} } = options
     const path = '/download/videos/generate/' + videoId
 

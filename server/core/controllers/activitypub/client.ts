@@ -49,7 +49,7 @@ import {
   getVideoLocalViewerValidator,
   videoCommentGetValidator
 } from '../../middlewares/validators/index.js'
-import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy.js'
+import { videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy.js'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists.js'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate.js'
 import { AccountModel } from '../../models/account/account.js'
@@ -224,12 +224,6 @@ activityPubClientRouter.get('/video-channels/:nameWithHost/playlists',
   asyncMiddleware(videoChannelPlaylistsController)
 )
 
-activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
-  executeIfActivityPub,
-  activityPubRateLimiter,
-  asyncMiddleware(videoFileRedundancyGetValidator),
-  asyncMiddleware(videoRedundancyController)
-)
 activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistType/:videoId',
   executeIfActivityPub,
   activityPubRateLimiter,

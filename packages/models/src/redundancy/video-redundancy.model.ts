@@ -5,13 +5,14 @@ export interface VideoRedundancy {
   uuid: string
 
   redundancies: {
-    files: FileRedundancyInformation[]
+    // FIXME: remove in v8
+    files: []
 
-    streamingPlaylists: StreamingPlaylistRedundancyInformation[]
+    streamingPlaylists: RedundancyInformation[]
   }
 }
 
-interface RedundancyInformation {
+export interface RedundancyInformation {
   id: number
   fileUrl: string
   strategy: string
@@ -22,14 +23,4 @@ interface RedundancyInformation {
   expiresOn: Date | string
 
   size: number
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FileRedundancyInformation extends RedundancyInformation {
-
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StreamingPlaylistRedundancyInformation extends RedundancyInformation {
-
 }

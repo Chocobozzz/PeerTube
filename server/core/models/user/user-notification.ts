@@ -21,6 +21,7 @@ import { VideoModel } from '../video/video.js'
 import { UserNotificationListQueryBuilder } from './sql/user-notitication-list-query-builder.js'
 import { UserRegistrationModel } from './user-registration.js'
 import { UserModel } from './user.js'
+import { ActorImageModel } from '../actor/actor-image.js'
 
 @Table({
   tableName: 'userNotification',
@@ -111,7 +112,6 @@ import { UserModel } from './user.js'
   ] as (ModelIndexesOptions & { where?: WhereOptions })[]
 })
 export class UserNotificationModel extends SequelizeModel<UserNotificationModel> {
-
   @AllowNull(false)
   @Default(null)
   @Is('UserNotificationType', value => throwIfNotValid(value, isUserNotificationTypeValid, 'type'))
@@ -274,22 +274,33 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
   })
   VideoCaption: Awaited<VideoCaptionModel>
 
-  static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
-    const where = { userId }
+  static listForApi (options: {
+    userId: number
+    start: number
+    count: number
+    sort: string
+    unread?: boolean
+    typeOneOf?: UserNotificationType_Type[]
+  }) {
+    const { userId, start, count, sort, unread, typeOneOf } = options
+
+    const countWhere = { userId }
 
     const query = {
-      userId,
-      unread,
       offset: start,
       limit: count,
       sort,
-      where
+
+      userId,
+      unread,
+      typeOneOf
     }
 
-    if (unread !== undefined) query.where['read'] = !unread
+    if (unread !== undefined) countWhere['read'] = !unread
+    if (typeOneOf !== undefined) countWhere['type'] = { [Op.in]: typeOneOf }
 
     return Promise.all([
-      UserNotificationModel.count({ where })
+      UserNotificationModel.count({ where: countWhere })
         .then(count => count || 0),
 
       count === 0
@@ -338,31 +349,31 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     const queries = [
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "account" ON "userNotification"."accountId" = "account"."id" ` +
-        `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN "account" ON "userNotification"."accountId" = "account"."id" ` +
+          `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
       ),
 
       // Remove notifications from muted accounts that followed ours
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
-        `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-        `INNER JOIN account ON account."actorId" = actor.id `
+          `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
+          `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
+          `INNER JOIN account ON account."actorId" = actor.id `
       ),
 
       // Remove notifications from muted accounts that commented something
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
-        `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-        `INNER JOIN account ON account."actorId" = actor.id `
+          `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
+          `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
+          `INNER JOIN account ON account."actorId" = actor.id `
       ),
 
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
-        `INNER JOIN "videoComment" ON "videoComment".id = "userNotification"."commentId" ` +
-        `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
-        `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
+          `INNER JOIN "videoComment" ON "videoComment".id = "userNotification"."commentId" ` +
+          `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
+          `INNER JOIN actor ON "actor"."id" = "account"."actorId" `
       )
     ]
 
@@ -552,13 +563,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
 
   formatAvatar (a: UserNotificationIncludes.ActorImageInclude) {
     return {
-      path: a.getStaticPath(),
-      width: a.width
-    }
-  }
-
-  formatVideoCaption (a: UserNotificationIncludes.ActorImageInclude) {
-    return {
+      fileUrl: ActorImageModel.getImageUrl(a),
       path: a.getStaticPath(),
       width: a.width
     }

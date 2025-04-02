@@ -1,10 +1,11 @@
-import { unarray } from '@peertube/peertube-core-utils'
+import { arrayify } from '@peertube/peertube-core-utils'
+import { ActivityPubActor } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@server/helpers/core-utils.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { exists, isArray, isDateValid } from '../misc.js'
 import { isHostValid } from '../servers.js'
-import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
+import { isActivityPubHTMLUrlValid, isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
 
 export function isActorEndpointsObjectValid (endpointObject: any) {
   if (endpointObject?.sharedInbox) {
@@ -62,7 +63,7 @@ export function isActorDeleteActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Delete')
 }
 
-export function sanitizeAndCheckActorObject (actor: any) {
+export function sanitizeAndCheckActorObject (actor: ActivityPubActor) {
   if (!isActorTypeValid(actor.type)) return false
 
   normalizeActor(actor)
@@ -71,41 +72,14 @@ export function sanitizeAndCheckActorObject (actor: any) {
     isActivityPubUrlValid(actor.id) &&
     isActivityPubUrlValid(actor.inbox) &&
     isActorPreferredUsernameValid(actor.preferredUsername) &&
-    isActivityPubUrlValid(actor.url) &&
     isActorPublicKeyObjectValid(actor.publicKey) &&
     isActorEndpointsObjectValid(actor.endpoints) &&
-
     (!actor.outbox || isActivityPubUrlValid(actor.outbox)) &&
     (!actor.following || isActivityPubUrlValid(actor.following)) &&
     (!actor.followers || isActivityPubUrlValid(actor.followers)) &&
-
-    setValidAttributedTo(actor) &&
-    setValidDescription(actor) &&
     // If this is a group (a channel), it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
     (actor.type !== 'Group' || actor.attributedTo.length !== 0)
-}
-
-export function normalizeActor (actor: any) {
-  if (!actor) return
-
-  if (!actor.url) {
-    actor.url = actor.id
-  } else if (isArray(actor.url)) {
-    actor.url = unarray(actor.url)
-  } else if (typeof actor.url !== 'string') {
-    actor.url = actor.url.href || actor.url.url
-  }
-
-  if (!isDateValid(actor.published)) actor.published = undefined
-
-  if (actor.summary && typeof actor.summary === 'string') {
-    actor.summary = peertubeTruncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
-
-    if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
-      actor.summary = null
-    }
-  }
 }
 
 export function isValidActorHandle (handle: string) {
@@ -121,8 +95,38 @@ export function areValidActorHandles (handles: string[]) {
   return isArray(handles) && handles.every(h => isValidActorHandle(h))
 }
 
-export function setValidDescription (obj: any) {
-  if (!obj.summary) obj.summary = null
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
-  return true
+function normalizeActor (actor: ActivityPubActor) {
+  if (!actor) return
+
+  setValidUrls(actor)
+  setValidAttributedTo(actor)
+  setValidDescription(actor)
+
+  if (!isDateValid(actor.published)) actor.published = undefined
+
+  if (actor.summary && typeof actor.summary === 'string') {
+    actor.summary = peertubeTruncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
+
+    if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
+      actor.summary = null
+    }
+  }
+}
+
+function setValidDescription (actor: ActivityPubActor) {
+  if (!actor.summary) actor.summary = null
+}
+
+function setValidUrls (actor: any) {
+  if (!actor.url) {
+    actor.url = []
+    return
+  }
+
+  actor.url = arrayify(actor.url)
+    .filter(u => isActivityPubHTMLUrlValid(u))
 }

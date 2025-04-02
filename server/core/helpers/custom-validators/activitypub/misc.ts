@@ -1,9 +1,10 @@
-import validator from 'validator'
+import { ActivityHtmlUrlObject } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
+import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { exists } from '../misc.js'
 
-function isUrlValid (url: string) {
+export function isUrlValid (url: string) {
   const isURLOptions = {
     require_host: true,
     require_tld: true,
@@ -20,11 +21,11 @@ function isUrlValid (url: string) {
   return exists(url) && validator.default.isURL('' + url, isURLOptions)
 }
 
-function isActivityPubUrlValid (url: string) {
+export function isActivityPubUrlValid (url: string) {
   return isUrlValid(url) && validator.default.isLength('' + url, CONSTRAINTS_FIELDS.ACTORS.URL)
 }
 
-function isBaseActivityValid (activity: any, type: string) {
+export function isBaseActivityValid (activity: any, type: string) {
   return activity.type === type &&
     isActivityPubUrlValid(activity.id) &&
     isObjectValid(activity.actor) &&
@@ -32,19 +33,26 @@ function isBaseActivityValid (activity: any, type: string) {
     isUrlCollectionValid(activity.cc)
 }
 
-function isUrlCollectionValid (collection: any) {
+export function isUrlCollectionValid (collection: any) {
   return collection === undefined ||
     (Array.isArray(collection) && collection.every(t => isActivityPubUrlValid(t)))
 }
 
-function isObjectValid (object: any) {
+export function isObjectValid (object: any) {
   return exists(object) &&
     (
       isActivityPubUrlValid(object) || isActivityPubUrlValid(object.id)
     )
 }
 
-function setValidAttributedTo (obj: any) {
+export function isActivityPubHTMLUrlValid (url: ActivityHtmlUrlObject) {
+  return url &&
+    url.type === 'Link' &&
+    url.mediaType === 'text/html' &&
+    isActivityPubUrlValid(url.href)
+}
+
+export function setValidAttributedTo (obj: any) {
   if (Array.isArray(obj.attributedTo) === false) {
     obj.attributedTo = []
     return true
@@ -58,19 +66,10 @@ function setValidAttributedTo (obj: any) {
   return true
 }
 
-function isActivityPubVideoDurationValid (value: string) {
+export function isActivityPubVideoDurationValid (value: string) {
   // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
   return exists(value) &&
     typeof value === 'string' &&
     value.startsWith('PT') &&
     value.endsWith('S')
-}
-
-export {
-  isUrlValid,
-  isActivityPubUrlValid,
-  isBaseActivityValid,
-  setValidAttributedTo,
-  isObjectValid,
-  isActivityPubVideoDurationValid
 }

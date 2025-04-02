@@ -1,29 +1,27 @@
-<!-- Upload progress/cancel/error/success header -->
-<div *ngIf="isUploading && !error" class="upload-progress-cancel">
-  <my-progress-bar
-    i18n-label label="Total uploaded" theme="green"
-    [value]="uploadPercents" [valueFormatted]="getUploadingLabel()"
-  >
-  </my-progress-bar>
+@if (error()) {
+  @if (enableRetryAfterError()) {
+    <div class="d-flex">
+      <my-progress-bar
+        [label]="error()" value="100" [valueFormatted]="error()"
+        theme="red"
+      >
+      </my-progress-bar>
 
-  <input
-    *ngIf="uploaded === false"
-    type="button" class="peertube-button secondary-button ms-1" i18n-value="Cancel ongoing upload" value="Cancel" (click)="cancelUpload.emit()"
-  />
-</div>
+      <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Retry failed upload" value="Retry" (click)="retry.emit()" />
+    </div>
+  } @else {
+    <my-alert type="danger" class="mt-3">
+      <div i18n>Sorry, but something went wrong.</div>
 
-<div *ngIf="error && enableRetryAfterError" class="upload-progress-retry">
-  <my-progress-bar
-    [label]="error" value="100" [valueFormatted]="error"
-    theme="red"
-  >
-  </my-progress-bar>
-
-  <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Retry failed upload" value="Retry" (click)="retry.emit()" />
-  <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Cancel ongoing upload" value="Cancel" (click)="cancelUpload.emit()" />
-</div>
-
-<my-alert *ngIf="error && !enableRetryAfterError" type="danger">
-  <div i18n>Sorry, but something went wrong</div>
-  {{ error }}
-</my-alert>
+      {{ error() }}
+    </my-alert>
+  }
+} @else if (isUploading() || uploaded()){
+  <div>
+    <my-progress-bar
+      i18n-label label="Total uploaded" theme="green"
+      [value]="uploadPercents()" [valueFormatted]="getUploadingLabel()"
+    >
+    </my-progress-bar>
+  </div>
+}

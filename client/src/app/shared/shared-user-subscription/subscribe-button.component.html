@@ -22,7 +22,11 @@
   @if (isUserLoggedIn()) {
     @if (isAllChannelsSubscribed) {
       <button type="button" [ngClass]="buttonClasses" class="btn last-in-group" (click)="unsubscribe()">
-        <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
+        @if (account()) {
+          <ng-container i18n>Unsubscribe from all channels</ng-container>
+        } @else {
+          <ng-container i18n>Unsubscribe</ng-container>
+        }
       </button>
     } @else {
       <button type="button" [ngClass]="buttonClasses" class="btn" (click)="subscribe()">
@@ -57,6 +61,7 @@
     <div class="dropdown-divider"></div>
 
     <h6 class="dropdown-header" i18n>Using a syndication feed</h6>
+    <a *ngIf="podcastFeedUri" [href]="podcastFeedUri" target="_blank" class="dropdown-item" i18n>Subscribe via Podcast Feed</a>
     <a [href]="rssUri" target="_blank" class="dropdown-item" i18n>Subscribe via RSS</a>
 
   </div>

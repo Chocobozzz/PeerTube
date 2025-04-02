@@ -167,7 +167,7 @@ export function getStreamingPlaylistAttributesFromObject (video: MVideoId, video
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
 
-    const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u))
+    const files = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u))
 
     const attribute = {
       type: VideoStreamingPlaylistType.HLS,

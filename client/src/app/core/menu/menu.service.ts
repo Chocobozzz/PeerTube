@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { fromEvent } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
 import { LocalStorageService, ScreenService } from '../wrappers'
 
 @Injectable()
 export class MenuService {
+  private screenService = inject(ScreenService)
+  private localStorageService = inject(LocalStorageService)
+
   private static LS_MENU_COLLAPSED = 'menu-collapsed'
 
   private menuCollapsed = false
   private menuChangedByUser = false
 
-  constructor (
-    private screenService: ScreenService,
-    private localStorageService: LocalStorageService
-  ) {
+  constructor () {
     // Do not display menu on small or touch screens
     if (this.screenService.isInSmallView() || this.screenService.isInTouchScreen()) {
       this.setMenuCollapsed(true)

@@ -1,5 +1,5 @@
 import { CommonModule, DecimalPipe, NgIf } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { Component, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { DaysDurationFormatterPipe } from '@app/shared/shared-main/date/days-duration-formatter.pipe'
@@ -13,7 +13,6 @@ import { AuthService } from '@app/core'
   selector: 'my-instance-stat-rules',
   templateUrl: './instance-stat-rules.component.html',
   styleUrls: [ './instance-stat-rules.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     NgIf,
@@ -26,13 +25,11 @@ import { AuthService } from '@app/core'
   ]
 })
 export class InstanceStatRulesComponent {
-  @Input({ required: true }) stats: ServerStats
-  @Input({ required: true }) config: ServerConfig
-  @Input({ required: true }) aboutHTML: AboutHTML
+  private auth = inject(AuthService)
 
-  constructor (private auth: AuthService) {
-
-  }
+  readonly stats = input.required<ServerStats>()
+  readonly config = input.required<ServerConfig>()
+  readonly aboutHTML = input.required<AboutHTML>()
 
   canUpload () {
     const user = this.auth.getUser()
@@ -43,14 +40,16 @@ export class InstanceStatRulesComponent {
       return true
     }
 
-    return this.config.user.videoQuota !== 0 && this.config.user.videoQuotaDaily !== 0
+    const config = this.config()
+    return config.user.videoQuota !== 0 && config.user.videoQuotaDaily !== 0
   }
 
   canPublishLive () {
-    return this.config.live.enabled
+    return this.config().live.enabled
   }
 
   isContactFormEnabled () {
-    return this.config.email.enabled && this.config.contactForm.enabled
+    const config = this.config()
+    return config.email.enabled && config.contactForm.enabled
   }
 }

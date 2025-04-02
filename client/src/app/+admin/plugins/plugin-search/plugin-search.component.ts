@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
@@ -19,7 +19,6 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
   styleUrls: [ './plugin-search.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     GlobalIconComponent,
@@ -33,6 +32,13 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   ]
 })
 export class PluginSearchComponent implements OnInit {
+  private pluginService = inject(PluginService)
+  private pluginApiService = inject(PluginApiService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+
   pluginType: PluginType_Type
 
   pagination: ComponentPagination = {
@@ -53,16 +59,6 @@ export class PluginSearchComponent implements OnInit {
 
   private searchSubject = new Subject<string>()
 
-  constructor (
-    private pluginService: PluginService,
-    private pluginApiService: PluginApiService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-  }
-
   ngOnInit () {
     if (!this.route.snapshot.queryParams['pluginType']) {
       const queryParams = { pluginType: PluginType.PLUGIN }
@@ -80,11 +76,11 @@ export class PluginSearchComponent implements OnInit {
     })
 
     this.searchSubject.asObservable()
-        .pipe(
-          debounceTime(400),
-          distinctUntilChanged()
-        )
-        .subscribe(search => this.router.navigate([], { queryParams: { search }, queryParamsHandling: 'merge' }))
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(search => this.router.navigate([], { queryParams: { search }, queryParamsHandling: 'merge' }))
   }
 
   onSearchChange (event: Event) {
@@ -104,23 +100,23 @@ export class PluginSearchComponent implements OnInit {
     this.isSearching = true
 
     this.pluginApiService.searchAvailablePlugins(this.pluginType, this.pagination, this.sort, this.search)
-        .subscribe({
-          next: res => {
-            this.isSearching = false
+      .subscribe({
+        next: res => {
+          this.isSearching = false
 
-            this.plugins = this.plugins.concat(res.data)
-            this.pagination.totalItems = res.total
+          this.plugins = this.plugins.concat(res.data)
+          this.pagination.totalItems = res.total
 
-            this.onDataSubject.next(res.data)
-          },
+          this.onDataSubject.next(res.data)
+        },
 
-          error: err => {
-            logger.error(err)
+        error: err => {
+          logger.error(err)
 
-            const message = $localize`The plugin index is not available. Please retry later.`
-            this.notifier.error(message)
-          }
-        })
+          const message = $localize`The plugin index is not available. Please retry later.`
+          this.notifier.error(message)
+        }
+      })
   }
 
   onNearOfBottom () {
@@ -147,7 +143,7 @@ export class PluginSearchComponent implements OnInit {
     if (this.installing[plugin.npmName]) return
 
     const res = await this.confirmService.confirm(
-      $localize`Please only install plugins or themes you trust, since they can execute any code on your instance.`,
+      $localize`Please only install plugins or themes you trust, since they can execute any code on your platform.`,
       $localize`Install ${plugin.name}?`
     )
     if (res === false) return
@@ -155,21 +151,21 @@ export class PluginSearchComponent implements OnInit {
     this.installing[plugin.npmName] = true
 
     this.pluginApiService.install(plugin.npmName)
-        .subscribe({
-          next: () => {
-            this.installing[plugin.npmName] = false
-            this.pluginInstalled = true
+      .subscribe({
+        next: () => {
+          this.installing[plugin.npmName] = false
+          this.pluginInstalled = true
 
-            this.notifier.success($localize`${plugin.name} installed.`)
+          this.notifier.success($localize`${plugin.name} installed.`)
 
-            plugin.installed = true
-          },
+          plugin.installed = true
+        },
 
-          error: err => {
-            this.installing[plugin.npmName] = false
+        error: err => {
+          this.installing[plugin.npmName] = false
 
-            this.notifier.error(err.message)
-          }
-        })
+          this.notifier.error(err.message)
+        }
+      })
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output } from '@angular/core'
+import { Component, forwardRef, OnChanges, OnInit, inject, input, output } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
@@ -17,31 +17,30 @@ import { NgClass, NgIf } from '@angular/common'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ NgClass, NgbTooltip, NgIf, GlobalIconComponent, FormsModule ]
 })
 export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {
-  @Input() theme: 'primary' | 'secondary' = 'secondary'
-  @Input() inputLabel: string
-  @Input() inputName: string
-  @Input() extensions: string[] = []
-  @Input() maxFileSize: number
+  private notifier = inject(Notifier)
 
-  @Input() displayFilename = false
-  @Input() displayReset = false
+  readonly theme = input<'primary' | 'secondary'>('secondary')
+  readonly inputLabel = input<string>(undefined)
+  readonly inputName = input<string>(undefined)
+  readonly extensions = input<string[]>([])
+  readonly maxFileSize = input<number>(undefined)
 
-  @Input() icon: GlobalIconName
-  @Input() buttonTooltip: string
+  readonly displayFilename = input(false)
+  readonly displayReset = input(false)
 
-  @Output() fileChanged = new EventEmitter<Blob>()
+  readonly icon = input<GlobalIconName>(undefined)
+  readonly buttonTooltip = input<string>(undefined)
+
+  readonly fileChanged = output<Blob>()
 
   classes: { [id: string]: boolean } = {}
   allowedExtensionsMessage = ''
   fileInputValue: any
 
   private file: File
-
-  constructor (private notifier: Notifier) { }
 
   get filename () {
     if (!this.file) return ''
@@ -50,7 +49,7 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
   }
 
   ngOnInit () {
-    this.allowedExtensionsMessage = this.extensions.join(', ')
+    this.allowedExtensionsMessage = this.extensions().join(', ')
 
     this.buildClasses()
   }
@@ -61,9 +60,9 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
 
   buildClasses () {
     this.classes = {
-      'with-icon': !!this.icon,
-      'primary-button': this.theme === 'primary',
-      'secondary-button': this.theme === 'secondary'
+      'with-icon': !!this.icon(),
+      'primary-button': this.theme() === 'primary',
+      'secondary-button': this.theme() === 'secondary'
     }
   }
 
@@ -71,13 +70,13 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
     if (event.target.files?.length) {
       const [ file ] = event.target.files
 
-      if (file.size > this.maxFileSize) {
+      if (file.size > this.maxFileSize()) {
         this.notifier.error($localize`This file is too large.`)
         return
       }
 
       const extension = '.' + file.name.split('.').pop()
-      if (this.extensions.includes(extension.toLowerCase()) === false) {
+      if (this.extensions().includes(extension.toLowerCase()) === false) {
         const message = $localize`PeerTube cannot handle this kind of file. Accepted extensions are ${this.allowedExtensionsMessage}.`
         this.notifier.error(message)
 
@@ -97,7 +96,9 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
     this.fileChanged.emit(undefined)
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (file: any) {
     this.file = file

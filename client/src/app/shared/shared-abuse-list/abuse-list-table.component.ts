@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -37,7 +37,6 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
   selector: 'my-abuse-list-table',
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,
@@ -58,10 +57,23 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
   ]
 })
 export class AbuseListTableComponent extends RestTable implements OnInit, OnDestroy {
-  @Input() viewType: 'admin' | 'user'
+  protected route = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private notifier = inject(Notifier)
+  private abuseService = inject(AbuseService)
+  private blocklistService = inject(BlocklistService)
+  private commentService = inject(VideoCommentService)
+  private videoService = inject(VideoService)
+  private videoBlocklistService = inject(VideoBlockService)
+  private confirmService = inject(ConfirmService)
+  private markdownRenderer = inject(MarkdownService)
+  private hooks = inject(HooksService)
+  private pluginService = inject(PluginService)
 
-  @ViewChild('abuseMessagesModal', { static: true }) abuseMessagesModal: AbuseMessageModalComponent
-  @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
+  readonly viewType = input<'admin' | 'user'>(undefined)
+
+  readonly abuseMessagesModal = viewChild<AbuseMessageModalComponent>('abuseMessagesModal')
+  readonly moderationCommentModal = viewChild<ModerationCommentModalComponent>('moderationCommentModal')
 
   abuses: ProcessedAbuse[] = []
   totalRecords = 0
@@ -98,25 +110,9 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     }
   ]
 
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private notifier: Notifier,
-    private abuseService: AbuseService,
-    private blocklistService: BlocklistService,
-    private commentService: VideoCommentService,
-    private videoService: VideoService,
-    private videoBlocklistService: VideoBlockService,
-    private confirmService: ConfirmService,
-    private markdownRenderer: MarkdownService,
-    private hooks: HooksService,
-    private pluginService: PluginService
-  ) {
-    super()
-  }
-
   async ngOnInit () {
-    if (this.viewType === 'admin') {
+    const viewType = this.viewType()
+    if (viewType === 'admin') {
       this.pluginService.addAction('admin-abuse-list:load-data', () => this.reloadDataInternal())
     }
 
@@ -132,21 +128,21 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
       this.buildAccountActions()
     ]
 
-    this.abuseActions = this.viewType === 'admin'
+    this.initialize()
+
+    this.abuseActions = viewType === 'admin'
       ? await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
       : abuseActions
-
-    this.initialize()
   }
 
   ngOnDestroy () {
-    if (this.viewType === 'admin') {
+    if (this.viewType() === 'admin') {
       this.pluginService.removeAction('admin-abuse-list:load-data')
     }
   }
 
   isAdminView () {
-    return this.viewType === 'admin'
+    return this.viewType() === 'admin'
   }
 
   getIdentifier () {
@@ -154,7 +150,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
   }
 
   openModerationCommentModal (abuse: AdminAbuse) {
-    this.moderationCommentModal.openModal(abuse)
+    this.moderationCommentModal().openModal(abuse)
   }
 
   onModerationCommentUpdated () {
@@ -217,18 +213,18 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
   }
 
   openAbuseMessagesModal (abuse: AdminAbuse) {
-    this.abuseMessagesModal.openModal(abuse)
+    this.abuseMessagesModal().openModal(abuse)
   }
 
   isLocalAbuse (abuse: AdminAbuse) {
-    if (this.viewType === 'user') return true
+    if (this.viewType() === 'user') return true
     if (!abuse.reporterAccount) return false
 
     return Actor.IS_LOCAL(abuse.reporterAccount.host)
   }
 
   getSendMessageButtonLabel (abuse: AdminAbuse) {
-    if (this.viewType === 'admin') {
+    if (this.viewType() === 'admin') {
       return formatICU(
         $localize`Send a message to the reporter (currently {count, plural, =1 {{count} message} other {{count} messages}})`,
         { count: abuse.countMessages }
@@ -250,7 +246,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
       search: this.search
     }
 
-    const observable = this.viewType === 'admin'
+    const observable = this.viewType() === 'admin'
       ? this.abuseService.getAdminAbuses(options)
       : this.abuseService.getUserAbuses(options)
 
@@ -495,7 +491,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     this.blocklistService.blockAccountByInstance(account)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${account.nameWithHost} muted by the instance.`)
+          this.notifier.success($localize`Account ${account.nameWithHost} muted by your platform.`)
           account.mutedByInstance = true
         },
 
@@ -507,7 +503,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     this.blocklistService.blockServerByInstance(host)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Server ${host} muted by the instance.`)
+          this.notifier.success($localize`${host} muted by your platform.`)
         },
 
         error: err => this.notifier.error(err.message)

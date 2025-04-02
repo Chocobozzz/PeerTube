@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
@@ -19,7 +19,6 @@ import { FollowModalComponent } from './follow-modal.component'
 @Component({
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,
@@ -35,8 +34,12 @@ import { FollowModalComponent } from './follow-modal.component'
     ButtonComponent
   ]
 })
-export class FollowingListComponent extends RestTable <ActorFollow> implements OnInit {
-  @ViewChild('followModal') followModal: FollowModalComponent
+export class FollowingListComponent extends RestTable<ActorFollow> implements OnInit {
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private followService = inject(InstanceFollowService)
+
+  readonly followModal = viewChild<FollowModalComponent>('followModal')
 
   following: ActorFollow[] = []
   totalRecords = 0
@@ -46,14 +49,6 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
   searchFilters: AdvancedInputFilter[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
-
-  constructor (
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private followService: InstanceFollowService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.initialize()
@@ -73,7 +68,7 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
   }
 
   openFollowModal () {
-    this.followModal.openModal()
+    this.followModal().openModal()
   }
 
   isInstanceFollowing (follow: ActorFollow) {
@@ -114,13 +109,13 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
 
   protected reloadDataInternal () {
     this.followService.getFollowing({ pagination: this.pagination, sort: this.sort, search: this.search })
-                      .subscribe({
-                        next: resultList => {
-                          this.following = resultList.data
-                          this.totalRecords = resultList.total
-                        },
+      .subscribe({
+        next: resultList => {
+          this.following = resultList.data
+          this.totalRecords = resultList.total
+        },
 
-                        error: err => this.notifier.error(err.message)
-                      })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

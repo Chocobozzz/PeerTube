@@ -9,6 +9,7 @@ a {
   &,
   &:hover {
     color: pvar(--fg);
+    opacity: 1;
 
     &.focus-visible {
       background-color: pvar(--primary);

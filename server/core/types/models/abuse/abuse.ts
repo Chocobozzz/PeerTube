@@ -20,95 +20,100 @@ export type MVideoAbuse = Omit<VideoAbuseModel, 'Abuse' | 'Video'>
 export type MCommentAbuse = Omit<VideoCommentAbuseModel, 'Abuse' | 'VideoComment'>
 
 export type MAbuseReporter =
-  MAbuse &
-  Use<'ReporterAccount', MAccountDefault>
+  & MAbuse
+  & Use<'ReporterAccount', MAccountDefault>
 
 // ############################################################################
 
 export type MVideoAbuseVideo =
-  MVideoAbuse &
-  UseVideoAbuse<'Video', MVideo>
+  & MVideoAbuse
+  & UseVideoAbuse<'Video', MVideo>
 
 export type MVideoAbuseVideoUrl =
-  MVideoAbuse &
-  UseVideoAbuse<'Video', MVideoUrl>
+  & MVideoAbuse
+  & UseVideoAbuse<'Video', MVideoUrl>
 
 export type MVideoAbuseVideoFull =
-  MVideoAbuse &
-  UseVideoAbuse<'Video', Omit<MVideoAccountLightBlacklistAllFiles, 'VideoFiles' | 'VideoStreamingPlaylists'>>
+  & MVideoAbuse
+  & UseVideoAbuse<'Video', Omit<MVideoAccountLightBlacklistAllFiles, 'VideoFiles' | 'VideoStreamingPlaylists'>>
 
 export type MVideoAbuseFormattable =
-  MVideoAbuse &
-  UseVideoAbuse<'Video', Pick<MVideoAccountLightBlacklistAllFiles,
-  'id' | 'uuid' | 'name' | 'nsfw' | 'getMiniature' | 'getMiniatureStaticPath' | 'isBlacklisted' | 'VideoChannel' | 'Thumbnails'>>
+  & MVideoAbuse
+  & UseVideoAbuse<
+    'Video',
+    Pick<
+      MVideoAccountLightBlacklistAllFiles,
+      'id' | 'uuid' | 'name' | 'nsfw' | 'getMiniature' | 'getMiniatureStaticPath' | 'isBlacklisted' | 'VideoChannel' | 'Thumbnails'
+    >
+  >
 
 // ############################################################################
 
 export type MCommentAbuseAccount =
-  MCommentAbuse &
-  UseCommentAbuse<'VideoComment', MCommentOwner>
+  & MCommentAbuse
+  & UseCommentAbuse<'VideoComment', MCommentOwner>
 
 export type MCommentAbuseAccountVideo =
-  MCommentAbuse &
-  UseCommentAbuse<'VideoComment', MCommentOwner & PickWith<VideoCommentModel, 'Video', MVideo>>
+  & MCommentAbuse
+  & UseCommentAbuse<'VideoComment', MCommentOwner & PickWith<VideoCommentModel, 'Video', MVideo>>
 
 export type MCommentAbuseUrl =
-  MCommentAbuse &
-  UseCommentAbuse<'VideoComment', MCommentUrl>
+  & MCommentAbuse
+  & UseCommentAbuse<'VideoComment', MCommentUrl>
 
 export type MCommentAbuseFormattable =
-  MCommentAbuse &
-  UseCommentAbuse<'VideoComment', MComment & PickWith<MCommentVideo, 'Video', Pick<MVideo, 'id' | 'uuid' | 'name'>>>
+  & MCommentAbuse
+  & UseCommentAbuse<'VideoComment', MComment & PickWith<MCommentVideo, 'Video', Pick<MVideo, 'id' | 'uuid' | 'name'>>>
 
 // ############################################################################
 
 export type MAbuseId = Pick<AbuseModel, 'id'>
 
 export type MAbuseVideo =
-  MAbuse &
-  Pick<AbuseModel, 'toActivityPubObject'> &
-  Use<'VideoAbuse', MVideoAbuseVideo>
+  & MAbuse
+  & Pick<AbuseModel, 'toActivityPubObject'>
+  & Use<'VideoAbuse', MVideoAbuseVideo>
 
 export type MAbuseUrl =
-  MAbuse &
-  Use<'VideoAbuse', MVideoAbuseVideoUrl> &
-  Use<'VideoCommentAbuse', MCommentAbuseUrl>
+  & MAbuse
+  & Use<'VideoAbuse', MVideoAbuseVideoUrl>
+  & Use<'VideoCommentAbuse', MCommentAbuseUrl>
 
 export type MAbuseAccountVideo =
-  MAbuse &
-  Pick<AbuseModel, 'toActivityPubObject'> &
-  Use<'VideoAbuse', MVideoAbuseVideoFull> &
-  Use<'ReporterAccount', MAccountDefault>
+  & MAbuse
+  & Pick<AbuseModel, 'toActivityPubObject'>
+  & Use<'VideoAbuse', MVideoAbuseVideoFull>
+  & Use<'ReporterAccount', MAccountDefault>
 
 export type MAbuseFull =
-  MAbuse &
-  Pick<AbuseModel, 'toActivityPubObject'> &
-  Use<'ReporterAccount', MAccountLight> &
-  Use<'FlaggedAccount', MAccountLight> &
-  Use<'VideoAbuse', MVideoAbuseVideoFull> &
-  Use<'VideoCommentAbuse', MCommentAbuseAccountVideo>
+  & MAbuse
+  & Pick<AbuseModel, 'toActivityPubObject'>
+  & Use<'ReporterAccount', MAccountLight>
+  & Use<'FlaggedAccount', MAccountLight>
+  & Use<'VideoAbuse', MVideoAbuseVideoFull>
+  & Use<'VideoCommentAbuse', MCommentAbuseAccountVideo>
 
 // ############################################################################
 
 // Format for API or AP object
 
 export type MAbuseAdminFormattable =
-  MAbuse &
-  Use<'ReporterAccount', MAccountFormattable> &
-  Use<'FlaggedAccount', MAccountFormattable> &
-  Use<'VideoAbuse', MVideoAbuseFormattable> &
-  Use<'VideoCommentAbuse', MCommentAbuseFormattable>
+  & MAbuse
+  & Use<'ReporterAccount', MAccountFormattable>
+  & Use<'FlaggedAccount', MAccountFormattable>
+  & Use<'VideoAbuse', MVideoAbuseFormattable>
+  & Use<'VideoCommentAbuse', MCommentAbuseFormattable>
 
 export type MAbuseUserFormattable =
-  MAbuse &
-  Use<'FlaggedAccount', MAccountFormattable> &
-  Use<'VideoAbuse', MVideoAbuseFormattable> &
-  Use<'VideoCommentAbuse', MCommentAbuseFormattable>
+  & MAbuse
+  & Use<'FlaggedAccount', MAccountFormattable>
+  & Use<'VideoAbuse', MVideoAbuseFormattable>
+  & Use<'VideoCommentAbuse', MCommentAbuseFormattable>
 
 export type MAbuseAP =
-  MAbuse &
-  Pick<AbuseModel, 'toActivityPubObject'> &
-  Use<'ReporterAccount', MAccountUrl> &
-  Use<'FlaggedAccount', MAccountUrl> &
-  Use<'VideoAbuse', MVideoAbuseVideo> &
-  Use<'VideoCommentAbuse', MCommentAbuseAccount>
+  & MAbuse
+  & Pick<AbuseModel, 'toActivityPubObject'>
+  & Use<'ReporterAccount', MAccountUrl>
+  & Use<'FlaggedAccount', MAccountUrl>
+  & Use<'VideoAbuse', MVideoAbuseVideo>
+  & Use<'VideoCommentAbuse', MCommentAbuseAccount>

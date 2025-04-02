@@ -191,7 +191,8 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   getOriginFileUrl (videoOrPlaylist: MVideo | MVideoPlaylist) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
-    if (videoOrPlaylist.isOwned()) return WEBSERVER.URL + staticPath
+    // FIXME: typings
+    if ((videoOrPlaylist as MVideo).isOwned()) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
   }

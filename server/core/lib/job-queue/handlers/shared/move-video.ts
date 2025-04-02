@@ -1,12 +1,13 @@
 import { LoggerTags, logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MVideoCaption, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 
-export async function moveToJob (options: {
+export async function moveVideoToStorageJob (options: {
   jobId: string
   videoUUID: string
   loggerTags: (number | string)[]
@@ -14,6 +15,8 @@ export async function moveToJob (options: {
   moveWebVideoFiles: (video: MVideoWithAllFiles) => Promise<void>
   moveHLSFiles: (video: MVideoWithAllFiles) => Promise<void>
   moveVideoSourceFile: (source: MVideoSource) => Promise<void>
+  moveCaptionFiles: (captions: MVideoCaption[]) => Promise<void>
+
   moveToFailedState: (video: MVideoWithAllFiles) => Promise<void>
   doAfterLastMove: (video: MVideoWithAllFiles) => Promise<void>
 }) {
@@ -24,6 +27,7 @@ export async function moveToJob (options: {
     moveVideoSourceFile,
     moveHLSFiles,
     moveWebVideoFiles,
+    moveCaptionFiles,
     moveToFailedState,
     doAfterLastMove
   } = options
@@ -35,7 +39,7 @@ export async function moveToJob (options: {
   const video = await VideoModel.loadWithFiles(videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Can\'t process job %d, video does not exist.', jobId, lTagsBase(videoUUID))
+    logger.info(`Can't process job ${jobId}, video does not exist.`, lTagsBase(videoUUID))
     fileMutexReleaser()
     return undefined
   }
@@ -51,25 +55,35 @@ export async function moveToJob (options: {
     }
 
     if (video.VideoFiles) {
-      logger.debug('Moving %d web video files for video %s.', video.VideoFiles.length, video.uuid, lTags)
+      logger.debug(`Moving ${video.VideoFiles.length} web video files for video ${video.uuid}.`, lTags)
 
       await moveWebVideoFiles(video)
     }
 
     if (video.VideoStreamingPlaylists) {
-      logger.debug('Moving HLS playlist of %s.', video.uuid, lTags)
+      logger.debug(`Moving HLS playlist of ${video.uuid}.`, lTags)
 
       await moveHLSFiles(video)
     }
 
+    const captions = await VideoCaptionModel.listVideoCaptions(video.id)
+    if (captions.length !== 0) {
+      logger.debug(`Moving captions of ${video.uuid}.`, lTags)
+
+      await moveCaptionFiles(captions)
+    }
+
     const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
+
+    logger.info(`Moved video ${video.uuid}. Checking pending move.`, lTags, { pendingMove })
+
     if (pendingMove === 0) {
-      logger.info('Running cleanup after moving files (video %s in job %s)', video.uuid, jobId, lTags)
+      logger.info(`Running cleanup after moving files (video ${video.uuid} in job ${jobId})`, lTags)
 
       await doAfterLastMove(video)
     }
   } catch (err) {
-    await onMoveToStorageFailure({ videoUUID, err, lTags, moveToFailedState })
+    await onMoveVideoToStorageFailure({ videoUUID, err, lTags, moveToFailedState })
 
     throw err
   } finally {
@@ -77,7 +91,7 @@ export async function moveToJob (options: {
   }
 }
 
-export async function onMoveToStorageFailure (options: {
+export async function onMoveVideoToStorageFailure (options: {
   videoUUID: string
   err: any
   lTags: LoggerTags
@@ -88,7 +102,7 @@ export async function onMoveToStorageFailure (options: {
   const video = await VideoModel.loadWithFiles(videoUUID)
   if (!video) return
 
-  logger.error('Cannot move video %s storage.', video.url, { err, ...lTags })
+  logger.error(`Cannot move video ${video.url} storage.`, { err, ...lTags })
 
   await moveToFailedState(video)
   await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingMove')

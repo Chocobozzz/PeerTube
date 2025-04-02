@@ -1,21 +1,19 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { PluginType, UserRight, UserRightType } from '@peertube/peertube-models'
 
 @Component({
+  selector: 'my-admin-settings',
   templateUrl: './admin-settings.component.html',
-  standalone: true,
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminSettingsComponent implements OnInit {
-  menuEntries: HorizontalMenuEntry[] = []
+  private auth = inject(AuthService)
+  private server = inject(ServerService)
 
-  constructor (
-    private auth: AuthService,
-    private server: ServerService
-  ) { }
+  menuEntries: HorizontalMenuEntry[] = []
 
   ngOnInit () {
     this.server.configReloaded.subscribe(() => this.buildMenu())

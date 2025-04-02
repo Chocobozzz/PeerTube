@@ -63,11 +63,16 @@ export class SQLCommand {
     await this.updateQuery(
       `UPDATE "videoFile" SET storage = :storage ` +
       `WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid) OR ` +
-      // eslint-disable-next-line max-len
       `"videoStreamingPlaylistId" IN (` +
         `SELECT "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ` +
         `INNER JOIN video ON video.id = "videoStreamingPlaylist"."videoId" AND "video".uuid = :uuid` +
       `)`,
+      { storage, uuid }
+    )
+
+    await this.updateQuery(
+      `UPDATE "videoStreamingPlaylist" SET storage = :storage ` +
+      `WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid)`,
       { storage, uuid }
     )
 
@@ -80,6 +85,15 @@ export class SQLCommand {
   async setUserExportStorageOf (userId: number, storage: FileStorageType) {
     await this.updateQuery(`UPDATE "userExport" SET storage = :storage WHERE "userId" = :userId`, { storage, userId })
   }
+
+  async setCaptionStorageOf (videoId: number, language: string, storage: FileStorageType) {
+    await this.updateQuery(
+      `UPDATE "videoCaption" SET storage = :storage WHERE "videoId" = :videoId AND language = :language`,
+      { storage, videoId, language }
+    )
+  }
+
+  // ---------------------------------------------------------------------------
 
   async setUserEmail (username: string, email: string) {
     await this.updateQuery(`UPDATE "user" SET email = :email WHERE "username" = :username`, { email, username })

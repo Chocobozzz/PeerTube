@@ -23,20 +23,25 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
   const payload = job.data as GenerateStoryboardPayload
   const lTags = lTagsBase(payload.videoUUID)
 
-  logger.info('Processing generate storyboard of %s in job %s.', payload.videoUUID, job.id, lTags)
+  logger.info(`Processing generate storyboard of ${payload.videoUUID} in job ${job.id}.`, lTags)
+
+  if (CONFIG.STORYBOARDS.ENABLED !== true) {
+    logger.info(`Storyboard disabled, do not process storyboard of ${payload.videoUUID} in job ${job.id}.`, lTags)
+    return
+  }
 
   const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
 
   try {
     const video = await VideoModel.loadFull(payload.videoUUID)
     if (!video) {
-      logger.info('Video %s does not exist anymore, skipping storyboard generation.', payload.videoUUID, lTags)
+      logger.info(`Video ${payload.videoUUID} does not exist anymore, skipping storyboard generation.`, lTags)
       return
     }
 
     const inputFile = video.getMaxQualityFile(VideoFileStream.VIDEO)
     if (!inputFile) {
-      logger.info('Do not generate a storyboard of %s since the video does not have a video stream', payload.videoUUID, lTags)
+      logger.info(`Do not generate a storyboard of ${payload.videoUUID} since the video does not have a video stream`, lTags)
       return
     }
 
@@ -62,7 +67,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
 
       const { totalSprites, spriteDuration } = buildSpritesMetadata({ video })
       if (totalSprites === 0) {
-        logger.info('Do not generate a storyboard of %s because the video is not long enough', payload.videoUUID, lTags)
+        logger.info(`Do not generate a storyboard of ${payload.videoUUID} because the video is not long enough`, lTags)
         return
       }
 
@@ -72,7 +77,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       })
 
       logger.debug(
-        'Generating storyboard from video of %s to %s', video.uuid, destination,
+        `Generating storyboard from video of ${video.uuid} to ${destination}`,
         { ...lTags, totalSprites, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
       )
 
@@ -96,7 +101,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
         return sequelizeTypescript.transaction(async transaction => {
           const videoStillExists = await VideoModel.load(video.id, transaction)
           if (!videoStillExists) {
-            logger.info('Video %s does not exist anymore, skipping storyboard generation.', payload.videoUUID, lTags)
+            logger.info(`Video ${payload.videoUUID} does not exist anymore, skipping storyboard generation.`, lTags)
             deleteFileAndCatch(destination)
             return
           }
@@ -114,7 +119,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
             videoId: video.id
           }, { transaction })
 
-          logger.info('Storyboard generation %s ended for video %s.', destination, video.uuid, lTags)
+          logger.info(`Storyboard generation ${destination} ended for video ${video.uuid}.`, lTags)
 
           if (payload.federate) {
             await federateVideoIfNeeded(video, false, transaction)

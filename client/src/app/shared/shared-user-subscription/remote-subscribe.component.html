@@ -7,14 +7,14 @@
   </div>
 
   <button type="submit" [disabled]="!form.valid" class="peertube-button primary-button">
-    @if (interact) {
+    @if (interact()) {
       <span i18n>Remote interact</span>
     } @else {
       <span i18n>Remote subscribe</span>
     }
   </button>
 
-  <my-help *ngIf="!interact && showHelp">
+  <my-help *ngIf="!interact() && showHelp()">
     <ng-template ptTemplate="customHtml">
       <ng-container i18n>
         You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
@@ -22,7 +22,7 @@
     </ng-template>
   </my-help>
 
-  <my-help *ngIf="showHelp && interact">
+  <my-help *ngIf="showHelp() && interact()">
     <ng-template ptTemplate="customHtml">
       <ng-container i18n>
         You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).

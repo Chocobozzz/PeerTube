@@ -112,7 +112,7 @@ export const moderationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
           meta: {
-            title: $localize`Muted instances`
+            title: $localize`Muted platforms`
           }
         }
       },

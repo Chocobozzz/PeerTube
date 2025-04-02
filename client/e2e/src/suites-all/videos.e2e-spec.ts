@@ -3,7 +3,7 @@ import { MyAccountPage } from '../po/my-account.po'
 import { PlayerPage } from '../po/player.po'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoUpdatePage } from '../po/video-update.po'
-import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
 import { FIXTURE_URLS, go, isIOS, isMobileDevice, isSafari, waitServerUp } from '../utils'
 
@@ -19,7 +19,7 @@ function isUploadUnsupported () {
 describe('Videos all workflow', () => {
   let videoWatchPage: VideoWatchPage
   let videoListPage: VideoListPage
-  let videoUploadPage: VideoUploadPage
+  let videoPublishPage: VideoPublishPage
   let videoUpdatePage: VideoUpdatePage
   let myAccountPage: MyAccountPage
   let loginPage: LoginPage
@@ -46,7 +46,7 @@ describe('Videos all workflow', () => {
 
   beforeEach(async () => {
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
-    videoUploadPage = new VideoUploadPage()
+    videoPublishPage = new VideoPublishPage()
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
     loginPage = new LoginPage(isMobileDevice())
@@ -70,10 +70,10 @@ describe('Videos all workflow', () => {
   it('Should upload a video', async () => {
     if (isUploadUnsupported()) return
 
-    await videoUploadPage.navigateTo()
+    await videoPublishPage.navigateTo()
 
-    await videoUploadPage.uploadVideo('video.mp4')
-    return videoUploadPage.validSecondUploadStep(videoName)
+    await videoPublishPage.uploadVideo('video.mp4')
+    await videoPublishPage.validSecondStep(videoName)
   })
 
   it('Should list videos', async () => {
@@ -124,12 +124,12 @@ describe('Videos all workflow', () => {
 
     await go(videoWatchUrl)
 
-    await videoWatchPage.clickOnUpdate()
+    await videoWatchPage.clickOnManage()
 
     videoName += ' updated'
     await videoUpdatePage.updateName(videoName)
-
-    await videoUpdatePage.validUpdate()
+    await videoUpdatePage.clickOnSave()
+    await videoUpdatePage.clickOnWatch()
 
     const name = await videoWatchPage.getVideoName()
     expect(name).toEqual(videoName)
@@ -145,10 +145,11 @@ describe('Videos all workflow', () => {
     await videoWatchPage.saveToPlaylist(playlistName)
     await browser.pause(5000)
 
-    await videoUploadPage.navigateTo()
+    await videoPublishPage.navigateTo()
 
-    await videoUploadPage.uploadVideo('video2.mp4')
-    await videoUploadPage.validSecondUploadStep(video2Name)
+    await videoPublishPage.uploadVideo('video2.mp4')
+    await videoPublishPage.validSecondStep(video2Name)
+    await videoPublishPage.clickOnWatch()
 
     await videoWatchPage.clickOnSave()
     await videoWatchPage.saveToPlaylist(playlistName)
@@ -173,7 +174,7 @@ describe('Videos all workflow', () => {
 
     await myAccountPage.playPlaylist()
 
-    await videoWatchPage.waitUntilVideoName(video2Name, 40 * 1000)
+    await videoWatchPage.waitWatchVideoName(video2Name, 40 * 1000)
   })
 
   it('Should watch the Web Video playlist in the embed', async () => {

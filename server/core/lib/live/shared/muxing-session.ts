@@ -227,7 +227,7 @@ class MuxingSession extends EventEmitter {
           this.streamingPlaylist.playlistUrl = url
         }
 
-        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions)
+        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions.map(r => ({ height: r })))
 
         await this.streamingPlaylist.save()
       } catch (err) {
@@ -469,6 +469,8 @@ class MuxingSession extends EventEmitter {
   private async addSegmentToReplay (segmentPath: string) {
     const segmentName = basename(segmentPath)
     const dest = join(this.replayDirectory, buildConcatenatedName(segmentName))
+
+    logger.debug(`Add segment ${segmentPath} to replay ${dest}`, this.lTags())
 
     try {
       const data = await readFile(segmentPath)

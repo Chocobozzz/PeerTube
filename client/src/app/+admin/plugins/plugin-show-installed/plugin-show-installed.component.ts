@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HooksService, Notifier, PluginService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -15,27 +15,22 @@ import { BuildFormArgument } from '@app/shared/form-validators/form-validator.mo
 @Component({
   selector: 'my-plugin-show-installed',
   templateUrl: './plugin-show-installed.component.html',
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgFor, DynamicFormFieldComponent ]
 })
 export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy {
+  protected formReactiveService = inject(FormReactiveService)
+  private pluginService = inject(PluginService)
+  private pluginAPIService = inject(PluginApiService)
+  private notifier = inject(Notifier)
+  private hooks = inject(HooksService)
+  private route = inject(ActivatedRoute)
+
   plugin: PeerTubePlugin
   registeredSettings: RegisterServerSettingOptions[] = []
   pluginTypeLabel: string
 
   private sub: Subscription
   private npmName: string
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private pluginService: PluginService,
-    private pluginAPIService: PluginApiService,
-    private notifier: Notifier,
-    private hooks: HooksService,
-    private route: ActivatedRoute
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.sub = this.route.params.subscribe(
@@ -55,13 +50,13 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     const settings = this.form.value
 
     this.pluginAPIService.updatePluginSettings(this.plugin.name, this.plugin.type, settings)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Settings updated.`)
-          },
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Settings updated.`)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   hasRegisteredSettings () {
@@ -84,23 +79,23 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
 
   private loadPlugin (npmName: string) {
     this.pluginAPIService.getPlugin(npmName)
-        .pipe(switchMap(plugin => {
-          return this.pluginAPIService.getPluginRegisteredSettings(plugin.name, plugin.type)
-            .pipe(map(data => ({ plugin, registeredSettings: data.registeredSettings })))
-        }))
-        .subscribe({
-          next: async ({ plugin, registeredSettings }) => {
-            this.plugin = plugin
+      .pipe(switchMap(plugin => {
+        return this.pluginAPIService.getPluginRegisteredSettings(plugin.name, plugin.type)
+          .pipe(map(data => ({ plugin, registeredSettings: data.registeredSettings })))
+      }))
+      .subscribe({
+        next: async ({ plugin, registeredSettings }) => {
+          this.plugin = plugin
 
-            this.registeredSettings = await this.translateSettings(registeredSettings)
+          this.registeredSettings = await this.translateSettings(registeredSettings)
 
-            this.pluginTypeLabel = this.pluginAPIService.getPluginTypeLabel(this.plugin.type)
+          this.pluginTypeLabel = this.pluginAPIService.getPluginTypeLabel(this.plugin.type)
 
-            this.buildSettingsForm()
-          },
+          this.buildSettingsForm()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private buildSettingsForm () {

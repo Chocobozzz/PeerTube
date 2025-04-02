@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
@@ -21,7 +21,6 @@ import { VideoRedundancyInformationComponent } from './video-redundancy-informat
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
   styleUrls: [ './video-redundancies-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     FormsModule,
@@ -39,6 +38,11 @@ import { VideoRedundancyInformationComponent } from './video-redundancy-informat
   ]
 })
 export class VideoRedundanciesListComponent extends RestTable implements OnInit {
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private redundancyService = inject(RedundancyService)
+  private serverService = inject(ServerService)
+
   private static LS_DISPLAY_TYPE = 'video-redundancies-list-display-type'
 
   videoRedundancies: VideoRedundancy[] = []
@@ -57,12 +61,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   private bytesPipe: BytesPipe
 
-  constructor (
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private redundancyService: RedundancyService,
-    private serverService: ServerService
-  ) {
+  constructor () {
     super()
 
     this.bytesPipe = new BytesPipe()
@@ -78,15 +77,15 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     this.initialize()
 
     this.serverService.getServerStats()
-        .subscribe(res => {
-          const redundancies = res.videosRedundancy
+      .subscribe(res => {
+        const redundancies = res.videosRedundancy
 
-          if (redundancies.length === 0) this.noRedundancies = true
+        if (redundancies.length === 0) this.noRedundancies = true
 
-          for (const r of redundancies) {
-            this.buildPieData(r)
-          }
-        })
+        for (const r of redundancies) {
+          this.buildPieData(r)
+        }
+      })
   }
 
   isDisplayingRemoteVideos () {
@@ -94,8 +93,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   getTotalSize (redundancy: VideoRedundancy) {
-    return redundancy.redundancies.files.reduce((a, b) => a + b.size, 0) +
-      redundancy.redundancies.streamingPlaylists.reduce((a, b) => a + b.size, 0)
+    return redundancy.redundancies.streamingPlaylists.reduce((a, b) => a + b.size, 0)
   }
 
   onDisplayTypeChanged () {
@@ -106,8 +104,9 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   getRedundancyStrategy (redundancy: VideoRedundancy) {
-    if (redundancy.redundancies.files.length !== 0) return redundancy.redundancies.files[0].strategy
-    if (redundancy.redundancies.streamingPlaylists.length !== 0) return redundancy.redundancies.streamingPlaylists[0].strategy
+    if (redundancy.redundancies.streamingPlaylists.length !== 0) {
+      return redundancy.redundancies.streamingPlaylists[0].strategy
+    }
 
     return ''
   }
@@ -185,7 +184,6 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
         error: err => this.notifier.error(err.message)
       })
-
   }
 
   protected reloadDataInternal () {
@@ -198,16 +196,16 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
     }
 
     this.redundancyService.listVideoRedundancies(options)
-                      .subscribe({
-                        next: resultList => {
-                          this.videoRedundancies = resultList.data
-                          this.totalRecords = resultList.total
+      .subscribe({
+        next: resultList => {
+          this.videoRedundancies = resultList.data
+          this.totalRecords = resultList.total
 
-                          this.dataLoaded = true
-                        },
+          this.dataLoaded = true
+        },
 
-                        error: err => this.notifier.error(err.message)
-                      })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private loadSelectLocalStorage () {

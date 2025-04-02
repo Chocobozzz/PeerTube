@@ -24,18 +24,23 @@ import { VideoPathManager } from './video-path-manager.js'
 const lTags = loggerTagsFactory('hls')
 
 export async function updateStreamingPlaylistsInfohashesIfNeeded () {
-  const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
+  const playlistsToUpdateIds = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
 
   // Use separate SQL queries, because we could have many videos to update
-  for (const playlist of playlistsToUpdate) {
-    await sequelizeTypescript.transaction(async t => {
-      const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlist.id, t)
+  for (const playlistId of playlistsToUpdateIds) {
+    try {
+      await sequelizeTypescript.transaction(async t => {
+        const playlist = await VideoStreamingPlaylistModel.loadWithVideo(playlistId, t)
+        const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlistId, t)
 
-      playlist.assignP2PMediaLoaderInfoHashes(playlist.Video, videoFiles)
-      playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
+        playlist.assignP2PMediaLoaderInfoHashes(playlist.Video, videoFiles)
+        playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
 
-      await playlist.save({ transaction: t })
-    })
+        await playlist.save({ transaction: t })
+      })
+    } catch (err) {
+      logger.error(`Cannot update streaming playlist infohash of playlist id ${playlistId}`, { err })
+    }
   }
 }
 

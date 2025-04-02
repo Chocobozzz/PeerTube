@@ -14,7 +14,6 @@ import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-co
   selector: 'my-instance-account-blocklist',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
   templateUrl: '../../../shared/shared-moderation/account-blocklist.component.html',
-  standalone: true,
   imports: [
     TableModule,
     SharedModule,

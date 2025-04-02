@@ -183,6 +183,19 @@ export class RunnerServer {
 
   // ---------------------------------------------------------------------------
 
+  listJobs () {
+    return {
+      concurrency: ConfigManager.Instance.getConfig().jobs.concurrency,
+
+      processingJobs: this.processingJobs.map(j => ({
+        serverUrl: j.server.url,
+        job: pick(j.job, [ 'type', 'startedAt', 'progress', 'payload' ])
+      }))
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   requestGracefulShutdown () {
     logger.info('Received graceful shutdown request')
 

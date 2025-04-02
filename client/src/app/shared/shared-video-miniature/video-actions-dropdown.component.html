@@ -1,7 +1,7 @@
 <ng-container *ngIf="videoActions.length !== 0">
 
   <div
-    *ngIf="isUserLoggedIn() && displayOptions.playlist"
+    *ngIf="isUserLoggedIn() && displayOptions().playlist"
     role="button" aria-label="Open video actions" i18n-aria-label
     class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" autoClose="outside"
     container="body" [placement]="getPlaylistDropdownPlacement()"
@@ -10,19 +10,18 @@
 
     <div ngbDropdownMenu>
       @defer (when dropdownOpened) {
-        <my-video-add-to-playlist #playlistAdd [video]="video"></my-video-add-to-playlist>
+        <my-video-add-to-playlist #playlistAdd [video]="video()"></my-video-add-to-playlist>
       }
     </div>
   </div>
 
   <my-action-dropdown
-    [actions]="videoActions" [label]="label" [entry]="{ video: video }"
-    [buttonSize]="buttonSize" [placement]="placement" [buttonDirection]="buttonDirection" [buttonStyled]="buttonStyled"
+    [actions]="videoActions" [label]="label()" [entry]="{ video: video() }"
+    [buttonSize]="buttonSize()" [placement]="placement()" [buttonDirection]="buttonDirection()" [buttonStyled]="buttonStyled()"
     container="body" (openChange)="dropdownOpened = true"
   ></my-action-dropdown>
 
   <my-video-download #videoDownloadModal></my-video-download>
-  <my-video-report #videoReportModal [video]="video"></my-video-report>
+  <my-video-report #videoReportModal [video]="video()"></my-video-report>
   <my-video-block #videoBlockModal (videoBlocked)="onVideoBlocked()"></my-video-block>
-  <my-live-stream-information #liveStreamInformationModal *ngIf="displayOptions.liveInfo"></my-live-stream-information>
 </ng-container>

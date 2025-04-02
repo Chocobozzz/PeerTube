@@ -1,5 +1,5 @@
 import { KeyValuePipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core'
+import { Component, LOCALE_ID, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import {
@@ -27,7 +27,6 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
   selector: 'my-video-files-download',
   templateUrl: './video-files-download.component.html',
   styleUrls: [ './video-files-download.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,
@@ -43,11 +42,14 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
   ]
 })
 export class VideoFilesDownloadComponent implements OnInit {
-  @Input({ required: true }) video: VideoDetails
-  @Input() originalVideoFile: VideoSource
-  @Input() videoFileToken: string
+  private localeId = inject(LOCALE_ID)
+  private videoService = inject(VideoService)
 
-  @Output() downloaded = new EventEmitter<void>()
+  readonly video = input.required<VideoDetails>()
+  readonly originalVideoFile = input<VideoSource>(undefined)
+  readonly videoFileToken = input<string>(undefined)
+
+  readonly downloaded = output()
 
   downloadType: 'direct' | 'torrent' = 'direct'
 
@@ -62,26 +64,23 @@ export class VideoFilesDownloadComponent implements OnInit {
   private bytesPipe: BytesPipe
   private numbersPipe: NumberFormatterPipe
 
-  constructor (
-    @Inject(LOCALE_ID) private localeId: string,
-    private videoService: VideoService
-  ) {
+  constructor () {
     this.bytesPipe = new BytesPipe()
     this.numbersPipe = new NumberFormatterPipe(this.localeId)
   }
 
   ngOnInit () {
-
     if (this.hasFiles()) {
       this.onResolutionIdChange(this.getVideoFiles()[0].resolution.id)
     }
   }
 
   getVideoFiles () {
-    if (!this.video) return []
-    if (this.video.files.length !== 0) return this.video.files
+    const video = this.video()
+    if (!video) return []
+    if (video.files.length !== 0) return video.files
 
-    const hls = this.video.getHlsPlaylist()
+    const hls = video.getHlsPlaylist()
     if (hls) return hls.files
 
     return []
@@ -103,7 +102,7 @@ export class VideoFilesDownloadComponent implements OnInit {
     let metadata: VideoFileMetadata
 
     if (this.activeResolutionId === 'original') {
-      metadata = this.originalVideoFile.metadata
+      metadata = this.originalVideoFile().metadata
     } else {
       const videoFile = this.getVideoFile()
       if (!videoFile) return
@@ -144,11 +143,11 @@ export class VideoFilesDownloadComponent implements OnInit {
 
   getVideoFileLink () {
     const suffix = this.activeResolutionId === 'original' || this.isConfidentialVideo()
-      ? '?videoFileToken=' + this.videoFileToken
+      ? '?videoFileToken=' + this.videoFileToken()
       : ''
 
     if (this.activeResolutionId === 'original') {
-      return this.originalVideoFile.fileDownloadUrl + suffix
+      return this.originalVideoFile().fileDownloadUrl + suffix
     }
 
     const file = this.getVideoFile()
@@ -166,7 +165,7 @@ export class VideoFilesDownloadComponent implements OnInit {
   // ---------------------------------------------------------------------------
 
   isConfidentialVideo () {
-    return this.activeResolutionId === 'original' || videoRequiresFileToken(this.video)
+    return this.activeResolutionId === 'original' || videoRequiresFileToken(this.video())
   }
 
   // ---------------------------------------------------------------------------

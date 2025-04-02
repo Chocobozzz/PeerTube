@@ -13,7 +13,7 @@ export const aboutInstanceRoutes: Routes = [
     component: AboutInstanceComponent,
     data: {
       meta: {
-        title: $localize`About this instance`
+        title: $localize`About this platform`
       }
     },
     resolve: {

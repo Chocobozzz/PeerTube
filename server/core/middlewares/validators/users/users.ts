@@ -1,8 +1,10 @@
-import { forceNumber } from '@peertube/peertube-core-utils'
+import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRight, UserRole } from '@peertube/peertube-models'
+import { isStringArray } from '@server/helpers/custom-validators/search.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { exists, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
   isUserAdminFlagsValid,
@@ -40,7 +42,6 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
 
 export const usersListValidator = [
   query('blocked')
@@ -200,7 +201,7 @@ export const usersUpdateValidator = [
       return res.fail({ message: 'Cannot change root role.' })
     }
 
-    if (req.body.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
+    if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
 
     return next()
   }
@@ -281,7 +282,7 @@ export const usersUpdateMeValidator = [
 
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
 
-    if (req.body.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
+    if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
 
     return next()
   }
@@ -314,15 +315,15 @@ export const usersVideoRatingValidator = [
 ]
 
 export const usersVideosValidator = [
-  query('isLive')
-    .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
-
   query('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+
+  query('channelNameOneOf')
+    .optional()
+    .customSanitizer(arrayify)
+    .custom(isStringArray).withMessage('Should have a valid channelNameOneOf array'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -21,12 +21,15 @@ function listUserChannelsForSelect (authService: AuthService) {
             if (a.updatedAt > b.updatedAt) return -1
             return 0
           })
-          .map(c => ({
-            id: c.id,
-            label: c.displayName,
-            support: c.support,
-            avatarPath: getAvatarPath(c)
-          }) as SelectChannelItem)
+          .map(c =>
+            ({
+              id: c.id,
+              name: c.name,
+              label: c.displayName,
+              support: c.support,
+              avatarPath: getAvatarPath(c)
+            }) as SelectChannelItem
+          )
       })
     )
 }

@@ -2,21 +2,18 @@ import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { ResultList, VideoChangeOwnership, VideoChangeOwnershipAccept, VideoChangeOwnershipCreate } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class VideoOwnershipService {
-  private static BASE_VIDEO_CHANGE_OWNERSHIP_URL = environment.apiUrl + '/api/v1/videos/'
+  private authHttp = inject(HttpClient)
+  private restService = inject(RestService)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) {
-  }
+  private static BASE_VIDEO_CHANGE_OWNERSHIP_URL = environment.apiUrl + '/api/v1/videos/'
 
   changeOwnership (id: number, username: string) {
     const url = VideoOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + id + '/give-ownership'

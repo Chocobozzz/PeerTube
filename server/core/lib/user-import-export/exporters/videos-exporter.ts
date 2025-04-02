@@ -5,7 +5,12 @@ import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
 import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
-import { getHLSFileReadStream, getOriginalFileReadStream, getWebVideoFileReadStream } from '@server/lib/object-storage/videos.js'
+import {
+  getCaptionReadStream,
+  getHLSFileReadStream,
+  getOriginalFileReadStream,
+  getWebVideoFileReadStream
+} from '@server/lib/object-storage/videos.js'
 import { muxToMergeVideoFiles } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
@@ -344,7 +349,7 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     for (const caption of captions) {
       staticFiles.push({
         archivePath: this.getArchiveCaptionFilePath(video, caption),
-        readStreamFactory: () => Promise.resolve(createReadStream(caption.getFSPath()))
+        readStreamFactory: () => this.generateCaptionReadStream(caption)
       })
 
       relativePathsFromJSON.captions[caption.language] = join(this.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, caption))
@@ -399,6 +404,18 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
     return stream
   }
+
+  private async generateCaptionReadStream (caption: MVideoCaption): Promise<Readable> {
+    if (caption.storage === FileStorage.FILE_SYSTEM) {
+      return createReadStream(caption.getFSPath())
+    }
+
+    const { stream } = await getCaptionReadStream({ filename: caption.filename, rangeHeader: undefined })
+
+    return stream
+  }
+
+  // ---------------------------------------------------------------------------
 
   private async getArchiveVideo (video: MVideoFullLight) {
     const source = await VideoSourceModel.loadLatest(video.id)

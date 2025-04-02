@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { Notifier, ServerService, User, UserService } from '@app/core'
@@ -13,13 +13,17 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-account-setup-warning-modal',
   templateUrl: './account-setup-warning-modal.component.html',
   styleUrls: [ './account-setup-warning-modal.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, RouterLink ]
 })
 export class AccountSetupWarningModalComponent implements OnInit {
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  private userService = inject(UserService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
+  private serverService = inject(ServerService)
 
-  @Output() created = new EventEmitter<void>()
+  readonly modal = viewChild<ElementRef>('modal')
+
+  readonly created = output()
 
   stopDisplayModal = false
   ref: NgbModalRef
@@ -33,13 +37,6 @@ export class AccountSetupWarningModalComponent implements OnInit {
   ngOnInit (): void {
     this.created.emit()
   }
-
-  constructor (
-    private userService: UserService,
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private serverService: ServerService
-  ) { }
 
   get instanceName () {
     return this.serverService.getHTMLConfig().instance.name
@@ -69,7 +66,7 @@ export class AccountSetupWarningModalComponent implements OnInit {
 
     if (this.ref) return
 
-    this.ref = this.modalService.open(this.modal, {
+    this.ref = this.modalService.open(this.modal(), {
       centered: true,
       backdrop: 'static',
       keyboard: false,
@@ -85,10 +82,10 @@ export class AccountSetupWarningModalComponent implements OnInit {
     peertubeLocalStorage.setItem(this.LS_KEYS.NO_ACCOUNT_SETUP_WARNING_MODAL, 'true')
 
     this.userService.updateMyProfile({ noAccountSetupWarningModal: true })
-        .subscribe({
-          next: () => logger.info('We will not open the account setup modal again.'),
+      .subscribe({
+        next: () => logger.info('We will not open the account setup modal again.'),
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

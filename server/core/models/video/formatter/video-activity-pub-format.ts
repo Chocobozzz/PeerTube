@@ -4,7 +4,9 @@ import {
   ActivityPubStoryboard,
   ActivityTagObject,
   ActivityTrackerUrlObject,
-  ActivityUrlObject, VideoCommentPolicy, VideoObject
+  ActivityUrlObject,
+  VideoCommentPolicy,
+  VideoObject
 } from '@peertube/peertube-models'
 import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
@@ -41,7 +43,13 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     {
       type: 'Link',
       mediaType: 'text/html',
-      href: WEBSERVER.URL + '/videos/watch/' + video.uuid
+      href: WEBSERVER.URL + video.getWatchStaticPath()
+    } as ActivityUrlObject,
+
+    {
+      type: 'Link',
+      mediaType: 'text/html',
+      href: video.url
     } as ActivityUrlObject,
 
     ...buildVideoFileUrls({ video, files: video.VideoFiles }),

@@ -1,13 +1,13 @@
 <ng-container>
-  <a [href]="'mailto:' + entry.email" [title]="getTitle()">
-    @if (showEmailVerifyInformation) {
-      @if (entry.emailVerified === true) {
-        &#x2713; {{ entry.email }}
+  <a [href]="'mailto:' + entry().email" [title]="getTitle()">
+    @if (showEmailVerifyInformation()) {
+      @if (entry().emailVerified === true) {
+        &#x2713; {{ entry().email }}
       } @else {
-        <em *ngIf="!entry.emailVerified">? {{ entry.email }}</em>
+        <em *ngIf="!entry().emailVerified">? {{ entry().email }}</em>
       }
     } @else {
-      {{ entry.email }}
+      {{ entry().email }}
     }
   </a>
 </ng-container>

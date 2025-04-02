@@ -2,7 +2,8 @@ export type IPCRequest =
   IPCRequestRegister |
   IPCRequestUnregister |
   IPCRequestListRegistered |
-  IPCRequestGracefulShutdown
+  IPCRequestGracefulShutdown |
+  IPCRequestListJobs
 
 export type IPCRequestRegister = {
   type: 'register'
@@ -14,5 +15,6 @@ export type IPCRequestRegister = {
 
 export type IPCRequestUnregister = { type: 'unregister', url: string, runnerName: string }
 export type IPCRequestListRegistered = { type: 'list-registered' }
+export type IPCRequestListJobs = { type: 'list-jobs' }
 
 export type IPCRequestGracefulShutdown = { type: 'graceful-shutdown' }

@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
@@ -25,7 +25,6 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
 @Component({
   templateUrl: './my-video-playlist-edit.component.html',
   styleUrls: [ './my-video-playlist-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,
@@ -41,18 +40,14 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
   ]
 })
 export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implements OnInit {
-  error: string
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
+  private videoPlaylistService = inject(VideoPlaylistService)
+  private serverService = inject(ServerService)
 
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private router: Router,
-    private videoPlaylistService: VideoPlaylistService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
+  error: string
 
   ngOnInit () {
     this.buildForm({
@@ -71,13 +66,13 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
       .subscribe(channels => this.userVideoChannels = channels)
 
     this.serverService.getVideoPlaylistPrivacies()
-        .subscribe(videoPlaylistPrivacies => {
-          this.videoPlaylistPrivacies = videoPlaylistPrivacies
+      .subscribe(videoPlaylistPrivacies => {
+        this.videoPlaylistPrivacies = videoPlaylistPrivacies
 
-          this.form.patchValue({
-            privacy: VideoPlaylistPrivacy.PRIVATE
-          })
+        this.form.patchValue({
+          privacy: VideoPlaylistPrivacy.PRIVATE
         })
+      })
   }
 
   formValidated () {

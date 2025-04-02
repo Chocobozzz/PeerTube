@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 7.0.0
+  version: 7.1.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -794,6 +794,7 @@ paths:
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/privacyOneOf'
@@ -1502,6 +1503,13 @@ paths:
       description: With your [client id and secret](#operation/getOAuthClient), you can retrieve an access and refresh tokens.
       tags:
         - Session
+      parameters:
+        - name: x-peertube-otp
+          in: header
+          schema:
+            type: string
+          required: false
+          description: If the user enabled two factor authentication, you need to provide the OTP code in this header
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -1799,6 +1807,7 @@ paths:
       tags:
         - User Imports
       parameters:
+        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
         - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
       requestBody:
@@ -1827,6 +1836,7 @@ paths:
       tags:
         - User Imports
       parameters:
+        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/resumableUploadId'
         - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
         - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
@@ -1859,6 +1869,7 @@ paths:
       tags:
         - User Imports
       parameters:
+        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/resumableUploadId'
         - name: Content-Length
           in: header
@@ -2165,9 +2176,27 @@ paths:
         - My User
         - Videos
       parameters:
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/channelNameOneOf'
       responses:
         '200':
           description: successful operation
@@ -2178,7 +2207,7 @@ paths:
 
   /api/v1/users/me/subscriptions:
     get:
-      summary: Get my user subscriptions
+      summary: List my user subscriptions
       security:
         - OAuth2:
           - user
@@ -2187,7 +2216,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/mySubscriptionSort'
       responses:
         '200':
           description: successful operation
@@ -2256,6 +2285,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
@@ -2315,6 +2345,13 @@ paths:
       tags:
         - My Notifications
       parameters:
+        - name: typeOneOf
+          in: query
+          description: only list notifications of these types
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/NotificationType'
         - name: unread
           in: query
           description: only list unread notifications
@@ -2379,29 +2416,49 @@ paths:
             schema:
               type: object
               properties:
-                newVideoFromSubscription:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newCommentOnMyVideo:
-                  $ref: '#/components/schemas/NotificationSettingValue'
                 abuseAsModerator:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 videoAutoBlacklistAsModerator:
                   $ref: '#/components/schemas/NotificationSettingValue'
+                newUserRegistration:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                newVideoFromSubscription:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
                 blacklistOnMyVideo:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 myVideoPublished:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 myVideoImportFinished:
                   $ref: '#/components/schemas/NotificationSettingValue'
-                newFollow:
-                  $ref: '#/components/schemas/NotificationSettingValue'
-                newUserRegistration:
-                  $ref: '#/components/schemas/NotificationSettingValue'
+
                 commentMention:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newCommentOnMyVideo:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                newFollow:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 newInstanceFollower:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 autoInstanceFollowing:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                abuseStateChange:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                abuseNewMessage:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                newPeerTubeVersion:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newPluginVersion:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                myVideoStudioEditionFinished:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+
+                myVideoTranscriptionGenerated:
                   $ref: '#/components/schemas/NotificationSettingValue'
       responses:
         '204':
@@ -2803,6 +2860,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
@@ -3625,6 +3683,7 @@ paths:
   '/api/v1/videos/{id}/source':
     get:
       summary: Get video source file metadata
+      description: Get metadata and download link of original video file
       operationId: getVideoSource
       security:
         - OAuth2: []
@@ -3669,6 +3728,7 @@ paths:
         - Video
         - Video Upload
       parameters:
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
         - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
       requestBody:
@@ -3708,6 +3768,7 @@ paths:
         - Video
         - Video Upload
       parameters:
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/resumableUploadId'
         - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
         - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
@@ -3758,6 +3819,7 @@ paths:
         - Video
         - Video Upload
       parameters:
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/resumableUploadId'
         - name: Content-Length
           in: header
@@ -4215,6 +4277,8 @@ paths:
           - user
       tags:
         - Video Captions
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
       requestBody:
         content:
           application/json:
@@ -4497,6 +4561,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/host'
         - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
@@ -7098,6 +7163,16 @@ components:
         enum:
           - 'local'
           - 'search-index'
+    mySubscriptionSort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - -id
+          - -createdAt
+          - -channelUpdatedAt
     videosSort:
       name: sort
       in: query
@@ -7425,6 +7500,19 @@ components:
       in: query
       required: false
       description: "**PeerTube >= 6.2** **Admins and moderators only** filter on videos that contain one of these automatic tags"
+      schema:
+        oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+      style: form
+      explode: true
+    channelNameOneOf:
+      name: channelNameOneOf
+      in: query
+      required: false
+      description: "**PeerTube >= 7.2** Filter on videos that are published by a channel with one of these names"
       schema:
         oneOf:
         - type: string
@@ -8180,6 +8268,10 @@ components:
           type: string
           description: Direct URL of the video
           format: url
+        playlistUrl:
+          type: string
+          description: Playlist URL of the file if it is owned by a playlist
+          format: url
         fileDownloadUrl:
           type: string
           description: URL endpoint that transfers the video file as an attachment (so that the browser opens a download dialog)
@@ -8394,7 +8486,7 @@ components:
               type: string
               nullable: true
               example: |
-               	"**[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
+                "**[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
                 **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network,
                 based on free/libre software!*\r\n\r\n**Animation Produced by:** [LILA](https://libreart.info) - [ZeMarmot Team](https://film.zemarmot.net)\r\n
                 *Directed by* Aryeom\r\n*Assistant* Jehan\r\n**Licence**: [CC-By-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)\r\n\r\n
@@ -8502,10 +8594,6 @@ components:
         redundancies:
           type: object
           properties:
-            files:
-              type: array
-              items:
-                $ref: '#/components/schemas/FileRedundancyInformation'
             streamingPlaylists:
               type: array
               items:
@@ -8642,7 +8730,32 @@ components:
           minLength: 2
           maxLength: 3000
         video:
-          $ref: '#/components/schemas/VideoInfo'
+          type: object
+          properties:
+            id:
+              type: integer
+            uuid:
+              $ref: '#/components/schemas/UUIDv4'
+            shortUUID:
+              $ref: '#/components/schemas/shortUUID'
+            name:
+              type: string
+            nsfw:
+              type: boolean
+            startAt:
+              type: string
+              format: date-time
+            endAt:
+              type: string
+              format: date-time
+            deleted:
+              type: boolean
+            blacklisted:
+              type: boolean
+            thumbnailPath:
+              type: string
+            channel:
+              $ref: '#/components/schemas/VideoChannel'
         createdAt:
           type: string
           format: date-time
@@ -10684,56 +10797,83 @@ components:
         - `1` WEB
 
         - `2` EMAIL
+    NotificationType:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+        - 22
+      description: >
+        Notification type. One of the following values:
+
+          - `1` NEW_VIDEO_FROM_SUBSCRIPTION
+
+          - `2` NEW_COMMENT_ON_MY_VIDEO
+
+          - `3` NEW_ABUSE_FOR_MODERATORS
+
+          - `4` BLACKLIST_ON_MY_VIDEO
+
+          - `5` UNBLACKLIST_ON_MY_VIDEO
+
+          - `6` MY_VIDEO_PUBLISHED
+
+          - `7` MY_VIDEO_IMPORT_SUCCESS
+
+          - `8` MY_VIDEO_IMPORT_ERROR
+
+          - `9` NEW_USER_REGISTRATION
+
+          - `10` NEW_FOLLOW
+
+          - `11` COMMENT_MENTION
+
+          - `12` VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
+
+          - `13` NEW_INSTANCE_FOLLOWER
+
+          - `14` AUTO_INSTANCE_FOLLOWING
+
+          - `15` ABUSE_STATE_CHANGE
+
+          - `16` ABUSE_NEW_MESSAGE
+
+          - `17` NEW_PLUGIN_VERSION
+
+          - `18` NEW_PEERTUBE_VERSION
+
+          - `19` MY_VIDEO_STUDIO_EDITION_FINISHED
+
+          - `20` NEW_USER_REGISTRATION_REQUEST
+
+          - `21` NEW_LIVE_FROM_SUBSCRIPTION
+
+          - `22` MY_VIDEO_TRANSCRIPTION_GENERATED
     Notification:
       properties:
         id:
           $ref: '#/components/schemas/id'
         type:
-          type: integer
-          description: >
-            Notification type, following the `UserNotificationType` enum:
-
-            - `1` NEW_VIDEO_FROM_SUBSCRIPTION
-
-            - `2` NEW_COMMENT_ON_MY_VIDEO
-
-            - `3` NEW_ABUSE_FOR_MODERATORS
-
-            - `4` BLACKLIST_ON_MY_VIDEO
-
-            - `5` UNBLACKLIST_ON_MY_VIDEO
-
-            - `6` MY_VIDEO_PUBLISHED
-
-            - `7` MY_VIDEO_IMPORT_SUCCESS
-
-            - `8` MY_VIDEO_IMPORT_ERROR
-
-            - `9` NEW_USER_REGISTRATION
-
-            - `10` NEW_FOLLOW
-
-            - `11` COMMENT_MENTION
-
-            - `12` VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
-
-            - `13` NEW_INSTANCE_FOLLOWER
-
-            - `14` AUTO_INSTANCE_FOLLOWING
-
-            - `15` ABUSE_STATE_CHANGE
-
-            - `16` ABUSE_NEW_MESSAGE
-
-            - `17` NEW_PLUGIN_VERSION
-
-            - `18` NEW_PEERTUBE_VERSION
-
-            - `19` MY_VIDEO_STUDIO_EDITION_FINISHED
-
-            - `20` NEW_USER_REGISTRATION_REQUEST
-
-            - `21` NEW_LIVE_FROM_SUBSCRIPTION
+          $ref: '#/components/schemas/NotificationType'
         read:
           type: boolean
         video:

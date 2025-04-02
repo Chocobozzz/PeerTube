@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -17,26 +17,21 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-follow-modal',
   templateUrl: './follow-modal.component.html',
   styleUrls: [ './follow-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf, AlertComponent ]
 })
 export class FollowModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: NgbModal
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private followService = inject(InstanceFollowService)
+  private notifier = inject(Notifier)
 
-  @Output() newFollow = new EventEmitter<void>()
+  readonly modal = viewChild<NgbModal>('modal')
+
+  readonly newFollow = output()
 
   placeholder = 'example.com\nchocobozzz@example.com\nchocobozzz_channel@example.com'
 
   private openedModal: NgbModalRef
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private followService: InstanceFollowService,
-    private notifier: Notifier
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -45,7 +40,7 @@ export class FollowModalComponent extends FormReactive implements OnInit {
   }
 
   openModal () {
-    this.openedModal = this.modalService.open(this.modal, { centered: true })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true })
   }
 
   hide () {

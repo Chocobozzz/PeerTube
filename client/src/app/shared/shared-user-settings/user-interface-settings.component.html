@@ -6,5 +6,5 @@
     <my-select-options inputId="theme" formControlName="theme" [items]="availableThemes"></my-select-options>
   </div>
 
-  <input *ngIf="!reactiveUpdate" type="submit" class="peertube-button primary-button" i18n-value value="Save interface settings" [disabled]="!form.valid">
+  <input *ngIf="!reactiveUpdate()" type="submit" class="peertube-button primary-button" i18n-value value="Save interface settings" [disabled]="!form.valid">
 </form>

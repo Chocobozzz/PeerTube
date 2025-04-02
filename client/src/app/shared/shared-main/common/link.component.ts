@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { booleanAttribute, Component, Input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, OnInit, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 
@@ -7,37 +7,36 @@ import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/gl
   selector: 'my-link',
   styleUrls: [ './link.component.scss' ],
   templateUrl: './link.component.html',
-  standalone: true,
   imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet, GlobalIconComponent ]
 })
 export class LinkComponent implements OnInit {
-  @Input() internalLink?: string | any[]
+  readonly internalLink = input<string | any[]>(undefined)
 
-  @Input() href?: string
-  @Input() target = '_self'
+  readonly href = input<string>(undefined)
+  readonly target = input('_self')
 
-  @Input() title?: string
+  readonly title = input<string>(undefined)
 
-  @Input() className?: string
-  @Input({ transform: booleanAttribute }) inheritParentStyle = false
-  @Input({ transform: booleanAttribute }) inheritParentDimension = false
+  readonly className = input<string>(undefined)
+  readonly inheritParentStyle = input(false, { transform: booleanAttribute })
+  readonly inheritParentDimension = input(false, { transform: booleanAttribute })
 
-  @Input() tabindex: string | number
+  readonly tabindex = input<string | number>(undefined)
 
-  @Input() ariaLabel: string
+  readonly ariaLabel = input<string>(undefined)
 
-  @Input() icon: GlobalIconName
+  readonly icon = input<GlobalIconName>(undefined)
 
   builtClasses: string
 
   ngOnInit () {
-    this.builtClasses = this.className || ''
+    this.builtClasses = this.className() || ''
 
-    if (this.inheritParentStyle) {
+    if (this.inheritParentStyle()) {
       this.builtClasses += ' inherit-parent-style'
     }
 
-    if (this.inheritParentDimension) {
+    if (this.inheritParentDimension()) {
       this.builtClasses += ' inherit-parent-dimension'
     }
   }

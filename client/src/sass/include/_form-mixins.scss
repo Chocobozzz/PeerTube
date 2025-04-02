@@ -33,7 +33,8 @@
   }
 
   &[disabled] {
-    opacity: 0.4;
+    color: pvar(--fg-300);
+    opacity: 0.8;
   }
 
   @media screen and (max-width: calc(#{$width} + 40px)) {
@@ -48,7 +49,7 @@
     color: pvar(--textarea-fg) !important;
     background-color: pvar(--textarea-bg) !important;
     height: $height;
-    padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2);
+    padding: pvar(--textarea-y-padding) pvar(--textarea-x-padding);
   }
 }
 
@@ -102,7 +103,7 @@
     }
 
     &[disabled] {
-      opacity: 0.4;
+      opacity: 0.5;
     }
   }
 }
@@ -110,7 +111,7 @@
 // Thanks: https://codepen.io/manabox/pen/raQmpL
 @mixin peertube-radio-container {
   &[disabled] {
-    opacity: 0.4;
+    opacity: 0.5;
   }
 
   label {
@@ -255,7 +256,7 @@
 
   &[disabled] + span,
   &[disabled] + span + span {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: default;
   }
 }

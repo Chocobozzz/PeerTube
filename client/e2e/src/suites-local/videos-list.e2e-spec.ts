@@ -3,14 +3,14 @@ import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoSearchPage } from '../po/video-search.po'
-import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
 import { NSFWPolicy } from '../types/common'
 import { isMobileDevice, isSafari, waitServerUp } from '../utils'
 
 describe('Videos list', () => {
   let videoListPage: VideoListPage
-  let videoUploadPage: VideoUploadPage
+  let videoPublishPage: VideoPublishPage
   let adminConfigPage: AdminConfigPage
   let loginPage: LoginPage
   let myAccountPage: MyAccountPage
@@ -87,7 +87,6 @@ describe('Videos list', () => {
   }
 
   async function updateAdminNSFW (nsfw: NSFWPolicy) {
-    await adminConfigPage.navigateTo('instance-information')
     await adminConfigPage.updateNSFWSetting(nsfw)
     await adminConfigPage.save()
   }
@@ -105,7 +104,7 @@ describe('Videos list', () => {
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
     adminConfigPage = new AdminConfigPage()
     loginPage = new LoginPage(isMobileDevice())
-    videoUploadPage = new VideoUploadPage()
+    videoPublishPage = new VideoPublishPage()
     myAccountPage = new MyAccountPage()
     videoSearchPage = new VideoSearchPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
@@ -119,20 +118,19 @@ describe('Videos list', () => {
   })
 
   it('Should set the homepage', async () => {
-    await adminConfigPage.navigateTo('instance-homepage')
     await adminConfigPage.updateHomepage('<peertube-videos-list data-sort="-publishedAt"></peertube-videos-list>')
     await adminConfigPage.save()
   })
 
   it('Should upload 2 videos (NSFW and classic videos)', async () => {
-    await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo('video.mp4')
-    await videoUploadPage.setAsNSFW()
-    await videoUploadPage.validSecondUploadStep(nsfwVideo)
+    await videoPublishPage.navigateTo()
+    await videoPublishPage.uploadVideo('video.mp4')
+    await videoPublishPage.setAsNSFW()
+    await videoPublishPage.validSecondStep(nsfwVideo)
 
-    await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo('video2.mp4')
-    await videoUploadPage.validSecondUploadStep(normalVideo)
+    await videoPublishPage.navigateTo()
+    await videoPublishPage.uploadVideo('video2.mp4')
+    await videoPublishPage.validSecondStep(normalVideo)
   })
 
   it('Should logout', async function () {
@@ -140,7 +138,6 @@ describe('Videos list', () => {
   })
 
   describe('Anonymous users', function () {
-
     it('Should correctly handle do not list', async () => {
       await loginPage.loginAsRootUser()
       await updateAdminNSFW('do_not_list')
@@ -170,7 +167,6 @@ describe('Videos list', () => {
   })
 
   describe('Logged in users', function () {
-
     before(async () => {
       await loginPage.loginAsRootUser()
     })
@@ -199,13 +195,13 @@ describe('Videos list', () => {
   })
 
   describe('Default upload values', function () {
-
     it('Should have default video values', async function () {
       await loginPage.loginAsRootUser()
-      await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo('video3.mp4')
-      await videoUploadPage.validSecondUploadStep('video')
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video3.mp4')
+      await videoPublishPage.validSecondStep('video')
 
+      await videoPublishPage.clickOnWatch()
       await videoWatchPage.waitWatchVideoName('video')
 
       expect(await videoWatchPage.getPrivacy()).toBe('Public')

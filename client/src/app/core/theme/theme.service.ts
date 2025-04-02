@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { sortBy } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, ServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -17,6 +17,12 @@ const debugLogger = debug('peertube:theme')
 
 @Injectable()
 export class ThemeService {
+  private auth = inject(AuthService)
+  private userService = inject(UserService)
+  private pluginService = inject(PluginService)
+  private server = inject(ServerService)
+  private localStorageService = inject(LocalStorageService)
+
   private oldInjectedProperties: string[] = []
   private oldThemeName: string
 
@@ -27,14 +33,6 @@ export class ThemeService {
   private themeDOMLinksFromLocalStorage: HTMLLinkElement[] = []
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private auth: AuthService,
-    private userService: UserService,
-    private pluginService: PluginService,
-    private server: ServerService,
-    private localStorageService: LocalStorageService
-  ) {}
 
   initialize () {
     this.serverConfig = this.server.getHTMLConfig()
@@ -206,7 +204,7 @@ export class ThemeService {
 
     const toProcess = [
       { prefix: 'primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
-      { prefix: 'on-primary', invertIfDark: true, step: 0, darkTheme: isGlobalDarkTheme },
+      { prefix: 'on-primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: isGlobalDarkTheme },
 
@@ -226,7 +224,8 @@ export class ThemeService {
         continue
       }
 
-      const mainColorHSL = toHSLA(parse(mainColor))
+      // Use trim for some web browsers: https://github.com/Chocobozzz/PeerTube/issues/6952
+      const mainColorHSL = toHSLA(parse(mainColor.trim()))
       debugLogger(`Theme main variable ${mainColor} -> ${this.toHSLStr(mainColorHSL)}`)
 
       // Inject in alphabetical order for easy debug

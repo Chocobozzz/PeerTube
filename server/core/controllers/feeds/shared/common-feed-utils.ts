@@ -1,6 +1,6 @@
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, Person } from '@peertube/feed/lib/typings/index.js'
-import { maxBy, pick } from '@peertube/peertube-core-utils'
+import { pick } from '@peertube/peertube-core-utils'
 import { ActorImageType } from '@peertube/peertube-models'
 import { mdToPlainText } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -14,13 +14,16 @@ export function initFeed (parameters: {
   description: string
   imageUrl: string
   isPodcast: boolean
+  nsfw?: boolean
+  guid?: string
   link?: string
   locked?: { isLocked: boolean, email: string }
   author?: {
     name: string
     link: string
-    imageUrl: string
   }
+  category?: string
+  language?: string
   person?: Person[]
   resourceType?: 'videos' | 'video-comments'
   queryString?: string
@@ -31,20 +34,29 @@ export function initFeed (parameters: {
   customTags?: CustomTag[]
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, link, imageUrl, isPodcast, resourceType, queryString, medium } = parameters
+  const { name, description, link, imageUrl, category, isPodcast, resourceType, queryString, medium, nsfw } = parameters
 
-  return new Feed({
+  const feed = new Feed({
     title: name,
     description: mdToPlainText(description),
+
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: link || webserverUrl,
     link: link || webserverUrl,
+
     image: imageUrl,
+
     favicon: webserverUrl + '/client/assets/images/favicon.png',
+
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,
+
     generator: `PeerTube - ${webserverUrl}`,
+
     medium: medium || 'video',
+
+    nsfw: nsfw ?? false,
+
     feedLinks: {
       json: `${webserverUrl}/feeds/${resourceType}.json${queryString}`,
       atom: `${webserverUrl}/feeds/${resourceType}.atom${queryString}`,
@@ -53,8 +65,24 @@ export function initFeed (parameters: {
         : `${webserverUrl}/feeds/${resourceType}.xml${queryString}`
     },
 
-    ...pick(parameters, [ 'stunServers', 'trackers', 'customXMLNS', 'customTags', 'author', 'person', 'locked' ])
+    ...pick(parameters, [
+      'guid',
+      'language',
+      'stunServers',
+      'trackers',
+      'customXMLNS',
+      'customTags',
+      'author',
+      'person',
+      'locked'
+    ])
   })
+
+  if (category) {
+    feed.addCategory(category)
+  }
+
+  return feed
 }
 
 export function sendFeed (feed: Feed, req: express.Request, res: express.Response) {
@@ -88,43 +116,33 @@ export async function buildFeedMetadata (options: {
   const { video, videoChannel, account } = options
 
   let imageUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png'
-  let accountImageUrl: string
+  let ownerImageUrl: string
   let name: string
-  let userName: string
   let description: string
   let email: string
   let link: string
-  let accountLink: string
+  let ownerLink: string
   let user: MUser
 
   if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
-    link = videoChannel.getClientUrl()
-    accountLink = videoChannel.Account.getClientUrl()
+    ownerLink = link = videoChannel.getClientUrl()
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
-      const videoChannelAvatar = maxBy(videoChannel.Actor.Avatars, 'width')
-      imageUrl = WEBSERVER.URL + videoChannelAvatar.getStaticPath()
-    }
-
-    if (videoChannel.Account.Actor.hasImage(ActorImageType.AVATAR)) {
-      const accountAvatar = maxBy(videoChannel.Account.Actor.Avatars, 'width')
-      accountImageUrl = WEBSERVER.URL + accountAvatar.getStaticPath()
+      imageUrl = WEBSERVER.URL + videoChannel.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      ownerImageUrl = imageUrl
     }
 
     user = await UserModel.loadById(videoChannel.Account.userId)
-    userName = videoChannel.Account.getDisplayName()
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
-    link = account.getClientUrl()
-    accountLink = link
+    ownerLink = link = account.getClientUrl()
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-      const accountAvatar = maxBy(account.Actor.Avatars, 'width')
-      imageUrl = WEBSERVER.URL + accountAvatar?.getStaticPath()
-      accountImageUrl = imageUrl
+      imageUrl = WEBSERVER.URL + account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      ownerImageUrl = imageUrl
     }
 
     user = await UserModel.loadById(account.userId)
@@ -144,5 +162,5 @@ export async function buildFeedMetadata (options: {
     email = user.email
   }
 
-  return { name, userName, description, imageUrl, accountImageUrl, email, link, accountLink }
+  return { name, description, imageUrl, ownerImageUrl, email, link, ownerLink }
 }

@@ -1,4 +1,5 @@
 import short, { SUUID } from 'short-uuid'
+import { v5 } from 'uuid'
 
 const translator = short()
 
@@ -26,6 +27,10 @@ export function isShortUUID (value: string) {
   if (!value) return false
 
   return value.length === translator.maxLength
+}
+
+export function buildUUIDv5FromURL (url: string) {
+  return v5(url, v5.URL)
 }
 
 export type { SUUID }

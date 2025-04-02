@@ -24,9 +24,8 @@ import { RUNNER_JOBS } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { PeerTubeSocket } from '@server/lib/peertube-socket.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
-import { setAsUpdated } from '@server/models/shared/index.js'
+import { setAsUpdated } from '@server/models/shared/update.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import throttle from 'lodash-es/throttle.js'
 
 type CreateRunnerJobArg =
   {
@@ -63,8 +62,6 @@ type CreateRunnerJobArg =
 export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {
 
   protected readonly lTags = loggerTagsFactory('runner')
-
-  static setJobAsUpdatedThrottled = throttle(setAsUpdated, 2000)
 
   // ---------------------------------------------------------------------------
 
@@ -121,8 +118,11 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
     if (progress) runnerJob.progress = progress
 
     if (!runnerJob.changed()) {
+      // Don't update updatedAt too often
+      if (runnerJob.updatedAt.getTime() > Date.now() - 2000) return
+
       try {
-        await AbstractJobHandler.setJobAsUpdatedThrottled({ sequelize: sequelizeTypescript, table: 'runnerJob', id: runnerJob.id })
+        await setAsUpdated({ sequelize: sequelizeTypescript, table: 'runnerJob', id: runnerJob.id })
       } catch (err) {
         logger.warn('Cannot set remote job as updated', { err, ...this.lTags(runnerJob.id, runnerJob.type) })
       }

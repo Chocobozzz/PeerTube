@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -13,11 +13,15 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-video-channel-videos',
   templateUrl: './video-channel-videos.component.html',
-  standalone: true,
   imports: [ NgIf, VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {
-  @ViewChild('videosList') videosList: VideosListComponent
+  private screenService = inject(ScreenService)
+  private videoChannelService = inject(VideoChannelService)
+  private videoService = inject(VideoService)
+  private hooks = inject(HooksService)
+
+  readonly videosList = viewChild<VideosListComponent>('videosList')
 
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
@@ -41,20 +45,12 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   private videoChannelSub: Subscription
   private alreadyLoaded = false
 
-  constructor (
-    private screenService: ScreenService,
-    private videoChannelService: VideoChannelService,
-    private videoService: VideoService,
-    private hooks: HooksService
-  ) {
-  }
-
   ngOnInit () {
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
-        if (this.alreadyLoaded) this.videosList.reloadVideos()
+        if (this.alreadyLoaded) this.videosList().reloadVideos()
 
         this.hooks.runAction('action:video-channel-videos.video-channel.loaded', 'video-channel', { videoChannel })
 

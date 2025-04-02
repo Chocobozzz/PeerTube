@@ -8,7 +8,7 @@ import {
   cleanupTests,
   createMultipleServers,
   followAll,
-  makeGetRequest,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
@@ -17,7 +17,7 @@ import {
 import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
-import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'
@@ -137,13 +137,10 @@ describe('Test multiple servers', function () {
           expect(image.createdAt).to.exist
           expect(image.updatedAt).to.exist
           expect(image.width).to.be.above(20).and.below(2000)
+          expect(image.fileUrl).to.exist
           expect(image.path).to.exist
 
-          await makeGetRequest({
-            url: server.url,
-            path: image.path,
-            expectedStatus: HttpStatusCode.OK_200
-          })
+          await makeRawRequest({ url: image.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
       })
     })

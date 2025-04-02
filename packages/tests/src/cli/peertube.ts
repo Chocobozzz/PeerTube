@@ -48,7 +48,7 @@ describe('Test CLI wrapper', function () {
   describe('Authentication and instance selection', function () {
 
     it('Should get an access token', async function () {
-      const stdout = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} token --url ${server.url} --username user_1 --password super_password`)
       const token = stdout.trim()
 
       const body = await server.users.getMyInfo({ token })
@@ -58,7 +58,7 @@ describe('Test CLI wrapper', function () {
     it('Should display no selected instance', async function () {
       this.timeout(60000)
 
-      const stdout = await cliCommand.execWithEnv(`${cmd} --help`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} --help`)
       expect(stdout).to.contain('no instance selected')
     })
 
@@ -82,14 +82,14 @@ describe('Test CLI wrapper', function () {
     it('Should default to this user', async function () {
       this.timeout(60000)
 
-      const stdout = await cliCommand.execWithEnv(`${cmd} --help`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} --help`)
       expect(stdout).to.contain(`instance ${server.url} selected`)
     })
 
     it('Should remember the user', async function () {
       this.timeout(60000)
 
-      const stdout = await cliCommand.execWithEnv(`${cmd} auth list`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} auth list`)
       expect(stdout).to.contain(server.url)
     })
   })
@@ -121,7 +121,7 @@ describe('Test CLI wrapper', function () {
     it('Should remove the auth user', async function () {
       await cliCommand.execWithEnv(`${cmd} auth del ${server.url}`)
 
-      const stdout = await cliCommand.execWithEnv(`${cmd} --help`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} --help`)
       expect(stdout).to.contain('no instance selected')
     })
 
@@ -143,15 +143,15 @@ describe('Test CLI wrapper', function () {
     })
 
     it('Should list installed plugins', async function () {
-      const res = await cliCommand.execWithEnv(`${cmd} plugins list`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} plugins list`)
 
-      expect(res).to.contain('peertube-plugin-hello-world')
+      expect(stdout).to.contain('peertube-plugin-hello-world')
     })
 
     it('Should uninstall the plugin', async function () {
-      const res = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
 
-      expect(res).to.not.contain('peertube-plugin-hello-world')
+      expect(stdout).to.not.contain('peertube-plugin-hello-world')
     })
 
     it('Should install a plugin in requested version', async function () {
@@ -161,16 +161,16 @@ describe('Test CLI wrapper', function () {
     })
 
     it('Should list installed plugins, in correct version', async function () {
-      const res = await cliCommand.execWithEnv(`${cmd} plugins list`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} plugins list`)
 
-      expect(res).to.contain('peertube-plugin-hello-world')
-      expect(res).to.contain('0.0.17')
+      expect(stdout).to.contain('peertube-plugin-hello-world')
+      expect(stdout).to.contain('0.0.17')
     })
 
     it('Should uninstall the plugin again', async function () {
-      const res = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
 
-      expect(res).to.not.contain('peertube-plugin-hello-world')
+      expect(stdout).to.not.contain('peertube-plugin-hello-world')
     })
 
     it('Should install a plugin in requested beta version', async function () {
@@ -178,10 +178,10 @@ describe('Test CLI wrapper', function () {
 
       await cliCommand.execWithEnv(`${cmd} plugins install --npm-name peertube-plugin-hello-world --plugin-version 0.0.21-beta.1`)
 
-      const res = await cliCommand.execWithEnv(`${cmd} plugins list`)
+      const { stdout } = await cliCommand.execWithEnv(`${cmd} plugins list`)
 
-      expect(res).to.contain('peertube-plugin-hello-world')
-      expect(res).to.contain('0.0.21-beta.1')
+      expect(stdout).to.contain('peertube-plugin-hello-world')
+      expect(stdout).to.contain('0.0.21-beta.1')
 
       await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
     })
@@ -223,7 +223,7 @@ describe('Test CLI wrapper', function () {
 
       {
         const params = 'list-my-redundancies'
-        const stdout = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
+        const { stdout } = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
         expect(stdout).to.contain('super video')
         expect(stdout).to.contain(server.host)
@@ -240,7 +240,7 @@ describe('Test CLI wrapper', function () {
 
       {
         const params = 'list-my-redundancies'
-        const stdout = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
+        const { stdout } = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
         expect(stdout).to.not.contain('super video')
       }

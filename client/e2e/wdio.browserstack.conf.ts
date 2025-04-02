@@ -71,13 +71,13 @@ module.exports = {
       },
       {
         browserName: 'Firefox',
-        browserVersion: '78', // Very old ESR
+        browserVersion: '79', // Oldest supported version
 
         ...buildBStackDesktopOptions({ sessionName: 'Firefox ESR Desktop', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
       {
         browserName: 'Safari',
-        browserVersion: '13',
+        browserVersion: '14',
 
         ...buildBStackDesktopOptions({ sessionName: 'Safari Desktop', resolution: '1280x1024' })
       },
@@ -100,13 +100,13 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 11', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 11', osVersion: '14' })
       },
 
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 11 2020', osVersion: '13' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad Pro 11 2020', osVersion: '14' })
       }
     ],
 

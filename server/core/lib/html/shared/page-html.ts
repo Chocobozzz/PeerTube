@@ -1,4 +1,11 @@
-import { buildFileLocale, escapeHTML, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '@peertube/peertube-core-utils'
+import {
+  buildFileLocale,
+  escapeHTML,
+  getDefaultLocale,
+  getDefaultRSSFeeds,
+  is18nLocale,
+  POSSIBLE_LOCALES
+} from '@peertube/peertube-core-utils'
 import { ActorImageType, HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
 import { CONFIG } from '@server/initializers/config.js'
@@ -14,7 +21,6 @@ import { ServerConfigManager } from '../../server-config-manager.js'
 import { TagsHtml } from './tags-html.js'
 
 export class PageHtml {
-
   private static htmlCache: { [path: string]: string } = {}
 
   static invalidateCache () {
@@ -52,7 +58,9 @@ export class PageHtml {
 
       ogType: 'website',
       twitterCard: 'summary_large_image',
-      forbidIndexation: false
+      forbidIndexation: false,
+      embedIndexation: false,
+      rssFeeds: getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
     }, {})
 
     return customHTML
@@ -124,7 +132,6 @@ export class PageHtml {
         sameSite: 'none',
         maxAge: 1000 * 3600 * 24 * 90 // 3 months
       })
-
     } else if (req.cookies.clientLanguage && is18nLocale(req.cookies.clientLanguage)) {
       lang = req.cookies.clientLanguage
     } else {
@@ -132,7 +139,8 @@ export class PageHtml {
     }
 
     logger.debug(
-      'Serving %s HTML language', buildFileLocale(lang),
+      'Serving %s HTML language',
+      buildFileLocale(lang),
       { cookie: req.cookies?.clientLanguage, paramLang, acceptLanguage: req.headers['accept-language'] }
     )
 

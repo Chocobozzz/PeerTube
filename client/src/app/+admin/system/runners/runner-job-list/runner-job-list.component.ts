@@ -1,6 +1,6 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
-import { RouterLink } from '@angular/router'
+import { Component, OnInit, inject } from '@angular/core'
+
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -8,7 +8,7 @@ import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+
 import { AutoColspanDirective } from '../../../../shared/shared-main/common/auto-colspan.directive'
 import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
@@ -18,10 +18,7 @@ import { RunnerJobFormatted, RunnerService } from '../runner.service'
 @Component({
   selector: 'my-runner-job-list',
   templateUrl: './runner-job-list.component.html',
-  standalone: true,
   imports: [
-    GlobalIconComponent,
-    RouterLink,
     TableModule,
     SharedModule,
     NgbTooltip,
@@ -34,7 +31,11 @@ import { RunnerJobFormatted, RunnerService } from '../runner.service'
     AutoColspanDirective
   ]
 })
-export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnInit {
+export class RunnerJobListComponent extends RestTable<RunnerJob> implements OnInit {
+  private runnerService = inject(RunnerService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+
   runnerJobs: RunnerJobFormatted[] = []
   totalRecords = 0
 
@@ -67,14 +68,6 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
       ]
     }
   ]
-
-  constructor (
-    private runnerService: RunnerService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.actions = [
@@ -127,20 +120,20 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
     if (res === false) return
 
     this.runnerService.cancelJobs(jobs)
-        .subscribe({
-          next: () => {
-            this.reloadData()
+      .subscribe({
+        next: () => {
+          this.reloadData()
 
-            this.notifier.success(
-              formatICU(
-                $localize`{count, plural, =1 {Job cancelled} other {{count} jobs cancelled}}`,
-                { count: jobs.length }
-              )
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Job cancelled} other {{count} jobs cancelled}}`,
+              { count: jobs.length }
             )
-          },
+          )
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async removeJobs (jobs: RunnerJob[]) {
@@ -154,20 +147,20 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
     if (res === false) return
 
     this.runnerService.removeJobs(jobs)
-        .subscribe({
-          next: () => {
-            this.reloadData()
+      .subscribe({
+        next: () => {
+          this.reloadData()
 
-            this.notifier.success(
-              formatICU(
-                $localize`{count, plural, =1 {Job removed} other {{count} jobs removed}}`,
-                { count: jobs.length }
-              )
+          this.notifier.success(
+            formatICU(
+              $localize`{count, plural, =1 {Job removed} other {{count} jobs removed}}`,
+              { count: jobs.length }
             )
-          },
+          )
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   getStateBadgeColor (job: RunnerJob) {

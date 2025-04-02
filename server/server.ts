@@ -266,13 +266,7 @@ app.use((_req, res: express.Response) => {
 })
 
 // Catch thrown errors
-app.use((err, _req, res: express.Response, _next) => {
-  // Format error to be logged
-  let error = 'Unknown error.'
-  if (err) {
-    error = err.stack || err.message || err
-  }
-
+app.use((err, req, res: express.Response, _next) => {
   // Handling Sequelize error traces
   const sql = err?.parent ? err.parent.sql : undefined
 
@@ -281,7 +275,7 @@ app.use((err, _req, res: express.Response, _next) => {
     ? (process as any)._getActiveRequests()
     : undefined
 
-  logger.error('Error in controller.', { err: error, sql, activeRequests })
+  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,

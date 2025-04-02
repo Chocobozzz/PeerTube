@@ -47,9 +47,12 @@ languages=(
     ["kab"]="kab"
 )
 
-cd client
 
-rm -rf ./dist
+rm -rf ./client/dist
+
+npm run build:embed
+
+cd client
 
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
@@ -87,8 +90,6 @@ else
     node --max_old_space_size=8192 node_modules/.bin/ng build --localize=false --output-path "dist/$defaultLanguage/" \
                                                               --configuration production --stats-json $additionalParams
 fi
-
-cd ../ && npm run build:embed && cd client/
 
 # Copy runtime locales
 cp -r "./src/locale" "./dist/locale"

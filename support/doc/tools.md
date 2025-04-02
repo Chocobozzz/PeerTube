@@ -12,7 +12,7 @@ It can be launched from a remote server/computer to easily upload videos, manage
 Ensure you have `node` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ```
 
 Then install the CLI:
@@ -131,7 +131,7 @@ You can read the admin documentation on how to use PeerTube runners on https://d
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
 
 ```bash
-node --version # Should be >= 16.x
+node --version # Should be >= 20.x
 ffprobe -version # Should be >= 4.3
 ffmpeg -version # Should be >= 4.3
 ```
@@ -359,6 +359,26 @@ sudo -u prunner peertube-runner list-registered
 
 :::
 
+### List jobs
+
+**Runner >= 0.1.0**
+
+To list jobs that are processed by the runner:
+
+::: code-group
+
+```bash [Shell]
+peertube-runner list-jobs
+peertube-runner list-jobs --include-payload
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner list-jobs
+sudo -u prunner peertube-runner list-jobs --include-payload
+```
+
+:::
+
 ### Graceful shutdown
 
 Ask the runner to shutdown when it has finished all of its current tasks:
@@ -424,7 +444,7 @@ docker compose exec -u peertube peertube npm run parse-log -- --level info
 
 `--level` is optional and could be `info`/`warn`/`error`
 
-You can also remove SQL or HTTP logs using `--not-tags` (PeerTube >= 3.2):
+You can also remove SQL or HTTP logs using `--not-tags`:
 
 ::: code-group
 
@@ -479,7 +499,7 @@ docker compose exec -u peertube peertube npm run create-import-video-file-job --
 
 ### Move video files from filesystem to object storage
 
-Use this script to move all video files or a specific video file to object storage.
+Use this script to move video related files (video files, original video file, captions, etc.) to object storage.
 
 ::: code-group
 
@@ -495,7 +515,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 :::
 
-The script can also move all video files that are not already in object storage:
+The script can also move all video related files that are not already in object storage:
 
 ::: code-group
 
@@ -515,7 +535,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 **PeerTube >= 6.0**
 
-Use this script to move all video files or a specific video file from object storage to the PeerTube instance filesystem.
+Use this script to move video related files (video files, original video file, captions, etc.) from object storage to the PeerTube instance filesystem.
 
 ::: code-group
 
@@ -531,7 +551,7 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 :::
 
-The script can also move all video files that are not already on the filesystem:
+The script can also move all video related files that are not already on the filesystem:
 
 ::: code-group
 

@@ -8,6 +8,8 @@
 
   --menu-bg: var(--menuBackgroundColor);
   --menu-fg: var(--menuForegroundColor);
+  --menu-margin-left: #{$menu-margin-left};
+  --menu-width: #{$menu-width};
 
   --fg: var(--mainForegroundColor, #000);
 
@@ -36,6 +38,8 @@
 
   --input-border-radius: 4px;
 
+  --textarea-y-padding: 12px;
+  --textarea-x-padding: 15px;
   --textarea-fg: var(--textareaForegroundColor, #{pvar(--input-fg)});
   --textarea-bg: var(--textareaBackgroundColor, #{pvar(--input-bg)});
 
@@ -44,8 +48,6 @@
   --support-btn-heart-bg: var(--supportButtonHeartColor, #{$support-button-heart});
 
   --x-margin-content: 2rem;
-
-  --main-col-width: calc(100vw - #{$menu-width});
 
   --secondary-icon-color: #{pvar(--fg-50)};
   --active-icon-color: #{pvar(--on-primary)};
@@ -58,35 +60,35 @@
   --alert-primary-bg: #{pvar(--primary-200)};
   --alert-primary-border-color: #{pvar(--primary-300)};
 
-  --menu-margin-left: #{$menu-margin-left};
-
-  --header-height: #{$header-height};
-
   --embed-fg: #fff;
-  --embed-big-play-bg: transparent;
-
-  &.mobile-app-msg {
-    --header-height: #{$header-height + $header-mobile-msg-height};
-  }
+  --embed-big-play-bg: rgba(0, 0, 0, 0.8);
 
   --menu-fg: #{pvar(--fg-400)};
   --menu-bg: #{pvar(--bg-secondary-400)};
 
-  @media screen and (max-width: $small-view) {
-    --header-height: #{$header-height-small-view};
+  // ---------------------------------------------------------------------------
 
-    &.mobile-app-msg {
-      --header-height: #{$header-height-small-view + $header-mobile-msg-height};
-    }
+  --tmp-header-height: #{$header-height};
+
+  @media screen and (max-width: $small-view) {
+    --tmp-header-height: #{$header-height-small-view};
   }
 
   @media screen and (max-width: $mobile-view) {
-    --header-height: #{$header-height-mobile-view};
+    --tmp-header-height: #{$header-height-mobile-view};
 
-    &.mobile-app-msg {
-      --header-height: #{$header-height-mobile-view + $header-mobile-msg-height};
+    &.global-search-hidden {
+      --tmp-header-height: #{$header-height-mobile-view-without-search};
     }
   }
+
+  --header-height: #{pvar(--tmp-header-height)};
+
+  &.mobile-app-msg {
+    --header-height: calc(#{pvar(--tmp-header-height)} + #{$header-mobile-msg-height});
+  }
+
+  // ---------------------------------------------------------------------------
 
   // Light theme
   &[data-pt-theme=peertube-core-light-beige],

@@ -1,7 +1,10 @@
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings/index.js'
-import { maxBy, sortObjectComparator } from '@peertube/peertube-core-utils'
+import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from '@peertube/peertube-core-utils'
 import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
+import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
+import { buildNSFWFilter } from '@server/helpers/express-utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
@@ -9,12 +12,11 @@ import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKe
 import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
 import { extname } from 'path'
-import { buildNSFWFilter } from '../../helpers/express-utils.js'
-import { MIMETYPES, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
+import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '../../initializers/constants.js'
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares/index.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { VideoModel } from '../../models/video/video.js'
-import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed } from './shared/index.js'
+import { buildFeedMetadata, getCommonVideoFeedAttributes, getPodcastFeedUrlCustomTag, getVideosForFeeds, initFeed } from './shared/index.js'
 
 const videoPodcastFeedsRouter = express.Router()
 
@@ -40,7 +42,8 @@ for (const event of ([ 'channel-updated', 'channel-deleted' ] as const)) {
 
 // ---------------------------------------------------------------------------
 
-videoPodcastFeedsRouter.get('/podcast/videos.xml',
+videoPodcastFeedsRouter.get(
+  '/podcast/videos.xml',
   setFeedPodcastContentType,
   videoFeedsPodcastSetCacheKey,
   podcastCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
@@ -59,11 +62,16 @@ export {
 async function generateVideoPodcastFeed (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
-  const { name, userName, description, imageUrl, accountImageUrl, email, link, accountLink } = await buildFeedMetadata({ videoChannel })
+  const { name, description, imageUrl, ownerImageUrl, email, link, ownerLink } = await buildFeedMetadata({ videoChannel })
+
+  const nsfw = buildNSFWFilter()
 
   const data = await getVideosForFeeds({
     sort: '-publishedAt',
-    nsfw: buildNSFWFilter(),
+
+    // Only list non-NSFW videos (for Apple)
+    nsfw,
+
     // Prevent podcast feeds from listing videos in other instances
     // helps prevent duplicates when they are indexed -- only the author should control them
     isLocal: true,
@@ -71,8 +79,14 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     videoChannelId: videoChannel?.id
   })
 
+  const language = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'language')
+  const category = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'category')
+  const hasNSFW = nsfw !== false
+    ? await VideoModel.channelHasNSFWContent(videoChannel.id)
+    : false
+
   const customTags: CustomTag[] = await Hooks.wrapObject(
-    [],
+    [ getPodcastFeedUrlCustomTag(videoChannel) ],
     'filter:feed.podcast.channel.create-custom-tags.result',
     { videoChannel }
   )
@@ -89,11 +103,18 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     isPodcast: true,
     imageUrl,
 
+    language: language || 'en',
+    category: categoryToItunes(category),
+    nsfw: hasNSFW,
+
+    guid: buildUUIDv5FromURL(videoChannel.Actor.url),
+
     locked: email
       ? { isLocked: true, email } // Default to true because we have no way of offering a redirect yet
       : undefined,
 
-    person: [ { name: userName, href: accountLink, img: accountImageUrl } ],
+    person: [ { name, href: ownerLink, img: ownerImageUrl } ],
+    author: { name: CONFIG.INSTANCE.NAME, link: WEBSERVER.URL },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: 'video',
@@ -108,15 +129,15 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
 }
 
 type PodcastMedia =
-  {
+  | {
     type: string
     length: number
     bitrate: number
     sources: { uri: string, contentType?: string }[]
     title: string
     language?: string
-  } |
-  {
+  }
+  | {
     sources: { uri: string }[]
     type: string
     title: string
@@ -135,23 +156,19 @@ async function generatePodcastItem (options: {
     { video, liveItem }
   )
 
-  const account = video.VideoChannel.Account
-
-  const author = {
-    name: account.getDisplayName(),
-    href: account.getClientUrl()
-  }
-
   const commonAttributes = getCommonVideoFeedAttributes(video)
   const guid = liveItem
-    ? `${video.uuid}_${video.publishedAt.toISOString()}`
-    : commonAttributes.link
+    ? `${video.url}?publishedAt=${video.publishedAt.toISOString()}`
+    : video.url
 
-  let personImage: string
+  const account = video.VideoChannel.Account
+  const person = {
+    name: account.getDisplayName(),
+    href: account.getClientUrl(),
 
-  if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-    const avatar = maxBy(account.Actor.Avatars, 'width')
-    personImage = WEBSERVER.URL + avatar.getStaticPath()
+    img: account.Actor.hasImage(ActorImageType.AVATAR)
+      ? WEBSERVER.URL + account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      : undefined
   }
 
   return {
@@ -160,14 +177,7 @@ async function generatePodcastItem (options: {
 
     trackers: video.getTrackerUrls(),
 
-    author: [ author ],
-    person: [
-      {
-        ...author,
-
-        img: personImage
-      }
-    ],
+    person: [ person ],
 
     media,
 
@@ -178,6 +188,8 @@ async function generatePodcastItem (options: {
         accountUrl: account.getClientUrl()
       }
     ],
+
+    duration: video.duration,
 
     customTags
   }
@@ -198,13 +210,13 @@ async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[]) {
 async function addVODPodcastItem (options: {
   feed: Feed
   video: VideoModel
-  captionsGroup: { [ id: number ]: MVideoCaptionVideo[] }
+  captionsGroup: { [id: number]: MVideoCaptionVideo[] }
 }) {
   const { feed, video, captionsGroup } = options
 
   const webVideos = video.getFormattedWebVideoFilesJSON(true)
     .map(f => buildVODWebVideoFile(video, f))
-    .sort(sortObjectComparator('bitrate', 'desc'))
+    .sort(sortObjectComparator('bitrate', 'asc'))
 
   const streamingPlaylistFiles = buildVODStreamingPlaylists(video)
 
@@ -253,7 +265,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 
   return {
-    type: getVideoFileMimeType(extname(videoFile.fileUrl), videoFile.resolution.id === VideoResolution.H_NOVIDEO),
+    type: getAppleMimeType(extname(videoFile.fileUrl), videoFile.resolution.id === VideoResolution.H_NOVIDEO),
     title: videoFile.resolution.label,
     length: videoFile.size,
     bitrate: videoFile.size / video.duration * 8,
@@ -266,7 +278,38 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
+  const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
   return [
+    ...hls.VideoFiles
+      .sort(sortObjectComparator('resolution', 'asc'))
+      .map(videoFile => {
+        const files = [ videoFile ]
+
+        if (videoFile.resolution !== VideoResolution.H_NOVIDEO && separatedAudioFile) {
+          files.push(separatedAudioFile)
+        }
+
+        return {
+          type: getAppleMimeType(videoFile.extname, videoFile.resolution === VideoResolution.H_NOVIDEO),
+          title: getResolutionLabel(videoFile),
+          length: files.reduce((p, f) => p + f.size, 0),
+          language: video.language,
+          sources: [
+            {
+              uri: buildDownloadFilesUrl({
+                baseUrl: WEBSERVER.URL,
+                videoFiles: files.map(f => f.id),
+                videoUUID: video.uuid,
+                extension: videoFile.hasVideo() && videoFile.hasAudio()
+                  ? '.mp4'
+                  : '.m4a'
+              })
+            }
+          ]
+        }
+      }),
+
     {
       type: 'application/x-mpegURL',
       title: 'HLS',
@@ -305,4 +348,38 @@ function buildVODCaptions (video: MVideo, videoCaptions: MVideoCaptionVideo[]) {
       rel: 'captions'
     }
   }).filter(c => c)
+}
+
+function categoryToItunes (category: number) {
+  const itunesMap: { [id in keyof typeof VIDEO_CATEGORIES]: string } = {
+    1: 'Music',
+    2: 'TV &amp; Film',
+    3: 'Leisure',
+    4: 'Arts',
+    5: 'Sports',
+    6: 'Places &amp; Travel',
+    7: 'Video Games',
+    8: 'Society &amp; Culture',
+    9: 'Comedy',
+    10: 'Fiction',
+    11: 'News',
+    12: 'Leisure',
+    13: 'Education',
+    14: 'Society &amp; Culture',
+    15: 'Technology',
+    16: 'Pets &amp; Animals',
+    17: 'Kids &amp; Family',
+    18: 'Food'
+  }
+
+  return itunesMap[category]
+}
+
+// Guidelines: https://help.apple.com/itc/podcasts_connect/#/itcb54353390
+// "The type values for the supported file formats are: audio/x-m4a, audio/mpeg, video/quicktime, video/mp4, video/x-m4v, ..."
+function getAppleMimeType (extname: string, isAudio: boolean) {
+  if (extname === '.mp4' && isAudio) return 'audio/x-m4a'
+  if (extname === '.mp3') return 'audio/mpeg'
+
+  return getVideoFileMimeType(extname, isAudio)
 }

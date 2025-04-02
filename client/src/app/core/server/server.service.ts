@@ -1,7 +1,7 @@
 import { Observable, of, Subject } from 'rxjs'
 import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Inject, Injectable, LOCALE_ID } from '@angular/core'
+import { Injectable, LOCALE_ID, inject } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
@@ -18,6 +18,9 @@ import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class ServerService {
+  private http = inject(HttpClient)
+  private localeId = inject(LOCALE_ID)
+
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
@@ -39,12 +42,6 @@ export class ServerService {
   private configLoaded = false
   private config: ServerConfig
   private htmlConfig: HTMLServerConfig
-
-  constructor (
-    private http: HttpClient,
-    @Inject(LOCALE_ID) private localeId: string
-  ) {
-  }
 
   loadHTMLConfig () {
     try {
@@ -82,20 +79,20 @@ export class ServerService {
 
     if (!this.configObservable) {
       this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
-                                  .pipe(
-                                    tap(config => {
-                                      this.config = config
-                                      this.htmlConfig = config
-                                      this.configLoaded = true
-                                    }),
-                                    tap(config => {
-                                      if (this.configReset) {
-                                        this.configReloaded.next(config)
-                                        this.configReset = false
-                                      }
-                                    }),
-                                    share()
-                                  )
+        .pipe(
+          tap(config => {
+            this.config = config
+            this.htmlConfig = config
+            this.configLoaded = true
+          }),
+          tap(config => {
+            if (this.configReset) {
+              this.configReloaded.next(config)
+              this.configReset = false
+            }
+          }),
+          share()
+        )
     }
 
     return this.configObservable
@@ -166,7 +163,7 @@ export class ServerService {
     return this.videoPlaylistPrivaciesObservable.pipe(first())
   }
 
-  getServerLocale (): Observable<{ [ id: string ]: string }> {
+  getServerLocale (): Observable<{ [id: string]: string }> {
     if (!this.localeObservable) {
       const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
 
@@ -175,8 +172,8 @@ export class ServerService {
         this.localeObservable = of({}).pipe(shareReplay())
       } else {
         this.localeObservable = this.http
-                                    .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
-                                    .pipe(shareReplay())
+          .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
+          .pipe(shareReplay())
       }
     }
 
@@ -187,40 +184,40 @@ export class ServerService {
     return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
   }
 
-  private loadAttributeEnum <T extends string | number> (
+  private loadAttributeEnum<T extends string | number> (
     baseUrl: string,
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
     sort = false
   ) {
     return this.getServerLocale()
-               .pipe(
-                 switchMap(translations => {
-                   return this.http.get<{ [ id: string ]: string }>(baseUrl + attributeName)
-                              .pipe(map(data => ({ data, translations })))
-                 }),
-                 map(({ data, translations }) => {
-                   const hashToPopulate: VideoConstant<T>[] = Object.keys(data)
-                                                                    .map(dataKey => {
-                                                                      const label = data[dataKey]
+      .pipe(
+        switchMap(translations => {
+          return this.http.get<{ [id: string]: string }>(baseUrl + attributeName)
+            .pipe(map(data => ({ data, translations })))
+        }),
+        map(({ data, translations }) => {
+          const hashToPopulate: VideoConstant<T>[] = Object.keys(data)
+            .map(dataKey => {
+              const label = data[dataKey]
 
-                                                                      const id = attributeName === 'languages'
-                                                                        ? dataKey as T
-                                                                        : parseInt(dataKey, 10) as T
+              const id = attributeName === 'languages'
+                ? dataKey as T
+                : parseInt(dataKey, 10) as T
 
-                                                                      return {
-                                                                        id,
-                                                                        label: peertubeTranslate(label, translations)
-                                                                      }
-                                                                    })
+              return {
+                id,
+                label: peertubeTranslate(label, translations)
+              }
+            })
 
-                   if (sort === true) {
-                     hashToPopulate.sort((a, b) => a.label.localeCompare(b.label))
-                   }
+          if (sort === true) {
+            hashToPopulate.sort((a, b) => a.label.localeCompare(b.label))
+          }
 
-                   return hashToPopulate
-                 }),
-                 shareReplay()
-               )
+          return hashToPopulate
+        }),
+        shareReplay()
+      )
   }
 
   private loadHTMLConfigLocally () {

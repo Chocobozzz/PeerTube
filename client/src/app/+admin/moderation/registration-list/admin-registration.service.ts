@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { from } from 'rxjs'
 import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ResultList, UserRegistration, UserRegistrationUpdateState } from '@peertube/peertube-models'
@@ -10,13 +10,11 @@ import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class AdminRegistrationService {
-  private static BASE_REGISTRATION_URL = environment.apiUrl + '/api/v1/users/registrations'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService
-  ) { }
+  private static BASE_REGISTRATION_URL = environment.apiUrl + '/api/v1/users/registrations'
 
   listRegistrations (options: {
     pagination: RestPagination

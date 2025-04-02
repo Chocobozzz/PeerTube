@@ -1,7 +1,7 @@
 <form [formGroup]="form">
 
-  <div *ngIf="requiresApproval" class="form-group">
-    <label i18n for="registrationReason">Why do you want to join {{ instanceName }}?</label>
+  <div *ngIf="requiresApproval()" class="form-group">
+    <label i18n for="registrationReason">Why do you want to join {{ instanceName() }}?</label>
 
     <textarea
       id="registrationReason" formControlName="registrationReason" class="form-control" rows="4"
@@ -15,10 +15,10 @@
     <my-peertube-checkbox inputName="terms" formControlName="terms">
       <ng-template ptTemplate="label">
         <ng-container i18n>
-          I am at least {{ minimumAge }} years old and agree
+          I am at least {{ minimumAge() }} years old and agree
           to the <a class="link-primary" (click)="onTermsClick($event)" href='#'>Terms</a>
-          <ng-container *ngIf="hasCodeOfConduct"> and to the <a class="link-primary" (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
-          of {{ instanceName }}
+          <ng-container *ngIf="hasCodeOfConduct()"> and to the <a class="link-primary" (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
+          of {{ instanceName() }}
         </ng-container>
       </ng-template>
     </my-peertube-checkbox>

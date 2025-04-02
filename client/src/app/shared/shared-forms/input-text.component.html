@@ -1,23 +1,23 @@
 <div class="input-group">
   <input
-    [id]="inputId" [name]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
-    [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly"
+    [id]="inputId()" [name]="inputId()" [autocomplete]="autocomplete()" [value]="value()" [placeholder]="placeholder()" [tabindex]="tabindex()"
+    [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly()"
     #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
-    [ngClass]="{ 'input-error': formError }"
-    [attr.aria-label]="ariaLabel"
+    [ngClass]="{ 'input-error': formError() }"
+    [attr.aria-label]="ariaLabel()"
   />
 
-  <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn" [title]="toggleTitle">
-    <my-global-icon *ngIf="show" iconName="eye-open"></my-global-icon>
-    <my-global-icon *ngIf="!show" iconName="eye-close"></my-global-icon>
+  <button *ngIf="withToggle()" (click)="toggle()" type="button" class="btn" [title]="toggleTitle">
+    <my-global-icon *ngIf="show()" iconName="eye-open"></my-global-icon>
+    <my-global-icon *ngIf="!show()" iconName="eye-close"></my-global-icon>
   </button>
 
   <my-copy-button
-    *ngIf="withCopy" [value]="input.value" i18n-notification notification="Copied"
+    *ngIf="withCopy()" [value]="input.value" i18n-notification notification="Copied"
     [isInputGroup]="true" i18n
   >
     COPY
   </my-copy-button>
 </div>
 
-<div *ngIf="formError" class="form-error" role="alert">{{ formError }}</div>
+<div *ngIf="formError()" class="form-error" role="alert">{{ formError() }}</div>

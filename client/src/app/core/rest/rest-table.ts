@@ -8,8 +8,7 @@ import { RestPagination } from './rest-pagination'
 
 const debugLogger = debug('peertube:tables:RestTable')
 
-export abstract class RestTable <T = unknown> {
-
+export abstract class RestTable<T = unknown> {
   abstract totalRecords: number
   abstract sort: SortMeta
   abstract pagination: RestPagination
@@ -31,6 +30,8 @@ export abstract class RestTable <T = unknown> {
   // Inner Map is value -> badge name
   private valueToBadge = new Map<string, Map<string, string>>()
   private badgesUsed = new Set<string>()
+
+  private lastLazyLoadEvent: TableLazyLoadEvent
 
   abstract getIdentifier (): string
 
@@ -57,6 +58,19 @@ export abstract class RestTable <T = unknown> {
   loadLazy (event: TableLazyLoadEvent) {
     debugLogger('Load lazy %o.', event)
 
+    if (this.lastLazyLoadEvent) {
+      // Prevent lazy loading twice
+      // TODO: remove when https://github.com/primefaces/primeng/issues/5480 is fixed
+      if (
+        this.lastLazyLoadEvent.first === event.first &&
+        this.lastLazyLoadEvent.rows === event.rows &&
+        this.lastLazyLoadEvent.sortField === event.sortField &&
+        this.lastLazyLoadEvent.sortOrder === event.sortOrder
+      ) return
+    }
+
+    this.lastLazyLoadEvent = event
+
     this.sort = {
       order: event.sortOrder,
       field: event.sortField as string
@@ -76,12 +90,17 @@ export abstract class RestTable <T = unknown> {
   }
 
   onSearch (search: string) {
+    this.search = search
+
+    this.resetAndReload()
+  }
+
+  protected resetAndReload () {
     this.pagination = {
       start: 0,
       count: this.rowsPerPage
     }
 
-    this.search = search
     this.reloadData()
   }
 
@@ -90,7 +109,7 @@ export abstract class RestTable <T = unknown> {
   }
 
   getPaginationTemplate () {
-    return $localize`{first} - {last} of {totalRecords}`
+    return $localize`Showing {first} to {last} of {totalRecords} elements`
   }
 
   protected abstract reloadDataInternal (): void

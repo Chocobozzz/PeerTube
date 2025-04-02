@@ -1,6 +1,6 @@
 import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ComponentPagination, RestExtractor, RestService } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import {
@@ -17,14 +17,12 @@ import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class PluginApiService {
-  private static BASE_PLUGIN_URL = environment.apiUrl + '/api/v1/plugins'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
+  private pluginService = inject(PluginService)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService,
-    private pluginService: PluginService
-  ) { }
+  private static BASE_PLUGIN_URL = environment.apiUrl + '/api/v1/plugins'
 
   getPluginTypeLabel (type: PluginType_Type) {
     if (type === PluginType.PLUGIN) {
@@ -46,7 +44,7 @@ export class PluginApiService {
     params = params.append('pluginType', pluginType.toString())
 
     return this.authHttp.get<ResultList<PeerTubePlugin>>(PluginApiService.BASE_PLUGIN_URL, { params })
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   searchAvailablePlugins (
@@ -64,14 +62,14 @@ export class PluginApiService {
     if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<PeerTubePluginIndex>>(PluginApiService.BASE_PLUGIN_URL + '/available', { params })
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPlugin (npmName: string) {
     const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName
 
     return this.authHttp.get<PeerTubePlugin>(path)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPluginRegisteredSettings (pluginName: string, pluginType: PluginType_Type) {
@@ -79,9 +77,9 @@ export class PluginApiService {
     const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/registered-settings'
 
     return this.authHttp.get<RegisteredServerSettings>(path)
-               .pipe(
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   updatePluginSettings (pluginName: string, pluginType: PluginType_Type, settings: any) {
@@ -89,7 +87,7 @@ export class PluginApiService {
     const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/settings'
 
     return this.authHttp.put(path, { settings })
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   uninstall (pluginName: string, pluginType: PluginType_Type) {
@@ -98,7 +96,7 @@ export class PluginApiService {
     }
 
     return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/uninstall', body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   update (pluginName: string, pluginType: PluginType_Type) {
@@ -107,7 +105,7 @@ export class PluginApiService {
     }
 
     return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/update', body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   install (npmName: string) {
@@ -116,7 +114,7 @@ export class PluginApiService {
     }
 
     return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/install', body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPluginOrThemeHref (type: PluginType_Type, name: string) {

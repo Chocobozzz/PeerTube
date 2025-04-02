@@ -3,63 +3,42 @@
 @use '_mixins' as *;
 @use '_miniature' as *;
 
-.table-video-link {
-  position: relative;
-  top: 3px;
+.root {
+  --co-image-height: 78px;
 
-  @include disable-outline;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media screen and (max-width: $mobile-view) {
+    --co-image-height: 64px;
+  }
+
+  &.small {
+    --co-image-height: 45px;
+  }
 }
 
-.table-video {
-  display: inline-flex;
+my-video-thumbnail {
+  display: block;
+  height: var(--co-image-height);
+  width: calc(#{math.div(16, 9)} * var(--co-image-height));
 
-  .table-video-image {
-    @include miniature-thumbnail;
-    @include margin-right(0.5rem);
-
-    & {
-      $image-height: 45px;
-
-      height: $image-height;
-      width: #{math.div(16, 9) * $image-height};
-      border-radius: 2px;
-      border: 0;
-      background: transparent;
-      display: inline-flex;
-      justify-content: center;
-      position: relative;
-    }
-
-    img {
-      height: 100%;
-      width: 100%;
-      border-radius: 2px;
-    }
-
-    .table-video-image-label {
-      position: absolute;
-      border-radius: 3px;
-      font-size: 10px;
-      padding: 0 3px;
-      line-height: 1.3;
-      bottom: 2px;
-      right: 2px;
-
-      @include static-thumbnail-overlay;
-    }
+  & + .name {
+    @include margin-left(0.5rem);
   }
+}
 
-  .table-video-text {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 90%;
-    color: pvar(--fg);
-    line-height: 1rem;
+.name {
+  color: pvar(--fg);
+  line-height: 1rem;
+  font-weight: $font-bold;
+  text-decoration: none;
+}
 
-    div + div {
-      color: pvar(--fg-300);
-      font-size: 11px;
-    }
-  }
+.channel {
+  color: pvar(--fg-200);
+  text-decoration: none;
+
+  @include font-size(14px);
 }

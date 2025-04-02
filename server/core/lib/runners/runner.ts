@@ -28,9 +28,8 @@ function updateLastRunnerContact (req: express.Request, runner: MRunner) {
     return sequelizeTypescript.transaction(async transaction => {
       return runner.save({ transaction })
     })
-  })
-  .catch(err => logger.error('Cannot update last runner contact for %s', runner.name, { err, ...lTags(runner.name) }))
-  .finally(() => updatingRunner.delete(runner.id))
+  }).catch(err => logger.error('Cannot update last runner contact for %s', runner.name, { err, ...lTags(runner.name) }))
+    .finally(() => updatingRunner.delete(runner.id))
 }
 
 function runnerJobCanBeCancelled (runnerJob: MRunnerJob) {

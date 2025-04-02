@@ -5,7 +5,8 @@ import { testAvatarSize } from '@tests/shared/checks.js'
 import { AbuseState, HttpStatusCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@peertube/peertube-models'
 import {
   cleanupTests,
-  createSingleServer, PeerTubeServer,
+  createSingleServer,
+  PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
 
@@ -37,7 +38,6 @@ describe('Test users', function () {
   })
 
   describe('Creating a user', function () {
-
     it('Should be able to create a new user', async function () {
       await server.users.create({ ...user, videoQuota: 2 * 1024 * 1024, adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST })
     })
@@ -81,7 +81,6 @@ describe('Test users', function () {
   })
 
   describe('Users listing', function () {
-
     it('Should list all the users', async function () {
       const { data, total } = await server.users.list()
 
@@ -186,7 +185,6 @@ describe('Test users', function () {
   })
 
   describe('Update my account', function () {
-
     it('Should update my password', async function () {
       await server.users.updateMe({
         token: userToken,
@@ -339,7 +337,6 @@ describe('Test users', function () {
   })
 
   describe('Updating another user', function () {
-
     it('Should be able to update another user', async function () {
       await server.users.update({
         userId,
@@ -391,7 +388,6 @@ describe('Test users', function () {
   })
 
   describe('Remove a user', function () {
-
     before(async function () {
       await server.users.update({
         userId,

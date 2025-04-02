@@ -38,6 +38,8 @@ export type VideosListMarkupData = {
   channelHandle?: string
   accountHandle?: string
 
+  host?: string
+
   isLive?: string // number
 
   onlyLocal?: StringBoolean

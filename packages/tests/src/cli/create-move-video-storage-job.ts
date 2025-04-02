@@ -18,7 +18,12 @@ import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
 import { join } from 'path'
 import { expectStartWith } from '../shared/checks.js'
 
-async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectStorage?: ObjectStorageCommand) {
+async function checkFiles (options: {
+  origin: PeerTubeServer
+  video: VideoDetails
+  objectStorage?: ObjectStorageCommand
+}) {
+  const { origin, video, objectStorage } = options
 
   // Web videos
   for (const file of video.files) {
@@ -62,6 +67,21 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectSt
       expectStartWith(source.fileDownloadUrl, origin.url)
     }
   }
+
+  // Captions
+  {
+    const start = objectStorage
+      ? objectStorage.getMockCaptionFileBaseUrl()
+      : origin.url
+
+    const { data: captions } = await origin.captions.list({ videoId: video.uuid })
+
+    for (const caption of captions) {
+      expectStartWith(caption.fileUrl, start)
+
+      await makeRawRequest({ url: caption.fileUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+    }
+  }
 }
 
 describe('Test create move video storage job CLI', function () {
@@ -86,6 +106,10 @@ describe('Test create move video storage job CLI', function () {
 
     for (let i = 0; i < 3; i++) {
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' + i })
+
+      await servers[0].captions.add({ language: 'ar', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+      await servers[0].captions.add({ language: 'zh', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+
       uuids.push(uuid)
     }
 
@@ -107,12 +131,12 @@ describe('Test create move video storage job CLI', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: uuids[1] })
 
-        await checkFiles(servers[0], video, objectStorage)
+        await checkFiles({ origin: servers[0], video, objectStorage })
 
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video)
+          await checkFiles({ origin: servers[0], video })
         }
       }
     })
@@ -128,7 +152,7 @@ describe('Test create move video storage job CLI', function () {
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video, objectStorage)
+          await checkFiles({ origin: servers[0], video, objectStorage })
         }
       }
     })
@@ -164,12 +188,12 @@ describe('Test create move video storage job CLI', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: uuids[1] })
 
-        await checkFiles(servers[0], video)
+        await checkFiles({ origin: servers[0], video })
 
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video, objectStorage)
+          await checkFiles({ origin: servers[0], video, objectStorage })
         }
       }
     })
@@ -185,7 +209,7 @@ describe('Test create move video storage job CLI', function () {
         for (const id of [ uuids[0], uuids[2] ]) {
           const video = await server.videos.get({ id })
 
-          await checkFiles(servers[0], video)
+          await checkFiles({ origin: servers[0], video })
         }
       }
     })

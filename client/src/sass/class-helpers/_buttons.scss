@@ -38,6 +38,10 @@
   @include tertiary-button;
 }
 
+.button-as-link {
+  @include button-as-link;
+}
+
 .danger-button {
   @include danger-button;
 }

@@ -11,7 +11,6 @@ import {
   VideoState,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
-import { HLSOptions, PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
 import {
   getBoolOrDefault,
   getParamString,
@@ -22,12 +21,13 @@ import {
   UserLocalStorageKeys,
   videoRequiresUserAuth
 } from '../../../root-helpers'
+import { HLSOptions, PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../player'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
 import { PlaylistTracker } from './playlist-tracker'
 import { Translations } from './translations'
-import { VideoFetcher } from './video-fetcher'
 import { getBackendUrl } from './url'
+import { VideoFetcher } from './video-fetcher'
 
 export class PlayerOptionsBuilder {
   private autoplay: boolean
@@ -335,7 +335,7 @@ export class PlayerOptionsBuilder {
     if (!storyboards || storyboards.length === 0) return undefined
 
     return {
-      url: getBackendUrl() + storyboards[0].storyboardPath,
+      url: storyboards[0].fileUrl,
       height: storyboards[0].spriteHeight,
       width: storyboards[0].spriteWidth,
       interval: storyboards[0].spriteDuration
@@ -428,7 +428,7 @@ export class PlayerOptionsBuilder {
         label: peertubeTranslate(c.language.label, translations),
         language: c.language.id,
         automaticallyGenerated: c.automaticallyGenerated,
-        src: getBackendUrl() + c.captionPath
+        src: c.fileUrl
       }))
     }
 

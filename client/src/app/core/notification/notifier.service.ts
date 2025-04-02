@@ -1,12 +1,12 @@
 import { MessageService } from 'primeng/api'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { logger } from '@root-helpers/logger'
 
 @Injectable()
 export class Notifier {
-  readonly TIMEOUT = 5000
+  private messageService = inject(MessageService)
 
-  constructor (private messageService: MessageService) { }
+  readonly TIMEOUT = 5000
 
   info (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Info`

@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { objectLineFeedToHtml } from '@app/helpers'
 import {
@@ -22,16 +22,14 @@ import { VideoComment } from './video-comment.model'
 
 @Injectable()
 export class VideoCommentService {
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
+
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
 
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static BASE_ME_URL = environment.apiUrl + '/api/v1/users/me/'
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService
-  ) {}
 
   addCommentThread (videoId: string, comment: VideoCommentCreate, videoPassword?: string) {
     const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
@@ -39,10 +37,10 @@ export class VideoCommentService {
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
     return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment, { headers })
-               .pipe(
-                 map(data => this.extractVideoComment(data.comment)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        map(data => this.extractVideoComment(data.comment)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   addCommentReply (options: { videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate, videoPassword?: string }) {
@@ -52,10 +50,10 @@ export class VideoCommentService {
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
     return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment, { headers })
-               .pipe(
-                 map(data => this.extractVideoComment(data.comment)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        map(data => this.extractVideoComment(data.comment)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   // ---------------------------------------------------------------------------
@@ -139,10 +137,10 @@ export class VideoCommentService {
 
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     return this.authHttp.get<ThreadsResultList<VideoComment>>(url, { params, headers })
-               .pipe(
-                 map(result => this.extractVideoComments(result)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        map(result => this.extractVideoComments(result)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   getVideoThreadComments (parameters: {
@@ -155,11 +153,11 @@ export class VideoCommentService {
     const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp
-               .get<VideoCommentThreadTreeServerModel>(url, { headers })
-               .pipe(
-                 map(tree => this.extractVideoCommentTree(tree)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<VideoCommentThreadTreeServerModel>(url, { headers })
+      .pipe(
+        map(tree => this.extractVideoCommentTree(tree)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   // ---------------------------------------------------------------------------
@@ -168,8 +166,8 @@ export class VideoCommentService {
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comments/${commentId}`
 
     return this.authHttp
-               .delete(url)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .delete(url)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {

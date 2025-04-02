@@ -70,8 +70,7 @@ export const unsafeSSRFGot = got.extend({
             return
           }
 
-          // Stream
-          (promiseOrStream as any).destroy()
+          ;(promiseOrStream as any).destroy()
         }
       })
 
@@ -138,10 +137,12 @@ export function doRequest (url: string, options: PeerTubeRequestOptions & { prev
     : peertubeGot
 
   return gotInstance(url, gotOptions)
-    .catch(err => { throw buildRequestError(err) })
+    .catch(err => {
+      throw buildRequestError(err)
+    })
 }
 
-export function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions & { preventSSRF?: false } = {}) {
+export function doJSONRequest<T> (url: string, options: PeerTubeRequestOptions & { preventSSRF?: false } = {}) {
   const gotOptions = buildGotOptions(options)
 
   const gotInstance = options.preventSSRF === false
@@ -149,7 +150,9 @@ export function doJSONRequest <T> (url: string, options: PeerTubeRequestOptions 
     : peertubeGot
 
   return gotInstance<T>(url, { ...gotOptions, responseType: 'json' })
-    .catch(err => { throw buildRequestError(err) })
+    .catch(err => {
+      throw buildRequestError(err)
+    })
 }
 
 export async function doRequestAndSaveToFile (url: string, destPath: string, options: PeerTubeRequestOptions = {}) {
@@ -211,6 +214,26 @@ export function isBinaryResponse (result: Response<any>) {
   return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
 }
 
+export function buildRequestError (error: RequestError) {
+  const newError: PeerTubeRequestError = new Error(error.message)
+  newError.name = error.name
+  newError.stack = error.stack
+
+  if (error.response) {
+    newError.responseBody = error.response.body
+    newError.responseHeaders = error.response.headers
+    newError.statusCode = error.response.statusCode
+  }
+
+  if (error.options) {
+    newError.requestHeaders = error.options.headers
+    newError.requestUrl = error.options.url
+    newError.requestMethod = error.options.method
+  }
+
+  return newError
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -249,26 +272,6 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
     headers,
     context
   }
-}
-
-function buildRequestError (error: RequestError) {
-  const newError: PeerTubeRequestError = new Error(error.message)
-  newError.name = error.name
-  newError.stack = error.stack
-
-  if (error.response) {
-    newError.responseBody = error.response.body
-    newError.responseHeaders = error.response.headers
-    newError.statusCode = error.response.statusCode
-  }
-
-  if (error.options) {
-    newError.requestHeaders = error.options.headers
-    newError.requestUrl = error.options.url
-    newError.requestMethod = error.options.method
-  }
-
-  return newError
 }
 
 function buildUrl (url: string | URL) {

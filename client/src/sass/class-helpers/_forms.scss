@@ -11,7 +11,7 @@
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .input-error:not(:focus) {
@@ -55,7 +55,7 @@
   font-size: 14px;
   margin-top: 10px;
 
-  @include muted;
+  @include muted-2;
 }
 
 // Useful with a "reset" button
@@ -65,8 +65,26 @@
   align-items: baseline;
 }
 
+label,
+.label {
+  font-weight: $font-bold;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
+  color: pvar(--fg-300);
+}
+
+.label-inline {
+  display: inline;
+  font-size: 1rem;
+  color: pvar(--fg-200);
+  font-weight: normal;
+  margin-bottom: 0;
+
+  @include margin-right(0.75rem);
+}
+
 label + .form-group-description,
 .label-container + .form-group-description {
   margin-bottom: 10px;
-  margin-top: 0;
+  margin-top: -0.5rem;
 }

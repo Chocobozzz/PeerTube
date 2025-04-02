@@ -1,34 +1,32 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, numberAttribute } from '@angular/core'
+import { Component, numberAttribute, input } from '@angular/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-progress-bar',
   styleUrls: [ './progress-bar.component.scss' ],
   templateUrl: './progress-bar.component.html',
-  standalone: true,
   imports: [
     CommonModule,
     NgbTooltip
   ]
 })
-
 export class ProgressBarComponent {
-  @Input({ required: true, transform: numberAttribute }) value: number
-  @Input({ required: true }) label: string
+  readonly value = input.required<number, unknown>({ transform: numberAttribute })
+  readonly label = input.required<string>()
 
-  @Input({ required: true }) valueFormatted: string | number
+  readonly valueFormatted = input.required<string | number>()
 
-  @Input() maxFormatted: string
+  readonly maxFormatted = input<string>(undefined)
 
-  @Input() size: 'normal' | 'small' = 'normal'
+  readonly size = input<'normal' | 'small'>('normal')
 
-  @Input({ transform: numberAttribute }) max = 100
-  @Input({ transform: numberAttribute }) min = 0
+  readonly max = input(100, { transform: numberAttribute })
+  readonly min = input(0, { transform: numberAttribute })
 
-  @Input() theme: 'green' | 'red' | 'main' = 'main'
+  readonly theme = input<'green' | 'red' | 'main'>('main')
 
   percentage () {
-    return this.value * 100 / this.max
+    return this.value() * 100 / this.max()
   }
 }

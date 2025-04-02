@@ -5,7 +5,7 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "module": "commonjs",
-    "target": "ES2015",
+    "target": "ES2018",
     "typeRoots": [
       "../node_modules/@types",
       "../node_modules"

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
@@ -11,24 +11,19 @@ import { NgIf, NgClass } from '@angular/common'
   selector: 'my-register-step-terms',
   templateUrl: './register-step-terms.component.html',
   styleUrls: [ './step.component.scss' ],
-  standalone: true,
   imports: [ FormsModule, ReactiveFormsModule, NgIf, NgClass, PeertubeCheckboxComponent, PeerTubeTemplateDirective ]
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {
-  @Input() hasCodeOfConduct = false
-  @Input() requiresApproval: boolean
-  @Input() minimumAge = 16
-  @Input() instanceName: string
+  protected formReactiveService = inject(FormReactiveService)
 
-  @Output() formBuilt = new EventEmitter<FormGroup>()
-  @Output() termsClick = new EventEmitter<void>()
-  @Output() codeOfConductClick = new EventEmitter<void>()
+  readonly hasCodeOfConduct = input(false)
+  readonly requiresApproval = input<boolean>(undefined)
+  readonly minimumAge = input(16)
+  readonly instanceName = input<string>(undefined)
 
-  constructor (
-    protected formReactiveService: FormReactiveService
-  ) {
-    super()
-  }
+  readonly formBuilt = output<FormGroup>()
+  readonly termsClick = output()
+  readonly codeOfConductClick = output()
 
   get instanceHost () {
     return window.location.host
@@ -38,7 +33,7 @@ export class RegisterStepTermsComponent extends FormReactive implements OnInit {
     this.buildForm({
       terms: REGISTER_TERMS_VALIDATOR,
 
-      registrationReason: this.requiresApproval
+      registrationReason: this.requiresApproval()
         ? REGISTER_REASON_VALIDATOR
         : null
     })

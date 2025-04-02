@@ -6,6 +6,9 @@ button:not(.with-border, .is-input-group) {
 }
 
 .is-input-group {
+  --bs-btn-border-color: #{pvar(--input-border-color)};
+  --bs-btn-hover-border-color: #{pvar(--input-border-color)};
+
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }

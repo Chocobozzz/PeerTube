@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, Input } from '@angular/core'
+import { booleanAttribute, Component, input } from '@angular/core'
 
 @Component({
   selector: 'my-custom-markup-help',
@@ -6,5 +6,5 @@ import { booleanAttribute, Component, Input } from '@angular/core'
   standalone: true
 })
 export class CustomMarkupHelpComponent {
-  @Input({ transform: booleanAttribute }) supportRelMe = false
+  readonly supportRelMe = input(false, { transform: booleanAttribute })
 }

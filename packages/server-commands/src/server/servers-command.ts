@@ -8,7 +8,6 @@ import { basename, join } from 'path'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ServersCommand extends AbstractCommand {
-
   static flushTests (internalServerNumber: number) {
     return new Promise<void>((res, rej) => {
       const suffix = ` -- ${internalServerNumber}`
@@ -46,9 +45,20 @@ export class ServersCommand extends AbstractCommand {
       await copy(origin, join('artifacts', destname))
     }
 
+    const saveDBIfNeeded = async () => {
+      if (!isGithubCI()) return
+
+      await ensureDir('artifacts')
+      const destname = join('artifacts', `peertube-${this.server.internalServerNumber}.sql`)
+      console.log('Saving database %s.', destname)
+
+      exec(`pg_dump peertube_test${this.server.internalServerNumber} > ${destname}`)
+    }
+
     if (this.server.parallel) {
       const promise = saveGithubLogsIfNeeded()
-                        .then(() => ServersCommand.flushTests(this.server.internalServerNumber))
+        .then(() => saveDBIfNeeded())
+        .then(() => ServersCommand.flushTests(this.server.internalServerNumber))
 
       promises.push(promise)
     }

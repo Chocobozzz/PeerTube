@@ -1,15 +1,14 @@
-import { booleanAttribute, Component, Input } from '@angular/core'
+import { booleanAttribute, Component, input } from '@angular/core'
 import { NgIf, NgStyle } from '@angular/common'
 
 @Component({
   selector: 'my-loader',
-  template: `<div *ngIf="loading" class="spinner-border" [ngStyle]="getStyle()" role="status"></div>`,
-  standalone: true,
+  template: `<div *ngIf="loading()" class="spinner-border" [ngStyle]="getStyle()" role="status"></div>`,
   imports: [ NgIf, NgStyle ]
 })
 export class LoaderComponent {
-  @Input({ transform: booleanAttribute }) loading: boolean
-  @Input() size: 'sm' | 'xl'
+  readonly loading = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+  readonly size = input<'sm' | 'xl'>(undefined)
 
   private readonly sizes = {
     sm: {
@@ -24,8 +23,9 @@ export class LoaderComponent {
   }
 
   getStyle () {
-    if (!this.size) return undefined
+    const size = this.size()
+    if (!size) return undefined
 
-    return this.sizes[this.size]
+    return this.sizes[size]
   }
 }

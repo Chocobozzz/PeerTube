@@ -12,15 +12,15 @@ export type MVideoLive = Omit<VideoLiveModel, 'Video' | 'ReplaySetting'>
 // ############################################################################
 
 export type MVideoLiveVideo =
-  MVideoLive &
-  Use<'Video', MVideo>
+  & MVideoLive
+  & Use<'Video', MVideo>
 
 // ############################################################################
 
 export type MVideoLiveWithSetting =
-  MVideoLive &
-  Use<'ReplaySetting', MLiveReplaySetting>
+  & MVideoLive
+  & Use<'ReplaySetting', MLiveReplaySetting>
 
 export type MVideoLiveVideoWithSetting =
-  MVideoLiveVideo &
-  Use<'ReplaySetting', MLiveReplaySetting>
+  & MVideoLiveVideo
+  & Use<'ReplaySetting', MLiveReplaySetting>

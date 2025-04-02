@@ -1342,9 +1342,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4603134051700562542" datatype="html">
+      <trans-unit id="4603134051700562542" datatype="html" xml:space="preserve">
         <source>Loading instance statistics...</source>
-        <target/>
+        <target state="translated">Încărcare instanță statistici...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1382,9 +1382,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="853055819436340388" datatype="html">
+      <trans-unit id="853055819436340388" datatype="html" xml:space="preserve">
         <source>video views</source>
-        <target/>
+        <target state="translated">vizualizări video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1402,9 +1402,9 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7222991934579313942" datatype="html">
+      <trans-unit id="7222991934579313942" datatype="html" xml:space="preserve">
         <source>of hosted video</source>
-        <target/>
+        <target state="translated">ale videouclipurilor găzduite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">51</context>
@@ -1418,41 +1418,41 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3541687134897970106" datatype="html">
+      <trans-unit id="3541687134897970106" datatype="html" xml:space="preserve">
         <source>followers</source>
-        <target/>
+        <target state="translated">urmăritori</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6751995972535426095" datatype="html">
+      <trans-unit id="6751995972535426095" datatype="html" xml:space="preserve">
         <source>following</source>
-        <target/>
+        <target state="translated">urmărire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4209525355702493436" datatype="html">
+      <trans-unit id="4209525355702493436" datatype="html" xml:space="preserve">
         <source>Ban</source>
-        <target/>
+        <target state="translated">Interdicție</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7908493851025027368" datatype="html">
+      <trans-unit id="7908493851025027368" datatype="html" xml:space="preserve">
         <source>A banned user will no longer be able to login.</source>
-        <target/>
+        <target state="translated">Un utilizator blocat nu va mai putea să se logheze.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3616223838716839702" datatype="html">
+      <trans-unit id="3616223838716839702" datatype="html" xml:space="preserve">
         <source>Ban this user</source>
-        <target/>
+        <target state="translated">Blochează acest utilizator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1478,9 +1478,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html">
+      <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737" datatype="html" xml:space="preserve">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target/>
+        <target state="translated">Cu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>lista Nu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sau <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>încețoșare miniaturi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, se va cere o confirmare pentru vizualizarea videoclipului. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">6</context>
@@ -1498,9 +1498,9 @@
           <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe" datatype="html">
+      <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe" datatype="html" xml:space="preserve">
         <source>Do not list</source>
-        <target/>
+        <target state="translated">Lista "Nu"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1510,9 +1510,9 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8930852890861583005" datatype="html">
+      <trans-unit id="8930852890861583005" datatype="html" xml:space="preserve">
         <source>Blur thumbnails</source>
-        <target/>
+        <target state="translated">Estompează miniaturile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1522,9 +1522,9 @@
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6812930637022637485" datatype="html">
+      <trans-unit id="6812930637022637485" datatype="html" xml:space="preserve">
         <source>Display</source>
-        <target/>
+        <target state="translated">Afișează</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1546,9 +1546,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1534085756270333258" datatype="html">
+      <trans-unit id="1534085756270333258" datatype="html" xml:space="preserve">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target/>
+        <target state="translated">În paginile Adăugate recent, Tendințe, Local, Cele mai plăcute și Căutare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">26</context>

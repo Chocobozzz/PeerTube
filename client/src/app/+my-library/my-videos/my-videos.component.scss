@@ -1,30 +1,71 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-@use '_form-mixins' as *;
 
-input[type=text] {
-  @include peertube-input-text(300px);
+my-select-checkbox {
+  min-width: 250px;
 }
 
-.peertube-select-container {
-  @include peertube-select-container(auto);
+.pt-badge {
+  @include margin-right(5px);
 }
 
-.action-button {
+.video-info > div {
   display: flex;
-  align-self: flex-end;
-  min-width: 200px;
-  justify-content: flex-end;
 
-  @include margin-left(10px);
+  my-global-icon {
+    position: relative;
+    top: -2px;
+
+    @include global-icon-size(16px);
+    @include margin-left(3px);
+  }
 }
 
-my-edit-button {
-  @include margin-right(10px);
+.right-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-@include on-small-main-col {
-  .action-button {
-    margin: 1rem auto 0;
+td {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.channel-filters {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $separator-border-color;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  overflow: hidden;
+
+  &:hover  {
+    overflow: auto;
+  }
+
+  .channels-label {
+    color: pvar(--fg-200);
+    font-weight: $font-bold;
+    white-space: nowrap;
+  }
+}
+
+p-table {
+  max-height: calc(100vh - #{pvar(--header-height)} - 300px);
+}
+
+@media screen and (min-width: $small-view) {
+  .video-cell-name {
+    width: 300px;
+    display: block;
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  my-video-cell {
+    max-width: 120px;
+    display: block;
   }
 }

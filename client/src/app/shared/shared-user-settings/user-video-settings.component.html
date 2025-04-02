@@ -76,5 +76,5 @@
     </my-peertube-checkbox>
   </div>
 
-  <input *ngIf="!reactiveUpdate" type="submit" i18n-value value="Save video settings" [disabled]="!form.valid" class="peertube-button primary-button mt-3">
+  <input *ngIf="!reactiveUpdate()" type="submit" i18n-value value="Save video settings" [disabled]="!form.valid" class="peertube-button primary-button mt-3">
 </form>

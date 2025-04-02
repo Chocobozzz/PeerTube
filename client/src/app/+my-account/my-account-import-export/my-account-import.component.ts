@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig } from '@app/helpers'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -17,11 +17,16 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-import',
   templateUrl: './my-account-import.component.html',
   styleUrls: [ './my-account-import.component.scss' ],
-  standalone: true,
   imports: [ NgIf, UploadProgressComponent, NgbTooltip, PTDatePipe, AlertComponent ]
 })
 export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponentDeactivate {
-  @Input() videoQuotaUsed: number
+  private authService = inject(AuthService)
+  private server = inject(ServerService)
+  private userImportExportService = inject(UserImportExportService)
+  private resumableUploadService = inject(UploadxService)
+  private notifier = inject(Notifier)
+
+  readonly videoQuotaUsed = input<number>(undefined)
 
   uploadingArchive = false
   archiveUploadFinished = false
@@ -35,14 +40,6 @@ export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponent
   private fileToUpload: File
   private uploadServiceSubscription: Subscription
   private alreadyRefreshedToken = false
-
-  constructor (
-    private authService: AuthService,
-    private server: ServerService,
-    private userImportExportService: UserImportExportService,
-    private resumableUploadService: UploadxService,
-    private notifier: Notifier
-  ) {}
 
   ngOnInit () {
     this.userImportExportService.getLatestImport({ userId: this.authService.getUser().id })
@@ -114,10 +111,10 @@ export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponent
 
     const user = this.authService.getUser()
 
-    if (user.videoQuota !== -1 && this.videoQuotaUsed + file.size > user.videoQuota) {
+    if (user.videoQuota !== -1 && this.videoQuotaUsed() + file.size > user.videoQuota) {
       const bytePipes = new BytesPipe()
       const fileSizeBytes = bytePipes.transform(file.size, 0)
-      const videoQuotaUsedBytes = bytePipes.transform(this.videoQuotaUsed, 0)
+      const videoQuotaUsedBytes = bytePipes.transform(this.videoQuotaUsed(), 0)
       const videoQuotaBytes = bytePipes.transform(user.videoQuota, 0)
 
       this.notifier.error(

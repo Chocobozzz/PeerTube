@@ -1,31 +1,29 @@
 import { of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { CustomPage } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class CustomPageService {
-  static BASE_INSTANCE_HOMEPAGE_URL = environment.apiUrl + '/api/v1/custom-pages/homepage/instance'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) { }
+  static BASE_INSTANCE_HOMEPAGE_URL = environment.apiUrl + '/api/v1/custom-pages/homepage/instance'
 
   getInstanceHomepage () {
     return this.authHttp.get<CustomPage>(CustomPageService.BASE_INSTANCE_HOMEPAGE_URL)
-                        .pipe(
-                          catchError(err => {
-                            if (err.status === 404) {
-                              return of({ content: '' })
-                            }
+      .pipe(
+        catchError(err => {
+          if (err.status === 404) {
+            return of({ content: '' })
+          }
 
-                            return this.restExtractor.handleError(err)
-                          })
-                        )
+          return this.restExtractor.handleError(err)
+        })
+      )
   }
 
   updateInstanceHomepage (content: string) {

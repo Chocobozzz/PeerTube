@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit, randomInt } from '@peertube/peertube-core-utils'
-import {
-  HttpStatusCode,
-  PeerTubeProblemDocument,
-  VideoCommentPolicy,
-  VideoCreateResult,
-  VideoPrivacy
-} from '@peertube/peertube-models'
+import { HttpStatusCode, PeerTubeProblemDocument, VideoCommentPolicy, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -17,7 +11,8 @@ import {
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
@@ -42,6 +37,7 @@ describe('Test videos API validator', function () {
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     userAccessToken = await server.users.generateUserAndToken('user1')
 
@@ -80,7 +76,6 @@ describe('Test videos API validator', function () {
   })
 
   describe('When searching a video', function () {
-
     it('Should fail with nothing', async function () {
       await makeGetRequest({
         url: server.url,
@@ -133,6 +128,40 @@ describe('Test videos API validator', function () {
         query: { channelId: 89898 },
         expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
+    })
+
+    it('Should not list videos of a channel of another user', async function () {
+      {
+        {
+          const { total, data } = await server.videos.listMyVideos({ token: userAccessToken, channelNameOneOf: [ 'root_channel' ] })
+
+          expect(total).to.equal(0)
+          expect(data).to.have.lengthOf(0)
+        }
+
+        {
+          const { total, data } = await server.videos.listMyVideos({ token: userAccessToken, channelId: server.store.channel.id })
+
+          expect(total).to.equal(0)
+          expect(data).to.have.lengthOf(0)
+        }
+      }
+
+      {
+        {
+          const { total, data } = await server.videos.listMyVideos({ channelNameOneOf: [ 'root_channel' ] })
+
+          expect(total).to.not.equal(0)
+          expect(data).to.not.have.lengthOf(0)
+        }
+
+        {
+          const { total, data } = await server.videos.listMyVideos({ channelId: server.store.channel.id })
+
+          expect(total).to.not.equal(0)
+          expect(data).to.not.have.lengthOf(0)
+        }
+      }
     })
 
     it('Should success with the correct parameters', async function () {
@@ -216,7 +245,6 @@ describe('Test videos API validator', function () {
     })
 
     function runSuite (mode: 'legacy' | 'resumable') {
-
       const baseOptions = () => {
         return {
           server,

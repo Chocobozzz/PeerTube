@@ -18,10 +18,6 @@ export abstract class FormReactive {
     this.validationMessages = validationMessages
   }
 
-  protected async waitPendingCheck () {
-    return this.formReactiveService.waitPendingCheck(this.form)
-  }
-
   protected markAllAsDirty () {
     return this.formReactiveService.markAllAsDirty(this.form.controls)
   }

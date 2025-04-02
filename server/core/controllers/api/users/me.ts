@@ -1,18 +1,21 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { getAllPrivacies, pick } from '@peertube/peertube-core-utils'
 import {
   ActorImageType,
   UserVideoRate as FormattedUserVideoRate,
   HttpStatusCode,
   UserUpdateMe,
-  UserVideoQuota
+  UserVideoQuota,
+  VideoInclude
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/helpers/audit-logger.js'
+import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-api-format.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import express from 'express'
 import 'multer'
-import { createReqFiles } from '../../../helpers/express-utils.js'
+import { createReqFiles, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
@@ -33,6 +36,7 @@ import {
 } from '../../../middlewares/index.js'
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image.js'
 import {
+  commonVideosFiltersValidator,
   deleteMeValidator,
   getMyVideoImportsValidator,
   listCommentsOnUserVideosValidator,
@@ -52,22 +56,13 @@ const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_
 
 const meRouter = express.Router()
 
-meRouter.get('/me',
-  authenticate,
-  asyncMiddleware(getUserInformation)
-)
-meRouter.delete('/me',
-  authenticate,
-  deleteMeValidator,
-  asyncMiddleware(deleteMe)
-)
+meRouter.get('/me', authenticate, asyncMiddleware(getUserInformation))
+meRouter.delete('/me', authenticate, deleteMeValidator, asyncMiddleware(deleteMe))
 
-meRouter.get('/me/video-quota-used',
-  authenticate,
-  asyncMiddleware(getUserVideoQuotaUsed)
-)
+meRouter.get('/me/video-quota-used', authenticate, asyncMiddleware(getUserVideoQuotaUsed))
 
-meRouter.get('/me/videos/imports',
+meRouter.get(
+  '/me/videos/imports',
   authenticate,
   paginationValidator,
   videoImportsSortValidator,
@@ -77,7 +72,8 @@ meRouter.get('/me/videos/imports',
   asyncMiddleware(getUserVideoImports)
 )
 
-meRouter.get('/me/videos/comments',
+meRouter.get(
+  '/me/videos/comments',
   authenticate,
   paginationValidator,
   videosSortValidator,
@@ -87,39 +83,25 @@ meRouter.get('/me/videos/comments',
   asyncMiddleware(listCommentsOnUserVideos)
 )
 
-meRouter.get('/me/videos',
+meRouter.get(
+  '/me/videos',
   authenticate,
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
+  commonVideosFiltersValidator,
   asyncMiddleware(usersVideosValidator),
   asyncMiddleware(listUserVideos)
 )
 
-meRouter.get('/me/videos/:videoId/rating',
-  authenticate,
-  asyncMiddleware(usersVideoRatingValidator),
-  asyncMiddleware(getUserVideoRating)
-)
+meRouter.get('/me/videos/:videoId/rating', authenticate, asyncMiddleware(usersVideoRatingValidator), asyncMiddleware(getUserVideoRating))
 
-meRouter.put('/me',
-  authenticate,
-  asyncMiddleware(usersUpdateMeValidator),
-  asyncRetryTransactionMiddleware(updateMe)
-)
+meRouter.put('/me', authenticate, asyncMiddleware(usersUpdateMeValidator), asyncRetryTransactionMiddleware(updateMe))
 
-meRouter.post('/me/avatar/pick',
-  authenticate,
-  reqAvatarFile,
-  updateAvatarValidator,
-  asyncRetryTransactionMiddleware(updateMyAvatar)
-)
+meRouter.post('/me/avatar/pick', authenticate, reqAvatarFile, updateAvatarValidator, asyncRetryTransactionMiddleware(updateMyAvatar))
 
-meRouter.delete('/me/avatar',
-  authenticate,
-  asyncRetryTransactionMiddleware(deleteMyAvatar)
-)
+meRouter.delete('/me/avatar', authenticate, asyncRetryTransactionMiddleware(deleteMyAvatar))
 
 // ---------------------------------------------------------------------------
 
@@ -131,30 +113,38 @@ export {
 
 async function listUserVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
+  const countVideos = getCountVideos(req)
+  const query = pickCommonVideoQuery(req.query)
+
+  const include = (query.include || VideoInclude.NONE) | VideoInclude.BLACKLISTED | VideoInclude.NOT_PUBLISHED_STATE
 
   const apiOptions = await Hooks.wrapObject({
+    privacyOneOf: getAllPrivacies(),
+
+    ...query,
+
+    // Display all
+    nsfw: null,
+
+    user,
     accountId: user.Account.id,
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort,
-    search: req.query.search,
-    channelId: res.locals.videoChannel?.id,
-    isLive: req.query.isLive
+    displayOnlyForFollower: null,
+
+    videoChannelId: res.locals.videoChannel?.id,
+    channelNameOneOf: req.query.channelNameOneOf,
+
+    countVideos,
+
+    include
   }, 'filter:api.user.me.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoModel.listUserVideosForApi.bind(VideoModel),
+    VideoModel.listForApi.bind(VideoModel),
     apiOptions,
     'filter:api.user.me.videos.list.result'
   )
 
-  const additionalAttributes = {
-    waitTranscoding: true,
-    state: true,
-    scheduledUpdate: true,
-    blacklistInfo: true
-  }
-  return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery({ include })))
 }
 
 async function listCommentsOnUserVideos (req: express.Request, res: express.Response) {

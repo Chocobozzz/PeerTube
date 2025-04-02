@@ -7,7 +7,7 @@ export function genericUploadErrorHandler (options: {
   err: Pick<HttpErrorResponse, 'message' | 'status' | 'headers'>
   name: string
   notifier?: Notifier
-  sticky?: boolean
+  sticky?: boolean // default false
 }) {
   const { err, name, notifier, sticky = false } = options
   const title = $localize`Upload failed`
@@ -51,19 +51,23 @@ function buildMessage (name: string, err: Pick<HttpErrorResponse, 'message' | 's
     return $localize`The connection was interrupted`
   }
 
+  if (err.status === HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415) {
+    return $localize`Your ${name} file format is not supported by your platform.`
+  }
+
   if (err.status === HttpStatusCode.INTERNAL_SERVER_ERROR_500) {
-    return $localize`The server encountered an error`
+    return $localize`The server encountered an error.`
   }
 
   if (err.status === HttpStatusCode.REQUEST_TIMEOUT_408) {
-    return $localize`Your ${name} file couldn't be transferred before the server proxy timeout`
+    return $localize`Your ${name} file couldn't be transferred before the server proxy timeout.`
   }
 
   if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
     const maxFileSize = err.headers?.get('X-File-Maximum-Size')
-    let message = $localize`Your ${name} file was too large `
+    let message = $localize`Your ${name} file was too large.`
 
-    if (maxFileSize) message += $localize` (max. size: ${maxFileSize})`
+    if (maxFileSize) message += $localize` Max size is ${maxFileSize}.`
 
     return message
   }

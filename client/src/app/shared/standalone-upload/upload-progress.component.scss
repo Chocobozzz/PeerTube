@@ -1,12 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.upload-progress-retry,
-.upload-progress-cancel {
-  display: flex;
-  margin-bottom: 40px;
-}
-
 my-progress-bar {
   width: 100%;
 }

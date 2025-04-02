@@ -50,7 +50,7 @@
         "SwitchCase": 1,
         "MemberExpression": "off",
         // https://github.com/eslint/eslint/issues/15299
-        "ignoredNodes": ["PropertyDefinition"]
+        "ignoredNodes": ["PropertyDefinition", "TSTypeParameterInstantiation", "TSConditionalType *"]
       }
     ],
     "@typescript-eslint/consistent-type-assertions": [

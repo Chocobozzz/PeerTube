@@ -68,10 +68,10 @@ export class ProcessLiveRTMPHLSTranscoding {
         const bitrate = await getVideoStreamBitrate(this.payload.input.rtmpUrl, probe)
         const { ratio } = await getVideoStreamDimensionsInfo(this.payload.input.rtmpUrl, probe)
 
-        const m3u8Watcher = watch(this.outputPath + '/*.m3u8')
+        const m3u8Watcher = watch(this.outputPath, { ignored: path => path !== this.outputPath && !path.endsWith('.m3u8') })
         this.fsWatchers.push(m3u8Watcher)
 
-        const tsWatcher = watch(this.outputPath + '/*.ts')
+        const tsWatcher = watch(this.outputPath, { ignored: path => path !== this.outputPath && !path.endsWith('.ts') })
         this.fsWatchers.push(tsWatcher)
 
         m3u8Watcher.on('change', p => {
@@ -223,11 +223,18 @@ export class ProcessLiveRTMPHLSTranscoding {
   private async onFFmpegEnded () {
     if (this.ended) return
 
-    this.ended = true
     logger.info('FFmpeg ended, sending success to server')
 
     // Wait last ffmpeg chunks generation
     await wait(1500)
+
+    try {
+      await this.sendPendingChunks()
+    } catch (err) {
+      logger.error(err, 'Cannot send latest chunks after ffmpeg ended')
+    }
+
+    this.ended = true
 
     this.sendSuccess()
       .catch(err => logger.error({ err }, 'Cannot send success'))
@@ -299,14 +306,18 @@ export class ProcessLiveRTMPHLSTranscoding {
           if (this.allPlaylistsCreated) {
             const playlistName = this.getPlaylistName(videoChunkFilename)
 
-            await this.updatePlaylistContent(playlistName, videoChunkFilename)
+            try {
+              await this.updatePlaylistContent(playlistName, videoChunkFilename)
 
-            payload = {
-              ...payload,
+              payload = {
+                ...payload,
 
-              masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
-              resolutionPlaylistFilename: playlistName,
-              resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
+                masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
+                resolutionPlaylistFilename: playlistName,
+                resolutionPlaylistFile: this.buildPlaylistFileParam(playlistName)
+              }
+            } catch (err) {
+              logger.warn(err, `Cannot fetch/update playlist content ${playlistName}`)
             }
           }
 
@@ -360,11 +371,17 @@ export class ProcessLiveRTMPHLSTranscoding {
 
   private async updatePlaylistContent (playlistName: string, latestChunkFilename: string) {
     const m3u8Path = join(this.outputPath, playlistName)
-    const playlistContent = await readFile(m3u8Path, 'utf-8')
+    let playlistContent = await readFile(m3u8Path, 'utf-8')
+
+    if (!playlistContent.includes('#EXT-X-ENDLIST')) {
+      playlistContent = playlistContent.substring(
+        0,
+        playlistContent.lastIndexOf(latestChunkFilename) + latestChunkFilename.length
+      ) + '\n'
+    }
 
     // Remove new chunk references, that will be processed later
     this.latestFilteredPlaylistContent[playlistName] = playlistContent
-      .substring(0, playlistContent.lastIndexOf(latestChunkFilename) + latestChunkFilename.length) + '\n'
   }
 
   private buildPlaylistFileParam (playlistName: string) {

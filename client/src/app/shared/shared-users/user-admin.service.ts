@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { getBytes } from '@root-helpers/bytes'
 import { arrayify, peertubeTranslate } from '@peertube/peertube-core-utils'
@@ -10,22 +10,19 @@ import { ResultList, User as UserServerModel, UserCreate, UserUpdate } from '@pe
 
 @Injectable()
 export class UserAdminService {
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService,
-    private serverService: ServerService
-  ) { }
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
+  private serverService = inject(ServerService)
 
   addUser (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL, userCreate)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   updateUser (userId: number, userUpdate: UserUpdate) {
     return this.authHttp.put(UserService.BASE_USERS_URL + userId, userUpdate)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   updateUsers (users: UserServerModel[], userUpdate: UserUpdate) {
@@ -105,7 +102,7 @@ export class UserAdminService {
       )
   }
 
-  private formatUser (user: UserServerModel, translations: { [ id: string ]: string } = {}) {
+  private formatUser (user: UserServerModel, translations: { [id: string]: string } = {}) {
     let videoQuota
     if (user.videoQuota === -1) {
       videoQuota = '∞'

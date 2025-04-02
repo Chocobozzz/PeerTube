@@ -17,6 +17,10 @@ export function generateOriginalVideoObjectStorageKey (filename: string) {
   return filename
 }
 
+export function generateCaptionObjectStorageKey (filename: string) {
+  return filename
+}
+
 export function generateUserExportObjectStorageKey (filename: string) {
   return filename
 }

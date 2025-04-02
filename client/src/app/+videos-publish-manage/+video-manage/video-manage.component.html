@@ -1,0 +1,6 @@
+<div class="margin-content">
+  <my-video-manage-container
+    *ngIf="loaded"
+    canUpdate="true" canWatch="true" cancelLink="/my-library/videos" (videoUpdated)="onVideoUpdated()"
+  ></my-video-manage-container>
+</div>

@@ -1,5 +1,5 @@
 import { SortMeta } from 'primeng/api'
-import { Directive, OnInit } from '@angular/core'
+import { Directive, OnInit, inject } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
@@ -7,6 +7,9 @@ import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericAccountBlocklistComponent extends RestTable implements OnInit {
+  private notifier = inject(Notifier)
+  private blocklistService = inject(BlocklistService)
+
   // @ts-expect-error: "Abstract methods can only appear within an abstract class"
   abstract mode: BlocklistComponentType
 
@@ -14,13 +17,6 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-
-  constructor (
-    private notifier: Notifier,
-    private blocklistService: BlocklistService
-  ) {
-    super()
-  }
 
   // @ts-expect-error: "Abstract methods can only appear within an abstract class"
   abstract getIdentifier (): string
@@ -40,7 +36,7 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
         this.notifier.success(
           this.mode === BlocklistComponentType.Account
             ? $localize`Account ${blockedAccount.nameWithHost} unmuted.`
-            : $localize`Account ${blockedAccount.nameWithHost} unmuted by your instance.`
+            : $localize`Account ${blockedAccount.nameWithHost} unmuted by your platform.`
         )
 
         this.reloadData()

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
@@ -10,7 +10,6 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
   selector: 'my-about-instance',
   templateUrl: './about-instance.component.html',
   styleUrls: [ './about-instance.component.scss' ],
-  standalone: true,
   imports: [
     InstanceStatRulesComponent,
     HorizontalMenuComponent,
@@ -18,16 +17,14 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
   ]
 })
 export class AboutInstanceComponent implements OnInit {
-  @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
+  private route = inject(ActivatedRoute)
+
+  readonly descriptionWrapper = viewChild<ElementRef<HTMLInputElement>>('descriptionWrapper')
 
   aboutHTML: AboutHTML
   serverStats: ServerStats
   serverConfig: ServerConfig
   menuEntries: HorizontalMenuEntry[] = []
-
-  constructor (
-    private route: ActivatedRoute
-  ) {}
 
   ngOnInit () {
     const {
@@ -62,11 +59,10 @@ export class AboutInstanceComponent implements OnInit {
       })
     }
 
-    if (aboutHTML.hardwareInformation) {
-      this.menuEntries.push({
-        label: $localize`Technical information`,
-        routerLink: '/about/instance/tech'
-      })
-    }
+    // Always displayed, we have the "features found on this instance" table on this page
+    this.menuEntries.push({
+      label: $localize`Technical information`,
+      routerLink: '/about/instance/tech'
+    })
   }
 }

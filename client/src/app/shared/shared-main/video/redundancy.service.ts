@@ -2,20 +2,18 @@ import { SortMeta } from 'primeng/api'
 import { concat, Observable } from 'rxjs'
 import { catchError, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { ResultList, Video, VideoRedundanciesTarget, VideoRedundancy } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class RedundancyService {
-  static BASE_REDUNDANCY_URL = environment.apiUrl + '/api/v1/server/redundancy'
+  private authHttp = inject(HttpClient)
+  private restService = inject(RestService)
+  private restExtractor = inject(RestExtractor)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restService: RestService,
-    private restExtractor: RestExtractor
-  ) { }
+  static BASE_REDUNDANCY_URL = environment.apiUrl + '/api/v1/server/redundancy'
 
   updateRedundancy (host: string, redundancyAllowed: boolean) {
     const url = RedundancyService.BASE_REDUNDANCY_URL + '/' + host
@@ -23,7 +21,7 @@ export class RedundancyService {
     const body = { redundancyAllowed }
 
     return this.authHttp.put(url, body)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   listVideoRedundancies (options: {
@@ -39,9 +37,9 @@ export class RedundancyService {
     if (target) params = params.append('target', target)
 
     return this.authHttp.get<ResultList<VideoRedundancy>>(RedundancyService.BASE_REDUNDANCY_URL + '/videos', { params })
-               .pipe(
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+      .pipe(
+        catchError(res => this.restExtractor.handleError(res))
+      )
   }
 
   addVideoRedundancy (video: Video) {
@@ -53,7 +51,6 @@ export class RedundancyService {
 
   removeVideoRedundancies (redundancy: VideoRedundancy) {
     const observables = redundancy.redundancies.streamingPlaylists.map(r => r.id)
-      .concat(redundancy.redundancies.files.map(r => r.id))
       .map(id => this.removeRedundancy(id))
 
     return concat(...observables)
@@ -62,6 +59,6 @@ export class RedundancyService {
 
   private removeRedundancy (redundancyId: number) {
     return this.authHttp.delete(RedundancyService.BASE_REDUNDANCY_URL + '/videos/' + redundancyId)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 }

@@ -12,6 +12,7 @@ import {
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { generateMagnetUri } from '@server/helpers/webtorrent.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
+import { getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
@@ -24,7 +25,7 @@ import {
   VIDEO_STATES
 } from '../../../initializers/constants.js'
 import { MServer, MStreamingPlaylistRedundanciesOpt, MVideoFormattable, MVideoFormattableDetails } from '../../../types/models/index.js'
-import { MVideoFileRedundanciesOpt } from '../../../types/models/video/video-file.js'
+import { MVideoFile } from '../../../types/models/video/video-file.js'
 import { sortByResolutionDesc } from './shared/index.js'
 
 export type VideoFormattingJSONOptions = {
@@ -42,7 +43,7 @@ export type VideoFormattingJSONOptions = {
   }
 }
 
-export function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSanitize): VideoFormattingJSONOptions {
+export function guessAdditionalAttributesFromQuery (query: Pick<VideosCommonQueryAfterSanitize, 'include'>): VideoFormattingJSONOptions {
   if (!query?.include) return {}
 
   return {
@@ -204,18 +205,30 @@ export function streamingPlaylistsModelToFormattedJSON (
         ? playlist.RedundancyVideos.map(r => ({ baseUrl: r.fileUrl }))
         : [],
 
-      files: videoFilesModelToFormattedJSON(video, playlist.VideoFiles)
+      files: videoFilesModelToFormattedJSON(video, playlist.VideoFiles, { includePlaylistUrl: true })
     }))
 }
 
+// ---------------------------------------------------------------------------
+
 export function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
-  videoFiles: MVideoFileRedundanciesOpt[],
+  videoFiles: MVideoFile[],
+  options?: {
+    includePlaylistUrl?: true
+    includeMagnet?: boolean
+  }
+): (VideoFile & { playlistUrl: string })[]
+
+export function videoFilesModelToFormattedJSON (
+  video: MVideoFormattable,
+  videoFiles: MVideoFile[],
   options: {
+    includePlaylistUrl?: boolean // default false
     includeMagnet?: boolean // default true
   } = {}
 ): VideoFile[] {
-  const { includeMagnet = true } = options
+  const { includePlaylistUrl = false, includeMagnet = true } = options
 
   if (isArray(videoFiles) === false) return []
 
@@ -227,6 +240,8 @@ export function videoFilesModelToFormattedJSON (
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
     .map(videoFile => {
+      const fileUrl = videoFile.getFileUrl(video)
+
       return {
         id: videoFile.id,
 
@@ -253,13 +268,17 @@ export function videoFilesModelToFormattedJSON (
         torrentUrl: videoFile.getTorrentUrl(),
         torrentDownloadUrl: videoFile.getTorrentDownloadUrl(),
 
-        fileUrl: videoFile.getFileUrl(video),
+        fileUrl,
         fileDownloadUrl: videoFile.getFileDownloadUrl(video),
 
         metadataUrl: videoFile.metadataUrl ?? getLocalVideoFileMetadataUrl(video, videoFile),
 
         hasAudio: videoFile.hasAudio(),
         hasVideo: videoFile.hasVideo(),
+
+        playlistUrl: includePlaylistUrl === true
+          ? getHlsResolutionPlaylistFilename(fileUrl)
+          : undefined,
 
         storage: video.remote
           ? null
@@ -319,10 +338,9 @@ function buildAdditionalAttributes (video: MVideoFormattable, options: VideoForm
 
   if (add?.blacklistInfo === true) {
     result.blacklisted = !!video.VideoBlacklist
-    result.blacklistedReason =
-      video.VideoBlacklist
-        ? video.VideoBlacklist.reason
-        : null
+    result.blacklistedReason = video.VideoBlacklist
+      ? video.VideoBlacklist.reason
+      : null
   }
 
   if (add?.blockedOwner === true) {

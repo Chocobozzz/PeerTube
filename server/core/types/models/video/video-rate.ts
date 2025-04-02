@@ -10,22 +10,22 @@ type Use<K extends keyof AccountVideoRateModel, M> = PickWith<AccountVideoRateMo
 export type MAccountVideoRate = Omit<AccountVideoRateModel, 'Video' | 'Account'>
 
 export type MAccountVideoRateVideoUrl =
-  MAccountVideoRate &
-  Use<'Video', MVideoUrl>
+  & MAccountVideoRate
+  & Use<'Video', MVideoUrl>
 
 export type MAccountVideoRateAccountUrl =
-  MAccountVideoRate &
-  Use<'Account', MAccountUrl>
+  & MAccountVideoRate
+  & Use<'Account', MAccountUrl>
 
 export type MAccountVideoRateAccountVideo =
-  MAccountVideoRate &
-  Use<'Account', MAccountAudience> &
-  Use<'Video', MVideo>
+  & MAccountVideoRate
+  & Use<'Account', MAccountAudience>
+  & Use<'Video', MVideo>
 
 // ############################################################################
 
 // Format for API or AP object
 
 export type MAccountVideoRateFormattable =
-  Pick<MAccountVideoRate, 'type'> &
-  Use<'Video', MVideoFormattable>
+  & Pick<MAccountVideoRate, 'type'>
+  & Use<'Video', MVideoFormattable>

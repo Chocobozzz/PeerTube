@@ -1,4 +1,4 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form()">
 
   <ng-container formGroupName="instanceCustomHomepage">
 
@@ -18,11 +18,11 @@
           <my-markdown-textarea
             inputId="instanceCustomHomepageContent" formControlName="content"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
-            [formError]="formErrors['instanceCustomHomepage.content']"
-            dir="ltr"
+            [formError]="formErrors()['instanceCustomHomepage.content']"
+            dir="ltr" monospace="true"
           ></my-markdown-textarea>
 
-          <div *ngIf="formErrors.instanceCustomHomepage.content" class="form-error" role="alert">{{ formErrors.instanceCustomHomepage.content }}</div>
+          <div *ngIf="formErrors().instanceCustomHomepage.content" class="form-error" role="alert">{{ formErrors().instanceCustomHomepage.content }}</div>
         </div>
       </div>
     </div>

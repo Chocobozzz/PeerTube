@@ -40,19 +40,19 @@
           <my-peertube-checkbox
             [inputName]="getOptionalInputName(playlist, element)"
             [ngModel]="element.enabled"
-            (click)="toggleOptionalPlaylist($event, playlist, element, startAt.timestamp, stopAt.timestamp)"
+            (click)="toggleOptionalPlaylist($event, playlist, element, startAt.timestamp(), stopAt.timestamp())"
           ></my-peertube-checkbox>
 
           <my-timestamp-input
             class="me-2"
-            [maxTimestamp]="video.duration"
+            [maxTimestamp]="video().duration"
             [(ngModel)]="element.startTimestamp"
             (inputBlur)="onElementTimestampUpdate(playlist, element)"
             #startAt
           ></my-timestamp-input>
 
           <my-timestamp-input
-            [maxTimestamp]="video.duration"
+            [maxTimestamp]="video().duration"
             [(ngModel)]="element.stopTimestamp"
             (inputBlur)="onElementTimestampUpdate(playlist, element)"
             #stopAt

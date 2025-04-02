@@ -1,17 +1,13 @@
 import { Component } from '@angular/core'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { FeedFormat } from '@peertube/peertube-models'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { FeedComponent } from '../../../shared/shared-main/feeds/feed.component'
+
 import { VideoCommentListAdminOwnerComponent } from '../../../shared/shared-video-comment/video-comment-list-admin-owner.component'
 
 @Component({
   selector: 'my-video-comment-list',
   templateUrl: './video-comment-list.component.html',
-  standalone: true,
   imports: [
-    GlobalIconComponent,
-    FeedComponent,
     VideoCommentListAdminOwnerComponent
   ]
 })

@@ -1,7 +1,6 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { pathExists } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
-import throttle from 'lodash-es/throttle.js'
 import maxmind, { CityResponse, CountryResponse, Reader } from 'maxmind'
 import { join } from 'path'
 import { isArray } from './custom-validators/misc.js'
@@ -16,6 +15,9 @@ export class GeoIP {
   private countryReader: Reader<CountryResponse>
   private cityReader: Reader<CityResponse>
 
+  private lastInitTry: Date
+  private initReadersPromise: Promise<any>
+
   private readonly INIT_READERS_RETRY_INTERVAL = 1000 * 60 * 10 // 10 minutes
   private readonly countryDBPath = join(CONFIG.STORAGE.BIN_DIR, 'dbip-country-lite-latest.mmdb')
   private readonly cityDBPath = join(CONFIG.STORAGE.BIN_DIR, 'dbip-city-lite-latest.mmdb')
@@ -28,7 +30,9 @@ export class GeoIP {
     if (CONFIG.GEO_IP.ENABLED === false) return emptyResult
 
     try {
-      await this.initReadersIfNeededThrottle()
+      if (!this.initReadersPromise) this.initReadersPromise = this.initReadersIfNeeded()
+      await this.initReadersPromise
+      this.initReadersPromise = undefined
 
       const countryResult = this.countryReader?.get(ip)
       const cityResult = this.cityReader?.get(ip)
@@ -112,6 +116,9 @@ export class GeoIP {
   // ---------------------------------------------------------------------------
 
   private async initReadersIfNeeded () {
+    if (this.lastInitTry && this.lastInitTry.getTime() > Date.now() - this.INIT_READERS_RETRY_INTERVAL) return
+    this.lastInitTry = new Date()
+
     if (!this.countryReader) {
       let open = true
 
@@ -136,8 +143,6 @@ export class GeoIP {
       }
     }
   }
-
-  private readonly initReadersIfNeededThrottle = throttle(this.initReadersIfNeeded.bind(this), this.INIT_READERS_RETRY_INTERVAL)
 
   // ---------------------------------------------------------------------------
 

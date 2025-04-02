@@ -3,7 +3,7 @@
 </my-signup-step-title>
 
 <my-alert type="primary">
-  <ng-container *ngIf="requiresApproval">
+  <ng-container *ngIf="requiresApproval()">
     <p i18n>Your email has been verified and your account request has been sent!</p>
 
     <p i18n>
@@ -11,7 +11,7 @@
     </p>
   </ng-container>
 
-  <ng-container *ngIf="!requiresApproval">
+  <ng-container *ngIf="!requiresApproval()">
     <p i18n>Your email has been verified and your account has been created!</p>
 
     <p i18n>

@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -14,7 +14,6 @@ import { TableModule } from 'primeng/table'
 import { switchMap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
@@ -25,9 +24,7 @@ import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.com
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
-  standalone: true,
   imports: [
-    GlobalIconComponent,
     TableModule,
     SharedModule,
     AdvancedInputFilterComponent,
@@ -43,6 +40,15 @@ import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.com
   ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit {
+  protected route = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private notifier = inject(Notifier)
+  private serverService = inject(ServerService)
+  private confirmService = inject(ConfirmService)
+  private videoBlocklistService = inject(VideoBlockService)
+  private markdownRenderer = inject(MarkdownService)
+  private videoService = inject(VideoService)
+
   blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -67,16 +73,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     }
   ]
 
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private notifier: Notifier,
-    private serverService: ServerService,
-    private confirmService: ConfirmService,
-    private videoBlocklistService: VideoBlockService,
-    private markdownRenderer: MarkdownService,
-    private videoService: VideoService
-  ) {
+  constructor () {
     super()
 
     this.videoBlocklistActions = [

@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { ResultList, WatchedWordsList } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
@@ -9,13 +9,11 @@ import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class WatchedWordsListService {
-  private static BASE_WATCHED_WORDS_URL = environment.apiUrl + '/api/v1/watched-words/'
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService
-  ) {}
+  private static BASE_WATCHED_WORDS_URL = environment.apiUrl + '/api/v1/watched-words/'
 
   list (options: {
     accountName?: string

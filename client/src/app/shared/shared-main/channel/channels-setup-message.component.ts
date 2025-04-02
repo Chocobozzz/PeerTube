@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, User } from '@app/core'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
@@ -10,17 +10,14 @@ import { VideoChannel } from './video-channel.model'
   selector: 'my-channels-setup-message',
   templateUrl: './channels-setup-message.component.html',
   styleUrls: [ './channels-setup-message.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, RouterLink, AlertComponent ]
 })
 export class ChannelsSetupMessageComponent implements OnInit {
-  @Input() hideLink = false
+  private authService = inject(AuthService)
+
+  readonly hideLink = input(false)
 
   user: User = null
-
-  constructor (
-    private authService: AuthService
-  ) {}
 
   hasChannelNotConfigured () {
     if (!this.user.videoChannels) return false

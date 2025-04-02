@@ -1,34 +1,31 @@
-import { Component, Input } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Component, inject, input, model } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { Notifier } from '@app/core'
 import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 
 @Component({
   selector: 'my-redundancy-checkbox',
   templateUrl: './redundancy-checkbox.component.html',
-  standalone: true,
   imports: [ PeertubeCheckboxComponent, FormsModule ]
 })
 export class RedundancyCheckboxComponent {
-  @Input() redundancyAllowed: boolean
-  @Input() host: string
+  private notifier = inject(Notifier)
+  private redundancyService = inject(RedundancyService)
 
-  constructor (
-    private notifier: Notifier,
-    private redundancyService: RedundancyService
-  ) { }
+  readonly host = input<string>(undefined)
+  readonly redundancyAllowed = model<boolean>(undefined)
 
   updateRedundancyState () {
-    this.redundancyService.updateRedundancy(this.host, this.redundancyAllowed)
-        .subscribe({
-          next: () => {
-            const stateLabel = this.redundancyAllowed ? $localize`enabled` : $localize`disabled`
+    this.redundancyService.updateRedundancy(this.host(), this.redundancyAllowed())
+      .subscribe({
+        next: () => {
+          const stateLabel = this.redundancyAllowed() ? $localize`enabled` : $localize`disabled`
 
-            this.notifier.success($localize`Redundancy for ${this.host} is ${stateLabel}`)
-          },
+          this.notifier.success($localize`Redundancy for ${this.host()} is ${stateLabel}`)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

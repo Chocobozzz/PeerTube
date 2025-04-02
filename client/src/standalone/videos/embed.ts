@@ -1,8 +1,3 @@
-import './embed.scss'
-import '../../assets/player/shared/dock/peertube-dock-component'
-import '../../assets/player/shared/dock/peertube-dock-plugin'
-import { PeerTubeServerError } from 'src/types'
-import videojs from 'video.js'
 import {
   HTMLServerConfig,
   ResultList,
@@ -12,10 +7,13 @@ import {
   VideoPlaylistElement,
   VideoState
 } from '@peertube/peertube-models'
-import { PeerTubePlayer } from '../../assets/player/peertube-player'
-import { TranslationsManager } from '../../assets/player/translations-manager'
+import type { PeerTubePlayer } from '@peertube/player'
+import { TranslationsManager } from '@root-helpers/translations-manager'
+import { PeerTubeServerError } from 'src/types'
+import type videojs from 'video.js'
 import { getParamString, logger, videoRequiresFileToken } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
+import './embed.scss'
 import {
   AuthHTTP,
   LiveManager,
@@ -37,6 +35,7 @@ export class PeerTubeEmbed {
 
   private translationsPromise: Promise<{ [id: string]: string }>
   private PeerTubePlayerManagerModulePromise: Promise<any>
+  private videojs: typeof videojs
 
   private readonly http: AuthHTTP
   private readonly videoFetcher: VideoFetcher
@@ -94,7 +93,7 @@ export class PeerTubeEmbed {
 
   async init () {
     this.translationsPromise = TranslationsManager.getServerTranslations(getBackendUrl(), navigator.language)
-    this.PeerTubePlayerManagerModulePromise = import('../../assets/player/peertube-player')
+    this.PeerTubePlayerManagerModulePromise = import('@peertube/player')
 
     // Issue when we parsed config from HTML, fallback to API
     if (!this.config) {
@@ -334,7 +333,11 @@ export class PeerTubeEmbed {
       }
     }
 
-    this.peertubePlugin.getPluginsManager().runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video })
+    this.peertubePlugin.getPluginsManager().runHook(
+      'action:embed.player.loaded',
+      undefined,
+      { player: this.player, videojs: this.videojs, video }
+    )
   }
 
   private buildCSS () {
@@ -430,10 +433,12 @@ export class PeerTubeEmbed {
     this.playerHTML.setInitVideoEl(playerElement)
     this.playerHTML.addInitVideoElToDOM()
 
-    const [ { PeerTubePlayer } ] = await Promise.all([
+    const [ { PeerTubePlayer, videojs } ] = await Promise.all([
       this.PeerTubePlayerManagerModulePromise,
       this.peertubePlugin.loadPlugins(this.config, await this.translationsPromise)
     ])
+
+    this.videojs = videojs
 
     const constructorOptions = this.playerOptionsBuilder.getPlayerConstructorOptions({
       serverConfig: this.config,

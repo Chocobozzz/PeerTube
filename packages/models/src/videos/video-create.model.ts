@@ -25,8 +25,8 @@ export interface VideoCreate {
   originallyPublishedAt?: Date | string
   videoPasswords?: string[]
 
-  thumbnailfile?: Blob | string
-  previewfile?: Blob | string
+  thumbnailfile?: Blob
+  previewfile?: Blob
 
   // Default is true if the feature is enabled by the instance admin
   generateTranscription?: boolean

@@ -1,4 +1,4 @@
-<my-alert type="primary" i18n *ngIf="videoUploadDisabled">
+<my-alert type="primary" i18n *ngIf="videoUploadDisabled()">
   Video uploads are disabled on this instance, hence your account won't be able to upload videos.
 </my-alert>
 
@@ -47,7 +47,7 @@
     <div class="col-md-12 col-xl-6 form-group">
       <label for="email" i18n>Email</label>
 
-      <div *ngIf="requiresEmailVerification" class="form-group-description" i18n>
+      <div *ngIf="requiresEmailVerification()" class="form-group-description" i18n>
         This email address will be used to validate your account.
       </div>
 

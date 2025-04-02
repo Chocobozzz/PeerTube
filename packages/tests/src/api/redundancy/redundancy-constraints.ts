@@ -92,7 +92,7 @@ describe('Test redundancy constraints', function () {
     this.timeout(120000)
 
     await waitJobs(servers)
-    await remoteServer.servers.waitUntilLog('Duplicated ', 5)
+    await remoteServer.servers.waitUntilLog('Duplicated playlist ', 1)
     await waitJobs(servers)
 
     {
@@ -121,7 +121,7 @@ describe('Test redundancy constraints', function () {
 
     await uploadWrapper('video 2 server 2')
 
-    await remoteServer.servers.waitUntilLog('Duplicated ', 10)
+    await remoteServer.servers.waitUntilLog('Duplicated playlist ', 2)
     await waitJobs(servers)
 
     {
@@ -150,7 +150,7 @@ describe('Test redundancy constraints', function () {
 
     await uploadWrapper('video 3 server 2')
 
-    await remoteServer.servers.waitUntilLog('Duplicated ', 15)
+    await remoteServer.servers.waitUntilLog('Duplicated playlist ', 3)
     await waitJobs(servers)
 
     {
@@ -171,7 +171,7 @@ describe('Test redundancy constraints', function () {
     await waitJobs(servers)
 
     await uploadWrapper('video 4 server 2')
-    await remoteServer.servers.waitUntilLog('Duplicated ', 20)
+    await remoteServer.servers.waitUntilLog('Duplicated playlist ', 4)
     await waitJobs(servers)
 
     {

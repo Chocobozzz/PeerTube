@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -21,7 +21,6 @@ import { ProcessRegistrationModalComponent } from './process-registration-modal.
   selector: 'my-registration-list',
   templateUrl: './registration-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,
@@ -38,8 +37,16 @@ import { ProcessRegistrationModalComponent } from './process-registration-modal.
     PTDatePipe
   ]
 })
-export class RegistrationListComponent extends RestTable <UserRegistration> implements OnInit {
-  @ViewChild('processRegistrationModal', { static: true }) processRegistrationModal: ProcessRegistrationModalComponent
+export class RegistrationListComponent extends RestTable<UserRegistration> implements OnInit {
+  protected route = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private server = inject(ServerService)
+  private notifier = inject(Notifier)
+  private markdownRenderer = inject(MarkdownService)
+  private confirmService = inject(ConfirmService)
+  private adminRegistrationService = inject(AdminRegistrationService)
+
+  readonly processRegistrationModal = viewChild<ProcessRegistrationModalComponent>('processRegistrationModal')
 
   registrations: (UserRegistration & { registrationReasonHTML?: string, moderationResponseHTML?: string })[] = []
   totalRecords = 0
@@ -53,15 +60,7 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
 
   requiresEmailVerification: boolean
 
-  constructor (
-    protected route: ActivatedRoute,
-    protected router: Router,
-    private server: ServerService,
-    private notifier: Notifier,
-    private markdownRenderer: MarkdownService,
-    private confirmService: ConfirmService,
-    private adminRegistrationService: AdminRegistrationService
-  ) {
+  constructor () {
     super()
 
     this.registrationActions = [
@@ -138,7 +137,7 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
   }
 
   private openRegistrationRequestProcessModal (registration: UserRegistration, mode: 'accept' | 'reject') {
-    this.processRegistrationModal.openModal(registration, mode)
+    this.processRegistrationModal().openModal(registration, mode)
   }
 
   private async removeRegistrations (registrations: UserRegistration[]) {

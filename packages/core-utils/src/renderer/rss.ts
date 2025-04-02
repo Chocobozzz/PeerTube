@@ -1,0 +1,51 @@
+import { VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+
+export function getDefaultRSSFeeds (url: string, instanceName: string) {
+  return [
+    {
+      url: `${url}/feeds/videos.xml`,
+      // TODO: translate
+      title: `${instanceName} - Videos feed`
+    }
+  ]
+}
+
+export function getChannelPodcastFeed (url: string, channel: { id: number }) {
+  return `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}`
+}
+
+export function getChannelRSSFeeds (url: string, instanceName: string, channel: { name: string, id: number }) {
+  return [
+    {
+      url: getChannelPodcastFeed(url, channel),
+      // TODO: translate
+      title: `${channel.name} podcast feed`
+    },
+
+    {
+      url: `${url}/feeds/videos.xml?videoChannelId=${channel.id}`,
+      // TODO: translate
+      title: `${channel.name} feed`
+    },
+
+    ...getDefaultRSSFeeds(url, instanceName)
+  ]
+}
+
+export function getVideoWatchRSSFeeds (
+  url: string,
+  instanceName: string,
+  video: { name: string, uuid: string, privacy: VideoPrivacyType }
+) {
+  if (video.privacy !== VideoPrivacy.PUBLIC) return getDefaultRSSFeeds(url, instanceName)
+
+  return [
+    {
+      url: `${url}/feeds/video-comments.xml?videoId=${video.uuid}`,
+      // TODO: translate
+      title: `${video.name} - Comments feed`
+    },
+
+    ...getDefaultRSSFeeds(url, instanceName)
+  ]
+}

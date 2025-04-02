@@ -50,14 +50,16 @@ async function storeObject (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
+
+  contentType?: string
 }): Promise<string> {
-  const { inputPath, objectStorageKey, bucketInfo, isPrivate } = options
+  const { inputPath, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   logger.debug('Uploading file %s to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
   const fileStream = createReadStream(inputPath)
 
-  return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo, isPrivate })
+  return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo, isPrivate, contentType })
 }
 
 async function storeContent (options: {
@@ -65,12 +67,14 @@ async function storeContent (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
+
+  contentType?: string
 }): Promise<string> {
-  const { content, objectStorageKey, bucketInfo, isPrivate } = options
+  const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   logger.debug('Uploading %s content to %s%s in bucket %s', content, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
-  return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate })
+  return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate, contentType })
 }
 
 async function storeStream (options: {
@@ -78,12 +82,14 @@ async function storeStream (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
+
+  contentType?: string
 }): Promise<string> {
-  const { stream, objectStorageKey, bucketInfo, isPrivate } = options
+  const { stream, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
-  return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate })
+  return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate, contentType })
 }
 
 // ---------------------------------------------------------------------------
@@ -296,13 +302,16 @@ async function uploadToStorage (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
+
+  contentType?: string
 }) {
-  const { content, objectStorageKey, bucketInfo, isPrivate } = options
+  const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
   const input: PutObjectCommandInput = {
     Body: content,
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: buildKey(objectStorageKey, bucketInfo)
+    Key: buildKey(objectStorageKey, bucketInfo),
+    ContentType: contentType
   }
 
   const acl = getACL(isPrivate)
@@ -323,21 +332,25 @@ async function uploadToStorage (options: {
     params: input
   })
 
-  const response = await parallelUploads3.done()
-  // Check is needed even if the HTTP status code is 200 OK
-  // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
-  if (!response.Bucket) {
-    const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
-    logger.error(message, { response, ...lTags() })
-    throw new Error(message)
+  try {
+    const response = await parallelUploads3.done()
+    // Check is needed even if the HTTP status code is 200 OK
+    // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
+    if (!response.Bucket) {
+      const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
+      logger.error(message, { response, ...lTags() })
+      throw new Error(message)
+    }
+
+    logger.debug(
+      'Completed %s%s in bucket %s',
+      bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, { ...lTags(), responseMetadata: response.$metadata }
+    )
+
+    return getInternalUrl(bucketInfo, objectStorageKey)
+  } catch (err) {
+    throw parseS3Error(err)
   }
-
-  logger.debug(
-    'Completed %s%s in bucket %s',
-    bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, { ...lTags(), reseponseMetadata: response.$metadata }
-  )
-
-  return getInternalUrl(bucketInfo, objectStorageKey)
 }
 
 async function applyOnPrefix (options: {
@@ -385,4 +398,20 @@ function getACL (isPrivate: boolean) {
   return isPrivate
     ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE as ObjectCannedACL
     : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC as ObjectCannedACL
+}
+
+// Prevent logging too much information, in particular the body request
+function parseS3Error (err: any) {
+  if (err.$response?.body) {
+    const body = err.$response.body
+
+    err.$response.body = {
+      rawHeaders: body.rawHeaders,
+      req: {
+        _header: body.req?._header
+      }
+    }
+  }
+
+  return err
 }

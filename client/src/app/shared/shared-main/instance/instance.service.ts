@@ -1,30 +1,34 @@
 import { forkJoin } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { MarkdownService, RestExtractor, ServerService } from '@app/core'
 import { objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
 import { About } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { logger } from '@root-helpers/logger'
 
-export type AboutHTML = Pick<About['instance'],
-'terms' | 'codeOfConduct' | 'moderationInformation' | 'administrator' | 'creationReason' |
-'maintenanceLifetime' | 'businessModel' | 'hardwareInformation'
+export type AboutHTML = Pick<
+  About['instance'],
+  | 'terms'
+  | 'codeOfConduct'
+  | 'moderationInformation'
+  | 'administrator'
+  | 'creationReason'
+  | 'maintenanceLifetime'
+  | 'businessModel'
+  | 'hardwareInformation'
 >
 
 @Injectable()
 export class InstanceService {
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private markdownService = inject(MarkdownService)
+  private serverService = inject(ServerService)
+
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config'
   private static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server'
-
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private markdownService: MarkdownService,
-    private serverService: ServerService
-  ) {
-  }
 
   getAbout () {
     return this.authHttp.get<About>(InstanceService.BASE_CONFIG_URL + '/about')
@@ -74,8 +78,7 @@ export class InstanceService {
     }
 
     return this.authHttp.post(InstanceService.BASE_SERVER_URL + '/contact', body)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
-
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   async buildHtml (about: About) {

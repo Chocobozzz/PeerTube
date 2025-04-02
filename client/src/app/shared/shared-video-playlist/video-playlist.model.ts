@@ -1,10 +1,10 @@
-import { getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { getAPIUrl, getOriginUrl } from '@app/helpers'
 import { buildPlaylistWatchPath, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   AccountSummary,
+  VideoPlaylist as ServerVideoPlaylist,
   VideoChannelSummary,
   VideoConstant,
-  VideoPlaylist as ServerVideoPlaylist,
   VideoPlaylistPrivacyType,
   VideoPlaylistType,
   VideoPlaylistType_Type
@@ -48,9 +48,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     return buildPlaylistWatchPath({ shortUUID: playlist.shortUUID || playlist.uuid })
   }
 
-  constructor (hash: ServerVideoPlaylist, translations: { [ id: string ]: string }) {
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
-
+  constructor (hash: ServerVideoPlaylist, translations: { [id: string]: string }) {
     this.id = hash.id
     this.uuid = hash.uuid
     this.shortUUID = hash.shortUUID
@@ -66,11 +64,11 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.thumbnailPath = hash.thumbnailPath
 
     this.thumbnailUrl = this.thumbnailPath
-      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
-      : absoluteAPIUrl + '/client/assets/images/default-playlist.jpg'
+      ? hash.thumbnailUrl || (getAPIUrl() + hash.thumbnailPath)
+      : getAPIUrl() + '/client/assets/images/default-playlist.jpg'
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
 
     this.videosLength = hash.videosLength
 

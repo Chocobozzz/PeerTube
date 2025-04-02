@@ -10,19 +10,7 @@ export class FFmpegImage {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
 
-  convertWebPToJPG (options: {
-    path: string
-    destination: string
-  }): Promise<void> {
-    const { path, destination } = options
-
-    this.commandWrapper.buildCommand(path)
-      .output(destination)
-
-    return this.commandWrapper.runCommand({ silent: true })
-  }
-
-  processGIF (options: {
+  processImage (options: {
     path: string
     destination: string
     newSize?: { width: number, height: number }
@@ -35,7 +23,7 @@ export class FFmpegImage {
 
     command.output(destination)
 
-    return this.commandWrapper.runCommand()
+    return this.commandWrapper.runCommand({ silent: true })
   }
 
   // ---------------------------------------------------------------------------

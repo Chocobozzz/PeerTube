@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import {
   getDefaultSanitizedHrefAttributes,
   getDefaultSanitizedSchemes,
@@ -9,10 +9,12 @@ import { LinkifierService } from './linkifier.service'
 
 @Injectable()
 export class HtmlRendererService {
+  private linkifier = inject(LinkifierService)
+
   private simpleDomPurify: DOMPurifyI
   private enhancedDomPurify: DOMPurifyI
 
-  constructor (private linkifier: LinkifierService) {
+  constructor () {
     this.simpleDomPurify = DOMPurify()
     this.enhancedDomPurify = DOMPurify()
 
@@ -20,7 +22,7 @@ export class HtmlRendererService {
     this.addHrefHook(this.enhancedDomPurify)
 
     this.addCheckSchemesHook(this.simpleDomPurify, getDefaultSanitizedSchemes())
-    this.addCheckSchemesHook(this.simpleDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
+    this.addCheckSchemesHook(this.enhancedDomPurify, [ ...getDefaultSanitizedSchemes(), 'mailto' ])
   }
 
   private addHrefHook (dompurifyInstance: DOMPurifyI) {
@@ -29,10 +31,15 @@ export class HtmlRendererService {
         node.setAttribute('target', '_blank')
 
         const rel = node.hasAttribute('rel')
-          ? node.getAttribute('rel') + ' '
+          ? node.getAttribute('rel')
           : ''
 
-        node.setAttribute('rel', rel + 'noopener noreferrer')
+        const relValues = new Set(rel.split(' '))
+        relValues.add('noopener')
+        relValues.add('noreferrer')
+        relValues.add('ugc')
+
+        node.setAttribute('rel', [ ...relValues ].join(' '))
       }
     })
   }
@@ -53,16 +60,29 @@ export class HtmlRendererService {
     })
   }
 
-  convertToBr (text: string) {
+  convertToBr (text: string, allowFormatting = false) {
     const html = text.replace(/\r?\n/g, '<br />')
 
+    const additionalAllowed = allowFormatting
+      ? [ 'b', 'i', 'u', 'strong', 'em' ]
+      : []
+
     return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [ 'br' ]
+      ALLOWED_TAGS: [ ...additionalAllowed, 'br' ]
+    })
+  }
+
+  removeClassAttributes (html: string) {
+    return DOMPurify().sanitize(html, {
+      ALLOWED_TAGS: getDefaultSanitizedTags(),
+      ALLOWED_ATTR: getDefaultSanitizedHrefAttributes().filter(a => a !== 'class'),
+      ALLOW_DATA_ATTR: true
     })
   }
 
   async toSimpleSafeHtml (text: string) {
-    const html = await this.linkifier.linkify(text)
+    let html = this.removeClassAttributes(text)
+    html = await this.linkifier.linkify(html)
 
     return this.sanitize(this.simpleDomPurify, html)
   }

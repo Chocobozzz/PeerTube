@@ -1,7 +1,6 @@
 import { getCheckbox, go, selectCustomSelect } from '../utils'
 
 export class MyAccountPage {
-
   navigateToMyVideos () {
     return $('a[href="/my-library/videos"]').click()
   }
@@ -54,7 +53,7 @@ export class MyAccountPage {
   // My account Videos
 
   async removeVideo (name: string) {
-    const container = await this.getVideoElement(name)
+    const container = await this.getVideoRow(name)
 
     await container.$('my-action-dropdown .dropdown-toggle').click()
 
@@ -76,8 +75,8 @@ export class MyAccountPage {
   }
 
   async countVideos (names: string[]) {
-    const elements = await $$('.video').filter(async e => {
-      const t = await e.$('.video-name').getText()
+    const elements = await $$('.video-cell-name .name').filter(async e => {
+      const t = await e.getText()
 
       return names.some(n => t.includes(n))
     })
@@ -137,22 +136,16 @@ export class MyAccountPage {
 
   // My account Videos
 
-  private async getVideoElement (name: string) {
-    const video = async () => {
-      const videos = await $$('.video').filter(async e => {
-        const t = await e.$('.video-name').getText()
+  private async getVideoRow (name: string) {
+    let el = $('.name*=' + name)
 
-        return t.includes(name)
-      })
+    await el.waitForDisplayed()
 
-      return videos[0]
+    while (await el.getTagName() !== 'tr') {
+      el = el.parentElement()
     }
 
-    await browser.waitUntil(async () => {
-      return (await video()).isDisplayed()
-    })
-
-    return video()
+    return el
   }
 
   // My account playlists

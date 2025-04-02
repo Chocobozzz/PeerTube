@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
@@ -15,24 +15,19 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-moderation-comment-modal',
   templateUrl: './moderation-comment-modal.component.html',
   styleUrls: [ './moderation-comment-modal.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: NgbModal
-  @Output() commentUpdated = new EventEmitter<string>()
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
+  private abuseService = inject(AbuseService)
+
+  readonly modal = viewChild<NgbModal>('modal')
+  readonly commentUpdated = output<string>()
 
   private abuseToComment: AdminAbuse
   private openedModal: NgbModalRef
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private abuseService: AbuseService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -42,7 +37,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
 
   openModal (abuseToComment: AdminAbuse) {
     this.abuseToComment = abuseToComment
-    this.openedModal = this.modalService.open(this.modal, { centered: true })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true })
 
     this.form.patchValue({
       moderationComment: this.abuseToComment.moderationComment
@@ -59,16 +54,15 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     const moderationComment: string = this.form.value['moderationComment']
 
     this.abuseService.updateAbuse(this.abuseToComment, { moderationComment })
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Comment updated.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Comment updated.`)
 
-            this.commentUpdated.emit(moderationComment)
-            this.hide()
-          },
+          this.commentUpdated.emit(moderationComment)
+          this.hide()
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
-
 }

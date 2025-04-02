@@ -1,10 +1,10 @@
 import { AdminPluginPage } from '../po/admin-plugin.po'
 import { LoginPage } from '../po/login.po'
-import { VideoUploadPage } from '../po/video-upload.po'
-import { getCheckbox, isMobileDevice, waitServerUp } from '../utils'
+import { VideoPublishPage } from '../po/video-publish.po'
+import { getCheckbox, getScreenshotPath, isMobileDevice, waitServerUp } from '../utils'
 
 describe('Plugins', () => {
-  let videoUploadPage: VideoUploadPage
+  let videoPublishPage: VideoPublishPage
   let loginPage: LoginPage
   let adminPluginPage: AdminPluginPage
 
@@ -12,11 +12,11 @@ describe('Plugins', () => {
     return getCheckbox('hello-world-field-4')
   }
 
-  async function expectSubmitState ({ disabled }: { disabled: boolean }) {
-    const disabledSubmit = await $('my-button [disabled]')
+  async function expectSubmitError (hasError: boolean) {
+    await videoPublishPage.clickOnSave()
 
-    if (disabled) expect(await disabledSubmit.isDisplayed()).toBeTruthy()
-    else expect(await disabledSubmit.isDisplayed()).toBeFalsy()
+    await $('.form-error*=Should be enabled').waitForDisplayed({ reverse: !hasError })
+    await $('li*=Should be enabled').waitForDisplayed({ reverse: !hasError })
   }
 
   before(async () => {
@@ -25,7 +25,7 @@ describe('Plugins', () => {
 
   beforeEach(async () => {
     loginPage = new LoginPage(isMobileDevice())
-    videoUploadPage = new VideoUploadPage()
+    videoPublishPage = new VideoPublishPage()
     adminPluginPage = new AdminPluginPage()
 
     await browser.maximizeWindow()
@@ -41,15 +41,23 @@ describe('Plugins', () => {
   })
 
   it('Should have checkbox in video edit page', async () => {
-    await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo('video.mp4')
+    await videoPublishPage.navigateTo()
+    await videoPublishPage.uploadVideo('video.mp4')
 
-    await $('span=Super field 4 in main tab').waitForDisplayed()
+    const el = () => $('span=Super field 4 in main tab')
+    await el().waitForDisplayed()
+
+    // Only displayed if the video is public
+    await videoPublishPage.setAsPrivate()
+    await el().waitForDisplayed({ reverse: true })
+
+    await videoPublishPage.setAsPublic()
+    await el().waitForDisplayed()
 
     const checkbox = await getPluginCheckbox()
     expect(await checkbox.isDisplayed()).toBeTruthy()
 
-    await expectSubmitState({ disabled: true })
+    await expectSubmitError(true)
   })
 
   it('Should check the checkbox and be able to submit the video', async function () {
@@ -58,7 +66,7 @@ describe('Plugins', () => {
     await checkbox.waitForClickable()
     await checkbox.click()
 
-    await expectSubmitState({ disabled: false })
+    await expectSubmitError(false)
   })
 
   it('Should uncheck the checkbox and not be able to submit the video', async function () {
@@ -67,16 +75,16 @@ describe('Plugins', () => {
     await checkbox.waitForClickable()
     await checkbox.click()
 
-    await expectSubmitState({ disabled: true })
-
-    const error = await $('.form-error*=Should be enabled')
-
-    expect(await error.isDisplayed()).toBeTruthy()
+    await expectSubmitError(true)
   })
 
   it('Should change the privacy and should hide the checkbox', async function () {
-    await videoUploadPage.setAsPrivate()
+    await videoPublishPage.setAsPrivate()
 
-    await expectSubmitState({ disabled: false })
+    await expectSubmitError(false)
+  })
+
+  after(async () => {
+    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

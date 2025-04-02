@@ -1,4 +1,4 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form()">
   <div class="pt-two-cols mt-5"> <!-- appearance grid -->
     <div class="title-col">
       <h2 i18n>APPEARANCE</h2>
@@ -30,7 +30,7 @@
           [clearable]="false"
         ></my-select-custom-value>
 
-        <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error" role="alert">{{ formErrors.instance.defaultClientRoute }}</div>
+        <div *ngIf="formErrors().instance.defaultClientRoute" class="form-error" role="alert">{{ formErrors().instance.defaultClientRoute }}</div>
       </div>
 
       <div class="form-group" formGroupName="trending">
@@ -47,7 +47,7 @@
               </select>
             </div>
 
-            <div *ngIf="formErrors.trending.videos.algorithms.default" class="form-error" role="alert">{{ formErrors.trending.videos.algorithms.default }}</div>
+            <div *ngIf="formErrors().trending.videos.algorithms.default" class="form-error" role="alert">{{ formErrors().trending.videos.algorithms.default }}</div>
           </ng-container>
         </ng-container>
       </div>
@@ -122,7 +122,7 @@
             </select>
           </div>
 
-          <div *ngIf="formErrors.broadcastMessage.level" class="form-error" role="alert">{{ formErrors.broadcastMessage.level }}</div>
+          <div *ngIf="formErrors().broadcastMessage.level" class="form-error" role="alert">{{ formErrors().broadcastMessage.level }}</div>
         </div>
 
         <div class="form-group">
@@ -130,10 +130,10 @@
 
           <my-markdown-textarea
             inputId="broadcastMessageMessage" formControlName="message"
-            [formError]="formErrors['broadcastMessage.message']" markdownType="to-unsafe-html"
+            [formError]="formErrors()['broadcastMessage.message']" markdownType="to-unsafe-html"
           ></my-markdown-textarea>
 
-          <div *ngIf="formErrors.broadcastMessage.message" class="form-error" role="alert">{{ formErrors.broadcastMessage.message }}</div>
+          <div *ngIf="formErrors().broadcastMessage.message" class="form-error" role="alert">{{ formErrors().broadcastMessage.message }}</div>
         </div>
 
       </ng-container>
@@ -185,12 +185,12 @@
                 <div class="number-with-unit">
                   <input
                     type="number" min="-1" id="signupLimit" class="form-control"
-                    formControlName="limit" [ngClass]="{ 'input-error': formErrors['signup.limit'] }"
+                    formControlName="limit" [ngClass]="{ 'input-error': formErrors()['signup.limit'] }"
                   >
-                  <span i18n>{form.value['signup']['limit'], plural, =1 {user} other {users}}</span>
+                  <span i18n>{form().value['signup']['limit'], plural, =1 {user} other {users}}</span>
                 </div>
 
-                <div *ngIf="formErrors.signup.limit" class="form-error" role="alert">{{ formErrors.signup.limit }}</div>
+                <div *ngIf="formErrors().signup.limit" class="form-error" role="alert">{{ formErrors().signup.limit }}</div>
 
                 <small i18n *ngIf="hasUnlimitedSignup()" class="muted small">Signup won't be limited to a fixed number of users.</small>
               </div>
@@ -201,12 +201,12 @@
                 <div class="number-with-unit">
                   <input
                     type="number" min="1" id="signupMinimumAge" class="form-control"
-                    formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors['signup.minimumAge'] }"
+                    formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors()['signup.minimumAge'] }"
                   >
-                  <span i18n>{form.value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
+                  <span i18n>{form().value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
                 </div>
 
-                <div *ngIf="formErrors.signup.minimumAge" class="form-error" role="alert">{{ formErrors.signup.minimumAge }}</div>
+                <div *ngIf="formErrors().signup.minimumAge" class="form-error" role="alert">{{ formErrors().signup.minimumAge }}</div>
               </div>
             </ng-container>
           </my-peertube-checkbox>
@@ -228,7 +228,7 @@
 
           <my-user-real-quota-info class="mt-2 d-block small muted" [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
 
-          <div *ngIf="formErrors.user.videoQuota" class="form-error" role="alert">{{ formErrors.user.videoQuota }}</div>
+          <div *ngIf="formErrors().user.videoQuota" class="form-error" role="alert">{{ formErrors().user.videoQuota }}</div>
         </div>
 
         <div class="form-group">
@@ -243,7 +243,7 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div *ngIf="formErrors.user.videoQuotaDaily" class="form-error" role="alert">{{ formErrors.user.videoQuotaDaily }}</div>
+          <div *ngIf="formErrors().user.videoQuotaDaily" class="form-error" role="alert">{{ formErrors().user.videoQuotaDaily }}</div>
         </div>
         <div class="form-group">
           <ng-container formGroupName="history">
@@ -281,7 +281,7 @@
               <span i18n>jobs in parallel</span>
             </div>
 
-            <div *ngIf="formErrors.import.concurrency" class="form-error" role="alert">{{ formErrors.import.concurrency }}</div>
+            <div *ngIf="formErrors().import.concurrency" class="form-error" role="alert">{{ formErrors().import.concurrency }}</div>
           </div>
 
           <div class="form-group" formGroupName="http">
@@ -328,12 +328,12 @@
             <div class="number-with-unit">
               <input
                 type="number" min="1" id="videoChannelSynchronizationMaxPerUser" class="form-control"
-                formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['import']['videoChannelSynchronization']['maxPerUser'] }"
+                formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors()['import']['videoChannelSynchronization']['maxPerUser'] }"
               >
-              <span i18n>{form.value['import']['videoChannelSynchronization']['maxPerUser'], plural, =1 {sync} other {syncs}}</span>
+              <span i18n>{form().value['import']['videoChannelSynchronization']['maxPerUser'], plural, =1 {sync} other {syncs}}</span>
             </div>
 
-            <div *ngIf="formErrors.import.videoChannelSynchronization.maxPerUser" class="form-error" role="alert">{{ formErrors.import.videoChannelSynchronization.maxPerUser }}</div>
+            <div *ngIf="formErrors().import.videoChannelSynchronization.maxPerUser" class="form-error" role="alert">{{ formErrors().import.videoChannelSynchronization.maxPerUser }}</div>
           </div>
         </ng-container>
 
@@ -426,12 +426,12 @@
         <div class="number-with-unit">
           <input
             type="number" min="1" id="videoChannelsMaxPerUser" class="form-control"
-            formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['videoChannels.maxPerUser'] }"
+            formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors()['videoChannels.maxPerUser'] }"
           >
-          <span i18n>{form.value['videoChannels']['maxPerUser'], plural, =1 {channel} other {channels}}</span>
+          <span i18n>{form().value['videoChannels']['maxPerUser'], plural, =1 {channel} other {channels}}</span>
         </div>
 
-        <div *ngIf="formErrors.videoChannels.maxPerUser" class="form-error" role="alert">{{ formErrors.videoChannels.maxPerUser }}</div>
+        <div *ngIf="formErrors().videoChannels.maxPerUser" class="form-error" role="alert">{{ formErrors().videoChannels.maxPerUser }}</div>
       </div>
     </div>
   </div>
@@ -478,22 +478,22 @@
             >
               <ng-container ngProjectAs="description">
                 <div i18n>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</div>
-
-                <div i18n>
-                  You should only use moderated search indexes in production, or <a class="link-primary" href="https://framagit.org/framasoft/peertube/search-index">host your own</a>.
-                </div>
               </ng-container>
 
               <ng-container ngProjectAs="extra">
                 <div [ngClass]="getDisabledSearchIndexClass()">
                   <label i18n for="searchIndexUrl">Search index URL</label>
 
+                  <div i18n class="label-small-info">
+                    Use your <a class="link-primary" target="_blank" href="https://framagit.org/framasoft/peertube/search-index">your own search index</a> or choose the official one, <a class="link-primary" target="_blank" href="https://sepiasearch.org">https://sepiasearch.org</a>, that is not moderated.
+                  </div>
+
                   <input
                     type="text"  id="searchIndexUrl" class="form-control"
-                    formControlName="url" [ngClass]="{ 'input-error': formErrors['search.searchIndex.url'] }"
+                    formControlName="url" [ngClass]="{ 'input-error': formErrors()['search.searchIndex.url'] }"
                   >
 
-                  <div *ngIf="formErrors.search.searchIndex.url" class="form-error" role="alert">{{ formErrors.search.searchIndex.url }}</div>
+                  <div *ngIf="formErrors().search.searchIndex.url" class="form-error" role="alert">{{ formErrors().search.searchIndex.url }}</div>
                 </div>
 
                 <div class="mt-3">
@@ -577,7 +577,7 @@
                     [clearable]="false"
                   ></my-select-custom-value>
 
-                  <div *ngIf="formErrors.export.users.maxUserVideoQuota" class="form-error" role="alert">{{ formErrors.export.users.maxUserVideoQuota }}</div>
+                  <div *ngIf="formErrors().export.users.maxUserVideoQuota" class="form-error" role="alert">{{ formErrors().export.users.maxUserVideoQuota }}</div>
                 </div>
 
                 <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
@@ -587,7 +587,7 @@
 
                   <div i18n class="mt-1 small muted">The archive file is deleted after this period.</div>
 
-                  <div *ngIf="formErrors.export.users.exportExpiration" class="form-error" role="alert">{{ formErrors.export.users.exportExpiration }}</div>
+                  <div *ngIf="formErrors().export.users.exportExpiration" class="form-error" role="alert">{{ formErrors().export.users.exportExpiration }}</div>
                 </div>
 
               </ng-container>
@@ -663,9 +663,9 @@
                     <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
                     <input
                       type="text" id="followingsInstanceAutoFollowIndexUrl" class="form-control"
-                      formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
+                      formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors()['followings.instance.autoFollowIndex.indexUrl'] }"
                     >
-                    <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error" role="alert">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+                    <div *ngIf="formErrors().followings.instance.autoFollowIndex.indexUrl" class="form-error" role="alert">{{ formErrors().followings.instance.autoFollowIndex.indexUrl }}</div>
                   </div>
                 </ng-container>
               </my-peertube-checkbox>
@@ -690,10 +690,10 @@
 
         <input
           type="text" id="adminEmail" class="form-control"
-          formControlName="email" [ngClass]="{ 'input-error': formErrors['admin.email'] }"
+          formControlName="email" [ngClass]="{ 'input-error': formErrors()['admin.email'] }"
         >
 
-        <div *ngIf="formErrors.admin.email" class="form-error" role="alert">{{ formErrors.admin.email }}</div>
+        <div *ngIf="formErrors().admin.email" class="form-error" role="alert">{{ formErrors().admin.email }}</div>
       </div>
 
       <div class="form-group" formGroupName="contactForm">
@@ -731,10 +731,10 @@
 
             <input
               type="text" id="servicesTwitterUsername" class="form-control"
-              formControlName="username" [ngClass]="{ 'input-error': formErrors['services.twitter.username'] }"
+              formControlName="username" [ngClass]="{ 'input-error': formErrors()['services.twitter.username'] }"
             >
 
-            <div *ngIf="formErrors.services.twitter.username" class="form-error" role="alert">{{ formErrors.services.twitter.username }}</div>
+            <div *ngIf="formErrors().services.twitter.username" class="form-error" role="alert">{{ formErrors().services.twitter.username }}</div>
           </div>
 
         </ng-container>

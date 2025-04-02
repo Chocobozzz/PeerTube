@@ -19,7 +19,8 @@ export class PeerTubePlugin {
       peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers({
         pluginInfo,
         translations
-      })
+      }),
+      backendUrl: getBackendUrl()
     })
 
     this.pluginsManager.loadPluginsList(config)

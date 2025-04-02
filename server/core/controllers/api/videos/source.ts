@@ -7,7 +7,7 @@ import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { buildNewFile, createVideoSource } from '@server/lib/video-file.js'
-import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
+import { buildMoveVideoJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
@@ -181,7 +181,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
   ]
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveJob({ video, isNewVideo: false, previousVideoState: undefined, type: 'move-to-object-storage' }))
+    jobs.push(await buildMoveVideoJob({ video, isNewVideo: false, previousVideoState: undefined, type: 'move-to-object-storage' }))
   }
 
   if (video.state === VideoState.TO_TRANSCODE) {

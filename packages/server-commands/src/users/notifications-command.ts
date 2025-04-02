@@ -1,4 +1,4 @@
-import { HttpStatusCode, ResultList, UserNotification, UserNotificationSetting } from '@peertube/peertube-models'
+import { HttpStatusCode, ResultList, UserNotification, UserNotificationSetting, UserNotificationType_Type } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class NotificationsCommand extends AbstractCommand {
@@ -23,8 +23,9 @@ export class NotificationsCommand extends AbstractCommand {
     count?: number
     unread?: boolean
     sort?: string
+    typeOneOf?: UserNotificationType_Type[]
   }) {
-    const { start, count, unread, sort = '-createdAt' } = options
+    const { start, count, unread, typeOneOf, sort = '-createdAt' } = options
     const path = '/api/v1/users/me/notifications'
 
     return this.getRequestBody<ResultList<UserNotification>>({
@@ -35,6 +36,7 @@ export class NotificationsCommand extends AbstractCommand {
         start,
         count,
         sort,
+        typeOneOf,
         unread
       },
       implicitToken: true,

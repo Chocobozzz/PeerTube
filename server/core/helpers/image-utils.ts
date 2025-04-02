@@ -1,8 +1,8 @@
-import { copy, remove } from 'fs-extra/esm'
-import { readFile, rename } from 'fs/promises'
 import { ColorActionName } from '@jimp/plugin-color'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { convertWebPToJPG, processGIF } from './ffmpeg/index.js'
+import { copy, remove } from 'fs-extra/esm'
+import { readFile } from 'fs/promises'
+import { processImage as processImageByFFmpeg } from './ffmpeg/index.js'
 import { logger } from './logger.js'
 
 import type Jimp from 'jimp'
@@ -28,8 +28,8 @@ export async function processImage (options: {
   logger.debug('Processing image %s to %s.', path, destination)
 
   // Use FFmpeg to process GIF
-  if (extension === '.gif') {
-    await processGIF({ path, destination, newSize })
+  if (extension === '.gif' || extension === '.webp') {
+    await processImageByFFmpeg({ path, destination, newSize })
   } else {
     await jimpProcessor({ path, destination, newSize, inputExt: extension })
   }
@@ -65,30 +65,26 @@ async function jimpProcessor (options: {
   }
   inputExt: string
 }) {
-  const { path, destination, newSize, inputExt } = options
+  const { path, newSize, inputExt, destination } = options
 
-  let sourceImage: Jimp
   const inputBuffer = await readFile(path)
 
   const Jimp = await import('jimp')
-
-  try {
-    sourceImage = await Jimp.default.read(inputBuffer)
-  } catch (err) {
-    logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
-
-    const newName = path + '.jpg'
-    await convertWebPToJPG({ path, destination: newName })
-    await rename(newName, path)
-
-    sourceImage = await Jimp.default.read(path)
-  }
+  const sourceImage = await Jimp.default.read(inputBuffer)
 
   await remove(destination)
 
   // Optimization if the source file has the appropriate size
-  const outputExt = getLowercaseExtension(destination)
-  if (skipProcessing({ sourceImage, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt })) {
+
+  if (
+    skipProcessing({
+      sourceImage,
+      newSize,
+      imageBytes: inputBuffer.byteLength,
+      inputExt,
+      outputExt: getLowercaseExtension(destination)
+    })
+  ) {
     return copy(path, destination)
   }
 
@@ -114,7 +110,7 @@ async function autoResize (options: {
 
   if (sourceIsPortrait && !destIsPortraitOrSquare) {
     const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
-                                              .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
+      .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
 
     const topImage = sourceImage.cloneQuiet().contain(newSize.width, newSize.height)
 
@@ -156,5 +152,5 @@ function hasExif (image: Jimp) {
 }
 
 function removeExif (image: Jimp) {
-  (image.bitmap as any).exifBuffer = null
+  ;(image.bitmap as any).exifBuffer = null
 }

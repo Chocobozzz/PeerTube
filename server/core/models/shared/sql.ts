@@ -1,7 +1,8 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
+import { FollowState } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { literal, Model, ModelStatic } from 'sequelize'
 import { Literal } from 'sequelize/types/utils'
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 
 // FIXME: have to specify the result type to not break peertube typings generation
 export function buildLocalAccountIdsIn (): Literal {
@@ -29,11 +30,12 @@ export function buildBlockedAccountSQL (blockerIds: number[]) {
 
 export function buildServerIdsFollowedBy (actorId: any) {
   const actorIdNumber = forceNumber(actorId)
+  const followState: FollowState = 'accepted'
 
   return '(' +
     'SELECT "actor"."serverId" FROM "actorFollow" ' +
     'INNER JOIN "actor" ON actor.id = "actorFollow"."targetActorId" ' +
-    'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+    `WHERE "actorFollow"."actorId" = ${actorIdNumber} AND "actorFollow"."state" = '${followState}'` +
     ')'
 }
 

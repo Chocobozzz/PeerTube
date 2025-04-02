@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
@@ -18,7 +18,6 @@ import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-mai
 
 @Component({
   templateUrl: './my-video-channel-syncs.component.html',
-  standalone: true,
   imports: [
     NgIf,
     GlobalIconComponent,
@@ -35,6 +34,12 @@ import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-mai
   ]
 })
 export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
+  private videoChannelsSyncService = inject(VideoChannelSyncService)
+  private serverService = inject(ServerService)
+  private notifier = inject(Notifier)
+  private authService = inject(AuthService)
+  private videoChannelService = inject(VideoChannelService)
+
   error: string
 
   channelSyncs: VideoChannelSync[] = []
@@ -52,16 +57,6 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
   }
 
   private serverConfig: HTMLServerConfig
-
-  constructor (
-    private videoChannelsSyncService: VideoChannelSyncService,
-    private serverService: ServerService,
-    private notifier: Notifier,
-    private authService: AuthService,
-    private videoChannelService: VideoChannelService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()

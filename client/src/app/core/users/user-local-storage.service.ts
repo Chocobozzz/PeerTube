@@ -1,5 +1,5 @@
 import { filter, throttleTime } from 'rxjs'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
@@ -11,12 +11,11 @@ import { LocalStorageService } from '../wrappers/storage.service'
 
 @Injectable()
 export class UserLocalStorageService {
+  private authService = inject(AuthService)
+  private server = inject(ServerService)
+  private localStorageService = inject(LocalStorageService)
 
-  constructor (
-    private authService: AuthService,
-    private server: ServerService,
-    private localStorageService: LocalStorageService
-  ) {
+  constructor () {
     this.authService.userInformationLoaded.subscribe({
       next: () => {
         const user = this.authService.getUser()
@@ -132,9 +131,9 @@ export class UserLocalStorageService {
       videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
     }
 
-    const obj: [ string, string | boolean | string[] ][] = objectKeysTyped(localStorageKeys)
+    const obj: [string, string | boolean | string[]][] = objectKeysTyped(localStorageKeys)
       .filter(key => key in profile)
-      .map(key => ([ localStorageKeys[key], profile[key] ]))
+      .map(key => [ localStorageKeys[key], profile[key] ])
 
     for (const [ key, value ] of obj) {
       try {

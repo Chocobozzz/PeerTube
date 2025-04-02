@@ -1,16 +1,7 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router'
-import {
-  AuthService,
-  AuthStatus,
-  AuthUser,
-  HotkeysService,
-  MenuService,
-  RedirectService,
-  ScreenService,
-  ServerService
-} from '@app/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { NavigationEnd, Router, RouterLink } from '@angular/router'
+import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/menu/quick-settings-modal.component'
@@ -20,19 +11,19 @@ import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-
 import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
 import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig } from '@peertube/peertube-models'
+import { HTMLServerConfig, ServerConfig } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { isAndroid } from '@root-helpers/web-browser'
+import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
 import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
 import { SearchTypeaheadComponent } from './search-typeahead.component'
+import { HeaderService } from './header.service'
 
 @Component({
   selector: 'my-header',
   templateUrl: './header.component.html',
   styleUrls: [ './header.component.scss' ],
-  standalone: true,
   imports: [
     CommonModule,
     NotificationDropdownComponent,
@@ -51,13 +42,22 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
     ButtonComponent
   ]
 })
-
 export class HeaderComponent implements OnInit, OnDestroy {
+  private authService = inject(AuthService)
+  private serverService = inject(ServerService)
+  private redirectService = inject(RedirectService)
+  private hotkeysService = inject(HotkeysService)
+  private screenService = inject(ScreenService)
+  private modalService = inject(PeertubeModalService)
+  private router = inject(Router)
+  private menu = inject(MenuService)
+  private headerService = inject(HeaderService)
+
   private static LS_HIDE_MOBILE_MSG = 'hide-mobile-msg'
 
-  @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
-  @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
-  @ViewChild('dropdown') dropdown: NgbDropdown
+  readonly languageChooserModal = viewChild<LanguageChooserComponent>('languageChooserModal')
+  readonly quickSettingsModal = viewChild<QuickSettingsModalComponent>('quickSettingsModal')
+  readonly dropdown = viewChild<NgbDropdown>('dropdown')
 
   user: AuthUser
   loggedIn: boolean
@@ -67,32 +67,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentInterfaceLanguage: string
 
   mobileMsg = false
-  mobileAppUrl = ''
+  androidAppUrl = ''
+  iosAppUrl = ''
 
-  private serverConfig: ServerConfig
+  searchHidden = false
+
+  private config: ServerConfig
+  private htmlConfig: HTMLServerConfig
 
   private quickSettingsModalSub: Subscription
+  private getSearchHiddenSub: Subscription
   private hotkeysSub: Subscription
   private authSub: Subscription
 
-  constructor (
-    private authService: AuthService,
-    private serverService: ServerService,
-    private redirectService: RedirectService,
-    private hotkeysService: HotkeysService,
-    private screenService: ScreenService,
-    private modalService: PeertubeModalService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private menu: MenuService
-  ) { }
-
   get language () {
-    return this.languageChooserModal.getCurrentLanguage()
+    return this.languageChooserModal().getCurrentLanguage()
   }
 
   get requiresApproval () {
-    return this.serverConfig.signup.requiresApproval
+    return this.config.signup.requiresApproval
   }
 
   get instanceName () {
@@ -100,7 +93,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isLoaded () {
-    return this.serverConfig && (!this.loggedIn || !!this.user?.account)
+    return this.config && (!this.loggedIn || !!this.user?.account)
   }
 
   isInMobileView () {
@@ -112,7 +105,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
+    this.htmlConfig = this.serverService.getHTMLConfig()
+    this.currentInterfaceLanguage = this.languageChooserModal().getCurrentLanguage()
 
     this.loggedIn = this.authService.isLoggedIn()
     this.updateUserState()
@@ -131,10 +125,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(isOpen => this.hotkeysHelpVisible = isOpen)
 
     this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+      .subscribe(config => this.config = config)
 
     this.quickSettingsModalSub = this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
+
+    this.getSearchHiddenSub = this.headerService.getSearchHiddenObs()
+      .subscribe(hidden => {
+        if (hidden) document.body.classList.add('global-search-hidden')
+        else document.body.classList.remove('global-search-hidden')
+
+        this.searchHidden = hidden
+      })
 
     this.setupMobileMsg()
   }
@@ -143,6 +145,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.quickSettingsModalSub) this.quickSettingsModalSub.unsubscribe()
     if (this.hotkeysSub) this.hotkeysSub.unsubscribe()
     if (this.authSub) this.authSub.unsubscribe()
+    if (this.getSearchHiddenSub) this.getSearchHiddenSub.unsubscribe()
   }
 
   // ---------------------------------------------------------------------------
@@ -160,12 +163,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private setupMobileMsg () {
     if (!this.isInMobileView()) return
     if (peertubeLocalStorage.getItem(HeaderComponent.LS_HIDE_MOBILE_MSG) === 'true') return
-    if (!isAndroid()) return
+
+    if (!isAndroid() && !isIphone()) return
 
     this.mobileMsg = true
     document.body.classList.add('mobile-app-msg')
 
     const host = window.location.host
+    const intentConfig = this.htmlConfig.client.openInApp.android.intent
+    const iosConfig = this.htmlConfig.client.openInApp.ios
 
     const getVideoId = (url: string) => {
       const matches = url.match(/^\/w\/([^/]+)$/)
@@ -184,19 +190,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       const url = event.url
 
+      const baseAndroid = `intent://${intentConfig.host}`
+      const fallbackAndroid = `#Intent;scheme=${intentConfig.scheme};S.browser_fallback_url=${intentConfig.fallbackUrl};end`
+
+      const baseIOS = `peertube://${iosConfig.host}`
+
       const videoId = getVideoId(url)
-      if (videoId) {
-        this.mobileAppUrl = `peertube:///video/${videoId}?host=${host}`
-        return
-      }
-
       const channelId = getChannelId(url)
-      if (channelId) {
-        this.mobileAppUrl = `peertube:///video-channel/${channelId}?host=${host}`
+
+      if (videoId) {
+        if (isAndroid()) {
+          this.androidAppUrl = `${baseAndroid}/video/${videoId}?host=${host}${fallbackAndroid}`
+        } else {
+          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
+        }
+
         return
       }
 
-      this.mobileAppUrl = `peertube:///?host=${host}`
+      if (channelId) {
+        if (isAndroid()) {
+          this.androidAppUrl = `${baseAndroid}/video-channel/${channelId}?host=${host}${fallbackAndroid}`
+        } else {
+          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
+        }
+
+        return
+      }
+
+      if (isAndroid()) {
+        this.androidAppUrl = `${baseAndroid}/?host=${host}${fallbackAndroid}`
+      } else {
+        this.iosAppUrl = `${baseIOS}/?host=${host}`
+      }
     })
   }
 
@@ -207,13 +233,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     peertubeLocalStorage.setItem(HeaderComponent.LS_HIDE_MOBILE_MSG, 'true')
   }
 
+  onOpenClientClick () {
+    if (!isIOS()) return
+
+    setTimeout(() => {
+      window.location.href = this.htmlConfig.client.openInApp.ios.fallbackUrl
+    }, 2500)
+  }
+
   // ---------------------------------------------------------------------------
 
   isRegistrationAllowed () {
-    if (!this.serverConfig) return false
+    if (!this.config) return false
 
-    return this.serverConfig.signup.allowed &&
-      this.serverConfig.signup.allowedForCurrentIP
+    return this.config.signup.allowed &&
+      this.config.signup.allowedForCurrentIP
   }
 
   logout (event: Event) {
@@ -225,11 +259,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openLanguageChooser () {
-    this.languageChooserModal.show()
+    this.languageChooserModal().show()
   }
 
   openQuickSettings () {
-    this.quickSettingsModal.show()
+    this.quickSettingsModal().show()
   }
 
   openHotkeysCheatSheet () {

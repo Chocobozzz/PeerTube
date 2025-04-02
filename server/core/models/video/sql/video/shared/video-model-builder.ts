@@ -25,15 +25,13 @@ import { VideoTableAttributes } from './video-table-attributes.js'
 type SQLRow = { [id: string]: string | number }
 
 /**
- *
  * Build video models from SQL rows
- *
  */
 
 export class VideoModelBuilder {
-  private videosMemo: { [ id: number ]: VideoModel }
-  private videoStreamingPlaylistMemo: { [ id: number ]: VideoStreamingPlaylistModel }
-  private videoFileMemo: { [ id: number ]: VideoFileModel }
+  private videosMemo: { [id: number]: VideoModel }
+  private videoStreamingPlaylistMemo: { [id: number]: VideoStreamingPlaylistModel }
+  private videoFileMemo: { [id: number]: VideoFileModel }
 
   private thumbnailsDone: Set<any>
   private actorImagesDone: Set<any>
@@ -58,7 +56,6 @@ export class VideoModelBuilder {
     private readonly mode: 'get' | 'list',
     private readonly tables: VideoTableAttributes
   ) {
-
   }
 
   buildVideosFromRows (options: {
@@ -114,6 +111,10 @@ export class VideoModelBuilder {
           this.setBlockedServer(row, videoModel)
         }
 
+        if (include & VideoInclude.NOT_PUBLISHED_STATE) {
+          this.setScheduleVideoUpdate(row, videoModel)
+        }
+
         if (include & VideoInclude.SOURCE) {
           this.setSource(row, videoModel)
         }
@@ -167,7 +168,6 @@ export class VideoModelBuilder {
 
       const videoModel = this.videosMemo[row.id]
       this.addWebVideoFile(row, videoModel)
-      this.addRedundancy(row, 'VideoFiles', this.videoFileMemo[id])
     }
   }
 
@@ -314,7 +314,7 @@ export class VideoModelBuilder {
     this.videoFileMemo[id] = videoFileModel
   }
 
-  private addRedundancy (row: SQLRow, prefix: string, to: VideoFileModel | VideoStreamingPlaylistModel) {
+  private addRedundancy (row: SQLRow, prefix: string, to: VideoStreamingPlaylistModel) {
     if (!to.RedundancyVideos) to.RedundancyVideos = []
 
     const redundancyPrefix = `${prefix}.RedundancyVideos`
@@ -439,7 +439,7 @@ export class VideoModelBuilder {
   }
 
   private grab (row: SQLRow, attributes: string[], prefix: string) {
-    const result: { [ id: string ]: string | number } = {}
+    const result: { [id: string]: string | number } = {}
 
     for (const a of attributes) {
       const key = prefix

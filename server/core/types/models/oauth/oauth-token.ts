@@ -9,6 +9,6 @@ type Use<K extends keyof OAuthTokenModel, M> = PickWith<OAuthTokenModel, K, M>
 export type MOAuthToken = Omit<OAuthTokenModel, 'User' | 'OAuthClients'>
 
 export type MOAuthTokenUser =
-  MOAuthToken &
-  Use<'User', MUserAccountUrl> &
-  { user?: MUserAccountUrl }
+  & MOAuthToken
+  & Use<'User', MUserAccountUrl>
+  & { user?: MUserAccountUrl }

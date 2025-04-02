@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -16,28 +16,23 @@ import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registrati
 @Component({
   selector: 'my-process-registration-modal',
   templateUrl: './process-registration-modal.component.html',
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent, AlertComponent ]
 })
 export class ProcessRegistrationModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: NgbModal
+  protected formReactiveService = inject(FormReactiveService)
+  private server = inject(ServerService)
+  private modalService = inject(NgbModal)
+  private notifier = inject(Notifier)
+  private registrationService = inject(AdminRegistrationService)
 
-  @Output() registrationProcessed = new EventEmitter()
+  readonly modal = viewChild<NgbModal>('modal')
+
+  readonly registrationProcessed = output()
 
   registration: UserRegistration
 
   private openedModal: NgbModalRef
   private processMode: 'accept' | 'reject'
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private server: ServerService,
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private registrationService: AdminRegistrationService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -62,7 +57,7 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
       preventEmailDelivery: !this.isEmailEnabled() || registration.emailVerified !== true
     })
 
-    this.openedModal = this.modalService.open(this.modal, { centered: true })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true })
   }
 
   hide () {

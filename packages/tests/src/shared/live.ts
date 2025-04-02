@@ -2,14 +2,13 @@
 
 import { getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { LiveVideo, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
-import { sha1 } from '@peertube/peertube-node-utils'
 import { ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { SQLCommand } from './sql-command.js'
-import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists.js'
+import { checkLiveSegmentHash, checkPlaylistInfohash, checkResolutionsInMasterPlaylist } from './streaming-playlists.js'
 
 async function checkLiveCleanup (options: {
   server: PeerTubeServer
@@ -169,13 +168,10 @@ async function testLiveVideoResolutions (options: {
         hlsPlaylist,
         withRetry: !!objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
+    }
 
-      if (originServer.internalServerNumber === server.internalServerNumber) {
-        const infohash = sha1(`2${hlsPlaylist.playlistUrl}+V${i}`)
-        const dbInfohashes = await sqlCommand.getPlaylistInfohash(hlsPlaylist.id)
-
-        expect(dbInfohashes).to.include(infohash)
-      }
+    if (originServer.internalServerNumber === server.internalServerNumber) {
+      await checkPlaylistInfohash({ video, sqlCommand, files: resolutions.map(r => ({ resolution: { id: r } })) })
     }
   }
 }

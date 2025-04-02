@@ -15,7 +15,6 @@ import { BatchDomainsModalComponent } from '../../shared/shared-moderation/batch
   selector: 'my-account-server-blocklist',
   styleUrls: [ '../../shared/shared-moderation/moderation.scss', '../../shared/shared-moderation/server-blocklist.component.scss' ],
   templateUrl: '../../shared/shared-moderation/server-blocklist.component.html',
-  standalone: true,
   imports: [
     GlobalIconComponent,
     TableModule,

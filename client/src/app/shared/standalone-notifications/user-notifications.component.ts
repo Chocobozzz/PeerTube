@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, OnInit, inject, input, output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
 import { AbuseState, VideoState } from '@peertube/peertube-models'
 import { CommonModule } from '@angular/common'
@@ -14,17 +14,19 @@ import { UserNotification } from '../shared-main/users/user-notification.model'
   selector: 'my-user-notifications',
   templateUrl: 'user-notifications.component.html',
   styleUrls: [ 'user-notifications.component.scss' ],
-  standalone: true,
   imports: [ CommonModule, GlobalIconComponent, RouterLink, FromNowPipe, InfiniteScrollerDirective ]
 })
 export class UserNotificationsComponent implements OnInit {
-  @Input() ignoreLoadingBar = false
-  @Input() infiniteScroll = true
-  @Input() itemsPerPage = 20
-  @Input() markAllAsReadSubject: Subject<boolean>
-  @Input() userNotificationReload: Subject<boolean>
+  private userNotificationService = inject(UserNotificationService)
+  private notifier = inject(Notifier)
 
-  @Output() notificationsLoaded = new EventEmitter()
+  readonly ignoreLoadingBar = input(false)
+  readonly infiniteScroll = input(true)
+  readonly itemsPerPage = input(20)
+  readonly markAllAsReadSubject = input<Subject<boolean>>(undefined)
+  readonly userNotificationReload = input<Subject<boolean>>(undefined)
+
+  readonly notificationsLoaded = output()
 
   notifications: UserNotification[] = []
   sortField = 'createdAt'
@@ -33,26 +35,23 @@ export class UserNotificationsComponent implements OnInit {
 
   onDataSubject = new Subject<any[]>()
 
-  constructor (
-    private userNotificationService: UserNotificationService,
-    private notifier: Notifier
-  ) { }
-
   ngOnInit () {
     this.componentPagination = {
       currentPage: 1,
-      itemsPerPage: this.itemsPerPage, // Reset items per page, because of the @Input() variable
+      itemsPerPage: this.itemsPerPage(),
       totalItems: null
     }
 
     this.loadNotifications()
 
-    if (this.markAllAsReadSubject) {
-      this.markAllAsReadSubject.subscribe(() => this.markAllAsRead())
+    const markAllAsReadSubject = this.markAllAsReadSubject()
+    if (markAllAsReadSubject) {
+      markAllAsReadSubject.subscribe(() => this.markAllAsRead())
     }
 
-    if (this.userNotificationReload) {
-      this.userNotificationReload.subscribe(() => this.loadNotifications(true))
+    const userNotificationReload = this.userNotificationReload()
+    if (userNotificationReload) {
+      userNotificationReload.subscribe(() => this.loadNotifications(true))
     }
   }
 
@@ -61,7 +60,7 @@ export class UserNotificationsComponent implements OnInit {
 
     const options = {
       pagination: this.componentPagination,
-      ignoreLoadingBar: this.ignoreLoadingBar,
+      ignoreLoadingBar: this.ignoreLoadingBar(),
       sort: {
         field: this.sortField,
         // if we order by creation date, we want DESC. all other fields are ASC (like unread).
@@ -70,22 +69,22 @@ export class UserNotificationsComponent implements OnInit {
     }
 
     this.userNotificationService.listMyNotifications(options)
-        .subscribe({
-          next: result => {
-            this.notifications = reset ? result.data : this.notifications.concat(result.data)
-            this.componentPagination.totalItems = result.total
+      .subscribe({
+        next: result => {
+          this.notifications = reset ? result.data : this.notifications.concat(result.data)
+          this.componentPagination.totalItems = result.total
 
-            this.notificationsLoaded.emit()
+          this.notificationsLoaded.emit()
 
-            this.onDataSubject.next(result.data)
-          },
+          this.onDataSubject.next(result.data)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onNearOfBottom () {
-    if (this.infiniteScroll === false) return
+    if (this.infiniteScroll() === false) return
 
     this.componentPagination.currentPage++
 
@@ -98,32 +97,32 @@ export class UserNotificationsComponent implements OnInit {
     if (notification.read) return
 
     this.userNotificationService.markAsRead(notification)
-        .subscribe({
-          next: () => {
-            notification.read = true
-          },
+      .subscribe({
+        next: () => {
+          notification.read = true
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   markAllAsRead () {
     this.userNotificationService.markAllAsRead()
-        .subscribe({
-          next: () => {
-            for (const notification of this.notifications) {
-              notification.read = true
-            }
-          },
+      .subscribe({
+        next: () => {
+          for (const notification of this.notifications) {
+            notification.read = true
+          }
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   changeSortColumn (column: string) {
     this.componentPagination = {
       currentPage: 1,
-      itemsPerPage: this.itemsPerPage,
+      itemsPerPage: this.itemsPerPage(),
       totalItems: null
     }
     this.sortField = column

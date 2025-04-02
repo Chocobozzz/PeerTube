@@ -1,4 +1,4 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form()">
 
   <div class="pt-two-cols mt-5"> <!-- cache grid -->
 
@@ -17,12 +17,12 @@
           <div class="number-with-unit">
             <input
               type="number" min="0" id="cachePreviewsSize" class="form-control"
-              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.previews.size'] }"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors()['cache.previews.size'] }"
             >
             <span i18n>{getCacheSize('previews'), plural, =1 {cached image} other {cached images}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.previews.size" class="form-error" role="alert">{{ formErrors.cache.previews.size }}</div>
+          <div *ngIf="formErrors().cache.previews.size" class="form-error" role="alert">{{ formErrors().cache.previews.size }}</div>
         </div>
 
         <div class="form-group" formGroupName="captions">
@@ -31,12 +31,12 @@
           <div class="number-with-unit">
             <input
               type="number" min="0" id="cacheCaptionsSize" class="form-control"
-              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.captions.size'] }"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors()['cache.captions.size'] }"
             >
             <span i18n>{getCacheSize('captions'), plural, =1 {cached caption} other {cached captions}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.captions.size" class="form-error" role="alert">{{ formErrors.cache.captions.size }}</div>
+          <div *ngIf="formErrors().cache.captions.size" class="form-error" role="alert">{{ formErrors().cache.captions.size }}</div>
         </div>
 
         <div class="form-group" formGroupName="torrents">
@@ -45,12 +45,12 @@
           <div class="number-with-unit">
             <input
               type="number" min="0" id="cacheTorrentsSize" class="form-control"
-              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.torrents.size'] }"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors()['cache.torrents.size'] }"
             >
             <span i18n>{getCacheSize('torrents'), plural, =1 {cached torrent} other {cached torrents}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.torrents.size" class="form-error" role="alert">{{ formErrors.cache.torrents.size }}</div>
+          <div *ngIf="formErrors().cache.torrents.size" class="form-error" role="alert">{{ formErrors().cache.torrents.size }}</div>
         </div>
 
         <div class="form-group" formGroupName="torrents">
@@ -59,12 +59,12 @@
           <div class="number-with-unit">
             <input
               type="number" min="0" id="cacheStoryboardsSize" class="form-control"
-              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.storyboards.size'] }"
+              formControlName="size" [ngClass]="{ 'input-error': formErrors()['cache.storyboards.size'] }"
             >
             <span i18n>{getCacheSize('storyboards'), plural, =1 {cached storyboard} other {cached storyboards}}</span>
           </div>
 
-          <div *ngIf="formErrors.cache.storyboards.size" class="form-error" role="alert">{{ formErrors.cache.storyboards.size }}</div>
+          <div *ngIf="formErrors().cache.storyboards.size" class="form-error" role="alert">{{ formErrors().cache.storyboards.size }}</div>
         </div>
       </ng-container>
 
@@ -96,10 +96,10 @@
 
             <textarea
               id="customizationJavascript" formControlName="javascript" class="form-control" dir="ltr"
-              [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
+              [ngClass]="{ 'input-error': formErrors()['instance.customizations.javascript'] }"
             ></textarea>
 
-            <div *ngIf="formErrors.instance.customizations.javascript" class="form-error" role="alert">{{ formErrors.instance.customizations.javascript }}</div>
+            <div *ngIf="formErrors().instance.customizations.javascript" class="form-error" role="alert">{{ formErrors().instance.customizations.javascript }}</div>
           </div>
 
           <div class="form-group">
@@ -126,9 +126,9 @@
 
             <textarea
               id="customizationCSS" formControlName="css" class="form-control" dir="ltr"
-              [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"
+              [ngClass]="{ 'input-error': formErrors()['instance.customizations.css'] }"
             ></textarea>
-            <div *ngIf="formErrors.instance.customizations.css" class="form-error" role="alert">{{ formErrors.instance.customizations.css }}</div>
+            <div *ngIf="formErrors().instance.customizations.css" class="form-error" role="alert">{{ formErrors().instance.customizations.css }}</div>
           </div>
         </ng-container>
       </ng-container>

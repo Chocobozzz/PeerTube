@@ -10,9 +10,7 @@ import { AbstractRunQuery } from '../../../shared/abstract-run-query.js'
 import { createSafeIn, parseRowCountResult } from '../../../shared/index.js'
 
 /**
- *
  * Build videos list SQL query to fetch rows
- *
  */
 
 export type DisplayOnlyForFollowerOptions = {
@@ -56,7 +54,9 @@ export type BuildVideosListQueryOptions = {
   hasWebVideoFiles?: boolean
 
   accountId?: number
+
   videoChannelId?: number
+  channelNameOneOf?: string[]
 
   videoPlaylistId?: number
 
@@ -177,6 +177,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.videoChannelId) {
       this.whereChannelId(options.videoChannelId)
+    }
+
+    if (options.channelNameOneOf) {
+      this.whereChannelOneOf(options.channelNameOneOf)
     }
 
     if (options.displayOnlyForFollower) {
@@ -335,7 +339,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private joinPlaylist (playlistId: number) {
     this.joins.push(
       'INNER JOIN "videoPlaylistElement" "video"."id" = "videoPlaylistElement"."videoId" ' +
-      'AND "videoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
+        'AND "videoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
     )
 
     this.replacements.videoPlaylistId = playlistId
@@ -344,7 +348,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereStateAvailable () {
     this.and.push(
       `("video"."state" = ${VideoState.PUBLISHED} OR ` +
-      `("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false))`
+        `("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false))`
     )
   }
 
@@ -389,22 +393,27 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.videoChannelId = channelId
   }
 
+  private whereChannelOneOf (channelOneOf: string[]) {
+    this.joins.push('INNER JOIN "actor" "channelActor" ON "videoChannel"."actorId" = "channelActor"."id"')
+    this.and.push('"channelActor"."preferredUsername" IN (:channelOneOf)')
+    this.replacements.channelOneOf = channelOneOf
+  }
+
   private whereFollowerActorId (options: { actorId: number, orLocalVideos: boolean }) {
-    let query =
-    '(' +
-    '  EXISTS (' + // Videos shared by actors we follow
-    '    SELECT 1 FROM "videoShare" ' +
-    '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
-    '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
-    '    WHERE "videoShare"."videoId" = "video"."id"' +
-    '  )' +
-    '  OR' +
-    '  EXISTS (' + // Videos published by channels or accounts we follow
-    '    SELECT 1 from "actorFollow" ' +
-    '    WHERE ("actorFollow"."targetActorId" = "account"."actorId" OR "actorFollow"."targetActorId" = "videoChannel"."actorId") ' +
-    '    AND "actorFollow"."actorId" = :followerActorId ' +
-    '    AND "actorFollow"."state" = \'accepted\'' +
-    '  )'
+    let query = '(' +
+      '  EXISTS (' + // Videos shared by actors we follow
+      '    SELECT 1 FROM "videoShare" ' +
+      '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
+      '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
+      '    WHERE "videoShare"."videoId" = "video"."id"' +
+      '  )' +
+      '  OR' +
+      '  EXISTS (' + // Videos published by channels or accounts we follow
+      '    SELECT 1 from "actorFollow" ' +
+      '    WHERE ("actorFollow"."targetActorId" = "account"."actorId" OR "actorFollow"."targetActorId" = "videoChannel"."actorId") ' +
+      '    AND "actorFollow"."actorId" = :followerActorId ' +
+      '    AND "actorFollow"."state" = \'accepted\'' +
+      '  )'
 
     if (options.orLocalVideos) {
       query += '  OR "video"."remote" IS FALSE'
@@ -438,10 +447,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     const prefix = exists ? '' : 'NOT '
 
     return prefix + 'EXISTS (' +
-    '  SELECT 1 FROM "videoStreamingPlaylist" ' +
-    '  INNER JOIN "videoFile" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
-    '  WHERE "videoStreamingPlaylist"."videoId" = "video"."id"' +
-    ')'
+      '  SELECT 1 FROM "videoStreamingPlaylist" ' +
+      '  INNER JOIN "videoFile" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
+      '  WHERE "videoStreamingPlaylist"."videoId" = "video"."id"' +
+      ')'
   }
 
   private whereTagsOneOf (tagsOneOf: string[]) {
@@ -449,10 +458,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.cte.push(
       '"tagsOneOf" AS (' +
-      '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
-      '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-      '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsOneOfLower) + ') ' +
-      ')'
+        '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
+        '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+        '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsOneOfLower) + ') ' +
+        ')'
     )
 
     this.joins.push('INNER JOIN "tagsOneOf" ON "video"."id" = "tagsOneOf"."videoId"')
@@ -463,10 +472,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.cte.push(
       '"autoTagsOneOf" AS (' +
-      '  SELECT "videoAutomaticTag"."videoId" AS "videoId" FROM "videoAutomaticTag" ' +
-      '  INNER JOIN "automaticTag" ON "automaticTag"."id" = "videoAutomaticTag"."automaticTagId" ' +
-      '  WHERE lower("automaticTag"."name") IN (' + createSafeIn(this.sequelize, tags) + ') ' +
-      ')'
+        '  SELECT "videoAutomaticTag"."videoId" AS "videoId" FROM "videoAutomaticTag" ' +
+        '  INNER JOIN "automaticTag" ON "automaticTag"."id" = "videoAutomaticTag"."automaticTagId" ' +
+        '  WHERE lower("automaticTag"."name") IN (' + createSafeIn(this.sequelize, tags) + ') ' +
+        ')'
     )
 
     this.joins.push('INNER JOIN "autoTagsOneOf" ON "video"."id" = "autoTagsOneOf"."videoId"')
@@ -477,11 +486,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.cte.push(
       '"tagsAllOf" AS (' +
-      '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
-      '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-      '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsAllOfLower) + ') ' +
-      '  GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
-      ')'
+        '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
+        '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+        '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsAllOfLower) + ') ' +
+        '  GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
+        ')'
     )
 
     this.joins.push('INNER JOIN "tagsAllOf" ON "video"."id" = "tagsAllOf"."videoId"')
@@ -516,10 +525,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
       languagesQueryParts.push(
         'EXISTS (' +
-        '  SELECT 1 FROM "videoCaption" WHERE "videoCaption"."language" ' +
-        '  IN (' + createSafeIn(this.sequelize, languages) + ') AND ' +
-        '  "videoCaption"."videoId" = "video"."id"' +
-        ')'
+          '  SELECT 1 FROM "videoCaption" WHERE "videoCaption"."language" ' +
+          '  IN (' + createSafeIn(this.sequelize, languages) + ') AND ' +
+          '  "videoCaption"."videoId" = "video"."id"' +
+          ')'
       )
     }
 
@@ -556,14 +565,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.and.push(
       'NOT EXISTS (' +
-      '  SELECT 1 FROM "accountBlocklist" ' +
-      '  WHERE "accountBlocklist"."accountId" IN (' + inClause + ') ' +
-      '  AND "accountBlocklist"."targetAccountId" = "account"."id" ' +
-      ')' +
-      'AND NOT EXISTS (' +
-      '  SELECT 1 FROM "serverBlocklist" WHERE "serverBlocklist"."accountId" IN (' + inClause + ') ' +
-      '  AND "serverBlocklist"."targetServerId" = "accountActor"."serverId"' +
-      ')'
+        '  SELECT 1 FROM "accountBlocklist" ' +
+        '  WHERE "accountBlocklist"."accountId" IN (' + inClause + ') ' +
+        '  AND "accountBlocklist"."targetAccountId" = "account"."id" ' +
+        ')' +
+        'AND NOT EXISTS (' +
+        '  SELECT 1 FROM "serverBlocklist" WHERE "serverBlocklist"."accountId" IN (' + inClause + ') ' +
+        '  AND "serverBlocklist"."targetServerId" = "accountActor"."serverId"' +
+        ')'
     )
   }
 
@@ -580,24 +589,24 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.cte.push(
       '"trigramSearch" AS (' +
-      '  SELECT "video"."id", ' +
-      `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) as similarity ` +
-      '  FROM "video" ' +
-      '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
-      '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-      ')'
+        '  SELECT "video"."id", ' +
+        `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) as similarity ` +
+        '  FROM "video" ' +
+        '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
+        '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+        ')'
     )
 
     this.joins.push('LEFT JOIN "trigramSearch" ON "video"."id" = "trigramSearch"."id"')
 
     let base = '(' +
-    '  "trigramSearch"."id" IS NOT NULL OR ' +
-    '  EXISTS (' +
-    '    SELECT 1 FROM "videoTag" ' +
-    '    INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-    `    WHERE lower("tag"."name") = lower(${escapedSearch}) ` +
-    '    AND "video"."id" = "videoTag"."videoId"' +
-    '  )'
+      '  "trigramSearch"."id" IS NOT NULL OR ' +
+      '  EXISTS (' +
+      '    SELECT 1 FROM "videoTag" ' +
+      '    INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+      `    WHERE lower("tag"."name") = lower(${escapedSearch}) ` +
+      '    AND "video"."id" = "videoTag"."videoId"' +
+      '  )'
 
     if (validator.default.isUUID(search)) {
       base += ` OR "video"."uuid" = ${escapedSearch}`
@@ -646,11 +655,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereExcludeAlreadyWatched (userId: number) {
     this.and.push(
       'NOT EXISTS (' +
-      '  SELECT 1' +
-      '  FROM "userVideoHistory"' +
-      '  WHERE "video"."id" = "userVideoHistory"."videoId"' +
-      '  AND "userVideoHistory"."userId" = :excludeAlreadyWatchedUserId' +
-      ')'
+        '  SELECT 1' +
+        '  FROM "userVideoHistory"' +
+        '  WHERE "video"."id" = "userVideoHistory"."videoId"' +
+        '  AND "userVideoHistory"."userId" = :excludeAlreadyWatchedUserId' +
+        ')'
     )
     this.replacements.excludeAlreadyWatchedUserId = userId
   }
@@ -692,8 +701,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.joins.push('LEFT JOIN "videoComment" ON "video"."id" = "videoComment"."videoId"')
 
-    let attribute =
-      `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
+    let attribute = `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
       `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
       `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
       `+ LOG(GREATEST(1, COUNT(DISTINCT "videoComment"."id"))) * ${weights.comment} ` + // comments (+)
@@ -723,22 +731,22 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.attributes.push(
         '(' +
           'CASE ' +
-            'WHEN "video"."remote" IS TRUE THEN 0 ' + // Consider remote videos with size of 0
-            'ELSE (' +
-              '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")' +
-              ' + ' +
-              '(' +
-                'SELECT COALESCE(SUM(size), 0) FROM "videoFile" ' +
-                'INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-                'AND "videoStreamingPlaylist"."videoId" = "video"."id"' +
-              ')' +
-              ' + ' +
-              '(' +
-                'SELECT COALESCE(SUM(size), 0) FROM "videoSource" ' +
-                'WHERE "videoSource"."videoId" = "video"."id" AND "videoSource"."storage" IS NOT NULL' +
-              ')' +
-            ') END' +
-        ') AS "localVideoFilesSize"'
+          'WHEN "video"."remote" IS TRUE THEN 0 ' + // Consider remote videos with size of 0
+          'ELSE (' +
+          '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")' +
+          ' + ' +
+          '(' +
+          'SELECT COALESCE(SUM(size), 0) FROM "videoFile" ' +
+          'INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+          'AND "videoStreamingPlaylist"."videoId" = "video"."id"' +
+          ')' +
+          ' + ' +
+          '(' +
+          'SELECT COALESCE(SUM(size), 0) FROM "videoSource" ' +
+          'WHERE "videoSource"."videoId" = "video"."id" AND "videoSource"."storage" IS NOT NULL' +
+          ')' +
+          ') END' +
+          ') AS "localVideoFilesSize"'
       )
     }
 
@@ -750,6 +758,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     if (field.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + field)
 
     if (field.toLowerCase() === 'random') return 'ORDER BY RANDOM()'
+    if (field.toLowerCase() === 'total') return `ORDER BY "total" ${direction}`
 
     if ([ 'trending', 'hot', 'best' ].includes(field.toLowerCase())) { // Sort by aggregation
       return `ORDER BY "score" ${direction}, "video"."views" ${direction}`

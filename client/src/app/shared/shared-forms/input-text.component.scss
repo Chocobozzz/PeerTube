@@ -11,11 +11,11 @@ input {
 
 .btn,
 my-copy-button ::ng-deep .btn {
-  background-color: var(--bg-secondary-400);
-  border-left: 1px solid var(--bg);
+  background-color: pvar(--bg-secondary-400);
+  border-left: 1px solid pvar(--bg);
 
   &:hover {
-    background-color: var(--bg-secondary-450);
+    background-color: pvar(--bg-secondary-450);
   }
 }
 

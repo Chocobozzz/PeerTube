@@ -78,8 +78,7 @@ RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}
 LATEST_VERSION_DIRECTORY="$PEERTUBE_PATH/versions/peertube-${VERSION}"
 cd "$LATEST_VERSION_DIRECTORY"
 
-# Launch yarn to check if we have all required dependencies
-NOCLIENT=1 yarn install --production --pure-lockfile
+NOCLIENT=1 npm run install-node-dependencies -- --production
 
 OLD_VERSION_DIRECTORY=$(readlink "$PEERTUBE_PATH/peertube-latest")
 

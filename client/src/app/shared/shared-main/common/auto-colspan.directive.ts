@@ -1,15 +1,12 @@
-import { AfterViewInit, Directive, ElementRef, Renderer2 } from '@angular/core'
+import { AfterViewInit, Directive, ElementRef, Renderer2, inject } from '@angular/core'
 
 @Directive({
   selector: '[myAutoColspan]',
   standalone: true
 })
 export class AutoColspanDirective implements AfterViewInit {
-
-  constructor (
-    private host: ElementRef,
-    private renderer: Renderer2
-  ) { }
+  private host = inject(ElementRef)
+  private renderer = inject(Renderer2)
 
   ngAfterViewInit () {
     const el = this.host.nativeElement as HTMLElement

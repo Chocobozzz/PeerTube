@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, input } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { durationToString } from '@app/helpers'
 import { AbusePredefinedReasonsString } from '@peertube/peertube-models'
@@ -13,12 +13,11 @@ import { ProcessedAbuse } from './processed-abuse.model'
   selector: 'my-abuse-details',
   templateUrl: './abuse-details.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-details.component.scss' ],
-  standalone: true,
   imports: [ NgIf, RouterLink, ActorAvatarComponent, GlobalIconComponent, NgFor, EmbedComponent, PTDatePipe ]
 })
 export class AbuseDetailsComponent implements OnInit {
-  @Input() abuse: ProcessedAbuse
-  @Input() isAdminView: boolean
+  readonly abuse = input<ProcessedAbuse>(undefined)
+  readonly isAdminView = input<boolean>(undefined)
 
   predefinedReasons: { id: string, label: string }[]
   private predefinedReasonsTranslations: { [key in AbusePredefinedReasonsString]: string }
@@ -37,19 +36,20 @@ export class AbuseDetailsComponent implements OnInit {
   }
 
   ngOnInit (): void {
-    if (!this.abuse.predefinedReasons) return
+    const abuse = this.abuse()
+    if (!abuse.predefinedReasons) return
 
-    this.predefinedReasons = this.abuse.predefinedReasons.map(r => ({
+    this.predefinedReasons = abuse.predefinedReasons.map(r => ({
       id: r,
       label: this.predefinedReasonsTranslations[r]
     }))
   }
 
   get startAt () {
-    return durationToString(this.abuse.video.startAt)
+    return durationToString(this.abuse().video.startAt)
   }
 
   get endAt () {
-    return durationToString(this.abuse.video.endAt)
+    return durationToString(this.abuse().video.endAt)
   }
 }

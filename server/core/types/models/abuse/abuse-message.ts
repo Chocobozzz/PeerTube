@@ -16,5 +16,5 @@ export type MAbuseMessageId = Pick<AbuseModel, 'id'>
 // Format for API
 
 export type MAbuseMessageFormattable =
-  MAbuseMessage &
-  Use<'Account', MAccountFormattable>
+  & MAbuseMessage
+  & Use<'Account', MAccountFormattable>

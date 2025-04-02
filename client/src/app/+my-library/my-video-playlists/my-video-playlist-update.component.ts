@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
@@ -27,7 +27,6 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
 @Component({
   templateUrl: './my-video-playlist-edit.component.html',
   styleUrls: [ './my-video-playlist-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,
@@ -43,21 +42,17 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
   ]
 })
 export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implements OnInit, OnDestroy {
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  private videoPlaylistService = inject(VideoPlaylistService)
+  private serverService = inject(ServerService)
+
   error: string
 
   private paramsSub: Subscription
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private router: Router,
-    private route: ActivatedRoute,
-    private videoPlaylistService: VideoPlaylistService,
-    private serverService: ServerService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -76,27 +71,27 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
       .subscribe(channels => this.userVideoChannels = channels)
 
     this.paramsSub = this.route.params
-                         .pipe(
-                           map(routeParams => routeParams['videoPlaylistId']),
-                           switchMap(videoPlaylistId => {
-                             return forkJoin([
-                               this.videoPlaylistService.getVideoPlaylist(videoPlaylistId),
-                               this.serverService.getVideoPlaylistPrivacies()
-                             ])
-                           })
-                         )
-                         .subscribe({
-                           next: ([ videoPlaylistToUpdate, videoPlaylistPrivacies ]) => {
-                             this.videoPlaylistToUpdate = videoPlaylistToUpdate
-                             this.videoPlaylistPrivacies = videoPlaylistPrivacies
+      .pipe(
+        map(routeParams => routeParams['videoPlaylistId']),
+        switchMap(videoPlaylistId => {
+          return forkJoin([
+            this.videoPlaylistService.getVideoPlaylist(videoPlaylistId),
+            this.serverService.getVideoPlaylistPrivacies()
+          ])
+        })
+      )
+      .subscribe({
+        next: ([ videoPlaylistToUpdate, videoPlaylistPrivacies ]) => {
+          this.videoPlaylistToUpdate = videoPlaylistToUpdate
+          this.videoPlaylistPrivacies = videoPlaylistPrivacies
 
-                             this.hydrateFormFromPlaylist()
-                           },
+          this.hydrateFormFromPlaylist()
+        },
 
-                           error: err => {
-                             this.error = err.message
-                           }
-                         })
+        error: err => {
+          this.error = err.message
+        }
+      })
   }
 
   ngOnDestroy () {

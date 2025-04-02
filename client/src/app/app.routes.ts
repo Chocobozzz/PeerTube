@@ -13,6 +13,9 @@ const routes: Routes = [
     loadChildren: () => import('./+admin/routes'),
     canActivateChild: [ MetaGuard ]
   },
+
+  // ---------------------------------------------------------------------------
+
   {
     path: 'my-account',
     loadChildren: () => import('./+my-account/routes'),
@@ -39,6 +42,8 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
+  // ---------------------------------------------------------------------------
+
   {
     path: 'video-channels',
     redirectTo: 'c'
@@ -60,6 +65,8 @@ const routes: Routes = [
     pathMatch: 'full',
     redirectTo: '/my-library/video-channels/update/:channel'
   },
+
+  // ---------------------------------------------------------------------------
 
   {
     path: 'p',
@@ -96,25 +103,58 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
+  // ---------------------------------------------------------------------------
+
+  {
+    path: 'studio/edit/:videoId',
+    redirectTo: '/videos/manage/:videoId/studio',
+    pathMatch: 'full'
+  },
+
+  {
+    path: 'stats/videos/:videoId',
+    redirectTo: '/videos/manage/:videoId/stats',
+    pathMatch: 'full'
+  },
+
   {
     path: 'videos/upload',
-    loadChildren: () => import('@app/+videos/+video-edit/add-routes'),
-    canActivateChild: [ MetaGuard ],
-    data: {
-      meta: {
-        title: $localize`Upload a video`
-      }
-    }
+    redirectTo: '/videos/publish',
+    pathMatch: 'full'
   },
   {
     path: 'videos/update/:uuid',
-    loadChildren: () => import('@app/+videos/+video-edit/update-routes'),
+    pathMatch: 'full',
+    redirectTo: '/videos/manage/:uuid'
+  },
+
+  {
+    path: 'videos/manage/:uuid',
+    loadChildren: () => import('./+videos-publish-manage/+video-manage/routes'),
     canActivateChild: [ MetaGuard ],
     data: {
       meta: {
-        title: $localize`Edit a video`
+        title: $localize`Manage your video`
       }
     }
+  },
+
+  {
+    path: 'videos/publish',
+    loadChildren: () => import('./+videos-publish-manage/+video-publish/routes'),
+    canActivateChild: [ MetaGuard ],
+    data: {
+      meta: {
+        title: $localize`Publish your video`
+      }
+    }
+  },
+
+  // ---------------------------------------------------------------------------
+
+  {
+    path: 'video-playlists/watch',
+    redirectTo: 'w/p'
   },
 
   {
@@ -127,13 +167,15 @@ const routes: Routes = [
   },
   {
     path: 'w',
-    loadChildren: () => import('@app/+videos/+video-watch/routes'),
+    loadChildren: () => import('./+video-watch/routes'),
     data: {
       preload: 5000
     }
   },
 
+  // ---------------------------------------------------------------------------
   // /home and other /videos routes
+  // ---------------------------------------------------------------------------
   {
     matcher: (url): UrlMatchResult => {
       if (url.length < 1) return null
@@ -153,16 +195,13 @@ const routes: Routes = [
       },
       {
         path: 'videos',
-        loadChildren: () => import('./+videos/routes'),
+        loadChildren: () => import('./+video-list/routes'),
         canActivateChild: [ MetaGuard ]
       }
     ]
   },
 
-  {
-    path: 'video-playlists/watch',
-    redirectTo: 'videos/watch/playlist'
-  },
+  // ---------------------------------------------------------------------------
 
   {
     path: 'remote-interaction',
@@ -170,19 +209,9 @@ const routes: Routes = [
     canActivateChild: [ MetaGuard ]
   },
 
-  {
-    path: 'studio',
-    loadChildren: () => import('./+video-studio/routes'),
-    canActivateChild: [ MetaGuard ]
-  },
-
-  {
-    path: 'stats',
-    loadChildren: () => import('./+stats/routes'),
-    canActivateChild: [ MetaGuard ]
-  },
-
-  // Matches /@:actorName
+  // ---------------------------------------------------------------------------
+  // /@:actorName
+  // ---------------------------------------------------------------------------
   {
     matcher: (url): UrlMatchResult => {
       const regex = new RegExp(`^@(${USER_USERNAME_REGEX_CHARACTERS}+)$`)
@@ -202,6 +231,8 @@ const routes: Routes = [
     canActivate: [ ActorRedirectGuard ],
     component: EmptyComponent
   },
+
+  // ---------------------------------------------------------------------------
 
   {
     path: '',

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, input } from '@angular/core'
 import { PluginElementPlaceholder } from '@peertube/peertube-models'
 
 @Component({
@@ -7,11 +7,10 @@ import { PluginElementPlaceholder } from '@peertube/peertube-models'
   styleUrls: [ './plugin-placeholder.component.scss' ],
   standalone: true
 })
-
 export class PluginPlaceholderComponent {
-  @Input() pluginId: PluginElementPlaceholder
+  readonly pluginId = input<PluginElementPlaceholder>(undefined)
 
   getId () {
-    return 'plugin-placeholder-' + this.pluginId
+    return 'plugin-placeholder-' + this.pluginId()
   }
 }

@@ -1,16 +1,17 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
-import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService } from '@app/core'
+import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
+import { getOriginUrl } from '@app/helpers'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
-import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
+import { getChannelRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
@@ -22,7 +23,6 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
 @Component({
   templateUrl: './video-channels.component.html',
   styleUrls: [ './video-channels.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     RouterLink,
@@ -35,13 +35,24 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
     NgClass,
     HorizontalMenuComponent,
     RouterOutlet,
-    SupportModalComponent,
-    PTDatePipe
+    SupportModalComponent
   ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
-  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
-  @ViewChild('supportModal') supportModal: SupportModalComponent
+  private route = inject(ActivatedRoute)
+  private authService = inject(AuthService)
+  private videoChannelService = inject(VideoChannelService)
+  private videoService = inject(VideoService)
+  private restExtractor = inject(RestExtractor)
+  private hotkeysService = inject(HotkeysService)
+  private screenService = inject(ScreenService)
+  private markdown = inject(MarkdownService)
+  private blocklist = inject(BlocklistService)
+  private metaService = inject(MetaService)
+  private server = inject(ServerService)
+
+  readonly subscribeButton = viewChild<SubscribeButtonComponent>('subscribeButton')
+  readonly supportModal = viewChild<SupportModalComponent>('supportModal')
 
   videoChannel: VideoChannel
   ownerAccount: Account
@@ -56,32 +67,22 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   private routeSub: Subscription
 
-  constructor (
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private videoChannelService: VideoChannelService,
-    private videoService: VideoService,
-    private restExtractor: RestExtractor,
-    private hotkeysService: HotkeysService,
-    private screenService: ScreenService,
-    private markdown: MarkdownService,
-    private blocklist: BlocklistService,
-    private metaService: MetaService
-  ) { }
-
   ngOnInit () {
     this.routeSub = this.route.params
       .pipe(
         map(params => params['videoChannelName']),
         distinctUntilChanged(),
         switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, 'other', [
-          HttpStatusCode.BAD_REQUEST_400,
-          HttpStatusCode.NOT_FOUND_404
-        ]))
+        catchError(err =>
+          this.restExtractor.redirectTo404IfNotFound(err, 'other', [
+            HttpStatusCode.BAD_REQUEST_400,
+            HttpStatusCode.NOT_FOUND_404
+          ])
+        )
       )
       .subscribe(async videoChannel => {
         this.metaService.setTitle(videoChannel.displayName)
+        this.metaService.setRSSFeeds(getChannelRSSFeeds(getOriginUrl(), this.server.getHTMLConfig().instance.name, videoChannel))
 
         this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML({
           markdown: videoChannel.description,
@@ -105,8 +106,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
     this.hotkeys = [
       new Hotkey('Shift+s', () => {
-        if (this.subscribeButton.isSubscribedToAll()) this.subscribeButton.unsubscribe()
-        else this.subscribeButton.subscribe()
+        const subscribeButton = this.subscribeButton()
+        if (subscribeButton.isSubscribedToAll()) subscribeButton.unsubscribe()
+        else subscribeButton.subscribe()
 
         return false
       }, $localize`Subscribe to the account`)
@@ -124,6 +126,8 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
     // Unbind hotkeys
     if (this.isUserLoggedIn()) this.hotkeysService.remove(this.hotkeys)
+
+    this.metaService.revertMetaTags()
   }
 
   isInSmallView () {
@@ -164,7 +168,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   showSupportModal () {
-    this.supportModal.show()
+    this.supportModal().show()
   }
 
   getAccountUrl () {

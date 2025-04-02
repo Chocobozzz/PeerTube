@@ -1,6 +1,6 @@
 import { NgClass, NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, HooksService, Notifier, RedirectService } from '@app/core'
@@ -27,7 +27,6 @@ import { VideoChannelEdit } from './video-channel-edit'
   selector: 'my-video-channel-update',
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,
@@ -42,22 +41,18 @@ import { VideoChannelEdit } from './video-channel-edit'
   ]
 })
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private route = inject(ActivatedRoute)
+  private videoChannelService = inject(VideoChannelService)
+  private redirectService = inject(RedirectService)
+  private hooks = inject(HooksService)
+
   error: string
 
   private paramsSub: Subscription
   private oldSupportField: string
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private route: ActivatedRoute,
-    private videoChannelService: VideoChannelService,
-    private redirectService: RedirectService,
-    private hooks: HooksService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -130,68 +125,70 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
   onAvatarChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'avatar')
-        .subscribe({
-          next: data => {
-            this.notifier.success($localize`Avatar changed.`)
+      .subscribe({
+        next: data => {
+          this.notifier.success($localize`Avatar changed.`)
 
-            this.videoChannel.updateAvatar(data.avatars)
+          this.videoChannel.updateAvatar(data.avatars)
 
-            // So my-actor-avatar component detects changes
-            this.videoChannel = shallowCopy(this.videoChannel)
-          },
+          // So my-actor-avatar component detects changes
+          this.videoChannel = shallowCopy(this.videoChannel)
+        },
 
-          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
+        error: (err: HttpErrorResponse) =>
+          genericUploadErrorHandler({
             err,
             name: $localize`avatar`,
             notifier: this.notifier
           })
-        })
+      })
   }
 
   onAvatarDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'avatar')
-                            .subscribe({
-                              next: () => {
-                                this.notifier.success($localize`Avatar deleted.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Avatar deleted.`)
 
-                                this.videoChannel.resetAvatar()
+          this.videoChannel.resetAvatar()
 
-                                // So my-actor-avatar component detects changes
-                                this.videoChannel = shallowCopy(this.videoChannel)
-                              },
+          // So my-actor-avatar component detects changes
+          this.videoChannel = shallowCopy(this.videoChannel)
+        },
 
-                              error: err => this.notifier.error(err.message)
-                            })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onBannerChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'banner')
-        .subscribe({
-          next: data => {
-            this.notifier.success($localize`Banner changed.`)
+      .subscribe({
+        next: data => {
+          this.notifier.success($localize`Banner changed.`)
 
-            this.videoChannel.updateBanner(data.banners)
-          },
+          this.videoChannel.updateBanner(data.banners)
+        },
 
-          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
+        error: (err: HttpErrorResponse) =>
+          genericUploadErrorHandler({
             err,
             name: $localize`banner`,
             notifier: this.notifier
           })
-        })
+      })
   }
 
   onBannerDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'banner')
-                            .subscribe({
-                              next: () => {
-                                this.notifier.success($localize`Banner deleted.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Banner deleted.`)
 
-                                this.videoChannel.resetBanner()
-                              },
+          this.videoChannel.resetBanner()
+        },
 
-                              error: err => this.notifier.error(err.message)
-                            })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   isCreation () {

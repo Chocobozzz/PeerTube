@@ -1,6 +1,6 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { durationToString, getAPIUrl, getOriginUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath, getAllFiles, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
@@ -123,12 +123,14 @@ export class Video implements VideoServerModel {
   }
 
   static buildUpdateUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
-    return '/videos/update/' + (video.shortUUID || video.uuid)
+    return '/videos/manage/' + (video.shortUUID || video.uuid)
   }
 
-  constructor (hash: VideoServerModel, translations: { [ id: string ]: string } = {}) {
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
+  static buildDurationLabel (video: Partial<Pick<Video, 'duration'>>) {
+    return durationToString(video.duration)
+  }
 
+  constructor (hash: VideoServerModel, translations: { [id: string]: string } = {}) {
     this.createdAt = new Date(hash.createdAt.toString())
     this.publishedAt = new Date(hash.publishedAt.toString())
     this.category = hash.category
@@ -144,7 +146,7 @@ export class Video implements VideoServerModel {
     this.isLive = hash.isLive
 
     this.duration = hash.duration
-    this.durationLabel = durationToString(hash.duration)
+    this.durationLabel = Video.buildDurationLabel(this)
 
     this.id = hash.id
     this.uuid = hash.uuid
@@ -155,16 +157,16 @@ export class Video implements VideoServerModel {
 
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = this.thumbnailPath
-      ? hash.thumbnailUrl || (absoluteAPIUrl + hash.thumbnailPath)
+      ? hash.thumbnailUrl || (getAPIUrl() + hash.thumbnailPath)
       : null
 
     this.previewPath = hash.previewPath
     this.previewUrl = this.previewPath
-      ? hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
+      ? hash.previewUrl || (getAPIUrl() + hash.previewPath)
       : null
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getOriginUrl() + hash.embedPath)
 
     this.url = hash.url
 
@@ -281,10 +283,10 @@ export class Video implements VideoServerModel {
 
   canRunTranscoding (user: AuthUser) {
     return this.isLocal &&
-    !this.isLive &&
-    user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
-    this.state?.id &&
-    !this.transcodingAndTranscriptionIncompatibleStates().has(this.state.id)
+      !this.isLive &&
+      user?.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
+      this.state?.id &&
+      !this.transcodingAndTranscriptionIncompatibleStates().has(this.state.id)
   }
 
   canGenerateTranscription (user: AuthUser, transcriptionEnabled: boolean) {

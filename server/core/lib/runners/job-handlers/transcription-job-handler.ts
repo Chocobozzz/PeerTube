@@ -21,7 +21,6 @@ type CreateOptions = {
 }
 
 export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, TranscriptionSuccess> {
-
   protected isAbortSupported () {
     return true
   }
@@ -89,6 +88,8 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
 
     const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) return
+
+    await VideoJobInfoModel.decrease(options.runnerJob.privatePayload.videoUUID, 'pendingTranscription')
 
     await onTranscriptionEnded({
       video,

@@ -46,6 +46,9 @@ export class IPCServer {
       case 'list-registered':
         return Promise.resolve(this.runnerServer.listRegistered())
 
+      case 'list-jobs':
+        return Promise.resolve(this.runnerServer.listJobs())
+
       case 'graceful-shutdown':
         this.runnerServer.requestGracefulShutdown()
         return undefined

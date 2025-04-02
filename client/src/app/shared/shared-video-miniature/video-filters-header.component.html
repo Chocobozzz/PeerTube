@@ -12,8 +12,8 @@
 
   <div class="d-flex flex-wrap-reverse align-items-start justify-content-between">
     <div class="gap-3">
-      <div class="scope-info" *ngIf="!hideScope" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
-        @if (filters.scope === 'local' || totalFollowing === 0) {
+      <div class="scope-info" *ngIf="!hideScope()" [ngClass]="{ 'opacity-0': totalFollowing === undefined }">
+        @if (filters().scope === 'local' || totalFollowing === 0) {
           <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
         } @else {
           <ng-container i18n>Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> other platforms</ng-container>
@@ -22,7 +22,7 @@
 
       <div class="filters-summary">
         <div class="d-inline-block active-filters">
-          @for (filter of filters.getActiveFilters(); track filter.key + (filter.value || '')) {
+          @for (filter of filters().getActiveFilters(); track filter.key + (filter.value || '')) {
             @if (filter.key !== 'scope') {
               <div class="d-inline-block active-filter">
                 <span i18n *ngIf="filter.value">{{ filter.label }}: </span>
@@ -81,7 +81,7 @@
 
           <div class="peertube-radio-container">
             <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwBoth" value="both" />
-            <label for="nsfwBoth">{{ filters.getNSFWDisplayLabel() }}</label>
+            <label for="nsfwBoth">{{ filters().getNSFWDisplayLabel() }}</label>
           </div>
 
           <div class="peertube-radio-container">
@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <div class="section" *ngIf="totalFollowing && !hideScope">
+      <div class="section" *ngIf="totalFollowing && !hideScope()">
         <div class="section-title">
          <ng-container i18n>Platforms order</ng-container>
 

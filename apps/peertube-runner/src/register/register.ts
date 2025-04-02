@@ -34,3 +34,14 @@ export async function listRegistered () {
 
   client.stop()
 }
+
+export async function listJobs (options: {
+  includePayload: boolean
+}) {
+  const client = new IPCClient()
+  await client.run()
+
+  await client.askListJobs(options)
+
+  client.stop()
+}

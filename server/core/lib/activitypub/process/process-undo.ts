@@ -145,7 +145,7 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
   return sequelizeTypescript.transaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) {
-      logger.warn('Unknown video share %d', announceActivity.id)
+      logger.warn(`Unknown video share ${announceActivity.id}`)
       return
     }
 

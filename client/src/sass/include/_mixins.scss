@@ -48,8 +48,18 @@
   text-overflow: ellipsis;
 }
 
-@mixin muted {
+@mixin muted-1 {
   color: pvar(--fg-300) !important;
+}
+
+@mixin muted-2 {
+  color: pvar(--fg-200) !important;
+
+  a,
+  .fake-link {
+    color: pvar(--fg);
+    text-decoration: underline;
+  }
 }
 
 @mixin fade-text ($fade-after, $background-color) {

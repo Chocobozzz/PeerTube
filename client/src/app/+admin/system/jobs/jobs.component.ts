@@ -1,9 +1,9 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { NgClass, NgIf } from '@angular/common'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
-import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+
 import { AutoColspanDirective } from '@app/shared/shared-main/common/auto-colspan.directive'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Job, JobState, JobType } from '@peertube/peertube-models'
@@ -21,10 +21,8 @@ import { JobService } from './job.service'
   selector: 'my-jobs',
   templateUrl: './jobs.component.html',
   styleUrls: [ './jobs.component.scss' ],
-  standalone: true,
   imports: [
     FormsModule,
-    NgFor,
     NgClass,
     ButtonComponent,
     TableModule,
@@ -32,12 +30,14 @@ import { JobService } from './job.service'
     NgIf,
     NgbTooltip,
     TableExpanderIconComponent,
-    GlobalIconComponent,
     SelectOptionsComponent,
     AutoColspanDirective
   ]
 })
 export class JobsComponent extends RestTable implements OnInit {
+  private notifier = inject(Notifier)
+  private jobsService = inject(JobService)
+
   private static LS_STATE = 'jobs-list-state'
   private static LS_TYPE = 'jobs-list-type'
 
@@ -87,13 +87,6 @@ export class JobsComponent extends RestTable implements OnInit {
   totalRecords: number
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-
-  constructor (
-    private notifier: Notifier,
-    private jobsService: JobService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.loadJobStateAndType()

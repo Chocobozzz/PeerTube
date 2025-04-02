@@ -1,9 +1,9 @@
-import bytes from 'bytes'
-import CliTable3 from 'cli-table3'
-import { URL } from 'url'
 import { Command } from '@commander-js/extra-typings'
 import { forceNumber, uniqify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoRedundanciesTarget } from '@peertube/peertube-models'
+import bytes from 'bytes'
+import CliTable3 from 'cli-table3'
+import { URL } from 'url'
 import { assignToken, buildServer, CommonProgramOptions, getServerCredentials } from './shared/index.js'
 
 export function defineRedundancyProgram () {
@@ -89,24 +89,22 @@ async function listRedundanciesCLI (options: CommonProgramOptions & { target: Vi
   const { data } = await server.redundancy.listVideos({ start: 0, count: 100, sort: 'name', target })
 
   const table = new CliTable3({
-    head: [ 'video id', 'video name', 'video url', 'files', 'playlists', 'by instances', 'total size' ]
+    head: [ 'video id', 'video name', 'video url', 'playlists', 'by instances', 'total size' ]
   }) as any
 
   for (const redundancy of data) {
-    const webVideoFiles = redundancy.redundancies.files
     const streamingPlaylists = redundancy.redundancies.streamingPlaylists
 
     let totalSize = ''
     if (target === 'remote-videos') {
-      const tmp = webVideoFiles.concat(streamingPlaylists)
-        .reduce((a, b) => a + b.size, 0)
+      const tmp = streamingPlaylists.reduce((a, b) => a + b.size, 0)
 
       // FIXME: don't use external dependency to stringify bytes: we already have the functions in the client
       totalSize = bytes(tmp)
     }
 
     const instances = uniqify(
-      webVideoFiles.concat(streamingPlaylists)
+      streamingPlaylists
         .map(r => r.fileUrl)
         .map(u => new URL(u).host)
     )
@@ -115,7 +113,6 @@ async function listRedundanciesCLI (options: CommonProgramOptions & { target: Vi
       redundancy.id.toString(),
       redundancy.name,
       redundancy.url,
-      webVideoFiles.length,
       streamingPlaylists.length,
       instances.join('\n'),
       totalSize
@@ -174,8 +171,7 @@ async function removeRedundancyCLI (options: CommonProgramOptions & { video: num
     throw new Error('Video redundancy not found.')
   }
 
-  const ids = videoRedundancy.redundancies.files
-    .concat(videoRedundancy.redundancies.streamingPlaylists)
+  const ids = videoRedundancy.redundancies.streamingPlaylists
     .map(r => r.id)
 
   for (const id of ids) {

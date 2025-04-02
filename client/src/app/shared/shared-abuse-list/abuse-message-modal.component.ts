@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -17,15 +17,24 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-abuse-message-modal',
   templateUrl: './abuse-message-modal.component.html',
   styleUrls: [ './abuse-message-modal.component.scss' ],
-  standalone: true,
   imports: [ NgIf, GlobalIconComponent, NgFor, NgClass, FormsModule, ReactiveFormsModule, PTDatePipe ]
 })
 export class AbuseMessageModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal', { static: true }) modal: NgbModal
+  protected formReactiveService = inject(FormReactiveService)
+  private modalService = inject(NgbModal)
+  private htmlRenderer = inject(HtmlRendererService)
+  private auth = inject(AuthService)
+  private notifier = inject(Notifier)
+  private abuseService = inject(AbuseService)
 
-  @Input() isAdminView: boolean
+  readonly modal = viewChild<NgbModal>('modal')
 
-  @Output() countMessagesUpdated = new EventEmitter<{ abuseId: number, countMessages: number }>()
+  readonly isAdminView = input<boolean>(undefined)
+
+  readonly countMessagesUpdated = output<{
+    abuseId: number
+    countMessages: number
+  }>()
 
   abuseMessages: (AbuseMessage & { messageHtml: string })[] = []
   textareaMessage: string
@@ -34,17 +43,6 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
   private openedModal: NgbModalRef
   private abuse: UserAbuse
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private modalService: NgbModal,
-    private htmlRenderer: HtmlRendererService,
-    private auth: AuthService,
-    private notifier: Notifier,
-    private abuseService: AbuseService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -55,7 +53,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   openModal (abuse: UserAbuse) {
     this.abuse = abuse
 
-    this.openedModal = this.modalService.open(this.modal, { centered: true })
+    this.openedModal = this.modalService.open(this.modal(), { centered: true })
 
     this.loadMessages()
   }
@@ -104,7 +102,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   }
 
   getPlaceholderMessage () {
-    if (this.isAdminView) {
+    if (this.isAdminView()) {
       return $localize`Add a message to communicate with the reporter`
     }
 
@@ -135,5 +133,4 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
         error: err => this.notifier.error(err.message)
       })
   }
-
 }

@@ -31,6 +31,23 @@ function queryParamsToObject (entries: URLSearchParams) {
 
 // ---------------------------------------------------------------------------
 
+function buildDownloadFilesUrl (options: {
+  baseUrl: string
+  videoUUID: string
+  videoFiles: number[]
+  videoFileToken?: string
+  extension?: string
+}) {
+  const { baseUrl, videoFiles, videoUUID, videoFileToken, extension = '' } = options
+
+  let url = `${baseUrl}/download/videos/generate/${videoUUID}${extension}?`
+  url += videoFiles.map(f => 'videoFileIds=' + f).join('&')
+
+  if (videoFileToken) url += `&videoFileToken=${videoFileToken}`
+
+  return url
+}
+
 function buildPlaylistLink (playlist: Pick<VideoPlaylist, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistWatchPath(playlist)
 }
@@ -47,19 +64,19 @@ function buildVideoLink (video: Pick<Video, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildVideoWatchPath(video)
 }
 
-function buildPlaylistEmbedPath (playlist: Pick<VideoPlaylist, 'uuid'>) {
-  return '/video-playlists/embed/' + playlist.uuid
+function buildPlaylistEmbedPath (playlist: Partial<Pick<VideoPlaylist, 'shortUUID' | 'uuid'>>) {
+  return '/video-playlists/embed/' + (playlist.shortUUID || playlist.uuid)
 }
 
-function buildPlaylistEmbedLink (playlist: Pick<VideoPlaylist, 'uuid'>, base?: string) {
+function buildPlaylistEmbedLink (playlist: Partial<Pick<VideoPlaylist, 'shortUUID' | 'uuid'>>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistEmbedPath(playlist)
 }
 
-function buildVideoEmbedPath (video: Pick<Video, 'uuid'>) {
-  return '/videos/embed/' + video.uuid
+function buildVideoEmbedPath (video: Partial<Pick<Video, 'shortUUID' | 'uuid'>>) {
+  return '/videos/embed/' + (video.shortUUID || video.uuid)
 }
 
-function buildVideoEmbedLink (video: Pick<Video, 'uuid'>, base?: string) {
+function buildVideoEmbedLink (video: Partial<Pick<Video, 'shortUUID' | 'uuid'>>, base?: string) {
   return (base ?? window.location.origin) + buildVideoEmbedPath(video)
 }
 
@@ -86,6 +103,8 @@ function decorateVideoLink (options: {
   p2p?: boolean
 
   api?: boolean
+
+  version?: number
 }) {
   const { url } = options
 
@@ -117,6 +136,8 @@ function decorateVideoLink (options: {
 
   if (options.api !== undefined) params.set('api', options.api ? '1' : '0')
 
+  if (options.version !== undefined) params.set('v', options.version + '')
+
   return buildUrl(url, params)
 }
 
@@ -140,6 +161,8 @@ export {
   addQueryParams,
   removeQueryParams,
   queryParamsToObject,
+
+  buildDownloadFilesUrl,
 
   buildPlaylistLink,
   buildVideoLink,

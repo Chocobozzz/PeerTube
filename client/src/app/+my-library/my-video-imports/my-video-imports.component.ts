@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
@@ -18,7 +18,6 @@ import { TableExpanderIconComponent } from '../../shared/shared-tables/table-exp
 @Component({
   templateUrl: './my-video-imports.component.html',
   styleUrls: [ './my-video-imports.component.scss' ],
-  standalone: true,
   imports: [
     AdvancedInputFilterComponent,
     TableModule,
@@ -35,17 +34,13 @@ import { TableExpanderIconComponent } from '../../shared/shared-tables/table-exp
   ]
 })
 export class MyVideoImportsComponent extends RestTable implements OnInit {
+  private notifier = inject(Notifier)
+  private videoImportService = inject(VideoImportService)
+
   videoImports: VideoImport[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-
-  constructor (
-    private notifier: Notifier,
-    private videoImportService: VideoImportService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.initialize()
@@ -118,13 +113,13 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
 
   protected reloadDataInternal () {
     this.videoImportService.getMyVideoImports(this.pagination, this.sort, this.search)
-        .subscribe({
-          next: resultList => {
-            this.videoImports = resultList.data
-            this.totalRecords = resultList.total
-          },
+      .subscribe({
+        next: resultList => {
+          this.videoImports = resultList.data
+          this.totalRecords = resultList.total
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

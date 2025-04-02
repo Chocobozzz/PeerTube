@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
@@ -33,7 +33,6 @@ import { UserPasswordComponent } from './user-password.component'
   selector: 'my-user-create',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ],
-  standalone: true,
   imports: [
     RouterLink,
     NgIf,
@@ -55,18 +54,18 @@ import { UserPasswordComponent } from './user-password.component'
   ]
 })
 export class UserCreateComponent extends UserEdit implements OnInit {
+  protected serverService = inject(ServerService)
+  protected formReactiveService = inject(FormReactiveService)
+  protected configService = inject(ConfigService)
+  protected screenService = inject(ScreenService)
+  protected auth = inject(AuthService)
+  private router = inject(Router)
+  private notifier = inject(Notifier)
+  private userAdminService = inject(UserAdminService)
+
   error: string
 
-  constructor (
-    protected serverService: ServerService,
-    protected formReactiveService: FormReactiveService,
-    protected configService: ConfigService,
-    protected screenService: ScreenService,
-    protected auth: AuthService,
-    private router: Router,
-    private notifier: Notifier,
-    private userAdminService: UserAdminService
-  ) {
+  constructor () {
     super()
 
     this.buildQuotaOptions()

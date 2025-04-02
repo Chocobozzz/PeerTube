@@ -311,7 +311,6 @@ describe('Test users admin API validators', function () {
   })
 
   describe('When getting a user', function () {
-
     it('Should fail with an non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,
@@ -331,7 +330,6 @@ describe('Test users admin API validators', function () {
   })
 
   describe('When updating a user', function () {
-
     it('Should fail with an invalid email attribute', async function () {
       const fields = {
         email: 'blabla'
@@ -349,6 +347,18 @@ describe('Test users admin API validators', function () {
         token: server.accessToken,
         fields,
         expectedStatus: HttpStatusCode.CONFLICT_409
+      })
+    })
+
+    it('Should succeed with the same email', async function () {
+      const fields = { email: 'user1@example.com' }
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
 

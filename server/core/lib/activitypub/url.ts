@@ -13,7 +13,6 @@ import {
   MVideoUrl,
   MVideoWithHost
 } from '../../types/models/index.js'
-import { MVideoFileVideoUUID } from '../../types/models/video/video-file.js'
 import { MVideoPlaylist, MVideoPlaylistUUID } from '../../types/models/video/video-playlist.js'
 import { MStreamingPlaylist } from '../../types/models/video/video-streaming-playlist.js'
 
@@ -27,12 +26,6 @@ export function getLocalVideoPlaylistActivityPubUrl (videoPlaylist: MVideoPlayli
 
 export function getLocalVideoPlaylistElementActivityPubUrl (playlist: MVideoPlaylistUUID, element: MVideoPlaylistElement) {
   return WEBSERVER.URL + '/video-playlists/' + playlist.uuid + '/videos/' + element.id
-}
-
-export function getLocalVideoCacheFileActivityPubUrl (videoFile: MVideoFileVideoUUID) {
-  const suffixFPS = videoFile.fps && videoFile.fps !== -1 ? '-' + videoFile.fps : ''
-
-  return `${WEBSERVER.URL}/redundancy/videos/${videoFile.Video.uuid}/${videoFile.resolution}${suffixFPS}`
 }
 
 export function getLocalVideoCacheStreamingPlaylistActivityPubUrl (video: MVideoUUID, playlist: MStreamingPlaylist) {

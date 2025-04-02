@@ -260,6 +260,12 @@ object_storage:
     prefix: ''
     base_url: ''
 
+  # Video captions
+  captions:
+    bucket_name: 'captions'
+    prefix: ''
+    base_url: ''
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
@@ -346,9 +352,12 @@ redundancy:
 # Other instances that duplicate your content
 remote_redundancy:
   videos:
-    # 'nobody': Do not accept remote redundancies
-    # 'anybody': Accept remote redundancies from anybody
-    # 'followings': Accept redundancies from instance followings
+    # PeerTube doesn't remove existing redundancies when you change this setting
+    # You can remove them in the web interface: https://docs.joinpeertube.org/admin/following-instances#instances-redundancy
+    # Available values:
+    #  * nobody: Do not accept remote redundancies
+    #  * followings: Accept redundancies from instance followings
+    #  * anybody: Accept remote redundancies from anybody
     accept_from: 'anybody'
 
 csp:
@@ -1039,11 +1048,12 @@ search:
   # instead of loading the video locally
   search_index:
     enabled: false
-    # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
-    # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
-    # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
-    url: ''
+    # URL of the search index, which should use the same search API and routes
+    # as PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
+    # You can deploy your own with https://framagit.org/framasoft/peertube/search-index,
+    # or you can use the official one: https://sepiasearch.org.
+    # But keep in mind it is an unmoderated search index
+    url: 'https://sepiasearch.org'
     # You can disable local search in the client, so users only use the search index
     disable_local_search: false
     # If you did not disable local search in the client, you can decide to use the search index by default
@@ -1066,6 +1076,29 @@ client:
       # If you enable only one external auth plugin
       # You can automatically redirect your users on this external platform when they click on the login button
       redirect_on_single_external_auth: false
+
+  open_in_app:
+    android:
+      # Use an intent URL: https://developer.chrome.com/docs/android/intents
+      intent:
+        enabled: true
+        # Host registered by the mobile app
+        host: 'joinpeertube.org'
+        # Scheme registered by the mobile app
+        scheme: 'peertube'
+        # If not having the app on the mobile device, open this page
+        # F-Droid alternative: https://f-droid.org/packages/org.framasoft.peertube/
+        fallback_url: 'https://play.google.com/store/apps/details?id=org.framasoft.peertube'
+
+    ios:
+      # We use a timeout for iOS: if the app is not opened after a few seconds, open the fallback URL
+      enabled: true
+      # Host registered by the mobile app
+      host: 'joinpeertube.org'
+      # Scheme registered by the mobile app
+      scheme: 'peertube'
+      # If not having the app on the mobile device, open this page
+      fallback_url: 'https://apps.apple.com/fr/app/peertube/id6737834858'
 
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video

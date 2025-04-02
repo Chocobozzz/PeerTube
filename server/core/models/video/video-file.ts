@@ -34,7 +34,6 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  HasMany,
   Is, Scopes,
   Table,
   UpdatedAt
@@ -56,7 +55,6 @@ import {
   WEBSERVER
 } from '../../initializers/constants.js'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
-import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
@@ -252,15 +250,6 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   })
   VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
 
-  @HasMany(() => VideoRedundancyModel, {
-    foreignKey: {
-      allowNull: true
-    },
-    onDelete: 'CASCADE',
-    hooks: true
-  })
-  RedundancyVideos: Awaited<VideoRedundancyModel>[]
-
   static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist.bind(VideoFileModel), {
     promise: true,
     max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
@@ -289,7 +278,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return doesExist({ sequelize: this.sequelize, query, bind: { filename } })
   }
 
-  static async doesOwnedFileExist (filename: string, storage: FileStorageType) {
+  static async doesOwnedWebVideoFileExist (filename: string, storage: FileStorageType) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
       `WHERE "filename" = $filename AND "storage" = $storage LIMIT 1`
 
@@ -331,11 +320,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   }
 
   static loadWithMetadata (id: number) {
-    return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk(id)
+    return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk<MVideoFile>(id)
   }
 
-  static loadWithVideo (id: number) {
-    return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk(id)
+  static loadWithVideo (id: number, transaction?: Transaction) {
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk<MVideoFileVideo>(id, { transaction })
   }
 
   static loadWithVideoOrPlaylist (id: number, videoIdOrUUID: number | string) {
@@ -365,23 +354,17 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     const query = {
       include: [
         {
-          model: VideoModel.unscoped(),
+          model: VideoStreamingPlaylistModel.unscoped(),
           required: true,
-          include: [
-            {
-              model: VideoStreamingPlaylistModel.unscoped(),
-              required: true,
-              where: {
-                id: streamingPlaylistId
-              }
-            }
-          ]
+          where: {
+            id: streamingPlaylistId
+          }
         }
       ],
       transaction
     }
 
-    return VideoFileModel.findAll(query)
+    return VideoFileModel.findAll<MVideoFile>(query)
   }
 
   static getStats () {

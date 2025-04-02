@@ -13,10 +13,7 @@
 @use '_css-variables' as *;
 
 @mixin main-col-expanded {
-  --main-col-width: 100vw;
-
-  width: calc(100% - #{$menu-collapsed-width});
-  margin-inline-start: $menu-collapsed-width;
+  --menu-width: #{$menu-collapsed-width};
 }
 
 /* clears the ‘X’ from Chrome */
@@ -63,7 +60,7 @@ noscript,
 }
 
 strong {
-  font-weight: $font-semibold;
+  font-weight: $font-bold;
 }
 
 input[readonly] {
@@ -83,14 +80,6 @@ button {
   color: pvar(--fg);
 
   @include disable-outline;
-}
-
-label,
-.label {
-  font-weight: $font-bold;
-  margin-bottom: 0.5rem;
-  font-size: 18px;
-  color: pvar(--fg-350);
 }
 
 .pt-label-container {
@@ -123,11 +112,15 @@ a:hover {
   opacity: 0.8;
 }
 
+a.pt {
+  text-decoration-color: pvar(--border-primary);
+  text-underline-offset: 0.25em;
+}
+
 .main-col {
   // Don't use rfs to get exact pixels
-  margin-inline-start: $menu-width;
-
-  width: calc(100% - #{$menu-width});
+  width: calc(100% - #{pvar(--menu-width)});
+  margin-inline-start: pvar(--menu-width);
   outline: none;
 
   .margin-content {
@@ -155,8 +148,7 @@ a:hover {
   }
 }
 
-.modal-open,
-.main-col.expanded {
+.modal-open {
   overflow: hidden !important;
 }
 

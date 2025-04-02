@@ -43,8 +43,12 @@
   }
 
   .description-html {
-    max-height: 60px;
+    max-height: 55px;
     grid-column: 2;
+    font-size: 14px;
+    margin-top: 5px;
+    color: var(--fg-300);
+    line-height: 1.2;
 
     @include fade-text(30px, pvar(--bg-secondary-350));
   }

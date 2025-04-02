@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core'
+import { Component, forwardRef, input, model } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 @Component({
@@ -15,15 +15,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
   standalone: true
 })
 export class InputSwitchComponent implements ControlValueAccessor {
-  @Input() checked = false
-  @Input() inputName: string
-  @Input() preventUpdate = false
-  @Input() label = $localize`Toggle`
+  readonly checked = model(false)
+  readonly inputName = input<string>(undefined)
+  readonly preventUpdate = input(false)
+  readonly label = input($localize`Toggle`)
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (checked: boolean) {
-    this.checked = checked
+    this.checked.set(checked)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -35,7 +37,7 @@ export class InputSwitchComponent implements ControlValueAccessor {
   }
 
   update () {
-    this.checked = !this.checked
-    this.propagateChange(this.checked)
+    this.checked.set(!this.checked())
+    this.propagateChange(this.checked())
   }
 }

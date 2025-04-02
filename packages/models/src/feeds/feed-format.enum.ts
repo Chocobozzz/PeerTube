@@ -1,4 +1,5 @@
 export const FeedFormat = {
+  PODCAST: 'xml',
   RSS: 'xml',
   ATOM: 'atom',
   JSON: 'json'

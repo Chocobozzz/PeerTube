@@ -66,11 +66,11 @@
       <td>{{ runnerJob.uuid }}</td>
 
       <td>
-        <span class="pt-badge ellipsis" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
+        <span class="pt-badge ellipsis" [title]="runnerJob.type" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
       </td>
 
       <td>
-        <span class="pt-badge ellipsis" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+        <span class="pt-badge ellipsis" [title]="runnerJob.state.label" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
       </td>
 
       <td>{{ runnerJob.priority }}</td>

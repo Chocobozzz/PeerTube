@@ -38,7 +38,8 @@ async function run () {
       `SELECT COUNT(*) AS "c", 'videoStreamingPlaylist->playlistUrl: ' || COUNT(*) AS "t" FROM "videoStreamingPlaylist" WHERE "playlistUrl" ~ :fromRegexp AND "storage" = :storage`,
       `SELECT COUNT(*) AS "c", 'videoStreamingPlaylist->segmentsSha256Url: ' || COUNT(*) AS "t" FROM "videoStreamingPlaylist" WHERE "segmentsSha256Url" ~ :fromRegexp AND "storage" = :storage`,
       `SELECT COUNT(*) AS "c", 'userExport->fileUrl: ' || COUNT(*) AS "t" FROM "userExport" WHERE "fileUrl" ~ :fromRegexp AND "storage" = :storage`,
-      `SELECT COUNT(*) AS "c", 'videoSource->fileUrl: ' || COUNT(*) AS "t" FROM "videoSource" WHERE "fileUrl" ~ :fromRegexp AND "storage" = :storage`
+      `SELECT COUNT(*) AS "c", 'videoSource->fileUrl: ' || COUNT(*) AS "t" FROM "videoSource" WHERE "fileUrl" ~ :fromRegexp AND "storage" = :storage`,
+      `SELECT COUNT(*) AS "c", 'videoCaption->fileUrl: ' || COUNT(*) AS "t" FROM "videoCaption" WHERE "fileUrl" ~ :fromRegexp AND "storage" = :storage`
     ]
 
     let hasResults = false
@@ -73,7 +74,8 @@ async function run () {
       `UPDATE "videoStreamingPlaylist" SET "playlistUrl" = regexp_replace("playlistUrl", :fromRegexp, :to) WHERE "storage" = :storage`,
       `UPDATE "videoStreamingPlaylist" SET "segmentsSha256Url" = regexp_replace("segmentsSha256Url", :fromRegexp, :to) WHERE "storage" = :storage`,
       `UPDATE "userExport" SET "fileUrl" = regexp_replace("fileUrl", :fromRegexp, :to) WHERE "storage" = :storage`,
-      `UPDATE "videoSource" SET "fileUrl" = regexp_replace("fileUrl", :fromRegexp, :to) WHERE "storage" = :storage`
+      `UPDATE "videoSource" SET "fileUrl" = regexp_replace("fileUrl", :fromRegexp, :to) WHERE "storage" = :storage`,
+      `UPDATE "videoCaption" SET "fileUrl" = regexp_replace("fileUrl", :fromRegexp, :to) WHERE "storage" = :storage`
     ]
 
     for (const query of queries) {

@@ -25,7 +25,7 @@ import {
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import cors from 'cors'
 import express from 'express'
-import { DOWNLOAD_PATHS } from '../initializers/constants.js'
+import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware, buildRateLimiter, optionalAuthenticate,
   originalVideoFileDownloadValidator,
@@ -68,7 +68,7 @@ const downloadGenerateRateLimiter = buildRateLimiter({
 })
 
 downloadRouter.use(
-  DOWNLOAD_PATHS.GENERATE_VIDEO + ':id',
+  [ DOWNLOAD_PATHS.GENERATE_VIDEO + ':id.m4a', DOWNLOAD_PATHS.GENERATE_VIDEO + ':id.mp4', DOWNLOAD_PATHS.GENERATE_VIDEO + ':id' ],
   downloadGenerateRateLimiter,
   optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
@@ -251,8 +251,14 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
     ? '.m4a'
     : maxResolutionFile.extname
 
-  const downloadFilename = buildDownloadFilename({ video, extname })
-  res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
+  // If there is the extension, we want to simulate a "raw file" and so not send the content disposition header
+  const urlPath = new URL(req.originalUrl, WEBSERVER.URL).pathname
+  if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
+    const downloadFilename = buildDownloadFilename({ video, extname })
+    res.setHeader('Content-disposition', `attachment; filename="${encodeURI(downloadFilename)}`)
+  }
+
+  res.type(extname)
 
   await muxToMergeVideoFiles({ video, videoFiles, output: res })
 }

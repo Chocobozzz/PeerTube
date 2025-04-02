@@ -11,7 +11,7 @@ import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, V
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-options.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
+import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -303,8 +303,10 @@ export async function muxToMergeVideoFiles (options: {
 
     logger.info(`Muxing files for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
 
+    const ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
+
     try {
-      await new FFmpegContainer(getFFmpegCommandWrapperOptions('vod')).mergeInputs({
+      await ffmpegContainer.mergeInputs({
         inputs,
         output,
         logError: false,
@@ -324,12 +326,23 @@ export async function muxToMergeVideoFiles (options: {
 
       logger.warn(`Cannot mux files of video ${video.url}`, { err, inputs: inputsToLog, ...lTags(video.uuid) })
 
-      throw err
-    }
+      if (err.inputStreamError) {
+        err.inputStreamError = buildRequestError(err.inputStreamError)
+      }
 
+      throw err
+    } finally {
+      ffmpegContainer.forceKill()
+    }
   } finally {
     for (const destination of tmpDestinations) {
       await remove(destination)
+    }
+
+    for (const input of inputs) {
+      if (input instanceof Readable) {
+        if (!input.destroyed) input.destroy()
+      }
     }
   }
 }
@@ -338,7 +351,6 @@ async function buildMuxInput (
   video: MVideo,
   videoFile: MVideoFile
 ): Promise<{ input: Readable, isTmpDestination: false } | { input: string, isTmpDestination: boolean }> {
-
   // ---------------------------------------------------------------------------
   // Remote
   // ---------------------------------------------------------------------------

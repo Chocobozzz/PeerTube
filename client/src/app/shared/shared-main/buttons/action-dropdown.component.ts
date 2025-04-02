@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core'
 import { Params, RouterLink } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
@@ -32,7 +32,6 @@ export type DropdownDirection = 'horizontal' | 'vertical'
   styleUrls: [ './action-dropdown.component.scss' ],
   templateUrl: './action-dropdown.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgIf,
     NgbTooltip,
@@ -46,27 +45,27 @@ export type DropdownDirection = 'horizontal' | 'vertical'
     NgTemplateOutlet
   ]
 })
-
 export class ActionDropdownComponent<T> {
-  @Input() actions: DropdownAction<T>[] | DropdownAction<T>[][] = []
-  @Input() entry: T
+  readonly actions = input<DropdownAction<T>[] | DropdownAction<T>[][]>([])
+  readonly entry = input<T>(undefined)
 
-  @Input() placement = 'bottom-left auto'
-  @Input() container: null | 'body'
+  readonly placement = input('bottom-left auto')
+  readonly container = input<null | 'body'>(undefined)
 
-  @Input() buttonSize: DropdownButtonSize = 'normal'
-  @Input() buttonDirection: DropdownDirection = 'horizontal'
-  @Input() buttonStyled = true
+  readonly buttonSize = input<DropdownButtonSize>('normal')
+  readonly buttonDirection = input<DropdownDirection>('horizontal')
+  readonly buttonStyled = input(true)
 
-  @Input() label: string
-  @Input() theme: DropdownTheme = 'secondary'
+  readonly label = input<string>(undefined)
+  readonly theme = input<DropdownTheme>('secondary')
 
-  @Output() openChange = new EventEmitter<boolean>()
+  readonly openChange = output<boolean>()
 
   getActions (): DropdownAction<T>[][] {
-    if (this.actions.length !== 0 && Array.isArray(this.actions[0])) return this.actions as DropdownAction<T>[][]
+    const actions = this.actions()
+    if (actions.length !== 0 && Array.isArray(actions[0])) return actions as DropdownAction<T>[][]
 
-    return [ this.actions as DropdownAction<T>[] ]
+    return [ actions as DropdownAction<T>[] ]
   }
 
   getQueryParams (action: DropdownAction<T>, entry: T) {

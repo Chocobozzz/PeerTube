@@ -1,6 +1,6 @@
+import { Injectable, inject } from '@angular/core'
+import { ActivatedRoute, ActivatedRouteSnapshot, Event, NavigationEnd, Params, Router, Scroll } from '@angular/router'
 import { filter } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
-import { ActivatedRoute, ActivatedRouteSnapshot, Event, NavigationEnd, Router, Scroll } from '@angular/router'
 import { ServerService } from '../server'
 
 export const enum RouterSetting {
@@ -11,13 +11,11 @@ export const enum RouterSetting {
 
 @Injectable()
 export class PeerTubeRouterService {
-  static readonly ROUTE_SETTING_NAME = 's'
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private server = inject(ServerService)
 
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private server: ServerService
-  ) { }
+  static readonly ROUTE_SETTING_NAME = 's'
 
   addRouteSetting (toAdd: RouterSetting) {
     if (this.hasRouteSetting(toAdd)) return
@@ -62,17 +60,16 @@ export class PeerTubeRouterService {
     )
   }
 
-  silentNavigate (baseRoute: string[], queryParams: { [id: string]: string }) {
+  silentNavigate (baseRoute: string[], existingParams: Params, relativeTo?: ActivatedRoute) {
     let routeSetting = this.getRouteSetting() ?? RouterSetting.NONE
     routeSetting |= RouterSetting.DISABLE_SCROLL_RESTORE
 
-    queryParams = {
-      ...queryParams,
+    const queryParams = {
+      ...existingParams,
 
       [PeerTubeRouterService.ROUTE_SETTING_NAME]: routeSetting
     }
 
-    return this.router.navigate(baseRoute, { queryParams })
+    return this.router.navigate(baseRoute, { queryParams, relativeTo })
   }
-
 }

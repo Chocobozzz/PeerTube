@@ -1,12 +1,12 @@
 <div class="form-group">
 
-  <div *ngIf="originalVideoFile" class="peertube-radio-container">
+  <div *ngIf="originalVideoFile()" class="peertube-radio-container">
     <input type="radio" name="video-file" id="original-file" [(ngModel)]="videoFileChosen" value="file-original">
 
     <label for="original-file">
       <strong i18n>Original file</strong>
 
-      <span class="muted">{{ originalVideoFile.size | bytes: 1 }} | {{ originalVideoFile.width }}x{{ originalVideoFile.height }}</span>
+      <span class="muted">{{ originalVideoFile().size | bytes: 1 }} | {{ originalVideoFile().width }}x{{ originalVideoFile().height }}</span>
 
       <my-global-icon i18n-ngbTooltip ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
     </label>

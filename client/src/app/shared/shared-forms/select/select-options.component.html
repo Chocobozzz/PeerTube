@@ -1,24 +1,24 @@
 <p-dropdown
-  [inputId]="inputId"
+  [inputId]="inputId()"
 
-  [options]="items"
+  [options]="items()"
 
   [(ngModel)]="selectedId"
   (ngModelChange)="onModelChange()"
 
   optionValue="id"
 
-  [showClear]="clearable"
+  [showClear]="clearable()"
 
-  [filter]="filter"
+  [filter]="filter()"
   filterBy="label"
 
   i18n-filterPlaceholder filterPlaceholder="Search"
   i18n-emptyFilterMessage emptyFilterMessage="No results found"
   i18n-emptyMessage emptyMessage="No items available"
 
-  [virtualScroll]="virtualScroll"
-  [virtualScrollItemSize]="virtualScrollItemSize"
+  [virtualScroll]="virtualScroll()"
+  [virtualScrollItemSize]="virtualScrollItemSize()"
 >
   <ng-template #itemTemplate let-item let-description="description">
     @if (customItemTemplate) {

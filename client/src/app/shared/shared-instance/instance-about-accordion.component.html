@@ -1,9 +1,9 @@
-<h2 *ngIf="displayInstanceName" class="instance-name">{{ about?.instance.name }}</h2>
+<h2 *ngIf="displayInstanceName()" class="instance-name">{{ about?.instance.name }}</h2>
 
-<div *ngIf="displayInstanceShortDescription" class="instance-short-description ellipsis-multiline-3">{{ about?.instance.shortDescription }}</div>
+<div *ngIf="displayInstanceShortDescription()" class="instance-short-description ellipsis-multiline-3">{{ about?.instance.shortDescription }}</div>
 
 <div ngbAccordion #accordion="ngbAccordion" [closeOthers]="true">
-  <div ngbAccordionItem="instance-features" *ngIf="panels.features">
+  <div ngbAccordionItem="instance-features" *ngIf="panels().features">
     <div ngbAccordionHeader>
       <button ngbAccordionButton>
         <my-global-icon iconName="playlists"></my-global-icon>

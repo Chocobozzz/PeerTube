@@ -1,21 +1,21 @@
 <div *ngIf="mobileMsg" class="mobile-msg">
   <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
 
-  <a class="peertube-button-link secondary-button me-3" [href]="mobileAppUrl">Open</a>
+  <a class="peertube-button-link secondary-button me-3" [href]="androidAppUrl || iosAppUrl" (click)="onOpenClientClick()">Open</a>
 
   <button class="border-0 p-0" title="Close this message" i18n-title (click)="hideMobileMsg()">
     <my-global-icon iconName="cross"></my-global-icon>
   </button>
 </div>
 
-<div class="root">
+<div class="root" [ngClass]="{ 'search-hidden': searchHidden }">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
 
     <span class="icon-logo"></span>
     <span class="instance-name">{{ instanceName }}</span>
   </a>
 
-  <my-search-typeahead [hidden]="!isLoaded()"></my-search-typeahead>
+  <my-search-typeahead *ngIf="!searchHidden" [hidden]="!isLoaded()"></my-search-typeahead>
 
   <div class="d-flex align-items-center buttons-container" [hidden]="!isLoaded()">
     @if (!loggedIn) {

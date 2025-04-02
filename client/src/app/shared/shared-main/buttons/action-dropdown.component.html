@@ -1,17 +1,17 @@
 <div
-  *ngIf="areActionsDisplayed(actions, entry)" class="dropdown-root"
-  ngbDropdown (openChange)="openChange.emit($event)" [placement]="placement" [container]="container"
+  *ngIf="areActionsDisplayed(actions(), entry())" class="dropdown-root"
+  ngbDropdown (openChange)="openChange.emit($event)" [placement]="placement()" [container]="container()"
 >
   <button
     class="action-button peertube-button border-0"
-    [ngClass]="{ 'icon-only': !label, 'peertube-button-small': buttonSize === 'small', 'secondary-button': buttonStyled && theme === 'secondary', 'primary-button': buttonStyled && theme === 'primary' }"
+    [ngClass]="{ 'icon-only': !label(), 'peertube-button-small': buttonSize() === 'small', 'secondary-button': buttonStyled() && theme() === 'secondary', 'primary-button': buttonStyled() && theme() === 'primary' }"
     ngbDropdownToggle aria-label="Open actions" i18n-aria-label
   >
-    @if (label) {
-      <span class="dropdown-toggle">{{ label }}</span>
-    } @else if (buttonDirection === 'horizontal') {
+    @if (label()) {
+      <span class="dropdown-toggle">{{ label() }}</span>
+    } @else if (buttonDirection() === 'horizontal') {
       <my-global-icon class="more-icon" iconName="more-horizontal"></my-global-icon>
-    } @else if (buttonDirection === 'vertical') {
+    } @else if (buttonDirection() === 'vertical') {
       <my-global-icon class="more-icon" iconName="more-vertical"></my-global-icon>
     }
   </button>
@@ -20,7 +20,7 @@
     <ng-container *ngFor="let actions of getActions()">
 
       <ng-container *ngFor="let action of actions">
-        <div [ngClass]="action.class" *ngIf="isBlockDisplayed(actions, action, entry)">
+        <div [ngClass]="action.class" *ngIf="isBlockDisplayed(actions, action, entry())">
 
           <ng-template #templateActionLabel let-action>
             <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
@@ -44,7 +44,7 @@
             @if (!action.isHeader) {
               <a
                 [ngClass]="{ 'with-icon': !!action.iconName }"
-                class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [queryParams]="getQueryParams(action, entry)" [title]="action.title || ''"
+                class="dropdown-item"  [routerLink]="action.linkBuilder(entry())" [queryParams]="getQueryParams(action, entry())" [title]="action.title || ''"
               >
                 <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
               </a>
@@ -54,11 +54,11 @@
               <span
                 [ngClass]="{ 'with-icon': !!action.iconName }"
                 class="custom-action dropdown-item" tabindex="0" role="button" [title]="action.title || ''"
-                (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
+                (click)="action.handler(entry())" (keyup.enter)="action.handler(entry())"
               >
                 <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
               </span>
-            } @else if (areActionsDisplayed(actions, entry)) {
+            } @else if (areActionsDisplayed(actions, entry())) {
               <h6 [ngClass]="{ 'with-icon': !!action.iconName }" class="dropdown-header" [title]="action.title || ''">
                 <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
               </h6>
@@ -67,7 +67,7 @@
         </div>
       </ng-container>
 
-      <div *ngIf="areActionsDisplayed(actions, entry)" class="dropdown-divider"></div>
+      <div *ngIf="areActionsDisplayed(actions, entry())" class="dropdown-divider"></div>
 
     </ng-container>
   </div>

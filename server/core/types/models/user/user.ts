@@ -30,45 +30,45 @@ export type MUserId = Pick<UserModel, 'id'>
 // With account
 
 export type MUserAccountId =
-  MUser &
-  Use<'Account', MAccountId>
+  & MUser
+  & Use<'Account', MAccountId>
 
 export type MUserAccountUrl =
-  MUser &
-  Use<'Account', MAccountUrl & MAccountIdActorId>
+  & MUser
+  & Use<'Account', MAccountUrl & MAccountIdActorId>
 
 export type MUserAccount =
-  MUser &
-  Use<'Account', MAccount>
+  & MUser
+  & Use<'Account', MAccount>
 
 export type MUserAccountDefault =
-  MUser &
-  Use<'Account', MAccountDefault>
+  & MUser
+  & Use<'Account', MAccountDefault>
 
 // With channel
 
 export type MUserNotifSettingChannelDefault =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting> &
-  Use<'Account', MAccountDefaultChannelDefault>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
+  & Use<'Account', MAccountDefaultChannelDefault>
 
 // With notification settings
 
 export type MUserWithNotificationSetting =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
 
 export type MUserNotifSettingAccount =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting> &
-  Use<'Account', MAccount>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
+  & Use<'Account', MAccount>
 
 // Default scope
 
 export type MUserDefault =
-  MUser &
-  Use<'NotificationSetting', MNotificationSetting> &
-  Use<'Account', MAccountDefault>
+  & MUser
+  & Use<'NotificationSetting', MNotificationSetting>
+  & Use<'Account', MAccountDefault>
 
 // ############################################################################
 
@@ -76,14 +76,14 @@ export type MUserDefault =
 
 type MAccountWithChannels = MAccountFormattable & PickWithOpt<AccountModel, 'VideoChannels', MChannelFormattable[]>
 type MAccountWithChannelsAndSpecialPlaylists =
-  MAccountWithChannels &
-  PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
+  & MAccountWithChannels
+  & PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
 
 export type MUserFormattable =
-  MUserQuotaUsed &
-  Use<'Account', MAccountWithChannels> &
-  PickWithOpt<UserModel, 'NotificationSetting', MNotificationSettingFormattable>
+  & MUserQuotaUsed
+  & Use<'Account', MAccountWithChannels>
+  & PickWithOpt<UserModel, 'NotificationSetting', MNotificationSettingFormattable>
 
 export type MMyUserFormattable =
-  MUserFormattable &
-  Use<'Account', MAccountWithChannelsAndSpecialPlaylists>
+  & MUserFormattable
+  & Use<'Account', MAccountWithChannelsAndSpecialPlaylists>

@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, Input, ViewChild } from '@angular/core'
+import { Component, input, viewChild } from '@angular/core'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { Syndication } from './syndication.model'
@@ -8,16 +8,15 @@ import { Syndication } from './syndication.model'
   selector: 'my-feed',
   styleUrls: [ './feed.component.scss' ],
   templateUrl: './feed.component.html',
-  standalone: true,
   imports: [ NgIf, NgbPopover, GlobalIconComponent, NgFor ]
 })
 export class FeedComponent {
-  @ViewChild('popover') popover: NgbPopover
+  readonly popover = viewChild<NgbPopover>('popover')
 
-  @Input() syndicationItems: Syndication[]
+  readonly syndicationItems = input<Syndication[]>(undefined)
 
   getTitle () {
-    if (this.popover?.isOpen()) {
+    if (this.popover()?.isOpen()) {
       return $localize`Close syndication dropdown`
     }
 

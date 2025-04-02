@@ -1,12 +1,12 @@
-<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage, 'display-as-row': displayAsRow }">
+<div class="miniature" [ngClass]="{ 'no-videos': playlist().videosLength === 0, 'to-manage': toManage(), 'display-as-row': displayAsRow() }">
   <my-link
-    [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
-    [title]="playlist.description" class="miniature-thumbnail" tabindex="-1"
+    [internalLink]="playlistRouterLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
+    [title]="playlist().description" class="miniature-thumbnail" tabindex="-1"
   >
-    <img alt="" [attr.aria-labelledby]="playlist.displayName" [attr.src]="playlist.thumbnailUrl" />
+    <img alt="" [attr.aria-labelledby]="playlist().displayName" [attr.src]="playlist().thumbnailUrl" />
 
     <div class="miniature-playlist-info-overlay">
-      <ng-container i18n>{playlist.videosLength, plural, =0 {No videos} =1 {1 video} other {{{ playlist.videosLength }} videos}}</ng-container>
+      <ng-container i18n>{playlist().videosLength, plural, =0 {No videos} =1 {1 video} other {{{ playlist().videosLength }} videos}}</ng-container>
     </div>
 
     <div class="play-overlay">
@@ -16,22 +16,26 @@
 
   <div class="miniature-info">
     <my-link
-      [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
-      [title]="playlist.description" class="miniature-name" className="ellipsis-multiline-2"
+      [internalLink]="playlistRouterLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
+      [title]="playlist().description" class="miniature-name" className="ellipsis-multiline-2"
     >
-      {{ playlist.displayName }}
+      {{ playlist().displayName }}
     </my-link>
 
-    <a i18n [routerLink]="[ '/c', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
-      {{ playlist.videoChannelBy }}
-    </a>
+    <my-link
+      *ngIf="displayChannel() && playlist().videoChannelBy"
+      class="by"
+      [internalLink]="ownerRouterLink" [href]="ownerHref" [target]="ownerTarget" inheritParentStyle="true"
+    >
+      {{ playlist().videoChannelBy }}
+    </my-link>
 
     <div class="privacy-date">
-      <span class="privacy" *ngIf="displayPrivacy">{{ playlist.privacy.label }}</span>
+      <span class="privacy" *ngIf="displayPrivacy()">{{ playlist().privacy.label }}</span>
 
-      <span i18n class="updated-at">Updated {{ playlist.updatedAt | myFromNow }}</span>
+      <span i18n class="updated-at">Updated {{ playlist().updatedAt | myFromNow }}</span>
     </div>
 
-    <div *ngIf="displayDescription" class="description" [innerHTML]="playlistDescription"></div>
+    <div *ngIf="displayDescription()" class="description" [innerHTML]="playlistDescription"></div>
   </div>
 </div>

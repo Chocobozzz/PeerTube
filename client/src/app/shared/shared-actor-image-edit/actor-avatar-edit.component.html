@@ -1,8 +1,8 @@
 <div class="actor" *ngIf="actor">
   <div class="position-relative me-3">
-    <my-actor-avatar [actor]="actor" [actorType]="actorType" [previewImage]="preview" size="100"></my-actor-avatar>
+    <my-actor-avatar [actor]="actor" [actorType]="actorType()" [previewImage]="preview" size="100"></my-actor-avatar>
 
-    @if (editable) {
+    @if (editable()) {
       @if (hasAvatar()) {
         <div ngbDropdown placement="right">
           <button type="button" class="actor-img-edit-button button-file primary-button" i18n-arialLabel aria-label="Change your avatar" ngbDropdownToggle>
@@ -13,7 +13,7 @@
             <div class="dropdown-item dropdown-file button-focus-within" [ngbTooltip]="avatarFormat">
               <my-global-icon iconName="upload"></my-global-icon>
               <label for="avatarfile" i18n>Upload a new avatar</label>
-              <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
+              <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>
             </div>
 
             <button type="button" class="dropdown-item" (click)="deleteAvatar()" (key.enter)="deleteAvatar()">
@@ -26,15 +26,15 @@
         <div class="actor-img-edit-button button-file primary-button button-focus-within" [ngbTooltip]="avatarFormat" placement="right" container="body">
           <my-global-icon iconName="upload"></my-global-icon>
           <label class="visually-hidden" for="avatarfile" i18n>Upload a new avatar</label>
-          <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
+          <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>
         </div>
       }
     }
   </div>
 
   <div class="actor-info">
-    <div *ngIf="displayName" class="actor-info-display-name">{{ displayName }}</div>
-    <div *ngIf="displayUsername && username" class="actor-info-username">{{ username }}</div>
-    <div *ngIf="subscribers" i18n class="actor-info-followers">{{ subscribers }} subscribers</div>
+    <div *ngIf="displayName()" class="actor-info-display-name">{{ displayName() }}</div>
+    <div *ngIf="displayUsername() && username()" class="actor-info-username">{{ username() }}</div>
+    <div *ngIf="subscribers()" i18n class="actor-info-followers">{{ subscribers() }} subscribers</div>
   </div>
 </div>

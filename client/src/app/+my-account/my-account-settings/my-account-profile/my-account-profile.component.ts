@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, inject, model } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -13,21 +13,16 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
   selector: 'my-account-profile',
   templateUrl: './my-account-profile.component.html',
   styleUrls: [ './my-account-profile.component.scss' ],
-  standalone: true,
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, AlertComponent, HelpComponent, MarkdownTextareaComponent ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
-  @Input() user: User = null
+  protected formReactiveService = inject(FormReactiveService)
+  private notifier = inject(Notifier)
+  private userService = inject(UserService)
+
+  readonly user = model<User>()
 
   error: string = null
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private notifier: Notifier,
-    private userService: UserService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -38,9 +33,9 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
     this.form.controls['username'].disable()
 
     this.form.patchValue({
-      'username': this.user.username,
-      'display-name': this.user.account.displayName,
-      'description': this.user.account.description
+      'username': this.user().username,
+      'display-name': this.user().account.displayName,
+      'description': this.user().account.description
     })
   }
 
@@ -55,15 +50,20 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
     this.error = null
 
     this.userService.updateMyProfile({ displayName, description })
-    .subscribe({
-      next: () => {
-        this.user.account.displayName = displayName
-        this.user.account.description = description
+      .subscribe({
+        next: () => {
+          this.user.update(u => {
+            // FIXME: Use immutability
+            u.account.displayName = displayName
+            u.account.description = description
 
-        this.notifier.success($localize`Profile updated.`)
-      },
+            return u
+          })
 
-      error: err => this.error = err.message
-    })
+          this.notifier.success($localize`Profile updated.`)
+        },
+
+        error: err => this.error = err.message
+      })
   }
 }

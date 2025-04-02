@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, forwardRef, Input, OnChanges } from '@angular/core'
+import { Component, forwardRef, OnChanges, input } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { DropdownModule } from 'primeng/dropdown'
@@ -10,7 +10,7 @@ import { SelectOptionsComponent } from './select-options.component'
   selector: 'my-select-channel',
   template: `
   <my-select-options
-    [inputId]="inputId"
+    [inputId]="inputId()"
 
     [items]="channels"
 
@@ -27,18 +27,17 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ DropdownModule, FormsModule, CommonModule, SelectOptionsComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
-  @Input({ required: true }) inputId: string
-  @Input() items: SelectChannelItem[] = []
+  readonly inputId = input.required<string>()
+  readonly items = input<SelectChannelItem[]>([])
 
   channels: SelectOptionsItem[]
   selectedId: number
 
   ngOnChanges () {
-    this.channels = this.items.map(c => {
+    this.channels = this.items().map(c => {
       const avatarPath = c.avatarPath
         ? c.avatarPath
         : VideoChannel.GET_DEFAULT_AVATAR_URL(21)
@@ -47,7 +46,9 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
     })
   }
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (id: number | string) {
     this.selectedId = typeof id === 'string'

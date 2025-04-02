@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ComponentPagination, hasMoreItems, HooksService, resetCurrentPage, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -13,10 +13,14 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
   selector: 'my-video-channel-playlists',
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ],
-  standalone: true,
   imports: [ NgIf, InfiniteScrollerDirective, NgFor, VideoPlaylistMiniatureComponent ]
 })
 export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {
+  private videoPlaylistService = inject(VideoPlaylistService)
+  private videoChannelService = inject(VideoChannelService)
+  private screenService = inject(ScreenService)
+  private hooks = inject(HooksService)
+
   videoPlaylists: VideoPlaylist[] = []
 
   pagination: ComponentPagination = {
@@ -29,13 +33,6 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
 
   private videoChannelSub: Subscription
   private videoChannel: VideoChannel
-
-  constructor (
-    private videoPlaylistService: VideoPlaylistService,
-    private videoChannelService: VideoChannelService,
-    private screenService: ScreenService,
-    private hooks: HooksService
-  ) {}
 
   ngOnInit () {
     // Parent get the video channel for us

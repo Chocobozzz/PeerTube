@@ -14,13 +14,13 @@ export type MServerHost = Pick<MServer, 'host'>
 export type MServerRedundancyAllowed = Pick<MServer, 'redundancyAllowed'>
 
 export type MServerHostBlocks =
-  MServerHost &
-  Use<'BlockedBy', MAccountBlocklistId[]>
+  & MServerHost
+  & Use<'BlockedBy', MAccountBlocklistId[]>
 
 // ############################################################################
 
 // Format for API or AP object
 
 export type MServerFormattable =
-  FunctionProperties<MServer> &
-  Pick<MServer, 'host'>
+  & FunctionProperties<MServer>
+  & Pick<MServer, 'host'>

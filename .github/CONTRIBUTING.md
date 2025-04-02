@@ -84,7 +84,7 @@ yarn install --pure-lockfile
 
 Note that development is done on the `develop` branch. If you want to hack on
 PeerTube, you should switch to that branch. Also note that you have to repeat
-the `yarn install --pure-lockfile` command.
+the `npm run install-node-dependencies` command.
 
 When you create a new branch you should also tell to use your repo for upload
 not default one. To do just do:

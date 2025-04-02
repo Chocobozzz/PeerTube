@@ -61,19 +61,14 @@
       <ng-container *ngIf="abuse.video">
 
         <td *ngIf="!abuse.video.deleted">
-          <my-video-cell [video]="abuse.video">
-            <span image>
-              <span
-                class="table-video-image-label" *ngIf="abuse.count > 1"
-                i18n-title title="This video has been reported multiple times."
-              >
-                {{ abuse.nth }}/{{ abuse.count }}
+          <my-video-cell [video]="abuse.video" size="small">
+            <div>
+              <span *ngIf="abuse.count > 1" class="pt-badge badge-secondary me-1" i18n-title title="This video has been reported multiple times" i18n>
+                {abuse.count, plural, =1 {1 abuse} other {{{ abuse.count }} abuses}}
               </span>
-            </span>
 
-            <span name>
-              <my-global-icon *ngIf="abuse.video.blacklisted" iconName="no" i18n-title title="The video was blocked"></my-global-icon>
-            </span>
+              <span *ngIf="abuse.video.blacklisted" class="pt-badge badge-red" i18n-title title="The video is blocked" i18n>Blocked</span>
+            </div>
           </my-video-cell>
         </td>
 
@@ -83,7 +78,7 @@
               <div>
                 {{ abuse.video.name }}
 
-                <span i18n class="fst-italic">(Deleted video)</span>
+                <span i18n class="pt-badge badge-secondary ms-1">Deleted video</span>
               </div>
 
               <div class="video-owner" i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>

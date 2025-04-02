@@ -1,6 +1,6 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 class="modal-title">{{ action }}</h4>
+    <h4 class="modal-title">{{ action() }}</h4>
 
     <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
       <my-global-icon iconName="cross"></my-global-icon>
@@ -13,7 +13,7 @@
         <label i18n for="hosts">1 host (without "http://") per line</label>
 
         <textarea
-          [placeholder]="placeholder" formControlName="hosts" type="text" id="hosts" name="hosts"
+          [placeholder]="placeholder()" formControlName="hosts" type="text" id="hosts" name="hosts"
           class="form-control" [ngClass]="{ 'input-error': formErrors['hosts'] }" ngbAutofocus
         ></textarea>
 
@@ -34,7 +34,7 @@
           (click)="hide()" (key.enter)="hide()"
         >
 
-        <input type="submit" [value]="action" class="peertube-button primary-button" [disabled]="!form.valid" />
+        <input type="submit" [value]="action()" class="peertube-button primary-button" [disabled]="!form.valid" />
       </div>
     </form>
   </div>

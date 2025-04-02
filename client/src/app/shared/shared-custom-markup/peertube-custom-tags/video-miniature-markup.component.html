@@ -1,6 +1,6 @@
 <my-video-miniature
-  *ngIf="video"
-  [video]="video" [user]="getUser()" [displayAsRow]="false"
+  *ngIf="video()"
+  [video]="video()" [user]="getUser()" [displayAsRow]="false"
   [displayVideoActions]="true" [displayOptions]="displayOptions"
 >
 </my-video-miniature>

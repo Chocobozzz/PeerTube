@@ -1,12 +1,9 @@
 {
   "name": "@peertube/peertube-runner",
-  "version": "0.0.23",
+  "version": "0.1.0",
   "type": "module",
   "main": "dist/peertube-runner.js",
   "bin": "dist/peertube-runner.js",
-  "engines": {
-    "node": ">=16.x"
-  },
   "license": "AGPL-3.0",
   "dependencies": {},
   "devDependencies": {

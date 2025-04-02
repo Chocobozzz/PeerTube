@@ -1,21 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
 import { CustomMarkupContainerComponent } from '../shared/shared-custom-markup/custom-markup-container.component'
 
 @Component({
   templateUrl: './home.component.html',
-  standalone: true,
   imports: [ CustomMarkupContainerComponent ]
 })
-
 export class HomeComponent implements OnInit {
-  @ViewChild('contentWrapper') contentWrapper: ElementRef<HTMLInputElement>
+  private customPageService = inject(CustomPageService)
+
+  readonly contentWrapper = viewChild<ElementRef<HTMLInputElement>>('contentWrapper')
 
   homepageContent: string
-
-  constructor (
-    private customPageService: CustomPageService
-  ) { }
 
   ngOnInit () {
     this.customPageService.getInstanceHomepage()

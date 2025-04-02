@@ -82,7 +82,7 @@ declare module 'express' {
   }
 
   // Our custom UploadXFile object using our custom metadata
-  export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
+  export type CustomUploadXFile<T extends Metadata> = UploadXFile & { metadata: T }
 
   export type EnhancedUploadXFile = CustomUploadXFile<Metadata> & {
     duration?: number // If video file

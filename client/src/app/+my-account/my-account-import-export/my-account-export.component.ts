@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, inject, input, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -16,13 +16,17 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-export',
   templateUrl: './my-account-export.component.html',
   styleUrls: [ './my-account-export.component.scss' ],
-  standalone: true,
   imports: [ NgIf, NgFor, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, PTDatePipe, BytesPipe, AlertComponent ]
 })
 export class MyAccountExportComponent implements OnInit {
-  @ViewChild('exportModal', { static: true }) exportModal: NgbModal
+  private authService = inject(AuthService)
+  private server = inject(ServerService)
+  private userImportExportService = inject(UserImportExportService)
+  private modalService = inject(NgbModal)
 
-  @Input() videoQuotaUsed: number
+  readonly exportModal = viewChild<NgbModal>('exportModal')
+
+  readonly videoQuotaUsed = input<number>(undefined)
 
   userExports: UserExport[] = []
 
@@ -34,15 +38,8 @@ export class MyAccountExportComponent implements OnInit {
   private exportModalOpened: NgbModalRef
   private requestingArchive = false
 
-  constructor (
-    private authService: AuthService,
-    private server: ServerService,
-    private userImportExportService: UserImportExportService,
-    private modalService: NgbModal
-  ) {}
-
   ngOnInit () {
-    this.archiveWeightEstimation = this.videoQuotaUsed
+    this.archiveWeightEstimation = this.videoQuotaUsed()
 
     this.reloadUserExports()
   }
@@ -71,7 +68,7 @@ export class MyAccountExportComponent implements OnInit {
     this.exportWithVideosFiles = false
     this.errorInModal = undefined
 
-    this.exportModalOpened = this.modalService.open(this.exportModal, { centered: true })
+    this.exportModalOpened = this.modalService.open(this.exportModal(), { centered: true })
   }
 
   requestNewArchive () {
@@ -106,8 +103,9 @@ export class MyAccountExportComponent implements OnInit {
         const error = err.body as PeerTubeProblemDocument
 
         if (error.code === ServerErrorCode.MAX_USER_VIDEO_QUOTA_EXCEEDED_FOR_USER_EXPORT) {
-          // eslint-disable-next-line max-len
-          this.errorInModal = $localize`Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.`
+          this.errorInModal =
+            // eslint-disable-next-line max-len
+            $localize`Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.`
           return
         }
 

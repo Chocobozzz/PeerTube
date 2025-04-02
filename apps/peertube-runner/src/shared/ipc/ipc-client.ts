@@ -1,8 +1,8 @@
+import { Client as NetIPC } from '@peertube/net-ipc'
 import CliTable3 from 'cli-table3'
 import { ensureDir } from 'fs-extra/esm'
-import { Client as NetIPC } from '@peertube/net-ipc'
 import { ConfigManager } from '../config-manager.js'
-import { IPCResponse, IPCResponseData, IPCRequest } from './shared/index.js'
+import { IPCRequest, IPCResponse, IPCResponseListJobs, IPCResponseListRegistered } from './shared/index.js'
 
 export class IPCClient {
   private netIPC: NetIPC
@@ -65,7 +65,7 @@ export class IPCClient {
       type: 'list-registered'
     }
 
-    const { success, error, data } = await this.netIPC.request(req) as IPCResponse<IPCResponseData>
+    const { success, error, data } = await this.netIPC.request(req) as IPCResponse<IPCResponseListRegistered>
     if (!success) {
       console.error('Could not list registered PeerTube instances', error)
       return
@@ -79,6 +79,49 @@ export class IPCClient {
       table.push([ server.url, server.runnerName, server.runnerDescription ])
     }
 
+    console.log(table.toString())
+  }
+
+  async askListJobs (options: {
+    includePayload: boolean
+  }) {
+    const req: IPCRequest = {
+      type: 'list-jobs'
+    }
+
+    const { success, error, data } = await this.netIPC.request(req) as IPCResponse<IPCResponseListJobs>
+    if (!success) {
+      console.error('Could not list jobs', error)
+      return
+    }
+
+    const head = [ 'instance', 'type', 'started', 'progress' ]
+    if (options.includePayload) head.push('payload')
+
+    const table = new CliTable3({
+      head,
+      wordWrap: true,
+      wrapOnWordBoundary: false
+    })
+
+    for (const { serverUrl, job } of data.processingJobs) {
+      const row = [
+        serverUrl,
+        job.type,
+
+        job.startedAt?.toLocaleString(),
+
+        job.progress !== undefined && job.progress !== null
+          ? `${job.progress}%`
+          : ''
+      ]
+
+      if (options.includePayload) row.push(JSON.stringify(job.payload, undefined, 2))
+
+      table.push(row)
+    }
+
+    console.log(`Processing ${data.processingJobs.length}/${data.concurrency} jobs`)
     console.log(table.toString())
   }
 

@@ -46,10 +46,13 @@
       </td>
 
       <td>
-        <my-video-cell [video]="videoBlock.video">
-          <span name>
-            <my-global-icon *ngIf="videoBlock.type === 2" i18n-title title="The video was blocked due to automatic blocking of new videos" iconName="robot"></my-global-icon>
-          </span>
+        <my-video-cell [video]="videoBlock.video" size="small">
+          <div>
+            <span
+              *ngIf="videoBlock.type === 2"
+              i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info" i18n
+            >Auto block</span>
+          </div>
         </my-video-cell>
       </td>
 

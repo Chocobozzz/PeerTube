@@ -10,10 +10,10 @@ type Use<K extends keyof LocalVideoViewerModel, M> = PickWith<LocalVideoViewerMo
 export type MLocalVideoViewer = Omit<LocalVideoViewerModel, 'Video'>
 
 export type MLocalVideoViewerVideo =
-  MLocalVideoViewer &
-  Use<'Video', MVideo>
+  & MLocalVideoViewer
+  & Use<'Video', MVideo>
 
 export type MLocalVideoViewerWithWatchSections =
-  MLocalVideoViewer &
-  Use<'Video', MVideo> &
-  Use<'WatchSections', MLocalVideoViewerWatchSection[]>
+  & MLocalVideoViewer
+  & Use<'Video', MVideo>
+  & Use<'WatchSections', MLocalVideoViewerWatchSection[]>

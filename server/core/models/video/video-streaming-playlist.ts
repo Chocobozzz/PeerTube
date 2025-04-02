@@ -5,7 +5,7 @@ import {
   type FileStorageType,
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
-import { sha1 } from '@peertube/peertube-node-utils'
+import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
@@ -141,12 +141,19 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { infoHash: `{${infoHash}}` } }) // Transform infoHash in a PG array
   }
 
-  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: unknown[]) {
+  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: { height: number }[]) {
     const hashes: string[] = []
+
+    const version = Math.abs(P2P_MEDIA_LOADER_PEER_VERSION)
 
     // https://github.com/Novage/p2p-media-loader/blob/master/p2p-media-loader-core/lib/p2p-media-manager.ts#L115
     for (let i = 0; i < files.length; i++) {
-      hashes.push(sha1(`${P2P_MEDIA_LOADER_PEER_VERSION}${playlistUrl}+V${i}`))
+      hashes.push(generateP2PMediaLoaderHash(`v${version}-${playlistUrl}-main-${i}`))
+    }
+
+    // Audio only stream
+    if (files.some(f => f.height === 0)) {
+      hashes.push(generateP2PMediaLoaderHash(`v${version}-${playlistUrl}-secondary-0`))
     }
 
     logger.debug('Assigned P2P Media Loader info hashes', { playlistUrl, hashes })
@@ -154,22 +161,18 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return hashes
   }
 
-  static listByIncorrectPeerVersion () {
-    const query = {
+  static async listByIncorrectPeerVersion () {
+    const rows = await VideoStreamingPlaylistModel.unscoped().findAll({
+      raw: true,
+      attributes: [ 'id' ],
       where: {
         p2pMediaLoaderPeerVersion: {
           [Op.ne]: P2P_MEDIA_LOADER_PEER_VERSION
         }
-      },
-      include: [
-        {
-          model: VideoModel.unscoped(),
-          required: true
-        }
-      ]
-    }
+      }
+    })
 
-    return VideoStreamingPlaylistModel.findAll(query)
+    return rows.map(r => r.id)
   }
 
   static loadWithVideoAndFiles (id: number) {
@@ -188,14 +191,15 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return VideoStreamingPlaylistModel.findByPk<MStreamingPlaylistFilesVideo>(id, options)
   }
 
-  static loadWithVideo (id: number) {
+  static loadWithVideo (id: number, transaction?: Transaction) {
     const options = {
       include: [
         {
           model: VideoModel.unscoped(),
           required: true
         }
-      ]
+      ],
+      transaction
     }
 
     return VideoStreamingPlaylistModel.findByPk(id, options)
@@ -242,7 +246,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID, storage } })
   }
 
-  assignP2PMediaLoaderInfoHashes (video: MVideo, files: unknown[]) {
+  assignP2PMediaLoaderInfoHashes (video: MVideo, files: { height: number }[]) {
     const masterPlaylistUrl = this.getMasterPlaylistUrl(video)
 
     this.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(masterPlaylistUrl, files)

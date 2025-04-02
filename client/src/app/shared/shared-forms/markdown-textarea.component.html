@@ -1,42 +1,51 @@
-<div class="root" [ngClass]="{ 'maximized': isMaximized }">
+<ng-template #previewContent>
+  <div #previewElement></div>
+  <div [innerHTML]="previewHTML"></div>
+</ng-template>
+
+<div class="root" [ngClass]="{ 'maximized': isMaximized, monospace: monospace() }">
 
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
-    [ngClass]="{ 'input-error': formError }"
+    [ngClass]="{ 'input-error': formError() }"
     [attr.disabled]="disabled || null"
-    [id]="inputId" [name]="inputId" [dir]="dir">
+    [id]="inputId()" [name]="inputId()" [dir]="dir()">
   </textarea>
 
-  <div ngbNav #nav="ngbNav" class="nav-pills nav-preview">
-    <ng-container ngbNavItem *ngIf="truncateTo3Lines">
-      <a ngbNavLink i18n>Truncated preview</a>
+  <div *ngIf="isMaximized" class="preview-maximized muted-2">
+    <ng-container *ngTemplateOutlet="previewContent"></ng-container>
+  </div>
 
-      <ng-template ngbNavContent>
-        <div class="ellipsis-multiline-3" [innerHTML]="previewHTML"></div>
-      </ng-template>
-    </ng-container>
+  <div *ngIf="withPreview()" class="buttons mt-3">
+    <button
+      *ngIf="!isMaximized"
+      type="button" class="peertube-button secondary-button" (click)="previewCollapsed = !previewCollapsed"
+		  [attr.aria-expanded]="!previewCollapsed" [attr.aria-controls]="inputId() + '-collapse'"
+    >
+      <my-global-icon iconName="arrow-down" [ngClass]="{ 'scale-y--1': !previewCollapsed }"></my-global-icon>
 
-    <ng-container ngbNavItem>
-      <a ngbNavLink i18n>Complete preview</a>
-
-      <ng-template ngbNavContent>
-        <div #previewElement></div>
-        <div [innerHTML]="previewHTML"></div>
-      </ng-template>
-    </ng-container>
-
-    <button type="button" (click)="onMaximizeClick()" class="maximize-button border-0 m-3" [disabled]="disabled">
-      @if (isMaximized) {
-        <my-global-icon [ngbTooltip]="maximizeOutText" iconName="exit-fullscreen"></my-global-icon>
-        <span class="visually-hidden">{{ maximizeOutText }}</span>
+      @if (previewCollapsed) {
+        <ng-container i18n>Show preview</ng-container>
       } @else {
-        <my-global-icon [ngbTooltip]="maximizeInText" iconName="fullscreen"></my-global-icon>
-        <span class="visually-hidden">{{ maximizeInText }}</span>
+        <ng-container i18n>Hide preview</ng-container>
+      }
+    </button>
+
+    <button type="button" (click)="onMaximizeClick()" class="maximize-button button-as-link" [disabled]="disabled">
+      @if (isMaximized) {
+        <ng-container i18n>Exit full-screen editor</ng-container>
+      } @else {
+        <ng-container i18n>Full-screen editor</ng-container>
       }
     </button>
   </div>
 
-  <div [ngbNavOutlet]="nav"></div>
-
-  <div *ngIf="!isMaximized && formError" class="form-error" role="alert">{{ formError }}</div>
+  <div
+    *ngIf="!isMaximized" class="preview-collapse mt-3 muted-2"
+    #collapse="ngbCollapse" [(ngbCollapse)]="previewCollapsed" [id]="inputId() + '-collapse'"
+  >
+    <ng-container *ngTemplateOutlet="previewContent"></ng-container>
+  </div>
 </div>
+
+<div *ngIf="!isMaximized && formError()" class="form-error" role="alert">{{ formError() }}</div>

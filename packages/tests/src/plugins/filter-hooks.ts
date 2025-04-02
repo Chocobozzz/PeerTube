@@ -11,6 +11,7 @@ import {
   VideoPrivacy
 } from '@peertube/peertube-models'
 import {
+  ConfigCommand,
   PeerTubeServer,
   PluginsCommand,
   cleanupTests,
@@ -26,6 +27,7 @@ import {
 import { expectEndWith } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '../shared/fixture-urls.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 
 describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]
@@ -33,11 +35,13 @@ describe('Test plugin filter hooks', function () {
   let threadId: number
   let videoPlaylistUUID: string
   let importUserToken: string
+  const emails: object[] = []
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await createMultipleServers(2)
+    const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
+    servers = await createMultipleServers(2, ConfigCommand.getEmailOverrideConfig(emailPort))
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
@@ -931,7 +935,43 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Emails', function () {
+    let server: PeerTubeServer
+    const emailAddress = 'plugin-admin@example.com'
+
+    before(async function () {
+      server = servers[0]
+      await server.users.create({ username: 'plugin-admin', email: emailAddress })
+    })
+
+    it('Should run filter:email.template-path.result', async function () {
+      const preEmailCount = emails.length
+      await server.users.askResetPassword({ email: emailAddress })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(preEmailCount + 1)
+
+      const email = emails[preEmailCount]
+
+      expect(email['html']).to.contain('Custom password reset email')
+    })
+
+    it('Should run filter:email.subject.result', async function () {
+      const preEmailCount = emails.length
+      await server.users.askResetPassword({ email: emailAddress })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(preEmailCount + 1)
+
+      const email = emails[preEmailCount]
+
+      expect(email['subject']).to.contain('Custom subject')
+    })
+  })
+
   after(async function () {
+    MockSmtpServer.Instance.kill()
+
     await cleanupTests(servers)
   })
 })

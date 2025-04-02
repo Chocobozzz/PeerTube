@@ -1,4 +1,4 @@
-import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
+import { addQueryParams, escapeHTML, getDefaultRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
@@ -8,12 +8,11 @@ import express from 'express'
 import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
 import { MEMOIZE_TTL, WEBSERVER } from '../../../initializers/constants.js'
-import { CommonEmbedHtml } from './common-embed-html.js'
+import { buildEmptyEmbedHTML } from './common.js'
 import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class PlaylistHtml {
-
   static async getWatchPlaylistHTML (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
     const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
 
@@ -40,6 +39,7 @@ export class PlaylistHtml {
       addEmbedInfo: true,
       addOG: true,
       addTwitterCard: true,
+      isEmbed: false,
 
       currentQuery: req.query
     })
@@ -56,7 +56,7 @@ export class PlaylistHtml {
     const [ html, playlist ] = await Promise.all([ PageHtml.getEmbedHTML(), playlistPromise ])
 
     if (!playlist || playlist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      return CommonEmbedHtml.buildEmptyEmbedHTML({ html, playlist })
+      return buildEmptyEmbedHTML({ html, playlist })
     }
 
     return this.buildPlaylistHTML({
@@ -65,6 +65,7 @@ export class PlaylistHtml {
       addEmbedInfo: true,
       addOG: false,
       addTwitterCard: false,
+      isEmbed: true,
 
       // TODO: Implement it so we can send query params to oembed service
       currentQuery: {}
@@ -83,9 +84,11 @@ export class PlaylistHtml {
     addTwitterCard: boolean
     addEmbedInfo: boolean
 
+    isEmbed: boolean
+
     currentQuery: Record<string, string>
   }) {
-    const { html, playlist, addEmbedInfo, addOG, addTwitterCard, currentQuery = {} } = options
+    const { html, playlist, addEmbedInfo, addOG, addTwitterCard, isEmbed, currentQuery = {} } = options
     const escapedTruncatedDescription = TagsHtml.buildEscapedTruncatedDescription(playlist.description)
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
@@ -113,7 +116,11 @@ export class PlaylistHtml {
       escapedTitle: escapeHTML(playlist.name),
       escapedTruncatedDescription,
 
-      forbidIndexation: !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
+      forbidIndexation: isEmbed
+        ? playlist.privacy !== VideoPlaylistPrivacy.PUBLIC && playlist.privacy !== VideoPlaylistPrivacy.UNLISTED
+        : !playlist.isOwned() || playlist.privacy !== VideoPlaylistPrivacy.PUBLIC,
+
+      embedIndexation: isEmbed,
 
       image: playlist.hasThumbnail()
         ? { url: playlist.getThumbnailUrl(), width: playlist.Thumbnail.width, height: playlist.Thumbnail.height }
@@ -126,7 +133,9 @@ export class PlaylistHtml {
       twitterCard,
 
       embed,
-      oembedUrl: this.getOEmbedUrl(playlist, currentQuery)
+      oembedUrl: this.getOEmbedUrl(playlist, currentQuery),
+
+      rssFeeds: getDefaultRSSFeeds(WEBSERVER.URL, CONFIG.INSTANCE.NAME)
     }, { playlist })
   }
 

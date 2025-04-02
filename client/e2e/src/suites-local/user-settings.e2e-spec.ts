@@ -1,12 +1,12 @@
 import { AnonymousSettingsPage } from '../po/anonymous-settings.po'
 import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
-import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
 import { go, isMobileDevice, isSafari, waitServerUp } from '../utils'
 
 describe('User settings', () => {
-  let videoUploadPage: VideoUploadPage
+  let videoPublishPage: VideoPublishPage
   let loginPage: LoginPage
   let videoWatchPage: VideoWatchPage
   let myAccountPage: MyAccountPage
@@ -16,7 +16,7 @@ describe('User settings', () => {
     await waitServerUp()
 
     loginPage = new LoginPage(isMobileDevice())
-    videoUploadPage = new VideoUploadPage()
+    videoPublishPage = new VideoPublishPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
     myAccountPage = new MyAccountPage()
     anonymousSettingsPage = new AnonymousSettingsPage()
@@ -42,10 +42,11 @@ describe('User settings', () => {
 
     before(async () => {
       await loginPage.loginAsRootUser()
-      await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo('video.mp4')
-      await videoUploadPage.validSecondUploadStep('video')
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video.mp4')
+      await videoPublishPage.validSecondStep('video')
 
+      await videoPublishPage.clickOnWatch()
       await videoWatchPage.waitWatchVideoName('video')
 
       videoUrl = await browser.getUrl()

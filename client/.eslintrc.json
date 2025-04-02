@@ -163,7 +163,8 @@
         "@typescript-eslint/unbound-method": [
           "error",
           { "ignoreStatic": true }
-        ]
+        ],
+        "import/no-named-default": "off"
       }
     },
     {

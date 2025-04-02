@@ -1,73 +1,99 @@
-import { LinkType } from 'src/types/link.type'
-import { Component, Input, OnInit } from '@angular/core'
-import { VideoPlaylist } from './video-playlist.model'
-import { MarkdownService } from '@app/core'
-import { FromNowPipe } from '../shared-main/date/from-now.pipe'
-import { RouterLink } from '@angular/router'
-import { LinkComponent } from '../shared-main/common/link.component'
 import { NgClass, NgIf } from '@angular/common'
+import { Component, OnInit, inject, input } from '@angular/core'
+import { MarkdownService } from '@app/core'
+import { LinkType } from 'src/types/link.type'
+import { LinkComponent } from '../shared-main/common/link.component'
+import { FromNowPipe } from '../shared-main/date/from-now.pipe'
+import { VideoPlaylist } from './video-playlist.model'
 
 @Component({
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
   templateUrl: './video-playlist-miniature.component.html',
-  standalone: true,
-  imports: [ NgClass, LinkComponent, NgIf, RouterLink, FromNowPipe ]
+  imports: [ NgClass, LinkComponent, NgIf, FromNowPipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {
-  @Input() playlist: VideoPlaylist
+  private markdownService = inject(MarkdownService)
 
-  @Input() toManage = false
+  readonly playlist = input<VideoPlaylist>(undefined)
 
-  @Input() displayChannel = false
-  @Input() displayDescription = false
-  @Input() displayPrivacy = false
-  @Input() displayAsRow = false
+  readonly toManage = input(false)
 
-  @Input() linkType: LinkType = 'internal'
+  readonly displayChannel = input(false)
+  readonly displayDescription = input(false)
+  readonly displayPrivacy = input(false)
+  readonly displayAsRow = input(false)
 
-  routerLink: any
+  readonly linkType = input<LinkType>('internal')
+
+  ownerRouterLink: any
+  ownerHref: string
+  ownerTarget: string
+
+  playlistRouterLink: any
   playlistHref: string
   playlistTarget: string
-  playlistDescription: string
 
-  constructor (
-    private markdownService: MarkdownService
-  ) {}
+  playlistDescription: string
 
   async ngOnInit () {
     this.buildPlaylistUrl()
-    if (this.displayDescription) {
-      this.playlistDescription = await this.markdownService.textMarkdownToHTML({ markdown: this.playlist.description })
+    this.buildOwnerUrl()
+
+    if (this.displayDescription()) {
+      this.playlistDescription = await this.markdownService.textMarkdownToHTML({ markdown: this.playlist().description })
     }
   }
 
   buildPlaylistUrl () {
-    if (this.toManage) {
-      this.routerLink = [ '/my-library/video-playlists', this.playlist.shortUUID ]
+    if (this.toManage()) {
+      this.playlistRouterLink = [ '/my-library/video-playlists', this.playlist().shortUUID ]
       return
     }
 
-    if (this.playlist.videosLength === 0) {
-      this.routerLink = null
+    const playlist = this.playlist()
+    if (playlist.videosLength === 0) {
+      this.playlistRouterLink = null
       return
     }
 
-    if (this.linkType === 'internal' || !this.playlist.url) {
-      this.routerLink = VideoPlaylist.buildWatchUrl(this.playlist)
+    const linkType = this.linkType()
+    if (linkType === 'internal' || !playlist.url) {
+      this.playlistRouterLink = VideoPlaylist.buildWatchUrl(playlist)
       return
     }
 
-    if (this.linkType === 'external') {
-      this.routerLink = null
-      this.playlistHref = this.playlist.url
+    if (linkType === 'external') {
+      this.playlistRouterLink = null
+      this.playlistHref = playlist.url
       this.playlistTarget = '_blank'
       return
     }
 
     // Lazy load
-    this.routerLink = [ '/search/lazy-load-playlist', { url: this.playlist.url } ]
+    this.playlistRouterLink = [ '/search/lazy-load-playlist', { url: playlist.url } ]
+  }
 
+  buildOwnerUrl () {
+    const playlist = this.playlist()
+    const linkType = this.linkType()
+
+    if (!playlist.videoChannel) return
+
+    if (linkType === 'internal' || !playlist.videoChannel.url) {
+      this.ownerRouterLink = `/c/${playlist.videoChannelBy}`
+      return
+    }
+
+    if (linkType === 'external') {
+      this.ownerRouterLink = null
+      this.ownerHref = playlist.videoChannel.url
+      this.ownerTarget = '_blank'
+      return
+    }
+
+    // Lazy load
+    this.ownerRouterLink = [ '/search/lazy-load-channel', { url: playlist.videoChannel.url } ]
     return
   }
 }

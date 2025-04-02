@@ -166,7 +166,12 @@
     $active-bg: pvar(--menu-bg-600),
     $hover-bg: pvar(--menu-bg-550),
     $border-color: pvar(--menu-bg-600)
-  )
+  );
+
+  &.label-xl {
+    font-size: 90%;
+    padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2) !important;
+  }
 }
 
 .more-info-btn,

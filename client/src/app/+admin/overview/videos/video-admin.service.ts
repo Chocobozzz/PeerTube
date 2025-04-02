@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -11,13 +11,10 @@ import { catchError, switchMap } from 'rxjs/operators'
 
 @Injectable()
 export class VideoAdminService {
-
-  constructor (
-    private videoService: VideoService,
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService
-  ) {}
+  private videoService = inject(VideoService)
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
+  private restService = inject(RestService)
 
   getAdminVideos (
     options: CommonVideoParams & { pagination: RestPagination, search?: string }
@@ -28,16 +25,16 @@ export class VideoAdminService {
     params = this.videoService.buildCommonVideosParams({ params, ...omit(options, [ 'search', 'pagination' ]) })
 
     params = params.set('start', pagination.start.toString())
-                   .set('count', pagination.count.toString())
+      .set('count', pagination.count.toString())
 
     params = this.buildAdminParamsFromSearch(search, params)
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
-               .pipe(
-                 switchMap(res => this.videoService.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
+      .pipe(
+        switchMap(res => this.videoService.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   buildAdminInputFilter (): AdvancedInputFilter[] {

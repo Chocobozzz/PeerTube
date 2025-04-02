@@ -1,0 +1,15 @@
+<my-alert type="warning">
+  <div i18n>There are errors in your video settings.</div>
+
+  @for (errorRoot of getAllErrors(); track errorRoot) {
+    <div class="mt-3">
+      <a i18n class="alert-link" [routerLink]="errorRoot.path">{{ errorRoot.page }} page</a>
+
+      <ul class="mb-0">
+        @for (error of errorRoot.errors; track error) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+    </div>
+  }
+</my-alert>

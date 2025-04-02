@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnInit } from '@angular/core'
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, HooksService, Notifier } from '@app/core'
@@ -26,7 +26,6 @@ import { VideoChannelEdit } from './video-channel-edit'
 @Component({
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     FormsModule,
@@ -41,22 +40,18 @@ import { VideoChannelEdit } from './video-channel-edit'
   ]
 })
 export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {
+  protected formReactiveService = inject(FormReactiveService)
+  private authService = inject(AuthService)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
+  private videoChannelService = inject(VideoChannelService)
+  private hooks = inject(HooksService)
+
   error: string
   videoChannel = new VideoChannel({})
 
   private avatar: FormData
   private banner: FormData
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private authService: AuthService,
-    private notifier: Notifier,
-    private router: Router,
-    private videoChannelService: VideoChannelService,
-    private hooks: HooksService
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.buildForm({
@@ -96,7 +91,7 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
 
         error: err => {
           if (err.status === HttpStatusCode.CONFLICT_409) {
-            this.error = $localize`This name already exists on this instance.`
+            this.error = $localize`This name already exists on this platform.`
             return
           }
 

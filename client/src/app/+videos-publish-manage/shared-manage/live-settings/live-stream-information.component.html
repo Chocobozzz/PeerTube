@@ -1,0 +1,14 @@
+<div class="journal" *ngIf="latestLiveSessions.length !== 0">
+  <div class="label" i18n>Latest live sessions</div>
+
+  <div class="journal-session d-flex align-items-center flex-wrap mb-2" *ngFor="let session of latestLiveSessions">
+    <span i18n class="pt-badge badge-success me-2" *ngIf="!getErrorLabel(session)">Success</span>
+    <span class="pt-badge badge-danger me-2" *ngIf="getErrorLabel(session)">{{ getErrorLabel(session) }}</span>
+
+    <span i18n>Started on <strong>{{ session.startDate | ptDate:'medium' }}</strong></span>
+    <span i18n *ngIf="session.endDate">Ended on <strong>{{ session.endDate | ptDate:'medium' }}</strong></span>
+
+    <a i18n *ngIf="session.replayVideo" [routerLink]="getVideoUrl(session.replayVideo)" target="_blank">Go to replay</a>
+    <span i18n *ngIf="isReplayBeingProcessed(session)">Replay is being processed...</span>
+  </div>
+</div>

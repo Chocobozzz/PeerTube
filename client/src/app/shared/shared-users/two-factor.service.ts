@@ -1,15 +1,13 @@
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { RestExtractor, UserService } from '@app/core'
 import { TwoFactorEnableResult } from '@peertube/peertube-models'
 
 @Injectable()
 export class TwoFactorService {
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) { }
+  private authHttp = inject(HttpClient)
+  private restExtractor = inject(RestExtractor)
 
   // ---------------------------------------------------------------------------
 
@@ -22,7 +20,7 @@ export class TwoFactorService {
     const url = UserService.BASE_USERS_URL + userId + '/two-factor/request'
 
     return this.authHttp.post<TwoFactorEnableResult>(url, { currentPassword })
-    .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   confirmTwoFactorRequest (options: {
@@ -35,7 +33,7 @@ export class TwoFactorService {
     const url = UserService.BASE_USERS_URL + userId + '/two-factor/confirm-request'
 
     return this.authHttp.post(url, { requestToken, otpToken })
-    .pipe(catchError(err => this.restExtractor.handleError(err)))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   disableTwoFactor (options: {

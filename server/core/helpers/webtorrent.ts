@@ -1,3 +1,11 @@
+import { promisify2 } from '@peertube/peertube-core-utils'
+import { sha1 } from '@peertube/peertube-node-utils'
+import { WEBSERVER } from '@server/initializers/constants.js'
+import { generateTorrentFileName } from '@server/lib/paths.js'
+import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { MVideoFile } from '@server/types/models/video/video-file.js'
+import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist.js'
+import { MVideo } from '@server/types/models/video/video.js'
 import bencode from 'bencode'
 import createTorrent from 'create-torrent'
 import { createWriteStream } from 'fs'
@@ -7,15 +15,6 @@ import { encode as magnetUriEncode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
 import { pipeline } from 'stream'
-import { promisify2 } from '@peertube/peertube-core-utils'
-import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { WEBSERVER } from '@server/initializers/constants.js'
-import { generateTorrentFileName } from '@server/lib/paths.js'
-import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file.js'
-import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist.js'
-import { MVideo } from '@server/types/models/video/video.js'
-import { sha1 } from '@peertube/peertube-node-utils'
 import { CONFIG } from '../initializers/config.js'
 import { logger } from './logger.js'
 import { generateVideoImportTmpPath } from './utils.js'
@@ -25,7 +24,7 @@ import type { Instance, TorrentFile } from 'webtorrent'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
-async function downloadWebTorrentVideo (target: { uri: string, torrentName?: string }, timeout: number) {
+export async function downloadWebTorrentVideo (target: { uri: string, torrentName?: string }, timeout: number) {
   const id = target.uri || target.torrentName
   let timer
 
@@ -39,7 +38,10 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
   const webtorrent = new (await import('webtorrent')).default({
     natUpnp: false,
     natPmp: false,
-    utp: false
+    utp: false,
+    lsd: false,
+    downloadLimit: 5_000_000,
+    uploadLimit: 5_000_000
   } as any)
 
   return new Promise<string>((res, rej) => {
@@ -99,13 +101,13 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
   })
 }
 
-function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+export function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), videoPath => {
     return createTorrentAndSetInfoHashFromPath(videoOrPlaylist, videoFile, videoPath)
   })
 }
 
-async function createTorrentAndSetInfoHashFromPath (
+export async function createTorrentAndSetInfoHashFromPath (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   videoFile: MVideoFile,
   filePath: string
@@ -139,7 +141,7 @@ async function createTorrentAndSetInfoHashFromPath (
   videoFile.torrentFilename = torrentFilename
 }
 
-async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+export async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
   if (!videoFile.torrentFilename) {
@@ -177,20 +179,17 @@ async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlayli
   videoFile.infoHash = sha1(bencode.encode(decoded.info))
 }
 
-function generateMagnetUri (
+export function generateMagnetUri (
   video: MVideo,
-  videoFile: MVideoFileRedundanciesOpt,
+  videoFile: MVideoFile,
   trackerUrls: string[]
 ) {
   const xs = videoFile.getTorrentUrl()
   const announce = trackerUrls
 
-  let urlList = video.hasPrivateStaticPath()
+  const urlList = video.hasPrivateStaticPath()
     ? []
     : [ videoFile.getFileUrl(video) ]
-
-  const redundancies = videoFile.RedundancyVideos
-  if (isArray(redundancies)) urlList = urlList.concat(redundancies.map(r => r.fileUrl))
 
   const magnetHash = {
     xs,
@@ -204,18 +203,7 @@ function generateMagnetUri (
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  createTorrentPromise,
-  updateTorrentMetadata,
-
-  createTorrentAndSetInfoHash,
-  createTorrentAndSetInfoHashFromPath,
-
-  generateMagnetUri,
-  downloadWebTorrentVideo
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function safeWebtorrentDestroy (

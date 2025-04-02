@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, EventEmitter, forwardRef, Input, numberAttribute, Output } from '@angular/core'
+import { booleanAttribute, Component, forwardRef, input, model, numberAttribute, output } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -14,36 +14,39 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       multi: true
     }
   ],
-  standalone: true,
   imports: [ MultiSelectModule, FormsModule, CommonModule ]
 })
 export class SelectCheckboxComponent implements ControlValueAccessor {
-  @Input({ required: true }) inputId: string
+  readonly inputId = input.required<string>()
 
-  @Input() availableItems: SelectOptionsItem[] = []
-  @Input() selectedItems: string[] = []
+  readonly availableItems = input<SelectOptionsItem[]>([])
+  readonly selectedItems = model<string[]>([])
 
-  @Input() selectableGroup: boolean
-  @Input() selectableGroupAsModel: boolean
-  @Input() placeholder: string
+  readonly selectableGroup = input<boolean>(undefined)
+  readonly selectableGroupAsModel = input<boolean>(undefined)
+  readonly placeholder = input<string>(undefined)
 
-  @Input() selectionLimit: number
+  readonly selectionLimit = input<number>(undefined)
 
-  @Input() selectedItemsLabel: string
+  readonly selectedItemsLabel = input<string>(undefined)
 
-  @Input({ transform: booleanAttribute }) virtualScroll = false
-  @Input({ transform: numberAttribute }) virtualScrollItemSize = 33
+  readonly virtualScroll = input(false, { transform: booleanAttribute })
+  readonly virtualScrollItemSize = input(33, { transform: numberAttribute })
 
-  @Input({ transform: booleanAttribute }) showClear: boolean
+  readonly showClear = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+  readonly showHeader = input<boolean, unknown>(undefined, { transform: booleanAttribute })
+  readonly showToggleAll = input<boolean, unknown>(undefined, { transform: booleanAttribute })
 
-  @Output() panelHide = new EventEmitter()
+  readonly panelHide = output()
 
   disabled = false
 
-  propagateChange = (_: any) => { /* empty */ }
+  propagateChange = (_: any) => {
+    // empty
+  }
 
   writeValue (items: string[]) {
-    this.selectedItems = items
+    this.selectedItems.set(items)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -55,7 +58,7 @@ export class SelectCheckboxComponent implements ControlValueAccessor {
   }
 
   onModelChange () {
-    this.propagateChange(this.selectedItems)
+    this.propagateChange(this.selectedItems())
   }
 
   setDisabledState (isDisabled: boolean) {

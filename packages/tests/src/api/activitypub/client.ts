@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { processViewersStats } from '@tests/shared/views.js'
-import { HttpStatusCode, VideoComment, VideoPlaylistPrivacy, WatchActionObject } from '@peertube/peertube-models'
+import {
+  ActivityPubActor,
+  HttpStatusCode,
+  VideoComment,
+  VideoObject,
+  VideoPlaylistPrivacy,
+  WatchActionObject
+} from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -12,8 +17,10 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
+import { processViewersStats } from '@tests/shared/views.js'
+import { expect } from 'chai'
 
-describe('Test activitypub', function () {
+describe('Test ActivityPub', function () {
   let servers: PeerTubeServer[] = []
   let video: { id: number, uuid: string, shortUUID: string }
   let playlist: { id: number, uuid: string, shortUUID: string }
@@ -21,31 +28,62 @@ describe('Test activitypub', function () {
 
   async function testAccount (path: string) {
     const res = await makeActivityPubGetRequest(servers[0].url, path)
-    const object = res.body
+    const object = res.body as ActivityPubActor
 
     expect(object.type).to.equal('Person')
     expect(object.id).to.equal(servers[0].url + '/accounts/root')
     expect(object.name).to.equal('root')
     expect(object.preferredUsername).to.equal('root')
+
+    // TODO: enable in v8
+    // const htmlURLs = [
+    //   servers[0].url + '/accounts/root',
+    //   servers[0].url + '/a/root',
+    //   servers[0].url + '/a/root/video-channels'
+    // ]
+
+    // for (const htmlURL of htmlURLs) {
+    //   expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
+    // }
   }
 
   async function testChannel (path: string) {
     const res = await makeActivityPubGetRequest(servers[0].url, path)
-    const object = res.body
+    const object = res.body as ActivityPubActor
 
     expect(object.type).to.equal('Group')
     expect(object.id).to.equal(servers[0].url + '/video-channels/root_channel')
     expect(object.name).to.equal('Main root channel')
     expect(object.preferredUsername).to.equal('root_channel')
+
+    // TODO: enable in v8
+    // const htmlURLs = [
+    //   servers[0].url + '/video-channels/root_channel',
+    //   servers[0].url + '/c/root_channel',
+    //   servers[0].url + '/c/root_channel/videos'
+    // ]
+
+    // for (const htmlURL of htmlURLs) {
+    //   expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
+    // }
   }
 
   async function testVideo (path: string) {
     const res = await makeActivityPubGetRequest(servers[0].url, path)
-    const object = res.body
+    const object = res.body as VideoObject
 
     expect(object.type).to.equal('Video')
     expect(object.id).to.equal(servers[0].url + '/videos/watch/' + video.uuid)
     expect(object.name).to.equal('video')
+
+    const htmlURLs = [
+      servers[0].url + '/videos/watch/' + video.uuid,
+      servers[0].url + '/w/' + video.shortUUID
+    ]
+
+    for (const htmlURL of htmlURLs) {
+      expect(object.url.find(u => u.href === htmlURL), htmlURL).to.exist
+    }
   }
 
   async function testComment (path: string) {

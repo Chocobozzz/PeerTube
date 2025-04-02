@@ -1,5 +1,5 @@
 import { SelectChannelItem } from 'src/types/select-options-item.model'
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
@@ -17,28 +17,23 @@ import { VideoOwnershipService } from '@app/shared/shared-main/video/video-owner
   selector: 'my-accept-ownership',
   templateUrl: './my-accept-ownership.component.html',
   styleUrls: [ './my-accept-ownership.component.scss' ],
-  standalone: true,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent, NgIf ]
 })
 export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
-  @Output() accepted = new EventEmitter<void>()
+  protected formReactiveService = inject(FormReactiveService)
+  private videoOwnershipService = inject(VideoOwnershipService)
+  private notifier = inject(Notifier)
+  private authService = inject(AuthService)
+  private modalService = inject(NgbModal)
 
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  readonly accepted = output()
+
+  readonly modal = viewChild<ElementRef>('modal')
 
   videoChangeOwnership: VideoChangeOwnership | undefined = undefined
   videoChannels: SelectChannelItem[]
 
   error: string = null
-
-  constructor (
-    protected formReactiveService: FormReactiveService,
-    private videoOwnershipService: VideoOwnershipService,
-    private notifier: Notifier,
-    private authService: AuthService,
-    private modalService: NgbModal
-  ) {
-    super()
-  }
 
   ngOnInit () {
     this.videoChannels = []
@@ -59,10 +54,12 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
 
     this.videoChangeOwnership = videoChangeOwnership
     this.modalService
-      .open(this.modal, { centered: true })
+      .open(this.modal(), { centered: true })
       .result
       .then(() => this.acceptOwnership())
-      .catch(() => this.videoChangeOwnership = undefined)
+      .catch(() => {
+        this.videoChangeOwnership = undefined
+      })
   }
 
   acceptOwnership () {

@@ -6,7 +6,7 @@ import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-q
 import { createTranscriptionTaskIfNeeded } from './video-captions.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
 
-export async function buildMoveJob (options: {
+export async function buildMoveVideoJob (options: {
   video: MVideoUUID
   previousVideoState: VideoStateType
   type: 'move-to-object-storage' | 'move-to-file-system'
@@ -92,7 +92,7 @@ export async function addVideoJobsAfterCreation (options: {
   ]
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveJob({ video, previousVideoState: undefined, type: 'move-to-object-storage' }))
+    jobs.push(await buildMoveVideoJob({ video, previousVideoState: undefined, type: 'move-to-object-storage' }))
   }
 
   if (video.state === VideoState.TO_TRANSCODE) {

@@ -200,15 +200,29 @@ export interface ActorKeysPayload {
   actorId: number
 }
 
-export interface DeleteResumableUploadMetaFilePayload {
-  filepath: string
-}
+// ---------------------------------------------------------------------------
 
-export interface MoveStoragePayload {
+export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
+
+export interface MoveVideoStoragePayload {
   videoUUID: string
   isNewVideo: boolean
   previousVideoState: VideoStateType
 }
+
+export interface MoveCaptionPayload {
+  captionId: number
+}
+
+export function isMoveVideoStoragePayload (payload: any): payload is MoveVideoStoragePayload {
+  return 'videoUUID' in payload
+}
+
+export function isMoveCaptionPayload (payload: any): payload is MoveCaptionPayload {
+  return 'captionId' in payload
+}
+
+// ---------------------------------------------------------------------------
 
 export type VideoStudioTaskCutPayload = VideoStudioTaskCut
 

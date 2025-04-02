@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, resetCurrentPage, updatePaginationOnDelete } from '@app/core'
@@ -16,7 +16,6 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   selector: 'my-plugin-list-installed',
   templateUrl: './plugin-list-installed.component.html',
   styleUrls: [ './plugin-list-installed.component.scss' ],
-  standalone: true,
   imports: [
     NgIf,
     InfiniteScrollerDirective,
@@ -27,6 +26,13 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   ]
 })
 export class PluginListInstalledComponent implements OnInit {
+  private pluginService = inject(PluginService)
+  private pluginApiService = inject(PluginApiService)
+  private notifier = inject(Notifier)
+  private confirmService = inject(ConfirmService)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+
   pluginType: PluginType_Type
 
   pagination: ComponentPagination = {
@@ -41,16 +47,6 @@ export class PluginListInstalledComponent implements OnInit {
   uninstalling: { [name: string]: boolean } = {}
 
   onDataSubject = new Subject<any[]>()
-
-  constructor (
-    private pluginService: PluginService,
-    private pluginApiService: PluginApiService,
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-  }
 
   ngOnInit () {
     if (!this.route.snapshot.queryParams['pluginType']) {
@@ -77,16 +73,16 @@ export class PluginListInstalledComponent implements OnInit {
 
   loadMorePlugins () {
     this.pluginApiService.getPlugins(this.pluginType, this.pagination, this.sort)
-        .subscribe({
-          next: res => {
-            this.plugins = this.plugins.concat(res.data)
-            this.pagination.totalItems = res.total
+      .subscribe({
+        next: res => {
+          this.plugins = this.plugins.concat(res.data)
+          this.pagination.totalItems = res.total
 
-            this.onDataSubject.next(res.data)
-          },
+          this.onDataSubject.next(res.data)
+        },
 
-          error: err => this.notifier.error(err.message)
-        })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onNearOfBottom () {
@@ -172,21 +168,21 @@ export class PluginListInstalledComponent implements OnInit {
     this.updating[pluginKey] = true
 
     this.pluginApiService.update(plugin.name, plugin.type)
-        .pipe()
-        .subscribe({
-          next: res => {
-            this.updating[pluginKey] = false
+      .pipe()
+      .subscribe({
+        next: res => {
+          this.updating[pluginKey] = false
 
-            this.notifier.success($localize`${plugin.name} updated.`)
+          this.notifier.success($localize`${plugin.name} updated.`)
 
-            Object.assign(plugin, res)
-          },
+          Object.assign(plugin, res)
+        },
 
-          error: err => {
-            this.notifier.error(err.message)
-            this.updating[pluginKey] = false
-          }
-        })
+        error: err => {
+          this.notifier.error(err.message)
+          this.updating[pluginKey] = false
+        }
+      })
   }
 
   getShowRouterLink (plugin: PeerTubePlugin) {

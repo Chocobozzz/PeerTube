@@ -1,3 +1,4 @@
+import { canVideoFileBeEdited } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, ServerFilterHookName, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { isVideoFileMimeTypeValid, isVideoFileSizeValid } from '@server/helpers/custom-validators/videos.js'
 import { logger } from '@server/helpers/logger.js'
@@ -85,14 +86,7 @@ export function checkVideoFileCanBeEdited (video: MVideo, res: express.Response)
     return false
   }
 
-  const validStates = new Set<VideoStateType>([
-    VideoState.PUBLISHED,
-    VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED,
-    VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED,
-    VideoState.TRANSCODING_FAILED
-  ])
-
-  if (!validStates.has(video.state)) {
+  if (!canVideoFileBeEdited(video.state)) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
       message: 'Video state is not compatible with edition'

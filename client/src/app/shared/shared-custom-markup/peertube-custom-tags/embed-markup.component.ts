@@ -1,5 +1,5 @@
 import { environment } from 'src/environments/environment'
-import { Component, ElementRef, Input, OnInit } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input } from '@angular/core'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildPlaylistEmbedLink, buildVideoEmbedLink } from '@peertube/peertube-core-utils'
 import { CustomMarkupComponent } from './shared'
@@ -10,18 +10,18 @@ import { CustomMarkupComponent } from './shared'
   standalone: true
 })
 export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
-  @Input() uuid: string
-  @Input() type: 'video' | 'playlist' = 'video'
+  private el = inject(ElementRef)
+
+  readonly uuid = input<string>(undefined)
+  readonly type = input<'video' | 'playlist'>('video')
 
   loaded: undefined
 
-  constructor (private el: ElementRef) { }
-
   ngOnInit () {
-    const link = this.type === 'video'
-      ? buildVideoEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
-      : buildPlaylistEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
+    const link = this.type() === 'video'
+      ? buildVideoEmbedLink({ uuid: this.uuid() }, environment.originServerUrl)
+      : buildPlaylistEmbedLink({ uuid: this.uuid() }, environment.originServerUrl)
 
-    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ embedUrl: link, embedTitle: this.uuid })
+    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ embedUrl: link, embedTitle: this.uuid() })
   }
 }

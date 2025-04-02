@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex">
     <meta property="og:platform" content="PeerTube" />
 
     <!-- /!\ The following comment is used by the server to prerender some tags /!\ -->
@@ -121,6 +120,15 @@
       }
 
       if (/MSIE|Trident/.test(window.navigator.userAgent) ) {
+        window.displayIncompatibleBrowser()
+      }
+
+      // BigInt must be supported (for the player to work)
+      try {
+        BigInt(9007199254740991)
+      } catch (err) {
+        console.error('BigInt is not supported on this web browser')
+
         window.displayIncompatibleBrowser()
       }
     </script>

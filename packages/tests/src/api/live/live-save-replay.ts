@@ -4,7 +4,6 @@ import { wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   HttpStatusCodeType,
-  LiveVideoCreate,
   LiveVideoError,
   VideoPrivacy,
   VideoPrivacyType,
@@ -51,19 +50,19 @@ describe('Save replay setting', function () {
       } catch {}
     }
 
-    const attributes: LiveVideoCreate = {
-      channelId: servers[0].store.channel.id,
-      privacy: VideoPrivacy.PUBLIC,
-      name: 'live'.repeat(30),
-      tags: [ 'tag1', 'tag2' ],
-      saveReplay: options.replay,
-      replaySettings: options.replaySettings,
-      permanentLive: options.permanent,
-      thumbnailfile: options.thumbnailfile,
-      previewfile: options.previewfile
-    }
-
-    const { uuid } = await servers[0].live.create({ fields: attributes })
+    const { uuid } = await servers[0].live.create({
+      fields: {
+        channelId: servers[0].store.channel.id,
+        privacy: VideoPrivacy.PUBLIC,
+        name: 'live'.repeat(30),
+        tags: [ 'tag1', 'tag2' ],
+        saveReplay: options.replay,
+        replaySettings: options.replaySettings,
+        permanentLive: options.permanent,
+        thumbnailfile: options.thumbnailfile,
+        previewfile: options.previewfile
+      }
+    })
     return uuid
   }
 
@@ -292,7 +291,6 @@ describe('Save replay setting', function () {
   })
 
   describe('With save replay enabled on non permanent live', function () {
-
     it('Should correctly create and federate the "waiting for stream" live', async function () {
       this.timeout(120000)
 
@@ -419,7 +417,6 @@ describe('Save replay setting', function () {
     let lastReplayUUID: string
 
     describe('With a first live and its replay', function () {
-
       before(async function () {
         this.timeout(120000)
 
@@ -534,7 +531,6 @@ describe('Save replay setting', function () {
     })
 
     describe('With a second live session', function () {
-
       it('Should update the replay settings', async function () {
         await servers[0].live.update({ videoId: liveVideoUUID, fields: { replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
         await waitJobs(servers)
@@ -620,7 +616,6 @@ describe('Save replay setting', function () {
     })
 
     describe('With terminated sessions', function () {
-
       it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
         this.timeout(120000)
 
@@ -662,7 +657,6 @@ describe('Save replay setting', function () {
     })
 
     describe('With a live without custom thumbnail', function () {
-
       it('Should correctly set the default thumbnail to the live replay', async function () {
         this.timeout(120000)
 

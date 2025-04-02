@@ -1,19 +1,26 @@
-<a [href]="getVideoUrl()" class="table-video-link" [title]="video.name" target="_blank" rel="noopener noreferrer">
-  <div class="table-video">
-    <div class="table-video-image">
-      <img [src]="video.thumbnailPath" alt="">
+<div class="root" [ngClass]="{ 'small': size() === 'small' }">
 
-      <ng-content select="[image]"></ng-content>
+  <my-video-thumbnail
+    *ngIf="thumbnail()"
+    [video]="video()" [videoRouterLink]="getVideoUrl()" [ariaLabel]="video().name" playOverlay="false"
+  ></my-video-thumbnail>
+
+  <div *ngIf="title()" class="min-width-0" [ngClass]="{ ellipsis: ellipsis }">
+    <div class="d-flex flex-wrap">
+      <a class="name" [ngClass]="{ ellipsis: ellipsis }" [routerLink]="getVideoUrl()" [title]="video().name">
+        {{ video().name }}
+      </a>
+
+      <ng-content></ng-content>
     </div>
 
-    <div class="table-video-text">
-      <div>
-        <ng-content select="[name]"></ng-content>
+    <a *ngIf="video().channel" [routerLink]="getChannelUrl()" class="channel" [ngClass]="{ ellipsis: ellipsis }">
+      {{ video().channel?.displayName }}
 
-        {{ video.name }}
-      </div>
-
-      <div class="muted">by {{ video.channel?.displayName }} on {{ video.channel?.host }} </div>
-    </div>
+      <ng-container *ngIf="hostInfo()" i18n>
+        on {{ video().channel?.host }}
+      </ng-container>
+    </a>
   </div>
-</a>
+
+</div>

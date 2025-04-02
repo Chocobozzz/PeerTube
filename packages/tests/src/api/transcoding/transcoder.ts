@@ -18,7 +18,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { canDoQuickTranscode } from '@peertube/peertube-server/core/lib/transcoding/transcoding-quick-transcode.js'
-import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import { expect } from 'chai'
 
 describe('Test video transcoding', function () {

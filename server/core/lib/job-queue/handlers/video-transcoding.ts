@@ -5,6 +5,7 @@ import {
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
+import { isVideoMissHLSAudio } from '@server/lib/runners/job-handlers/shared/utils.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
 import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebVideoResolution } from '@server/lib/transcoding/web-transcoding.js'
@@ -20,7 +21,7 @@ import { VideoModel } from '../../../models/video/video.js'
 
 type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
-const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } = {
+const handlers: { [id in VideoTranscodingPayload['type']]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
   'new-resolution-to-web-video': handleNewWebVideoResolutionJob,
   'merge-audio-to-web-video': handleWebVideoMergeAudioJob,
@@ -36,7 +37,7 @@ async function processVideoTranscoding (job: Job) {
   const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id, lTags(payload.videoUUID))
+    logger.info(`Do not process job ${job.id}, video does not exist.`, lTags(payload.videoUUID))
     return undefined
   }
 
@@ -150,5 +151,12 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
     await removeAllWebVideoFiles(video)
   }
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
+  let moveVideoToNextState = !payload.hasChildren
+
+  // Splitted audio, wait audio generation before moving the video in its next state
+  if (await isVideoMissHLSAudio({ resolution: payload.resolution, separatedAudio: payload.separatedAudio, videoId: videoArg.uuid })) {
+    moveVideoToNextState = false
+  }
+
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState, video })
 }
