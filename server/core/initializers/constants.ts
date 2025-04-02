@@ -46,7 +46,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 875
+export const LAST_MIGRATION_VERSION = 880
 
 // ---------------------------------------------------------------------------
 
@@ -119,6 +119,7 @@ export const SORTABLE_COLUMNS = {
     'originallyPublishedAt',
     'views',
     'likes',
+    'comments',
     'trending',
     'hot',
     'best',
@@ -172,7 +173,7 @@ export const ACTOR_FOLLOW_SCORE = {
   MAX: 10000
 }
 
-export const FOLLOW_STATES: { [ id: string ]: FollowState } = {
+export const FOLLOW_STATES: { [id: string]: FollowState } = {
   PENDING: 'pending',
   ACCEPTED: 'accepted',
   REJECTED: 'rejected'
@@ -274,7 +275,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'import-user-archive': 60000 * 60 * 24, // 24 hours
   'video-transcription': 1000 * 3600 * 6 // 6 hours
 }
-export const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
+export const REPEAT_JOBS: { [id in JobType]?: RepeatOptions } = {
   'videos-views-stats': {
     pattern: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
@@ -528,7 +529,7 @@ export let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 export const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 export const DEFAULT_AUDIO_MERGE_RESOLUTION = 25
 
-export const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
+export const VIDEO_RATE_TYPES: { [id: string]: VideoRateType } = {
   LIKE: 'like',
   DISLIKE: 'dislike'
 }
@@ -579,7 +580,7 @@ export const VIDEO_LICENCES = {
 
 export const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
-export const VIDEO_PRIVACIES: { [ id in VideoPrivacyType ]: string } = {
+export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
@@ -587,7 +588,7 @@ export const VIDEO_PRIVACIES: { [ id in VideoPrivacyType ]: string } = {
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
 }
 
-export const VIDEO_STATES: { [ id in VideoStateType ]: string } = {
+export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.PUBLISHED]: 'Published',
   [VideoState.TO_TRANSCODE]: 'To transcode',
   [VideoState.TO_IMPORT]: 'To import',
@@ -601,7 +602,7 @@ export const VIDEO_STATES: { [ id in VideoStateType ]: string } = {
   [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed'
 }
 
-export const VIDEO_IMPORT_STATES: { [ id in VideoImportStateType ]: string } = {
+export const VIDEO_IMPORT_STATES: { [id in VideoImportStateType]: string } = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success',
@@ -610,37 +611,37 @@ export const VIDEO_IMPORT_STATES: { [ id in VideoImportStateType ]: string } = {
   [VideoImportState.PROCESSING]: 'Processing'
 }
 
-export const VIDEO_CHANNEL_SYNC_STATE: { [ id in VideoChannelSyncStateType ]: string } = {
+export const VIDEO_CHANNEL_SYNC_STATE: { [id in VideoChannelSyncStateType]: string } = {
   [VideoChannelSyncState.FAILED]: 'Failed',
   [VideoChannelSyncState.SYNCED]: 'Synchronized',
   [VideoChannelSyncState.PROCESSING]: 'Processing',
   [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
 }
 
-export const ABUSE_STATES: { [ id in AbuseStateType ]: string } = {
+export const ABUSE_STATES: { [id in AbuseStateType]: string } = {
   [AbuseState.PENDING]: 'Pending',
   [AbuseState.REJECTED]: 'Rejected',
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
-export const USER_REGISTRATION_STATES: { [ id in UserRegistrationStateType ]: string } = {
+export const USER_REGISTRATION_STATES: { [id in UserRegistrationStateType]: string } = {
   [UserRegistrationState.PENDING]: 'Pending',
   [UserRegistrationState.REJECTED]: 'Rejected',
   [UserRegistrationState.ACCEPTED]: 'Accepted'
 }
 
-export const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacyType ]: string } = {
+export const VIDEO_PLAYLIST_PRIVACIES: { [id in VideoPlaylistPrivacyType]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
   [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
-export const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType_Type ]: string } = {
+export const VIDEO_PLAYLIST_TYPES: { [id in VideoPlaylistType_Type]: string } = {
   [VideoPlaylistType.REGULAR]: 'Regular',
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
 
-export const RUNNER_JOB_STATES: { [ id in RunnerJobStateType ]: string } = {
+export const RUNNER_JOB_STATES: { [id in RunnerJobStateType]: string } = {
   [RunnerJobState.PROCESSING]: 'Processing',
   [RunnerJobState.COMPLETED]: 'Completed',
   [RunnerJobState.COMPLETING]: 'Completing',
@@ -652,21 +653,21 @@ export const RUNNER_JOB_STATES: { [ id in RunnerJobStateType ]: string } = {
   [RunnerJobState.PARENT_CANCELLED]: 'Parent job cancelled'
 }
 
-export const USER_EXPORT_STATES: { [ id in UserExportStateType ]: string } = {
+export const USER_EXPORT_STATES: { [id in UserExportStateType]: string } = {
   [UserExportState.PENDING]: 'Pending',
   [UserExportState.PROCESSING]: 'Processing',
   [UserExportState.COMPLETED]: 'Completed',
   [UserExportState.ERRORED]: 'Failed'
 }
 
-export const USER_IMPORT_STATES: { [ id in UserImportStateType ]: string } = {
+export const USER_IMPORT_STATES: { [id in UserImportStateType]: string } = {
   [UserImportState.PENDING]: 'Pending',
   [UserImportState.PROCESSING]: 'Processing',
   [UserImportState.COMPLETED]: 'Completed',
   [UserImportState.ERRORED]: 'Failed'
 }
 
-export const VIDEO_COMMENTS_POLICY: { [ id in VideoCommentPolicyType ]: string } = {
+export const VIDEO_COMMENTS_POLICY: { [id in VideoCommentPolicyType]: string } = {
   [VideoCommentPolicy.DISABLED]: 'Disabled',
   [VideoCommentPolicy.ENABLED]: 'Enabled',
   [VideoCommentPolicy.REQUIRES_APPROVAL]: 'Requires approval'
@@ -699,12 +700,12 @@ export const MIMETYPES = {
       'audio/vnd.dolby.dd-raw': '.ac3',
       'audio/ac3': '.ac3'
     },
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   VIDEO: {
-    MIMETYPE_EXT: null as { [ id: string ]: string | string[] },
+    MIMETYPE_EXT: null as { [id: string]: string | string[] },
     MIMETYPES_REGEX: null as string,
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   IMAGE: {
     MIMETYPE_EXT: {
@@ -714,7 +715,7 @@ export const MIMETYPES = {
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
     },
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
@@ -722,7 +723,7 @@ export const MIMETYPES = {
       'application/x-subrip': '.srt',
       'text/plain': '.srt'
     },
-    EXT_MIMETYPE: null as { [ id: string ]: string }
+    EXT_MIMETYPE: null as { [id: string]: string }
   },
   TORRENT: {
     MIMETYPE_EXT: {
@@ -792,7 +793,7 @@ export const ACTIVITY_PUB = {
   VIDEO_PLAYLIST_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2 // 2 days
 }
 
-export const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
+export const ACTIVITY_PUB_ACTOR_TYPES: { [id: string]: ActivityPubActorType } = {
   GROUP: 'Group',
   PERSON: 'Person',
   APPLICATION: 'Application',
@@ -830,7 +831,7 @@ export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME: `${number} minutes` | `${number}
 
 export const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
-export const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
+export const NSFW_POLICY_TYPES: { [id: string]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
   BLUR: 'blur',
   DISPLAY: 'display'
@@ -1286,7 +1287,9 @@ export async function buildLanguages () {
       return (l.iso6391 !== undefined && l.type === 'living') ||
         additionalLanguages[l.iso6393] === true
     })
-    .forEach(l => { languages[l.iso6391 || l.iso6393] = l.name })
+    .forEach(l => {
+      languages[l.iso6391 || l.iso6393] = l.name
+    })
 
   // Override Occitan label
   languages['oc'] = 'Occitan'
@@ -1411,7 +1414,7 @@ function updateWebserverConfig () {
   CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
 }
 
-function buildVideoExtMimetype (obj: { [ id: string ]: string | string[] }) {
+function buildVideoExtMimetype (obj: { [id: string]: string | string[] }) {
   const result: { [id: string]: string } = {}
 
   for (const mimetype of Object.keys(obj)) {

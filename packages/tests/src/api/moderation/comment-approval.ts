@@ -12,9 +12,12 @@ import {
 } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
-  cleanupTests, createMultipleServers,
+  cleanupTests,
+  createMultipleServers,
   doubleFollow,
-  makeActivityPubGetRequest, makeActivityPubRawRequest, setAccessTokensToServers,
+  makeActivityPubGetRequest,
+  makeActivityPubRawRequest,
+  setAccessTokensToServers,
   setDefaultAccountAvatar,
   waitJobs
 } from '@peertube/peertube-server-commands'
@@ -543,6 +546,68 @@ describe('Test comments approval', function () {
 
       expect(data.some(c => c.text === '2 - framasoft.org and allowed')).to.be.true
       expect(data.some(c => c.text === '2 - https://framasoft.org and forbidden')).to.be.false
+    })
+  })
+
+  describe('Comment count with moderation', function () {
+    let videoId: string
+
+    before(async function () {
+      videoId = await createVideo(VideoCommentPolicy.REQUIRES_APPROVAL)
+    })
+
+    it('Should not increment comment count when comment is held for review', async function () {
+      await servers[0].comments.createThread({ token: anotherUserToken, videoId, text: 'held comment' })
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: videoId })
+      expect(video.comments).to.equal(0)
+    })
+
+    it('Should increment comment count after approving comment', async function () {
+      // Create a new comment that will be held for review
+      await servers[0].comments.createThread({ token: anotherUserToken, videoId, text: 'test comment' })
+      await waitJobs(servers)
+
+      // Get the held comment
+      const { data } = await servers[0].comments.listCommentsOnMyVideos({ token: userToken })
+      const heldComment = data.find(c => c.text === 'test comment')
+      expect(heldComment.heldForReview).to.be.true
+
+      // Verify initial count is 0
+      let video = await servers[0].videos.get({ id: videoId })
+      expect(video.comments).to.equal(0)
+
+      // Approve the comment
+      await servers[0].comments.approve({ token: userToken, videoId, commentId: heldComment.id })
+      await waitJobs(servers)
+
+      // Verify count incremented after approval
+      video = await servers[0].videos.get({ id: videoId })
+      expect(video.comments).to.equal(1)
+    })
+
+    it('Should not increment comment count when deleting held comment', async function () {
+      // Get initial comment count
+      let video = await servers[0].videos.get({ id: videoId })
+      const initialCount = video.comments
+
+      // Create a new comment that will be held for review
+      await servers[0].comments.createThread({ token: anotherUserToken, videoId, text: 'to be deleted' })
+      await waitJobs(servers)
+
+      // Get the held comment
+      const { data } = await servers[0].comments.listCommentsOnMyVideos({ token: userToken })
+      const heldComment = data.find(c => c.text === 'to be deleted')
+      expect(heldComment.heldForReview).to.be.true
+
+      // Delete the held comment
+      await servers[0].comments.delete({ token: userToken, videoId, commentId: heldComment.id })
+      await waitJobs(servers)
+
+      // Verify count remains unchanged after deleting held comment
+      video = await servers[0].videos.get({ id: videoId })
+      expect(video.comments).to.equal(initialCount)
     })
   })
 

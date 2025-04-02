@@ -51,6 +51,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
 
   likes: number
   dislikes: number
+  comments: number
+
   nsfw: boolean
 
   account: AccountSummary

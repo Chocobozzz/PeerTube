@@ -78,14 +78,15 @@
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
 
-      <th scope="col" *ngIf="isSelected('duration')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="duration" i18n>{{ getColumn('duration').label }} <p-sortIcon field="duration"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('name')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name" i18n>{{ getColumn('name').label }} <p-sortIcon field="name"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('privacy')" i18n>{{ getColumn('privacy').label }}</th>
-      <th scope="col" *ngIf="isSelected('sensitive')" i18n>{{ getColumn('sensitive').label }}</th>
-      <th scope="col" *ngIf="isSelected('playlists')" i18n>{{ getColumn('playlists').label }}</th>
-      <th scope="col" *ngIf="isSelected('insights')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="views" i18n>{{ getColumn('insights').label }} <p-sortIcon field="views"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('duration')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="duration">{{ getColumn('duration').label }} <p-sortIcon field="duration"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('name')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">{{ getColumn('name').label }} <p-sortIcon field="name"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('privacy')">{{ getColumn('privacy').label }}</th>
+      <th scope="col" *ngIf="isSelected('sensitive')">{{ getColumn('sensitive').label }}</th>
+      <th scope="col" *ngIf="isSelected('playlists')">{{ getColumn('playlists').label }}</th>
+      <th scope="col" *ngIf="isSelected('insights')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="views">{{ getColumn('insights').label }} <p-sortIcon field="views"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('comments')" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="comments">{{ getColumn('comments').label }} <p-sortIcon field="comments"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('published')" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">{{ getColumn('published').label }} <p-sortIcon field="publishedAt"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('state')" i18n>{{ getColumn('state').label }}</th>
+      <th scope="col" *ngIf="isSelected('state')">{{ getColumn('state').label }}</th>
 
       <th scope="col" width="250px" class="action-head">
         <div class="d-flex align-items-center justify-content-between">
@@ -160,6 +161,10 @@
             <ng-container i18n>{video.viewers, plural, =0 {No viewers} =1 {1 viewer} other {{{ video.views | myNumberFormatter }} viewers}}</ng-container>
           }
         </a>
+      </td>
+
+      <td *ngIf="isSelected('comments')">
+        <span i18n>{video.comments, plural, =0 {No comments} =1 {1 comment} other {{{ video.comments | myNumberFormatter }} comments}}</span>
       </td>
 
       <td *ngIf="isSelected('published')">

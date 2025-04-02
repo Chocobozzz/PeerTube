@@ -45,7 +45,6 @@ describe('Test video comments', function () {
   })
 
   describe('User comments', function () {
-
     it('Should not have threads on this video', async function () {
       const body = await command.listThreads({ videoId: videoUUID })
 
@@ -256,11 +255,10 @@ describe('Test video comments', function () {
   })
 
   describe('Listing comments on my videos and in admin', function () {
-
-    const listFunctions = () => ([
+    const listFunctions = () => [
       command.listForAdmin.bind(command),
       command.listCommentsOnMyVideos.bind(command)
-    ])
+    ]
 
     it('Should list comments', async function () {
       for (const fn of listFunctions()) {
@@ -399,6 +397,38 @@ describe('Test video comments', function () {
     })
 
     // Auto tags filter is checked auto tags test file
+  })
+
+  describe('Video comment count', function () {
+    let testVideoUUID: string
+
+    before(async function () {
+      const { uuid } = await server.videos.upload()
+      testVideoUUID = uuid
+    })
+
+    it('Should start with 0 comments', async function () {
+      const video = await server.videos.get({ id: testVideoUUID })
+      expect(video.commentsEnabled).to.be.true
+      expect(video.comments).to.equal(0)
+    })
+
+    it('Should increment comment count when adding comment', async function () {
+      await command.createThread({ videoId: testVideoUUID, text: 'test comment' })
+
+      const video = await server.videos.get({ id: testVideoUUID })
+      expect(video.comments).to.equal(1)
+    })
+
+    it('Should decrement count when deleting comment', async function () {
+      const { data } = await command.listThreads({ videoId: testVideoUUID })
+      const commentToDelete = data[0]
+
+      await command.delete({ videoId: testVideoUUID, commentId: commentToDelete.id })
+
+      const video = await server.videos.get({ id: testVideoUUID })
+      expect(video.comments).to.equal(0)
+    })
   })
 
   after(async function () {

@@ -508,6 +508,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   dislikes: number
 
   @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Min(0)
+  @Column
+  comments: number
+
+  @AllowNull(false)
   @Column
   remote: boolean
 

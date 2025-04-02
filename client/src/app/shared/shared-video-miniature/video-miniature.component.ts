@@ -6,9 +6,9 @@ import {
   LOCALE_ID,
   OnInit,
   booleanAttribute,
-  numberAttribute,
   inject,
   input,
+  numberAttribute,
   output
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
@@ -24,8 +24,8 @@ import { VideoService } from '../shared-main/video/video.service'
 import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
-import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
 import { ActorHostComponent } from '../standalone-actor/actor-host.component'
+import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
 
 export type MiniatureDisplayOptions = {
   date?: boolean

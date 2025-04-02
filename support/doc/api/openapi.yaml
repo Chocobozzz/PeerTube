@@ -7186,6 +7186,7 @@ components:
           - -publishedAt
           - -views
           - -likes
+          - -comments
           - -trending
           - -hot
           - -best
@@ -8445,6 +8446,9 @@ components:
         dislikes:
           type: integer
           example: 7
+        comments:
+          description: "**PeerTube >= 7.2** Number of comments on the video"
+          type: integer
         nsfw:
           type: boolean
         waitTranscoding:

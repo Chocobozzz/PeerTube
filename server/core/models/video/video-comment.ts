@@ -7,19 +7,27 @@ import {
   VideoCommentForAdminOrUser,
   VideoCommentObject
 } from '@peertube/peertube-models'
+import { afterCommitIfTransaction, retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { logger } from '@server/helpers/logger.js'
 import { extractMentions } from '@server/helpers/mentions.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getLocalApproveReplyActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { Op, Order, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
-  BelongsTo, Column,
+  BelongsTo,
+  Column,
   CreatedAt,
   DataType,
   ForeignKey,
   HasMany,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -27,13 +35,14 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import {
   MComment,
-  MCommentAP,
   MCommentAdminOrUserFormattable,
+  MCommentAP,
   MCommentExport,
   MCommentFormattable,
   MCommentId,
   MCommentOwner,
-  MCommentOwnerReplyVideoImmutable, MCommentOwnerVideoFeed,
+  MCommentOwnerReplyVideoImmutable,
+  MCommentOwnerVideoFeed,
   MCommentOwnerVideoReply,
   MVideo,
   MVideoImmutable
@@ -42,7 +51,7 @@ import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse.js'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import { CommentAutomaticTagModel } from '../automatic-tag/comment-automatic-tag.js'
-import { SequelizeModel, buildLocalAccountIdsIn, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
+import { buildLocalAccountIdsIn, buildSQLAttributes, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { ListVideoCommentsOptions, VideoCommentListQueryBuilder } from './sql/comment/video-comment-list-query-builder.js'
 import { VideoChannelModel } from './video-channel.js'
 import { VideoModel } from './video.js'
@@ -221,6 +230,43 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     onDelete: 'CASCADE'
   })
   CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
+
+  @AfterCreate
+  @AfterDestroy
+  static incrementCommentCount (instance: VideoCommentModel, options: any) {
+    if (instance.heldForReview) return // Don't count held comments
+
+    return afterCommitIfTransaction(options.transaction, () => this.rebuildCommentsCount(instance.videoId))
+  }
+
+  @AfterUpdate
+  static updateCommentCountOnHeldStatusChange (instance: VideoCommentModel, options: any) {
+    return afterCommitIfTransaction(options.transaction, () => this.rebuildCommentsCount(instance.videoId))
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static async rebuildCommentsCount (videoId: number) {
+    try {
+      await retryTransactionWrapper(() => {
+        return sequelizeTypescript.transaction(async transaction => {
+          const video = await VideoModel.load(videoId, transaction)
+
+          video.comments = await new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, {
+            selectType: 'comment-only',
+            videoId: video.id,
+            heldForReview: false,
+            notDeleted: true,
+            transaction
+          }).countComments()
+
+          await video.save({ transaction })
+        })
+      })
+    } catch (err) {
+      logger.error('Cannot rebuild comments count for video ' + videoId, { err })
+    }
+  }
 
   // ---------------------------------------------------------------------------
 
@@ -442,15 +488,17 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       order: [ [ 'createdAt', order ] ] as Order,
       where: {
         id: {
-          [Op.in]: Sequelize.literal('(' +
-            'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
+          [Op.in]: Sequelize.literal(
+            '(' +
+              'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
               `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${comment.id} ` +
               'UNION ' +
               'SELECT "parent"."id", "parent"."inReplyToCommentId" FROM "videoComment" "parent" ' +
               'INNER JOIN "children" ON "children"."inReplyToCommentId" = "parent"."id"' +
-            ') ' +
-            'SELECT id FROM children' +
-          ')'),
+              ') ' +
+              'SELECT id FROM children' +
+              ')'
+          ),
           [Op.ne]: comment.id
         }
       },
