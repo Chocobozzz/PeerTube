@@ -12,9 +12,12 @@ import {
 } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
-  cleanupTests, createMultipleServers,
+  cleanupTests,
+  createMultipleServers,
   doubleFollow,
-  makeActivityPubGetRequest, makeActivityPubRawRequest, setAccessTokensToServers,
+  makeActivityPubGetRequest,
+  makeActivityPubRawRequest,
+  setAccessTokensToServers,
   setDefaultAccountAvatar,
   waitJobs
 } from '@peertube/peertube-server-commands'
@@ -558,7 +561,7 @@ describe('Test comments approval', function () {
       await waitJobs(servers)
 
       const video = await servers[0].videos.get({ id: videoId })
-      expect(video.commentCount).to.equal(0)
+      expect(video.comments).to.equal(0)
     })
 
     it('Should increment comment count after approving comment', async function () {
@@ -573,7 +576,7 @@ describe('Test comments approval', function () {
 
       // Verify initial count is 0
       let video = await servers[0].videos.get({ id: videoId })
-      expect(video.commentCount).to.equal(0)
+      expect(video.comments).to.equal(0)
 
       // Approve the comment
       await servers[0].comments.approve({ token: userToken, videoId, commentId: heldComment.id })
@@ -581,13 +584,13 @@ describe('Test comments approval', function () {
 
       // Verify count incremented after approval
       video = await servers[0].videos.get({ id: videoId })
-      expect(video.commentCount).to.equal(1)
+      expect(video.comments).to.equal(1)
     })
 
     it('Should not increment comment count when deleting held comment', async function () {
       // Get initial comment count
       let video = await servers[0].videos.get({ id: videoId })
-      const initialCount = video.commentCount
+      const initialCount = video.comments
 
       // Create a new comment that will be held for review
       await servers[0].comments.createThread({ token: anotherUserToken, videoId, text: 'to be deleted' })
@@ -604,7 +607,7 @@ describe('Test comments approval', function () {
 
       // Verify count remains unchanged after deleting held comment
       video = await servers[0].videos.get({ id: videoId })
-      expect(video.commentCount).to.equal(initialCount)
+      expect(video.comments).to.equal(initialCount)
     })
   })
 

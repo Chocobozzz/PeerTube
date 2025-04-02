@@ -46,7 +46,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 780
+export const LAST_MIGRATION_VERSION = 880
 
 // ---------------------------------------------------------------------------
 
@@ -119,6 +119,7 @@ export const SORTABLE_COLUMNS = {
     'originallyPublishedAt',
     'views',
     'likes',
+    'comments',
     'trending',
     'hot',
     'best',

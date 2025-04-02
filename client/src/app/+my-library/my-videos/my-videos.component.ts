@@ -52,7 +52,7 @@ import { VideoPrivacyBadgeComponent } from '../../shared/shared-video/video-priv
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
-type Column = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state'
+type Column = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
 type CommonFilter = 'live' | 'vod' | 'private' | 'internal' | 'unlisted' | 'password-protected' | 'public'
 
 @Component({
@@ -157,6 +157,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       { id: 'sensitive', label: $localize`Sensitive`, selected: true },
       { id: 'playlists', label: $localize`Playlists`, selected: true },
       { id: 'insights', label: $localize`Insights`, selected: true },
+      { id: 'comments', label: $localize`Comments`, selected: false },
       { id: 'published', label: $localize`Published`, selected: true },
       { id: 'state', label: $localize`State`, selected: true }
     ]

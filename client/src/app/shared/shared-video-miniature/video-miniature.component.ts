@@ -6,14 +6,13 @@ import {
   LOCALE_ID,
   OnInit,
   booleanAttribute,
-  numberAttribute,
   inject,
   input,
+  numberAttribute,
   output
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { formatICU } from '@app/helpers'
 import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs/operators'
 import { LinkType } from '../../../types/link.type'
@@ -25,8 +24,8 @@ import { VideoService } from '../shared-main/video/video.service'
 import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
-import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
 import { ActorHostComponent } from '../standalone-actor/actor-host.component'
+import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -39,8 +38,7 @@ export type MiniatureDisplayOptions = {
   nsfw?: boolean
 
   by?: boolean
-  forceChannelInBy?: boolean,
-  commentCount?: boolean
+  forceChannelInBy?: boolean
 }
 
 @Component({
@@ -275,14 +273,6 @@ export class VideoMiniatureComponent implements OnInit {
 
   getAriaLabel () {
     return $localize`Watch video ${this.video().name}`
-  }
-
-  hasComments () {
-    return this.video.commentCount > 0
-  }
-
-  getCommentCount () {
-    return $localize`${this.video.commentCount} comment${this.video.commentCount > 1 ? 's' : ''}`
   }
 
   loadActions () {

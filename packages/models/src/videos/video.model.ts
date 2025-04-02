@@ -51,6 +51,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
 
   likes: number
   dislikes: number
+  comments: number
+
   nsfw: boolean
 
   account: AccountSummary
@@ -60,9 +62,7 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
     currentTime: number
   }
 
-  pluginData?: any,
-
-  commentCount: number
+  pluginData?: any
 }
 
 // Not included by default, needs query params

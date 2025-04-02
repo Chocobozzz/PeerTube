@@ -116,7 +116,7 @@ export class Video implements VideoServerModel {
 
   automaticTags?: string[]
 
-  commentCount: number
+  comments: number
 
   static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
@@ -214,7 +214,7 @@ export class Video implements VideoServerModel {
 
     this.automaticTags = hash.automaticTags
 
-    this.commentCount = hash.commentCount
+    this.comments = hash.comments
   }
 
   isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {

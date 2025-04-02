@@ -1,12 +1,8 @@
 /**
- *
  * Class to build video attributes/join names we want to fetch from the database
- *
  */
 export class VideoTableAttributes {
-
   constructor (private readonly mode: 'get' | 'list') {
-
   }
 
   getChannelAttributesForUser () {
@@ -296,7 +292,7 @@ export class VideoTableAttributes {
       'createdAt',
       'updatedAt',
       'moveJobsRunning',
-      'commentCount'
+      'comments'
     ]
   }
 }

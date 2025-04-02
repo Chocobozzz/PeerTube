@@ -508,6 +508,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   dislikes: number
 
   @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Min(0)
+  @Column
+  comments: number
+
+  @AllowNull(false)
   @Column
   remote: boolean
 
@@ -564,11 +571,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Default(null)
   @Column
   originallyPublishedAt: Date
-
-  @AllowNull(false)
-  @Default(0)
-  @Column
-  commentCount: number
 
   @ForeignKey(() => VideoChannelModel)
   @Column
