@@ -970,6 +970,8 @@ describe('Test plugin filter hooks', function () {
   })
 
   after(async function () {
+    MockSmtpServer.Instance.kill()
+
     await cleanupTests(servers)
   })
 })
