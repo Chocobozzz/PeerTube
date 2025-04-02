@@ -271,9 +271,8 @@ class Emailer {
           { view }
         )
         const compiledTemplate = pug.compileFile(templatePath)
-        const html = await email.juiceResources(compiledTemplate(locals))
 
-        return html
+        return compiledTemplate(locals)
       },
       message: {
         from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`
