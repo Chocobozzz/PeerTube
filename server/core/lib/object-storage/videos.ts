@@ -78,7 +78,7 @@ export function storeVideoCaption (inputPath: string, filename: string) {
     objectStorageKey: generateCaptionObjectStorageKey(filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS,
     isPrivate: false,
-    contentType: 'text/vtt'
+    contentType: 'text/vtt; charset=UTF-8'
   })
 }
 
