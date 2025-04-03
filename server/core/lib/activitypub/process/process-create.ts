@@ -186,5 +186,5 @@ async function processCreatePlaylist (
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist({ playlistObject, to: activity.to })
+  await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: activity.to })
 }

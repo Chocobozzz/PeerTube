@@ -49,7 +49,7 @@ export async function createAccountPlaylists (playlistUrls: string[], account: M
         throw new Error(`Cannot refresh remote playlist ${playlistUrl}: invalid body.`)
       }
 
-      return createOrUpdateVideoPlaylist({ playlistObject })
+      return createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
     } catch (err) {
       logger.warn(`Cannot create or update playlist ${playlistUrl}`, { err, ...lTags(playlistUrl) })
     }
@@ -58,9 +58,17 @@ export async function createAccountPlaylists (playlistUrls: string[], account: M
 
 export async function createOrUpdateVideoPlaylist (options: {
   playlistObject: PlaylistObject
+  // Which is the context where we retrieved the playlist
+  // Can be the actor that signed the activity URL or the playlist URL we fetched
+  contextUrl: string
   to?: string[]
 }) {
-  const { playlistObject, to } = options
+  const { playlistObject, contextUrl, to } = options
+
+  if (!checkUrlsSameHost(playlistObject.id, contextUrl)) {
+    throw new Error(`Playlist ${playlistObject.id} is not on the same host as context URL ${contextUrl}`)
+  }
+
   const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
 
   const channel = await getRemotePlaylistChannel(playlistObject)
@@ -82,7 +90,11 @@ export async function createOrUpdateVideoPlaylist (options: {
   return playlist
 }
 
-export async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
   if (!isArray(playlistObject.attributedTo) || playlistObject.attributedTo.length !== 1) {
     throw new Error('Not attributed to for playlist object ' + getAPId(playlistObject))
   }
@@ -100,10 +112,6 @@ export async function getRemotePlaylistChannel (playlistObject: PlaylistObject) 
 
   return actor.VideoChannel
 }
-
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
 
 async function fetchElementUrls (playlistObject: PlaylistObject) {
   let accItems: string[] = []

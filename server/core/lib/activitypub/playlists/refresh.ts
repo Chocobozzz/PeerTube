@@ -29,7 +29,7 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwnerD
       return videoPlaylist
     }
 
-    await createOrUpdateVideoPlaylist({ playlistObject })
+    await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: videoPlaylist.url })
 
     return videoPlaylist
   } catch (err) {
