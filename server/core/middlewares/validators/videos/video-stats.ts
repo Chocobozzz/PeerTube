@@ -6,7 +6,7 @@ import { STATS_TIMESERIE } from '@server/initializers/constants.js'
 import { HttpStatusCode, UserRight, VideoStatsTimeserieQuery } from '@peertube/peertube-models'
 import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
-const videoOverallStatsValidator = [
+export const videoOverallOrUserAgentStatsValidator = [
   isValidVideoIdParam('videoId'),
 
   query('startDate')
@@ -25,7 +25,7 @@ const videoOverallStatsValidator = [
   }
 ]
 
-const videoRetentionStatsValidator = [
+export const videoRetentionStatsValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -43,18 +43,7 @@ const videoRetentionStatsValidator = [
   }
 ]
 
-const videoUserAgentStatsValidator = [
-  isValidVideoIdParam('videoId'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    if (!await commonStatsCheck(req, res)) return
-
-    return next()
-  }
-]
-
-const videoTimeserieStatsValidator = [
+export const videoTimeseriesStatsValidator = [
   isValidVideoIdParam('videoId'),
 
   param('metric')
@@ -95,14 +84,7 @@ const videoTimeserieStatsValidator = [
 ]
 
 // ---------------------------------------------------------------------------
-
-export {
-  videoOverallStatsValidator,
-  videoTimeserieStatsValidator,
-  videoRetentionStatsValidator,
-  videoUserAgentStatsValidator
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function commonStatsCheck (req: express.Request, res: express.Response) {

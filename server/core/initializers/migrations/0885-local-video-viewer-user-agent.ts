@@ -13,10 +13,6 @@ async function up (utils: {
       defaultValue: null,
       allowNull: true
     }, { transaction })
-
-    await utils.queryInterface.addIndex('localVideoViewer', [ 'browser' ], {
-      transaction
-    })
   }
 
   {
@@ -25,10 +21,6 @@ async function up (utils: {
       defaultValue: null,
       allowNull: true
     }, { transaction })
-
-    await utils.queryInterface.addIndex('localVideoViewer', [ 'device' ], {
-      transaction
-    })
   }
 
   {
@@ -37,10 +29,6 @@ async function up (utils: {
       defaultValue: null,
       allowNull: true
     }, { transaction })
-
-    await utils.queryInterface.addIndex('localVideoViewer', [ 'operatingSystem' ], {
-      transaction
-    })
   }
 }
 
@@ -49,5 +37,6 @@ function down (options) {
 }
 
 export {
-  down, up
+  down,
+  up
 }

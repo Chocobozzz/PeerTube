@@ -12,7 +12,7 @@ import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-vid
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import { IResult } from 'ua-parser-js'
+import { IResult as UAParserResult } from 'ua-parser-js'
 
 const lTags = loggerTagsFactory('views')
 
@@ -52,7 +52,7 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   async addLocalViewer (options: {
-    userAgent: IResult
+    userAgent: UAParserResult
     video: MVideoImmutable
     currentTime: number
     ip: string
@@ -62,7 +62,8 @@ export class VideoViewerStats {
     const { video, ip, viewEvent, currentTime, sessionId, userAgent } = options
 
     logger.debug(
-      'Adding local viewer to video stats %s.', video.uuid,
+      'Adding local viewer to video stats %s.',
+      video.uuid,
       { currentTime, viewEvent, sessionId, ...lTags(video.uuid) }
     )
 
@@ -218,9 +219,7 @@ export class VideoViewerStats {
   }
 
   /**
-   *
    *  Redis calls can be expensive so try to cache things in front of it
-   *
    */
 
   private getLocalVideoViewer (options: {

@@ -4,7 +4,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoViews, ViewerScope } from './shared/index.js'
-import { IResult } from 'ua-parser-js'
+import { IResult as UAParserResult } from 'ua-parser-js'
 
 /**
  * If processing a local view:
@@ -21,13 +21,11 @@ import { IResult } from 'ua-parser-js'
  * A viewer is a someone that watched one or multiple sections of a video
  * A viewer that watched only a few seconds of a video may not increment the video views counter
  * Viewers statistics are sent to origin instance using the `WatchAction` ActivityPub object
- *
  */
 
 const lTags = loggerTagsFactory('views')
 
 export class VideoViewsManager {
-
   private static instance: VideoViewsManager
 
   private videoViewerStats: VideoViewerStats
@@ -44,7 +42,7 @@ export class VideoViewsManager {
   }
 
   async processLocalView (options: {
-    userAgent: IResult
+    userAgent: UAParserResult
     video: MVideoImmutable
     currentTime: number
     ip: string | null
