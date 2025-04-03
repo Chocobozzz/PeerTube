@@ -175,7 +175,7 @@ h1 {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;;
+  row-gap: 1rem;
 
   .video-actions {
     padding: 1.5rem;
@@ -184,7 +184,6 @@ h1 {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    flex-wrap: wrap;
 
     h2 {
       font-size: 1.5rem;
@@ -200,7 +199,6 @@ h1 {
     .watch-save {
       display: flex;
       gap: 1rem;
-      flex-wrap: wrap;
     }
 
     @media screen and (max-width: 1200px) {
