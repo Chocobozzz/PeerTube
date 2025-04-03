@@ -22,6 +22,7 @@ services:
       - ./docker-volume/data:/var/www/peertube/storage
       - certbot-www:/var/www/certbot
       - ./docker-volume/certbot/conf:/etc/letsencrypt
+      - ./docker-volume/nginx-logs:/var/log/nginx
     depends_on:
       - peertube
     restart: "always"
