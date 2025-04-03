@@ -13,15 +13,18 @@ export class ScreenService {
   }
 
   isInSmallView () {
+    // Keep it sync with SASS variable
     return this.getWindowInnerWidth() < 800
   }
 
-  isInMediumView () {
-    return this.getWindowInnerWidth() < 1100
+  isInMobileView () {
+    // Keep it sync with SASS variable
+    return this.getWindowInnerWidth() < 500
   }
 
-  isInMobileView () {
-    return this.getWindowInnerWidth() < 500
+  isInMenuOverlayView () {
+    // Keep it sync with $menu-overlay-view SASS variable
+    return this.getWindowInnerWidth() < 1200
   }
 
   isInTouchScreen () {

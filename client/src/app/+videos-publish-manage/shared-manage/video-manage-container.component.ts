@@ -3,7 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { booleanAttribute, Component, inject, input, OnDestroy, OnInit, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
-import { MenuService, Notifier, ScreenService } from '@app/core'
+import { Notifier, ScreenService } from '@app/core'
+import { HeaderService } from '@app/header/header.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
@@ -12,7 +13,6 @@ import { UploadProgressComponent } from '../../shared/standalone-upload/upload-p
 import { ManageErrorsComponent } from './common/manage-errors.component'
 import { VideoEdit } from './common/video-edit.model'
 import { VideoManageController } from './video-manage-controller.service'
-import { HeaderService } from '@app/header/header.service'
 
 @Component({
   selector: 'my-video-manage-container',
@@ -33,7 +33,6 @@ import { HeaderService } from '@app/header/header.service'
 export class VideoManageContainerComponent implements OnInit, OnDestroy {
   private manageController = inject(VideoManageController)
   private notifier = inject(Notifier)
-  private menuService = inject(MenuService)
   private headerService = inject(HeaderService)
   private screenService = inject(ScreenService)
 
@@ -50,12 +49,8 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
 
   private isUpdating = false
   private videoEdit: VideoEdit
-  private menuWasCollapsed: boolean
 
   ngOnInit (): void {
-    this.menuWasCollapsed = this.menuService.isCollapsed()
-    this.menuService.setMenuCollapsed(true)
-
     if (this.screenService.isInMobileView()) {
       this.headerService.setSearchHidden(true)
     }
@@ -65,7 +60,6 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy (): void {
-    this.menuService.setMenuCollapsed(this.menuWasCollapsed)
     this.headerService.setSearchHidden(false)
   }
 
