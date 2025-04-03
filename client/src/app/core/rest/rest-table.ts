@@ -55,7 +55,7 @@ export abstract class RestTable<T = unknown> {
     peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
   }
 
-  loadLazy (event: TableLazyLoadEvent) {
+  protected parseLazy (event: TableLazyLoadEvent) {
     debugLogger('Load lazy %o.', event)
 
     if (this.lastLazyLoadEvent) {
@@ -66,7 +66,7 @@ export abstract class RestTable<T = unknown> {
         this.lastLazyLoadEvent.rows === event.rows &&
         this.lastLazyLoadEvent.sortField === event.sortField &&
         this.lastLazyLoadEvent.sortOrder === event.sortOrder
-      ) return
+      ) return false
     }
 
     this.lastLazyLoadEvent = event
@@ -85,23 +85,28 @@ export abstract class RestTable<T = unknown> {
 
     this.expandedRows = {}
 
-    this.reloadData()
-    this.saveSort()
+    return true
+  }
+
+  loadLazy (event: TableLazyLoadEvent) {
+    if (this.parseLazy(event)) {
+      this.reloadData()
+      this.saveSort()
+    }
   }
 
   onSearch (search: string) {
     this.search = search
 
-    this.resetAndReload()
+    this.resetPagination()
+    this.reloadData()
   }
 
-  protected resetAndReload () {
+  resetPagination () {
     this.pagination = {
       start: 0,
       count: this.rowsPerPage
     }
-
-    this.reloadData()
   }
 
   isInSelectionMode () {

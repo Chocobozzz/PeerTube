@@ -31,9 +31,10 @@ import {
   VideosExistInPlaylists
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import debug from 'debug'
 import uniqBy from 'lodash-es/uniqBy'
 import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
+import { TableLazyLoadEvent, TableModule } from 'primeng/table'
 import { finalize } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
@@ -52,8 +53,20 @@ import { VideoPrivacyBadgeComponent } from '../../shared/shared-video/video-priv
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
+const debugLogger = debug('peertube:my-videos')
+
 type Column = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
 type CommonFilter = 'live' | 'vod' | 'private' | 'internal' | 'unlisted' | 'password-protected' | 'public'
+type QueryParams = {
+  channelNameOneOf?: string[]
+  privacyOneOf?: string[]
+  isLive?: string
+  start?: number
+  count?: number
+  sortOrder?: number
+  sortField?: string
+  search?: string
+}
 
 @Component({
   selector: 'my-videos',
@@ -192,7 +205,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       }
     ]
 
-    this.parseQueryParams()
+    this.subscribeToQueryChanges()
     this.buildActions()
     this.loadSelectedColumns()
   }
@@ -201,12 +214,14 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     this.headerService.setSearchHidden(false)
   }
 
-  private parseQueryParams () {
-    const queryParams = this.route.snapshot.queryParams as {
-      channelNameOneOf?: string[]
-      privacyOneOf?: string[]
-      isLive: string
-    }
+  private subscribeToQueryChanges () {
+    this.route.queryParams.subscribe(queryParams => {
+      this.parseQueryParams(queryParams)
+    })
+  }
+
+  private parseQueryParams (queryParams: QueryParams) {
+    debugLogger('Parse query params', { queryParams })
 
     {
       const enabledChannels = queryParams.channelNameOneOf
@@ -222,6 +237,8 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     }
 
     {
+      this.selectedFilterItems = []
+
       if (queryParams.isLive === 'true') this.selectedFilterItems.push('live')
       if (queryParams.isLive === 'false') this.selectedFilterItems.push('vod')
 
@@ -234,6 +251,21 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       if (enabledPrivacies.has(VideoPrivacy.UNLISTED)) this.selectedFilterItems.push('unlisted')
       if (enabledPrivacies.has(VideoPrivacy.PASSWORD_PROTECTED)) this.selectedFilterItems.push('password-protected')
       if (enabledPrivacies.has(VideoPrivacy.PRIVATE)) this.selectedFilterItems.push('private')
+    }
+
+    if (queryParams.start !== undefined) this.pagination.start = +queryParams.start
+    if (queryParams.count !== undefined) this.pagination.count = +queryParams.count
+    if (queryParams.sortOrder !== undefined) this.sort.order = +queryParams.sortOrder
+    if (queryParams.sortField !== undefined) this.sort.field = queryParams.sortField
+    if (queryParams.search !== undefined) this.search = queryParams.search
+
+    this.reloadData()
+  }
+
+  loadLazy (event: TableLazyLoadEvent) {
+    if (this.parseLazy(event)) {
+      this.updateUrl()
+      this.saveSort()
     }
   }
 
@@ -272,18 +304,37 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     this.peertubeLocalStorage.setItem(MyVideosComponent.LS_SELECTED_COLUMNS_KEY, JSON.stringify(enabled))
   }
 
+  // ---------------------------------------------------------------------------
+
+  // Override REST table method
+  onSearch (search: string) {
+    this.search = search
+
+    this.onFilter()
+  }
+
   onFilter () {
+    this.resetPagination()
+    this.updateUrl()
+  }
+
+  private updateUrl () {
     const channelNameOneOf = this.channels.filter(c => c.selected).map(c => c.name)
 
-    const newParams = {
+    const newParams: Record<keyof QueryParams, any> = {
       ...this.route.snapshot.queryParams,
+
       ...this.buildCommonVideoFilters(),
 
-      channelNameOneOf
+      search: this.search,
+      channelNameOneOf,
+      start: this.pagination.start,
+      count: this.pagination.count,
+      sortOrder: this.sort.order,
+      sortField: this.sort.field
     }
 
     this.peertubeRouter.silentNavigate([ '.' ], newParams, this.route)
-    this.resetAndReload()
   }
 
   private buildCommonVideoFilters () {

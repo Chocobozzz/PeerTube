@@ -46,7 +46,6 @@ export class MenuService {
   }
 
   private hasMenuCollapsedByUrl (url: string) {
-    console.log(url)
     const collapsedBaseUrls = [ '/videos/publish', '/videos/manage/' ]
 
     for (const collapsedBaseUrl of collapsedBaseUrls) {
