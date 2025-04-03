@@ -35,8 +35,6 @@ export type VideoActionsDisplayType = {
   liveInfo?: boolean
   removeFiles?: boolean
   transcoding?: boolean
-  studio?: boolean
-  stats?: boolean
   generateTranscription?: boolean
   transcriptionWidget?: boolean
 }
@@ -91,8 +89,6 @@ export class VideoActionsDropdownComponent implements OnChanges {
     liveInfo: false,
     removeFiles: false,
     transcoding: false,
-    studio: true,
-    stats: true,
     generateTranscription: false,
     transcriptionWidget: false
   })

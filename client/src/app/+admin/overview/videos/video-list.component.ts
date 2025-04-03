@@ -98,8 +98,6 @@ export class VideoListComponent extends RestTable<Video> implements OnInit {
     liveInfo: false,
     removeFiles: true,
     transcoding: true,
-    studio: true,
-    stats: true,
     generateTranscription: true
   }
 

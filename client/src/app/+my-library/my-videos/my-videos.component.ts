@@ -124,9 +124,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     mute: false,
     liveInfo: true,
     removeFiles: false,
-    transcoding: false,
-    studio: true,
-    stats: true
+    transcoding: false
   }
 
   moreVideoActions: DropdownAction<{ video: Video }>[][] = []

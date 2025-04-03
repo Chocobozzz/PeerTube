@@ -94,9 +94,7 @@ export class VideoMiniatureComponent implements OnInit {
     delete: true,
     report: true,
     duplicate: true,
-    mute: true,
-    studio: false,
-    stats: false
+    mute: true
   })
 
   readonly actorImageSize = input(34, { transform: numberAttribute })
