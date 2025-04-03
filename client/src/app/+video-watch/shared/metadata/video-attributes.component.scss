@@ -16,24 +16,6 @@
   @include padding-right(5px);
 }
 
-a.attribute-value {
-  color: pvar(--fg);
-
-  @include disable-default-a-behaviour;
-
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
-.attribute-tags {
-  .attribute-value:not(:nth-child(2)) {
-    &::before {
-      content: ', ';
-    }
-  }
-}
-
 @media screen and (max-width: 1600px) {
   .attributes .attribute {
     margin-bottom: 5px;

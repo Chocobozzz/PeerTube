@@ -59,7 +59,7 @@
   <span i18n class="attribute-label">Tags</span>
   <a
     *ngFor="let tag of getVideoTags()"
-    class="attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
+    class="attribute-value pt-badge badge-secondary me-1" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
   >{{ tag }}</a>
 </div>
 
