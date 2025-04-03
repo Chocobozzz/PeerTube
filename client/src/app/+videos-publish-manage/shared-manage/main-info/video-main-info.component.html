@@ -51,7 +51,7 @@
         <div *ngIf="formErrors.tags" class="form-error" role="alert">{{ formErrors.tags }}</div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mb-5">
         <label i18n for="support">Support button</label>
 
         <div class="form-group-description" i18n>
@@ -67,6 +67,16 @@
           Do you want to use the same text for all your videos? You can define <strong>a default text and support button</strong> in your <a [routerLink]="getChannelUpdateUrl()" target="_blank" rel="noopener noreferrer">channel settings</a>.
         </div>
       </div>
+
+      <ng-container
+        *ngFor="let pluginSetting of getPluginsFields('main')"
+        [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+      ></ng-container>
+
+      <ng-container
+        *ngFor="let pluginSetting of getPluginsFields('plugin-settings')"
+        [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+      ></ng-container>
     </div>
 
     <div>
@@ -154,16 +164,4 @@
       </ng-template>
     </my-peertube-checkbox>
   </div>
-</div>
-
-<div class="plugin-fields">
-  <ng-container
-    *ngFor="let pluginSetting of getPluginsFields('main')"
-    [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
-  ></ng-container>
-
-  <ng-container
-    *ngFor="let pluginSetting of getPluginsFields('plugin-settings')"
-    [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
-  ></ng-container>
 </div>
