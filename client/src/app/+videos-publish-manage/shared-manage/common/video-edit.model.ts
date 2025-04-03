@@ -167,6 +167,7 @@ export class VideoEdit {
       size: number
     }
     live?: LiveVideoUpdate
+    pluginDefaults?: Record<string, string | boolean>
   } = {}
 
   private serverConfig: HTMLServerConfig
@@ -336,6 +337,11 @@ export class VideoEdit {
 
     if (saveInStore) {
       this.saveStore.common = buildObj()
+
+      // Apply plugin defaults so we correctly detect changes
+      if (this.saveStore.pluginDefaults) {
+        this.saveStore.common.pluginData = { ...this.saveStore.pluginDefaults, ...this.saveStore.common.pluginData }
+      }
     }
 
     // ---------------------------------------------------------------------------
@@ -352,6 +358,14 @@ export class VideoEdit {
     this.metadata.blacklisted = video.blacklisted
 
     this.metadata.isLive = video.isLive
+  }
+
+  loadPluginDataDefaults (pluginDefaults: Record<string, string | boolean>) {
+    this.saveStore.pluginDefaults = pluginDefaults
+
+    if (this.saveStore.common?.pluginData) {
+      this.saveStore.common.pluginData = { ...this.saveStore.pluginDefaults, ...this.saveStore.common.pluginData }
+    }
   }
 
   private async loadPreview (video: UpdateFromAPIOptions['video']) {

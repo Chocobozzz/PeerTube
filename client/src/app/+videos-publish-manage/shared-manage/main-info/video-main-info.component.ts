@@ -371,6 +371,8 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       pluginDefaults
     )
 
+    this.videoEdit.loadPluginDataDefaults(pluginDefaults)
+
     this.form.addControl('pluginData', this.pluginDataFormGroup)
     this.formErrors['pluginData'] = pluginFormErrors
     this.validationMessages['pluginData'] = pluginValidationMessages
