@@ -159,7 +159,7 @@
 
                   <div class="ms-2 d-flex flex-column">
                     <ng-container formGroupName="resolutions">
-                      <div class="form-group" *ngFor="let resolution of resolutions">
+                      <div class="form-group mb-2" *ngFor="let resolution of resolutions">
                         <my-peertube-checkbox
                           [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
                           labelText="{{ resolution.label }}"
