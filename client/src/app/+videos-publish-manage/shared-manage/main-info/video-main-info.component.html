@@ -74,10 +74,10 @@
 
         <my-markdown-textarea
           inputId="support" formControlName="support" markdownType="enhanced"
-          [formError]="formErrors['support']" withPreview="false"
+          [formError]="formErrors['support']"
         ></my-markdown-textarea>
 
-        <div class="form-group-description" i18n>
+        <div class="form-group-description mt-3" i18n>
           Do you want to use the same text for all your videos? You can define <strong>a default text and support button</strong> in your <a [routerLink]="getChannelUpdateUrl()" target="_blank" rel="noopener noreferrer">channel settings</a>.
         </div>
       </div>
