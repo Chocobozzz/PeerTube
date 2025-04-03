@@ -52,20 +52,6 @@
       </div>
 
       <div class="form-group">
-        <label i18n for="licence">Licence</label>
-
-        <div class="form-group-description" i18n>
-          <a href="https://chooser-beta.creativecommons.org/" target="_blank" rel="noopener noreferrer">Choose</a> the appropriate licence for your work.
-        </div>
-
-        <my-select-options inputId="licence" [items]="videoLicences" formControlName="licence" clearable="true"></my-select-options>
-
-        <div *ngIf="formErrors.licence" class="form-error" role="alert">
-          {{ formErrors.licence }}
-        </div>
-      </div>
-
-      <div class="form-group">
         <label i18n for="support">Support button</label>
 
         <div class="form-group-description" i18n>
@@ -101,6 +87,20 @@
 
         <div *ngIf="formErrors.privacy" class="form-error" role="alert">
           {{ formErrors.privacy }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="licence">Licence</label>
+
+        <div class="form-group-description" i18n>
+          <a href="https://chooser-beta.creativecommons.org/" target="_blank" rel="noopener noreferrer">Choose</a> the appropriate licence for your work.
+        </div>
+
+        <my-select-options inputId="licence" [items]="videoLicences" formControlName="licence" clearable="true"></my-select-options>
+
+        <div *ngIf="formErrors.licence" class="form-error" role="alert">
+          {{ formErrors.licence }}
         </div>
       </div>
 
