@@ -13,8 +13,8 @@ export abstract class RestTable<T = unknown> {
   abstract sort: SortMeta
   abstract pagination: RestPagination
 
-  rowsPerPageOptions = [ 10, 20, 50, 100 ]
-  rowsPerPage = this.rowsPerPageOptions[0]
+  rowsPerPageOptions = [ 5, 10, 20, 50, 100 ]
+  rowsPerPage = 10
   expandedRows = {}
 
   selectedRows: T[] = []

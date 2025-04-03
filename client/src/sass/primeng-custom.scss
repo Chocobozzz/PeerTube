@@ -1242,6 +1242,9 @@ p-chips {
 // ---------------------------------------------------------------------------
 
 .new-p-table {
+  margin-bottom: 0.5rem;
+  display: block;
+
   .column-toggle {
     .tertiary-button:not(.active) {
       color: pvar(--fg-300) !important;

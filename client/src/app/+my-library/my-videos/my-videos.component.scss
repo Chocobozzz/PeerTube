@@ -52,10 +52,6 @@ td {
   }
 }
 
-p-table {
-  max-height: calc(100vh - #{pvar(--header-height)} - 300px);
-}
-
 @media screen and (min-width: $small-view) {
   .video-cell-name {
     width: 300px;
