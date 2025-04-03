@@ -134,9 +134,11 @@
       </td>
 
       <td *ngIf="isSelected('privacy')">
-        <my-video-privacy-badge [video]="video"></my-video-privacy-badge>
+        <div class="d-flex flex-wrap gap-1">
+          <my-video-privacy-badge [video]="video"></my-video-privacy-badge>
 
-        <span *ngIf="video.blacklisted" class="pt-badge badge-red ms-1" i18n>Blocked</span>
+          <span *ngIf="video.blacklisted" class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
+        </div>
       </td>
 
       <td *ngIf="isSelected('sensitive')">
