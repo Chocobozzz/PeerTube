@@ -71,7 +71,7 @@ Install the template that the nginx container will use.
 The container will generate the configuration by replacing `${WEBSERVER_HOST}` and `${PEERTUBE_HOST}` using your docker compose env file.
 
 ```shell
-mkdir -p docker-volume/nginx
+mkdir -p docker-volume/nginx docker-volume/nginx-logs
 curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/nginx/peertube > docker-volume/nginx/peertube
 ```
 
