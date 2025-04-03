@@ -1,21 +1,27 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import {
+  exists,
+  isSafePeerTubeFilenameWithoutExtension,
+  isUUIDValid,
+  toBooleanOrNull
+} from '@server/helpers/custom-validators/misc.js'
 import { logger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylist, MVideoFile, MVideoThumbnailBlacklist } from '@server/types/models/index.js'
 import express from 'express'
-import { query } from 'express-validator'
+import { param, query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
-import { basename, dirname } from 'path'
+import { basename } from 'path'
 import { areValidationErrors, checkCanAccessVideoStaticFiles, isValidVideoPasswordHeader } from './shared/index.js'
 
 type LRUValue = {
   allowed: boolean
   video?: MVideoThumbnailBlacklist
   file?: MVideoFile
-  playlist?: MStreamingPlaylist }
+  playlist?: MStreamingPlaylist
+}
 
 const staticFileTokenBypass = new LRUCache<string, LRUValue>({
   max: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.MAX_SIZE,
@@ -62,6 +68,13 @@ const ensureCanAccessVideoPrivateWebVideoFiles = [
 ]
 
 const ensureCanAccessPrivateVideoHLSFiles = [
+  param('videoUUID')
+    .custom(isUUIDValid),
+
+  param('playlistNameWithoutExtension')
+    .optional()
+    .custom(v => isSafePeerTubeFilenameWithoutExtension(v)),
+
   query('videoFileToken')
     .optional()
     .custom(exists),
@@ -71,22 +84,12 @@ const ensureCanAccessPrivateVideoHLSFiles = [
     .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid reinjectVideoFileToken boolean'),
 
-  query('playlistName')
-    .optional()
-    .customSanitizer(isSafePeerTubeFilenameWithoutExtension),
-
   isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const videoUUID = basename(dirname(req.originalUrl))
-
-    if (!isUUIDValid(videoUUID)) {
-      logger.debug('Path does not contain valid video UUID to serve static file %s', req.originalUrl)
-
-      return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
-    }
+    const videoUUID = req.params.videoUUID
 
     const token = extractTokenOrDie(req, res)
     if (!token) return
@@ -122,7 +125,8 @@ const ensureCanAccessPrivateVideoHLSFiles = [
 ]
 
 export {
-  ensureCanAccessPrivateVideoHLSFiles, ensureCanAccessVideoPrivateWebVideoFiles
+  ensureCanAccessPrivateVideoHLSFiles,
+  ensureCanAccessVideoPrivateWebVideoFiles
 }
 
 // ---------------------------------------------------------------------------

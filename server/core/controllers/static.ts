@@ -55,7 +55,7 @@ const privateHLSStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AU
   : []
 
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistName.m3u8',
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistNameWithoutExtension.m3u8',
   ...privateHLSStaticMiddlewares,
   asyncMiddleware(servePrivateM3U8)
 )
@@ -81,8 +81,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function servePrivateM3U8 (req: express.Request, res: express.Response) {
-  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistName + '.m3u8')
-  const filename = req.params.playlistName + '.m3u8'
+  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistNameWithoutExtension + '.m3u8')
+  const filename = req.params.playlistNameWithoutExtension + '.m3u8'
 
   let playlistContent: string
 
