@@ -63,6 +63,7 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
   readonly autoFontSize = input(false, { transform: booleanAttribute })
   readonly rounded = input(false, { transform: booleanAttribute })
   readonly small = input(false, { transform: booleanAttribute })
+  readonly show = input(false, { transform: booleanAttribute })
 
   readonly labelContent = viewChild<ElementRef>('labelContent')
 
@@ -105,7 +106,8 @@ export class ButtonComponent implements OnChanges, AfterViewInit {
       'icon-only': !label,
       'label-xl': this.autoFontSize() && label.length > 10,
       'responsive-label': this.responsiveLabel(),
-      'small-button': this.small()
+      'small-button': this.small(),
+      'show': this.show()
     }
 
     debugLogger('Built button classes', { classes: this.classes, label, labelContent: this.labelContent() })

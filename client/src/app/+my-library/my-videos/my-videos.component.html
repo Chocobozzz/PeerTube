@@ -93,8 +93,8 @@
           <span i18>Actions</span>
 
           <span class="c-hand column-toggle" >
-            <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside">
-              <my-button theme="tertiary" icon="columns" ngbDropdownToggle i18n-title title="Open table configuration"></my-button>
+            <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside" #columnsDropdown="ngbDropdown">
+              <my-button theme="tertiary" icon="columns" ngbDropdownToggle i18n-title title="Open table configuration" [show]="columnsDropdown.isOpen()"></my-button>
 
               <div ngbDropdownMenu class="p-3">
                 <div class="form-group">
