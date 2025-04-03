@@ -16,6 +16,8 @@ export async function unzip (source: string, destination: string) {
     yauzl.open(source, { lazyEntries: true }, (err, zipFile) => {
       if (err) return rej(err)
 
+      zipFile.on('error', err => rej(err))
+
       zipFile.readEntry()
 
       zipFile.on('entry', async entry => {
