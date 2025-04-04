@@ -6,14 +6,14 @@ import { RouterModule } from '@angular/router'
 import { Notifier, ScreenService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
 import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
 import { ManageErrorsComponent } from './common/manage-errors.component'
 import { VideoEdit } from './common/video-edit.model'
 import { VideoManageController } from './video-manage-controller.service'
-import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
+import { VideoManageMenuComponent } from './video-manage-menu.component'
 
 @Component({
   selector: 'my-video-manage-container',
@@ -28,7 +28,7 @@ import { VideoStateMessageService } from '@app/shared/shared-video/video-state-m
     ManageErrorsComponent,
     NgbTooltipModule,
     UploadProgressComponent,
-    GlobalIconComponent
+    VideoManageMenuComponent
   ]
 })
 export class VideoManageContainerComponent implements OnInit, OnDestroy {

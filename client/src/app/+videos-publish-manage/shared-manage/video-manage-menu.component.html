@@ -1,0 +1,113 @@
+<div class="menu">
+  <h1 i18n>MANAGE MY VIDEO</h1>
+
+  <ul class="ul-unstyle">
+    <li>
+      <a routerLink="." queryParamsHandling="merge" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <div class="global-icon-wrapper">
+          <my-global-icon iconName="film"></my-global-icon>
+        </div>
+
+        <span i18n>Main information</span>
+      </a>
+    </li>
+
+    <li *ngIf="getVideo().isLive">
+      <a routerLink="live-settings" queryParamsHandling="merge" routerLinkActive="active">
+        <div class="global-icon-wrapper">
+          <my-global-icon iconName="live"></my-global-icon>
+        </div>
+
+        <span i18n>Live settings</span>
+      </a>
+    </li>
+
+    <div class="separator">
+      <div></div>
+    </div>
+
+    <li>
+      <a routerLink="customization" queryParamsHandling="merge" routerLinkActive="active">
+        <div class="global-icon-wrapper">
+          <my-global-icon iconName="cog"></my-global-icon>
+        </div>
+
+        <span i18n>Customization</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="moderation" queryParamsHandling="merge" routerLinkActive="active">
+        <div class="global-icon-wrapper">
+          <my-global-icon iconName="moderation"></my-global-icon>
+        </div>
+
+        <span i18n>Moderation</span>
+      </a>
+    </li>
+
+    @if (!getVideo().isLive) {
+      <li>
+        <a routerLink="captions" queryParamsHandling="merge" routerLinkActive="active">
+          <div class="global-icon-wrapper">
+            <my-global-icon iconName="captions"></my-global-icon>
+          </div>
+
+          <span i18n>Captions</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="chapters" queryParamsHandling="merge" routerLinkActive="active">
+          <div class="global-icon-wrapper">
+            <my-global-icon iconName="chapters"></my-global-icon>
+          </div>
+
+          <span i18n>Chapters</span>
+        </a>
+      </li>
+
+      <div class="separator">
+        <div></div>
+      </div>
+
+      <li>
+        <a routerLink="studio" queryParamsHandling="merge" routerLinkActive="active">
+          <div class="global-icon-wrapper">
+            <my-global-icon iconName="studio"></my-global-icon>
+          </div>
+
+          <span i18n>Studio</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="replace-file" queryParamsHandling="merge" routerLinkActive="active">
+          <div class="global-icon-wrapper">
+            <my-global-icon iconName="upload"></my-global-icon>
+          </div>
+
+          <span i18n>Replace file</span>
+        </a>
+      </li>
+    }
+
+    @if (canWatch()) {
+      <div class="separator">
+        <div></div>
+      </div>
+
+      <li>
+        <a routerLink="stats" queryParamsHandling="merge" routerLinkActive="active">
+          <div class="global-icon-wrapper">
+            <my-global-icon iconName="stats"></my-global-icon>
+          </div>
+
+          <span i18n>Statistics</span>
+        </a>
+      </li>
+    }
+  </ul>
+</div>
+
+<div class="menu-placeholder"></div>
