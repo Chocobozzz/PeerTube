@@ -1,0 +1,11 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+.unavailable {
+  display: flex;
+
+  my-help {
+    color: pvar(--fg-200);
+  }
+}

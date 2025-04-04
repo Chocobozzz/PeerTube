@@ -70,10 +70,9 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private screenService = inject(ScreenService)
   private peertubeRouter = inject(PeerTubeRouterService)
 
+  // dprint-ignore
   // eslint-disable-next-line max-len
-  readonly getVideosObservableFunction = input<
-    (pagination: ComponentPaginationLight, filters: VideoFilters) => Observable<ResultList<Video>>
-  >(undefined)
+  readonly getVideosObservableFunction = input<(pagination: ComponentPaginationLight, filters: VideoFilters) => Observable<ResultList<Video>>>(undefined)
   readonly getSyndicationItemsFunction = input<(filters: VideoFilters) => Promise<Syndication[]> | Syndication[]>(undefined)
 
   readonly defaultSort = input<VideoSortField>(undefined)

@@ -86,12 +86,10 @@
           <div class="form-group">
             <label i18n for="customizationJavascript">JavaScript</label>
             <my-help>
-              <ng-template ptTemplate="customHtml">
-                <ng-container i18n>
-                  <p class="mb-2">Write JavaScript code directly. Example:</p>
-                  <pre>console.log('my instance is amazing');</pre>
-                </ng-container>
-              </ng-template>
+              <ng-container i18n>
+                <p class="mb-2">Write JavaScript code directly. Example:</p>
+                <pre>console.log('my instance is amazing');</pre>
+              </ng-container>
             </my-help>
 
             <textarea
@@ -106,8 +104,7 @@
             <label for="customizationCSS">CSS</label>
 
             <my-help>
-              <ng-template ptTemplate="customHtml">
-                <ng-container i18n>
+              <ng-container i18n>
                   <p class="mb-2">Write CSS code directly. Example:</p>
 <pre>
 #custom-css {{ '{' }}
@@ -120,8 +117,7 @@
   color: red;
 {{ '}' }}
 </pre>
-                </ng-container>
-              </ng-template>
+              </ng-container>
             </my-help>
 
             <textarea

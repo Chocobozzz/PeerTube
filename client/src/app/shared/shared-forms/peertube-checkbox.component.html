@@ -26,9 +26,7 @@
       [tooltipPlacement]="helpPlacement()"
       helpType="custom"
     >
-      <ng-template ptTemplate="customHtml">
-        <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
-      </ng-template>
+      <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
     </my-help>
 
     <div *ngIf="recommended()" class="ms-2 pt-badge badge-secondary" i18n>Recommended</div>

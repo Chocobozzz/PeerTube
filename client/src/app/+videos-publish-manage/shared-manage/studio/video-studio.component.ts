@@ -7,13 +7,12 @@ import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.co
 import { TimestampInputComponent } from '@app/shared/shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { EmbedComponent } from '@app/shared/shared-main/video/embed.component'
-import { canVideoFileBeEdited } from '@peertube/peertube-core-utils'
-import { VideoState } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
+import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
+import { getStudioUnavailability } from '../common/unavailable-features'
 import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
-import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
 
 const debugLogger = debug('peertube:video-manage')
 
@@ -128,23 +127,12 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
     return this.videoEdit.getStudioTasks().length === 0
   }
 
-  canFileBeReplaced () {
-    return canVideoFileBeEdited(this.videoEdit.getVideoAttributes().state)
-  }
+  getUnavailability () {
+    return getStudioUnavailability({
+      ...this.videoEdit.getVideoAttributes(),
 
-  isLive () {
-    return this.videoEdit.getVideoAttributes().isLive
-  }
-
-  isTranscoding () {
-    return this.videoEdit.getVideoAttributes().state === VideoState.TO_TRANSCODE
-  }
-
-  isEditing () {
-    return this.videoEdit.getVideoAttributes().state === VideoState.TO_EDIT
-  }
-
-  isImporting () {
-    return this.videoEdit.getVideoAttributes().state === VideoState.TO_IMPORT
+      instanceName: this.instanceName,
+      studioEnabled: this.studioEnabled
+    })
   }
 }

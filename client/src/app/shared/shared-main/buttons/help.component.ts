@@ -1,62 +1,33 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common'
-import {
-  AfterContentInit,
-  booleanAttribute,
-  Component,
-  contentChildren,
-  input,
-  OnChanges,
-  OnInit,
-  TemplateRef
-} from '@angular/core'
+import { NgIf } from '@angular/common'
+import { booleanAttribute, Component, input, OnChanges, OnInit } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { PeerTubeTemplateDirective } from '../common/peertube-template.directive'
 
 @Component({
   selector: 'my-help',
   styleUrls: [ './help.component.scss' ],
   templateUrl: './help.component.html',
-  imports: [ NgIf, NgTemplateOutlet, NgbPopover, GlobalIconComponent ]
+  imports: [ NgIf, NgbPopover, GlobalIconComponent ]
 })
-export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
+export class HelpComponent implements OnInit, OnChanges {
+  readonly helpTitle = input('')
   readonly helpType = input<'custom' | 'markdownText' | 'markdownEnhanced'>('custom')
-  readonly tooltipPlacement = input('right auto')
   readonly iconName = input<GlobalIconName>('help')
-  readonly title = input($localize`Get help`)
-  readonly autoClose = input('outside')
   readonly supportRelMe = input(false, { transform: booleanAttribute })
 
-  readonly templates = contentChildren(PeerTubeTemplateDirective)
+  readonly title = input($localize`Get help`)
+
+  readonly tooltipPlacement = input('right auto')
+  readonly autoClose = input('outside')
+  readonly container = input<'body'>(undefined)
 
   isPopoverOpened = false
-  mainHtml = ''
-
-  preHtmlTemplate: TemplateRef<any>
-  customHtmlTemplate: TemplateRef<any>
-  postHtmlTemplate: TemplateRef<any>
+  markdownHTML = ''
 
   ngOnInit () {
     this.init()
-  }
-
-  ngAfterContentInit () {
-    {
-      const t = this.templates().find(t => t.name() === 'preHtml')
-      if (t) this.preHtmlTemplate = t.template
-    }
-
-    {
-      const t = this.templates().find(t => t.name() === 'customHtml')
-      if (t) this.customHtmlTemplate = t.template
-    }
-
-    {
-      const t = this.templates().find(t => t.name() === 'postHtml')
-      if (t) this.postHtmlTemplate = t.template
-    }
   }
 
   ngOnChanges () {
@@ -74,12 +45,12 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   private init () {
     const helpType = this.helpType()
     if (helpType === 'markdownText') {
-      this.mainHtml = this.formatMarkdownSupport(TEXT_RULES)
+      this.markdownHTML = this.formatMarkdownSupport(TEXT_RULES)
       return
     }
 
     if (helpType === 'markdownEnhanced') {
-      this.mainHtml = this.formatMarkdownSupport(ENHANCED_RULES)
+      this.markdownHTML = this.formatMarkdownSupport(ENHANCED_RULES)
       return
     }
   }

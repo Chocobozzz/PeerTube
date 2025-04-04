@@ -16,28 +16,26 @@
         [ngClass]="{ 'is-rtl': isRTL() }" class="markdown-guide" helpType="custom" iconName="markdown"
         tooltipPlacement="left auto" autoClose="true" i18n-title title="Markdown compatible"
       >
-        <ng-template ptTemplate="customHtml">
-          <span i18n>Markdown compatible that supports:</span>
+        <span i18n>Markdown compatible that supports:</span>
 
-          <ul>
-            <li><span i18n>Auto generated links</span></li>
-            <li><span i18n>Break lines</span></li>
-            <li><span i18n>Lists</span></li>
-            <li>
-              <span i18n>Emphasis</span>
-              <code>**<strong i18n>bold</strong>** _<i i18n>italic</i>_</code>
-            </li>
-            <li>
-              <span i18n>Emoji shortcuts</span>
-              <code>:) &lt;3</code>
-            </li>
-            <li>
-              <span i18n>Emoji markup</span>
-              <code>:smile:</code>
-              <div><a href="" (click)="openEmojiModal($event)" i18n>See complete list</a></div>
-            </li>
-          </ul>
-        </ng-template>
+        <ul>
+          <li><span i18n>Auto generated links</span></li>
+          <li><span i18n>Break lines</span></li>
+          <li><span i18n>Lists</span></li>
+          <li>
+            <span i18n>Emphasis</span>
+            <code>**<strong i18n>bold</strong>** _<i i18n>italic</i>_</code>
+          </li>
+          <li>
+            <span i18n>Emoji shortcuts</span>
+            <code>:) &lt;3</code>
+          </li>
+          <li>
+            <span i18n>Emoji markup</span>
+            <code>:smile:</code>
+            <div><a href="" (click)="openEmojiModal($event)" i18n>See complete list</a></div>
+          </li>
+        </ul>
       </my-help>
       <div *ngIf="formErrors.text" class="form-error" role="alert">
         {{ formErrors.text }}

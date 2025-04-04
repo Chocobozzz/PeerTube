@@ -1,21 +1,9 @@
 <ng-template #tooltipTemplate>
-  <p *ngIf="preHtmlTemplate">
-    <ng-template *ngTemplateOutlet="preHtmlTemplate"></ng-template>
-  </p>
+  <strong class="help-title" *ngIf="helpTitle()">{{ helpTitle() }}</strong>
 
-  <div *ngIf="preHtmlTemplate && (customHtmlTemplate || mainHtml || postHtmlTemplate)" class="mb-2"></div>
+  <p *ngIf="markdownHTML" [innerHTML]="markdownHTML"></p>
 
-  <p *ngIf="customHtmlTemplate">
-    <ng-template *ngTemplateOutlet="customHtmlTemplate"></ng-template>
-  </p>
-
-  <p *ngIf="mainHtml" [innerHTML]="mainHtml"></p>
-
-  <div *ngIf="(customHtmlTemplate || mainHtml) && postHtmlTemplate" class="mb-2"></div>
-
-  <p *ngIf="postHtmlTemplate">
-    <ng-template *ngTemplateOutlet="postHtmlTemplate"></ng-template>
-  </p>
+  <ng-content></ng-content>
 </ng-template>
 
 <button
@@ -28,6 +16,7 @@
   [autoClose]="autoClose()"
   (onHidden)="onPopoverHidden()"
   (onShown)="onPopoverShown()"
+  [container]="container()"
   type="button"
 >
   <my-global-icon [iconName]="iconName()"></my-global-icon>

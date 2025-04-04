@@ -15,18 +15,14 @@
   </button>
 
   <my-help *ngIf="!interact() && showHelp()">
-    <ng-template ptTemplate="customHtml">
-      <ng-container i18n>
-        You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
-      </ng-container>
-    </ng-template>
+    <ng-container i18n>
+      You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
+    </ng-container>
   </my-help>
 
   <my-help *ngIf="showHelp() && interact()">
-    <ng-template ptTemplate="customHtml">
-      <ng-container i18n>
-        You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
-      </ng-container>
-    </ng-template>
+    <ng-container i18n>
+      You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).
+    </ng-container>
   </my-help>
 </form>

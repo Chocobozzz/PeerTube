@@ -4,13 +4,12 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
-import { canVideoFileBeEdited } from '@peertube/peertube-core-utils'
-import { VideoState } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
 import { ReactiveFileComponent } from '../../../shared/shared-forms/reactive-file.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
+import { getReplaceFileUnavailability } from '../common/unavailable-features'
 import { VideoEdit } from '../common/video-edit.model'
 import { VideoUploadService } from '../common/video-upload.service'
 import { VideoManageController } from '../video-manage-controller.service'
@@ -97,23 +96,12 @@ export class VideoReplaceFileComponent implements OnInit, OnDestroy {
     return this.videoUploadService.getVideoExtensions()
   }
 
-  canFileBeReplaced () {
-    return canVideoFileBeEdited(this.videoEdit.getVideoAttributes().state)
-  }
+  getUnavailability () {
+    return getReplaceFileUnavailability({
+      ...this.videoEdit.getVideoAttributes(),
 
-  isLive () {
-    return this.videoEdit.getVideoAttributes().isLive
-  }
-
-  isTranscoding () {
-    return this.videoEdit.getVideoAttributes().state === VideoState.TO_TRANSCODE
-  }
-
-  isEditing () {
-    return this.videoEdit.getVideoAttributes().state === VideoState.TO_EDIT
-  }
-
-  isImporting () {
-    return this.videoEdit.getVideoAttributes().state === VideoState.TO_IMPORT
+      instanceName: this.instanceName,
+      replaceFileEnabled: this.replaceFileEnabled
+    })
   }
 }

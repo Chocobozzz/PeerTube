@@ -72,23 +72,51 @@
       </div>
 
       <li>
-        <a routerLink="studio" queryParamsHandling="merge" routerLinkActive="active">
+        <ng-template #iconStudio>
           <div class="global-icon-wrapper">
             <my-global-icon iconName="studio"></my-global-icon>
           </div>
+        </ng-template>
 
+        <ng-template #labelStudio>
           <span i18n>Studio</span>
-        </a>
+        </ng-template>
+
+        @if (studioUnavailable()) {
+          <my-unavailable-menu-entry [help]="studioUnavailable()">
+            <span class="icon" *ngTemplateOutlet="iconStudio"></span>
+            <span class="label" *ngTemplateOutlet="labelStudio"></span>
+          </my-unavailable-menu-entry>
+        } @else {
+          <a routerLink="studio" queryParamsHandling="merge" routerLinkActive="active">
+            <ng-container *ngTemplateOutlet="iconStudio"></ng-container>
+            <ng-container *ngTemplateOutlet="labelStudio"></ng-container>
+          </a>
+        }
       </li>
 
       <li>
-        <a routerLink="replace-file" queryParamsHandling="merge" routerLinkActive="active">
+        <ng-template #iconReplaceFile>
           <div class="global-icon-wrapper">
             <my-global-icon iconName="upload"></my-global-icon>
           </div>
+        </ng-template>
 
+        <ng-template #labelReplaceFile>
           <span i18n>Replace file</span>
-        </a>
+        </ng-template>
+
+        @if (replaceFileUnavailable()) {
+          <my-unavailable-menu-entry [help]="replaceFileUnavailable()">
+            <span class="icon" *ngTemplateOutlet="iconReplaceFile"></span>
+            <span class="label" *ngTemplateOutlet="labelReplaceFile"></span>
+          </my-unavailable-menu-entry>
+        } @else {
+          <a routerLink="replace-file" queryParamsHandling="merge" routerLinkActive="active">
+            <ng-container *ngTemplateOutlet="iconReplaceFile"></ng-container>
+            <ng-container *ngTemplateOutlet="labelReplaceFile"></ng-container>
+          </a>
+        }
       </li>
     }
 

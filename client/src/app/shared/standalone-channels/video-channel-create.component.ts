@@ -21,6 +21,7 @@ import { ActorBannerEditComponent } from '../shared-actor-image-edit/actor-banne
 import { MarkdownTextareaComponent } from '../shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { HelpComponent } from '../shared-main/buttons/help.component'
+import { MarkdownHintComponent } from '../shared-main/text/markdown-hint.component'
 import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
@@ -36,7 +37,8 @@ import { VideoChannelEdit } from './video-channel-edit'
     HelpComponent,
     MarkdownTextareaComponent,
     PeertubeCheckboxComponent,
-    AlertComponent
+    AlertComponent,
+    MarkdownHintComponent
   ]
 })
 export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {

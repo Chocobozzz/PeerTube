@@ -4,20 +4,8 @@
   <ng-container i18n>Replace file</ng-container>
 </h2>
 
-@if (!replaceFileEnabled) {
-  <my-alert type="primary" i18n>File replacement is not enabled on {{ instanceName }}.</my-alert>
-} @else if (!canFileBeReplaced()) {
-  @if (isLive()) {
-    <my-alert type="primary" i18n>File replacement is not available on a live.</my-alert>
-  } @else if (isTranscoding()) {
-    <my-alert type="primary" i18n>File replacement is not available while the video is being transcoding.</my-alert>
-  } @else if (isEditing()) {
-    <my-alert type="primary" i18n>File replacement is not available while the video is being edited.</my-alert>
-  } @else if (isImporting()) {
-    <my-alert type="primary" i18n>File replacement is not available while the video is being imported.</my-alert>
-  } @else {
-    <my-alert type="primary" i18n>File replacement is not available.</my-alert>
-  }
+@if (getUnavailability()) {
+  <my-alert type="primary" i18n>{{ getUnavailability() }}</my-alert>
 } @else {
   <div [formGroup]="form">
     <div class="form-columns reverse">

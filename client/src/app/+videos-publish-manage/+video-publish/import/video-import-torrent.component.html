@@ -16,12 +16,10 @@
       <div class="form-group form-group-magnet-uri">
         <label i18n for="magnetUri">Paste magnet URI</label>
         <my-help>
-          <ng-template ptTemplate="customHtml">
-            <ng-container i18n>
-              You can import any torrent file that points to a media file.
-              You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.
-            </ng-container>
-          </ng-template>
+          <ng-container i18n>
+            You can import any torrent file that points to a media file.
+            You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.
+          </ng-container>
         </my-help>
 
         <input type="text" id="magnetUri" [(ngModel)]="firstStepMagnetUri" class="form-control" />

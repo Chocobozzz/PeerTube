@@ -26,6 +26,11 @@
     background-color: pvar(--bg-secondary-400);
   }
 
+  &.badge-secondary-on-secondary {
+    color: pvar(--fg-300);
+    background-color: pvar(--bg-secondary-450);
+  }
+
   &.badge-banned,
   &.badge-danger,
   &.badge-red {

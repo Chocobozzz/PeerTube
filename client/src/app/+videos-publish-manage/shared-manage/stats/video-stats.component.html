@@ -11,7 +11,7 @@
         {{ card.label }}
 
         <my-help *ngIf="card.help">
-          <ng-template ptTemplate="customHtml">{{ card.help }}</ng-template>
+          {{ card.help }}
         </my-help>
       </div>
       <div class="value">{{ card.value }}</div>
