@@ -33,6 +33,12 @@ $nav-link-height: 40px;
 :host ::ng-deep .video-add-nav {
   @include peertube-nav-tabs($border-width, $border-type, $border-color, $nav-link-height);
 
+  & {
+    overflow-x: auto;
+    flex-wrap: unset;
+    white-space: nowrap;
+  }
+
   a.nav-link {
     &.active {
       background-color: pvar(--bg-secondary-400) !important;
@@ -57,24 +63,4 @@ $nav-link-height: 40px;
   &.dragover {
     border: 3px dashed pvar(--primary);
   }
-}
-
-@mixin nav-scroll {
-  ::ng-deep .video-add-nav {
-    height: #{$nav-link-height + $border-width * 2};
-    overflow-x: auto;
-    white-space: nowrap;
-    flex-wrap: unset;
-
-    /* Hide active tab style to not have a moving tab effect */
-    a.nav-link.active {
-      border-color: transparent;
-      background-color: pvar(--bg) !important;
-    }
-  }
-}
-
-/* Make .video-add-nav tabs scrollable on small devices */
-@media screen and (max-width: $small-view) {
-  @include nav-scroll();
 }

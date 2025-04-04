@@ -214,62 +214,41 @@ body {
 // Nav
 // ---------------------------------------------------------------------------
 
-.nav:not(.nav-pills) {
-  --bs-nav-link-padding-x: 0;
-
-  .nav-link {
-    @include margin-right(2rem);
+.nav {
+  .nav-link,
+  .unavailable-nav-link {
+    display: flex;
+    align-items: center;
+    min-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
-.nav .nav-link {
-  display: flex !important;
-  align-items: center;
-  height: 30px !important;
-}
-
-.nav.nav-pills {
-  font-size: 16px !important;
-  font-weight: $font-semibold !important;
+.nav-tabs {
+  .nav-link,
+  .unavailable-nav-link {
+    color: pvar(--fg-100);
+    font-weight: $font-semibold;
+    border: 0;
+    border-bottom: 2px solid transparent;
+  }
 
   .nav-link {
-    opacity: 0.7 !important;
+    @include disable-default-a-behaviour;
+
+    &.active {
+      background-color: pvar(--bg) !important;
+      border-bottom-color: pvar(--border-primary);
+    }
 
     &.active,
     &:hover,
     &:active,
     &:focus {
-      opacity: 1 !important;
+      opacity: 1;
+      color: pvar(--fg);
     }
-  }
-
-  a {
-    color: pvar(--fg);
-
-    @include disable-default-a-behaviour;
-  }
-}
-
-.nav-tabs .nav-link {
-  color: pvar(--fg);
-  font-weight: $font-semibold;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  opacity: 0.7;
-
-  @include disable-default-a-behaviour;
-
-  &.active {
-    color: pvar(--fg);
-    background-color: pvar(--bg) !important;
-    border-bottom-color: pvar(--border-primary);
-  }
-
-  &.active,
-  &:hover,
-  &:active,
-  &:focus {
-    opacity: 1;
   }
 }
 

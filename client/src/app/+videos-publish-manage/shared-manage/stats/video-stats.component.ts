@@ -24,7 +24,6 @@ import { SelectOptionsItem } from 'src/types'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
@@ -62,7 +61,6 @@ ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--fg')
     NgFor,
     NgIf,
     HelpComponent,
-    PeerTubeTemplateDirective,
     EmbedComponent,
     SelectOptionsComponent,
     FormsModule,

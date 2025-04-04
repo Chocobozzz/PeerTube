@@ -69,10 +69,22 @@
         </ng-template>
       </ng-container>
 
-      <ng-container ngbNavItem="import-url" *ngIf="isVideoImportHttpEnabled()">
-        <a ngbNavLink>
-          <span i18n>Import with URL</span>
-        </a>
+      <ng-container ngbNavItem="import-url">
+        @if (isVideoImportHttpEnabled()) {
+          <a ngbNavLink>
+            <span i18n>Import with URL</span>
+          </a>
+        } @else {
+          <div class="unavailable-nav-link">
+            <span i18n>Import with URL</span>
+
+            <div class="pt-badge badge-secondary ms-2 me-1" i18n>UNAVAILABLE</div>
+
+            <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+              Import with URL is not available on {{ instanceName }}.
+            </my-help>
+          </div>
+        }
 
         <ng-template ngbNavContent>
           <my-video-import-url
@@ -82,10 +94,22 @@
         </ng-template>
       </ng-container>
 
-      <ng-container ngbNavItem="import-torrent" *ngIf="isVideoImportTorrentEnabled()">
-        <a ngbNavLink>
-          <span i18n>Import with torrent</span>
-        </a>
+      <ng-container ngbNavItem="import-torrent">
+        @if (isVideoImportTorrentEnabled()) {
+          <a ngbNavLink>
+            <span i18n>Import with torrent</span>
+          </a>
+        } @else {
+          <div class="unavailable-nav-link">
+            <span i18n>Import with torrent</span>
+
+            <div class="pt-badge badge-secondary ms-2 me-1" i18n>UNAVAILABLE</div>
+
+            <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+              Import with torrent is not available on {{ instanceName }}.
+            </my-help>
+          </div>
+        }
 
         <ng-template ngbNavContent>
           <my-video-import-torrent
@@ -95,10 +119,22 @@
         </ng-template>
       </ng-container>
 
-      <ng-container ngbNavItem="go-live" *ngIf="isVideoLiveEnabled()">
-        <a ngbNavLink>
-          <span i18n>Go live</span>
-        </a>
+      <ng-container ngbNavItem="go-live">
+        @if (isVideoLiveEnabled()) {
+          <a ngbNavLink>
+            <span i18n>Go live</span>
+          </a>
+        } @else {
+          <div class="unavailable-nav-link">
+            <span i18n>Go live</span>
+
+            <div class="pt-badge badge-secondary ms-2 me-1" i18n>UNAVAILABLE</div>
+
+            <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
+              Live streaming is not available on {{ instanceName }}.
+            </my-help>
+          </div>
+        }
 
         <ng-template ngbNavContent>
           <my-video-go-live

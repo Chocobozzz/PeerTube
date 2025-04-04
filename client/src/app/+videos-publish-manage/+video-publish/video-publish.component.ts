@@ -1,20 +1,13 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, HostListener, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import {
-  AuthService,
-  AuthUser,
-  CanComponentDeactivate,
-  CanDeactivateGuard,
-  HooksService,
-  PeerTubeRouterService,
-  ServerService
-} from '@app/core'
+import { AuthService, AuthUser, CanComponentDeactivate, CanDeactivateGuard, HooksService, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, UserVideoQuota, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
 import { SelectChannelItem } from 'src/types'
+import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/channel/channels-setup-message.component'
 import { UserQuotaComponent } from '../../shared/shared-main/users/user-quota.component'
 import { VideoManageType } from '../shared-manage/common/video-manage.type'
@@ -46,7 +39,8 @@ import { VideoPublishResolverData } from './video-publish.resolver'
     VideoGoLiveComponent,
     VideoImportTorrentComponent,
     VideoImportUrlComponent,
-    VideoUploadComponent
+    VideoUploadComponent,
+    HelpComponent
   ],
   providers: [ VideoManageController ]
 })
@@ -59,7 +53,6 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
   private manageController = inject(VideoManageController)
   private videoService = inject(VideoService)
   private canDeactivateGuard = inject(CanDeactivateGuard)
-  private peertubeRouter = inject(PeerTubeRouterService)
 
   readonly videoUpload = viewChild<VideoUploadComponent>('videoUpload')
   readonly videoImportUrl = viewChild<VideoImportUrlComponent>('videoImportUrl')
@@ -95,6 +88,10 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
 
   get isContactFormEnabled () {
     return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
+  }
+
+  get instanceName () {
+    return this.serverConfig.instance.name
   }
 
   ngOnInit () {
