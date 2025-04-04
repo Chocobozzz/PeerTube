@@ -846,7 +846,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoFileToken: () => videoFileToken,
       requiresUserAuth: videoRequiresUserAuth(video, videoPassword),
       requiresPassword: video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
-        !video.canAccessPasswordProtectedVideoWithoutPassword(this.user),
+        !video.canBypassPassword(this.user),
       videoPassword: () => videoPassword,
 
       videoCaptions: playerCaptions,

@@ -10,8 +10,14 @@
   This live has ended.
 </my-alert>
 
-<my-alert rounded="false" type="warning" *ngIf="getAlertWarning()">
-  {{ getAlertWarning() }}
+<my-alert rounded="false" type="warning" *ngIf="getAlertWarning()?.title">
+  <div class="alert-title">{{ getAlertWarning()?.title }}</div>
+
+  @if (canSeeMoreInfo()) {
+    {{ getAlertWarning().watchSecondary }}
+  }
+
+  {{ getAlertWarning().watchMain }}
 </my-alert>
 
 <my-alert rounded="false" i18n type="warning" *ngIf="noPlaylistVideoFound()">
@@ -20,9 +26,10 @@
 
 <my-alert rounded="false" type="danger" *ngIf="video()?.blacklisted">
   <div class="blocked-label" i18n>This video is blocked.</div>
+
   {{ video().blacklistedReason }}
 </my-alert>
 
-<my-alert rounded="false" i18n type="warning" *ngIf="video()?.canAccessPasswordProtectedVideoWithoutPassword(user())">
+<my-alert rounded="false" i18n type="warning" *ngIf="video()?.canBypassPassword(user())">
   This video is password protected.
 </my-alert>

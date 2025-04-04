@@ -76,7 +76,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     avatar: true,
     privacyLabel: false,
     privacyText: false,
-    state: false,
     blacklistInfo: false
   }
 

@@ -50,7 +50,6 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
     avatar: true,
     privacyLabel: false,
     privacyText: false,
-    state: false,
     blacklistInfo: false
   }
 

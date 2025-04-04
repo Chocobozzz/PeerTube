@@ -61,7 +61,6 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     avatar: false,
     privacyLabel: false,
     privacyText: false,
-    state: false,
     blacklistInfo: false
   }
 

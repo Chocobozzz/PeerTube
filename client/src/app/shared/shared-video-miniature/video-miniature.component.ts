@@ -13,7 +13,7 @@ import {
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs/operators'
 import { LinkType } from '../../../types/link.type'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
@@ -33,7 +33,6 @@ export type MiniatureDisplayOptions = {
   avatar?: boolean
   privacyLabel?: boolean
   privacyText?: boolean
-  state?: boolean
   blacklistInfo?: boolean
   nsfw?: boolean
 
@@ -80,7 +79,6 @@ export class VideoMiniatureComponent implements OnInit {
     avatar: true,
     privacyLabel: false,
     privacyText: false,
-    state: false,
     blacklistInfo: false,
     forceChannelInBy: false
   })
@@ -224,49 +222,6 @@ export class VideoMiniatureComponent implements OnInit {
 
   isPasswordProtectedVideo () {
     return this.video().privacy.id === VideoPrivacy.PASSWORD_PROTECTED
-  }
-
-  getStateLabel (video: Video) {
-    if (!video.state) return ''
-
-    if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
-      return $localize`Published`
-    }
-
-    if (video.scheduledUpdate) {
-      const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
-      return $localize`Publication scheduled on ${updateAt}`
-    }
-
-    switch (video.state.id) {
-      case VideoState.TRANSCODING_FAILED:
-        return $localize`Transcoding failed`
-
-      case VideoState.TO_MOVE_TO_FILE_SYSTEM:
-        return $localize`Moving to file system`
-
-      case VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED:
-        return $localize`Moving to file system failed`
-
-      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE:
-        return $localize`Moving to external storage`
-
-      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED:
-        return $localize`Move to external storage failed`
-
-      case VideoState.TO_TRANSCODE:
-        return video.waitTranscoding === true
-          ? $localize`Waiting transcoding`
-          : $localize`To transcode`
-
-      case VideoState.TO_IMPORT:
-        return $localize`To import`
-
-      case VideoState.TO_EDIT:
-        return $localize`To edit`
-    }
-
-    return ''
   }
 
   getAriaLabel () {

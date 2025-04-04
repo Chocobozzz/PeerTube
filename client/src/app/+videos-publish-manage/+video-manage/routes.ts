@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { CanDeactivateGuard, LoginGuard } from '@app/core'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 import { I18nPrimengCalendarService } from '../shared-manage/common/i18n-primeng-calendar.service'
 import { VideoUploadService } from '../shared-manage/common/video-upload.service'
 import { manageRoutes } from '../shared-manage/routes'
@@ -19,7 +20,8 @@ export default [
       LiveVideoService,
       I18nPrimengCalendarService,
       VideoUploadService,
-      VideoStudioService
+      VideoStudioService,
+      VideoStateMessageService
     ],
     resolve: {
       resolverData: VideoManageResolver

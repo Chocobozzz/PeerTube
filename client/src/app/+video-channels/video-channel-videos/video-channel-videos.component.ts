@@ -35,7 +35,6 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
     avatar: false,
     privacyLabel: true,
     privacyText: false,
-    state: false,
     blacklistInfo: false
   }
 

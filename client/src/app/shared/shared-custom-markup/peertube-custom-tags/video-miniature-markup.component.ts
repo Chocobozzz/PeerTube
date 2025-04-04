@@ -38,7 +38,6 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
     avatar: true,
     privacyLabel: false,
     privacyText: false,
-    state: false,
     blacklistInfo: false
   }
 

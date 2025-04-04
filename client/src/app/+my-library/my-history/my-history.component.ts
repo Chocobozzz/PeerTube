@@ -59,7 +59,6 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     by: true,
     privacyLabel: false,
     privacyText: true,
-    state: true,
     blacklistInfo: true
   }
 

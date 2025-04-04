@@ -171,19 +171,20 @@ h1 {
   }
 }
 
+.video-header-block {
+  border-radius: 14px;
+  background-color: pvar(--bg-secondary-350);
+}
+
 .video-header {
-  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
 
   .video-actions {
-    padding: 1.5rem;
-    border-radius: 14px;
-    background-color: pvar(--bg-secondary-350);
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    padding: 1.5rem;
 
     h2 {
       font-size: 1.5rem;
@@ -220,4 +221,11 @@ h1 {
       display: none;
     }
   }
+}
+
+.video-state {
+  color: pvar(--fg-300);
+  padding: 1rem 1.5rem;
+
+  @include font-size(14px);
 }

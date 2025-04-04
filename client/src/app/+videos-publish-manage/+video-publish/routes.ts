@@ -10,6 +10,7 @@ import { VideoPublishComponent } from './video-publish.component'
 import { VideoPublishResolver } from './video-publish.resolver'
 import { inject } from '@angular/core'
 import debug from 'debug'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 
 const debugLogger = debug('peertube:video-publish')
 
@@ -42,6 +43,7 @@ export default [
     providers: [
       VideoPublishResolver,
       VideoManageController,
+      VideoStateMessageService,
       LiveVideoService,
       I18nPrimengCalendarService,
       VideoUploadService,

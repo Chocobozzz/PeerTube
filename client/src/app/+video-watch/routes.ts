@@ -12,6 +12,7 @@ import { OverviewService } from '../+video-list'
 import { VideoRecommendationService } from './shared'
 import { VideoWatchComponent } from './video-watch.component'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 
 export default [
   {
@@ -28,7 +29,8 @@ export default [
       SearchService,
       AbuseService,
       UserAdminService,
-      BulkService
+      BulkService,
+      VideoStateMessageService
     ],
     children: [
       {

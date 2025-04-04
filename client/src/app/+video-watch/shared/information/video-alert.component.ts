@@ -1,10 +1,11 @@
 import { NgIf } from '@angular/common'
-import { Component, input } from '@angular/core'
+import { Component, inject, input } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
-import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
+import { UserRight, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-alert',
@@ -17,35 +18,17 @@ export class VideoAlertComponent {
   readonly video = input<VideoDetails>(undefined)
   readonly noPlaylistVideoFound = input<boolean>(undefined)
 
+  private readonly videoStateMessage = inject(VideoStateMessageService)
+
+  canSeeMoreInfo () {
+    return !!(this.user()?.hasRight(UserRight.UPDATE_ANY_VIDEO))
+  }
+
   getAlertWarning () {
     const video = this.video()
-    if (!video) return
+    if (!video) return undefined
 
-    switch (video.state.id) {
-      case VideoState.TO_TRANSCODE:
-        return $localize`The video is being transcoded, it may not work properly.`
-
-      case VideoState.TO_IMPORT:
-        return $localize`The video is being imported, it will be available when the import is finished.`
-
-      case VideoState.TO_MOVE_TO_FILE_SYSTEM:
-        return $localize`The video is being moved to server file system, it may not work properly`
-
-      case VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED:
-        return $localize`Move to file system failed, this video may not work properly.`
-
-      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE:
-        return $localize`The video is being moved to an external server, it may not work properly.`
-
-      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED:
-        return $localize`Move to external storage failed, this video may not work properly.`
-
-      case VideoState.TO_EDIT:
-        return $localize`The video is being edited, it may not work properly.`
-
-      case VideoState.TRANSCODING_FAILED:
-        return $localize`Transcoding failed, this video may not work properly.`
-    }
+    return this.videoStateMessage.buildWarn(video.state.id)
   }
 
   hasVideoScheduledPublication () {

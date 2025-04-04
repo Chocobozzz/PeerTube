@@ -87,6 +87,7 @@
 // ---------------------------------------------------------------------------
 
 .alert {
+
   &.pt-alert-primary {
     color: pvar(--alert-primary-fg);
     background-color: pvar(--alert-primary-bg);
@@ -109,6 +110,13 @@
       );
     }
   }
+}
+
+.alert-title {
+  color: pvar(--fg-300);
+  font-weight: $font-bold;
+
+  @include font-size(18px);
 }
 
 // ---------------------------------------------------------------------------

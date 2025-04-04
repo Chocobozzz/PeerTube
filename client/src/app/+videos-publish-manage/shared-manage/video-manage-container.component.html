@@ -117,41 +117,50 @@
 
   <div class="w-100 min-width-0">
 
-    <div class="video-header">
-      <div class="video-actions">
-        <my-button class="cancel-button" icon="arrow-left" theme="secondary" i18n [ptRouterLink]="cancelLink()">Cancel</my-button>
+    <div class="mb-3">
+      <div class="video-header mb-2">
+        <div class="video-actions video-header-block mb-2">
+          <my-button class="cancel-button" icon="arrow-left" theme="secondary" i18n [ptRouterLink]="cancelLink()">Cancel</my-button>
 
-        <h2>{{ getVideo().name }}</h2>
+          <h2>{{ getVideo().name }}</h2>
 
-        <div class="watch-save">
-          <my-button *ngIf="canWatch()" class="watch-button" icon="external-link" theme="secondary" class="me-3" [href]="getWatchUrl()">
-            <span i18n class="watch-button-label">Watch the video</span>
-          </my-button>
+          <div class="watch-save">
+            <my-button *ngIf="canWatch()" class="watch-button" icon="external-link" theme="secondary" class="me-3" [href]="getWatchUrl()">
+              <span i18n class="watch-button-label">Watch the video</span>
+            </my-button>
 
-          <my-button
-            theme="primary" class="save-button"
-            icon="circle-tick"
-            [disabled]="!canUpdate() || !hasPendingChanges()"  (click)="onWantToUpdate()"
-          >
-            @if (hasStudioTasks()) {
-              <ng-container i18n>Save and run studio tasks</ng-container>
-            } @else if (hasReplaceFile()) {
-              <ng-container i18n>Save and replace file</ng-container>
-            } @else {
-              <ng-container i18n>Save</ng-container>
-            }
-          </my-button>
+            <my-button
+              theme="primary" class="save-button"
+              icon="circle-tick"
+              [disabled]="!canUpdate() || !hasPendingChanges()"  (click)="onWantToUpdate()"
+            >
+              @if (hasStudioTasks()) {
+                <ng-container i18n>Save and run studio tasks</ng-container>
+              } @else if (hasReplaceFile()) {
+                <ng-container i18n>Save and replace file</ng-container>
+              } @else {
+                <ng-container i18n>Save</ng-container>
+              }
+            </my-button>
+          </div>
         </div>
+
+        <div *ngIf="getStateWarning()?.title" class="video-state video-header-block mb-2">
+          <div class="alert-title">{{ getStateWarning().title }}</div>
+
+          <strong class="me-1">{{ getStateWarning().manageMain }}</strong>
+          <span>{{ getStateWarning().manageSecondary }}</span>
+        </div>
+
+        <my-manage-errors *ngIf="displayFormErrorsMsg && hasFormErrors()" class="d-block mb-2"></my-manage-errors>
+
+        <my-upload-progress
+          [isUploading]="isUploadingFile()"
+          [uploadPercents]="getUploadPercents()" [error]="getUploadError()" [uploaded]="hasUploadedFile()"
+          [enableRetryAfterError]="canRetryUpload" (retry)="retryUpload()"
+        >
+        </my-upload-progress>
       </div>
-
-      <my-manage-errors *ngIf="displayFormErrorsMsg && hasFormErrors()"></my-manage-errors>
-
-      <my-upload-progress
-        [isUploading]="isUploadingFile()"
-        [uploadPercents]="getUploadPercents()" [error]="getUploadError()" [uploaded]="hasUploadedFile()"
-        [enableRetryAfterError]="canRetryUpload" (retry)="retryUpload()"
-      >
-      </my-upload-progress>
 
       <ng-content></ng-content>
     </div>

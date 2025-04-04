@@ -13,6 +13,7 @@ import { UploadProgressComponent } from '../../shared/standalone-upload/upload-p
 import { ManageErrorsComponent } from './common/manage-errors.component'
 import { VideoEdit } from './common/video-edit.model'
 import { VideoManageController } from './video-manage-controller.service'
+import { VideoStateMessageService } from '@app/shared/shared-video/video-state-message.service'
 
 @Component({
   selector: 'my-video-manage-container',
@@ -35,6 +36,7 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   private notifier = inject(Notifier)
   private headerService = inject(HeaderService)
   private screenService = inject(ScreenService)
+  private videoStateMessage = inject(VideoStateMessageService)
 
   readonly canWatch = input.required<boolean, string | boolean>({ transform: booleanAttribute })
   readonly canUpdate = input.required<boolean, string | boolean>({ transform: booleanAttribute })
@@ -63,8 +65,16 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
     this.headerService.setSearchHidden(false)
   }
 
+  // ---------------------------------------------------------------------------
+
   hasFormErrors () {
     return this.manageController.hasFormErrors()
+  }
+
+  // ---------------------------------------------------------------------------
+
+  getStateWarning () {
+    return this.videoStateMessage.buildWarn(this.videoEdit.getVideoAttributes().state)
   }
 
   // ---------------------------------------------------------------------------

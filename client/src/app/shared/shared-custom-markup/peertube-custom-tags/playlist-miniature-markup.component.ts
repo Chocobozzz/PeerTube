@@ -37,7 +37,6 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
     avatar: true,
     privacyLabel: false,
     privacyText: false,
-    state: false,
     blacklistInfo: false
   }
 
