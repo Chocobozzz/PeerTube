@@ -75,6 +75,10 @@ p-calendar {
   }
 }
 
+.dragover {
+    border: 3px dashed pvar(--primary);
+}
+
 .plugin-fields {
   display: flex;
   flex-wrap: wrap;
