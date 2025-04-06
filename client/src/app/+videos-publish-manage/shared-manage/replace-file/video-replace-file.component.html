@@ -1,39 +1,42 @@
-<h2>
-  <my-global-icon iconName="upload"></my-global-icon>
+<div myDragDrop (fileDropped)="onFileDropped($event)">
+	<h2>
+		<my-global-icon iconName="upload"></my-global-icon>
 
-  <ng-container i18n>Replace file</ng-container>
-</h2>
+		<ng-container i18n>Replace file</ng-container>
+	</h2>
 
-@if (getUnavailability()) {
-  <my-alert type="primary" i18n>{{ getUnavailability() }}</my-alert>
-} @else {
-  <div [formGroup]="form">
-    <div class="form-columns reverse">
-      <div>
-        <div *ngIf="videoEdit.getVideoSource()" class="form-group">
-          <label i18n for="filename">Current uploaded file</label>
+	@if (getUnavailability()) {
+		<my-alert type="primary" i18n>{{ getUnavailability() }}</my-alert>
+	} @else {
+		<div [formGroup]="form">
+			<div class="form-columns reverse">
+				<div>
+					<div *ngIf="videoEdit.getVideoSource()" class="form-group">
+						<label i18n for="filename">Current uploaded file</label>
 
-          <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoEdit.getVideoSource().filename" />
-        </div>
-      </div>
+						<input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoEdit.getVideoSource().filename" />
+					</div>
+				</div>
 
-      <div>
-        <div class="form-group">
-          <label i18n for="videofile">Replace video file</label>
+				<div>
+					<div class="form-group">
+						<label i18n for="videofile">Replace video file</label>
 
-          <div i18n class="form-group-description">⚠️ Uploading a new version of your video will completely erase the current version</div>
+						<div i18n class="form-group-description">⚠️ Uploading a new version of your video will completely erase the current version</div>
 
-          <div>
-            <my-reactive-file
-              formControlName="replaceFile"
-              i18n-inputLabel inputLabel="Select the file to upload"
-              inputName="videofile" [extensions]="getVideoExtensions()" [displayFilename]="true" [displayReset]="true"
-              [buttonTooltip]="'(extensions: ' + getVideoExtensions() + ')'"
-              theme="primary"
-            ></my-reactive-file>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-}
+						<div>
+							<my-reactive-file
+								#reactiveFileInput
+								formControlName="replaceFile"
+								i18n-inputLabel inputLabel="Select the file to upload"
+								inputName="videofile" [extensions]="getVideoExtensions()" [displayFilename]="true" [displayReset]="true"
+								[buttonTooltip]="'(extensions: ' + getVideoExtensions() + ')'"
+								theme="primary"
+							></my-reactive-file>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+</div>
