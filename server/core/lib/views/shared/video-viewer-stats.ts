@@ -1,4 +1,4 @@
-import { VideoViewEvent } from '@peertube/peertube-models'
+import { UserAgent, VideoViewEvent } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { GeoIP } from '@server/helpers/geo-ip.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
@@ -12,7 +12,6 @@ import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-vid
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import { IResult as UAParserResult } from 'ua-parser-js'
 
 const lTags = loggerTagsFactory('views')
 
@@ -52,7 +51,7 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   async addLocalViewer (options: {
-    userAgent: UAParserResult
+    userAgent: UserAgent
     video: MVideoImmutable
     currentTime: number
     ip: string
@@ -90,9 +89,9 @@ export class VideoViewerStats {
 
         watchTime: 0,
 
-        browser: userAgent.browser.name,
-        device: userAgent.device.type || 'unknown',
-        operatingSystem: userAgent.os.name,
+        browser: userAgent.browser,
+        device: userAgent.device || 'unknown',
+        operatingSystem: userAgent.operatingSystem,
 
         country,
         subdivisionName,

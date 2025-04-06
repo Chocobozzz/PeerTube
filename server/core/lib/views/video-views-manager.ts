@@ -1,10 +1,9 @@
-import { VideoViewEvent } from '@peertube/peertube-models'
+import { UserAgent, VideoViewEvent } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoViews, ViewerScope } from './shared/index.js'
-import { IResult as UAParserResult } from 'ua-parser-js'
 
 /**
  * If processing a local view:
@@ -42,7 +41,7 @@ export class VideoViewsManager {
   }
 
   async processLocalView (options: {
-    userAgent: UAParserResult
+    userAgent: UserAgent
     video: MVideoImmutable
     currentTime: number
     ip: string | null

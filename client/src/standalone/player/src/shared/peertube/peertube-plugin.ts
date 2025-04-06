@@ -4,6 +4,7 @@ import { logger } from '@root-helpers/logger'
 import { isIOS, isMobile, isSafari } from '@root-helpers/web-browser'
 import debug from 'debug'
 import videojs from 'video.js'
+import { UAParser } from 'ua-parser-js'
 import {
   getPlayerSessionId,
   getStoredLastSubtitle,
@@ -413,7 +414,17 @@ class PeerTubePlugin extends Plugin {
 
     const sessionId = getPlayerSessionId()
 
-    const body: VideoView = { currentTime, viewEvent, sessionId }
+    const userAgent = UAParser(window.navigator.userAgent)
+    const body: VideoView = {
+      currentTime,
+      viewEvent,
+      sessionId,
+      userAgent: {
+        browser: userAgent.browser.name,
+        device: userAgent.device.type || 'unknown',
+        operatingSystem: userAgent.os.name,
+      }
+    }
 
     const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
     if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())

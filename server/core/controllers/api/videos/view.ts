@@ -1,5 +1,4 @@
 import express from 'express'
-import { UAParser } from 'ua-parser-js'
 import { HttpStatusCode, VideoView } from '@peertube/peertube-models'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
@@ -38,13 +37,9 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const body = req.body as VideoView
 
   const ip = req.ip
-  const userAgent = await Hooks.wrapFun(
-    UAParser,
-    req.headers['user-agent'],
-    'filter:api.video-view.parse-user-agent.get.result'
-  )
+
   const { successView } = await VideoViewsManager.Instance.processLocalView({
-    userAgent,
+    userAgent: body.userAgent,
     video,
     ip,
     currentTime: body.currentTime,
