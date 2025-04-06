@@ -94,9 +94,9 @@ export class VideoReplaceFileComponent implements OnInit, OnDestroy {
     this.updatedSub?.unsubscribe()
   }
 
-  @ViewChild('reactiveFileInput') reactiveFile: ReactiveFileComponent;
+  @ViewChild('reactiveFileInput') reactiveFile: ReactiveFileComponent
   onFileDropped (files: FileList) {
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) return
 
     this.reactiveFile.fileChange({ target: { files } })
   }
