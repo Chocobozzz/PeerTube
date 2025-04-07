@@ -7,7 +7,14 @@ import { logger, loggerTagsFactory } from './logger.js'
 
 const lTags = loggerTagsFactory('unzip')
 
-export async function unzip (source: string, destination: string) {
+export async function unzip (options: {
+  source: string
+  destination: string
+  maxSize: number // in bytes
+  maxFiles: number
+}) {
+  const { source, destination } = options
+
   await ensureDir(destination)
 
   logger.info(`Unzip ${source} to ${destination}`, lTags())
@@ -18,9 +25,25 @@ export async function unzip (source: string, destination: string) {
 
       zipFile.on('error', err => rej(err))
 
+      let decompressedSize = 0
+      let entries = 0
+
       zipFile.readEntry()
 
       zipFile.on('entry', async entry => {
+        decompressedSize += entry.uncompressedSize
+        entries++
+
+        if (decompressedSize > options.maxSize) {
+          zipFile.close()
+          return rej(new Error(`Unzipped size exceeds ${options.maxSize} bytes`))
+        }
+
+        if (entries > options.maxFiles) {
+          zipFile.close()
+          return rej(new Error(`Unzipped files count exceeds ${options.maxFiles}`))
+        }
+
         const entryPath = join(destination, entry.fileName)
 
         try {

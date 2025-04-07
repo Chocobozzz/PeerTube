@@ -122,7 +122,8 @@ describe('Test user import API validators', function () {
         'export-without-videos.zip',
         'export-bad-structure.zip',
         'export-bad-structure.zip',
-        'export-crash.zip'
+        'export-crash.zip',
+        'zip-bomb.zip'
       ]
 
       const tokens: string[] = []

@@ -1,5 +1,5 @@
 import { UserImportResultSummary, UserImportState } from '@peertube/peertube-models'
-import { getFilenameWithoutExt } from '@peertube/peertube-node-utils'
+import { getFilenameWithoutExt, getFileSize } from '@peertube/peertube-node-utils'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { unzip } from '@server/helpers/unzip.js'
@@ -20,6 +20,7 @@ import { UserVideoHistoryImporter } from './importers/user-video-history-importe
 import { VideoPlaylistsImporter } from './importers/video-playlists-importer.js'
 import { VideosImporter } from './importers/videos-importer.js'
 import { WatchedWordsListsImporter } from './importers/watched-words-lists-importer.js'
+import { parseBytes } from '@server/helpers/core-utils.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -51,7 +52,14 @@ export class UserImporter {
       const inputZip = getFSUserImportFilePath(importModel)
       this.extractedDirectory = join(dirname(inputZip), getFilenameWithoutExt(inputZip))
 
-      await unzip(inputZip, this.extractedDirectory)
+      await unzip({
+        source: inputZip,
+        destination: this.extractedDirectory,
+        // Videos that take a lot of space don't have a good compression ratio
+        // Keep a minimum of 1GB if the archive doesn't contain video files
+        maxSize: Math.max(await getFileSize(inputZip) * 2, parseBytes('1GB')),
+        maxFiles: 10000
+      })
 
       const user = await UserModel.loadByIdFull(importModel.userId)
 
