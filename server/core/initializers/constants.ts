@@ -46,7 +46,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 880
+export const LAST_MIGRATION_VERSION = 885
 
 // ---------------------------------------------------------------------------
 
@@ -512,6 +512,9 @@ export const CONSTRAINTS_FIELDS = {
     LIST_NAME: { min: 1, max: 100 }, // Length
     WORDS: { min: 1, max: 500 }, // Number of total words
     WORD: { min: 1, max: 100 } // Length
+  },
+  VIDEO_VIEW: {
+    UA_INFO: { min: 1, max: 200 } // Length
   }
 }
 

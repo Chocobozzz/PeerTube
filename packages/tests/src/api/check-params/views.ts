@@ -24,11 +24,10 @@ describe('Test videos views API validators', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].config.enableLive({ allowReplay: false, transcoding: false });
-
-    ({ uuid: videoId } = await servers[0].videos.quickUpload({ name: 'video' }));
-    ({ uuid: remoteVideoId } = await servers[1].videos.quickUpload({ name: 'video' }));
-    ({ uuid: liveVideoId } = await servers[0].live.create({
+    await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
+    ;({ uuid: videoId } = await servers[0].videos.quickUpload({ name: 'video' }))
+    ;({ uuid: remoteVideoId } = await servers[1].videos.quickUpload({ name: 'video' }))
+    ;({ uuid: liveVideoId } = await servers[0].live.create({
       fields: {
         name: 'live',
         privacy: VideoPrivacy.PUBLIC,
@@ -42,7 +41,6 @@ describe('Test videos views API validators', function () {
   })
 
   describe('When viewing a video', async function () {
-
     it('Should fail without current time', async function () {
       await servers[0].views.view({ id: videoId, currentTime: undefined, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -53,23 +51,66 @@ describe('Test videos views API validators', function () {
       await servers[0].views.view({ id: videoId, currentTime: 10, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with an invalid view event', async function () {
+      await servers[0].views.view({
+        id: videoId,
+        currentTime: 1,
+        viewEvent: 'seeko' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid session id', async function () {
+      await servers[0].views.view({ id: videoId, currentTime: 1, sessionId: 'tito_t', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an invalid client', async function () {
+      await servers[0].views.view({
+        id: videoId,
+        currentTime: 1,
+        client: 'a'.repeat(1000),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid operating system', async function () {
+      await servers[0].views.view({
+        id: videoId,
+        currentTime: 1,
+        operatingSystem: 'a'.repeat(1000),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with correct parameters', async function () {
-      await servers[0].views.view({ id: videoId, currentTime: 1 })
+      await servers[0].views.view({
+        id: videoId,
+        sessionId: 'titot',
+        viewEvent: 'seek',
+        client: 'chrome',
+        device: 'super device' as any,
+        operatingSystem: 'linux',
+        currentTime: 1
+      })
     })
   })
 
-  describe('When getting overall stats', function () {
+  describe('When getting overall/useragent stats', function () {
+    async function testEndpoint (options: Parameters<PeerTubeServer['videoStats']['getOverallStats']>[0]) {
+      await servers[0].videoStats.getOverallStats(options)
+      await servers[0].videoStats.getUserAgentStats(options)
+    }
 
     it('Should fail with a remote video', async function () {
-      await servers[0].videoStats.getOverallStats({ videoId: remoteVideoId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await testEndpoint({ videoId: remoteVideoId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail without token', async function () {
-      await servers[0].videoStats.getOverallStats({ videoId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await testEndpoint({ videoId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another token', async function () {
-      await servers[0].videoStats.getOverallStats({
+      await testEndpoint({
         videoId,
         token: userAccessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
@@ -77,7 +118,7 @@ describe('Test videos views API validators', function () {
     })
 
     it('Should fail with an invalid start date', async function () {
-      await servers[0].videoStats.getOverallStats({
+      await testEndpoint({
         videoId,
         startDate: 'fake' as any,
         endDate: new Date().toISOString(),
@@ -86,7 +127,7 @@ describe('Test videos views API validators', function () {
     })
 
     it('Should fail with an invalid end date', async function () {
-      await servers[0].videoStats.getOverallStats({
+      await testEndpoint({
         videoId,
         startDate: new Date().toISOString(),
         endDate: 'fake' as any,
@@ -95,7 +136,7 @@ describe('Test videos views API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await servers[0].videoStats.getOverallStats({
+      await testEndpoint({
         videoId,
         startDate: new Date().toISOString(),
         endDate: new Date().toISOString()
@@ -104,7 +145,6 @@ describe('Test videos views API validators', function () {
   })
 
   describe('When getting timeserie stats', function () {
-
     it('Should fail with a remote video', async function () {
       await servers[0].videoStats.getTimeserieStats({
         videoId: remoteVideoId,
@@ -189,7 +229,6 @@ describe('Test videos views API validators', function () {
   })
 
   describe('When getting retention stats', function () {
-
     it('Should fail with a remote video', async function () {
       await servers[0].videoStats.getRetentionStats({
         videoId: remoteVideoId,

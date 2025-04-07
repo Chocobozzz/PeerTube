@@ -14,7 +14,8 @@ import {
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
-  VideoStatsTimeserieMetric
+  VideoStatsTimeserieMetric,
+  VideoStatsUserAgent
 } from '@peertube/peertube-models'
 import { ChartConfiguration, ChartData, defaults as ChartJSDefaults, ChartOptions, PluginOptionsByType, Scale, TooltipItem } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
@@ -29,11 +30,13 @@ import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
 import { VideoStatsService } from './video-stats.service'
 
-type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries' | 'regions'
+const BAR_GRAPHS = [ 'countries', 'regions', 'clients', 'devices', 'operatingSystems' ] as const
+type BarGraphs = typeof BAR_GRAPHS[number]
+type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | BarGraphs
 
 type GeoData = { name: string, viewers: number }[]
 
-type ChartIngestData = VideoStatsTimeserie | VideoStatsRetention | GeoData
+type ChartIngestData = VideoStatsTimeserie | VideoStatsRetention | GeoData | VideoStatsUserAgent
 type ChartBuilderResult = {
   type: 'line' | 'bar'
 
@@ -45,6 +48,8 @@ type ChartBuilderResult = {
 }
 
 type Card = { label: string, value: string | number, moreInfo?: string, help?: string }
+
+const isBarGraph = (graphId: ActiveGraphId): graphId is BarGraphs => BAR_GRAPHS.some(graph => graph === graphId)
 
 ChartJSDefaults.backgroundColor = getComputedStyle(document.body).getPropertyValue('--bg')
 ChartJSDefaults.borderColor = getComputedStyle(document.body).getPropertyValue('--bg-secondary-500')
@@ -139,6 +144,21 @@ export class VideoStatsComponent implements OnInit {
       {
         id: 'regions',
         label: $localize`Regions`,
+        zoomEnabled: false
+      },
+      {
+        id: 'clients',
+        label: $localize`Clients`,
+        zoomEnabled: false
+      },
+      {
+        id: 'devices',
+        label: $localize`Devices`,
+        zoomEnabled: false
+      },
+      {
+        id: 'operatingSystems',
+        label: $localize`Operating systems`,
         zoomEnabled: false
       }
     ]
@@ -359,17 +379,23 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private loadChart () {
+    const videoId = this.videoEdit.getVideoAttributes().uuid
+
     const obsBuilders: { [id in ActiveGraphId]: Observable<ChartIngestData> } = {
-      retention: this.statsService.getRetentionStats(this.videoEdit.getVideoAttributes().uuid),
+      retention: this.statsService.getRetentionStats(videoId),
+
+      clients: this.statsService.getUserAgentStats({ videoId }),
+      devices: this.statsService.getUserAgentStats({ videoId }),
+      operatingSystems: this.statsService.getUserAgentStats({ videoId }),
 
       aggregateWatchTime: this.statsService.getTimeserieStats({
-        videoId: this.videoEdit.getVideoAttributes().uuid,
+        videoId,
         startDate: this.statsStartDate,
         endDate: this.statsEndDate,
         metric: 'aggregateWatchTime'
       }),
       viewers: this.statsService.getTimeserieStats({
-        videoId: this.videoEdit.getVideoAttributes().uuid,
+        videoId,
         startDate: this.statsStartDate,
         endDate: this.statsEndDate,
         metric: 'viewers'
@@ -395,6 +421,9 @@ export class VideoStatsComponent implements OnInit {
     const dataBuilders: {
       [id in ActiveGraphId]: (rawData: ChartIngestData) => ChartBuilderResult
     } = {
+      clients: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'clients'),
+      devices: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'devices'),
+      operatingSystems: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'operatingSystems'),
       retention: (rawData: VideoStatsRetention) => this.buildRetentionChartOptions(rawData),
       aggregateWatchTime: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       viewers: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
@@ -418,6 +447,7 @@ export class VideoStatsComponent implements OnInit {
         scales: {
           x: {
             ticks: {
+              stepSize: isBarGraph(graphId) ? 1 : undefined,
               callback: function (value) {
                 return self.formatXTick({
                   graphId,
@@ -550,6 +580,43 @@ export class VideoStatsComponent implements OnInit {
     }
   }
 
+  private buildUserAgentChartOptions (rawData: VideoStatsUserAgent, type: 'clients' | 'devices' | 'operatingSystems'): ChartBuilderResult {
+    const labels: string[] = []
+    const data: number[] = []
+
+    for (const d of rawData[type]) {
+      const name = d.name?.charAt(0).toUpperCase() + d.name?.slice(1)
+      labels.push(name)
+      data.push(d.viewers)
+    }
+
+    return {
+      type: 'bar' as 'bar',
+
+      options: {
+        indexAxis: 'y'
+      },
+
+      displayLegend: true,
+
+      plugins: {
+        ...this.buildDisabledZoomPlugin()
+      },
+
+      data: {
+        labels,
+        datasets: [
+          {
+            label: $localize`Viewers`,
+            backgroundColor: this.buildChartColor(),
+            maxBarThickness: 20,
+            data
+          }
+        ]
+      }
+    }
+  }
+
   private buildGeoChartOptions (rawData: GeoData): ChartBuilderResult {
     const labels: string[] = []
     const data: number[] = []
@@ -630,7 +697,7 @@ export class VideoStatsComponent implements OnInit {
 
     if (graphId === 'retention') return value + ' %'
     if (graphId === 'aggregateWatchTime') return secondsToTime(+value)
-    if ((graphId === 'countries' || graphId === 'regions') && scale) return scale.getLabelForValue(value as number)
+    if (isBarGraph(graphId) && scale) return scale.getLabelForValue(value as number)
 
     return value.toLocaleString(this.localeId)
   }
