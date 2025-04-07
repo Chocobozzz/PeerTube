@@ -8,7 +8,7 @@ async function up (utils: {
   const { transaction } = utils
 
   {
-    await utils.queryInterface.addColumn('localVideoViewer', 'browser', {
+    await utils.queryInterface.addColumn('localVideoViewer', 'client', {
       type: Sequelize.STRING,
       defaultValue: null,
       allowNull: true

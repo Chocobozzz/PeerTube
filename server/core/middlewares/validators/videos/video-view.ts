@@ -1,5 +1,10 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { isVideoTimeValid } from '@server/helpers/custom-validators/video-view.js'
+import {
+  isVideoTimeValid,
+  isVideoViewEvent,
+  isVideoViewUAInfo,
+  toVideoViewUADeviceOrNull
+} from '@server/helpers/custom-validators/video-view.js'
 import { getCachedVideoDuration } from '@server/lib/video.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import express from 'express'
@@ -41,6 +46,20 @@ export const videoViewValidator = [
   body('sessionId')
     .optional()
     .isAlphanumeric(undefined, { ignore: '-' }),
+
+  body('viewEvent')
+    .optional()
+    .custom(isVideoViewEvent),
+
+  body('client')
+    .optional()
+    .custom(isVideoViewUAInfo),
+  body('device')
+    .optional()
+    .customSanitizer(toVideoViewUADeviceOrNull),
+  body('operatingSystem')
+    .optional()
+    .custom(isVideoViewUAInfo),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return

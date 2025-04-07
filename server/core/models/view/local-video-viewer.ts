@@ -51,7 +51,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
   @AllowNull(true)
   @Column
-  browser: string
+  client: string
 
   @AllowNull(true)
   @Column
@@ -262,22 +262,22 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   }): Promise<VideoStatsUserAgent> {
     const { video, startDate, endDate } = options
 
-    const [ browser, device, operatingSystem ] = await Promise.all([
-      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'browser', startDate, endDate, videoId: video.id }),
+    const [ clients, devices, operatingSystems ] = await Promise.all([
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'client', startDate, endDate, videoId: video.id }),
       LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'device', startDate, endDate, videoId: video.id }),
       LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'operatingSystem', startDate, endDate, videoId: video.id })
     ])
 
     return {
-      browser: browser.map(r => ({
-        name: r.browser,
+      clients: clients.map(r => ({
+        name: r.client,
         viewers: r.viewers
       })),
-      device: device.map(r => ({
+      devices: devices.map(r => ({
         name: r.device,
         viewers: r.viewers
       })),
-      operatingSystem: operatingSystem.map(r => ({
+      operatingSystems: operatingSystems.map(r => ({
         name: r.operatingSystem,
         viewers: r.viewers
       }))
@@ -379,7 +379,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   }
 
   private static async buildGroupBy (options: {
-    groupByColumn: 'country' | 'subdivisionName' | 'browser' | 'device' | 'operatingSystem'
+    groupByColumn: 'country' | 'subdivisionName' | 'client' | 'device' | 'operatingSystem'
     startDate?: string
     endDate?: string
     videoId: number

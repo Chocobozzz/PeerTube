@@ -1,4 +1,4 @@
-import { UserAgent, VideoViewEvent } from '@peertube/peertube-models'
+import { VideoViewEvent } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { GeoIP } from '@server/helpers/geo-ip.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
@@ -26,7 +26,7 @@ type LocalViewerStats = {
 
   watchTime: number
 
-  browser: string
+  client: string
   device: string
   operatingSystem: string
 
@@ -51,19 +51,21 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   async addLocalViewer (options: {
-    userAgent: UserAgent
     video: MVideoImmutable
     currentTime: number
     ip: string
     sessionId: string
     viewEvent?: VideoViewEvent
+    client: string
+    operatingSystem: string
+    device: string
   }) {
-    const { video, ip, viewEvent, currentTime, sessionId, userAgent } = options
+    const { video, ip, viewEvent, currentTime, sessionId, client, operatingSystem, device } = options
 
     logger.debug(
       'Adding local viewer to video stats %s.',
       video.uuid,
-      { currentTime, viewEvent, sessionId, ...lTags(video.uuid) }
+      { currentTime, viewEvent, sessionId, client, operatingSystem, device, ...lTags(video.uuid) }
     )
 
     const nowMs = new Date().getTime()
@@ -73,7 +75,7 @@ export class VideoViewerStats {
     if (stats && stats.watchSections.length >= MAX_LOCAL_VIEWER_WATCH_SECTIONS) {
       logger.warn(
         'Too much watch section to store for a viewer, skipping this one',
-        { sessionId, currentTime, viewEvent, ...lTags(video.uuid) }
+        { currentTime, viewEvent, sessionId, client, operatingSystem, device, ...lTags(video.uuid) }
       )
       return
     }
@@ -89,9 +91,9 @@ export class VideoViewerStats {
 
         watchTime: 0,
 
-        browser: userAgent.browser,
-        device: userAgent.device || 'unknown',
-        operatingSystem: userAgent.operatingSystem,
+        client,
+        device,
+        operatingSystem,
 
         country,
         subdivisionName,
@@ -191,7 +193,7 @@ export class VideoViewerStats {
       startDate: new Date(stats.firstUpdated),
       endDate: new Date(stats.lastUpdated),
       watchTime: stats.watchTime,
-      browser: stats.browser,
+      client: stats.client,
       device: stats.device,
       operatingSystem: stats.operatingSystem,
       country: stats.country,

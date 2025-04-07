@@ -1,4 +1,4 @@
-import { UserAgent, VideoViewEvent } from '@peertube/peertube-models'
+import { VideoViewEvent } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -41,14 +41,16 @@ export class VideoViewsManager {
   }
 
   async processLocalView (options: {
-    userAgent: UserAgent
     video: MVideoImmutable
     currentTime: number
     ip: string | null
     sessionId?: string
     viewEvent?: VideoViewEvent
+    client: string
+    operatingSystem: string
+    device: string
   }) {
-    const { video, ip, viewEvent, currentTime, userAgent } = options
+    const { video, ip, viewEvent, currentTime, client, operatingSystem, device } = options
 
     let sessionId = options.sessionId
     if (!sessionId || CONFIG.VIEWS.VIDEOS.TRUST_VIEWER_SESSION_ID !== true) {
@@ -57,7 +59,7 @@ export class VideoViewsManager {
 
     logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`, lTags())
 
-    await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime, userAgent })
+    await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime, client, operatingSystem, device })
 
     const successViewer = await this.videoViewerCounters.addLocalViewer({ video, sessionId })
 

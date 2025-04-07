@@ -3164,6 +3164,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoStatsOverall'
 
+  '/api/v1/videos/{id}/stats/user-agent':
+    get:
+      summary: Get user agent stats of a video
+      tags:
+        - Video Stats
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: startDate
+          in: query
+          description: Filter stats by start date
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: Filter stats by end date
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoStatsUserAgent'
+
   '/api/v1/videos/{id}/stats/retention':
     get:
       summary: Get retention stats of a video
@@ -9090,7 +9119,18 @@ components:
             Optional param to represent the current viewer session.
             Used by the backend to properly count one view per session per video.
             PeerTube admin can configure the server to not trust this `sessionId` parameter but use the request IP address instead to identify a viewer.
-
+        client:
+          type: string
+          description: >
+            Client software used to watch the video. For example "Firefox", "PeerTube Approval Android", etc.
+        device:
+          $ref: '#/components/schemas/VideoStatsUserAgentDevice'
+          description: >
+            Device used to watch the video. For example "desktop", "mobile", "smarttv", etc.
+        operatingSystem:
+          type: string
+          description: >
+            Operating system used to watch the video. For example "Windows", "Ubuntu", etc.
 
     VideoStatsOverall:
       properties:
@@ -9109,6 +9149,47 @@ components:
             type: object
             properties:
               isoCode:
+                type: string
+              viewers:
+                type: number
+
+    VideoStatsUserAgentDevice:
+      enum:
+        - 'console'
+        - 'embedded'
+        - 'mobile'
+        - 'smarttv'
+        - 'tablet'
+        - 'wearable'
+        - 'xr'
+        - 'desktop'
+
+    VideoStatsUserAgent:
+      properties:
+        clients:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              viewers:
+                type: number
+        devices:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                $ref: '#/components/schemas/VideoStatsUserAgentDevice'
+              viewers:
+                type: number
+        operatingSystem:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
                 type: string
               viewers:
                 type: number

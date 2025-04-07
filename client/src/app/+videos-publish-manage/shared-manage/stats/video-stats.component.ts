@@ -31,7 +31,7 @@ import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
 import { VideoStatsService } from './video-stats.service'
 
-const BAR_GRAPHS = [ 'countries', 'regions', 'browser', 'device', 'operatingSystem' ] as const
+const BAR_GRAPHS = [ 'countries', 'regions', 'clients', 'devices', 'operatingSystems' ] as const
 type BarGraphs = typeof BAR_GRAPHS[number]
 type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | BarGraphs
 
@@ -50,7 +50,7 @@ type ChartBuilderResult = {
 
 type Card = { label: string, value: string | number, moreInfo?: string, help?: string }
 
-const isBarGraph = (graphId: ActiveGraphId): graphId is BarGraphs => BAR_GRAPHS.some((graph) => graph === graphId)
+const isBarGraph = (graphId: ActiveGraphId): graphId is BarGraphs => BAR_GRAPHS.some(graph => graph === graphId)
 
 ChartJSDefaults.backgroundColor = getComputedStyle(document.body).getPropertyValue('--bg')
 ChartJSDefaults.borderColor = getComputedStyle(document.body).getPropertyValue('--bg-secondary-500')
@@ -149,18 +149,18 @@ export class VideoStatsComponent implements OnInit {
         zoomEnabled: false
       },
       {
-        id: 'browser',
-        label: $localize`Browser`,
+        id: 'clients',
+        label: $localize`Clients`,
         zoomEnabled: false
       },
       {
-        id: 'device',
-        label: $localize`Device`,
+        id: 'devices',
+        label: $localize`Devices`,
         zoomEnabled: false
       },
       {
-        id: 'operatingSystem',
-        label: $localize`Operating system`,
+        id: 'operatingSystems',
+        label: $localize`Operating systems`,
         zoomEnabled: false
       }
     ]
@@ -381,20 +381,23 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private loadChart () {
+    const videoId = this.videoEdit.getVideoAttributes().uuid
+
     const obsBuilders: { [id in ActiveGraphId]: Observable<ChartIngestData> } = {
-      retention: this.statsService.getRetentionStats(this.videoEdit.getVideoAttributes().uuid),
-      browser: this.statsService.getUserAgentStats(this.videoEdit.getVideoAttributes().uuid),
-      device: this.statsService.getUserAgentStats(this.videoEdit.getVideoAttributes().uuid),
-      operatingSystem: this.statsService.getUserAgentStats(this.videoEdit.getVideoAttributes().uuid),
+      retention: this.statsService.getRetentionStats(videoId),
+
+      clients: this.statsService.getUserAgentStats({ videoId }),
+      devices: this.statsService.getUserAgentStats({ videoId }),
+      operatingSystems: this.statsService.getUserAgentStats({ videoId }),
 
       aggregateWatchTime: this.statsService.getTimeserieStats({
-        videoId: this.videoEdit.getVideoAttributes().uuid,
+        videoId,
         startDate: this.statsStartDate,
         endDate: this.statsEndDate,
         metric: 'aggregateWatchTime'
       }),
       viewers: this.statsService.getTimeserieStats({
-        videoId: this.videoEdit.getVideoAttributes().uuid,
+        videoId,
         startDate: this.statsStartDate,
         endDate: this.statsEndDate,
         metric: 'viewers'
@@ -420,9 +423,9 @@ export class VideoStatsComponent implements OnInit {
     const dataBuilders: {
       [id in ActiveGraphId]: (rawData: ChartIngestData) => ChartBuilderResult
     } = {
-      browser: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'browser'),
-      device: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'device'),
-      operatingSystem: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'operatingSystem'),
+      clients: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'clients'),
+      devices: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'devices'),
+      operatingSystems: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'operatingSystems'),
       retention: (rawData: VideoStatsRetention) => this.buildRetentionChartOptions(rawData),
       aggregateWatchTime: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       viewers: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
@@ -579,7 +582,7 @@ export class VideoStatsComponent implements OnInit {
     }
   }
 
-  private buildUserAgentChartOptions (rawData: VideoStatsUserAgent, type: 'browser' | 'device' | 'operatingSystem'): ChartBuilderResult {
+  private buildUserAgentChartOptions (rawData: VideoStatsUserAgent, type: 'clients' | 'devices' | 'operatingSystems'): ChartBuilderResult {
     const labels: string[] = []
     const data: number[] = []
 

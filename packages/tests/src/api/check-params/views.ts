@@ -51,8 +51,47 @@ describe('Test videos views API validators', function () {
       await servers[0].views.view({ id: videoId, currentTime: 10, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with an invalid view event', async function () {
+      await servers[0].views.view({
+        id: videoId,
+        currentTime: 1,
+        viewEvent: 'seeko' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid session id', async function () {
+      await servers[0].views.view({ id: videoId, currentTime: 1, sessionId: 'tito_t', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an invalid client', async function () {
+      await servers[0].views.view({
+        id: videoId,
+        currentTime: 1,
+        client: 'a'.repeat(1000),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid operating system', async function () {
+      await servers[0].views.view({
+        id: videoId,
+        currentTime: 1,
+        operatingSystem: 'a'.repeat(1000),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with correct parameters', async function () {
-      await servers[0].views.view({ id: videoId, currentTime: 1 })
+      await servers[0].views.view({
+        id: videoId,
+        sessionId: 'titot',
+        viewEvent: 'seek',
+        client: 'chrome',
+        device: 'super device' as any,
+        operatingSystem: 'linux',
+        currentTime: 1
+      })
     })
   })
 
