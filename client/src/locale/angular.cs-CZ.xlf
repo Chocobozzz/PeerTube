@@ -3271,9 +3271,9 @@
           <context context-type="linenumber">290</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2095604754338363597" datatype="html">
+      <trans-unit id="2095604754338363597" datatype="html" xml:space="preserve">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Pokud je povoleno, doporučujeme použít <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, abyste zabránili přístupu k soukromým URL ze serveru PeerTube</target>
+        <target state="translated">⚠️ Pokud je povoleno, doporučujeme použít <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, abyste zabránili přístupu k soukromým adresám URL z vašeho serveru PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">293</context>
@@ -3898,9 +3898,9 @@
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9065795501872450602">
+      <trans-unit id="9065795501872450602" xml:space="preserve">
         <source>Licence</source>
-        <target>License</target>
+        <target state="translated">Licence</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">134</context>
@@ -4330,7 +4330,7 @@
       </trans-unit>
       <trans-unit id="3171444589366264129" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>kompatibilní s Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> které také podporuje <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>vlastní PeerTube HTML značky<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Kompatibilní s Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, které také podporuje <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>vlastní HTML značky PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2,3</context>
@@ -4338,7 +4338,7 @@
       </trans-unit>
       <trans-unit id="8725224976466294458" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinmastodon.org/user/profile/#verification&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Mastodon verification link<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is also supported. </source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinmastodon.org/user/profile/#verification&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>ověřovací odkaz na Mastodon<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> je také podporován. </target>
+        <target state="translated">Je také podporován <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinmastodon.org/user/profile/#verification&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>ověřovací odkaz sítě Mastodon<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -7379,9 +7379,9 @@
           <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667250632809964191">
+      <trans-unit id="6667250632809964191" xml:space="preserve">
         <source>Send a link to reset the password by email to the user</source>
-        <target>Zaslat odkaz pro reset hesla uživateli emailem</target>
+        <target state="translated">Zaslat odkaz pro reset hesla uživateli e-mailem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">231</context>
@@ -9257,17 +9257,17 @@
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="399528956091640769" datatype="html">
+      <trans-unit id="399528956091640769" datatype="html" xml:space="preserve">
         <source>MODERATION &amp; NSFW</source>
-        <target state="translated">MODEROVÁNÍ &amp; NSFW</target>
+        <target state="translated">MODEROVÁNÍ A NSFW</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4423835119021329687" datatype="html">
+      <trans-unit id="4423835119021329687" datatype="html" xml:space="preserve">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to build a moderation team. </source>
-        <target state="translated">Spravovat <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/users&quot;&gt;"/>uživatele <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>pro vytvoření a moderování týmu. </target>
+        <target state="translated">Spravovat <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/users&quot;&gt;"/>uživatele<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pro vytvoření týmu moderátorů. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">181</context>
@@ -10697,9 +10697,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1823941382992046371">
+      <trans-unit id="1823941382992046371" xml:space="preserve">
         <source>Allow audio files upload</source>
-        <target>Umožnit upload audio souborů</target>
+        <target state="translated">Umožnit nahrávání zvukových souborů</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">60</context>
@@ -11651,7 +11651,7 @@
       </trans-unit>
       <trans-unit id="1456146786867743695" datatype="html" xml:space="preserve">
         <source>Mastodon link</source>
-        <target state="translated">odkaz na Mastodon</target>
+        <target state="translated">Odkaz na Mastodon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">151,153</context>
@@ -11659,23 +11659,23 @@
       </trans-unit>
       <trans-unit id="3938009584903861509" datatype="html" xml:space="preserve">
         <source>Bluesky link</source>
-        <target state="translated">odkaz na Bluesky</target>
+        <target state="translated">Odkaz na Bluesky</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">162,164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="264068562357780835">
+      <trans-unit id="264068562357780835" xml:space="preserve">
         <source>New email</source>
-        <target>Nový email</target>
+        <target state="translated">Nový e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3000005804987112527">
+      <trans-unit id="3000005804987112527" xml:space="preserve">
         <source>Change email</source>
-        <target>Změnit email</target>
+        <target state="translated">Změnit e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">34</context>
@@ -12631,9 +12631,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5634180635200972996" datatype="html">
+      <trans-unit id="5634180635200972996" datatype="html" xml:space="preserve">
         <source>Email verified!</source>
-        <target state="translated">Email ověřen!</target>
+        <target state="translated">E-mail ověřen!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -13227,9 +13227,9 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5336387229608682776" datatype="html">
+      <trans-unit id="5336387229608682776" datatype="html" xml:space="preserve">
         <source>PeerTube Applications</source>
-        <target state="translated">PeerTube Aplikace</target>
+        <target state="translated">Aplikace PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">40</context>
@@ -16309,9 +16309,9 @@
           <context context-type="linenumber">313</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3104427236147521673" datatype="html">
+      <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {1 e-mail uživatele nastaven jako ověřený.} other {<x id="count"/> e-maily uživatele nastaveny jako ověřené.}}</target>
+        <target state="translated">{count, plural, =1 {1 e-mail uživatele nastaven jako ověřený.} few {<x id="count"/> e-maily uživatele nastaveny jako ověřené.} other {<x id="count"/> e-mailů uživatele nastaveno jako ověřené.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">331</context>
@@ -16377,9 +16377,9 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6012072687166259654" datatype="html">
+      <trans-unit id="6012072687166259654" datatype="html" xml:space="preserve">
         <source>Please check your emails to verify your new email.</source>
-        <target state="translated">Zkontrolujte své e-maily a ověřte si svůj nový e-mail.</target>
+        <target state="translated">Zkontrolujte prosím své e-maily a ověřte si svůj nový e-mail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -17085,9 +17085,9 @@
           <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5851560788527570644" datatype="html">
+      <trans-unit id="5851560788527570644" datatype="html" xml:space="preserve">
         <source>Notifications</source>
-        <target state="translated">Oznamování</target>
+        <target state="translated">Oznámení</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -17101,9 +17101,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5767090948392236130" datatype="html">
+      <trans-unit id="5767090948392236130" datatype="html" xml:space="preserve">
         <source>Notification preferences</source>
-        <target state="translated">Předvolby oznamování</target>
+        <target state="translated">Předvolby oznámení</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
           <context context-type="linenumber">11</context>
@@ -17499,9 +17499,9 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2687679787442328897" datatype="html">
+      <trans-unit id="2687679787442328897" datatype="html" xml:space="preserve">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target state="translated">Email s ověřovacím odkazem zaslán na <x id="PH"/>.</target>
+        <target state="translated">E-mail s ověřovacím odkazem zaslán na <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -22698,25 +22698,25 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2763845919408843325" datatype="html">
+      <trans-unit id="2763845919408843325" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
-        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" bude přidáno na začátek videa</target>
+        <target state="translated">Na začátek videa bude přidáno „<x id="PH" equiv-text="this.getFilename(t.options.file)"/>“</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4952096817126306891" datatype="html">
+      <trans-unit id="4952096817126306891" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" bude přidán na konec videa</target>
+        <target state="translated">Na konec videa bude přidáno „<x id="PH" equiv-text="this.getFilename(t.options.file)"/>“</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="665518679871959619" datatype="html">
+      <trans-unit id="665518679871959619" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" do videa bude přidán obrazový vodoznak</target>
+        <target state="translated">Do videa bude přidán vodoznak „<x id="PH" equiv-text="this.getFilename(t.options.file)"/>“</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">149</context>
