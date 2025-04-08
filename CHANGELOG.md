@@ -1,5 +1,35 @@
 # Changelog
 
+## v7.1.1
+
+### SECURITY
+
+  * This version fixes important vulnerabilities, that will be detailed on Tuesday, April 15
+
+### Bug fixes
+
+  * Fix playlist page margins
+  * Fix danger button border
+  * Fix unsubscribe button label for channels
+  * Fix remote subscribe on iOS
+  * Add Podcast feed to subscribe button
+  * Always display technical information tab in *About* page
+  * Fix menu button auto font-size to prevent overflow in some locales
+  * Correctly inject multiple `rel="me"` links with supported markdown fields
+  * Fix adding studio watermark with audio/video split HLS file
+  * Reset video state on studio failure
+  * Fix updating a user in administration
+  * Fix error when getting a S3 object with some S3 providers
+  * Specify charset when uploading caption files in S3
+  * Fix theme color parsing with some web browsers
+  * Improve channel description in custom markup miniature
+  * Ensure ffmpeg process is killed if download is aborted
+  * Correctly reload playlist on playlist change in watch page
+  * Use `indexifembedded` in embeds instead of `noindex`
+  * Fix extra space on links of remote comments
+  * Don't convert webp images to jpeg
+
+
 ## v7.1.0
 
 ### IMPORTANT NOTES
