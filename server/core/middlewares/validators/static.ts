@@ -1,6 +1,7 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   exists,
+  isSafeFilename,
   isSafePeerTubeFilenameWithoutExtension,
   isUUIDValid,
   toBooleanOrNull
@@ -28,7 +29,7 @@ const staticFileTokenBypass = new LRUCache<string, LRUValue>({
   ttl: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.TTL
 })
 
-const ensureCanAccessVideoPrivateWebVideoFiles = [
+export const ensureCanAccessVideoPrivateWebVideoFiles = [
   query('videoFileToken').optional().custom(exists),
 
   isValidVideoPasswordHeader(),
@@ -67,22 +68,43 @@ const ensureCanAccessVideoPrivateWebVideoFiles = [
   }
 ]
 
-const ensureCanAccessPrivateVideoHLSFiles = [
+export const privateM3U8PlaylistValidator = [
   param('videoUUID')
     .custom(isUUIDValid),
 
   param('playlistNameWithoutExtension')
-    .optional()
     .custom(v => isSafePeerTubeFilenameWithoutExtension(v)),
-
-  query('videoFileToken')
-    .optional()
-    .custom(exists),
 
   query('reinjectVideoFileToken')
     .optional()
     .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid reinjectVideoFileToken boolean'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+export const privateHLSFileValidator = [
+  param('videoUUID')
+    .custom(isUUIDValid),
+
+  param('filename')
+    .custom(v => isSafeFilename(v)),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+export const ensureCanAccessPrivateVideoHLSFiles = [
+  query('videoFileToken')
+    .optional()
+    .custom(exists),
 
   isValidVideoPasswordHeader(),
 
@@ -123,11 +145,6 @@ const ensureCanAccessPrivateVideoHLSFiles = [
     return next()
   }
 ]
-
-export {
-  ensureCanAccessPrivateVideoHLSFiles,
-  ensureCanAccessVideoPrivateWebVideoFiles
-}
 
 // ---------------------------------------------------------------------------
 

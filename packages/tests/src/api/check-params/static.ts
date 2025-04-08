@@ -61,7 +61,8 @@ describe('Test static endpoints validators', function () {
       await makeGetRequest({
         url: server.url,
         token: server.accessToken,
-        path: '/static/streaming-playlists/hls/private/' + privateVideo.uuid + '/' + privateM3U8.replace('.m3u8', '.mp4')
+        path: '/static/streaming-playlists/hls/private/' + privateVideo.uuid + '/' + privateM3U8.replace('.m3u8', '.mp4'),
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 

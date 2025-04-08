@@ -5,7 +5,9 @@ import {
   ensureCanAccessPrivateVideoHLSFiles,
   ensureCanAccessVideoPrivateWebVideoFiles,
   handleStaticError,
-  optionalAuthenticate
+  optionalAuthenticate,
+  privateHLSFileValidator,
+  privateM3U8PlaylistValidator
 } from '@server/middlewares/index.js'
 import cors from 'cors'
 import express from 'express'
@@ -55,17 +57,20 @@ const privateHLSStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AU
   : []
 
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistNameWithoutExtension.m3u8',
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistNameWithoutExtension([a-z0-9-]+).m3u8',
+  privateM3U8PlaylistValidator,
   ...privateHLSStaticMiddlewares,
   asyncMiddleware(servePrivateM3U8)
 )
 
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS,
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
+  privateHLSFileValidator,
   ...privateHLSStaticMiddlewares,
-  express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, { fallthrough: false }),
-  handleStaticError
+  servePrivateHLSFile
 )
+// ---------------------------------------------------------------------------
+
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
   express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, { fallthrough: false }),
@@ -79,6 +84,12 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function servePrivateHLSFile (req: express.Request, res: express.Response) {
+  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.filename)
+
+  return res.sendFile(path)
+}
 
 async function servePrivateM3U8 (req: express.Request, res: express.Response) {
   const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistNameWithoutExtension + '.m3u8')
