@@ -4,7 +4,9 @@ import { getHLS, removeFragmentedMP4Ext, uuidRegex } from '@peertube/peertube-co
 import {
   FileStorage,
   HttpStatusCode,
+  VideoCaption,
   VideoDetails,
+  VideoFile,
   VideoPrivacy,
   VideoResolution,
   VideoStreamingPlaylist,
@@ -99,6 +101,7 @@ export async function checkResolutionsInMasterPlaylist (options: {
   server: PeerTubeServer
   playlistUrl: string
   resolutions: number[]
+
   framerates?: { [id: number]: number }
   token?: string
   transcoded?: boolean // default true
@@ -106,6 +109,7 @@ export async function checkResolutionsInMasterPlaylist (options: {
   splittedAudio?: boolean // default false
   hasAudio?: boolean // default true
   hasVideo?: boolean // default true
+  hasCaptions?: boolean // default false
 }) {
   const {
     server,
@@ -117,7 +121,8 @@ export async function checkResolutionsInMasterPlaylist (options: {
     hasVideo = true,
     splittedAudio = false,
     withRetry = false,
-    transcoded = true
+    transcoded = true,
+    hasCaptions = false
   } = options
 
   const masterPlaylist = await server.streamingPlaylists.get({ url: playlistUrl, token, withRetry })
@@ -156,13 +161,19 @@ export async function checkResolutionsInMasterPlaylist (options: {
       regexp += `,(FRAME-RATE=${framerateRegex},)?CODECS="${codecs}"${audioGroup}`
     }
 
-    expect(masterPlaylist).to.match(new RegExp(`${regexp}`))
+    if (hasCaptions) {
+      regexp += `,SUBTITLES="subtitles"`
+    }
+
+    expect(masterPlaylist, masterPlaylist).to.match(new RegExp(`${regexp}`))
   }
 
   if (splittedAudio && hasAudio && hasVideo) {
     expect(masterPlaylist).to.match(
       // eslint-disable-next-line max-len
-      new RegExp(`#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="(group_Audio|audio)",NAME="(Audio|audio_0)"(,AUTOSELECT=YES)?,DEFAULT=YES,URI="[^.]*0.m3u8"`)
+      new RegExp(
+        `#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="(group_Audio|audio)",NAME="(Audio|audio_0)"(,AUTOSELECT=YES)?,DEFAULT=YES,URI="[^.]*0.m3u8"`
+      )
     )
   }
 
@@ -172,6 +183,26 @@ export async function checkResolutionsInMasterPlaylist (options: {
     : resolutions.filter(r => r !== VideoResolution.H_NOVIDEO).length
 
   expect(playlistsLength).to.have.lengthOf(playlistsLengthShouldBe)
+}
+
+export async function checkCaptionsInMasterPlaylist (options: {
+  server: PeerTubeServer
+  playlistUrl: string
+  captions: VideoCaption[]
+  withRetry?: boolean
+  token?: string
+}) {
+  const { server, playlistUrl, captions, withRetry, token } = options
+
+  const masterPlaylist = await server.streamingPlaylists.get({ url: playlistUrl, token, withRetry })
+
+  for (const caption of captions) {
+    const toContain =
+      `#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subtitles",NAME="${caption.language.label}",DEFAULT=NO,AUTOSELECT=NO,FORCED=NO,` +
+      `LANGUAGE="${caption.language.id}",URI="${basename(caption.m3u8Url)}"`
+
+    expect(masterPlaylist, `Master content:\n${masterPlaylist}\n\nTo contain:\n${toContain}\n\n`).to.contain(toContain)
+  }
 }
 
 export async function completeCheckHlsPlaylist (options: {
@@ -185,9 +216,11 @@ export async function completeCheckHlsPlaylist (options: {
   hasVideo?: boolean // default true
 
   resolutions?: number[]
+  captions?: VideoCaption[]
+
   objectStorageBaseUrl?: string
 }) {
-  const { videoUUID, hlsOnly, splittedAudio, hasAudio = true, hasVideo = true, objectStorageBaseUrl } = options
+  const { videoUUID, hlsOnly, captions = [], splittedAudio, hasAudio = true, hasVideo = true, objectStorageBaseUrl } = options
 
   const hlsResolutions = options.resolutions ?? [ 240, 360, 480, 720 ]
   const webVideoResolutions = [ ...hlsResolutions ]
@@ -225,73 +258,26 @@ export async function completeCheckHlsPlaylist (options: {
     // Check JSON files
     for (const resolution of hlsResolutions) {
       const file = hlsFiles.find(f => f.resolution.id === resolution)
-      expect(file).to.not.be.undefined
 
-      if (file.resolution.id === VideoResolution.H_NOVIDEO) {
-        expect(file.resolution.label).to.equal('Audio only')
-        expect(file.hasAudio).to.be.true
-        expect(file.hasVideo).to.be.false
+      await checkHLSResolution({
+        file,
+        resolution,
+        hasAudio,
+        splittedAudio,
+        isOrigin,
+        objectStorageBaseUrl,
+        requiresAuth,
+        server,
+        videoDetails,
+        privatePath,
+        baseUrl,
+        token
+      })
+    }
 
-        expect(file.height).to.equal(0)
-        expect(file.width).to.equal(0)
-      } else {
-        expect(file.resolution.label).to.equal(resolution + 'p')
-
-        expect(file.hasVideo).to.be.true
-        expect(file.hasAudio).to.equal(hasAudio && !splittedAudio)
-
-        expect(Math.min(file.height, file.width)).to.equal(resolution)
-        expect(Math.max(file.height, file.width)).to.be.greaterThan(resolution)
-      }
-
-      if (isOrigin) {
-        if (objectStorageBaseUrl) {
-          expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
-        } else {
-          expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
-        }
-      } else {
-        expect(file.storage).to.be.null
-      }
-
-      expect(file.magnetUri).to.have.lengthOf.above(2)
-      await checkWebTorrentWorks(file.magnetUri)
-
-      expect(file.playlistUrl).to.equal(file.fileUrl.replace(/-fragmented.mp4$/, '.m3u8'))
-
-      {
-        const nameReg = `${uuidRegex}-${file.resolution.id}`
-
-        expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}-hls.torrent`))
-
-        if (objectStorageBaseUrl && requiresAuth) {
-          // eslint-disable-next-line max-len
-          expect(file.fileUrl).to.match(new RegExp(`${server.url}/object-storage-proxy/streaming-playlists/hls/${privatePath}${videoDetails.uuid}/${nameReg}-fragmented.mp4`))
-        } else if (objectStorageBaseUrl) {
-          expectStartWith(file.fileUrl, objectStorageBaseUrl)
-        } else {
-          expect(file.fileUrl).to.match(
-            new RegExp(`${baseUrl}/static/streaming-playlists/hls/${privatePath}${videoDetails.uuid}/${nameReg}-fragmented.mp4`)
-          )
-        }
-      }
-
-      {
-        await Promise.all([
-          makeRawRequest({ url: file.torrentUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-          makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-          makeRawRequest({ url: file.metadataUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-          makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-
-          makeRawRequest({
-            url: file.fileDownloadUrl,
-            token,
-            expectedStatus: objectStorageBaseUrl
-              ? HttpStatusCode.FOUND_302
-              : HttpStatusCode.OK_200
-          })
-        ])
-      }
+    // Check captions
+    for (const caption of captions) {
+      await checkHLSCaption({ caption, objectStorageBaseUrl, videoDetails, privatePath, baseUrl, token })
     }
 
     // Check master playlist
@@ -303,13 +289,20 @@ export async function completeCheckHlsPlaylist (options: {
         resolutions: hlsResolutions,
         hasAudio,
         hasVideo,
-        splittedAudio
+        splittedAudio,
+        hasCaptions: captions.length !== 0
+      })
+
+      await checkCaptionsInMasterPlaylist({
+        server,
+        token,
+        playlistUrl: hlsPlaylist.playlistUrl,
+        captions
       })
 
       const masterPlaylist = await server.streamingPlaylists.get({ url: hlsPlaylist.playlistUrl, token })
 
       for (const resolution of hlsResolutions) {
-        expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
       }
     }
@@ -410,4 +403,137 @@ export async function checkVideoFileTokenReinjection (options: {
 export function extractResolutionPlaylistUrls (masterPath: string, masterContent: string) {
   return masterContent.match(/[a-z0-9-]+\.m3u8(?:[?a-zA-Z0-9=&-]+)?/mg)
     .map(filename => join(dirname(masterPath), filename))
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+async function checkHLSResolution (options: {
+  file: VideoFile & { playlistUrl: string }
+  resolution: number
+  hasAudio: boolean
+  splittedAudio: boolean
+  isOrigin: boolean
+  objectStorageBaseUrl: string | undefined
+  requiresAuth: boolean
+  server: PeerTubeServer
+  videoDetails: VideoDetails
+  privatePath: string
+  baseUrl: string
+  token: string | undefined
+}) {
+  const {
+    file,
+    resolution,
+    hasAudio,
+    splittedAudio,
+    isOrigin,
+    objectStorageBaseUrl,
+    requiresAuth,
+    server,
+    videoDetails,
+    privatePath,
+    baseUrl,
+    token
+  } = options
+
+  expect(file).to.not.be.undefined
+
+  if (file.resolution.id === VideoResolution.H_NOVIDEO) {
+    expect(file.resolution.label).to.equal('Audio only')
+    expect(file.hasAudio).to.be.true
+    expect(file.hasVideo).to.be.false
+
+    expect(file.height).to.equal(0)
+    expect(file.width).to.equal(0)
+  } else {
+    expect(file.resolution.label).to.equal(`${resolution}p`)
+
+    expect(file.hasVideo).to.be.true
+    expect(file.hasAudio).to.equal(hasAudio && !splittedAudio)
+
+    expect(Math.min(file.height, file.width)).to.equal(resolution)
+    expect(Math.max(file.height, file.width)).to.be.greaterThan(resolution)
+  }
+
+  if (isOrigin) {
+    if (objectStorageBaseUrl) {
+      expect(file.storage).to.equal(FileStorage.OBJECT_STORAGE)
+    } else {
+      expect(file.storage).to.equal(FileStorage.FILE_SYSTEM)
+    }
+  } else {
+    expect(file.storage).to.be.null
+  }
+
+  expect(file.magnetUri).to.have.lengthOf.above(2)
+  await checkWebTorrentWorks(file.magnetUri)
+
+  expect(file.playlistUrl).to.equal(file.fileUrl.replace(/-fragmented.mp4$/, '.m3u8'))
+
+  const nameReg = `${uuidRegex}-${file.resolution.id}`
+
+  expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}-hls.torrent`))
+
+  if (objectStorageBaseUrl && requiresAuth) {
+    expect(file.fileUrl).to.match(
+      new RegExp(
+        `${server.url}/object-storage-proxy/streaming-playlists/hls/${privatePath}${videoDetails.uuid}/${nameReg}-fragmented.mp4`
+      )
+    )
+  } else if (objectStorageBaseUrl) {
+    expectStartWith(file.fileUrl, objectStorageBaseUrl)
+  } else {
+    expect(file.fileUrl).to.match(
+      new RegExp(`${baseUrl}/static/streaming-playlists/hls/${privatePath}${videoDetails.uuid}/${nameReg}-fragmented.mp4`)
+    )
+  }
+
+  await Promise.all([
+    makeRawRequest({ url: file.torrentUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+    makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+    makeRawRequest({ url: file.metadataUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+    makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+
+    makeRawRequest({
+      url: file.fileDownloadUrl,
+      token,
+      expectedStatus: objectStorageBaseUrl
+        ? HttpStatusCode.FOUND_302
+        : HttpStatusCode.OK_200
+    })
+  ])
+}
+
+async function checkHLSCaption (options: {
+  caption: VideoCaption
+  objectStorageBaseUrl: string | undefined
+  videoDetails: VideoDetails
+  privatePath: string
+  baseUrl: string
+  token: string | undefined
+}) {
+  const { caption, objectStorageBaseUrl, videoDetails, privatePath, baseUrl, token } = options
+
+  expect(caption.fileUrl).to.exist
+  expect(caption.m3u8Url).to.exist
+  expect(basename(caption.m3u8Url)).to.equal(basename(caption.fileUrl).replace(/\.vtt$/, '.m3u8'))
+
+  if (objectStorageBaseUrl) {
+    expectStartWith(caption.m3u8Url, objectStorageBaseUrl)
+  } else {
+    const nameReg = basename(caption.fileUrl).replace(/\.vtt$/, '.m3u8')
+
+    expect(caption.m3u8Url).to.match(
+      new RegExp(`${baseUrl}/static/streaming-playlists/hls/${privatePath}${videoDetails.uuid}/${nameReg}`)
+    )
+  }
+
+  await makeRawRequest({ url: caption.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 })
+
+  const { text } = await makeRawRequest({ url: caption.m3u8Url, token, expectedStatus: HttpStatusCode.OK_200 })
+  expect(text).to.match(new RegExp(`^#EXTM3U`))
+  expect(text).to.include(`#EXT-X-TARGETDURATION:${videoDetails.duration}`)
+  expect(text).to.include(caption.fileUrl)
 }

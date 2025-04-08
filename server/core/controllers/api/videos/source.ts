@@ -29,14 +29,16 @@ const lTags = loggerTagsFactory('api', 'video')
 
 const videoSourceRouter = express.Router()
 
-videoSourceRouter.get('/:id/source',
+videoSourceRouter.get(
+  '/:id/source',
   openapiOperationDoc({ operationId: 'getVideoSource' }),
   authenticate,
   asyncMiddleware(videoSourceGetLatestValidator),
   getVideoLatestSource
 )
 
-videoSourceRouter.delete('/:id/source/file',
+videoSourceRouter.delete(
+  '/:id/source/file',
   openapiOperationDoc({ operationId: 'deleteVideoSourceFile' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
@@ -211,6 +213,6 @@ async function removeOldFiles (options: {
   }
 
   for (const playlist of playlists) {
-    await video.removeStreamingPlaylistFiles(playlist)
+    await video.removeAllStreamingPlaylistFiles({ playlist })
   }
 }

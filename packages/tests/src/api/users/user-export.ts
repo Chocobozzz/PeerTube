@@ -3,7 +3,8 @@
 import { wait } from '@peertube/peertube-core-utils'
 import { hasAudioStream, hasVideoStream } from '@peertube/peertube-ffmpeg'
 import {
-  AccountExportJSON, ActivityPubActor,
+  AccountExportJSON,
+  ActivityPubActor,
   ActivityPubOrderedCollection,
   AutoTagPoliciesJSON,
   BlocklistExportJSON,
@@ -22,7 +23,8 @@ import {
   VideoChapterObject,
   VideoCommentObject,
   VideoCreateResult,
-  VideoExportJSON, VideoPlaylistCreateResult,
+  VideoExportJSON,
+  VideoPlaylistCreateResult,
   VideoPlaylistPrivacy,
   VideoPlaylistsExportJSON,
   VideoPlaylistType,
@@ -31,7 +33,9 @@ import {
 } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
-  cleanupTests, getRedirectionUrl, makeActivityPubRawRequest,
+  cleanupTests,
+  getRedirectionUrl,
+  makeActivityPubRawRequest,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -81,9 +85,9 @@ function runTest (withObjectStorage: boolean) {
 
     objectStorage = withObjectStorage
       ? new ObjectStorageCommand()
-      : undefined;
+      : undefined
 
-    ({
+    ;({
       rootId,
       noahId,
       remoteRootId,
@@ -285,7 +289,11 @@ function runTest (withObjectStorage: boolean) {
         // Subtitles
         expect(video.subtitleLanguage).to.have.lengthOf(2)
         for (const subtitle of video.subtitleLanguage) {
-          await checkFileExistsInZIP(zip, subtitle.url, '/activity-pub')
+          const subtitleUrl = typeof subtitle.url === 'string'
+            ? subtitle.url
+            : subtitle.url.find(u => u.mediaType === 'text/vtt').href
+
+          await checkFileExistsInZIP(zip, subtitleUrl, '/activity-pub')
         }
 
         // Chapters
@@ -905,7 +913,6 @@ function runTest (withObjectStorage: boolean) {
 }
 
 describe('Test user export', function () {
-
   describe('From filesystem', function () {
     runTest(false)
   })

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { RunnerJobState } from '@peertube/peertube-models'
+import { RunnerJobState, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -15,6 +15,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkPeerTubeRunnerCacheIsEmpty } from '@tests/shared/directories.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
 import { expect } from 'chai'
 
@@ -42,9 +43,7 @@ describe('Test transcription in peertube-runner program', function () {
   })
 
   describe('Running transcription', function () {
-
     describe('Common on filesystem', function () {
-
       it('Should run transcription on classic file', async function () {
         this.timeout(360000)
 
@@ -108,11 +107,30 @@ describe('Test transcription in peertube-runner program', function () {
       it('Should run transcription and upload it on object storage', async function () {
         this.timeout(360000)
 
+        await servers[0].config.save()
+        await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true })
+
         const uuid = await uploadForTranscription(servers[0])
         await waitJobs(servers, { runnerJobs: true, skipFailed: true }) // skipFailed because previous test had a failed runner job
 
         await checkAutoCaption({ servers, uuid, objectStorageBaseUrl: objectStorage.getMockCaptionFileBaseUrl() })
         await checkLanguage(servers, uuid, 'en')
+
+        const { data: captions } = await servers[0].captions.list({ videoId: uuid })
+        expect(captions).to.have.lengthOf(1)
+
+        await completeCheckHlsPlaylist({
+          servers,
+          videoUUID: uuid,
+          hlsOnly: true,
+          hasAudio: true,
+          hasVideo: true,
+          captions,
+          objectStorageBaseUrl: objectStorage.getMockPlaylistBaseUrl(),
+          resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ]
+        })
+
+        await servers[0].config.rollback()
       })
 
       after(async function () {
@@ -121,7 +139,6 @@ describe('Test transcription in peertube-runner program', function () {
     })
 
     describe('When transcription is not enabled in runner', function () {
-
       before(async function () {
         await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'runner' })
         peertubeRunner.kill()
@@ -148,7 +165,6 @@ describe('Test transcription in peertube-runner program', function () {
     })
 
     describe('Check cleanup', function () {
-
       it('Should have an empty cache directory', async function () {
         await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner, 'transcription')
       })

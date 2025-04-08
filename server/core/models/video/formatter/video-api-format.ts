@@ -12,7 +12,7 @@ import {
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { generateMagnetUri } from '@server/helpers/webtorrent.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
-import { getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
@@ -277,7 +277,7 @@ export function videoFilesModelToFormattedJSON (
         hasVideo: videoFile.hasVideo(),
 
         playlistUrl: includePlaylistUrl === true
-          ? getHlsResolutionPlaylistFilename(fileUrl)
+          ? getHLSResolutionPlaylistFilename(fileUrl)
           : undefined,
 
         storage: video.remote

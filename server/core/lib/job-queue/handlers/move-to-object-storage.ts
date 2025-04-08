@@ -2,8 +2,16 @@ import { FileStorage, isMoveCaptionPayload, isMoveVideoStoragePayload, MoveStora
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
-import { storeHLSFileFromFilename, storeOriginalVideoFile, storeVideoCaption, storeWebVideoFile } from '@server/lib/object-storage/index.js'
-import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { buildCaptionM3U8Content } from '@server/lib/hls.js'
+import {
+  storeHLSFileFromContent,
+  storeHLSFileFromFilename,
+  storeOriginalVideoFile,
+  storeVideoCaption,
+  storeWebVideoFile
+} from '@server/lib/object-storage/index.js'
+import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { updateHLSMasterOnCaptionChange } from '@server/lib/video-captions.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/lib/video-state.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoCaption, MVideoFile, MVideoWithAllFiles } from '@server/types/models/index.js'
@@ -13,6 +21,7 @@ import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { moveCaptionToStorageJob } from './shared/move-caption.js'
 import { moveVideoToStorageJob, onMoveVideoToStorageFailure } from './shared/move-video.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 
 const lTagsBase = loggerTagsFactory('move-object-storage')
 
@@ -84,20 +93,50 @@ async function moveVideoSourceFile (source: MVideoSource) {
 
 // ---------------------------------------------------------------------------
 
-async function moveCaptionFiles (captions: MVideoCaption[]) {
+async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlaylistVideo) {
+  let hlsUpdated = false
+
   for (const caption of captions) {
-    if (caption.storage !== FileStorage.FILE_SYSTEM) continue
+    if (caption.storage === FileStorage.FILE_SYSTEM) {
+      const captionPath = caption.getFSFilePath()
 
-    const captionPath = caption.getFSPath()
-    const fileUrl = await storeVideoCaption(captionPath, caption.filename)
+      // Assign new values before building the m3u8 file
+      caption.fileUrl = await storeVideoCaption(captionPath, caption.filename)
+      caption.storage = FileStorage.OBJECT_STORAGE
 
-    caption.storage = FileStorage.OBJECT_STORAGE
-    caption.fileUrl = fileUrl
-    await caption.save()
+      await caption.save()
 
-    logger.debug(`Removing video caption file ${captionPath} because it's now on object storage`, lTagsBase())
+      logger.debug(`Removing video caption file ${captionPath} because it's now on object storage`, lTagsBase())
+      await remove(captionPath)
+    }
 
-    await remove(captionPath)
+    if (hls && (!caption.m3u8Filename || !caption.m3u8Url)) {
+      hlsUpdated = true
+
+      const m3u8PathToRemove = caption.getFSM3U8Path(hls.Video)
+
+      // Caption link has been updated, so we must also update the HLS caption playlist
+      const content = buildCaptionM3U8Content({ video: hls.Video, caption })
+
+      caption.m3u8Filename = VideoCaptionModel.generateM3U8Filename(caption.filename)
+      caption.m3u8Url = await storeHLSFileFromContent({
+        playlist: hls,
+        pathOrFilename: caption.m3u8Filename,
+        content,
+        contentType: 'application/vnd.apple.mpegurl; charset=utf-8'
+      })
+
+      await caption.save()
+
+      if (m3u8PathToRemove) {
+        logger.debug(`Removing video caption playlist file ${m3u8PathToRemove} because it's now on object storage`, lTagsBase())
+        await remove(m3u8PathToRemove)
+      }
+    }
+  }
+
+  if (hlsUpdated) {
+    await updateHLSMasterOnCaptionChange(hls.Video, hls)
   }
 }
 
@@ -122,7 +161,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
       if (file.storage !== FileStorage.FILE_SYSTEM) continue
 
       // Resolution playlist
-      const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
+      const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
       await storeHLSFileFromFilename(playlistWithVideo, playlistFilename)
 
       // Resolution fragmented file

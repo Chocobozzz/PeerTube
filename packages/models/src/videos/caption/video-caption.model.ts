@@ -7,6 +7,7 @@ export interface VideoCaption {
   captionPath: string
 
   fileUrl: string
+  m3u8Url: string
 
   automaticallyGenerated: boolean
   updatedAt: string

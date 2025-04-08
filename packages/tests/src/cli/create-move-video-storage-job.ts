@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoDetails, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -15,6 +15,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { join } from 'path'
 import { expectStartWith } from '../shared/checks.js'
 
@@ -81,6 +82,17 @@ async function checkFiles (options: {
 
       await makeRawRequest({ url: caption.fileUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     }
+
+    await completeCheckHlsPlaylist({
+      servers: [ origin ],
+      videoUUID: video.uuid,
+      hlsOnly: false,
+      hasAudio: true,
+      hasVideo: true,
+      captions,
+      objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl(),
+      resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ]
+    })
   }
 }
 
@@ -120,7 +132,6 @@ describe('Test create move video storage job CLI', function () {
   })
 
   describe('To object storage', function () {
-
     it('Should move only one file', async function () {
       this.timeout(120000)
 
@@ -158,6 +169,8 @@ describe('Test create move video storage job CLI', function () {
     })
 
     it('Should not have files on disk anymore', async function () {
+      await checkDirectoryIsEmpty(servers[0], 'captions', [ 'private' ])
+
       await checkDirectoryIsEmpty(servers[0], 'web-videos', [ 'private' ])
       await checkDirectoryIsEmpty(servers[0], join('web-videos', 'private'))
 
@@ -171,9 +184,14 @@ describe('Test create move video storage job CLI', function () {
 
     before(async function () {
       const video = await servers[0].videos.get({ id: uuids[1] })
+      const { data: captions } = await servers[0].captions.list({ videoId: uuids[1] })
 
       oldFileUrls = [
         ...getAllFiles(video).map(f => f.fileUrl),
+
+        ...captions.map(c => c.fileUrl),
+        ...captions.map(c => c.m3u8Url),
+
         video.streamingPlaylists[0].playlistUrl
       ]
     })

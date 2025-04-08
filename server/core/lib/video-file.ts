@@ -90,7 +90,7 @@ export async function removeHLSPlaylist (video: MVideoWithAllFiles) {
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    await video.removeStreamingPlaylistFiles(hls)
+    await video.removeAllStreamingPlaylistFiles({ playlist: hls })
     await hls.destroy()
 
     video.VideoStreamingPlaylists = video.VideoStreamingPlaylists.filter(p => p.id !== hls.id)

@@ -104,5 +104,5 @@ async function servePrivateM3U8 (req: express.Request, res: express.Response) {
     ? injectQueryToPlaylistUrls(playlistContent, buildReinjectVideoFileTokenQuery(req, filename.endsWith('master.m3u8')))
     : playlistContent
 
-  return res.set('content-type', 'application/vnd.apple.mpegurl').send(transformedContent).end()
+  return res.set('content-type', 'application/x-mpegurl; charset=utf-8').send(transformedContent).end()
 }

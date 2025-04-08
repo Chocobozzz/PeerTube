@@ -1,5 +1,6 @@
 import { arrayify, maxBy, minBy } from '@peertube/peertube-core-utils'
 import {
+  ActivityCaptionUrlObject,
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
@@ -65,11 +66,11 @@ export function getFileAttributesFromUrl (
   for (const fileUrl of fileUrls) {
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
-                         .find(u => {
-                           return u.height === fileUrl.height &&
-                             u.fps === fileUrl.fps &&
-                             u.rel.includes(fileUrl.mediaType)
-                         })
+      .find(u => {
+        return u.height === fileUrl.height &&
+          u.fps === fileUrl.fps &&
+          u.rel.includes(fileUrl.mediaType)
+      })
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
     const resolution = fileUrl.height
@@ -204,13 +205,23 @@ export function getLiveAttributesFromObject (video: MVideoId, videoObject: Video
 }
 
 export function getCaptionAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
-  return videoObject.subtitleLanguage.map(c => ({
-    videoId: video.id,
-    filename: VideoCaptionModel.generateCaptionName(c.identifier),
-    language: c.identifier,
-    automaticallyGenerated: c.automaticallyGenerated === true,
-    fileUrl: c.url
-  }))
+  return videoObject.subtitleLanguage.map(c => {
+    // This field is sanitized in validators
+    // TODO: Remove as in v8
+    const url = c.url as (ActivityCaptionUrlObject | ActivityPlaylistUrlObject)[]
+
+    const filename = VideoCaptionModel.generateCaptionName(c.identifier)
+
+    return {
+      videoId: video.id,
+      filename,
+      language: c.identifier,
+      automaticallyGenerated: c.automaticallyGenerated === true,
+      fileUrl: url.find(u => u.mediaType === 'text/vtt')?.href,
+      m3u8Filename: VideoCaptionModel.generateM3U8Filename(filename),
+      m3u8Url: url.find(u => u.mediaType === 'application/x-mpegURL')?.href
+    } as Partial<AttributesOnly<VideoCaptionModel>>
+  })
 }
 
 export function getStoryboardAttributeFromObject (video: MVideoId, videoObject: VideoObject) {

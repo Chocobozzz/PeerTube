@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { VideoPrivacy } from '@peertube/peertube-models'
+import { VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -15,6 +15,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { checkAutoCaption, checkLanguage, checkNoCaption, getCaptionContent, uploadForTranscription } from '@tests/shared/transcription.js'
 import { expect } from 'chai'
 import { join } from 'path'
@@ -39,11 +40,12 @@ describe('Test video transcription', function () {
   // ---------------------------------------------------------------------------
 
   describe('Common on filesystem', function () {
-
     it('Should generate a transcription on request', async function () {
       this.timeout(360000)
 
       await servers[0].config.disableTranscription()
+      await servers[0].config.save()
+      await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true })
 
       const uuid = await uploadForTranscription(servers[0])
       await waitJobs(servers)
@@ -56,6 +58,22 @@ describe('Test video transcription', function () {
       await checkLanguage(servers, uuid, 'en')
 
       await checkAutoCaption({ servers, uuid })
+
+      const { data: captions } = await servers[0].captions.list({ videoId: uuid })
+      expect(captions).to.have.lengthOf(1)
+
+      await completeCheckHlsPlaylist({
+        servers,
+        videoUUID: uuid,
+        hlsOnly: true,
+        hasAudio: true,
+        hasVideo: true,
+        captions,
+        resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ]
+      })
+
+      await servers[0].config.rollback()
+      await servers[0].config.enableTranscription()
     })
 
     it('Should run transcription on upload by default', async function () {
@@ -260,6 +278,8 @@ describe('Test video transcription', function () {
       this.timeout(360000)
 
       await servers[0].config.disableTranscription()
+      await servers[0].config.save()
+      await servers[0].config.enableMinimumTranscoding({ webVideo: false, hls: true })
 
       const uuid = await uploadForTranscription(servers[0])
       await waitJobs(servers)
@@ -272,6 +292,23 @@ describe('Test video transcription', function () {
       await checkLanguage(servers, uuid, 'en')
 
       await checkAutoCaption({ servers, uuid, objectStorageBaseUrl: objectStorage.getMockCaptionFileBaseUrl() })
+
+      const { data: captions } = await servers[0].captions.list({ videoId: uuid })
+      expect(captions).to.have.lengthOf(1)
+
+      await completeCheckHlsPlaylist({
+        servers,
+        videoUUID: uuid,
+        hlsOnly: true,
+        hasAudio: true,
+        hasVideo: true,
+        captions,
+        objectStorageBaseUrl: objectStorage.getMockPlaylistBaseUrl(),
+        resolutions: [ VideoResolution.H_720P, VideoResolution.H_240P ]
+      })
+
+      await servers[0].config.rollback()
+      await servers[0].config.enableTranscription()
     })
 
     it('Should run transcription on upload by default', async function () {

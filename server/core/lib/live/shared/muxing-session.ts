@@ -51,16 +51,17 @@ interface MuxingSessionEvents {
 
 declare interface MuxingSession {
   on<U extends keyof MuxingSessionEvents>(
-    event: U, listener: MuxingSessionEvents[U]
+    event: U,
+    listener: MuxingSessionEvents[U]
   ): this
 
   emit<U extends keyof MuxingSessionEvents>(
-    event: U, ...args: Parameters<MuxingSessionEvents[U]>
+    event: U,
+    ...args: Parameters<MuxingSessionEvents[U]>
   ): boolean
 }
 
 class MuxingSession extends EventEmitter {
-
   private transcodingWrapper: AbstractTranscodingWrapper
 
   private readonly context: any
@@ -222,7 +223,14 @@ class MuxingSession extends EventEmitter {
 
           logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
 
-          const url = await storeHLSFileFromContent(this.streamingPlaylist, this.streamingPlaylist.playlistFilename, masterContent)
+          const url = await storeHLSFileFromContent(
+            {
+              playlist: this.streamingPlaylist,
+              pathOrFilename: this.streamingPlaylist.playlistFilename,
+              content: masterContent,
+              contentType: 'application/x-mpegurl; charset=utf-8'
+            }
+          )
 
           this.streamingPlaylist.playlistUrl = url
         }
@@ -405,18 +413,25 @@ class MuxingSession extends EventEmitter {
       }
 
       const queue = this.objectStorageSendQueues.get(m3u8Path)
-      await queue.add(() => storeHLSFileFromContent(this.streamingPlaylist, m3u8Path, filteredPlaylistContent))
+      await queue.add(() =>
+        storeHLSFileFromContent({
+          playlist: this.streamingPlaylist,
+          pathOrFilename: m3u8Path,
+          content: filteredPlaylistContent,
+          contentType: 'application/x-mpegurl; charset=utf-8'
+        })
+      )
     } catch (err) {
       logger.error('Cannot store in object storage m3u8 file %s', m3u8Path, { err, ...this.lTags() })
     }
   }
 
   private onTranscodingError () {
-    this.emit('transcoding-error', ({ videoUUID: this.videoUUID }))
+    this.emit('transcoding-error', { videoUUID: this.videoUUID })
   }
 
   private onTranscodedEnded () {
-    this.emit('transcoding-end', ({ videoUUID: this.videoUUID }))
+    this.emit('transcoding-end', { videoUUID: this.videoUUID })
 
     logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputLocalUrl, this.lTags())
 
@@ -433,7 +448,8 @@ class MuxingSession extends EventEmitter {
         })
         .catch(err => {
           logger.error(
-            'Cannot close watchers of %s or process remaining hash segments.', this.outDirectory,
+            'Cannot close watchers of %s or process remaining hash segments.',
+            this.outDirectory,
             { err, ...this.lTags() }
           )
         })
@@ -482,7 +498,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private async createLivePlaylist (): Promise<MStreamingPlaylistVideo> {
-    const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(this.videoLive.Video)
+    const { playlist } = await VideoStreamingPlaylistModel.loadOrGenerate(this.videoLive.Video)
 
     playlist.playlistFilename = generateHLSMasterPlaylistFilename(true)
     playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(true)

@@ -22,5 +22,10 @@ export function getRtcConfig (stunServers: string[]) {
 }
 
 export function isSameOrigin (current: string, target: string) {
-  return new URL(current).origin === new URL(target).origin
+  const currentUrl = new URL(current)
+  const targetUrl = new URL(target)
+
+  if (currentUrl.hostname === 'localhost' && targetUrl.hostname === 'localhost') return true
+
+  return currentUrl.origin === targetUrl.origin
 }

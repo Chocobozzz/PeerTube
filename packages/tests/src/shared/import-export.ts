@@ -19,7 +19,8 @@ import {
   ObjectStorageCommand,
   PeerTubeServer,
   createSingleServer,
-  doubleFollow, makeRawRequest,
+  doubleFollow,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -49,7 +50,7 @@ export async function downloadZIP (server: PeerTubeServer, userId: number) {
   return JSZip.loadAsync(res.body)
 }
 
-export async function parseZIPJSONFile <T> (zip: JSZip, path: string) {
+export async function parseZIPJSONFile<T> (zip: JSZip, path: string) {
   return JSON.parse(await zip.file(path).async('string')) as T
 }
 
@@ -218,7 +219,7 @@ export async function prepareImportExportTests (options: {
   const noahPrivateVideo = await server.videos.quickUpload({ name: 'noah private video', token: noahToken, privacy: VideoPrivacy.PRIVATE })
   const noahVideo = await server.videos.quickUpload({ name: 'noah public video', token: noahToken, privacy: VideoPrivacy.PUBLIC })
   // eslint-disable-next-line max-len
-  await server.videos.upload({
+  const noahVideo2 = await server.videos.upload({
     token: noahToken,
     attributes: {
       fixture: 'video_short.webm',
@@ -247,6 +248,9 @@ export async function prepareImportExportTests (options: {
   // Captions
   await server.captions.add({ language: 'ar', videoId: noahVideo.uuid, fixture: 'subtitle-good1.vtt' })
   await server.captions.add({ language: 'fr', videoId: noahVideo.uuid, fixture: 'subtitle-good1.vtt' })
+
+  await server.captions.add({ language: 'zh', videoId: noahVideo2.uuid, fixture: 'subtitle-good1.vtt' })
+  await server.captions.add({ language: 'es', videoId: noahVideo2.uuid, fixture: 'subtitle-good1.vtt' })
 
   // Chapters
   await server.chapters.update({
@@ -295,7 +299,11 @@ export async function prepareImportExportTests (options: {
   await server.playlists.quickCreate({ displayName: 'noah playlist 2', token: noahToken, privacy: VideoPlaylistPrivacy.PRIVATE })
 
   // eslint-disable-next-line max-len
-  await server.playlists.addElement({ playlistId: noahPlaylist.uuid, token: noahToken, attributes: { videoId: mouskaVideo.uuid, startTimestamp: 2, stopTimestamp: 3 } })
+  await server.playlists.addElement({
+    playlistId: noahPlaylist.uuid,
+    token: noahToken,
+    attributes: { videoId: mouskaVideo.uuid, startTimestamp: 2, stopTimestamp: 3 }
+  })
   await server.playlists.addElement({ playlistId: noahPlaylist.uuid, token: noahToken, attributes: { videoId: noahVideo.uuid } })
   await server.playlists.addElement({ playlistId: noahPlaylist.uuid, token: noahToken, attributes: { videoId: noahPrivateVideo.uuid } })
 

@@ -1,5 +1,7 @@
-import { ActivityIdentifierObject } from './common-objects.js'
+import { ActivityCaptionUrlObject, ActivityIdentifierObject, ActivityPlaylistUrlObject } from './common-objects.js'
 
 export interface VideoCaptionObject extends ActivityIdentifierObject {
   automaticallyGenerated: boolean
+
+  url: string | (ActivityCaptionUrlObject | ActivityPlaylistUrlObject)[]
 }

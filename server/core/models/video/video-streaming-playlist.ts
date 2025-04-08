@@ -12,22 +12,18 @@ import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
-import { MStreamingPlaylist, MStreamingPlaylistFiles, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models/index.js'
+import {
+  MStreamingPlaylist,
+  MStreamingPlaylistFiles,
+  MStreamingPlaylistFilesVideo,
+  MStreamingPlaylistVideo,
+  MVideo,
+  MVideoPrivacy
+} from '@server/types/models/index.js'
 import memoizee from 'memoizee'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  Default,
-  ForeignKey,
-  HasMany,
-  Is, Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isArrayOf } from '../../helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos.js'
 import {
@@ -205,7 +201,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
-  static loadHLSPlaylistByVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylist> {
+  static loadHLSByVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylist> {
     const options = {
       where: {
         type: VideoStreamingPlaylistType.HLS,
@@ -217,10 +213,31 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return VideoStreamingPlaylistModel.findOne(options)
   }
 
+  static loadHLSByVideoWithVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylistVideo> {
+    const options = {
+      where: {
+        type: VideoStreamingPlaylistType.HLS,
+        videoId
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ],
+      transaction
+    }
+
+    return VideoStreamingPlaylistModel.findOne(options)
+  }
+
   static async loadOrGenerate (video: MVideo, transaction?: Transaction) {
-    let playlist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id, transaction)
+    let playlist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id, transaction)
+    let generated = false
 
     if (!playlist) {
+      generated = true
+
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
@@ -234,7 +251,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       await playlist.save({ transaction })
     }
 
-    return Object.assign(playlist, { Video: video })
+    return { generated, playlist: Object.assign(playlist, { Video: video }) }
   }
 
   static doesOwnedVideoUUIDExist (videoUUID: string, storage: FileStorageType) {
@@ -339,19 +356,21 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return Object.assign(this, { Video: video })
   }
 
-  private getMasterPlaylistStaticPath (video: MVideo) {
+  // ---------------------------------------------------------------------------
+
+  static getPlaylistFileStaticPath (video: MVideoPrivacy, filename: string) {
     if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.playlistFilename)
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, filename)
     }
 
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.playlistFilename)
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, filename)
   }
 
-  private getSha256SegmentsStaticPath (video: MVideo) {
-    if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.segmentsSha256Filename)
-    }
+  private getMasterPlaylistStaticPath (video: MVideoPrivacy) {
+    return VideoStreamingPlaylistModel.getPlaylistFileStaticPath(video, this.playlistFilename)
+  }
 
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.segmentsSha256Filename)
+  private getSha256SegmentsStaticPath (video: MVideoPrivacy) {
+    return VideoStreamingPlaylistModel.getPlaylistFileStaticPath(video, this.segmentsSha256Filename)
   }
 }

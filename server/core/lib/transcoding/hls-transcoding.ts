@@ -12,10 +12,11 @@ import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist.js'
 import { renameVideoFileInPlaylist, updateM3U8AndShaPlaylist } from '../hls.js'
-import { generateHLSVideoFilename, getHlsResolutionPlaylistFilename } from '../paths.js'
+import { generateHLSVideoFilename, getHLSResolutionPlaylistFilename } from '../paths.js'
 import { buildNewFile } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
+import { createAllCaptionPlaylistsOnFSIfNeeded } from '../video-captions.js'
 
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
 export async function generateHlsPlaylistResolutionFromTS (options: {
@@ -75,7 +76,7 @@ export async function onHLSVideoFileTranscoding (options: {
   const { video, videoOutputPath, m3u8OutputPath, filesLockedInParent = false } = options
 
   // Create or update the playlist
-  const playlist = await retryTransactionWrapper(() => {
+  const { playlist, generated: playlistGenerated } = await retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async transaction => {
       return VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
     })
@@ -97,7 +98,7 @@ export async function onHLSVideoFileTranscoding (options: {
     // Move playlist file
     const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(
       video,
-      getHlsResolutionPlaylistFilename(newVideoFile.filename)
+      getHLSResolutionPlaylistFilename(newVideoFile.filename)
     )
     await move(m3u8OutputPath, resolutionPlaylistPath, { overwrite: true })
 
@@ -126,6 +127,10 @@ export async function onHLSVideoFileTranscoding (options: {
     }
 
     const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
+
+    if (playlistGenerated) {
+      await createAllCaptionPlaylistsOnFSIfNeeded(video)
+    }
 
     await updateM3U8AndShaPlaylist(video, playlist)
 
@@ -180,7 +185,7 @@ async function generateHlsPlaylistCommon (options: {
   const videoFilename = generateHLSVideoFilename(resolution)
   const videoOutputPath = join(videoTranscodedBasePath, videoFilename)
 
-  const resolutionPlaylistFilename = getHlsResolutionPlaylistFilename(videoFilename)
+  const resolutionPlaylistFilename = getHLSResolutionPlaylistFilename(videoFilename)
   const m3u8OutputPath = join(videoTranscodedBasePath, resolutionPlaylistFilename)
 
   const transcodeOptions: HLSTranscodeOptions | HLSFromTSTranscodeOptions = {

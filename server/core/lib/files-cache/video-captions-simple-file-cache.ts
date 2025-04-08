@@ -6,8 +6,7 @@ import { VideoModel } from '../../models/video/video.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache.js'
 
-class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
-
+class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache<string> {
   private static instance: VideoCaptionsSimpleFileCache
 
   private constructor () {
@@ -23,7 +22,7 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
     if (!videoCaption) return undefined
 
     if (videoCaption.isOwned()) {
-      return { isOwned: true, path: videoCaption.getFSPath() }
+      return { isOwned: true, path: videoCaption.getFSFilePath() }
     }
 
     return this.loadRemoteFile(filename)
