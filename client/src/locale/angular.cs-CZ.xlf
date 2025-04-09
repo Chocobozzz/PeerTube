@@ -4312,9 +4312,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7306351600905511107" datatype="html">
+      <trans-unit id="7306351600905511107" datatype="html" xml:space="preserve">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="translated">poměr 6/1, doporučená velikost: 1920x317, maximální velikost: <x id="PH_1" equiv-text="this.bannerExtensions"/> koncovky: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">poměr 6:1, doporučená velikost: 1920x317, maximální velikost: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, přípony: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -5090,9 +5090,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5359075917564707730" datatype="html">
+      <trans-unit id="5359075917564707730" datatype="html" xml:space="preserve">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target state="translated">Gratulujeme, video na <x id="INTERPOLATION"/> bude importováno! Již nyní můžete přidat informace o tomto videu. </target>
+        <target state="translated">Gratulujeme, video na adrese <x id="INTERPOLATION"/> bude importováno! Již nyní můžete přidat informace o tomto videu. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5599,9 +5599,9 @@
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2061223017941329156" datatype="html">
+      <trans-unit id="2061223017941329156" datatype="html" xml:space="preserve">
         <source>Import with URL</source>
-        <target state="translated">Import s URL</target>
+        <target state="translated">Import z URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">70</context>
