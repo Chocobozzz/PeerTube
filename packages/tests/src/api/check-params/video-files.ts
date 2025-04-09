@@ -12,7 +12,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 
-describe('Test videos files', function () {
+describe('Test videos files API validators', function () {
   let servers: PeerTubeServer[]
 
   let userToken: string

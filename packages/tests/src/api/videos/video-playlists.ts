@@ -117,7 +117,6 @@ describe('Test video playlists', function () {
   })
 
   describe('Check playlists filters and privacies', function () {
-
     it('Should list video playlist privacies', async function () {
       const privacies = await commands[0].getPrivacies()
 
@@ -169,7 +168,6 @@ describe('Test video playlists', function () {
 
         let playlist: VideoPlaylist = null
         for (const body of [ bodyList, bodyChannel ]) {
-
           expect(body.total).to.equal(1)
           expect(body.data).to.have.lengthOf(1)
 
@@ -218,7 +216,6 @@ describe('Test video playlists', function () {
   })
 
   describe('Create and federate playlists', function () {
-
     it('Should create a playlist on server 1 and have the playlist on server 2 and 3', async function () {
       this.timeout(30000)
 
@@ -345,7 +342,6 @@ describe('Test video playlists', function () {
   })
 
   describe('List playlists', function () {
-
     it('Should correctly list the playlists', async function () {
       this.timeout(30000)
 
@@ -495,7 +491,6 @@ describe('Test video playlists', function () {
   })
 
   describe('Update playlists', function () {
-
     it('Should update a playlist', async function () {
       this.timeout(30000)
 
@@ -535,7 +530,6 @@ describe('Test video playlists', function () {
   })
 
   describe('Element timestamps', function () {
-
     it('Should create a playlist containing different startTimestamp/endTimestamp videos', async function () {
       this.timeout(120000)
 
@@ -659,12 +653,14 @@ describe('Test video playlists', function () {
       group1 = [ servers[0] ]
       group2 = [ servers[1], servers[2] ]
 
+      const myInfo = await servers[0].users.getMyInfo({ token: userTokenServer1 })
+
       const playlist = await commands[0].create({
         token: userTokenServer1,
         attributes: {
           displayName: 'playlist 56',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: servers[0].store.channel.id
+          videoChannelId: myInfo.videoChannels[0].id
         }
       })
 
@@ -820,7 +816,6 @@ describe('Test video playlists', function () {
   })
 
   describe('Managing playlist elements', function () {
-
     it('Should reorder the playlist', async function () {
       this.timeout(30000)
 
@@ -1094,7 +1089,6 @@ describe('Test video playlists', function () {
   })
 
   describe('Playlist deletion', function () {
-
     it('Should delete the playlist on server 1 and delete on server 2 and 3', async function () {
       this.timeout(30000)
 
