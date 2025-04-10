@@ -7185,22 +7185,22 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-p2p-media-loader-core@2.1.2, p2p-media-loader-core@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/p2p-media-loader-core/-/p2p-media-loader-core-2.1.2.tgz#27bcb7b95cba76d00a681ce21bffaf41f418514e"
-  integrity sha512-fAeoXANKFRnHF17a706Bd6WtMdi5a9Ac78b39TBaGBWLFGfNWVj249ysuY8c5beLlgpGNnl5J4w9VH+I1UH2nQ==
+p2p-media-loader-core@2.2.1, p2p-media-loader-core@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/p2p-media-loader-core/-/p2p-media-loader-core-2.2.1.tgz#280d123d95e78b01b9dfcd9f4b509ace2efc2b48"
+  integrity sha512-6KnL59jQQYP2q26g+yfTpnD9lA2gpH2qWsgdAlzWghTYLdHbqcqk1sSMByZ7gwX/VrpDpDQTWf214+1sEPqm/A==
   dependencies:
     "@types/debug" "^4.1.12"
     bittorrent-tracker "^11.2.1"
     debug "^4.4.0"
     nano-md5 "^1.0.5"
 
-p2p-media-loader-hlsjs@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-2.1.2.tgz#a476cce7e196426b45c30a3669c62b0d21f1616e"
-  integrity sha512-97iCj6qlyHbBDTDHpbyuKejBdljA0gahq0Fa2B7GhiIJNqPN4nJe0KzycE1Yket8JpDKqGGE1747PpTSz2qLaA==
+p2p-media-loader-hlsjs@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-2.2.1.tgz#bb21a97d49aec13819fa92bd20aea6624d54fbf0"
+  integrity sha512-CT9uS8Ku9ivSVkivnlGD6aOFVIl7JjTh2NuZuwN40Jvtgckw07b8pCKQQRpOt3f7oEazXE/3M88cPGP/Q1gxEA==
   dependencies:
-    p2p-media-loader-core "2.1.2"
+    p2p-media-loader-core "2.2.1"
 
 pac-proxy-agent@^7.0.1:
   version "7.1.0"
