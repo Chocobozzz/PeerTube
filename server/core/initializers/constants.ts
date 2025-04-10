@@ -123,7 +123,8 @@ export const SORTABLE_COLUMNS = {
     'trending',
     'hot',
     'best',
-    'localVideoFilesSize'
+    'localVideoFilesSize',
+    'match'
   ],
 
   // Don't forget to update peertube-search-index with the same values
