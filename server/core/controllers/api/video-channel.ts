@@ -76,7 +76,7 @@ videoChannelRouter.get(
 videoChannelRouter.post('/', authenticate, asyncMiddleware(videoChannelsAddValidator), asyncRetryTransactionMiddleware(createVideoChannel))
 
 videoChannelRouter.post(
-  '/:nameWithHost/avatar/pick',
+  '/:handle/avatar/pick',
   authenticate,
   reqAvatarFile,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
@@ -85,7 +85,7 @@ videoChannelRouter.post(
 )
 
 videoChannelRouter.post(
-  '/:nameWithHost/banner/pick',
+  '/:handle/banner/pick',
   authenticate,
   reqBannerFile,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
@@ -94,21 +94,21 @@ videoChannelRouter.post(
 )
 
 videoChannelRouter.delete(
-  '/:nameWithHost/avatar',
+  '/:handle/avatar',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
 videoChannelRouter.delete(
-  '/:nameWithHost/banner',
+  '/:handle/banner',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
 videoChannelRouter.put(
-  '/:nameWithHost',
+  '/:handle',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
   videoChannelsUpdateValidator,
@@ -116,7 +116,7 @@ videoChannelRouter.put(
 )
 
 videoChannelRouter.delete(
-  '/:nameWithHost',
+  '/:handle',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
   asyncMiddleware(videoChannelsRemoveValidator),
@@ -124,13 +124,13 @@ videoChannelRouter.delete(
 )
 
 videoChannelRouter.get(
-  '/:nameWithHost',
+  '/:handle',
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
   asyncMiddleware(getVideoChannel)
 )
 
 videoChannelRouter.get(
-  '/:nameWithHost/video-playlists',
+  '/:handle/video-playlists',
   optionalAuthenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
   paginationValidator,
@@ -142,7 +142,7 @@ videoChannelRouter.get(
 )
 
 videoChannelRouter.get(
-  '/:nameWithHost/videos',
+  '/:handle/videos',
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: false })),
   paginationValidator,
   videosSortValidator,
@@ -154,7 +154,7 @@ videoChannelRouter.get(
 )
 
 videoChannelRouter.get(
-  '/:nameWithHost/followers',
+  '/:handle/followers',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkManage: true })),
   paginationValidator,
@@ -165,7 +165,7 @@ videoChannelRouter.get(
 )
 
 videoChannelRouter.post(
-  '/:nameWithHost/import-videos',
+  '/:handle/import-videos',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: true })),
   asyncMiddleware(videoChannelImportVideosValidator),

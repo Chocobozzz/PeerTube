@@ -20,7 +20,7 @@ import { activityPubResponse } from './utils.js'
 const outboxRouter = express.Router()
 
 outboxRouter.get(
-  '/accounts/:name/outbox',
+  '/accounts/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
   accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false }),
@@ -28,7 +28,7 @@ outboxRouter.get(
 )
 
 outboxRouter.get(
-  '/video-channels/:nameWithHost/outbox',
+  '/video-channels/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),

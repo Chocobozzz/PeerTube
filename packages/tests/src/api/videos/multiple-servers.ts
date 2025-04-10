@@ -62,7 +62,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should upload the video and propagate on each server', function () {
-
     it('Should upload the video on server 1 and propagate on each server', async function () {
       this.timeout(60000)
 
@@ -362,7 +361,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Local videos listing', function () {
-
     it('Should list only local videos on server 1', async function () {
       const { data, total } = await servers[0].videos.list({ isLocal: true })
 
@@ -393,7 +391,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('All videos listing', function () {
-
     it('Should list and sort by "localVideoFilesSize"', async function () {
       const { data, total } = await servers[2].videos.list({ sort: '-localVideoFilesSize' })
 
@@ -408,7 +405,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should seed the uploaded video', function () {
-
     it('Should add the file 1 by asking server 3', async function () {
       this.retries(2)
       this.timeout(30000)
@@ -1038,7 +1034,6 @@ describe('Test multiple servers', function () {
   })
 
   describe('With minimum parameters', function () {
-
     it('Should upload and propagate the video', async function () {
       this.timeout(240000)
 
@@ -1053,7 +1048,7 @@ describe('Test multiple servers', function () {
         .field('channelId', '1')
 
       await req.attach('videofile', buildAbsoluteFixturePath('video_short.webm'))
-               .expect(HttpStatusCode.OK_200)
+        .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)
 
@@ -1120,13 +1115,11 @@ describe('Test multiple servers', function () {
   })
 
   describe('TMP directory', function () {
-
     it('Should have an empty tmp directory', async function () {
       for (const server of servers) {
         await checkTmpIsEmpty(server)
       }
     })
-
   })
 
   after(async function () {

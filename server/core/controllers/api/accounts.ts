@@ -52,13 +52,13 @@ accountsRouter.get(
 )
 
 accountsRouter.get(
-  '/:accountName',
+  '/:handle',
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   getAccount
 )
 
 accountsRouter.get(
-  '/:accountName/videos',
+  '/:handle/videos',
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   paginationValidator,
   videosSortValidator,
@@ -70,7 +70,7 @@ accountsRouter.get(
 )
 
 accountsRouter.get(
-  '/:accountName/video-channels',
+  '/:handle/video-channels',
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   videoChannelStatsValidator,
   paginationValidator,
@@ -81,7 +81,7 @@ accountsRouter.get(
 )
 
 accountsRouter.get(
-  '/:accountName/video-playlists',
+  '/:handle/video-playlists',
   optionalAuthenticate,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   paginationValidator,
@@ -94,7 +94,7 @@ accountsRouter.get(
 )
 
 accountsRouter.get(
-  '/:accountName/video-channel-syncs',
+  '/:handle/video-channel-syncs',
   authenticate,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
   paginationValidator,
@@ -105,7 +105,7 @@ accountsRouter.get(
 )
 
 accountsRouter.get(
-  '/:accountName/ratings',
+  '/:handle/ratings',
   authenticate,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
   paginationValidator,
@@ -117,7 +117,7 @@ accountsRouter.get(
 )
 
 accountsRouter.get(
-  '/:accountName/followers',
+  '/:handle/followers',
   authenticate,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
   paginationValidator,

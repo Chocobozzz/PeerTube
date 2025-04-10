@@ -10,7 +10,7 @@ export const accountHandleGetValidatorFactory = (options: {
   const { checkManage, checkIsLocal } = options
 
   return [
-    param('accountName')
+    param('handle')
       .exists(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {

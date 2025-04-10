@@ -25,7 +25,7 @@ inboxRouter.post(
 )
 
 inboxRouter.post(
-  '/accounts/:name/inbox',
+  '/accounts/:handle/inbox',
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
@@ -35,7 +35,7 @@ inboxRouter.post(
 )
 
 inboxRouter.post(
-  '/video-channels/:nameWithHost/inbox',
+  '/video-channels/:handle/inbox',
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),

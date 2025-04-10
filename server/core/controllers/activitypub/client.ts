@@ -64,28 +64,28 @@ activityPubClientRouter.use(cors())
 // Intercept ActivityPub client requests
 
 activityPubClientRouter.get(
-  [ '/accounts?/:name', '/accounts?/:name/video-channels', '/a/:name', '/a/:name/video-channels' ],
+  [ '/accounts?/:handle', '/accounts?/:handle/video-channels', '/a/:handle', '/a/:handle/video-channels' ],
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(accountController)
 )
 activityPubClientRouter.get(
-  '/accounts?/:name/followers',
+  '/accounts?/:handle/followers',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(accountFollowersController)
 )
 activityPubClientRouter.get(
-  '/accounts?/:name/following',
+  '/accounts?/:handle/following',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(accountFollowingController)
 )
 activityPubClientRouter.get(
-  '/accounts?/:name/playlists',
+  '/accounts?/:handle/playlists',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
@@ -208,28 +208,28 @@ activityPubClientRouter.get(
 // ---------------------------------------------------------------------------
 
 activityPubClientRouter.get(
-  [ '/video-channels/:nameWithHost', '/video-channels/:nameWithHost/videos', '/c/:nameWithHost', '/c/:nameWithHost/videos' ],
+  [ '/video-channels/:handle', '/video-channels/:handle/videos', '/c/:handle', '/c/:handle/videos' ],
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(videoChannelController)
 )
 activityPubClientRouter.get(
-  '/video-channels/:nameWithHost/followers',
+  '/video-channels/:handle/followers',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(videoChannelFollowersController)
 )
 activityPubClientRouter.get(
-  '/video-channels/:nameWithHost/following',
+  '/video-channels/:handle/following',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(videoChannelFollowingController)
 )
 activityPubClientRouter.get(
-  '/video-channels/:nameWithHost/playlists',
+  '/video-channels/:handle/playlists',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),

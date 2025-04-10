@@ -10,7 +10,7 @@ const servicesRouter = express.Router()
 
 servicesRouter.use('/oembed', cors(), apiRateLimiter, asyncMiddleware(oembedValidator), generateOEmbed)
 servicesRouter.use(
-  '/redirect/accounts/:accountName',
+  '/redirect/accounts/:handle',
   apiRateLimiter,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   redirectToAccountUrl

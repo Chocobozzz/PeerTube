@@ -89,7 +89,7 @@ export const videoChannelsHandleValidatorFactory = (options: {
   const { checkIsLocal, checkManage } = options
 
   return [
-    param('nameWithHost')
+    param('handle')
       .exists(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
