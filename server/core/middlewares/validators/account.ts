@@ -15,7 +15,7 @@ export const accountHandleGetValidatorFactory = (options: {
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
-      if (!await doesAccountHandleExist({ handle: req.params.accountName, res, checkIsLocal, checkManage })) return
+      if (!await doesAccountHandleExist({ handle: req.params.handle, res, checkIsLocal, checkManage })) return
 
       if (options.checkManage) {
         const user = res.locals.oauth.token.User

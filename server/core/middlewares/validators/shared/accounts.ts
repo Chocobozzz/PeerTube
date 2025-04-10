@@ -26,7 +26,7 @@ export async function doesAccountHandleExist (options: {
 }) {
   const { handle, res, checkIsLocal, checkManage } = options
 
-  const account = await AccountModel.loadByNameWithHost(handle)
+  const account = await AccountModel.loadByHandle(handle)
 
   return doesAccountExist({ account, res, checkIsLocal, checkManage })
 }

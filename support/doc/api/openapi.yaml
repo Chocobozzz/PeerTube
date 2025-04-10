@@ -1202,7 +1202,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Follow'
 
-  '/api/v1/server/followers/{nameWithHost}':
+  '/api/v1/server/followers/{handle}':
     delete:
       summary: Remove or reject a follower to your server
       security:
@@ -1211,7 +1211,7 @@ paths:
       tags:
         - Instance Follows
       parameters:
-        - name: nameWithHost
+        - name: handle
           in: path
           required: true
           description: The remote actor handle to remove from your followers
@@ -1224,7 +1224,7 @@ paths:
         '404':
           description: follower not found
 
-  '/api/v1/server/followers/{nameWithHost}/reject':
+  '/api/v1/server/followers/{handle}/reject':
     post:
       summary: Reject a pending follower to your server
       security:
@@ -1233,7 +1233,7 @@ paths:
       tags:
         - Instance Follows
       parameters:
-        - name: nameWithHost
+        - name: handle
           in: path
           required: true
           description: The remote actor handle to remove from your followers
@@ -1246,7 +1246,7 @@ paths:
         '404':
           description: follower not found
 
-  '/api/v1/server/followers/{nameWithHost}/accept':
+  '/api/v1/server/followers/{handle}/accept':
     post:
       summary: Accept a pending follower to your server
       security:
@@ -1255,7 +1255,7 @@ paths:
       tags:
         - Instance Follows
       parameters:
-        - name: nameWithHost
+        - name: handle
           in: path
           required: true
           description: The remote actor handle to remove from your followers

@@ -51,9 +51,6 @@ export const videoChannelsAddValidator = [
 ]
 
 export const videoChannelsUpdateValidator = [
-  param('nameWithHost')
-    .exists(),
-
   body('displayName')
     .optional()
     .custom(isVideoChannelDisplayNameValid),
@@ -95,7 +92,7 @@ export const videoChannelsHandleValidatorFactory = (options: {
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
 
-      if (!await doesChannelHandleExist({ handle: req.params.nameWithHost, checkManage, checkIsLocal, res })) return
+      if (!await doesChannelHandleExist({ handle: req.params.handle, checkManage, checkIsLocal, res })) return
 
       return next()
     }

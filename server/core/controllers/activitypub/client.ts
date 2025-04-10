@@ -92,7 +92,7 @@ activityPubClientRouter.get(
   asyncMiddleware(accountPlaylistsController)
 )
 activityPubClientRouter.get(
-  '/accounts?/:name/likes/:videoId',
+  '/accounts?/:accountName/likes/:videoId',
   executeIfActivityPub,
   activityPubRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
@@ -100,7 +100,7 @@ activityPubClientRouter.get(
   asyncMiddleware(getAccountVideoRateFactory('like'))
 )
 activityPubClientRouter.get(
-  '/accounts?/:name/dislikes/:videoId',
+  '/accounts?/:accountName/dislikes/:videoId',
   executeIfActivityPub,
   activityPubRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),

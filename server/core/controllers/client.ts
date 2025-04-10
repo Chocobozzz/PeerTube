@@ -24,30 +24,15 @@ const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
-clientsRouter.use([ '/w/p/:id', '/videos/watch/playlist/:id' ],
-  clientsRateLimiter,
-  asyncMiddleware(generateWatchPlaylistHtmlPage)
-)
+clientsRouter.use([ '/w/p/:id', '/videos/watch/playlist/:id' ], clientsRateLimiter, asyncMiddleware(generateWatchPlaylistHtmlPage))
 
-clientsRouter.use([ '/w/:id', '/videos/watch/:id' ],
-  clientsRateLimiter,
-  asyncMiddleware(generateWatchHtmlPage)
-)
+clientsRouter.use([ '/w/:id', '/videos/watch/:id' ], clientsRateLimiter, asyncMiddleware(generateWatchHtmlPage))
 
-clientsRouter.use([ '/accounts/:nameWithHost', '/a/:nameWithHost' ],
-  clientsRateLimiter,
-  asyncMiddleware(generateAccountHtmlPage)
-)
+clientsRouter.use([ '/accounts/:handle', '/a/:handle' ], clientsRateLimiter, asyncMiddleware(generateAccountHtmlPage))
 
-clientsRouter.use([ '/video-channels/:nameWithHost', '/c/:nameWithHost' ],
-  clientsRateLimiter,
-  asyncMiddleware(generateVideoChannelHtmlPage)
-)
+clientsRouter.use([ '/video-channels/:handle', '/c/:handle' ], clientsRateLimiter, asyncMiddleware(generateVideoChannelHtmlPage))
 
-clientsRouter.use('/@:nameWithHost',
-  clientsRateLimiter,
-  asyncMiddleware(generateActorHtmlPage)
-)
+clientsRouter.use('/@:handle', clientsRateLimiter, asyncMiddleware(generateActorHtmlPage))
 
 // ---------------------------------------------------------------------------
 
@@ -118,10 +103,7 @@ clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => 
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 // Try to provide the right language index.html
-clientsRouter.use('/(:language)?',
-  clientsRateLimiter,
-  asyncMiddleware(serveIndexHTML)
-)
+clientsRouter.use('/(:language)?', clientsRateLimiter, asyncMiddleware(serveIndexHTML))
 
 // ---------------------------------------------------------------------------
 
@@ -206,19 +188,19 @@ async function generateWatchPlaylistHtmlPage (req: express.Request, res: express
 }
 
 async function generateAccountHtmlPage (req: express.Request, res: express.Response) {
-  const html = await ClientHtml.getAccountHTMLPage(req.params.nameWithHost, req, res)
+  const html = await ClientHtml.getAccountHTMLPage(req.params.handle, req, res)
 
   return sendHTML(html, res, true)
 }
 
 async function generateVideoChannelHtmlPage (req: express.Request, res: express.Response) {
-  const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
+  const html = await ClientHtml.getVideoChannelHTMLPage(req.params.handle, req, res)
 
   return sendHTML(html, res, true)
 }
 
 async function generateActorHtmlPage (req: express.Request, res: express.Response) {
-  const html = await ClientHtml.getActorHTMLPage(req.params.nameWithHost, req, res)
+  const html = await ClientHtml.getActorHTMLPage(req.params.handle, req, res)
 
   return sendHTML(html, res, true)
 }
