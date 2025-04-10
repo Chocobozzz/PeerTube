@@ -118,6 +118,7 @@ type CommonUpdate = Omit<VideoUpdate, 'thumbnailfile' | 'originallyPublishedAt' 
 export class VideoEdit {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
 
+  private isNewVideo = false
   private common: CommonUpdate = {}
   private captions: VideoCaptionWithPathEdit[] = []
   private chapters: VideoChaptersEdit = new VideoChaptersEdit()
@@ -172,14 +173,15 @@ export class VideoEdit {
 
   private serverConfig: HTMLServerConfig
 
-  private constructor (serverConfig: HTMLServerConfig) {
+  private constructor (serverConfig: HTMLServerConfig, isNewVideo = false) {
     this.serverConfig = serverConfig
+    this.isNewVideo = isNewVideo
   }
 
   // ---------------------------------------------------------------------------
 
   static createFromUpload (serverConfig: HTMLServerConfig, options: CreateFromUploadOptions) {
-    const videoEdit = new VideoEdit(serverConfig)
+    const videoEdit = new VideoEdit(serverConfig, true)
     videoEdit.loadFromPublish(options, false)
 
     return videoEdit
@@ -188,7 +190,7 @@ export class VideoEdit {
   // ---------------------------------------------------------------------------
 
   static createFromImport (serverConfig: HTMLServerConfig, options: CreateFromImportOptions) {
-    const videoEdit = new VideoEdit(serverConfig)
+    const videoEdit = new VideoEdit(serverConfig, true)
     videoEdit.loadFromImport(options)
 
     return videoEdit
@@ -209,7 +211,7 @@ export class VideoEdit {
   // ---------------------------------------------------------------------------
 
   static createFromLive (serverConfig: HTMLServerConfig, options: CreateFromLiveOptions) {
-    const videoEdit = new VideoEdit(serverConfig)
+    const videoEdit = new VideoEdit(serverConfig, true)
     videoEdit.loadFromLive(options)
 
     return videoEdit
@@ -767,6 +769,7 @@ export class VideoEdit {
   // ---------------------------------------------------------------------------
 
   hasCommonChanges () {
+    if (this.isNewVideo) return true
     if (!this.saveStore.common) return true
 
     let changes = !this.areSameObjects(omit(this.common, [ 'previewfile' ]), omit(this.saveStore.common, [ 'previewfile' ]))
@@ -894,5 +897,11 @@ export class VideoEdit {
     }
 
     return true
+  }
+
+  // ---------------------------------------------------------------------------
+
+  onSave () {
+    this.isNewVideo = false
   }
 }

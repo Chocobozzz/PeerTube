@@ -1,5 +1,6 @@
 import { join } from 'path'
 import { VideoManage } from './video-manage'
+import { FIXTURE_URLS } from '../utils'
 
 export class VideoPublishPage extends VideoManage {
   async navigateTo (tab?: 'Go live') {
@@ -34,6 +35,23 @@ export class VideoPublishPage extends VideoManage {
     await elem.chooseFile(fileToUpload)
 
     // Wait for the upload to finish
+    await this.getSaveButton().waitForClickable()
+  }
+
+  async importVideo () {
+    const tab = $('.nav-link*=Import with URL')
+    await tab.waitForClickable()
+    await tab.click()
+
+    const input = $('#targetUrl')
+    await input.waitForDisplayed()
+    await input.setValue(FIXTURE_URLS.IMPORT_URL)
+
+    const submit = $('.first-step-block .primary-button:not([disabled])')
+    await submit.waitForClickable()
+    await submit.click()
+
+    // Wait for the import to finish
     await this.getSaveButton().waitForClickable()
   }
 

@@ -13,13 +13,11 @@ describe('Publish video', () => {
     videoPublishPage = new VideoPublishPage()
 
     await browser.maximizeWindow()
+
+    await loginPage.loginAsRootUser()
   })
 
   describe('Common', function () {
-    before(async function () {
-      await loginPage.loginAsRootUser()
-    })
-
     it('Should upload a video and on refresh being redirected to the manage page', async function () {
       await videoPublishPage.navigateTo()
       await videoPublishPage.uploadVideo('video.mp4')
@@ -47,6 +45,16 @@ describe('Publish video', () => {
       expect(nextDay.getDate()).toEqual(inputDate.getDate())
       expect(nextDay.getMonth()).toEqual(inputDate.getMonth())
       expect(nextDay.getFullYear()).toEqual(inputDate.getFullYear())
+    })
+  })
+
+  describe('Import', function () {
+    it('Should import a video and on refresh being redirected to the manage page', async function () {
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.importVideo()
+      await videoPublishPage.validSecondStep('second video')
+
+      await videoPublishPage.refresh('second video')
     })
   })
 
