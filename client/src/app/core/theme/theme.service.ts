@@ -181,21 +181,22 @@ export class ThemeService {
       return
     }
 
-    if (!this.canInjectColorPalette()) {
+    if (!this.canInjectCoreColorPalette()) {
       return setTimeout(() => this.injectCoreColorPalette(iteration + 1))
     }
 
     return this.injectColorPalette()
   }
 
-  private canInjectColorPalette () {
+  private canInjectCoreColorPalette () {
     const computedStyle = getComputedStyle(document.body)
+    const isDark = computedStyle.getPropertyValue('--is-dark')
 
-    return !!computedStyle.getPropertyValue('--fg')
+    return isDark === '0' || isDark === '1'
   }
 
   private injectColorPalette () {
-    debugLogger(`Injecting color palette`)
+    console.log(`Injecting color palette`)
 
     const rootStyle = document.body.style
     const computedStyle = getComputedStyle(document.body)
@@ -228,6 +229,8 @@ export class ThemeService {
       { prefix: 'on-primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: isGlobalDarkTheme },
+
+      { prefix: 'input-bg', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
 
       { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme },
       { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme }

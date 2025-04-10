@@ -3,6 +3,7 @@
 @use '_icons' as *;
 
 $hover-bg: pvar(--bg-secondary-400);
+$hover-bg-2: pvar(--bg-secondary-350);
 
 /* stylelint-disable */
 @import 'primeng/resources/primeng.css';
@@ -493,12 +494,13 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
 .p-chips .p-chips-multiple-container .p-chips-token {
   padding: 2px 15px;
   margin-right: 0.5rem;
-  background: pvar(--bg-secondary-500);
+  background: pvar(--input-bg-550);
   color: pvar(--fg);
   border-radius: 4px;
+  text-transform: uppercase;
 }
 .p-chips .p-chips-multiple-container .p-chips-token.p-focus {
-  background: pvar(--bg-secondary-500);
+  background: pvar(--input-bg-600);
   color: pvar(--fg);
 }
 .p-chips .p-chips-multiple-container .p-chips-token .p-chips-token-icon {
@@ -508,7 +510,7 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   padding: 3px 0;
 }
 .p-chips .p-chips-multiple-container .p-chips-input-token input {
-  color: pvar(--input-placeholder);
+  color: pvar(--input-fg);
   padding: 0;
   margin: 0;
 }
@@ -665,7 +667,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
   color: pvar(--fg);
-  background: pvar(--bg-secondary-500);
+  background: $hover-bg;
 }
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox {
   margin-right: 0.5rem;
@@ -821,7 +823,7 @@ p-table {
   .p-datatable-tbody {
     tr {
       &:hover {
-        background-color: $hover-bg !important;
+        background-color: $hover-bg-2 !important;
       }
 
       td {

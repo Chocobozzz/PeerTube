@@ -25,10 +25,12 @@
   --green: #{$green};
 
   --input-fg: var(--inputForegroundColor, #{pvar(--fg)});
+
   --input-bg: var(--inputBackgroundColor, #{pvar(--bg-secondary-400)});
+  --input-bg-in-secondary: #{pvar(--input-bg-550)};
+
   --input-placeholder: var(--inputPlaceholderColor, #{pvar(--fg-50)});
   --input-border-color: var(--inputBorderColor, #{pvar(--input-bg)});
-  --input-bg-in-secondary: #{pvar(--bg-secondary-450)};
 
   --input-check-active-fg: #{pvar(--on-primary)};
   --input-check-active-bg: #{pvar(--primary)};
@@ -132,7 +134,6 @@
     --border-primary: #F2690D;
 
     --input-bg: #{pvar(--bg-secondary-450)};
-    --input-bg-in-secondary: #{pvar(--bg-secondary-500)};
 
     --fg: hsl(0 10% 96%);
 

@@ -98,11 +98,14 @@ $variables: (
   --green: var(--green),
 
   --input-fg: var(--input-fg),
+
   --input-bg: var(--input-bg),
+  --input-bg-550: var(--input-bg-550),
+  --input-bg-600: var(--input-bg-600),
+  --input-bg-in-secondary: var(--input-bg-in-secondary),
 
   --input-placeholder: var(--input-placeholder),
   --input-border-color: var(--input-border-color),
-  --input-bg-in-secondary: var(--input-bg-in-secondary),
   --input-border-radius: var(--input-border-radius),
 
   --input-check-active-fg: var(--input-check-active-fg),
