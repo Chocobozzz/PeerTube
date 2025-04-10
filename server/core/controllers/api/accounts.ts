@@ -1,8 +1,8 @@
-import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
+import express from 'express'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
@@ -22,29 +22,28 @@ import {
   videoRatingValidator
 } from '../../middlewares/index.js'
 import {
-  accountNameWithHostGetValidator,
+  accountHandleGetValidatorFactory,
   accountsFollowersSortValidator,
   accountsSortValidator,
-  ensureAuthUserOwnsAccountValidator,
-  ensureCanManageChannelOrAccount,
   videoChannelsSortValidator,
   videoChannelStatsValidator,
   videoChannelSyncsSortValidator,
   videosSortValidator
 } from '../../middlewares/validators/index.js'
 import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists.js'
-import { AccountModel } from '../../models/account/account.js'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate.js'
+import { AccountModel } from '../../models/account/account.js'
 import { guessAdditionalAttributesFromQuery } from '../../models/video/formatter/index.js'
-import { VideoModel } from '../../models/video/video.js'
 import { VideoChannelModel } from '../../models/video/video-channel.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
+import { VideoModel } from '../../models/video/video.js'
 
 const accountsRouter = express.Router()
 
 accountsRouter.use(apiRateLimiter)
 
-accountsRouter.get('/',
+accountsRouter.get(
+  '/',
   paginationValidator,
   accountsSortValidator,
   setDefaultSort,
@@ -52,13 +51,15 @@ accountsRouter.get('/',
   asyncMiddleware(listAccounts)
 )
 
-accountsRouter.get('/:accountName',
-  asyncMiddleware(accountNameWithHostGetValidator),
+accountsRouter.get(
+  '/:accountName',
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   getAccount
 )
 
-accountsRouter.get('/:accountName/videos',
-  asyncMiddleware(accountNameWithHostGetValidator),
+accountsRouter.get(
+  '/:accountName/videos',
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   paginationValidator,
   videosSortValidator,
   setDefaultVideosSort,
@@ -68,8 +69,9 @@ accountsRouter.get('/:accountName/videos',
   asyncMiddleware(listAccountVideos)
 )
 
-accountsRouter.get('/:accountName/video-channels',
-  asyncMiddleware(accountNameWithHostGetValidator),
+accountsRouter.get(
+  '/:accountName/video-channels',
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   videoChannelStatsValidator,
   paginationValidator,
   videoChannelsSortValidator,
@@ -78,20 +80,10 @@ accountsRouter.get('/:accountName/video-channels',
   asyncMiddleware(listAccountChannels)
 )
 
-accountsRouter.get('/:accountName/video-channel-syncs',
-  authenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
-  ensureCanManageChannelOrAccount,
-  paginationValidator,
-  videoChannelSyncsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  asyncMiddleware(listAccountChannelsSync)
-)
-
-accountsRouter.get('/:accountName/video-playlists',
+accountsRouter.get(
+  '/:accountName/video-playlists',
   optionalAuthenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   paginationValidator,
   videoPlaylistsSortValidator,
   setDefaultSort,
@@ -101,10 +93,21 @@ accountsRouter.get('/:accountName/video-playlists',
   asyncMiddleware(listAccountPlaylists)
 )
 
-accountsRouter.get('/:accountName/ratings',
+accountsRouter.get(
+  '/:accountName/video-channel-syncs',
   authenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
-  ensureAuthUserOwnsAccountValidator,
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
+  paginationValidator,
+  videoChannelSyncsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAccountChannelsSync)
+)
+
+accountsRouter.get(
+  '/:accountName/ratings',
+  authenticate,
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
   paginationValidator,
   videoRatesSortValidator,
   setDefaultSort,
@@ -113,10 +116,10 @@ accountsRouter.get('/:accountName/ratings',
   asyncMiddleware(listAccountRatings)
 )
 
-accountsRouter.get('/:accountName/followers',
+accountsRouter.get(
+  '/:accountName/followers',
   authenticate,
-  asyncMiddleware(accountNameWithHostGetValidator),
-  ensureAuthUserOwnsAccountValidator,
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: true })),
   paginationValidator,
   accountsFollowersSortValidator,
   setDefaultSort,

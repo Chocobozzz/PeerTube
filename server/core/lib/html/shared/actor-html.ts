@@ -23,7 +23,7 @@ export class ActorHtml {
   }
 
   static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    const videoChannel = await VideoChannelModel.loadByHandleAndPopulateAccount(nameWithHost)
 
     return this.getAccountOrChannelHTMLPage({
       loader: () => Promise.resolve(videoChannel),
@@ -36,7 +36,7 @@ export class ActorHtml {
   static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
     const [ account, channel ] = await Promise.all([
       AccountModel.loadByNameWithHost(nameWithHost),
-      VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+      VideoChannelModel.loadByHandleAndPopulateAccount(nameWithHost)
     ])
 
     return this.getAccountOrChannelHTMLPage({

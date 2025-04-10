@@ -1,16 +1,16 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import express from 'express'
 import { param, query } from 'express-validator'
-import { HttpStatusCode } from '@peertube/peertube-models'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds.js'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc.js'
 import {
   areValidationErrors,
   checkCanSeeVideo,
+  doesAccountHandleExist,
   doesAccountIdExist,
-  doesAccountNameWithHostExist,
+  doesChannelHandleExist,
+  doesChannelIdExist,
   doesUserFeedTokenCorrespond,
-  doesVideoChannelIdExist,
-  doesVideoChannelNameWithHostExist,
   doesVideoExist
 } from './shared/index.js'
 
@@ -90,10 +90,14 @@ const feedsAccountOrChannelFiltersValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.accountId && !await doesAccountIdExist(req.query.accountId, res)) return
-    if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
-    if (req.query.accountName && !await doesAccountNameWithHostExist(req.query.accountName, res)) return
-    if (req.query.videoChannelName && !await doesVideoChannelNameWithHostExist(req.query.videoChannelName, res)) return
+    const { accountId, videoChannelId, accountName, videoChannelName } = req.query
+    const commonOptions = { res, checkManage: false, checkIsLocal: false }
+
+    if (accountId && !await doesAccountIdExist({ id: accountId, ...commonOptions })) return
+    if (videoChannelId && !await doesChannelIdExist({ id: videoChannelId, ...commonOptions })) return
+
+    if (accountName && !await doesAccountHandleExist({ handle: accountName, ...commonOptions })) return
+    if (videoChannelName && !await doesChannelHandleExist({ handle: videoChannelName, ...commonOptions })) return
 
     return next()
   }
@@ -107,7 +111,7 @@ const videoFeedsPodcastValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
+    if (!await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: false, checkIsLocal: false, res })) return
 
     return next()
   }
@@ -125,7 +129,7 @@ const videoSubscriptionFeedsValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesAccountIdExist(req.query.accountId, res)) return
+    if (!await doesAccountIdExist({ id: req.query.accountId, res, checkIsLocal: true, checkManage: false })) return
     if (!await doesUserFeedTokenCorrespond(res.locals.account.userId, req.query.token, res)) return
 
     return next()
@@ -157,11 +161,11 @@ const videoCommentsFeedsValidator = [
 // ---------------------------------------------------------------------------
 
 export {
+  feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
   setFeedFormatContentType,
   setFeedPodcastContentType,
-  feedsAccountOrChannelFiltersValidator,
+  videoCommentsFeedsValidator,
   videoFeedsPodcastValidator,
-  videoSubscriptionFeedsValidator,
-  videoCommentsFeedsValidator
+  videoSubscriptionFeedsValidator
 }

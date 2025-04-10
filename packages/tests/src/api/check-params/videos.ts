@@ -140,10 +140,11 @@ describe('Test videos API validator', function () {
         }
 
         {
-          const { total, data } = await server.videos.listMyVideos({ token: userAccessToken, channelId: server.store.channel.id })
-
-          expect(total).to.equal(0)
-          expect(data).to.have.lengthOf(0)
+          await server.videos.listMyVideos({
+            token: userAccessToken,
+            channelId: server.store.channel.id,
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
+          })
         }
       }
 

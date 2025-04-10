@@ -9,7 +9,7 @@ import { WEBSERVER } from '../../initializers/constants.js'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist.js'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist.js'
 import { ServerModel } from '../../models/server/server.js'
-import { areValidationErrors, doesAccountNameWithHostExist } from './shared/index.js'
+import { areValidationErrors, doesAccountHandleExist } from './shared/index.js'
 
 const blockAccountValidator = [
   body('accountName')
@@ -17,7 +17,7 @@ const blockAccountValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.body.accountName, res)) return
+    if (!await doesAccountHandleExist({ handle: req.body.accountName, res, checkIsLocal: false, checkManage: false })) return
 
     const user = res.locals.oauth.token.User
     const accountToBlock = res.locals.account
@@ -40,7 +40,7 @@ const unblockAccountByAccountValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, res, checkIsLocal: false, checkManage: false })) return
 
     const user = res.locals.oauth.token.User
     const targetAccount = res.locals.account
@@ -56,7 +56,7 @@ const unblockAccountByServerValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, res, checkIsLocal: false, checkManage: false })) return
 
     const serverActor = await getServerActor()
     const targetAccount = res.locals.account

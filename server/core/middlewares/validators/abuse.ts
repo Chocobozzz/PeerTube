@@ -57,7 +57,7 @@ const abuseReportValidator = [
     const body: AbuseCreate = req.body
 
     if (body.video?.id && !await doesVideoExist(body.video.id, res)) return
-    if (body.account?.id && !await doesAccountIdExist(body.account.id, res)) return
+    if (body.account?.id && !await doesAccountIdExist({ id: body.account.id, res, checkIsLocal: false, checkManage: false })) return
     if (body.comment?.id && !await doesCommentIdExist(body.comment.id, res)) return
 
     if (!body.video?.id && !body.account?.id && !body.comment?.id) {

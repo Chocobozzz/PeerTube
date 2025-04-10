@@ -12,11 +12,15 @@ export function checkUserIdExist (idArg: number | string, res: express.Response,
 }
 
 export function checkUserEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
-  return checkUserExist(async () => {
-    const users = await UserModel.loadByEmailCaseInsensitive(email)
+  return checkUserExist(
+    async () => {
+      const users = await UserModel.loadByEmailCaseInsensitive(email)
 
-    return getUserByEmailPermissive(users, email)
-  }, res, abortResponse)
+      return getUserByEmailPermissive(users, email)
+    },
+    res,
+    abortResponse
+  )
 }
 
 export async function checkUsernameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
@@ -101,4 +105,19 @@ export function checkUserCanManageAccount (options: {
   })
 
   return false
+}
+
+export async function doesUserFeedTokenCorrespond (id: number, token: string, res: express.Response) {
+  const user = await UserModel.loadByIdWithChannels(forceNumber(id))
+
+  if (token !== user.feedToken) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'User and token mismatch'
+    })
+    return false
+  }
+
+  res.locals.user = user
+  return true
 }
