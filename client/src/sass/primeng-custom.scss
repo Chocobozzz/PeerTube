@@ -1073,7 +1073,7 @@ p-table {
   }
 }
 
-@media screen and (max-width: $primeng-breakpoint) {
+@media screen and (max-width: $medium-view) {
   p-table {
     td {
       &.expand-cell {

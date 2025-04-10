@@ -109,7 +109,7 @@
       border-end-start-radius: 0;
       border-end-end-radius: 0;
 
-      @media screen and (min-width: 1000px) {
+      @media screen and (min-width: $medium-view) {
         width: 500px;
       }
     }

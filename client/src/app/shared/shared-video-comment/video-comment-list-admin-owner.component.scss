@@ -55,7 +55,7 @@ my-global-icon {
   }
 }
 
-@media screen and (max-width: $primeng-breakpoint) {
+@media screen and (max-width: $medium-view) {
   .video {
     align-items: flex-start !important;
   }

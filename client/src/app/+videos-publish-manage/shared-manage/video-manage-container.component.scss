@@ -7,7 +7,7 @@
   display: flex;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: $medium-view) {
   .root {
     margin-bottom: 150px;
   }

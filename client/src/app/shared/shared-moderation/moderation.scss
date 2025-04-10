@@ -33,7 +33,7 @@
     max-width: 500px;
   }
 
-  @media screen and (max-width: $primeng-breakpoint) {
+  @media screen and (max-width: $medium-view) {
     .right {
       width: 100%;
     }
@@ -67,7 +67,7 @@ my-abuse-details {
   width: 100%;
 }
 
-@media screen and (max-width: $primeng-breakpoint) {
+@media screen and (max-width: $medium-view) {
   .abuse-messages {
     justify-content: flex-start !important;
   }

@@ -20,7 +20,7 @@ p-tableCheckbox {
   top: -2.5px;
 }
 
-@media screen and (max-width: $primeng-breakpoint) {
+@media screen and (max-width: $medium-view) {
   .empty-cell {
     padding: 0;
   }

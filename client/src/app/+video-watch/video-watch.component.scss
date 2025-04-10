@@ -94,7 +94,7 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
   font-size: 24px;
   height: 500px;
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: $medium-view) {
     font-size: 20px;
   }
 

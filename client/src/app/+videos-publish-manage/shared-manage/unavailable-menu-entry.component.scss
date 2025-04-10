@@ -4,8 +4,24 @@
 
 .unavailable {
   display: flex;
+  align-items: center;
+  gap: 0.5;
 
   my-help {
     color: pvar(--fg-200);
+  }
+}
+
+
+@media only screen and (max-width: $medium-view) {
+  .unavailable {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .badge-help > * {
+    display: block;
+    margin-top: 0.25rem;
   }
 }

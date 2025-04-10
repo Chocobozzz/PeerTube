@@ -2,6 +2,7 @@
 @use 'sass:color';
 @use 'sass:map';
 
+$medium-view: 1000px;
 $small-view: 800px;
 $mobile-view: 500px;
 
@@ -78,8 +79,6 @@ $focus-box-shadow-dimensions: 0 0 0 .2rem;
 $form-input-font-size: 16px;
 
 $video-watch-info-margin-left: 44px;
-
-$primeng-breakpoint: 960px;
 
 // ---------------------------------------------------------------------------
 // Theme variables with key check using pvar() function
