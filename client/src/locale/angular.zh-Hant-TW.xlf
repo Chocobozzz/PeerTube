@@ -5014,17 +5014,17 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1760429801169166597" datatype="html">
+      <trans-unit id="1760429801169166597" datatype="html" xml:space="preserve">
         <source>Live configuration is unavailable because you are streaming in this live.</source>
-        <target state="new">Live configuration is unavailable because you are streaming in this live.</target>
+        <target state="translated">因為您正在此直播中串流，因此無法使用直播設定。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8775708050219693192" datatype="html">
+      <trans-unit id="8775708050219693192" datatype="html" xml:space="preserve">
         <source>Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> 上設定的最大直播時間為 <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>。若您的直播達到此限制，其將會自動終止。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -5146,9 +5146,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1582661564914737553" datatype="html">
+      <trans-unit id="1582661564914737553" datatype="html" xml:space="preserve">
         <source>Name of the uploaded file.</source>
-        <target state="new"> Name of the uploaded file. </target>
+        <target state="translated">上傳檔案的名稱。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -5242,9 +5242,9 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8072551128947614417" datatype="html">
+      <trans-unit id="8072551128947614417" datatype="html" xml:space="preserve">
         <source>Main information</source>
-        <target state="new">Main information</target>
+        <target state="translated">主要資訊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5262,33 +5262,33 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6585268061238979045" datatype="html">
+      <trans-unit id="6585268061238979045" datatype="html" xml:space="preserve">
         <source>Video title</source>
-        <target state="new">Video title</target>
+        <target state="translated">影片標題</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4094023877159391225" datatype="html">
+      <trans-unit id="4094023877159391225" datatype="html" xml:space="preserve">
         <source>You can format your description using the <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </source>
-        <target state="new"> You can format your description using the <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </target>
+        <target state="translated">您可以使用 <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown 語言<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/> 對您的描述進行格式設定： </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">28,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3603659973330861834" datatype="html">
+      <trans-unit id="3603659973330861834" datatype="html" xml:space="preserve">
         <source>For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</source>
-        <target state="new">For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</target>
+        <target state="translated">例如，要<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>讓文字以粗體顯示<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>（**粗體文字**）或<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>讓文字以義式斜體顯示<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>（*義式斜體文字*）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">32,33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="566903689838278643" datatype="html">
+      <trans-unit id="566903689838278643" datatype="html" xml:space="preserve">
         <source>You can also create a link to a specific timecode of the video (e.g. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> by simply writing 00:05) or <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>a classic link<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([title of my link](https://example.com))</source>
-        <target state="new">You can also create a link to a specific timecode of the video (e.g. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> by simply writing 00:05) or <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>a classic link<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([title of my link](https://example.com))</target>
+        <target state="translated">您也可以建立到影片特定時間的連結（例如僅寫上 00:05 即可連結至 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> 的位置）或<x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>經典連結<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>（[我的連結標題](https://example.com)）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">33,34</context>
