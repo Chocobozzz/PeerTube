@@ -5294,41 +5294,41 @@
           <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7799871320184598340" datatype="html">
+      <trans-unit id="7799871320184598340" datatype="html" xml:space="preserve">
         <source>Maximum of 5 tags to suggest relevant recommendations.</source>
-        <target state="new">Maximum of 5 tags to suggest relevant recommendations.</target>
+        <target state="translated">最多 5 個標籤以提供相關建議。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1089762823481395967" datatype="html">
+      <trans-unit id="1089762823481395967" datatype="html" xml:space="preserve">
         <source>Support button</source>
-        <target state="new">Support button</target>
+        <target state="translated">支援按鈕</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2190068095391152848" datatype="html">
+      <trans-unit id="2190068095391152848" datatype="html" xml:space="preserve">
         <source>This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">這是幫助觀看您影片的人<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>了解如何支援您<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>的文字。您可以使用 <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown 語言<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>，包括<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>您的募款工具連結<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">58,61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2993337224487346050" datatype="html">
+      <trans-unit id="2993337224487346050" datatype="html" xml:space="preserve">
         <source>Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">您想在所有影片中使用相同的文字嗎？您可以在您的<x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>頻道設定中<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>定義<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>預設文字與支援按鈕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3434410278501759813" datatype="html">
+      <trans-unit id="3434410278501759813" datatype="html" xml:space="preserve">
         <source>Thumbnail</source>
-        <target state="new">Thumbnail</target>
+        <target state="translated">縮圖</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">89,91</context>
@@ -5374,9 +5374,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7949715708714367297" datatype="html">
+      <trans-unit id="7949715708714367297" datatype="html" xml:space="preserve">
         <source>Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> is being imported! You can already add information about this video. </source>
-        <target state="new"> Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> is being imported! You can already add information about this video. </target>
+        <target state="translated">恭喜，正在匯入 <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> 中的影片！您已經可以新增關於此影片的資訊。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-url.component.html</context>
           <context context-type="linenumber">38,40</context>
@@ -5474,9 +5474,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="449108118650377396" datatype="html">
+      <trans-unit id="449108118650377396" datatype="html" xml:space="preserve">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target state="new">Congratulations! Your video is now available in your private library.</target>
+        <target state="translated">恭喜！您的影片現在可以在您的私人媒體庫中找到。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">52</context>
@@ -5507,9 +5507,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="159182233259245277" datatype="html">
+      <trans-unit id="159182233259245277" datatype="html" xml:space="preserve">
         <source>Sorry, but something went wrong.</source>
-        <target state="new">Sorry, but something went wrong.</target>
+        <target state="translated">抱歉，出了點差錯。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -5707,9 +5707,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1069523139277190436" datatype="html">
+      <trans-unit id="1069523139277190436" datatype="html" xml:space="preserve">
         <source>Statistics</source>
-        <target state="new">Statistics</target>
+        <target state="translated">統計資料</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5827,9 +5827,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3183528558317228851" datatype="html">
+      <trans-unit id="3183528558317228851" datatype="html" xml:space="preserve">
         <source>Your live is waiting in your library. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your live is waiting in your library. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">您的直播正在您的媒體庫中等待。但仍有未儲存的變更：您確定您想要離開此頁面嗎？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -5863,9 +5863,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1588042004294678369" datatype="html">
+      <trans-unit id="1588042004294678369" datatype="html" xml:space="preserve">
         <source>UNAVAILABLE</source>
-        <target state="new">UNAVAILABLE</target>
+        <target state="translated">無法使用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -5883,9 +5883,9 @@
           <context context-type="linenumber">10,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5007027170771093295" datatype="html">
+      <trans-unit id="5007027170771093295" datatype="html" xml:space="preserve">
         <source>Feature unavailable</source>
-        <target state="new">Feature unavailable</target>
+        <target state="translated">功能無法使用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">83</context>
@@ -6159,9 +6159,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4278992604323819883" datatype="html">
+      <trans-unit id="4278992604323819883" datatype="html" xml:space="preserve">
         <source>on <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </source>
-        <target state="new"> on <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </target>
+        <target state="translated">於 <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/video-cell.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -6583,9 +6583,9 @@
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8906065447450776604" datatype="html">
+      <trans-unit id="8906065447450776604" datatype="html" xml:space="preserve">
         <source>Auto block</source>
-        <target state="new">Auto block</target>
+        <target state="translated">自動封鎖</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">54,55</context>
@@ -7019,17 +7019,17 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3245220240937722814" datatype="html">
+      <trans-unit id="3245220240937722814" datatype="html" xml:space="preserve">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">我的頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="913810105049472842" datatype="html">
+      <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
-        <target state="new">Manage my channels</target>
+        <target state="translated">管理我的頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -7851,25 +7851,25 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6410388482930606788" datatype="html">
+      <trans-unit id="6410388482930606788" datatype="html" xml:space="preserve">
         <source>This video has been reported multiple times</source>
-        <target state="new">This video has been reported multiple times</target>
+        <target state="translated">此影片已被回報過多次</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216288352598663055" datatype="html">
+      <trans-unit id="5216288352598663055" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 次濫用} other {<x id="INTERPOLATION"/> 次濫用}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4984728317230462494" datatype="html">
+      <trans-unit id="4984728317230462494" datatype="html" xml:space="preserve">
         <source>The video is blocked</source>
-        <target state="new">The video is blocked</target>
+        <target state="translated">影片已封鎖</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">70</context>
@@ -8559,9 +8559,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2655875876987395619" datatype="html">
+      <trans-unit id="2655875876987395619" datatype="html" xml:space="preserve">
         <source>Deleted video</source>
-        <target state="new">Deleted video</target>
+        <target state="translated">已刪除的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81,82</context>
@@ -12307,9 +12307,9 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7785411665353034911" datatype="html">
+      <trans-unit id="7785411665353034911" datatype="html" xml:space="preserve">
         <source>This is text that helps people visiting your channel page <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> This is text that helps people visiting your channel page <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">這是協助瀏覽您頻道頁面的人<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>了解如何支援您<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>的文字。您可以使用 <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown 語言<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>，包含<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>您的募款工具連結<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-channels/video-channel-edit.component.html</context>
           <context context-type="linenumber">73,76</context>
@@ -12809,25 +12809,25 @@
           <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910845130937645353" datatype="html">
+      <trans-unit id="5910845130937645353" datatype="html" xml:space="preserve">
         <source>Clients</source>
-        <target state="new">Clients</target>
+        <target state="translated">客戶端</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3719027099325959755" datatype="html">
+      <trans-unit id="3719027099325959755" datatype="html" xml:space="preserve">
         <source>Devices</source>
-        <target state="new">Devices</target>
+        <target state="translated">裝置</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2852782118363573273" datatype="html">
+      <trans-unit id="2852782118363573273" datatype="html" xml:space="preserve">
         <source>Operating systems</source>
-        <target state="new">Operating systems</target>
+        <target state="translated">作業系統</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -14245,49 +14245,49 @@
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2150280748663310169" datatype="html">
+      <trans-unit id="2150280748663310169" datatype="html" xml:space="preserve">
         <source>videos per page</source>
-        <target state="new">videos per page</target>
+        <target state="translated">部影片/頁</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8414659348208189884" datatype="html">
+      <trans-unit id="8414659348208189884" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ getColumn('published').label }}"/> <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ getColumn('published').label }}"/> <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getColumn('published').label }}"/> <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="790123789008020153" datatype="html">
+      <trans-unit id="790123789008020153" datatype="html" xml:space="preserve">
         <source>Column displayed:</source>
-        <target state="new">Column displayed:</target>
+        <target state="translated">顯示的欄位：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">104,106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4942346691669949289" datatype="html">
+      <trans-unit id="4942346691669949289" datatype="html" xml:space="preserve">
         <source>Navigate to the video stats page</source>
-        <target state="new">Navigate to the video stats page</target>
+        <target state="translated">前往影片統計資料頁面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">160,161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2255609929953210118" datatype="html">
+      <trans-unit id="2255609929953210118" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No viewers} =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No viewers} =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有觀眾} =1 {1 位觀眾} other {<x id="INTERPOLATION"/> 位觀眾}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5707577756171682456" datatype="html">
+      <trans-unit id="5707577756171682456" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No comments} =1 {1 comment} other {<x id="INTERPOLATION"/> comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No comments} =1 {1 comment} other {<x id="INTERPOLATION"/> comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有留言} =1 {1 則留言} other {<x id="INTERPOLATION"/> 則留言}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">172</context>
@@ -17579,17 +17579,17 @@
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8496409985768674759" datatype="html">
+      <trans-unit id="8496409985768674759" datatype="html" xml:space="preserve">
         <source>Manage my videos</source>
-        <target state="new">Manage my videos</target>
+        <target state="translated">管理我的裝置</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1170141381901621610" datatype="html">
+      <trans-unit id="1170141381901621610" datatype="html" xml:space="preserve">
         <source>Comments on my videos</source>
-        <target state="new">Comments on my videos</target>
+        <target state="translated">對我的影片的留言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-space.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -17673,9 +17673,9 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="461856253799771024" datatype="html">
+      <trans-unit id="461856253799771024" datatype="html" xml:space="preserve">
         <source>Per channel:</source>
-        <target state="new">Per channel:</target>
+        <target state="translated">每個頻道：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -17813,17 +17813,17 @@
           <context context-type="linenumber">475</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8054671906242440075" datatype="html">
+      <trans-unit id="8054671906242440075" datatype="html" xml:space="preserve">
         <source>No video found matching current filters.</source>
-        <target state="new">No video found matching current filters.</target>
+        <target state="translated">沒有找到符合目前篩選條件的影片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9219070136037518482" datatype="html">
+      <trans-unit id="9219070136037518482" datatype="html" xml:space="preserve">
         <source>You don't have any videos published yet.</source>
-        <target state="new">You don't have any videos published yet.</target>
+        <target state="translated">您尚未發表任何影片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">202</context>
@@ -18121,17 +18121,17 @@
           <context context-type="linenumber">363</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3578349972886631879" datatype="html">
+      <trans-unit id="3578349972886631879" datatype="html" xml:space="preserve">
         <source>Manage your video</source>
-        <target state="new">Manage your video</target>
+        <target state="translated">管理您的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8442110182158744120" datatype="html">
+      <trans-unit id="8442110182158744120" datatype="html" xml:space="preserve">
         <source>Publish your video</source>
-        <target state="new">Publish your video</target>
+        <target state="translated">發佈您的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
           <context context-type="linenumber">148</context>
@@ -18233,17 +18233,17 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2817281420230417453" datatype="html">
+      <trans-unit id="2817281420230417453" datatype="html" xml:space="preserve">
         <source>Started on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.startDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Started on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.startDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">開始於 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.startDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3301948621825061833" datatype="html">
+      <trans-unit id="3301948621825061833" datatype="html" xml:space="preserve">
         <source>Ended on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.endDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Ended on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.endDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">結束於 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ session.endDate | ptDate:'medium' }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -18497,9 +18497,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2821942875866613217" datatype="html">
+      <trans-unit id="2821942875866613217" datatype="html" xml:space="preserve">
         <source>Search your videos</source>
-        <target state="new">Search your videos</target>
+        <target state="translated">搜尋您的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -20566,17 +20566,17 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3444025441306717183" datatype="html">
+      <trans-unit id="3444025441306717183" datatype="html" xml:space="preserve">
         <source>There are errors in your video settings.</source>
-        <target state="new">There are errors in your video settings.</target>
+        <target state="translated">您的影片設定有誤。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/manage-errors.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2271545768110890370" datatype="html">
+      <trans-unit id="2271545768110890370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ errorRoot.page }}"/> page</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ errorRoot.page }}"/> page</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ errorRoot.page }}"/> 頁</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/manage-errors.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -20818,25 +20818,25 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1250852024988288728" datatype="html">
+      <trans-unit id="1250852024988288728" datatype="html" xml:space="preserve">
         <source>Emphasis: *text*</source>
-        <target state="new">Emphasis: *text*</target>
+        <target state="translated">強調：*文字*</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7631247820708444092" datatype="html">
+      <trans-unit id="7631247820708444092" datatype="html" xml:space="preserve">
         <source>Links: [title](https://example.com)</source>
-        <target state="new">Links: [title](https://example.com)</target>
+        <target state="translated">連結：[標題](https://example.com)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8652568377002148697" datatype="html">
+      <trans-unit id="8652568377002148697" datatype="html" xml:space="preserve">
         <source>Images: ![description](https://example.com/image.png)</source>
-        <target state="new">Images: ![description](https://example.com/image.png)</target>
+        <target state="translated">圖片：![描述](https://example.com/image.png)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -21378,9 +21378,9 @@
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2975958100686828466" datatype="html">
+      <trans-unit id="2975958100686828466" datatype="html" xml:space="preserve">
         <source>Captions are not available on a live.</source>
-        <target state="new">Captions are not available on a live.</target>
+        <target state="translated">直播無法提供字幕。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">8</context>
@@ -21450,9 +21450,9 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4038948669924102036" datatype="html">
+      <trans-unit id="4038948669924102036" datatype="html" xml:space="preserve">
         <source>Showing {first} to {last} of {totalRecords} elements</source>
-        <target state="new">Showing {first} to {last} of {totalRecords} elements</target>
+        <target state="translated">顯示 {first} 到 {last}，共 {totalRecords} 個元素</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-table.ts</context>
           <context context-type="linenumber">117</context>
@@ -22036,33 +22036,33 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8091877262136797101" datatype="html">
+      <trans-unit id="8091877262136797101" datatype="html" xml:space="preserve">
         <source>Show preview</source>
-        <target state="new">Show preview</target>
+        <target state="translated">顯示預覽</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7130074592466972739" datatype="html">
+      <trans-unit id="7130074592466972739" datatype="html" xml:space="preserve">
         <source>Hide preview</source>
-        <target state="new">Hide preview</target>
+        <target state="translated">隱藏預覽</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3045979261611286252" datatype="html">
+      <trans-unit id="3045979261611286252" datatype="html" xml:space="preserve">
         <source>Exit full-screen editor</source>
-        <target state="new">Exit full-screen editor</target>
+        <target state="translated">離開全螢幕編輯器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5828663111777947237" datatype="html">
+      <trans-unit id="5828663111777947237" datatype="html" xml:space="preserve">
         <source>Full-screen editor</source>
-        <target state="new">Full-screen editor</target>
+        <target state="translated">全螢幕編輯器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">38</context>
@@ -22736,9 +22736,9 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3403196612855474932" datatype="html">
+      <trans-unit id="3403196612855474932" datatype="html" xml:space="preserve">
         <source>Lives</source>
-        <target state="new">Lives</target>
+        <target state="translated">直播</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">180</context>
