@@ -10,7 +10,8 @@ import {
   Column,
   CreatedAt,
   DataType,
-  ForeignKey, Scopes,
+  ForeignKey,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -54,7 +55,6 @@ export enum ScopeNames {
   ]
 })
 export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel> {
-
   @CreatedAt
   createdAt: Date
 
@@ -174,13 +174,17 @@ export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel>
     })
   }
 
-  static listSessionsOfLiveForAPI (options: { videoId: number }) {
-    const { videoId } = options
+  static listSessionsOfLiveForAPI (options: {
+    videoId: number
+    count: number
+  }) {
+    const { videoId, count } = options
 
     const query: FindOptions<AttributesOnly<VideoLiveSessionModel>> = {
       where: {
         liveVideoId: videoId
       },
+      limit: count,
       order: [ [ 'startDate', 'ASC' ] ]
     }
 

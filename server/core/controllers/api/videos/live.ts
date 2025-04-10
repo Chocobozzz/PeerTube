@@ -1,12 +1,5 @@
 import express from 'express'
-import {
-  HttpStatusCode,
-  LiveVideoCreate,
-  LiveVideoUpdate,
-  ThumbnailType,
-  UserRight,
-  VideoState
-} from '@peertube/peertube-models'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoUpdate, ThumbnailType, UserRight, VideoState } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
@@ -35,37 +28,33 @@ const liveRouter = express.Router()
 
 const reqVideoFileLive = createReqFiles([ 'thumbnailfile', 'previewfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
-liveRouter.post('/live',
+liveRouter.post(
+  '/live',
   authenticate,
   reqVideoFileLive,
   asyncMiddleware(videoLiveAddValidator),
   asyncRetryTransactionMiddleware(addLiveVideo)
 )
 
-liveRouter.get('/live/:videoId/sessions',
+liveRouter.get(
+  '/live/:videoId/sessions',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
   videoLiveListSessionsValidator,
   asyncMiddleware(getLiveVideoSessions)
 )
 
-liveRouter.get('/live/:videoId',
-  optionalAuthenticate,
-  asyncMiddleware(videoLiveGetValidator),
-  getLiveVideo
-)
+liveRouter.get('/live/:videoId', optionalAuthenticate, asyncMiddleware(videoLiveGetValidator), getLiveVideo)
 
-liveRouter.put('/live/:videoId',
+liveRouter.put(
+  '/live/:videoId',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
   videoLiveUpdateValidator,
   asyncRetryTransactionMiddleware(updateLiveVideo)
 )
 
-liveRouter.get('/:videoId/live-session',
-  asyncMiddleware(videoLiveFindReplaySessionValidator),
-  getLiveReplaySession
-)
+liveRouter.get('/:videoId/live-session', asyncMiddleware(videoLiveFindReplaySessionValidator), getLiveReplaySession)
 
 // ---------------------------------------------------------------------------
 
@@ -90,7 +79,7 @@ function getLiveReplaySession (req: express.Request, res: express.Response) {
 async function getLiveVideoSessions (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
-  const data = await VideoLiveSessionModel.listSessionsOfLiveForAPI({ videoId: videoLive.videoId })
+  const data = await VideoLiveSessionModel.listSessionsOfLiveForAPI({ videoId: videoLive.videoId, count: 100 })
 
   return res.json(getFormattedObjects(data, data.length))
 }
