@@ -1,19 +1,18 @@
+import { NgIf } from '@angular/common'
 import { Component, OnInit, inject, input } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { logger } from '@root-helpers/logger'
-import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
-import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
-import { HelpComponent } from '../shared-main/buttons/help.component'
-import { NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { isIOS } from '@root-helpers/web-browser'
+import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
+import { HelpComponent } from '../shared-main/buttons/help.component'
 
 @Component({
   selector: 'my-remote-subscribe',
   templateUrl: './remote-subscribe.component.html',
-  imports: [ FormsModule, ReactiveFormsModule, NgIf, HelpComponent, PeerTubeTemplateDirective ]
+  imports: [ FormsModule, ReactiveFormsModule, NgIf, HelpComponent ]
 })
 export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)

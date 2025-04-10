@@ -7,9 +7,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { getReplaceFileUnavailability, getStudioUnavailability } from './common/unavailable-features'
 import { VideoEdit } from './common/video-edit.model'
-import { VideoManageController } from './video-manage-controller.service'
-import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { UnavailableMenuEntryComponent } from './unavailable-menu-entry.component'
+import { VideoManageController } from './video-manage-controller.service'
 
 @Component({
   selector: 'my-video-manage-menu',
@@ -22,7 +21,6 @@ import { UnavailableMenuEntryComponent } from './unavailable-menu-entry.componen
     ReactiveFormsModule,
     NgbTooltipModule,
     GlobalIconComponent,
-    HelpComponent,
     UnavailableMenuEntryComponent
   ]
 })

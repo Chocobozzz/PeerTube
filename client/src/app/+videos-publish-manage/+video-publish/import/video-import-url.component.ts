@@ -19,7 +19,6 @@ import { SelectChannelItem } from 'src/types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
 
 const debugLogger = debug('peertube:video-publish')
@@ -32,7 +31,6 @@ const debugLogger = debug('peertube:video-publish')
     NgIf,
     GlobalIconComponent,
     HelpComponent,
-    PeerTubeTemplateDirective,
     FormsModule,
     RouterLink,
     SelectChannelComponent,

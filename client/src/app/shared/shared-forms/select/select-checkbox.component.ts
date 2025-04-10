@@ -26,15 +26,12 @@ export class SelectCheckboxComponent implements ControlValueAccessor {
   readonly selectableGroupAsModel = input<boolean>(undefined)
   readonly placeholder = input<string>(undefined)
 
-  readonly selectionLimit = input<number>(undefined)
-
   readonly selectedItemsLabel = input<string>(undefined)
 
   readonly virtualScroll = input(false, { transform: booleanAttribute })
   readonly virtualScrollItemSize = input(33, { transform: numberAttribute })
 
   readonly showClear = input<boolean, unknown>(undefined, { transform: booleanAttribute })
-  readonly showHeader = input<boolean, unknown>(undefined, { transform: booleanAttribute })
   readonly showToggleAll = input<boolean, unknown>(undefined, { transform: booleanAttribute })
 
   readonly panelHide = output()

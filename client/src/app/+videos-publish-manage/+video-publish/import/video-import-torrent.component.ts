@@ -16,7 +16,6 @@ import { SelectChannelItem } from 'src/types'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
 import { DragDropDirective } from '../shared/drag-drop.directive'
 
@@ -33,7 +32,6 @@ const debugLogger = debug('peertube:video-publish')
     GlobalIconComponent,
     NgbTooltip,
     HelpComponent,
-    PeerTubeTemplateDirective,
     FormsModule,
     DragDropDirective,
     SelectChannelComponent,

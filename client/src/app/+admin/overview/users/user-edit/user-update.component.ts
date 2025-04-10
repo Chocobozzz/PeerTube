@@ -22,7 +22,6 @@ import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peert
 import { SelectCustomValueComponent } from '../../../../shared/shared-forms/select/select-custom-value.component'
 import { HelpComponent } from '../../../../shared/shared-main/buttons/help.component'
 import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
-import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/common/peertube-template.directive'
 import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
 import { UserEdit } from './user-edit'
 import { UserPasswordComponent } from './user-password.component'
@@ -40,7 +39,6 @@ import { UserPasswordComponent } from './user-password.component'
     ReactiveFormsModule,
     NgClass,
     HelpComponent,
-    PeerTubeTemplateDirective,
     InputTextComponent,
     NgFor,
     SelectCustomValueComponent,
