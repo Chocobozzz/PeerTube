@@ -5,7 +5,6 @@
 .unavailable {
   display: flex;
   align-items: center;
-  gap: 0.5;
 
   my-help {
     color: pvar(--fg-200);
@@ -20,8 +19,8 @@
     align-items: center;
   }
 
-  .badge-help > * {
-    display: block;
+  .badge-help {
+    display: flex;
     margin-top: 0.25rem;
   }
 }
