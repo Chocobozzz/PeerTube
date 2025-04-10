@@ -22744,7 +22744,7 @@
       </trans-unit>
       <trans-unit id="3403196612855474932" datatype="html" xml:space="preserve">
         <source>Lives</source>
-        <target state="translated">Vidas</target>
+        <target state="translated">Diretos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">180</context>
