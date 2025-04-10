@@ -226,6 +226,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
     this.updatedSub?.unsubscribe()
     this.manageController.unregisterSaveHook()
+    this.videoEdit.disableCheckPluginChanges()
   }
 
   // ---------------------------------------------------------------------------
@@ -372,6 +373,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     )
 
     this.videoEdit.loadPluginDataDefaults(pluginDefaults)
+    this.videoEdit.enableCheckPluginChanges()
 
     this.form.addControl('pluginData', this.pluginDataFormGroup)
     this.formErrors['pluginData'] = pluginFormErrors
