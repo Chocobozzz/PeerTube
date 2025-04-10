@@ -239,11 +239,14 @@ class PeerTubePlugin extends Plugin {
 
   private setUserAgentInfo () {
     const userAgent = UAParser(window.navigator.userAgent)
+    const defaultDevice = isMobile()
+      ? 'mobile'
+      : 'desktop'
 
     this.userAgentInfo = {
       client: userAgent.browser.name,
       os: userAgent.os.name,
-      device: userAgent.device.type || 'desktop'
+      device: userAgent.device.type || defaultDevice
     }
   }
 
