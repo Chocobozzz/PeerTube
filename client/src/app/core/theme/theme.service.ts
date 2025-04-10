@@ -170,12 +170,33 @@ export class ThemeService {
       this.localStorageService.removeItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, false)
     }
 
-    setTimeout(() => this.injectColorPalette(), 0)
+    this.injectCoreColorPalette()
 
     this.oldThemeName = currentTheme
   }
 
+  private injectCoreColorPalette (iteration = 0) {
+    if (iteration > 10) {
+      logger.error('Cannot inject core color palette: too many iterations')
+      return
+    }
+
+    if (!this.canInjectColorPalette()) {
+      return setTimeout(() => this.injectCoreColorPalette(iteration + 1))
+    }
+
+    return this.injectColorPalette()
+  }
+
+  private canInjectColorPalette () {
+    const computedStyle = getComputedStyle(document.body)
+
+    return !!computedStyle.getPropertyValue('--fg')
+  }
+
   private injectColorPalette () {
+    debugLogger(`Injecting color palette`)
+
     const rootStyle = document.body.style
     const computedStyle = getComputedStyle(document.body)
 
