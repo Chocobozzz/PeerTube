@@ -301,7 +301,7 @@ function buildVODStreamingPlaylists (video: MVideoFullLight) {
                 baseUrl: WEBSERVER.URL,
                 videoFiles: files.map(f => f.id),
                 videoUUID: video.uuid,
-                extension: videoFile.hasVideo() && videoFile.hasAudio()
+                extension: videoFile.hasVideo()
                   ? '.mp4'
                   : '.m4a'
               })
