@@ -83,7 +83,7 @@ export async function doesVideoChannelOfAccountExist (channelId: number, user: M
   const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
 
   if (videoChannel === null) {
-    res.fail({ message: 'Unknown video "video channel" for this instance.' })
+    res.fail({ message: `Unknown ${channelId} on this instance.` })
     return false
   }
 
@@ -94,9 +94,7 @@ export async function doesVideoChannelOfAccountExist (channelId: number, user: M
   }
 
   if (videoChannel.Account.id !== user.Account.id) {
-    res.fail({
-      message: 'Unknown video "video channel" for this account.'
-    })
+    res.fail({ message: `Unknown channel ${channelId} for this account.` })
     return false
   }
 

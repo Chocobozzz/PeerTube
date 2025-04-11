@@ -1,4 +1,6 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
+  ActivityCaptionUrlObject,
   ActivityPubStoryboard,
   ActivityTrackerUrlObject,
   ActivityVideoFileMetadataUrlObject,
@@ -96,14 +98,14 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
 
 export function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
-    // Video file link
-    (
-      MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType] &&
-      isActivityPubUrlValid(url.href) &&
-      validator.default.isInt(url.height + '', { min: 0 }) &&
-      validator.default.isInt(url.size + '', { min: 0 }) &&
-      (!url.fps || validator.default.isInt(url.fps + '', { min: -1 }))
-    ) ||
+      // Video file link
+      (
+        MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType] &&
+        isActivityPubUrlValid(url.href) &&
+        validator.default.isInt(url.height + '', { min: 0 }) &&
+        validator.default.isInt(url.size + '', { min: 0 }) &&
+        (!url.fps || validator.default.isInt(url.fps + '', { min: -1 }))
+      ) ||
     // Torrent link
     (
       MIMETYPES.AP_TORRENT.MIMETYPE_EXT[url.mediaType] &&
@@ -139,6 +141,13 @@ export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlO
     isActivityPubUrlValid(url.href)
 }
 
+export function isAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
+  return url &&
+    url.type === 'Link' &&
+    (url.mediaType === 'text/vtt' || url.mediaType === 'application/x-mpegURL') &&
+    isActivityPubUrlValid(url.href)
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -157,7 +166,21 @@ function setValidRemoteCaptions (video: VideoObject) {
   if (Array.isArray(video.subtitleLanguage) === false) return false
 
   video.subtitleLanguage = video.subtitleLanguage.filter(caption => {
-    if (!isActivityPubUrlValid(caption.url)) caption.url = null
+    if (typeof caption.url === 'string') {
+      if (isActivityPubUrlValid(caption.url)) {
+        caption.url = [
+          {
+            type: 'Link',
+            href: caption.url,
+            mediaType: 'text/vtt'
+          }
+        ]
+      } else {
+        caption.url = []
+      }
+    } else {
+      caption.url = arrayify(caption.url).filter(u => isAPCaptionUrlObject(u))
+    }
 
     return isRemoteStringIdentifierValid(caption)
   })

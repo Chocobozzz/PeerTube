@@ -1,6 +1,7 @@
 import { HttpStatusCode, VideoCaptionGenerate } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { createLocalCaption, createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { createLocalCaption, createTranscriptionTaskIfNeeded, updateHLSMasterOnCaptionChangeIfNeeded } from '@server/lib/video-captions.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import express from 'express'
 import { createReqFiles } from '../../../helpers/express-utils.js'
@@ -17,7 +18,6 @@ import {
   listVideoCaptionsValidator
 } from '../../../middlewares/validators/index.js'
 import { VideoCaptionModel } from '../../../models/video/video-caption.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const lTags = loggerTagsFactory('api', 'video-caption')
 
@@ -25,25 +25,25 @@ const reqVideoCaptionAdd = createReqFiles([ 'captionfile' ], MIMETYPES.VIDEO_CAP
 
 const videoCaptionsRouter = express.Router()
 
-videoCaptionsRouter.post('/:videoId/captions/generate',
+videoCaptionsRouter.post(
+  '/:videoId/captions/generate',
   authenticate,
   asyncMiddleware(generateVideoCaptionValidator),
   asyncMiddleware(createGenerateVideoCaption)
 )
 
-videoCaptionsRouter.get('/:videoId/captions',
-  asyncMiddleware(listVideoCaptionsValidator),
-  asyncMiddleware(listVideoCaptions)
-)
+videoCaptionsRouter.get('/:videoId/captions', asyncMiddleware(listVideoCaptionsValidator), asyncMiddleware(listVideoCaptions))
 
-videoCaptionsRouter.put('/:videoId/captions/:captionLanguage',
+videoCaptionsRouter.put(
+  '/:videoId/captions/:captionLanguage',
   authenticate,
   reqVideoCaptionAdd,
   asyncMiddleware(addVideoCaptionValidator),
   asyncMiddleware(createVideoCaption)
 )
 
-videoCaptionsRouter.delete('/:videoId/captions/:captionLanguage',
+videoCaptionsRouter.delete(
+  '/:videoId/captions/:captionLanguage',
   authenticate,
   asyncMiddleware(deleteVideoCaptionValidator),
   asyncRetryTransactionMiddleware(deleteVideoCaption)
@@ -89,10 +89,12 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
     automaticallyGenerated: false
   })
 
+  if (videoCaption.m3u8Filename) {
+    await updateHLSMasterOnCaptionChangeIfNeeded(video)
+  }
+
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
-      return federateVideoIfNeeded(video, false, t)
-    })
+    return sequelizeTypescript.transaction(t => federateVideoIfNeeded(video, false, t))
   })
 
   Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
@@ -103,12 +105,18 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
 async function deleteVideoCaption (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoCaption = res.locals.videoCaption
+  const hasM3U8 = !!videoCaption.m3u8Filename
 
   await sequelizeTypescript.transaction(async t => {
     await videoCaption.destroy({ transaction: t })
+  })
 
-    // Send video update
-    await federateVideoIfNeeded(video, false, t)
+  if (hasM3U8) {
+    await updateHLSMasterOnCaptionChangeIfNeeded(video)
+  }
+
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(t => federateVideoIfNeeded(video, false, t))
   })
 
   logger.info('Video caption %s of video %s deleted.', videoCaption.language, video.uuid, lTags(video.uuid))

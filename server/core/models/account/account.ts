@@ -302,8 +302,8 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     return AccountModel.findByPk(id, { transaction })
   }
 
-  static loadByNameWithHost (nameWithHost: string): Promise<MAccountDefault> {
-    const [ accountName, host ] = nameWithHost.split('@')
+  static loadByHandle (handle: string): Promise<MAccountDefault> {
+    const [ accountName, host ] = handle.split('@')
 
     if (!host || host === WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
 

@@ -24,7 +24,7 @@ import {
   checkCanSeeVideo,
   checkUserCanManageAccount,
   checkUserCanManageVideo,
-  doesVideoChannelIdExist,
+  doesChannelIdExist,
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
   doesVideoExist,
@@ -51,7 +51,9 @@ export const listAllVideoCommentsForAdminValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'unsafe-only-immutable-attributes')) return
-    if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
+    if (
+      req.query.videoChannelId && !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, res })
+    ) return
 
     return next()
   }
@@ -70,7 +72,9 @@ export const listCommentsOnUserVideosValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res, 'all')) return
-    if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
+    if (
+      req.query.videoChannelId && !await doesChannelIdExist({ id: req.query.videoChannelId, checkManage: true, checkIsLocal: true, res })
+    ) return
 
     const user = res.locals.oauth.token.User
 

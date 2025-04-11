@@ -118,6 +118,7 @@ type CommonUpdate = Omit<VideoUpdate, 'thumbnailfile' | 'originallyPublishedAt' 
 export class VideoEdit {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
 
+  private isNewVideo = false
   private common: CommonUpdate = {}
   private captions: VideoCaptionWithPathEdit[] = []
   private chapters: VideoChaptersEdit = new VideoChaptersEdit()
@@ -162,24 +163,27 @@ export class VideoEdit {
   }
 
   private saveStore: {
-    common?: CommonUpdate
-    previewfile?: {
-      size: number
-    }
+    common?: Omit<CommonUpdate, 'pluginData' | 'previewfile'>
+    previewfile?: { size: number }
+
     live?: LiveVideoUpdate
+
+    pluginData?: any
     pluginDefaults?: Record<string, string | boolean>
   } = {}
+  private checkPluginChanges = false
 
   private serverConfig: HTMLServerConfig
 
-  private constructor (serverConfig: HTMLServerConfig) {
+  private constructor (serverConfig: HTMLServerConfig, isNewVideo = false) {
     this.serverConfig = serverConfig
+    this.isNewVideo = isNewVideo
   }
 
   // ---------------------------------------------------------------------------
 
   static createFromUpload (serverConfig: HTMLServerConfig, options: CreateFromUploadOptions) {
-    const videoEdit = new VideoEdit(serverConfig)
+    const videoEdit = new VideoEdit(serverConfig, true)
     videoEdit.loadFromPublish(options, false)
 
     return videoEdit
@@ -188,7 +192,7 @@ export class VideoEdit {
   // ---------------------------------------------------------------------------
 
   static createFromImport (serverConfig: HTMLServerConfig, options: CreateFromImportOptions) {
-    const videoEdit = new VideoEdit(serverConfig)
+    const videoEdit = new VideoEdit(serverConfig, true)
     videoEdit.loadFromImport(options)
 
     return videoEdit
@@ -209,7 +213,7 @@ export class VideoEdit {
   // ---------------------------------------------------------------------------
 
   static createFromLive (serverConfig: HTMLServerConfig, options: CreateFromLiveOptions) {
-    const videoEdit = new VideoEdit(serverConfig)
+    const videoEdit = new VideoEdit(serverConfig, true)
     videoEdit.loadFromLive(options)
 
     return videoEdit
@@ -336,12 +340,12 @@ export class VideoEdit {
     this.common = buildObj()
 
     if (saveInStore) {
-      this.saveStore.common = buildObj()
+      const obj = buildObj()
+      this.saveStore.common = omit(obj, [ 'pluginData', 'previewfile' ])
 
       // Apply plugin defaults so we correctly detect changes
-      if (this.saveStore.pluginDefaults) {
-        this.saveStore.common.pluginData = { ...this.saveStore.pluginDefaults, ...this.saveStore.common.pluginData }
-      }
+      const pluginDefaults = this.saveStore.pluginDefaults || {}
+      this.saveStore.pluginData = { ...pluginDefaults, ...obj.pluginData }
     }
 
     // ---------------------------------------------------------------------------
@@ -363,8 +367,8 @@ export class VideoEdit {
   loadPluginDataDefaults (pluginDefaults: Record<string, string | boolean>) {
     this.saveStore.pluginDefaults = pluginDefaults
 
-    if (this.saveStore.common?.pluginData) {
-      this.saveStore.common.pluginData = { ...this.saveStore.pluginDefaults, ...this.saveStore.common.pluginData }
+    if (this.saveStore?.pluginData) {
+      this.saveStore.pluginData = { ...this.saveStore.pluginDefaults, ...this.saveStore.pluginData }
     }
   }
 
@@ -767,9 +771,10 @@ export class VideoEdit {
   // ---------------------------------------------------------------------------
 
   hasCommonChanges () {
+    if (this.isNewVideo) return true
     if (!this.saveStore.common) return true
 
-    let changes = !this.areSameObjects(omit(this.common, [ 'previewfile' ]), omit(this.saveStore.common, [ 'previewfile' ]))
+    let changes = !this.areSameObjects(omit(this.common, [ 'previewfile', 'pluginData' ]), this.saveStore.common)
 
     // Compare preview file
     if (changes !== true && (this.common.previewfile || this.saveStore.previewfile)) {
@@ -781,6 +786,22 @@ export class VideoEdit {
       common: this.common,
       saveCommon: this.saveStore.common,
       savePreview: this.saveStore.previewfile
+    })
+
+    return changes
+  }
+
+  hasPluginDataChanges () {
+    if (!this.checkPluginChanges) return false
+    if (!this.saveStore.pluginData) return true
+
+    const current = this.common.pluginData
+    const changes = !this.areSameObjects(current, this.saveStore.pluginData)
+
+    debugLogger('Check if has plugin data changes', {
+      changes,
+      pluginData: current,
+      savePluginData: this.saveStore.pluginData
     })
 
     return changes
@@ -837,7 +858,8 @@ export class VideoEdit {
       this.hasReplaceFile() ||
       this.hasStudioTasks() ||
       this.hasChaptersChanges() ||
-      this.hasCommonChanges()
+      this.hasCommonChanges() ||
+      this.hasPluginDataChanges()
   }
 
   // ---------------------------------------------------------------------------
@@ -894,5 +916,19 @@ export class VideoEdit {
     }
 
     return true
+  }
+
+  // ---------------------------------------------------------------------------
+
+  onSave () {
+    this.isNewVideo = false
+  }
+
+  enableCheckPluginChanges () {
+    this.checkPluginChanges = true
+  }
+
+  disableCheckPluginChanges () {
+    this.checkPluginChanges = false
   }
 }

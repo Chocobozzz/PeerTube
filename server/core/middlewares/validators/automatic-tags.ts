@@ -3,8 +3,7 @@ import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import express from 'express'
 import { body, param } from 'express-validator'
-import { doesAccountNameWithHostExist } from './shared/accounts.js'
-import { checkUserCanManageAccount } from './shared/users.js'
+import { doesAccountHandleExist } from './shared/accounts.js'
 import { areValidationErrors } from './shared/utils.js'
 
 export const manageAccountAutomaticTagsValidator = [
@@ -13,8 +12,7 @@ export const manageAccountAutomaticTagsValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
-    if (!checkUserCanManageAccount({ user: res.locals.oauth.token.User, account: res.locals.account, specialRight: null, res })) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, res, checkIsLocal: true, checkManage: true })) return
 
     return next()
   }

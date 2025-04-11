@@ -70,8 +70,8 @@ p-calendar {
     }
   }
 
-  @media screen and (max-width: 1000px) {
-    grid-template-columns: 1fr;
+  @media screen and (max-width: $medium-view) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

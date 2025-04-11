@@ -1,9 +1,9 @@
-import express from 'express'
-import { body, param, query } from 'express-validator'
 import { HttpStatusCode, VideosImportInChannelCreate } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MChannelAccountDefault } from '@server/types/models/index.js'
+import express from 'express'
+import { body, param, query } from 'express-validator'
 import { isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc.js'
 import {
   isVideoChannelDescriptionValid,
@@ -13,7 +13,7 @@ import {
 } from '../../../helpers/custom-validators/video-channels.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
-import { areValidationErrors, checkUserQuota, doesVideoChannelNameWithHostExist } from '../shared/index.js'
+import { areValidationErrors, checkUserQuota, doesChannelHandleExist } from '../shared/index.js'
 import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs.js'
 
 export const videoChannelsAddValidator = [
@@ -51,9 +51,6 @@ export const videoChannelsAddValidator = [
 ]
 
 export const videoChannelsUpdateValidator = [
-  param('nameWithHost')
-    .exists(),
-
   body('displayName')
     .optional()
     .custom(isVideoChannelDisplayNameValid),
@@ -82,31 +79,25 @@ export const videoChannelsRemoveValidator = [
   }
 ]
 
-export const videoChannelsNameWithHostValidator = [
-  param('nameWithHost')
-    .exists(),
+export const videoChannelsHandleValidatorFactory = (options: {
+  checkIsLocal: boolean
+  checkManage: boolean
+}) => {
+  const { checkIsLocal, checkManage } = options
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
+  return [
+    param('handle')
+      .exists(),
 
-    if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
 
-    return next()
-  }
-]
+      if (!await doesChannelHandleExist({ handle: req.params.handle, checkManage, checkIsLocal, res })) return
 
-export const ensureIsLocalChannel = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (res.locals.videoChannel.Actor.isOwned() === false) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'This channel is not owned.'
-      })
+      return next()
     }
-
-    return next()
-  }
-]
+  ]
+}
 
 export const ensureChannelOwnerCanUpload = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

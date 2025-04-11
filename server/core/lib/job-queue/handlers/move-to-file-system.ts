@@ -13,7 +13,8 @@ import {
   removeOriginalFileObjectStorage,
   removeWebVideoObjectStorage
 } from '@server/lib/object-storage/index.js'
-import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { updateHLSMasterOnCaptionChange, upsertCaptionPlaylistOnFS } from '@server/lib/video-captions.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedMoveToFileSystemState, moveToNextState } from '@server/lib/video-state.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoCaption, MVideoFile, MVideoWithAllFiles } from '@server/types/models/index.js'
@@ -115,7 +116,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
       if (file.storage === FileStorage.FILE_SYSTEM) continue
 
       // Resolution playlist
-      const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
+      const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
       await makeHLSFileAvailable(playlistWithVideo, playlistFilename, join(getHLSDirectory(video), playlistFilename))
       await makeHLSFileAvailable(playlistWithVideo, file.filename, join(getHLSDirectory(video), file.filename))
 
@@ -152,21 +153,47 @@ async function onVideoFileMoved (options: {
 
 // ---------------------------------------------------------------------------
 
-async function moveCaptionFiles (captions: MVideoCaption[]) {
+async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlaylistVideo) {
+  let hlsUpdated = false
+
   for (const caption of captions) {
-    if (caption.storage === FileStorage.FILE_SYSTEM) continue
+    if (caption.storage === FileStorage.OBJECT_STORAGE) {
+      const oldFileUrl = caption.fileUrl
 
-    await makeCaptionFileAvailable(caption.filename, caption.getFSPath())
+      await makeCaptionFileAvailable(caption.filename, caption.getFSFilePath())
 
-    const oldFileUrl = caption.fileUrl
+      // Assign new values before building the m3u8 file
+      caption.fileUrl = null
+      caption.storage = FileStorage.FILE_SYSTEM
 
-    caption.fileUrl = null
-    caption.storage = FileStorage.FILE_SYSTEM
-    await caption.save()
+      await caption.save()
 
-    logger.debug('Removing caption file %s because it\'s now on file system', oldFileUrl, lTagsBase())
+      logger.debug('Removing caption file %s because it\'s now on file system', oldFileUrl, lTagsBase())
+      await removeCaptionObjectStorage(caption)
+    }
 
-    await removeCaptionObjectStorage(caption)
+    if (hls && (!caption.m3u8Filename || caption.m3u8Url)) {
+      hlsUpdated = true
+
+      const oldM3U8Url = caption.m3u8Url
+      const oldM3U8Filename = caption.m3u8Filename
+
+      // Caption link has been updated, so we must also update the HLS caption playlist
+      caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, hls.Video)
+      caption.m3u8Url = null
+
+      await caption.save()
+
+      if (oldM3U8Url) {
+        logger.debug(`Removing video caption playlist file ${oldM3U8Url} because it's now on file system`, lTagsBase())
+
+        await removeHLSFileObjectStorageByFilename(hls, oldM3U8Filename)
+      }
+    }
+  }
+
+  if (hlsUpdated) {
+    await updateHLSMasterOnCaptionChange(hls.Video, hls)
   }
 }
 

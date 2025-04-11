@@ -37,7 +37,7 @@ import { LocalVideoCreator, ThumbnailOptions } from '@server/lib/local-video-cre
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
-import { createLocalCaption } from '@server/lib/video-captions.js'
+import { createLocalCaption, updateHLSMasterOnCaptionChange } from '@server/lib/video-captions.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -49,12 +49,33 @@ import { AbstractUserImporter } from './abstract-user-importer.js'
 const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = VideoExportJSON['videos'][0]
-type SanitizedObject = Pick<ImportObject, 'name' | 'duration' | 'channel' | 'privacy' | 'archiveFiles' | 'captions' | 'category' |
-'licence' | 'language' | 'description' | 'support' | 'nsfw' | 'isLive' | 'commentsPolicy' | 'downloadEnabled' | 'waitTranscoding' |
-'originallyPublishedAt' | 'tags' | 'live' | 'passwords' | 'source' | 'chapters'>
+type SanitizedObject = Pick<
+  ImportObject,
+  | 'name'
+  | 'duration'
+  | 'channel'
+  | 'privacy'
+  | 'archiveFiles'
+  | 'captions'
+  | 'category'
+  | 'licence'
+  | 'language'
+  | 'description'
+  | 'support'
+  | 'nsfw'
+  | 'isLive'
+  | 'commentsPolicy'
+  | 'downloadEnabled'
+  | 'waitTranscoding'
+  | 'originallyPublishedAt'
+  | 'tags'
+  | 'live'
+  | 'passwords'
+  | 'source'
+  | 'chapters'
+>
 
-export class VideosImporter extends AbstractUserImporter <VideoExportJSON, ImportObject, SanitizedObject> {
-
+export class VideosImporter extends AbstractUserImporter<VideoExportJSON, ImportObject, SanitizedObject> {
   protected getImportObjects (json: VideoExportJSON) {
     return json.videos
   }
@@ -257,6 +278,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
   private async importCaptions (video: MVideoFullLight, videoImportData: SanitizedObject) {
     const captionPaths: string[] = []
+    let updateHLS = false
 
     for (const captionImport of videoImportData.captions) {
       const relativeFilePath = videoImportData.archiveFiles?.captions?.[captionImport.language]
@@ -270,7 +292,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
       if (!await this.isFileValidOrLog(absoluteFilePath, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)) continue
 
-      await createLocalCaption({
+      const caption = await createLocalCaption({
         video,
         language: captionImport.language,
         path: absoluteFilePath,
@@ -278,6 +300,12 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       })
 
       captionPaths.push(absoluteFilePath)
+
+      if (caption.m3u8Filename) updateHLS = true
+    }
+
+    if (updateHLS && video.getHLSPlaylist()) {
+      await updateHLSMasterOnCaptionChange(video, video.getHLSPlaylist())
     }
 
     return captionPaths

@@ -86,10 +86,14 @@ my-embed {
 
 .nav-tabs {
   @include peertube-nav-tabs($border-width: 2px);
+
+  a.nav-link {
+    padding: 0 10px !important;
+  }
 }
 
-.chart-container {
-  margin-bottom: 10px;
+.timeseries {
+  min-height: 500px;
 }
 
 .zoom-container {

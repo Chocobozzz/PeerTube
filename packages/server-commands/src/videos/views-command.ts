@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
-import { HttpStatusCode, VideoViewEvent } from '@peertube/peertube-models'
+import { pick } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, VideoView, VideoViewEvent } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ViewsCommand extends AbstractCommand {
-
-  view (options: OverrideCommandOptions & {
-    id: number | string
-    currentTime: number
-    viewEvent?: VideoViewEvent
-    xForwardedFor?: string
-    sessionId?: string
-  }) {
-    const { id, xForwardedFor, viewEvent, currentTime, sessionId } = options
+  view (
+    options: OverrideCommandOptions & VideoView & {
+      id: number | string
+      xForwardedFor?: string
+    }
+  ) {
+    const { id, xForwardedFor } = options
     const path = '/api/v1/videos/' + id + '/views'
 
     return this.postBodyRequest({
@@ -19,31 +18,30 @@ export class ViewsCommand extends AbstractCommand {
 
       path,
       xForwardedFor,
-      fields: {
-        currentTime,
-        viewEvent,
-        sessionId
-      },
+      fields: pick(options, [ 'currentTime', 'viewEvent', 'sessionId', 'client', 'device', 'operatingSystem' ]),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
-  async simulateView (options: OverrideCommandOptions & {
-    id: number | string
-    xForwardedFor?: string
-    sessionId?: string
-  }) {
+  async simulateView (
+    options: OverrideCommandOptions & Omit<VideoView, 'currentTime'> & {
+      id: number | string
+      xForwardedFor?: string
+    }
+  ) {
     await this.view({ ...options, currentTime: 0 })
     await this.view({ ...options, currentTime: 5 })
   }
 
-  async simulateViewer (options: OverrideCommandOptions & {
-    id: number | string
-    currentTimes: number[]
-    xForwardedFor?: string
-    sessionId?: string
-  }) {
+  async simulateViewer (
+    options: OverrideCommandOptions & {
+      id: number | string
+      currentTimes: number[]
+      xForwardedFor?: string
+      sessionId?: string
+    }
+  ) {
     let viewEvent: VideoViewEvent = 'seek'
 
     for (const currentTime of options.currentTimes) {

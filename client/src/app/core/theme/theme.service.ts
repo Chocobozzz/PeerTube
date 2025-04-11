@@ -170,12 +170,34 @@ export class ThemeService {
       this.localStorageService.removeItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, false)
     }
 
-    setTimeout(() => this.injectColorPalette(), 0)
+    this.injectCoreColorPalette()
 
     this.oldThemeName = currentTheme
   }
 
+  private injectCoreColorPalette (iteration = 0) {
+    if (iteration > 10) {
+      logger.error('Cannot inject core color palette: too many iterations')
+      return
+    }
+
+    if (!this.canInjectCoreColorPalette()) {
+      return setTimeout(() => this.injectCoreColorPalette(iteration + 1))
+    }
+
+    return this.injectColorPalette()
+  }
+
+  private canInjectCoreColorPalette () {
+    const computedStyle = getComputedStyle(document.body)
+    const isDark = computedStyle.getPropertyValue('--is-dark')
+
+    return isDark === '0' || isDark === '1'
+  }
+
   private injectColorPalette () {
+    console.log(`Injecting color palette`)
+
     const rootStyle = document.body.style
     const computedStyle = getComputedStyle(document.body)
 
@@ -207,6 +229,8 @@ export class ThemeService {
       { prefix: 'on-primary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'bg-secondary', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
       { prefix: 'fg', invertIfDark: true, fallbacks: { '--fg-300': '--greyForegroundColor' }, step: 5, darkTheme: isGlobalDarkTheme },
+
+      { prefix: 'input-bg', invertIfDark: true, step: 5, darkTheme: isGlobalDarkTheme },
 
       { prefix: 'menu-fg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme },
       { prefix: 'menu-bg', invertIfDark: true, step: 5, darkTheme: isMenuDarkTheme }

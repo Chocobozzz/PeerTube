@@ -8,7 +8,7 @@ import { JobQueue } from '@server/lib/job-queue/index.js'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
-  getHlsResolutionPlaylistFilename
+  getHLSResolutionPlaylistFilename
 } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -19,7 +19,6 @@ run()
   .catch(err => {
     console.error(err)
     process.exit(-1)
-
   })
 
 async function run () {
@@ -52,7 +51,7 @@ async function processVideo (videoId: number) {
 
   console.log(`Renaming HLS playlist files of video ${video.name}.`)
 
-  const playlist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
+  const playlist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
   const hlsDirPath = VideoPathManager.Instance.getFSHLSOutputPath(video)
 
   const masterPlaylistPath = join(hlsDirPath, playlist.playlistFilename)
@@ -60,7 +59,7 @@ async function processVideo (videoId: number) {
 
   for (const videoFile of hls.VideoFiles) {
     const srcName = `${videoFile.resolution}.m3u8`
-    const dstName = getHlsResolutionPlaylistFilename(videoFile.filename)
+    const dstName = getHLSResolutionPlaylistFilename(videoFile.filename)
 
     const src = join(hlsDirPath, srcName)
     const dst = join(hlsDirPath, dstName)

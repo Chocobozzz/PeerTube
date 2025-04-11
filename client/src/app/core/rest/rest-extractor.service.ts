@@ -74,7 +74,6 @@ export class RestExtractor {
   }
 
   private buildErrorMessage (err: any) {
-    console.log(err)
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       const errorMessage = err.error.detail || err.error.title

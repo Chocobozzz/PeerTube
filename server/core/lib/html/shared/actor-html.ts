@@ -11,8 +11,8 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml, TagsOptions } from './tags-html.js'
 
 export class ActorHtml {
-  static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    const accountModelPromise = AccountModel.loadByNameWithHost(nameWithHost)
+  static async getAccountHTMLPage (handle: string, req: express.Request, res: express.Response) {
+    const accountModelPromise = AccountModel.loadByHandle(handle)
 
     return this.getAccountOrChannelHTMLPage({
       loader: () => accountModelPromise,
@@ -22,8 +22,8 @@ export class ActorHtml {
     })
   }
 
-  static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+  static async getVideoChannelHTMLPage (handle: string, req: express.Request, res: express.Response) {
+    const videoChannel = await VideoChannelModel.loadByHandleAndPopulateAccount(handle)
 
     return this.getAccountOrChannelHTMLPage({
       loader: () => Promise.resolve(videoChannel),
@@ -33,10 +33,10 @@ export class ActorHtml {
     })
   }
 
-  static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
+  static async getActorHTMLPage (handle: string, req: express.Request, res: express.Response) {
     const [ account, channel ] = await Promise.all([
-      AccountModel.loadByNameWithHost(nameWithHost),
-      VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+      AccountModel.loadByHandle(handle),
+      VideoChannelModel.loadByHandleAndPopulateAccount(handle)
     ])
 
     return this.getAccountOrChannelHTMLPage({

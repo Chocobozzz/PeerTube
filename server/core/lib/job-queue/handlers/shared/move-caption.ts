@@ -4,15 +4,16 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/federate.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoCaption } from '@server/types/models/index.js'
+import { MStreamingPlaylistVideoUUID, MVideoCaption } from '@server/types/models/index.js'
 
 export async function moveCaptionToStorageJob (options: {
   jobId: string
   captionId: number
   loggerTags: (number | string)[]
 
-  moveCaptionFiles: (captions: MVideoCaption[]) => Promise<void>
+  moveCaptionFiles: (captions: MVideoCaption[], hls: MStreamingPlaylistVideoUUID) => Promise<void>
 }) {
   const {
     jobId,
@@ -32,8 +33,10 @@ export async function moveCaptionToStorageJob (options: {
 
   const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(caption.Video.uuid)
 
+  const hls = await VideoStreamingPlaylistModel.loadHLSByVideoWithVideo(caption.videoId)
+
   try {
-    await moveCaptionFiles([ caption ])
+    await moveCaptionFiles([ caption ], hls)
 
     await retryTransactionWrapper(() => {
       return sequelizeTypescript.transaction(async t => {

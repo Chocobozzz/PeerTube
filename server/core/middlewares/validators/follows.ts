@@ -53,7 +53,6 @@ const followValidator = [
 
     const body: ServerFollowCreate = req.body
     if (body.hosts.length === 0 && body.handles.length === 0) {
-
       return res
         .status(HttpStatusCode.BAD_REQUEST_400)
         .json({
@@ -94,7 +93,7 @@ const removeFollowingValidator = [
 ]
 
 const getFollowerValidator = [
-  param('nameWithHost')
+  param('handle')
     .custom(isValidActorHandle),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -102,19 +101,19 @@ const getFollowerValidator = [
 
     let follow: MActorFollowActorsDefault
     try {
-      const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
+      const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.handle)
       const actor = await ActorModel.loadByUrl(actorUrl)
 
       const serverActor = await getServerActor()
       follow = await ActorFollowModel.loadByActorAndTarget(actor.id, serverActor.id)
     } catch (err) {
-      logger.warn('Cannot get actor from handle.', { handle: req.params.nameWithHost, err })
+      logger.warn('Cannot get actor from handle.', { handle: req.params.handle, err })
     }
 
     if (!follow) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
-        message: `Follower ${req.params.nameWithHost} not found.`
+        message: `Follower ${req.params.handle} not found.`
       })
     }
 

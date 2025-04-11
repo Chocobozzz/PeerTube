@@ -20,7 +20,8 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  Is, Scopes,
+  Is,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -57,7 +58,6 @@ export enum ScopeNames {
     ]
   }
 }))
-
 @Table({
   tableName: 'videoRedundancy',
   indexes: [
@@ -77,7 +77,6 @@ export enum ScopeNames {
   ]
 })
 export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
-
   @CreatedAt
   createdAt: Date
 
@@ -134,8 +133,8 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     const videoUUID = videoStreamingPlaylist.Video.uuid
     logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
 
-    videoStreamingPlaylist.Video.removeStreamingPlaylistFiles(videoStreamingPlaylist, true)
-                          .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
+    videoStreamingPlaylist.Video.removeAllStreamingPlaylistFiles({ playlist: videoStreamingPlaylist, isRedundancy: true })
+      .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
 
     return undefined
   }
@@ -295,7 +294,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     }
 
     return VideoRedundancyModel.findOne(query)
-                               .then(r => !!r)
+      .then(r => !!r)
   }
 
   static async getVideoSample (p: Promise<VideoModel[]>) {
@@ -503,7 +502,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
               '(' +
                 'SELECT "videoId" FROM "videoStreamingPlaylist" ' +
                 'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id' +
-              ')'
+                ')'
             )
           }
         }
@@ -516,12 +515,12 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
 
     const sql = `WITH "tmp" AS ` +
       `(` +
-        `SELECT "videoStreamingFile"."size" AS "videoStreamingFileSize", "videoStreamingPlaylist"."videoId" AS "videoStreamingVideoId"` +
-        `FROM "videoRedundancy" AS "videoRedundancy" ` +
-        `LEFT JOIN "videoStreamingPlaylist" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ` +
-        `LEFT JOIN "videoFile" AS "videoStreamingFile" ` +
-          `ON "videoStreamingPlaylist"."id" = "videoStreamingFile"."videoStreamingPlaylistId" ` +
-        `WHERE "videoRedundancy"."strategy" = :strategy AND "videoRedundancy"."actorId" = :actorId` +
+      `SELECT "videoStreamingFile"."size" AS "videoStreamingFileSize", "videoStreamingPlaylist"."videoId" AS "videoStreamingVideoId"` +
+      `FROM "videoRedundancy" AS "videoRedundancy" ` +
+      `LEFT JOIN "videoStreamingPlaylist" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ` +
+      `LEFT JOIN "videoFile" AS "videoStreamingFile" ` +
+      `ON "videoStreamingPlaylist"."id" = "videoStreamingFile"."videoStreamingPlaylistId" ` +
+      `WHERE "videoRedundancy"."strategy" = :strategy AND "videoRedundancy"."actorId" = :actorId` +
       `) ` +
       `SELECT ` +
       `COALESCE(SUM("videoStreamingFileSize"), '0') AS "totalUsed", ` +
@@ -604,7 +603,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
         `SELECT "videoStreamingPlaylist"."videoId" AS "videoId" FROM "videoRedundancy" ` +
         `INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoRedundancy"."videoStreamingPlaylistId" ` +
         `WHERE "videoRedundancy"."actorId" = ${peertubeActor.id} ` +
-      ')'
+        ')'
     )
 
     return {

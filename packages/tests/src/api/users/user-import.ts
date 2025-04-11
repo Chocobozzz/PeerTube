@@ -14,12 +14,7 @@ import {
   VideoState
 } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
-import {
-  ObjectStorageCommand,
-  PeerTubeServer,
-  cleanupTests,
-  waitJobs
-} from '@peertube/peertube-server-commands'
+import { ObjectStorageCommand, PeerTubeServer, cleanupTests, waitJobs } from '@peertube/peertube-server-commands'
 import { testAvatarSize, testImage } from '@tests/shared/checks.js'
 import { prepareImportExportTests } from '@tests/shared/import-export.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
@@ -57,9 +52,8 @@ function runTest (withObjectStorage: boolean) {
 
     objectStorage = withObjectStorage
       ? new ObjectStorageCommand()
-      : undefined;
-
-    ({
+      : undefined
+    ;({
       noahId,
       externalVideo,
       noahVideo,
@@ -122,7 +116,6 @@ function runTest (withObjectStorage: boolean) {
   })
 
   describe('Import process', function () {
-
     it('Should import an archive with video files', async function () {
       this.timeout(240000)
 
@@ -142,7 +135,6 @@ function runTest (withObjectStorage: boolean) {
   })
 
   describe('Import data', function () {
-
     it('Should have correctly imported blocklist', async function () {
       {
         const { data } = await remoteServer.blocklist.listMyAccountBlocklist({ start: 0, count: 5, token: remoteNoahToken })
@@ -363,6 +355,9 @@ function runTest (withObjectStorage: boolean) {
     })
 
     it('Should have correctly imported user videos', async function () {
+      // We observe weird behaviour in the CI, so re-wait jobs here just to be sure
+      await waitJobs([ remoteServer, server ])
+
       const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
       expect(data).to.have.lengthOf(5)
 
@@ -453,12 +448,24 @@ function runTest (withObjectStorage: boolean) {
           })
         }
 
+        const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })
+
+        // TODO: merge these functions in v8, caption playlist are not federated before v8
         await completeCheckHlsPlaylist({
           hlsOnly: false,
-          servers: [ remoteServer, server ],
+          servers: [ remoteServer ],
           videoUUID: otherVideo.uuid,
           objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl(),
-          resolutions: [ 720, 240 ]
+          resolutions: [ 720, 240 ],
+          captions
+        })
+        await completeCheckHlsPlaylist({
+          hlsOnly: false,
+          servers: [ server ],
+          videoUUID: otherVideo.uuid,
+          objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl(),
+          resolutions: [ 720, 240 ],
+          captions: [] // Caption playlist are not federated before v8
         })
 
         const source = await remoteServer.videos.getSource({ id: otherVideo.uuid })
@@ -498,7 +505,6 @@ function runTest (withObjectStorage: boolean) {
   })
 
   describe('Re-import', function () {
-
     it('Should re-import the same file', async function () {
       this.timeout(240000)
 
@@ -584,7 +590,6 @@ function runTest (withObjectStorage: boolean) {
   })
 
   describe('After import', function () {
-
     it('Should have received an email on finished import', async function () {
       const email = emails.reverse().find(e => {
         return e['to'][0]['address'] === 'noah_remote@example.com' &&
@@ -616,7 +621,6 @@ function runTest (withObjectStorage: boolean) {
   })
 
   describe('Custom video options included in the export', function () {
-
     async function generateAndExportImport (username: string) {
       const archivePath = join(server.getDirectoryPath('tmp'), `archive${username}.zip`)
       const fixture = 'video_short1.webm'
@@ -718,7 +722,6 @@ function runTest (withObjectStorage: boolean) {
 }
 
 describe('Test user import', function () {
-
   describe('From filesystem', function () {
     runTest(false)
   })

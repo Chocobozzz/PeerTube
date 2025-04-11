@@ -4,19 +4,15 @@ import { escapeHTML, forceNumber } from '@peertube/peertube-core-utils'
 import { MChannelSummary } from '@server/types/models/index.js'
 import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, oembedValidator } from '../middlewares/index.js'
-import { accountNameWithHostGetValidator } from '../middlewares/validators/index.js'
+import { accountHandleGetValidatorFactory } from '../middlewares/validators/index.js'
 
 const servicesRouter = express.Router()
 
-servicesRouter.use('/oembed',
-  cors(),
+servicesRouter.use('/oembed', cors(), apiRateLimiter, asyncMiddleware(oembedValidator), generateOEmbed)
+servicesRouter.use(
+  '/redirect/accounts/:handle',
   apiRateLimiter,
-  asyncMiddleware(oembedValidator),
-  generateOEmbed
-)
-servicesRouter.use('/redirect/accounts/:accountName',
-  apiRateLimiter,
-  asyncMiddleware(accountNameWithHostGetValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkManage: false })),
   redirectToAccountUrl
 )
 

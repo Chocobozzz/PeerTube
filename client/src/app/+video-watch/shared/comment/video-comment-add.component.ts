@@ -9,7 +9,6 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { TextareaAutoResizeDirective } from '@app/shared/shared-forms/textarea-autoresize.directive'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { HelpComponent } from '@app/shared/shared-main/buttons/help.component'
-import { PeerTubeTemplateDirective } from '@app/shared/shared-main/common/peertube-template.directive'
 import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { RemoteSubscribeComponent } from '@app/shared/shared-user-subscription/remote-subscribe.component'
@@ -30,7 +29,6 @@ import { Observable } from 'rxjs'
     TextareaAutoResizeDirective,
     NgClass,
     HelpComponent,
-    PeerTubeTemplateDirective,
     NgIf,
     GlobalIconComponent,
     RemoteSubscribeComponent,

@@ -309,6 +309,10 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
   // Override REST table method
   onSearch (search: string) {
     this.search = search
+    this.sort = {
+      field: 'match',
+      order: -1
+    }
 
     this.onFilter()
   }

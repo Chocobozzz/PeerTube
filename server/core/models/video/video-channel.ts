@@ -725,8 +725,8 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadByNameWithHostAndPopulateAccount (nameWithHost: string) {
-    const [ name, host ] = nameWithHost.split('@')
+  static loadByHandleAndPopulateAccount (handle: string) {
+    const [ name, host ] = handle.split('@')
 
     if (!host || host === WEBSERVER.HOST) return VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
 

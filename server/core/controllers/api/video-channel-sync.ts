@@ -1,4 +1,4 @@
-import express from 'express'
+import { HttpStatusCode, VideoChannelSyncState } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger.js'
 import { logger } from '@server/helpers/logger.js'
 import {
@@ -6,32 +6,31 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  ensureCanManageChannelOrAccount,
   ensureSyncExists,
   ensureSyncIsEnabled,
   videoChannelSyncValidator
 } from '@server/middlewares/index.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { MChannelSyncFormattable } from '@server/types/models/index.js'
-import { HttpStatusCode, VideoChannelSyncState } from '@peertube/peertube-models'
+import express from 'express'
 
 const videoChannelSyncRouter = express.Router()
 const auditLogger = auditLoggerFactory('channel-syncs')
 
 videoChannelSyncRouter.use(apiRateLimiter)
 
-videoChannelSyncRouter.post('/',
+videoChannelSyncRouter.post(
+  '/',
   authenticate,
   ensureSyncIsEnabled,
   asyncMiddleware(videoChannelSyncValidator),
-  ensureCanManageChannelOrAccount,
   asyncRetryTransactionMiddleware(createVideoChannelSync)
 )
 
-videoChannelSyncRouter.delete('/:id',
+videoChannelSyncRouter.delete(
+  '/:id',
   authenticate,
   asyncMiddleware(ensureSyncExists),
-  ensureCanManageChannelOrAccount,
   asyncRetryTransactionMiddleware(removeVideoChannelSync)
 )
 

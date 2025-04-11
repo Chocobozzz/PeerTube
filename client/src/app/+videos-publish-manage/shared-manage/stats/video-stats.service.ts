@@ -3,7 +3,13 @@ import { environment } from 'src/environments/environment'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { VideoStatsOverall, VideoStatsRetention, VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@peertube/peertube-models'
+import {
+  VideoStatsOverall,
+  VideoStatsRetention,
+  VideoStatsTimeserie,
+  VideoStatsTimeserieMetric,
+  VideoStatsUserAgent
+} from '@peertube/peertube-models'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable({
@@ -48,6 +54,21 @@ export class VideoStatsService {
 
   getRetentionStats (videoId: string) {
     return this.authHttp.get<VideoStatsRetention>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/retention')
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  getUserAgentStats (options: {
+    videoId: string
+    startDate?: Date
+    endDate?: Date
+  }) {
+    const { videoId, startDate, endDate } = options
+
+    let params = new HttpParams()
+    if (startDate) params = params.append('startDate', startDate.toISOString())
+    if (endDate) params = params.append('endDate', endDate.toISOString())
+
+    return this.authHttp.get<VideoStatsUserAgent>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/user-agent', { params })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

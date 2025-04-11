@@ -1,24 +1,23 @@
-import { QueryTypes } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Table } from 'sequelize-typescript'
-import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
-import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
-import { MLocalVideoViewer, MLocalVideoViewerWithWatchSections, MVideo } from '@server/types/models/index.js'
 import {
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
   VideoStatsTimeserieMetric,
+  VideoStatsUserAgent,
   WatchActionObject
 } from '@peertube/peertube-models'
+import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
+import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
+import { MLocalVideoViewer, MLocalVideoViewerWithWatchSections, MVideo } from '@server/types/models/index.js'
+import { QueryOptionsWithType, QueryTypes } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Table } from 'sequelize-typescript'
+import { SequelizeModel } from '../shared/index.js'
 import { VideoModel } from '../video/video.js'
 import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-section.js'
-import { SequelizeModel } from '../shared/index.js'
 
 /**
- *
  * Aggregate viewers of local videos only to display statistics to video owners
  * A viewer is a user that watched one or multiple sections of a specific video inside a time window
- *
  */
 
 @Table({
@@ -49,6 +48,18 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   @AllowNull(false)
   @Column
   watchTime: number
+
+  @AllowNull(true)
+  @Column
+  client: string
+
+  @AllowNull(true)
+  @Column
+  device: string
+
+  @AllowNull(true)
+  @Column
+  operatingSystem: string
 
   @AllowNull(true)
   @Column
@@ -203,27 +214,12 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
       return LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
     }
 
-    const buildGeoPromise = (type: 'country' | 'subdivisionName') => {
-      let dateWhere = ''
-
-      if (startDate) dateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
-      if (endDate) dateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
-
-      const query = `SELECT "${type}", COUNT("${type}") as viewers ` +
-        `FROM "localVideoViewer" ` +
-        `WHERE "videoId" = :videoId AND "${type}" IS NOT NULL ${dateWhere} ` +
-        `GROUP BY "${type}" ` +
-        `ORDER BY "viewers" DESC`
-
-      return LocalVideoViewerModel.sequelize.query<any>(query, queryOptions)
-    }
-
     const [ rowsTotalViewers, rowsWatchTime, rowsWatchPeak, rowsCountries, rowsSubdivisions ] = await Promise.all([
       buildTotalViewersPromise(),
       buildWatchTimePromise(),
       buildWatchPeakPromise(),
-      buildGeoPromise('country'),
-      buildGeoPromise('subdivisionName')
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'country', startDate, endDate, videoId: video.id }),
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'subdivisionName', startDate, endDate, videoId: video.id })
     ])
 
     const viewersPeak = rowsWatchPeak.length !== 0
@@ -259,20 +255,49 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
     }
   }
 
+  static async getUserAgentStats (options: {
+    video: MVideo
+    startDate?: string
+    endDate?: string
+  }): Promise<VideoStatsUserAgent> {
+    const { video, startDate, endDate } = options
+
+    const [ clients, devices, operatingSystems ] = await Promise.all([
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'client', startDate, endDate, videoId: video.id }),
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'device', startDate, endDate, videoId: video.id }),
+      LocalVideoViewerModel.buildGroupBy({ groupByColumn: 'operatingSystem', startDate, endDate, videoId: video.id })
+    ])
+
+    return {
+      clients: clients.map(r => ({
+        name: r.client,
+        viewers: r.viewers
+      })),
+      devices: devices.map(r => ({
+        name: r.device,
+        viewers: r.viewers
+      })),
+      operatingSystems: operatingSystems.map(r => ({
+        name: r.operatingSystem,
+        viewers: r.viewers
+      }))
+    }
+  }
+
   static async getRetentionStats (video: MVideo): Promise<VideoStatsRetention> {
     const step = Math.max(Math.round(video.duration / 100), 1)
 
     const query = `WITH "total" AS (SELECT COUNT(*) AS viewers FROM "localVideoViewer" WHERE "videoId" = :videoId) ` +
       `SELECT serie AS "second", ` +
-        `(COUNT("localVideoViewer".id)::float / (SELECT GREATEST("total"."viewers", 1) FROM "total")) AS "retention" ` +
+      `(COUNT("localVideoViewer".id)::float / (SELECT GREATEST("total"."viewers", 1) FROM "total")) AS "retention" ` +
       `FROM generate_series(0, ${video.duration}, ${step}) serie ` +
       `LEFT JOIN "localVideoViewer" ON "localVideoViewer"."videoId" = :videoId ` +
-        `AND EXISTS (` +
-          `SELECT 1 FROM "localVideoViewerWatchSection" ` +
-          `WHERE "localVideoViewer"."id" = "localVideoViewerWatchSection"."localVideoViewerId" ` +
-          `AND serie >= "localVideoViewerWatchSection"."watchStart" ` +
-          `AND serie <= "localVideoViewerWatchSection"."watchEnd"` +
-        `)` +
+      `AND EXISTS (` +
+      `SELECT 1 FROM "localVideoViewerWatchSection" ` +
+      `WHERE "localVideoViewer"."id" = "localVideoViewerWatchSection"."localVideoViewerId" ` +
+      `AND serie >= "localVideoViewerWatchSection"."watchStart" ` +
+      `AND serie <= "localVideoViewerWatchSection"."watchEnd"` +
+      `)` +
       `GROUP BY serie ` +
       `ORDER BY serie ASC`
 
@@ -301,12 +326,12 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
 
     const { groupInterval, startDate, endDate } = buildGroupByAndBoundaries(options.startDate, options.endDate)
 
-    const selectMetrics: { [ id in VideoStatsTimeserieMetric ]: string } = {
+    const selectMetrics: { [id in VideoStatsTimeserieMetric]: string } = {
       viewers: 'COUNT("localVideoViewer"."id")',
       aggregateWatchTime: 'SUM("localVideoViewer"."watchTime")'
     }
 
-    const intervalWhere: { [ id in VideoStatsTimeserieMetric ]: string } = {
+    const intervalWhere: { [id in VideoStatsTimeserieMetric]: string } = {
       // Viewer is still in the interval. Overlap algorithm
       viewers: '"localVideoViewer"."startDate" <= "intervals"."endDate" ' +
         'AND "localVideoViewer"."endDate" >= "intervals"."startDate"',
@@ -351,6 +376,33 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
         value: parseInt(r.value)
       }))
     }
+  }
+
+  private static async buildGroupBy (options: {
+    groupByColumn: 'country' | 'subdivisionName' | 'client' | 'device' | 'operatingSystem'
+    startDate?: string
+    endDate?: string
+    videoId: number
+  }) {
+    const { groupByColumn, startDate, endDate, videoId } = options
+
+    const queryOptions: QueryOptionsWithType<QueryTypes.SELECT> = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { videoId, startDate, endDate }
+    }
+
+    let dateWhere = ''
+
+    if (startDate) dateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
+    if (endDate) dateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
+
+    const query = `SELECT "${groupByColumn}", COUNT("${groupByColumn}") as viewers ` +
+      `FROM "localVideoViewer" ` +
+      `WHERE "videoId" = :videoId AND "${groupByColumn}" IS NOT NULL ${dateWhere} ` +
+      `GROUP BY "${groupByColumn}" ` +
+      `ORDER BY "viewers" DESC`
+
+    return LocalVideoViewerModel.sequelize.query<any>(query, queryOptions)
   }
 
   toActivityPubObject (this: MLocalVideoViewerWithWatchSections): WatchActionObject {

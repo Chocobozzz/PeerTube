@@ -4,7 +4,7 @@ import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.j
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { HttpStatusCode, VideoChannelSyncCreate } from '@peertube/peertube-models'
-import { areValidationErrors, doesVideoChannelIdExist } from '../shared/index.js'
+import { areValidationErrors, doesChannelIdExist } from '../shared/index.js'
 import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs.js'
 
 export const ensureSyncIsEnabled = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -29,7 +29,7 @@ export const videoChannelSyncValidator = [
     if (areValidationErrors(req, res)) return
 
     const body: VideoChannelSyncCreate = req.body
-    if (!await doesVideoChannelIdExist(body.videoChannelId, res)) return
+    if (!await doesChannelIdExist({ id: body.videoChannelId, checkManage: true, checkIsLocal: true, res })) return
 
     const count = await VideoChannelSyncModel.countByAccount(res.locals.videoChannel.accountId)
     if (count >= CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER) {
@@ -49,7 +49,7 @@ export const ensureSyncExists = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoChannelSyncIdExist(+req.params.id, res)) return
-    if (!await doesVideoChannelIdExist(res.locals.videoChannelSync.videoChannelId, res)) return
+    if (!await doesChannelIdExist({ id: res.locals.videoChannelSync.videoChannelId, checkManage: true, checkIsLocal: true, res })) return
 
     return next()
   }

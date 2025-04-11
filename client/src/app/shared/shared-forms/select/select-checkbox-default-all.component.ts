@@ -18,6 +18,7 @@ import { SelectCheckboxComponent } from './select-checkbox.component'
     [selectedItemsLabel]="selectedItemsLabel"
 
     showClear="false"
+    showToggleAll="true"
 
     [virtualScroll]="virtualScroll()"
 

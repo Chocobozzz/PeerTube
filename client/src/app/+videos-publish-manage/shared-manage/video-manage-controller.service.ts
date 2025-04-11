@@ -299,6 +299,7 @@ export class VideoManageController implements OnDestroy {
       finalize(() => {
         debugLogger('Update complete')
 
+        this.videoEdit.onSave()
         this.loadingBar.useRef().complete()
         this.isUpdatingVideo = false
         this.updatedSubject.next()

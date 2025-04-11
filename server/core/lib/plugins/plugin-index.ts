@@ -66,7 +66,7 @@ export async function getLatestPluginVersion (npmName: string) {
   const results = await getLatestPluginsVersion([ npmName ])
 
   if (Array.isArray(results) === false || results.length !== 1) {
-    logger.warn('Cannot get latest supported plugin version of %s.', npmName)
+    logger.warn(`Cannot get latest supported plugin version of ${npmName}`, { results })
     return undefined
   }
 

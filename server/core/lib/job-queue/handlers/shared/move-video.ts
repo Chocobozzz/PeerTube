@@ -4,7 +4,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoCaption, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MStreamingPlaylistVideoUUID, MVideoCaption, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 
 export async function moveVideoToStorageJob (options: {
@@ -15,7 +15,7 @@ export async function moveVideoToStorageJob (options: {
   moveWebVideoFiles: (video: MVideoWithAllFiles) => Promise<void>
   moveHLSFiles: (video: MVideoWithAllFiles) => Promise<void>
   moveVideoSourceFile: (source: MVideoSource) => Promise<void>
-  moveCaptionFiles: (captions: MVideoCaption[]) => Promise<void>
+  moveCaptionFiles: (captions: MVideoCaption[], hls: MStreamingPlaylistVideoUUID) => Promise<void>
 
   moveToFailedState: (video: MVideoWithAllFiles) => Promise<void>
   doAfterLastMove: (video: MVideoWithAllFiles) => Promise<void>
@@ -68,9 +68,10 @@ export async function moveVideoToStorageJob (options: {
 
     const captions = await VideoCaptionModel.listVideoCaptions(video.id)
     if (captions.length !== 0) {
-      logger.debug(`Moving captions of ${video.uuid}.`, lTags)
+      logger.debug(`Moving ${captions.length} captions of ${video.uuid}.`, lTags)
 
-      await moveCaptionFiles(captions)
+      const hls = video.getHLSPlaylist()
+      await moveCaptionFiles(captions, hls)
     }
 
     const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')

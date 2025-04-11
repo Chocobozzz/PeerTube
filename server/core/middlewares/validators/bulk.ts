@@ -1,10 +1,10 @@
-import express from 'express'
-import { body } from 'express-validator'
 import { BulkRemoveCommentsOfBody, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { isBulkRemoveCommentsOfScopeValid } from '@server/helpers/custom-validators/bulk.js'
-import { areValidationErrors, doesAccountNameWithHostExist } from './shared/index.js'
+import express from 'express'
+import { body } from 'express-validator'
+import { areValidationErrors, doesAccountHandleExist } from './shared/index.js'
 
-const bulkRemoveCommentsOfValidator = [
+export const bulkRemoveCommentsOfValidator = [
   body('accountName')
     .exists(),
   body('scope')
@@ -12,7 +12,7 @@ const bulkRemoveCommentsOfValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.body.accountName, res)) return
+    if (!await doesAccountHandleExist({ handle: req.body.accountName, res, checkIsLocal: false, checkManage: false })) return
 
     const user = res.locals.oauth.token.User
     const body = req.body as BulkRemoveCommentsOfBody
@@ -27,11 +27,3 @@ const bulkRemoveCommentsOfValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  bulkRemoveCommentsOfValidator
-}
-
-// ---------------------------------------------------------------------------

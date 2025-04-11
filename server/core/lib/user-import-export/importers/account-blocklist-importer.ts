@@ -12,8 +12,7 @@ const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = { handle: string | null, host: string | null, archiveFiles?: never }
 
-export class BlocklistImporter extends AbstractUserImporter <BlocklistExportJSON, ImportObject, ImportObject> {
-
+export class BlocklistImporter extends AbstractUserImporter<BlocklistExportJSON, ImportObject, ImportObject> {
   protected getImportObjects (json: BlocklistExportJSON) {
     return [
       ...json.actors.map(o => ({ handle: o.handle, host: null })),
@@ -38,7 +37,7 @@ export class BlocklistImporter extends AbstractUserImporter <BlocklistExportJSON
   }
 
   private async importAccountBlock (handle: string) {
-    const accountToBlock = await AccountModel.loadByNameWithHost(handle)
+    const accountToBlock = await AccountModel.loadByHandle(handle)
     if (!accountToBlock) {
       logger.info('Account %s was not blocked on user import because it cannot be found in the database.', handle, lTags())
       return

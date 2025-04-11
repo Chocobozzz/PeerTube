@@ -53,6 +53,7 @@
         </my-alert>
       } @else {
         <my-upload-progress
+          class="d-block mt-3 mb-3"
           [isUploading]="uploadingArchive" [uploadPercents]="uploadPercents" [error]="error" [uploaded]="archiveUploadFinished"
           [enableRetryAfterError]="enableRetryAfterError" (cancelUpload)="cancelUpload()" (retry)="retryUpload()"
         >

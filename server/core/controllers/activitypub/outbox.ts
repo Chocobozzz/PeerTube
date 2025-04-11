@@ -1,18 +1,17 @@
-import express from 'express'
 import { Activity, VideoPrivacy } from '@peertube/peertube-models'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { MActorLight } from '@server/types/models/index.js'
+import express from 'express'
 import { logger } from '../../helpers/logger.js'
 import { buildAudience } from '../../lib/activitypub/audience.js'
 import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send/index.js'
 import {
+  accountHandleGetValidatorFactory,
   activityPubRateLimiter,
   asyncMiddleware,
-  ensureIsLocalChannel,
-  localAccountValidator,
-  videoChannelsNameWithHostValidator
+  videoChannelsHandleValidatorFactory
 } from '../../middlewares/index.js'
 import { apPaginationValidator } from '../../middlewares/validators/activitypub/index.js'
 import { VideoModel } from '../../models/video/video.js'
@@ -20,18 +19,19 @@ import { activityPubResponse } from './utils.js'
 
 const outboxRouter = express.Router()
 
-outboxRouter.get('/accounts/:name/outbox',
+outboxRouter.get(
+  '/accounts/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
-  localAccountValidator,
+  accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false }),
   asyncMiddleware(outboxController)
 )
 
-outboxRouter.get('/video-channels/:nameWithHost/outbox',
+outboxRouter.get(
+  '/video-channels/:handle/outbox',
   activityPubRateLimiter,
   apPaginationValidator,
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(outboxController)
 )
 

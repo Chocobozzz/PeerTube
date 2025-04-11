@@ -7,8 +7,7 @@ import { WatchedWordsListModel } from '@server/models/watched-words/watched-word
 import { MAccountId, MWatchedWordsList } from '@server/types/models/index.js'
 import express from 'express'
 import { ValidationChain, body, param } from 'express-validator'
-import { doesAccountNameWithHostExist } from './shared/accounts.js'
-import { checkUserCanManageAccount } from './shared/users.js'
+import { doesAccountHandleExist } from './shared/accounts.js'
 import { areValidationErrors } from './shared/utils.js'
 
 export const manageAccountWatchedWordsListValidator = [
@@ -17,8 +16,7 @@ export const manageAccountWatchedWordsListValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
-    if (!checkUserCanManageAccount({ user: res.locals.oauth.token.User, account: res.locals.account, specialRight: null, res })) return
+    if (!await doesAccountHandleExist({ handle: req.params.accountName, res, checkIsLocal: true, checkManage: true })) return
 
     return next()
   }
@@ -59,14 +57,14 @@ function buildUpdateOrAddValidators ({ optional }: { optional: boolean }) {
       .trim()
       .custom(isWatchedWordListNameValid).withMessage(
         `Should have a list name between ` +
-        `${CONSTRAINTS_FIELDS.WATCHED_WORDS.LIST_NAME.min} and ${CONSTRAINTS_FIELDS.WATCHED_WORDS.LIST_NAME.max} characters long`
+          `${CONSTRAINTS_FIELDS.WATCHED_WORDS.LIST_NAME.min} and ${CONSTRAINTS_FIELDS.WATCHED_WORDS.LIST_NAME.max} characters long`
       ),
 
     makeOptionalIfNeeded(body('words'))
       .custom(areWatchedWordsValid)
       .withMessage(
         `Should have an array of up to ${CONSTRAINTS_FIELDS.WATCHED_WORDS.WORDS.max} words between ` +
-        `${CONSTRAINTS_FIELDS.WATCHED_WORDS.WORD.min} and ${CONSTRAINTS_FIELDS.WATCHED_WORDS.WORD.max} characters each`
+          `${CONSTRAINTS_FIELDS.WATCHED_WORDS.WORD.min} and ${CONSTRAINTS_FIELDS.WATCHED_WORDS.WORD.max} characters each`
       )
   ]
 }

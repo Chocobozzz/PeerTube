@@ -23,6 +23,7 @@ describe('Test my user API validators', function () {
   let video: VideoCreateResult
   let server: PeerTubeServer
   let userToken = ''
+  let anotherUserToken = ''
   let moderatorToken = ''
 
   // ---------------------------------------------------------------
@@ -49,6 +50,10 @@ describe('Test my user API validators', function () {
     {
       const result = await server.users.generate('moderator2', UserRole.MODERATOR)
       moderatorId = result.userId
+    }
+
+    {
+      anotherUserToken = await server.users.generateUserAndToken('user2')
     }
 
     {
@@ -411,7 +416,7 @@ describe('Test my user API validators', function () {
     })
 
     it('Should fail with a another user', async function () {
-      await makeGetRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: anotherUserToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with a bad type', async function () {
@@ -449,7 +454,7 @@ describe('Test my user API validators', function () {
     })
 
     it('Should fail with a another user', async function () {
-      await makeGetRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: anotherUserToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct params', async function () {

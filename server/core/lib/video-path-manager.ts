@@ -11,23 +11,23 @@ import {
   MVideoFile,
   MVideoFileStreamingPlaylistVideo,
   MVideoFileVideo,
+  MVideoPrivacy,
   MVideoWithFile
 } from '@server/types/models/index.js'
 import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
 import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
-import { getHLSDirectory, getHlsResolutionPlaylistFilename } from './paths.js'
+import { getHLSDirectory, getHLSResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
 
-type MakeAvailableCB <T> = (path: string) => Awaitable<T>
-type MakeAvailableMultipleCB <T> = (paths: string[]) => Awaitable<T>
+type MakeAvailableCB<T> = (path: string) => Awaitable<T>
+type MakeAvailableMultipleCB<T> = (paths: string[]) => Awaitable<T>
 type MakeAvailableCreateMethod = { method: () => Awaitable<string>, clean: boolean }
 
 const lTags = loggerTagsFactory('video-path-manager')
 
 class VideoPathManager {
-
   private static instance: VideoPathManager
 
   // Key is a video UUID
@@ -35,7 +35,7 @@ class VideoPathManager {
 
   private constructor () {}
 
-  getFSHLSOutputPath (video: MVideo, filename?: string) {
+  getFSHLSOutputPath (video: MVideoPrivacy, filename?: string) {
     const base = getHLSDirectory(video)
     if (!filename) return base
 
@@ -62,7 +62,7 @@ class VideoPathManager {
 
   // ---------------------------------------------------------------------------
 
-  async makeAvailableVideoFiles <T> (videoFiles: (MVideoFileVideo | MVideoFileStreamingPlaylistVideo)[], cb: MakeAvailableMultipleCB<T>) {
+  async makeAvailableVideoFiles<T> (videoFiles: (MVideoFileVideo | MVideoFileStreamingPlaylistVideo)[], cb: MakeAvailableMultipleCB<T>) {
     const createMethods: MakeAvailableCreateMethod[] = []
 
     for (const videoFile of videoFiles) {
@@ -95,11 +95,11 @@ class VideoPathManager {
     return this.makeAvailableFactory({ createMethods, cbContext: cb })
   }
 
-  async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
+  async makeAvailableVideoFile<T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     return this.makeAvailableVideoFiles([ videoFile ], paths => cb(paths[0]))
   }
 
-  async makeAvailableMaxQualityFiles <T> (
+  async makeAvailableMaxQualityFiles<T> (
     video: MVideoWithFile,
     cb: (options: { videoPath: string, separatedAudioPath: string }) => Awaitable<T>
   ) {
@@ -115,8 +115,8 @@ class VideoPathManager {
 
   // ---------------------------------------------------------------------------
 
-  async makeAvailableResolutionPlaylistFile <T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
-    const filename = getHlsResolutionPlaylistFilename(videoFile.filename)
+  async makeAvailableResolutionPlaylistFile<T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
+    const filename = getHLSResolutionPlaylistFilename(videoFile.filename)
 
     if (videoFile.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory({
@@ -142,7 +142,7 @@ class VideoPathManager {
     })
   }
 
-  async makeAvailablePlaylistFile <T> (playlist: MStreamingPlaylistVideo, filename: string, cb: MakeAvailableCB<T>) {
+  async makeAvailablePlaylistFile<T> (playlist: MStreamingPlaylistVideo, filename: string, cb: MakeAvailableCB<T>) {
     if (playlist.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory({
         createMethods: [
@@ -189,7 +189,7 @@ class VideoPathManager {
     logger.debug('Released lockfiles of %s.', videoUUID, lTags(videoUUID))
   }
 
-  private async makeAvailableFactory <T> (options: {
+  private async makeAvailableFactory<T> (options: {
     createMethods: MakeAvailableCreateMethod[]
     cbContext: MakeAvailableMultipleCB<T>
   }) {

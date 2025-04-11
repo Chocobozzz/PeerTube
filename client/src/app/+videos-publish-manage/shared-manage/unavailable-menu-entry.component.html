@@ -1,4 +1,4 @@
-<div class="unavailable d-flex align-items-center">
+<div class="unavailable">
   <ng-content select=".icon"></ng-content>
 
   <div>
@@ -6,8 +6,8 @@
       <ng-content select=".label"></ng-content>
     </div>
 
-    <div>
-      <div class="pt-badge badge-secondary-on-secondary me-1" i18n>UNAVAILABLE</div>
+    <div class="badge-help">
+      <div class="pt-badge badge-secondary-on-secondary" i18n>UNAVAILABLE</div>
 
       <my-help i18n-helpTitle helpTitle="Feature unavailable" container="body">
         {{ help() }}

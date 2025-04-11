@@ -1,35 +1,31 @@
+import { UserRight } from '@peertube/peertube-models'
 import express from 'express'
 import { param } from 'express-validator'
-import { isAccountNameValid } from '../../helpers/custom-validators/accounts.js'
-import { areValidationErrors, doesAccountNameWithHostExist, doesLocalAccountNameExist } from './shared/index.js'
+import { areValidationErrors, checkUserCanManageAccount, doesAccountHandleExist } from './shared/index.js'
 
-const localAccountValidator = [
-  param('name')
-    .custom(isAccountNameValid),
+export const accountHandleGetValidatorFactory = (options: {
+  checkManage: boolean
+  checkIsLocal: boolean
+}) => {
+  const { checkManage, checkIsLocal } = options
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    if (!await doesLocalAccountNameExist(req.params.name, res)) return
+  return [
+    param('handle')
+      .exists(),
 
-    return next()
-  }
-]
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
+      if (!await doesAccountHandleExist({ handle: req.params.handle, res, checkIsLocal, checkManage })) return
 
-const accountNameWithHostGetValidator = [
-  param('accountName')
-    .exists(),
+      if (options.checkManage) {
+        const user = res.locals.oauth.token.User
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
+        if (!checkUserCanManageAccount({ account: res.locals.account, user, res, specialRight: UserRight.MANAGE_USERS })) {
+          return false
+        }
+      }
 
-    return next()
-  }
-]
-
-// ---------------------------------------------------------------------------
-
-export {
-  localAccountValidator,
-  accountNameWithHostGetValidator
+      return next()
+    }
+  ]
 }

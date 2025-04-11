@@ -31,7 +31,7 @@ import {
   removeWebVideoObjectStorage
 } from '@server/lib/object-storage/index.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
-import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { getHLSDirectory, getHLSRedundancyDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
@@ -640,7 +640,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       name: 'videoId',
       allowNull: true
     },
-    hooks: true,
     onDelete: 'cascade'
   })
   VideoFiles: Awaited<VideoFileModel>[]
@@ -650,7 +649,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       name: 'videoId',
       allowNull: false
     },
-    hooks: true,
     onDelete: 'cascade'
   })
   VideoStreamingPlaylists: Awaited<VideoStreamingPlaylistModel>[]
@@ -834,7 +832,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   static async removeFiles (instance: VideoModel, options) {
     const tasks: Promise<any>[] = []
 
-    logger.info('Removing files of video %s.', instance.url)
+    logger.info('Removing files of video %s.', instance.url, { toto: new Error().stack })
 
     if (instance.isOwned()) {
       if (!Array.isArray(instance.VideoFiles)) {
@@ -852,7 +850,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
 
       for (const p of instance.VideoStreamingPlaylists) {
-        tasks.push(instance.removeStreamingPlaylistFiles(p))
+        // Captions will be automatically deleted
+        tasks.push(instance.removeAllStreamingPlaylistFiles({ playlist: p, deleteCaptionPlaylists: false }))
       }
 
       // Remove source files
@@ -1904,7 +1903,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       if (isArray(videoAP.VideoCaptions)) return videoAP.VideoCaptions
 
       return this.$get('VideoCaptions', {
-        attributes: [ 'filename', 'language', 'fileUrl', 'storage', 'automaticallyGenerated' ],
+        attributes: [ 'filename', 'language', 'fileUrl', 'storage', 'automaticallyGenerated', 'm3u8Filename', 'm3u8Url' ],
         transaction
       }) as Promise<MVideoCaptionLanguageUrl[]>
     }
@@ -1993,47 +1992,76 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return Promise.all(promises)
   }
 
-  async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
+  async removeAllStreamingPlaylistFiles (options: {
+    playlist: MStreamingPlaylist
+    deleteCaptionPlaylists?: boolean // default true
+    isRedundancy?: boolean // default false
+  }) {
+    const { playlist, deleteCaptionPlaylists = true, isRedundancy = false } = options
+
     const directoryPath = isRedundancy
       ? getHLSRedundancyDirectory(this)
       : getHLSDirectory(this)
 
-    try {
-      await remove(directoryPath)
-    } catch (err) {
-      // If it's a live, ffmpeg may have added another file while fs-extra is removing the directory
-      // So wait a little bit and retry
-      if (err.code === 'ENOTEMPTY') {
-        await wait(1000)
+    const removeDirectory = async () => {
+      try {
         await remove(directoryPath)
+      } catch (err) {
+        // If it's a live, ffmpeg may have added another file while fs-extra is removing the directory
+        // So wait a little bit and retry
+        if (err.code === 'ENOTEMPTY') {
+          await wait(1000)
+          await remove(directoryPath)
 
-        return
+          return
+        }
+
+        throw err
       }
-
-      throw err
     }
 
-    if (isRedundancy !== true) {
-      const streamingPlaylistWithFiles = streamingPlaylist as MStreamingPlaylistFilesVideo
-      streamingPlaylistWithFiles.Video = this
+    if (isRedundancy) {
+      await removeDirectory()
+    } else {
+      if (deleteCaptionPlaylists) {
+        const captions = await VideoCaptionModel.listVideoCaptions(playlist.videoId)
 
-      if (!Array.isArray(streamingPlaylistWithFiles.VideoFiles)) {
-        streamingPlaylistWithFiles.VideoFiles = await streamingPlaylistWithFiles.$get('VideoFiles')
+        // Remove playlist files associated to captions
+        for (const caption of captions) {
+          try {
+            await caption.removeCaptionPlaylist()
+            await caption.save()
+          } catch (err) {
+            logger.error(
+              `Cannot remove caption ${caption.filename} (${caption.language}) playlist files associated to video ${this.name}`,
+              { video: this, ...lTags(this.uuid) }
+            )
+          }
+        }
+      }
+
+      await removeDirectory()
+
+      const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
+      playlistWithFiles.Video = this
+
+      if (!Array.isArray(playlistWithFiles.VideoFiles)) {
+        playlistWithFiles.VideoFiles = await playlistWithFiles.$get('VideoFiles')
       }
 
       // Remove physical files and torrents
       await Promise.all(
-        streamingPlaylistWithFiles.VideoFiles.map(file => file.removeTorrent())
+        playlistWithFiles.VideoFiles.map(file => file.removeTorrent())
       )
 
-      if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
-        await removeHLSObjectStorage(streamingPlaylist.withVideo(this))
+      if (playlist.storage === FileStorage.OBJECT_STORAGE) {
+        await removeHLSObjectStorage(playlist.withVideo(this))
       }
     }
 
     logger.debug(
       `Removing files associated to streaming playlist of video ${this.url}`,
-      { streamingPlaylist, isRedundancy, ...lTags(this.uuid) }
+      { playlist, isRedundancy, ...lTags(this.uuid) }
     )
   }
 
@@ -2042,7 +2070,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     await videoFile.removeTorrent()
     await remove(filePath)
 
-    const resolutionFilename = getHlsResolutionPlaylistFilename(videoFile.filename)
+    const resolutionFilename = getHLSResolutionPlaylistFilename(videoFile.filename)
     await remove(VideoPathManager.Instance.getFSHLSOutputPath(this, resolutionFilename))
 
     if (videoFile.storage === FileStorage.OBJECT_STORAGE) {

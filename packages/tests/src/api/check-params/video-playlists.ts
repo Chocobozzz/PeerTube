@@ -26,6 +26,7 @@ describe('Test video playlists API validator', function () {
   let userAccessToken: string
 
   let playlist: VideoPlaylistCreateResult
+  let userPlaylist: VideoPlaylistCreateResult
   let privatePlaylistUUID: string
 
   let watchLaterPlaylistId: number
@@ -45,6 +46,8 @@ describe('Test video playlists API validator', function () {
     await setDefaultVideoChannel([ server ])
 
     userAccessToken = await server.users.generateUserAndToken('user1')
+    const user = await server.users.getMyInfo({ token: userAccessToken })
+
     videoId = (await server.videos.quickUpload({ name: 'video 1' })).id
 
     command = server.playlists
@@ -66,6 +69,17 @@ describe('Test video playlists API validator', function () {
           displayName: 'super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: server.store.channel.id
+        }
+      })
+    }
+
+    {
+      userPlaylist = await command.create({
+        token: userAccessToken,
+        attributes: {
+          displayName: 'user playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: user.videoChannels[0].id
         }
       })
     }
@@ -246,7 +260,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      const params = getBase({ videoChannelId: 42 }, { expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      const params = getBase({ videoChannelId: 42 }, { expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       await command.create(params)
       await command.update(getUpdate(params, playlist.shortUUID))
@@ -290,6 +304,13 @@ describe('Test video playlists API validator', function () {
         getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }),
         playlist.shortUUID
       ))
+    })
+
+    it('Should fail to set a playlist to a channel owned by another user', async function () {
+      const params = getBase({}, { token: userAccessToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+      await command.create(params)
+      await command.update(getUpdate(params, userPlaylist.shortUUID))
     })
 
     it('Should fail to update the watch later playlist', async function () {

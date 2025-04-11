@@ -32,7 +32,7 @@ my-timestamp-input {
 
 @include on-small-main-col {
   .grid-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto 1fr;
 
     form {

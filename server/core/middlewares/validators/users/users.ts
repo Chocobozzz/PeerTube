@@ -1,7 +1,8 @@
 import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, UserRole } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { MUser } from '@server/types/models/user/user.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { exists, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
@@ -34,11 +35,10 @@ import { ActorModel } from '../../../models/actor/actor.js'
 import {
   areValidationErrors,
   checkEmailDoesNotAlreadyExist,
-  checkUserCanManageAccount,
   checkUserEmailExistPermissive,
   checkUserIdExist,
   checkUsernameOrEmailDoNotAlreadyExist,
-  doesVideoChannelIdExist,
+  doesChannelIdExist,
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
@@ -128,11 +128,13 @@ export const usersRemoveValidator = [
       return res.fail({ message: 'Cannot remove the root user' })
     }
 
+    if (!checkUserCanModerate(user, res)) return
+
     return next()
   }
 ]
 
-export const usersBlockingValidator = [
+export const usersBlockToggleValidator = [
   param('id')
     .custom(isIdValid),
   body('reason')
@@ -147,6 +149,8 @@ export const usersBlockingValidator = [
     if (user.username === 'root') {
       return res.fail({ message: 'Cannot block the root user' })
     }
+
+    if (!checkUserCanModerate(user, res)) return
 
     return next()
   }
@@ -200,6 +204,8 @@ export const usersUpdateValidator = [
     if (user.username === 'root' && req.body.role !== undefined && user.role !== req.body.role) {
       return res.fail({ message: 'Cannot change root role.' })
     }
+
+    if (!checkUserCanModerate(user, res)) return
 
     if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
 
@@ -328,7 +334,7 @@ export const usersVideosValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.channelId && !await doesVideoChannelIdExist(req.query.channelId, res)) return
+    if (req.query.channelId && !await doesChannelIdExist({ id: req.query.channelId, checkManage: true, checkIsLocal: true, res })) return
 
     return next()
   }
@@ -431,38 +437,20 @@ export const userAutocompleteValidator = [
     .not().isEmpty()
 ]
 
-export const ensureAuthUserOwnsAccountValidator = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.User
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
-    if (!checkUserCanManageAccount({ user, account: res.locals.account, specialRight: null, res })) return
+function checkUserCanModerate (onUser: MUser, res: express.Response) {
+  const authUser = res.locals.oauth.token.User
 
-    return next()
-  }
-]
+  if (authUser.role === UserRole.ADMINISTRATOR) return true
+  if (authUser.role === UserRole.MODERATOR && onUser.role === UserRole.USER) return true
 
-export const ensureCanManageChannelOrAccount = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = res.locals.oauth.token.user
-    const account = res.locals.videoChannel?.Account ?? res.locals.account
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: 'Users can only be managed by moderators or admins.'
+  })
 
-    if (!checkUserCanManageAccount({ account, user, res, specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL })) return
-
-    return next()
-  }
-]
-
-export const ensureCanModerateUser = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const authUser = res.locals.oauth.token.User
-    const onUser = res.locals.user
-
-    if (authUser.role === UserRole.ADMINISTRATOR) return next()
-    if (authUser.role === UserRole.MODERATOR && onUser.role === UserRole.USER) return next()
-
-    return res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Users can only be managed by moderators or admins.'
-    })
-  }
-]
+  return false
+}

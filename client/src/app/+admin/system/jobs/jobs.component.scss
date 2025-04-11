@@ -16,7 +16,7 @@
   min-width: 240px;
 }
 
-@media screen and (min-width: $primeng-breakpoint) {
+@media screen and (min-width: $medium-view) {
   .job-id {
     max-width: 30vw !important;
   }

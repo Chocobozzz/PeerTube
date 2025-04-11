@@ -56,9 +56,9 @@ function getLinkOrThrow (webfingerData: WebFingerData) {
   return selfLink.href
 }
 
-function webfingerLookup (nameWithHost: string) {
+function webfingerLookup (handle: string) {
   return new Promise<WebFingerData>((res, rej) => {
-    webfinger.lookup(nameWithHost, (err, p) => {
+    webfinger.lookup(handle, (err, p) => {
       if (err) return rej(err)
 
       return res(p.object)

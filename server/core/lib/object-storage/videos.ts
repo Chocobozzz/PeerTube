@@ -1,6 +1,6 @@
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { MStreamingPlaylistVideo, MVideo, MVideoCaption, MVideoFile } from '@server/types/models/index.js'
+import { MStreamingPlaylistVideo, MStreamingPlaylistVideoUUID, MVideo, MVideoCaption, MVideoFile } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { basename, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
@@ -50,12 +50,22 @@ export function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: s
   })
 }
 
-export function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, pathOrFilename: string, content: string) {
+export function storeHLSFileFromContent (
+  options: {
+    playlist: MStreamingPlaylistVideo
+    pathOrFilename: string
+    content: string
+    contentType: string
+  }
+) {
+  const { playlist, pathOrFilename, content, contentType } = options
+
   return storeContent({
     content,
     objectStorageKey: generateHLSObjectStorageKey(playlist, basename(pathOrFilename)),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
-    isPrivate: playlist.Video.hasPrivateStaticPath()
+    isPrivate: playlist.Video.hasPrivateStaticPath(),
+    contentType
   })
 }
 
@@ -113,15 +123,15 @@ export async function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
 
 // ---------------------------------------------------------------------------
 
-export function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
+export function removeHLSObjectStorage (playlist: MStreamingPlaylistVideoUUID) {
   return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-export function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideo, filename: string) {
+export function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideoUUID, filename: string) {
   return removeObject(generateHLSObjectStorageKey(playlist, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-export function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideo, path: string) {
+export function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideoUUID, path: string) {
   return removeObject(generateHLSObjectStorageKey(playlist, basename(path)), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
@@ -149,7 +159,7 @@ export function removeCaptionObjectStorage (videoCaption: MVideoCaption) {
 
 // ---------------------------------------------------------------------------
 
-export async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, filename: string, destination: string) {
+export async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideoUUID, filename: string, destination: string) {
   const key = generateHLSObjectStorageKey(playlist, filename)
 
   logger.info('Fetching HLS file %s from object storage to %s.', key, destination, lTags())

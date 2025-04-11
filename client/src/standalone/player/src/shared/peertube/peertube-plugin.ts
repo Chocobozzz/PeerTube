@@ -1,8 +1,9 @@
 import { timeToInt } from '@peertube/peertube-core-utils'
-import { VideoView, VideoViewEvent } from '@peertube/peertube-models'
+import { VideoStatsUserAgentDevice, VideoView, VideoViewEvent } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { isIOS, isMobile, isSafari } from '@root-helpers/web-browser'
 import debug from 'debug'
+import { UAParser } from 'ua-parser-js'
 import videojs from 'video.js'
 import {
   getPlayerSessionId,
@@ -49,9 +50,16 @@ class PeerTubePlugin extends Plugin {
   declare private stopTimeHandler: (...args: any[]) => void
 
   declare private resizeObserver: ResizeObserver
+  declare private userAgentInfo: {
+    client: string
+    device: VideoStatsUserAgentDevice
+    os: string
+  }
 
   constructor (player: videojs.Player, private readonly options: PeerTubePluginOptions) {
     super(player)
+
+    this.setUserAgentInfo()
 
     this.menuOpened = false
     this.mouseInControlBar = false
@@ -226,6 +234,19 @@ class PeerTubePlugin extends Plugin {
 
     if (this.player.loadingSpinner) {
       this.player.loadingSpinner.show()
+    }
+  }
+
+  private setUserAgentInfo () {
+    const userAgent = UAParser(window.navigator.userAgent)
+    const defaultDevice = isMobile()
+      ? 'mobile'
+      : 'desktop'
+
+    this.userAgentInfo = {
+      client: userAgent.browser.name,
+      os: userAgent.os.name,
+      device: userAgent.device.type || defaultDevice
     }
   }
 
@@ -413,7 +434,14 @@ class PeerTubePlugin extends Plugin {
 
     const sessionId = getPlayerSessionId()
 
-    const body: VideoView = { currentTime, viewEvent, sessionId }
+    const body: VideoView = {
+      currentTime,
+      viewEvent,
+      sessionId,
+      client: this.userAgentInfo.client || undefined,
+      device: this.userAgentInfo.device || undefined,
+      operatingSystem: this.userAgentInfo.os || undefined
+    }
 
     const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
     if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())

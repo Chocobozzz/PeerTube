@@ -3,23 +3,26 @@ import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, TranscriptionModel, WhisperBuiltinModel, transcriberFactory } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideo, MVideoCaption, MVideoFullLight, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
+import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFullLight, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
+import { writeFile } from 'fs/promises'
 import { join } from 'path'
 import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { buildCaptionM3U8Content, updateM3U8AndShaPlaylist } from './hls.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const lTags = loggerTagsFactory('video-caption')
 
@@ -41,6 +44,13 @@ export async function createLocalCaption (options: {
 
   await moveAndProcessCaptionFile({ path }, videoCaption)
 
+  const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
+
+  // If object storage is enabled, the move to object storage job will upload the playlist on the fly
+  videoCaption.m3u8Filename = hls && !CONFIG.OBJECT_STORAGE.ENABLED
+    ? await upsertCaptionPlaylistOnFS(videoCaption, video)
+    : null
+
   await retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(t => {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
@@ -55,6 +65,41 @@ export async function createLocalCaption (options: {
 
   return Object.assign(videoCaption, { Video: video })
 }
+
+// ---------------------------------------------------------------------------
+
+export async function createAllCaptionPlaylistsOnFSIfNeeded (video: MVideo) {
+  const captions = await VideoCaptionModel.listVideoCaptions(video.id)
+
+  for (const caption of captions) {
+    if (caption.m3u8Filename) continue
+
+    try {
+      caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, video)
+      await caption.save()
+    } catch (err) {
+      logger.error(
+        `Cannot create caption playlist ${caption.filename} (${caption.language}) of video ${video.uuid}`,
+        { ...lTags(video.uuid), err }
+      )
+    }
+  }
+}
+
+export async function updateHLSMasterOnCaptionChangeIfNeeded (video: MVideo) {
+  const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
+  if (!hls) return
+
+  return updateHLSMasterOnCaptionChange(video, hls)
+}
+
+export async function updateHLSMasterOnCaptionChange (video: MVideo, hls: MStreamingPlaylist) {
+  logger.debug(`Updating HLS master playlist of video ${video.uuid} after caption change`, lTags(video.uuid))
+
+  await updateM3U8AndShaPlaylist(video, hls)
+}
+
+// ---------------------------------------------------------------------------
 
 export async function createTranscriptionTaskIfNeeded (video: MVideoUUID & MVideoUrl) {
   if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED !== true) return
@@ -186,6 +231,10 @@ export async function onTranscriptionEnded (options: {
     automaticallyGenerated: true
   })
 
+  if (caption.m3u8Filename) {
+    await updateHLSMasterOnCaptionChangeIfNeeded(video)
+  }
+
   await sequelizeTypescript.transaction(async t => {
     await federateVideoIfNeeded(video, false, t)
   })
@@ -193,4 +242,16 @@ export async function onTranscriptionEnded (options: {
   Notifier.Instance.notifyOfGeneratedVideoTranscription(caption)
 
   logger.info(`Transcription ended for ${video.uuid}`, lTags(video.uuid, ...customLTags))
+}
+
+export async function upsertCaptionPlaylistOnFS (caption: MVideoCaption, video: MVideo) {
+  const m3u8Filename = VideoCaptionModel.generateM3U8Filename(caption.filename)
+  const m3u8Destination = VideoPathManager.Instance.getFSHLSOutputPath(video, m3u8Filename)
+
+  logger.debug(`Creating caption playlist ${m3u8Destination} of video ${video.uuid}`, lTags(video.uuid))
+
+  const content = buildCaptionM3U8Content({ video, caption })
+  await writeFile(m3u8Destination, content, 'utf8')
+
+  return m3u8Filename
 }

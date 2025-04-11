@@ -1,18 +1,16 @@
-import { pick } from 'lodash-es'
-import { Subject, Subscription } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
-import { NgIf } from '@angular/common'
-
+import { pick } from 'lodash-es'
+import { Subject, Subscription } from 'rxjs'
+import { first } from 'rxjs/operators'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
-import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
 import { HelpComponent } from '../shared-main/buttons/help.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-user-video-settings',
@@ -22,7 +20,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     FormsModule,
     ReactiveFormsModule,
     HelpComponent,
-    PeerTubeTemplateDirective,
     SelectLanguagesComponent,
     PeertubeCheckboxComponent,
     NgIf

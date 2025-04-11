@@ -1,22 +1,22 @@
-import express from 'express'
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, HttpStatusCode, RootActivity } from '@peertube/peertube-models'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager.js'
+import express from 'express'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity.js'
 import { logger } from '../../helpers/logger.js'
 import {
+  accountHandleGetValidatorFactory,
   activityPubRateLimiter,
   asyncMiddleware,
   checkSignature,
-  ensureIsLocalChannel,
-  localAccountValidator,
   signatureValidator,
-  videoChannelsNameWithHostValidator
+  videoChannelsHandleValidatorFactory
 } from '../../middlewares/index.js'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity.js'
 
 const inboxRouter = express.Router()
 
-inboxRouter.post('/inbox',
+inboxRouter.post(
+  '/inbox',
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
@@ -24,21 +24,22 @@ inboxRouter.post('/inbox',
   inboxController
 )
 
-inboxRouter.post('/accounts/:name/inbox',
+inboxRouter.post(
+  '/accounts/:handle/inbox',
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
-  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(activityPubValidator),
   inboxController
 )
 
-inboxRouter.post('/video-channels/:nameWithHost/inbox',
+inboxRouter.post(
+  '/video-channels/:handle/inbox',
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
-  asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureIsLocalChannel,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkManage: false })),
   asyncMiddleware(activityPubValidator),
   inboxController
 )

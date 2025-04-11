@@ -1,6 +1,6 @@
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoStreamingPlaylistModel } from '../../../models/video/video-streaming-playlist.js'
-import { MVideo } from './video.js'
+import { MVideo, MVideoUUID } from './video.js'
 import { MVideoFile } from './video-file.js'
 import { MVideoRedundancy, MVideoRedundancyFileUrl } from './video-redundancy.js'
 
@@ -17,6 +17,10 @@ export type MStreamingPlaylistFiles =
 export type MStreamingPlaylistVideo =
   & MStreamingPlaylist
   & Use<'Video', MVideo>
+
+export type MStreamingPlaylistVideoUUID =
+  & MStreamingPlaylist
+  & Use<'Video', MVideoUUID>
 
 export type MStreamingPlaylistFilesVideo =
   & MStreamingPlaylist
