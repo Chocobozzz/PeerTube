@@ -1539,9 +1539,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4052135535335116638" datatype="html">
+      <trans-unit id="4052135535335116638" datatype="html" xml:space="preserve">
         <source>Current thumbnail</source>
-        <target state="new">Current thumbnail</target>
+        <target state="translated">Hình thu nhỏ hiện tại</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2343,9 +2343,9 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3083362298006411773" datatype="html">
+      <trans-unit id="3083362298006411773" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</target>
+        <target state="translated">File <x id="PH" equiv-text="name"/> không thể chuyển dữ liệu trước khi hết thời gian chờ của proxy máy chủ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">63</context>
@@ -4939,9 +4939,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1929702212782336063" datatype="html">
+      <trans-unit id="1929702212782336063" datatype="html" xml:space="preserve">
         <source>Chapters are not available on a live.</source>
-        <target state="new">Chapters are not available on a live.</target>
+        <target state="translated">Phân cảnh không có sẵn trên buổi phát trực tiếp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.html</context>
           <context context-type="linenumber">8</context>
@@ -22921,17 +22921,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910852061199012281" datatype="html">
+      <trans-unit id="5910852061199012281" datatype="html" xml:space="preserve">
         <source>Studio edition in progress</source>
-        <target state="new">Studio edition in progress</target>
+        <target state="translated">Studio đang trong quá trình hoàn thiện</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7170696328218243679" datatype="html">
+      <trans-unit id="7170696328218243679" datatype="html" xml:space="preserve">
         <source>Failure during transcoding of your video files</source>
-        <target state="new">Failure during transcoding of your video files</target>
+        <target state="translated">Lỗi trong quá trình chuyển mã các file video của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">92</context>
@@ -23157,9 +23157,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3680241561185438605" datatype="html">
+      <trans-unit id="3680241561185438605" datatype="html" xml:space="preserve">
         <source>Your video was uploaded to your library. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your video was uploaded to your library. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">Video của bạn đã được tải lên thư viện. Nhưng có những thay đổi chưa được lưu: bạn có chắc muốn rời khỏi trang này?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">123</context>
@@ -23195,9 +23195,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7978464307296909824" datatype="html">
+      <trans-unit id="7978464307296909824" datatype="html" xml:space="preserve">
         <source>You have unsaved changes. Are you sure you want to leave?</source>
-        <target state="new">You have unsaved changes. Are you sure you want to leave?</target>
+        <target state="translated">Bạn chưa lưu thay đổi. Bạn có chắc muốn thoát?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-manage/video-manage.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -23235,9 +23235,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7894988827815329889" datatype="html">
+      <trans-unit id="7894988827815329889" datatype="html" xml:space="preserve">
         <source>Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</source>
-        <target state="new">Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
+        <target state="translated">Bạn có chắc muốn tạo tác vụ studio cho "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">393</context>
@@ -23255,33 +23255,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1011549395664876962" datatype="html">
+      <trans-unit id="1011549395664876962" datatype="html" xml:space="preserve">
         <source>Watch the video</source>
-        <target state="new">Watch the video</target>
+        <target state="translated">Xem video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1752865245649568961" datatype="html">
+      <trans-unit id="1752865245649568961" datatype="html" xml:space="preserve">
         <source>Save and run studio tasks</source>
-        <target state="new">Save and run studio tasks</target>
+        <target state="translated">Lưu và thực hiện tác vụ studio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9042759538160678922" datatype="html">
+      <trans-unit id="9042759538160678922" datatype="html" xml:space="preserve">
         <source>Save and replace file</source>
-        <target state="new">Save and replace file</target>
+        <target state="translated">Lưu và thay thế file</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9206119333094797882" datatype="html">
+      <trans-unit id="9206119333094797882" datatype="html" xml:space="preserve">
         <source>You cannot replace the video file and also have studio tasks.</source>
-        <target state="new">You cannot replace the video file and also have studio tasks.</target>
+        <target state="translated">Bạn không thể thay thế filevideo và cũng có tác vụ trong studio.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">361</context>
