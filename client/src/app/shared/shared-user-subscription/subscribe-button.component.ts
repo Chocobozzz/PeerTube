@@ -2,7 +2,7 @@ import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnChanges, inject, input, viewChild } from '@angular/core'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
-import { FeedFormat } from '@peertube/peertube-models'
+import { FeedFormat, FeedType } from '@peertube/peertube-models'
 import { concat, forkJoin, merge } from 'rxjs'
 import { Account } from '../shared-main/account/account.model'
 import { VideoChannel } from '../shared-main/channel/video-channel.model'
@@ -84,7 +84,7 @@ export class SubscribeButtonComponent implements OnChanges {
       ? undefined
       : this.videoService
         .getVideoChannelFeedUrls(this.videoChannels()[0].id)
-        .find(i => i.format === FeedFormat.PODCAST)
+        .find(i => i.type === FeedType.PODCAST)
         .url
   }
 
