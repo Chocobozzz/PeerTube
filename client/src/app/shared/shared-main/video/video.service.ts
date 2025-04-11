@@ -6,6 +6,9 @@ import { arrayify, buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
+  FeedFormatType,
+  FeedType,
+  FeedType_Type,
   NSFWPolicyType,
   ResultList,
   ServerErrorCode,
@@ -224,18 +227,21 @@ export class VideoService {
   }
 
   buildBaseFeedUrls (params: HttpParams, base = VideoService.BASE_FEEDS_URL) {
-    const feeds = [
+    const feeds: { type: FeedType_Type, format: FeedFormatType, label: string, url: string }[] = [
       {
+        type: FeedType.VIDEOS,
         format: FeedFormat.RSS,
         label: 'media rss 2.0',
         url: base + FeedFormat.RSS.toLowerCase()
       },
       {
+        type: FeedType.VIDEOS,
         format: FeedFormat.ATOM,
         label: 'atom 1.0',
         url: base + FeedFormat.ATOM.toLowerCase()
       },
       {
+        type: FeedType.VIDEOS,
         format: FeedFormat.JSON,
         label: 'json 1.0',
         url: base + FeedFormat.JSON.toLowerCase()
@@ -279,6 +285,7 @@ export class VideoService {
     const feedUrls = this.buildBaseFeedUrls(params)
 
     feedUrls.push({
+      type: FeedType.PODCAST,
       format: FeedFormat.PODCAST,
       label: 'podcast rss 2.0',
       url: VideoService.PODCAST_FEEDS_URL + `?videoChannelId=${videoChannelId}`
