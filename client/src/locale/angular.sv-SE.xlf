@@ -1549,81 +1549,81 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4170151929241782619" datatype="html">
+      <trans-unit id="4170151929241782619" datatype="html" xml:space="preserve">
         <source>In <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/> formats, <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSizeInBytes }}"/> maximum.</source>
-        <target state="new">In <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/> formats, <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSizeInBytes }}"/> maximum.</target>
+        <target state="translated">I <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/> format, <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSizeInBytes }}"/> maximalt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2804650977749842371" datatype="html">
+      <trans-unit id="2804650977749842371" datatype="html" xml:space="preserve">
         <source>Recommended size: 1280x720px.</source>
-        <target state="new">Recommended size: 1280x720px.</target>
+        <target state="translated">Rekommenderad storlek: 1280x720 pixlar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4822431364265606" datatype="html">
+      <trans-unit id="4822431364265606" datatype="html" xml:space="preserve">
         <source>Select from video</source>
-        <target state="new"> Select from video </target>
+        <target state="translated">Välj från video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6415678299744947414" datatype="html">
+      <trans-unit id="6415678299744947414" datatype="html" xml:space="preserve">
         <source>File replacement is not enabled on <x id="PH" equiv-text="instanceName"/>.</source>
-        <target state="new">File replacement is not enabled on <x id="PH" equiv-text="instanceName"/>.</target>
+        <target state="translated">Filersättning är inte påslagen på <x id="PH" equiv-text="instanceName"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1439057370359538654" datatype="html">
+      <trans-unit id="1439057370359538654" datatype="html" xml:space="preserve">
         <source>File replacement is not available on a live.</source>
-        <target state="new">File replacement is not available on a live.</target>
+        <target state="translated">Filersättning är inte tillgänglig vid direktsändning.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545636587679565725" datatype="html">
+      <trans-unit id="7545636587679565725" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being transcoding.</source>
-        <target state="new">File replacement is not available while the video is being transcoding.</target>
+        <target state="translated">Filersättning är inte tillgänglig medan videon omkodas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="942718789410221156" datatype="html">
+      <trans-unit id="942718789410221156" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being edited.</source>
-        <target state="new">File replacement is not available while the video is being edited.</target>
+        <target state="translated">Filersättning är inte tillgänglig medan videon redigeras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8573772649653209009" datatype="html">
+      <trans-unit id="8573772649653209009" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being imported.</source>
-        <target state="new">File replacement is not available while the video is being imported.</target>
+        <target state="translated">Filersättning är inte tillgänglig medan videon importeras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1622943505826483882" datatype="html">
+      <trans-unit id="1622943505826483882" datatype="html" xml:space="preserve">
         <source>File replacement is not available.</source>
-        <target state="new">File replacement is not available.</target>
+        <target state="translated">Filersättning är inte tillgänglig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="915313658414662035" datatype="html">
+      <trans-unit id="915313658414662035" datatype="html" xml:space="preserve">
         <source>Studio is not enabled on <x id="PH" equiv-text="instanceName"/>.</source>
-        <target state="new">Studio is not enabled on <x id="PH" equiv-text="instanceName"/>.</target>
+        <target state="translated">Studio-användning är inte påslagen på <x id="PH" equiv-text="instanceName"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">34</context>
@@ -22065,17 +22065,17 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3045979261611286252" datatype="html">
+      <trans-unit id="3045979261611286252" datatype="html" xml:space="preserve">
         <source>Exit full-screen editor</source>
-        <target state="new">Exit full-screen editor</target>
+        <target state="translated">Avsluta helskärm för redigeraren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5828663111777947237" datatype="html">
+      <trans-unit id="5828663111777947237" datatype="html" xml:space="preserve">
         <source>Full-screen editor</source>
-        <target state="new">Full-screen editor</target>
+        <target state="translated">Helskärmsredigeraren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">38</context>
@@ -22749,49 +22749,49 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3403196612855474932" datatype="html">
+      <trans-unit id="3403196612855474932" datatype="html" xml:space="preserve">
         <source>Lives</source>
-        <target state="new">Lives</target>
+        <target state="translated">Direktsändningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4998592027845693576" datatype="html">
+      <trans-unit id="4998592027845693576" datatype="html" xml:space="preserve">
         <source>Public videos</source>
-        <target state="new">Public videos</target>
+        <target state="translated">Publika videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4970567719750648547" datatype="html">
+      <trans-unit id="4970567719750648547" datatype="html" xml:space="preserve">
         <source>Internal videos</source>
-        <target state="new">Internal videos</target>
+        <target state="translated">Interna videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2457309597882219063" datatype="html">
+      <trans-unit id="2457309597882219063" datatype="html" xml:space="preserve">
         <source>Unlisted videos</source>
-        <target state="new">Unlisted videos</target>
+        <target state="translated">Olistade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7650736596900384878" datatype="html">
+      <trans-unit id="7650736596900384878" datatype="html" xml:space="preserve">
         <source>Password protected videos</source>
-        <target state="new">Password protected videos</target>
+        <target state="translated">Lösenordsskyddade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6081858129717915969" datatype="html">
+      <trans-unit id="6081858129717915969" datatype="html" xml:space="preserve">
         <source>Private videos</source>
-        <target state="new">Private videos</target>
+        <target state="translated">Privata videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">204</context>
@@ -22873,73 +22873,73 @@
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5722034318470457785" datatype="html">
+      <trans-unit id="5722034318470457785" datatype="html" xml:space="preserve">
         <source>Your video file is being processed.</source>
-        <target state="new">Your video file is being processed.</target>
+        <target state="translated">Din videofil bearbetas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5489245301010887885" datatype="html">
+      <trans-unit id="5489245301010887885" datatype="html" xml:space="preserve">
         <source>This can take a while and some features may not be available until it is complete.</source>
-        <target state="new">This can take a while and some features may not be available until it is complete.</target>
+        <target state="translated">Detta kan vara tidskrävande och vissa funktioner kanske inte är tillgängliga förrän bearbetningen är klar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3911848809598246025" datatype="html">
+      <trans-unit id="3911848809598246025" datatype="html" xml:space="preserve">
         <source>Contact your administrator to fix it.</source>
-        <target state="new">Contact your administrator to fix it.</target>
+        <target state="translated">Kontakta din administratör för att åtgärda problemet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6610623780037367849" datatype="html">
+      <trans-unit id="6610623780037367849" datatype="html" xml:space="preserve">
         <source>Your web browser may not be able to play it.</source>
-        <target state="new">Your web browser may not be able to play it.</target>
+        <target state="translated">Din webbläsare kanske inte kan spela upp den.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3115242563270499472" datatype="html">
+      <trans-unit id="3115242563270499472" datatype="html" xml:space="preserve">
         <source>Transcoding in progress</source>
-        <target state="new">Transcoding in progress</target>
+        <target state="translated">Omkodning pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9094272343501770717" datatype="html">
+      <trans-unit id="9094272343501770717" datatype="html" xml:space="preserve">
         <source>Import in progress</source>
-        <target state="new">Import in progress</target>
+        <target state="translated">Import pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8473873393873007257" datatype="html">
+      <trans-unit id="8473873393873007257" datatype="html" xml:space="preserve">
         <source>Your remote video is being imported.</source>
-        <target state="new">Your remote video is being imported.</target>
+        <target state="translated">Din fjärrvideo importeras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="762981882514577877" datatype="html">
+      <trans-unit id="762981882514577877" datatype="html" xml:space="preserve">
         <source>The remote video is being imported, it will be available when the import is complete.</source>
-        <target state="new">The remote video is being imported, it will be available when the import is complete.</target>
+        <target state="translated">Fjärrvideon importeras, den kommer att vara tillgänglig när importen är klar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6132063630865598642" datatype="html">
+      <trans-unit id="6132063630865598642" datatype="html" xml:space="preserve">
         <source>Moving video files</source>
-        <target state="new">Moving video files</target>
+        <target state="translated">Flytta videofiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">40</context>
@@ -22949,25 +22949,25 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8780054161177843365" datatype="html">
+      <trans-unit id="8780054161177843365" datatype="html" xml:space="preserve">
         <source>The video is being moved to the file system.</source>
-        <target state="new">The video is being moved to the file system.</target>
+        <target state="translated">Videon flyttas till filsystemet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6414709216834299238" datatype="html">
+      <trans-unit id="6414709216834299238" datatype="html" xml:space="preserve">
         <source>Failed to move video files to the platform file system.</source>
-        <target state="new">Failed to move video files to the platform file system.</target>
+        <target state="translated">Kunde inte flytta videofilerna till plattformens filsystem.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6106629040656502843" datatype="html">
+      <trans-unit id="6106629040656502843" datatype="html" xml:space="preserve">
         <source>Failed to move video files</source>
-        <target state="new">Failed to move video files</target>
+        <target state="translated">Kunde inte flytta videofilerna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">51</context>
@@ -22977,33 +22977,33 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5947879152561825850" datatype="html">
+      <trans-unit id="5947879152561825850" datatype="html" xml:space="preserve">
         <source>The video is being moved to an external storage.</source>
-        <target state="new">The video is being moved to an external storage.</target>
+        <target state="translated">Videon flyttas till externt lagringsutrymme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="542526490067261846" datatype="html">
+      <trans-unit id="542526490067261846" datatype="html" xml:space="preserve">
         <source>Failed to move video files to an external storage.</source>
-        <target state="new">Failed to move video files to an external storage.</target>
+        <target state="translated">Kunde inte flytta videofilen till externt lagringsutrymme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910852061199012281" datatype="html">
+      <trans-unit id="5910852061199012281" datatype="html" xml:space="preserve">
         <source>Studio edition in progress</source>
-        <target state="new">Studio edition in progress</target>
+        <target state="translated">Studioredigering pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7170696328218243679" datatype="html">
+      <trans-unit id="7170696328218243679" datatype="html" xml:space="preserve">
         <source>Failure during transcoding of your video files</source>
-        <target state="new">Failure during transcoding of your video files</target>
+        <target state="translated">Kunde inte omkoda dina videofiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">92</context>
@@ -23229,9 +23229,9 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3680241561185438605" datatype="html">
+      <trans-unit id="3680241561185438605" datatype="html" xml:space="preserve">
         <source>Your video was uploaded to your library. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your video was uploaded to your library. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">Din video har laddats upp till ditt bibliotek. Är du säker på att du vill lämna den här sidan? Det finns osparade ändringar som kommer försvinna isåfall.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">123</context>
@@ -23267,9 +23267,9 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7978464307296909824" datatype="html">
+      <trans-unit id="7978464307296909824" datatype="html" xml:space="preserve">
         <source>You have unsaved changes. Are you sure you want to leave?</source>
-        <target state="new">You have unsaved changes. Are you sure you want to leave?</target>
+        <target state="translated">Du har osparade ändringar som försvinner om du lämnar sidan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-manage/video-manage.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -23307,9 +23307,9 @@
           <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7894988827815329889" datatype="html">
+      <trans-unit id="7894988827815329889" datatype="html" xml:space="preserve">
         <source>Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</source>
-        <target state="new">Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
+        <target state="translated">Vill du skapa studiouppgifter för "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">393</context>
@@ -23327,33 +23327,33 @@
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1011549395664876962" datatype="html">
+      <trans-unit id="1011549395664876962" datatype="html" xml:space="preserve">
         <source>Watch the video</source>
-        <target state="new">Watch the video</target>
+        <target state="translated">Titta på videon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1752865245649568961" datatype="html">
+      <trans-unit id="1752865245649568961" datatype="html" xml:space="preserve">
         <source>Save and run studio tasks</source>
-        <target state="new">Save and run studio tasks</target>
+        <target state="translated">Spara och kör studiouppgifter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9042759538160678922" datatype="html">
+      <trans-unit id="9042759538160678922" datatype="html" xml:space="preserve">
         <source>Save and replace file</source>
-        <target state="new">Save and replace file</target>
+        <target state="translated">Spara och ersätt fil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9206119333094797882" datatype="html">
+      <trans-unit id="9206119333094797882" datatype="html" xml:space="preserve">
         <source>You cannot replace the video file and also have studio tasks.</source>
-        <target state="new">You cannot replace the video file and also have studio tasks.</target>
+        <target state="translated">Du kan inte ersätta videofilen och samtidigt ha ofärdiga studiouppgifter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">361</context>
