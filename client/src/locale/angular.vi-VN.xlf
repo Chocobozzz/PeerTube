@@ -1881,7 +1881,7 @@
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html" xml:space="preserve">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Video livestream có nhiều độ phân giải</target>
+        <target state="translated">Chuyển mã video phát trực tiếp ra nhiều độ phân giải</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">82</context>
@@ -2401,9 +2401,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2992313729068029516" datatype="html">
+      <trans-unit id="2992313729068029516" datatype="html" xml:space="preserve">
         <source>Block live "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Chặn livestream "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Chặn phát trực tiếp "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2441,9 +2441,9 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3849007546028672808" datatype="html">
+      <trans-unit id="3849007546028672808" datatype="html" xml:space="preserve">
         <source>Blocking a live will automatically terminate the live stream.</source>
-        <target state="translated">Chặn livestream sẽ tự động hủy bỏ buổi livestream.</target>
+        <target state="translated">Chặn phát trực tiếp sẽ tự động hủy bỏ buổi phát trực tiếp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3202,9 +3202,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1599290313974118905" datatype="html">
+      <trans-unit id="1599290313974118905" datatype="html" xml:space="preserve">
         <source>Live blacklisted</source>
-        <target state="translated">Danh sách cấm livestream</target>
+        <target state="translated">Danh sách cấm phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -4979,9 +4979,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8508836953540308271" datatype="html">
+      <trans-unit id="8508836953540308271" datatype="html" xml:space="preserve">
         <source>Live settings</source>
-        <target state="translated">Thiết lập livestream</target>
+        <target state="translated">Thiết lập phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5027,33 +5027,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1212376766715456139" datatype="html">
+      <trans-unit id="1212376766715456139" datatype="html" xml:space="preserve">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ Nếu kích hoạt tùy chọn này, buổi livestream sẽ hủy bỏ nếu bạn đạt giới hạn dung lượng cho phép</target>
+        <target state="translated">⚠️ Buổi phát trực tiếp có thể sẽ tạm dừng nếu bạn đạt hạn mức dung lượng cho phép</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4964217545822568684" datatype="html">
+      <trans-unit id="4964217545822568684" datatype="html" xml:space="preserve">
         <source>Privacy of the new replay</source>
-        <target state="translated">Bảo mật cho phát lại</target>
+        <target state="translated">Chế độ hiển thị replay</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1966495339378120213" datatype="html">
+      <trans-unit id="1966495339378120213" datatype="html" xml:space="preserve">
         <source>Latency mode</source>
-        <target state="translated">Chế độ trễ</target>
+        <target state="translated">Độ trễ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8891497955962997247" datatype="html">
+      <trans-unit id="8891497955962997247" datatype="html" xml:space="preserve">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">Đăng video phát lại sau khi livestream kết thúc</target>
+        <target state="translated">Đăng video replay sau khi buổi phát trực tiếp kết thúc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">73</context>
@@ -5439,17 +5439,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1087181129481039628" datatype="html">
+      <trans-unit id="1087181129481039628" datatype="html" xml:space="preserve">
         <source>Normal live</source>
-        <target state="translated">Livestream thường</target>
+        <target state="translated">Phát trực tiếp thường</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3517255641769192386" datatype="html">
+      <trans-unit id="3517255641769192386" datatype="html" xml:space="preserve">
         <source>Permanent/recurring live</source>
-        <target state="translated">Livestream vĩnh viễn</target>
+        <target state="translated">Phát trực tiếp vĩnh viễn/định kỳ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5562,7 +5562,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8561870672350433993" datatype="html" xml:space="preserve">
         <source>No watched word lists found.</source>
-        <target state="translated">Không tìm thấy danh sách từ đã theo dõi.</target>
+        <target state="translated">Không tìm thấy danh sách từ khóa đã lọc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">79</context>
@@ -5594,7 +5594,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="11546234043677618" datatype="html" xml:space="preserve">
         <source>Save watched words list</source>
-        <target state="translated">Lưu danh sách từ theo dõi</target>
+        <target state="translated">Lưu danh sách từ khóa lọc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5776,49 +5776,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1278564497286613571" datatype="html">
+      <trans-unit id="1278564497286613571" datatype="html" xml:space="preserve">
         <source>Cannot create live because you created too many lives</source>
-        <target state="translated">Không thể tạo livestream vì bạn đã tạo quá nhiều livestream</target>
+        <target state="translated">Không thể tạo phát trực tiếp vì bạn đã tạo quá nhiều</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8675588963276687921" datatype="html">
+      <trans-unit id="8675588963276687921" datatype="html" xml:space="preserve">
         <source>Stream only once, replay will replace your live</source>
-        <target state="translated">Live stream chỉ một lần, phát lại sẽ thay thế phát trực tiếp của bạn</target>
+        <target state="translated">Chỉ phát trực tiếp một lần, sau đó file replay sẽ thay thế link phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2360261543675520397" datatype="html">
+      <trans-unit id="2360261543675520397" datatype="html" xml:space="preserve">
         <source>Stream only once</source>
-        <target state="translated">Livestream một lần</target>
+        <target state="translated">Phát trực tiếp một lần</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3384650899171037827" datatype="html">
+      <trans-unit id="3384650899171037827" datatype="html" xml:space="preserve">
         <source>Stream multiple times, replays will be separate videos</source>
-        <target state="translated">Livestream nhiều lần, phát lại sẽ là các video riêng biệt</target>
+        <target state="translated">Phát trực tiếp nhiều lần, replay sẽ là các video riêng biệt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="58134197356653483" datatype="html">
+      <trans-unit id="58134197356653483" datatype="html" xml:space="preserve">
         <source>Stream multiple times using the same URL</source>
-        <target state="translated">Livestream nhiều lần sử dụng chỉ một URL</target>
+        <target state="translated">Phát trực tiếp nhiều lần với cùng một URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8218579597782287078" datatype="html">
+      <trans-unit id="8218579597782287078" datatype="html" xml:space="preserve">
         <source>Go Live</source>
-        <target state="translated">Livestream</target>
+        <target state="translated">Phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5912,9 +5912,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6066940329544282265" datatype="html">
+      <trans-unit id="6066940329544282265" datatype="html" xml:space="preserve">
         <source>Go live</source>
-        <target state="translated">Livestream</target>
+        <target state="translated">Phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">125</context>
@@ -6650,15 +6650,15 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6481633820711333116" datatype="html" xml:space="preserve">
         <source>This live is not currently streaming.</source>
-        <target state="translated">Buổi livestream chưa bắt đầu.</target>
+        <target state="translated">Buổi phát trực tiếp chưa bắt đầu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4926204350710628499" datatype="html">
+      <trans-unit id="4926204350710628499" datatype="html" xml:space="preserve">
         <source>This live has ended.</source>
-        <target state="translated">Buổi livestream đã kết thúc.</target>
+        <target state="translated">Buổi phát trực tiếp đã kết thúc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">10</context>
@@ -6986,7 +6986,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7260030884541952275" datatype="html" xml:space="preserve">
         <source>That contain any word from your "<x id="PH" equiv-text="tag.name"/>" watched word list</source>
-        <target state="translated">Có chứa bất kỳ từ nào trong "<x id="PH" equiv-text="tag.name"/>" danh sách từ theo dõi của bạn</target>
+        <target state="translated">Có chứa bất kỳ từ nào trong "<x id="PH" equiv-text="tag.name"/>" danh sách từ khóa lọc của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -7018,7 +7018,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
-        <target state="translated">Bình luận trên video của bạn</target>
+        <target state="translated">Bình luận về video của tôi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">65</context>
@@ -7978,7 +7978,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3755780063671912599" datatype="html" xml:space="preserve">
         <source>Watched words</source>
-        <target state="translated">Những từ theo dõi</target>
+        <target state="translated">Lọc từ khóa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -10740,17 +10740,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1429138002697017359" datatype="html">
+      <trans-unit id="1429138002697017359" datatype="html" xml:space="preserve">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">Cho phép người dùng trên máy chủ được livestream.</target>
+        <target state="translated">Cho phép người dùng trên máy chủ được phát trực tiếp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8894612824234881672" datatype="html">
+      <trans-unit id="8894612824234881672" datatype="html" xml:space="preserve">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ Bạn phải tin tưởng người dùng và chế độ kiểm duyệt nếu cho phép livestream</target>
+        <target state="translated">⚠️ Bạn phải tin tưởng người dùng và chế độ kiểm duyệt nếu cho phép phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">23</context>
@@ -10764,17 +10764,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6421580347313273983" datatype="html">
+      <trans-unit id="6421580347313273983" datatype="html" xml:space="preserve">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">Cho phép người dùng đăng lại buổi livestream của họ</target>
+        <target state="translated">Cho phép người dùng đăng lại buổi phát trực tiếp của họ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8583623894789865917" datatype="html">
+      <trans-unit id="8583623894789865917" datatype="html" xml:space="preserve">
         <source>Allow your users to change live latency</source>
-        <target state="translated">Cho phép người dùng tăng độ trễ livestream</target>
+        <target state="translated">Cho phép người dùng chọn độ trễ phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">40</context>
@@ -10788,9 +10788,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5191164170233238999" datatype="html">
+      <trans-unit id="5191164170233238999" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="translated">Số livestream tối đa cùng lúc được tạo trên máy chủ của bạn</target>
+        <target state="translated">Số luồng phát trực tiếp tối đa cùng lúc được tạo trên máy chủ của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">49</context>
@@ -10808,9 +10808,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">63,65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6830777508073747241" datatype="html">
+      <trans-unit id="6830777508073747241" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {livestream} other {livestream}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {phát trực tiếp} other {phát trực tiếp}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">55</context>
@@ -10820,25 +10820,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1834362188086938736" datatype="html">
+      <trans-unit id="1834362188086938736" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created per user</source>
-        <target state="translated">Số livestream tối đa cùng lúc được tạo với mỗi người dùng</target>
+        <target state="translated">Số phát trực tiếp tối đa cùng lúc được tạo với mỗi người dùng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1521259619066122077" datatype="html">
+      <trans-unit id="1521259619066122077" datatype="html" xml:space="preserve">
         <source>Max live duration</source>
-        <target state="translated">Thời lượng livestream tối đa</target>
+        <target state="translated">Thời lượng phát trực tiếp tối đa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5309195634424105927" datatype="html">
+      <trans-unit id="5309195634424105927" datatype="html" xml:space="preserve">
         <source>Live transcoding threads</source>
-        <target state="translated">Chuyển mã buổi livestream thành nhiều luồng</target>
+        <target state="translated">Chuyển mã buổi phát trực tiếp thành nhiều luồng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">177</context>
@@ -10860,25 +10860,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417246074503129277" datatype="html">
+      <trans-unit id="1417246074503129277" datatype="html" xml:space="preserve">
         <source>Live transcoding profile</source>
-        <target state="translated">Hồ sơ chuyển độ phân giải livestream</target>
+        <target state="translated">Hồ sơ chuyển độ phân giải phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8294583621306221742" datatype="html">
+      <trans-unit id="8294583621306221742" datatype="html" xml:space="preserve">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">bản mẫu chuyển độ phân giải livestream có thể thêm thông qua những tiện ích của PeerTube</target>
+        <target state="translated">hồ sơ chuyển mã phát trực tiếp có thể thêm bằng những tiện ích của PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6727057461851446921" datatype="html">
+      <trans-unit id="6727057461851446921" datatype="html" xml:space="preserve">
         <source>Live resolutions to generate</source>
-        <target state="translated">Độ phân giải livestream để tạo</target>
+        <target state="translated">Độ phân giải buổi phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">130</context>
@@ -10904,17 +10904,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3283660108004661843" datatype="html">
+      <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="translated">Bật xử lý từ xa cho livestream</target>
+        <target state="translated">Bật xử lý từ xa cho buổi phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2281161665447607254" datatype="html">
+      <trans-unit id="2281161665447607254" datatype="html" xml:space="preserve">
         <source>Allow live streaming</source>
-        <target state="translated">Cho phép livestream</target>
+        <target state="translated">Cho phép phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">19</context>
@@ -15470,7 +15470,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5841439724861780893" datatype="html" xml:space="preserve">
         <source>Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="translated">Tên/mô tả video và các bình luận có chứa bất kỳ từ nào được xem sẽ tự động được gắn thẻ theo tên của danh sách.</target>
+        <target state="translated">Tên video/mô tả và bình luận có chứa từ khóa đã lọc sẽ tự động được lọc theo tên của danh sách.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">1</context>
@@ -17660,9 +17660,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1991904494976135035" datatype="html">
+      <trans-unit id="1991904494976135035" datatype="html" xml:space="preserve">
         <source>My abuse reports</source>
-        <target state="translated">Báo cáo của tôi</target>
+        <target state="translated">Báo cáo vi phạm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">148</context>
@@ -17670,7 +17670,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7484325899601915135" datatype="html" xml:space="preserve">
         <source>Your watched words</source>
-        <target state="translated">Từ mà bạn theo dõi</target>
+        <target state="translated">Từ khóa đã lọc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">75</context>
@@ -18706,7 +18706,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2364233042886987548" datatype="html" xml:space="preserve">
         <source>Comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="translated">Các bình luận có chứa bất kỳ từ nào được theo dõi sẽ tự động được gắn thẻ theo tên của danh sách.</target>
+        <target state="translated">Các bình luận có chứa từ khóa đã lọc sẽ tự động được lọc theo tên của danh sách.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-watched-words-list/my-watched-words-list.component.html</context>
           <context context-type="linenumber">1</context>
@@ -19744,33 +19744,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">469</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7220386604464537651" datatype="html">
+      <trans-unit id="7220386604464537651" datatype="html" xml:space="preserve">
         <source>Live RTMP Url</source>
-        <target state="translated">Live RTMP Url</target>
+        <target state="translated">URL RTMP phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4956017863340142734" datatype="html">
+      <trans-unit id="4956017863340142734" datatype="html" xml:space="preserve">
         <source>Live RTMPS Url</source>
-        <target state="translated">Live RTMPS Url</target>
+        <target state="translated">URL RTMPS phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1225050607125362052" datatype="html">
+      <trans-unit id="1225050607125362052" datatype="html" xml:space="preserve">
         <source>Live stream key</source>
-        <target state="translated">Mã livestream</target>
+        <target state="translated">Mã phát trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5058286083557987083" datatype="html">
+      <trans-unit id="5058286083557987083" datatype="html" xml:space="preserve">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="translated">⚠️ Không chia sẻ mã livestream của bạn với bất cứ ai.</target>
+        <target state="translated">⚠️ Không chia sẻ mã phát trực tiếp của bạn với bất kỳ ai.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">43</context>
