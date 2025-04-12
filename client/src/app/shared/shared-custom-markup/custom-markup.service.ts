@@ -116,7 +116,11 @@ export class CustomMarkupService {
     const data = el.dataset as EmbedMarkupData
     const { component, loadedPromise } = this.dynamicElementService.createElement(EmbedMarkupComponent)
 
-    this.dynamicElementService.setModel(component, { uuid: data.uuid, type })
+    this.dynamicElementService.setModel(component, {
+      uuid: data.uuid,
+      type,
+      responsive: data.responsive ? this.buildBoolean(data.responsive) : undefined
+    })
 
     return { component, loadedPromise }
   }

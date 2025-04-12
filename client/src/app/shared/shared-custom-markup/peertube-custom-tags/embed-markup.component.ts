@@ -14,6 +14,7 @@ export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
 
   readonly uuid = input<string>(undefined)
   readonly type = input<'video' | 'playlist'>('video')
+  readonly responsive = input<boolean>(undefined)
 
   loaded: undefined
 
@@ -22,6 +23,10 @@ export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
       ? buildVideoEmbedLink({ uuid: this.uuid() }, environment.originServerUrl)
       : buildPlaylistEmbedLink({ uuid: this.uuid() }, environment.originServerUrl)
 
-    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ embedUrl: link, embedTitle: this.uuid() })
+    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ 
+      embedUrl: link, 
+      embedTitle: this.uuid(),
+      responsive: this.responsive() ?? false
+    })
   }
 }

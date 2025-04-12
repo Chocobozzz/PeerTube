@@ -3,6 +3,7 @@ type StringBoolean = 'true' | 'false'
 export type EmbedMarkupData = {
   // Video or playlist uuid
   uuid: string
+  responsive?: StringBoolean
 }
 
 export type VideoMiniatureMarkupData = {
