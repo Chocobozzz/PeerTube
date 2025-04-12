@@ -4,6 +4,17 @@ export type EmbedMarkupData = {
   // Video or playlist uuid
   uuid: string
   responsive?: StringBoolean
+  startAt?: string
+  stopAt?: string
+  subtitle?: string
+  autoplay?: StringBoolean
+  muted?: StringBoolean
+  loop?: StringBoolean
+  title?: StringBoolean
+  p2p?: StringBoolean
+  warningTitle?: StringBoolean
+  controlBar?: StringBoolean
+  peertubeLink?: StringBoolean
 }
 
 export type VideoMiniatureMarkupData = {

@@ -119,7 +119,18 @@ export class CustomMarkupService {
     this.dynamicElementService.setModel(component, {
       uuid: data.uuid,
       type,
-      responsive: data.responsive ? this.buildBoolean(data.responsive) : undefined
+      responsive: this.buildBoolean(data.responsive) ?? false,
+      startAt: data.startAt,
+      stopAt: data.stopAt,
+      subtitle: data.subtitle,
+      autoplay: this.buildBoolean(data.autoplay) ?? false,
+      muted: this.buildBoolean(data.muted) ?? false,
+      loop: this.buildBoolean(data.loop) ?? false,
+      title: this.buildBoolean(data.displayTitle) ?? true,
+      p2p: this.buildBoolean(data.p2p) ?? true,
+      warningTitle: this.buildBoolean(data.privacyWarning) ?? true,
+      controlBar: this.buildBoolean(data.playerControl) ?? true,
+      peertubeLink: this.buildBoolean(data.peertubeLink) ?? true
     })
 
     return { component, loadedPromise }
