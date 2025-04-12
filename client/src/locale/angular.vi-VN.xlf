@@ -16844,9 +16844,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3472732945521632942" datatype="html">
+      <trans-unit id="3472732945521632942" datatype="html" xml:space="preserve">
         <source>Necessary to claim podcast RSS feeds.</source>
-        <target state="translated">Cần có để yêu cầu nguồn cấp RSS podcast.</target>
+        <target state="translated">Cần có để lấy nguồn cấp RSS podcast.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">11</context>
