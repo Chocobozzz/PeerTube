@@ -311,9 +311,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7127745751169269971" datatype="html">
+      <trans-unit id="7127745751169269971" datatype="html" xml:space="preserve">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="translated">Video của bạn <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> vừa bị khoá </target>
+        <target state="translated">Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> của bạn bị khoá </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">38</context>
@@ -381,7 +381,7 @@
       </trans-unit>
       <trans-unit id="4131049854186863972" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.comment.heldForReview&quot;&gt;"/>. This comment requires <x id="START_LINK_2" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentReviewUrl&quot; [queryParams]=&quot;notification.commentReviewQueryParams&quot;&gt;"/>your approval<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> đã bình luận trên video của bạn <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.comment.heldForReview&quot;&gt;"/>. Việc này cần <x id="START_LINK_2" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentReviewUrl&quot; [queryParams]=&quot;notification.commentReviewQueryParams&quot;&gt;"/>bạn duyệt<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> đã bình luận video của bạn <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;notification.comment.heldForReview&quot;&gt;"/>. Việc này cần <x id="START_LINK_2" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentReviewUrl&quot; [queryParams]=&quot;notification.commentReviewQueryParams&quot;&gt;"/>bạn duyệt<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">100</context>
@@ -497,7 +497,7 @@
       </trans-unit>
       <trans-unit id="5521797894955945446" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> đang phát trực tiếp: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> đang trực tiếp: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">236,237</context>
@@ -505,7 +505,7 @@
       </trans-unit>
       <trans-unit id="251018234206898226" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> went live: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> đã phát trực tiếp: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> đã trực tiếp: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">240,241</context>
@@ -1281,7 +1281,7 @@
       </trans-unit>
       <trans-unit id="4853472797848575859" datatype="html" xml:space="preserve">
         <source>Waiting live</source>
-        <target state="translated">Buổi phát đang chờ</target>
+        <target state="translated">Buổi trực tiếp đang chờ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -1289,7 +1289,7 @@
       </trans-unit>
       <trans-unit id="423716195876655711" datatype="html" xml:space="preserve">
         <source>Live ended</source>
-        <target state="translated">Buổi phát đã kết thúc</target>
+        <target state="translated">Buổi trực tiếp đã kết thúc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -1409,7 +1409,7 @@
       </trans-unit>
       <trans-unit id="7855115715004732406" datatype="html" xml:space="preserve">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
-        <target state="translated">Xem video "<x id="PH" equiv-text="value.category.label"/>"</target>
+        <target state="translated">Xem video <x id="PH" equiv-text="value.category.label"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -1425,7 +1425,7 @@
       </trans-unit>
       <trans-unit id="8844207666221087270" datatype="html" xml:space="preserve">
         <source>Browse "#<x id="PH" equiv-text="value.tag"/>" videos</source>
-        <target state="translated">Tìm video "#<x id="PH" equiv-text="value.tag"/>"</target>
+        <target state="translated">Xem video #<x id="PH" equiv-text="value.tag"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -1581,7 +1581,7 @@
       </trans-unit>
       <trans-unit id="1439057370359538654" datatype="html" xml:space="preserve">
         <source>File replacement is not available on a live.</source>
-        <target state="translated">Thay thế file không khả dụng cho buổi phát trực tiếp.</target>
+        <target state="translated">Thay thế file không khả dụng cho buổi trực tiếp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">15</context>
@@ -1629,7 +1629,7 @@
       </trans-unit>
       <trans-unit id="4289458489048046810" datatype="html" xml:space="preserve">
         <source>Studio is not available on a live.</source>
-        <target state="translated">Studio không khả dụng trên buổi phát trực tiếp.</target>
+        <target state="translated">Studio không khả dụng trên buổi trực tiếp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">37</context>
@@ -1871,9 +1871,9 @@
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="330610135077253864" datatype="html">
+      <trans-unit id="330610135077253864" datatype="html" xml:space="preserve">
         <source>Live streaming enabled</source>
-        <target state="translated">Cho phép livestream</target>
+        <target state="translated">Cho phép trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">75</context>
@@ -2129,7 +2129,7 @@
       </trans-unit>
       <trans-unit id="4776113937628941635" datatype="html" xml:space="preserve">
         <source>This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></source>
-        <target state="translated">Nền tảng này ở <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
+        <target state="translated">Máy chủ này ở <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">60,61</context>
@@ -2185,7 +2185,7 @@
       </trans-unit>
       <trans-unit id="8017622347308758772" datatype="html" xml:space="preserve">
         <source>Public registration on our platform is not allowed</source>
-        <target state="translated">Nền tảng không công khai đăng ký</target>
+        <target state="translated">Máy chủ không công khai đăng ký</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">97,98</context>
@@ -2193,7 +2193,7 @@
       </trans-unit>
       <trans-unit id="707876467820107191" datatype="html" xml:space="preserve">
         <source>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</source>
-        <target state="translated">Nền tảng tương thích với các dịch vụ Fediverse như Mastodon, Lemmy, Misskey</target>
+        <target state="translated">Máy chủ tương thích với các dịch vụ Fediverse như Mastodon, Lemmy, Misskey</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">112,114</context>
@@ -3396,9 +3396,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6371572688505952303" datatype="html">
+      <trans-unit id="6371572688505952303" datatype="html" xml:space="preserve">
         <source>My library</source>
-        <target state="translated">Kênh của tôi</target>
+        <target state="translated">Thư viện</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library.component.html</context>
           <context context-type="linenumber">6</context>
@@ -6324,9 +6324,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2392048495773035896" datatype="html">
+      <trans-unit id="2392048495773035896" datatype="html" xml:space="preserve">
         <source>Open the modal to support the video uploader</source>
-        <target state="translated">Mở phương thức để hỗ trợ trình tải lên video</target>
+        <target state="translated">Xem cách hỗ trợ người tải lên video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -8746,7 +8746,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9025984970788474055" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="translated">Nền tảng <x id="PH" equiv-text="domain"/> đã bị ẩn.</target>
+        <target state="translated">Máy chủ <x id="PH" equiv-text="domain"/> đã bị ẩn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -8754,7 +8754,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6750929335415365131" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted by your platform.</source>
-        <target state="translated">Nền tảng <x id="PH" equiv-text="domain"/> đã bị ẩn bởi nền tảng của bạn.</target>
+        <target state="translated">Máy chủ <x id="PH" equiv-text="domain"/> đã bị máy chủ của bạn ẩn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -9840,25 +9840,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4046343890883004514" datatype="html">
+      <trans-unit id="4046343890883004514" datatype="html" xml:space="preserve">
         <source>Recent views</source>
-        <target state="translated">Lượt xem gần đây</target>
+        <target state="translated">Được xem gần đây</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8177374861384376651" datatype="html">
+      <trans-unit id="8177374861384376651" datatype="html" xml:space="preserve">
         <source>Most liked videos</source>
-        <target state="translated">Yêu thích nhất</target>
+        <target state="translated">Được thích nhiều nhất</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="297360345401834321" datatype="html">
+      <trans-unit id="297360345401834321" datatype="html" xml:space="preserve">
         <source>Global views</source>
-        <target state="translated">Lượt xem toàn cầu</target>
+        <target state="translated">Được xem nhiều nhất</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">46</context>
@@ -12598,7 +12598,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2191782228095209497" datatype="html" xml:space="preserve">
         <source>My video space</source>
-        <target state="translated">Không gian video của tôi</target>
+        <target state="translated">Của tôi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">198</context>
@@ -13350,7 +13350,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4843885358288366928" datatype="html" xml:space="preserve">
         <source>Moderation and code of conduct</source>
-        <target state="translated">Kiểm duyệt và quy tắc ứng xử</target>
+        <target state="translated">Kiểm duyệt và nội quy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -13566,7 +13566,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="962765493084218985" datatype="html" xml:space="preserve">
         <source>Platform</source>
-        <target state="translated">Nền tảng</target>
+        <target state="translated">Máy chủ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -14114,7 +14114,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1541005328084571131" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> other platforms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="translated">Nền tảng <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> đăng ký nội dung từ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> nền tảng<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> khác.</target>
+        <target state="translated">Máy chủ <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> đăng ký nội dung từ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> máy chủ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> khác.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99,101</context>
@@ -14162,7 +14162,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8317194248349445422" datatype="html" xml:space="preserve">
         <source>This platform</source>
-        <target state="translated">Nền tảng này</target>
+        <target state="translated">Máy chủ này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">160</context>
@@ -16182,7 +16182,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3586102125640292723" datatype="html" xml:space="preserve">
         <source>Muted platforms</source>
-        <target state="translated">Nền tảng đã ẩn</target>
+        <target state="translated">Máy chủ đã ẩn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">115</context>
@@ -22951,7 +22951,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7659756233411947529" datatype="html" xml:space="preserve">
         <source>Current lives</source>
-        <target state="translated">Những lượt phát trực tiếp gần đây</target>
+        <target state="translated">Trực tiếp gần đây</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">28</context>
@@ -23735,9 +23735,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1812379335568847528" datatype="html">
+      <trans-unit id="1812379335568847528" datatype="html" xml:space="preserve">
         <source>Subscriptions</source>
-        <target state="translated">Danh sách đăng ký</target>
+        <target state="translated">Kênh đăng ký</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context>
           <context context-type="linenumber">24</context>
