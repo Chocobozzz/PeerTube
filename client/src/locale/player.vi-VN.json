@@ -32,7 +32,7 @@
     "Download Breakdown": "Tỉ lệ tải",
     "Buffer Progress": "Bộ nhớ đệm",
     "Buffer State": "Đã đệm",
-    "Live Latency": "Độ trễ livestream",
+    "Live Latency": "Độ trễ phát trực tiếp",
     "P2P": "P2P",
     "{1} seconds": "{1} giây",
     "enabled": "bật",
@@ -41,8 +41,8 @@
     "  off": "  tắt",
     "Player mode": "Kiểu phát",
     "Play in loop": "Phát lặp lại",
-    "This live is not currently streaming.": "Hiện tại buổi phát này không phát trực tiếp.",
-    "This live has ended.": "Buổi livestream đã kết thúc.",
+    "This live is not currently streaming.": "Buổi phát này hiện chưa phát trực tiếp.",
+    "This live has ended.": "Buổi phát trực tiếp đã kết thúc.",
     "The video failed to play, will try to fast forward.": "Không thể phát video, sẽ cố gắng tua nhanh.",
     "{1} / {2} dropped of {3}": "{1} / {2} thất bại trong {3}",
     " (muted)": " (đã tắt tiếng)",
@@ -145,6 +145,6 @@
     "Beginning of dialog window. Escape will cancel and close the window.": "Đang mở cửa sổ hộp thoại. Thoát lúc này sẽ hủy bỏ và đóng cửa sổ.",
     "End of dialog window.": "Hết cửa sổ hộp thoại.",
     "{1} is loading.": "Đang tải {1}.",
-    "This live has not started yet.": "Buổi livestream chưa bắt đầu.",
+    "This live has not started yet.": "Buổi phát trực tiếp chưa bắt đầu.",
     "Uses P2P, others may know you are watching this video.": "Khi dùng P2P, người khác có thể biết bạn đang xem video này."
 }
