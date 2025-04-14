@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
-import { RouterLink } from '@angular/router'
-import { HooksService, PluginService, ServerService } from '@app/core'
+import { Router, RouterLink } from '@angular/router'
+import { ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 import {
   VIDEO_CATEGORY_VALIDATOR,
@@ -45,6 +45,7 @@ import { forkJoin, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { MarkdownHintComponent } from '../../../shared/shared-main/text/markdown-hint.component'
 import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from '../common/thumbnail-manager.component'
@@ -99,7 +100,8 @@ type Form = {
     ThumbnailManagerComponent,
     GlobalIconComponent,
     MarkdownHintComponent,
-    RouterLink
+    RouterLink,
+    DeleteButtonComponent
   ]
 })
 export class VideoMainInfoComponent implements OnInit, OnDestroy {
@@ -114,6 +116,9 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   private hooks = inject(HooksService)
   private cd = inject(ChangeDetectorRef)
   private manageController = inject(VideoManageController)
+  private confirmService = inject(ConfirmService)
+  private notifier = inject(Notifier)
+  private router = inject(Router)
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
@@ -462,5 +467,30 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   private updateSupportField (support: string) {
     return this.form.patchValue({ support: support || '' })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  canBeDeleted () {
+    return !!this.videoEdit.getVideoAttributes().id
+  }
+
+  async deleteVideo () {
+    const video = this.videoEdit.getVideoAttributes()
+    const message = $localize`Are you sure you want to delete your video "${video.name}?`
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    if (res === false) return
+
+    this.videoService.removeVideo(video.id)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`"${video.name}" deleted`)
+
+          this.router.navigate([ '/my-library/videos' ])
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
   }
 }
