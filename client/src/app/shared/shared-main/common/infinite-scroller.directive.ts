@@ -1,5 +1,5 @@
-import { AfterViewChecked, booleanAttribute, Directive, ElementRef, OnDestroy, OnInit, inject, input, output } from '@angular/core'
-import { PeerTubeRouterService, RouterSetting } from '@app/core'
+import { AfterViewChecked, booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, output } from '@angular/core'
+import { PeerTubeRouterService } from '@app/core'
 import { fromEvent, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
 
@@ -13,12 +13,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
 
   readonly percentLimit = input(70)
   readonly onItself = input(false, { transform: booleanAttribute })
-  // Add angular state in query params to reuse the routed component
   readonly dataObservable = input<Observable<any[]>>(undefined)
-
-  // Add angular state in query params to reuse the routed component
-  readonly setAngularState = input<boolean, unknown>(undefined, { transform: booleanAttribute })
-  readonly parentDisabled = input(false)
 
   readonly nearOfBottom = output()
 
@@ -77,8 +72,6 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
         filter(({ current, maximumScroll }) => (current / maximumScroll) > this.decimalLimit)
       )
       .subscribe(() => {
-        if (this.setAngularState() && !this.parentDisabled()) this.setScrollRouteParams()
-
         this.nearOfBottom.emit()
       })
 
@@ -109,9 +102,5 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewCh
 
     this.lastCurrentBottom = current
     return result
-  }
-
-  private setScrollRouteParams () {
-    this.peertubeRouter.addRouteSetting(RouterSetting.REUSE_COMPONENT)
   }
 }

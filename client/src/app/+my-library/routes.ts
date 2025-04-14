@@ -13,6 +13,7 @@ import { LoginGuard } from '../core'
 import { CommentsOnMyVideosComponent } from './comments-on-my-videos/comments-on-my-videos.component'
 import { AutomaticTagService } from './my-auto-tag-policies/automatic-tag.service'
 import { MyAutoTagPoliciesComponent } from './my-auto-tag-policies/my-auto-tag-policies.component'
+import { MyChannelSpaceComponent } from './my-channel-space.component'
 import { MyFollowersComponent } from './my-follows/my-followers.component'
 import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
 import { MyHistoryComponent } from './my-history/my-history.component'
@@ -28,7 +29,6 @@ import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlis
 import { MyVideoSpaceComponent } from './my-video-space.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
 import { MyWatchedWordsListComponent } from './my-watched-words-list/my-watched-words-list.component'
-import { MyChannelSpaceComponent } from './my-channel-space.component'
 
 const commonConfig = {
   path: '',
@@ -93,10 +93,6 @@ const videoSpaceRoutes = [
     data: {
       meta: {
         title: $localize`My videos`
-      },
-      reuse: {
-        enabled: true,
-        key: 'my-videos-list'
       }
     }
   },

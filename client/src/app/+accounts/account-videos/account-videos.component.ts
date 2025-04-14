@@ -6,7 +6,7 @@ import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
 import { VideoSortField } from '@peertube/peertube-models'
-import { Subscription } from 'rxjs'
+import { first, Subscription } from 'rxjs'
 import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
 
 @Component({
@@ -37,6 +37,8 @@ export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReus
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
       .subscribe(account => {
+        if (account.id === this.account?.id) return
+
         this.account = account
         if (this.alreadyLoaded) this.videosList().reloadVideos()
 

@@ -2,7 +2,6 @@ import { ComponentRef, Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import { DisableForReuseHook } from './disable-for-reuse-hook'
-import { PeerTubeRouterService, RouterSetting } from './peertube-router.service'
 
 @Injectable()
 export class CustomReuseStrategy implements RouteReuseStrategy {
@@ -50,9 +49,8 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     logger.info(`Reusing component ${key}.`)
 
     const handle = this.storedRouteHandles.get(key)
-    if (!handle) return handle;
-
-    (handle as any).componentRef.instance.enabledForReuse()
+    if (!handle) return handle
+    ;(handle as any).componentRef.instance.enabledForReuse()
 
     return handle
   }
@@ -67,9 +65,8 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
       this.storedRouteHandles.forEach((r, key) => {
         if (key === this.recentlyUsed) return
 
-        logger.info(`Removing stored component ${key}`);
-
-        (r as any).componentRef.destroy()
+        logger.info(`Removing stored component ${key}`)
+        ;(r as any).componentRef.destroy()
         this.storedRouteHandles.delete(key)
       })
     }
@@ -84,7 +81,6 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
 
   private isReuseEnabled (route: ActivatedRouteSnapshot) {
     // Cannot use peertube router here because of cyclic router dependency
-    return route.data.reuse?.enabled &&
-      !!(route.queryParams[PeerTubeRouterService.ROUTE_SETTING_NAME] & RouterSetting.REUSE_COMPONENT)
+    return route.data.reuse?.enabled
   }
 }

@@ -18,7 +18,7 @@
   <div
     class="margin-content videos-margin-content"
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()"
-    [dataObservable]="onDataSubject.asObservable()" setAngularState="true" [parentDisabled]="disabled"
+    [dataObservable]="onDataSubject.asObservable()"
   >
     <div class="section videos" *ngFor="let object of objects">
 

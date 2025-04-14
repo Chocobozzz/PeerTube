@@ -48,6 +48,8 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
+        if (this.videoChannel?.id === videoChannel.id) return
+
         this.videoChannel = videoChannel
         if (this.alreadyLoaded) this.videosList().reloadVideos()
 

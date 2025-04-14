@@ -19,7 +19,6 @@
 
   <div
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
-    [setAngularState]="true" [parentDisabled]="disabled()"
     class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
     <ng-container *ngIf="highlightedLives.length !== 0">

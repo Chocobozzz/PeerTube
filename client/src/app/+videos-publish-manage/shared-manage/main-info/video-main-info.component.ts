@@ -45,7 +45,6 @@ import { forkJoin, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
 import { MarkdownHintComponent } from '../../../shared/shared-main/text/markdown-hint.component'
 import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
 import { ThumbnailManagerComponent } from '../common/thumbnail-manager.component'
@@ -100,8 +99,7 @@ type Form = {
     ThumbnailManagerComponent,
     GlobalIconComponent,
     MarkdownHintComponent,
-    RouterLink,
-    DeleteButtonComponent
+    RouterLink
   ]
 })
 export class VideoMainInfoComponent implements OnInit, OnDestroy {
