@@ -146,11 +146,11 @@
 }
 
 @mixin danger-button {
-  background-color: pvar(--red);
-  color: pvar(--on-red);
-  border: 1px solid pvar(--red);
+  background-color: pvar(--input-danger-bg);
+  color: pvar(--input-danger-fg);
+  border: 0;
 
-  @include button-focus(pvar(--red));
+  @include button-focus(pvar(--input-danger-bg));
 
   &:hover,
   &:active,

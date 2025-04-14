@@ -20,7 +20,6 @@
   --on-primary: #{pvar(--fg)};
 
   --red: #{$red};
-  --on-red: #{$white};
 
   --green: #{$green};
 
@@ -28,6 +27,9 @@
 
   --input-bg: var(--inputBackgroundColor, #{pvar(--bg-secondary-400)});
   --input-bg-in-secondary: #{pvar(--input-bg-550)};
+
+  --input-danger-fg: #9C221C;
+  --input-danger-bg: #FEBBB2;
 
   --input-placeholder: var(--inputPlaceholderColor, #{pvar(--fg-50)});
   --input-border-color: var(--inputBorderColor, #{pvar(--input-bg)});
@@ -134,6 +136,9 @@
     --border-primary: #F2690D;
 
     --input-bg: #{pvar(--bg-secondary-450)};
+
+    --input-danger-fg: #FEBBB2;
+    --input-danger-bg: #9C221C;
 
     --fg: hsl(0 10% 96%);
 
