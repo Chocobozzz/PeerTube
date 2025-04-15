@@ -13,14 +13,13 @@
     (click)="completeDescriptionShown = !completeDescriptionShown"
     class="video-info-description-more button-unstyle"
   >
-    <ng-container *ngIf="!completeDescriptionShown">
-      <ng-container i18n>Show more</ng-container>
-      <span class="chevron-down"></span>
-    </ng-container>
-
-    <ng-container *ngIf="completeDescriptionShown">
+    @if (completeDescriptionShown) {
       <ng-container i18n>Show less</ng-container>
       <span class="chevron-up"></span>
-    </ng-container>
+    } @else {
+      <ng-container i18n>Show more</ng-container>
+      <span class="chevron-down"></span>
+    }
+
   </button>
 </div>

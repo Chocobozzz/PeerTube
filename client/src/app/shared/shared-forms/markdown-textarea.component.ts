@@ -33,6 +33,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   private screenService = inject(ScreenService)
   private markdownService = inject(MarkdownService)
 
+  readonly previewEl = viewChild<ElementRef<HTMLElement>>('previewEl')
+
   readonly content = model('')
 
   readonly formError = input<string | FormReactiveErrors | FormReactiveErrors[]>(undefined)
@@ -51,6 +53,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   readonly withPreview = input(true, { transform: booleanAttribute })
   readonly withHtml = input(false, { transform: booleanAttribute })
   readonly withEmoji = input(false, { transform: booleanAttribute })
+  readonly withShowMoreButton = input(false, { transform: booleanAttribute })
 
   readonly monospace = input(false, { transform: booleanAttribute })
 
@@ -59,9 +62,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   previewHTML: SafeHtml | string = ''
 
-  isMaximized = false
+  maximized = false
   disabled = false
   previewCollapsed = true
+  truncated = false
 
   private contentChanged = new Subject<string>()
   private scrollPosition: [number, number]
@@ -75,6 +79,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
       .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content())
+
+    this.truncated = this.withShowMoreButton()
   }
 
   ngOnDestroy () {
@@ -109,7 +115,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   onMaximizeClick () {
     if (this.disabled) return
 
-    this.isMaximized = !this.isMaximized
+    this.maximized = !this.maximized
 
     // Make sure textarea have the focus
     // Except on touchscreens devices, the virtual keyboard may move up and hide the textarea in maximized mode
@@ -118,7 +124,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
     }
 
     // Make sure the window has no scrollbars
-    if (!this.isMaximized) {
+    if (!this.maximized) {
       this.unlockBodyScroll()
     } else {
       this.lockBodyScroll()
@@ -127,6 +133,13 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   setDisabledState (isDisabled: boolean) {
     this.disabled = isDisabled
+  }
+
+  hasEllipsis () {
+    const el = this.previewEl()?.nativeElement
+    if (!el) return false
+
+    return el.offsetHeight < el.scrollHeight
   }
 
   private lockBodyScroll () {

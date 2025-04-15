@@ -3,7 +3,7 @@
   <div [innerHTML]="previewHTML"></div>
 </ng-template>
 
-<div class="root" [ngClass]="{ 'maximized': isMaximized, monospace: monospace() }">
+<div class="root" [ngClass]="{ 'maximized': maximized, monospace: monospace() }">
 
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
@@ -12,13 +12,13 @@
     [id]="inputId()" [name]="inputId()" [dir]="dir()">
   </textarea>
 
-  <div *ngIf="isMaximized" class="preview-maximized muted-2">
+  <div *ngIf="maximized" class="preview-maximized muted-2">
     <ng-container *ngTemplateOutlet="previewContent"></ng-container>
   </div>
 
   <div *ngIf="withPreview()" class="buttons mt-3">
     <button
-      *ngIf="!isMaximized"
+      *ngIf="!maximized"
       type="button" class="peertube-button secondary-button" (click)="previewCollapsed = !previewCollapsed"
 		  [attr.aria-expanded]="!previewCollapsed" [attr.aria-controls]="inputId() + '-collapse'"
     >
@@ -32,7 +32,7 @@
     </button>
 
     <button type="button" (click)="onMaximizeClick()" class="maximize-button button-as-link" [disabled]="disabled">
-      @if (isMaximized) {
+      @if (maximized) {
         <ng-container i18n>Exit full-screen editor</ng-container>
       } @else {
         <ng-container i18n>Full-screen editor</ng-container>
@@ -41,11 +41,26 @@
   </div>
 
   <div
-    *ngIf="!isMaximized" class="preview-collapse mt-3 muted-2"
-    #collapse="ngbCollapse" [(ngbCollapse)]="previewCollapsed" [id]="inputId() + '-collapse'"
+    *ngIf="!maximized" class="preview-collapse preview mt-3 muted-2"
+    [ngClass]="{ 'ellipsis-multiline-3': truncated }"
+    #collapse="ngbCollapse" [(ngbCollapse)]="previewCollapsed" [id]="inputId() + '-collapse'" #previewEl
   >
     <ng-container *ngTemplateOutlet="previewContent"></ng-container>
   </div>
 </div>
 
-<div *ngIf="!isMaximized && formError()" class="form-error" role="alert">{{ formError() }}</div>
+@if (!maximized) {
+  @if (withShowMoreButton() && (!truncated || hasEllipsis())) {
+    <button type="button" (click)="truncated = !truncated" class="button-unstyle show-more-toggle">
+      @if (truncated) {
+        <ng-container i18n>Show more</ng-container>
+        <span class="chevron-down"></span>
+      } @else {
+        <ng-container i18n>Show less</ng-container>
+        <span class="chevron-up"></span>
+      }
+    </button>
+  }
+
+  <div *ngIf="formError()" class="form-error" role="alert">{{ formError() }}</div>
+}

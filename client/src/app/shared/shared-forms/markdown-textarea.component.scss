@@ -11,12 +11,9 @@
     @include peertube-textarea(100%, 170px);
   }
 
-  .preview {
-    min-height: 75px;
-    max-height: 210px;
-
-    overflow-y: auto;
-    word-wrap: break-word;
+  .preview,
+  .preview-maximized {
+    @include peertube-word-wrap;
   }
 
   .buttons {
@@ -84,6 +81,14 @@
       scrollbar-color: pvar(--fg-300) pvar(--bg);
     }
   }
+}
+
+.show-more-toggle {
+  font-weight: $font-bold;
+  color: pvar(--fg-300);
+  margin-top: 1rem;
+
+  @include font-size(14px);
 }
 
 @include on-small-main-col () {

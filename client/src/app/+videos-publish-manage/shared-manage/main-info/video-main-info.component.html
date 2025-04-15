@@ -37,7 +37,7 @@
         <my-markdown-textarea
           inputId="description"
           formControlName="description" [markdownVideo]="videoEdit.getVideoAttributes()"
-          [formError]="formErrors.description" withEmoji="true"
+          [formError]="formErrors.description" withEmoji="true" withShowMoreButton="true"
         ></my-markdown-textarea>
       </div>
 
@@ -166,7 +166,7 @@
 
     <div *ngIf="canBeDeleted()" class="form-group">
       <label i18n for="deleteVideo">Delete your video</label>
-      <div class="form-group-description" i18n>Warning: this is a definitive action!l!</div>
+      <div class="form-group-description" i18n>Warning: this is a definitive action!</div>
 
       <button class="peertube-button danger-button" (click)="deleteVideo()" i18n>Delete</button>
     </div>
