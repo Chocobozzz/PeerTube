@@ -197,6 +197,9 @@ declare module 'express' {
 
       user?: MUserDefault
       userRegistration?: MRegistration
+      // For verification links
+      userEmail?: MUserDefault
+      userPendingEmail?: MUserDefault
 
       server?: MServer
 

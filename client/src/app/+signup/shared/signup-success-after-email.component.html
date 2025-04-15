@@ -3,19 +3,17 @@
 </my-signup-step-title>
 
 <my-alert type="primary">
-  <ng-container *ngIf="requiresApproval()">
+  @if (requiresApproval()) {
     <p i18n>Your email has been verified and your account request has been sent!</p>
 
     <p i18n>
       A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.
     </p>
-  </ng-container>
-
-  <ng-container *ngIf="!requiresApproval()">
+  } @else {
     <p i18n>Your email has been verified and your account has been created!</p>
 
     <p i18n>
       If you need help using PeerTube, you can have a look at the <a class="link-primary" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
     </p>
-  </ng-container>
+  }
 </my-alert>

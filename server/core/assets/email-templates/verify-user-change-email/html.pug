@@ -1,0 +1,11 @@
+extends ../common/greetings
+
+block title
+  | Email verification
+
+block content
+  p You requested to change your email.
+
+  p Please follow #[a(href=verifyEmailUrl) this link] to verify this email belongs to you.
+  p If you can't see the verification link above you can use the following link #[a(href=verifyEmailUrl) #{verifyEmailUrl}]
+  p If you are not the person who initiated this request, please contact your administrator.

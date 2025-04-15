@@ -88,6 +88,8 @@ export class UserService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  // ---------------------------------------------------------------------------
+
   changeEmail (password: string, newEmail: string) {
     const url = UserService.BASE_USERS_URL + 'me'
     const body: UserUpdateMe = {
@@ -98,6 +100,32 @@ export class UserService {
     return this.authHttp.put(url, body)
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
+
+  askSendVerifyEmail (email: string) {
+    const url = UserService.BASE_USERS_URL + 'ask-send-verify-email'
+
+    return this.authHttp.post(url, { email })
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  verifyUserEmail (options: {
+    userId: number
+    verificationString: string
+    isPendingEmail: boolean
+  }) {
+    const { userId, verificationString, isPendingEmail } = options
+
+    const url = `${UserService.BASE_USERS_URL}${userId}/verify-email`
+    const body = {
+      verificationString,
+      isPendingEmail
+    }
+
+    return this.authHttp.post(url, body)
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  // ---------------------------------------------------------------------------
 
   updateMyProfile (profile: UserUpdateMe) {
     const url = UserService.BASE_USERS_URL + 'me'

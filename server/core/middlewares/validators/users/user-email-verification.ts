@@ -1,14 +1,16 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { getByEmailPermissive } from '@server/lib/user.js'
+import { UserModel } from '@server/models/user/user.js'
 import express from 'express'
 import { body, param } from 'express-validator'
 import { logger } from '../../../helpers/logger.js'
 import { Redis } from '../../../lib/redis.js'
-import { areValidationErrors, checkUserEmailExistPermissive, checkUserIdExist } from '../shared/index.js'
+import { areValidationErrors, checkUserIdExist } from '../shared/index.js'
 import { checkRegistrationEmailExistPermissive, checkRegistrationIdExist } from './shared/user-registrations.js'
 
-export const usersAskSendVerifyEmailValidator = [
+export const usersAskSendUserVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -18,22 +20,58 @@ export const usersAskSendVerifyEmailValidator = [
       email: req.body.email
     }, 'filter:api.email-verification.ask-send-verify-email.body')
 
-    const [ userExists, registrationExists ] = await Promise.all([
-      checkUserEmailExistPermissive(email, res, false),
-      checkRegistrationEmailExistPermissive(email, res, false)
+    const [ userEmail, userPendingEmail ] = await Promise.all([
+      UserModel.loadByEmailCaseInsensitive(email).then(users => getByEmailPermissive(users, email)),
+      UserModel.loadByPendingEmailCaseInsensitive(email).then(users => getByEmailPermissive(users, email))
     ])
 
-    if (!userExists && !registrationExists) {
-      logger.debug('User or registration with email %s does not exist (asking verify email).', email)
+    if (userEmail && userPendingEmail) {
+      logger.error(`Found 2 users with email ${email} to send verification link.`)
+
       // Do not leak our emails
-      return res.status(HttpStatusCode.NO_CONTENT_204).end()
+      return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
     }
 
-    if (res.locals.user?.pluginAuth) {
+    if (!userEmail && !userPendingEmail) {
+      logger.debug(`User with email ${email} does not exist (asking verify email).`)
+
+      // Do not leak our emails
+      return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    }
+
+    res.locals.userEmail = userEmail
+    res.locals.userPendingEmail = userPendingEmail
+
+    const user = userEmail || userPendingEmail
+
+    if (user.pluginAuth) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
         message: 'Cannot ask verification email of a user that uses a plugin authentication.'
       })
+    }
+
+    return next()
+  }
+]
+
+export const usersAskSendRegistrationVerifyEmailValidator = [
+  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    const { email } = await Hooks.wrapObject({
+      email: req.body.email
+    }, 'filter:api.email-verification.ask-send-verify-email.body')
+
+    const registrationExists = await checkRegistrationEmailExistPermissive(email, res, false)
+
+    if (!registrationExists) {
+      logger.debug(`Registration with email ${email} does not exist (asking verify email).`)
+
+      // Do not leak our emails
+      return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
     }
 
     return next()

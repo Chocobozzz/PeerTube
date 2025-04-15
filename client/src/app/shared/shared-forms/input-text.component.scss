@@ -5,8 +5,6 @@
 
 input {
   @include peertube-input-text(auto);
-  @include padding-left(15px !important);
-  @include padding-right(15px !important);
 }
 
 .btn,

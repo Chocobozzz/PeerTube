@@ -23,6 +23,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   private userService = inject(UserService)
   private serverService = inject(ServerService)
 
+  verificationEmailSent = false
   error: string
   success: string
   user: User
@@ -67,5 +68,17 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
           this.error = err.message
         }
       })
+  }
+
+  resendVerificationEmail () {
+    this.userService.askSendVerifyEmail(this.user.pendingEmail).subscribe({
+      next: () => {
+        this.verificationEmailSent = true
+      },
+
+      error: err => {
+        this.error = err.message
+      }
+    })
   }
 }

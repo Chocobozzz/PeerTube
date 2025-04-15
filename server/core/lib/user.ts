@@ -1,4 +1,3 @@
-import { Transaction } from 'sequelize'
 import {
   ActivityPubActorType,
   UserAdminFlag,
@@ -12,6 +11,7 @@ import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MActorDefault } from '@server/types/models/actor/index.js'
+import { Transaction } from 'sequelize'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
 import { AccountModel } from '../models/account/account.js'
@@ -29,7 +29,7 @@ import { createWatchLaterPlaylist } from './video-playlist.js'
 
 type ChannelNames = { name: string, displayName: string }
 
-function buildUser (options: {
+export function buildUser (options: {
   username: string
   password: string
   email: string
@@ -80,7 +80,7 @@ function buildUser (options: {
 
 // ---------------------------------------------------------------------------
 
-async function createUserAccountAndChannelAndPlaylist (parameters: {
+export async function createUserAccountAndChannelAndPlaylist (parameters: {
   userToCreate: MUser
   userDisplayName?: string
   channelNames?: ChannelNames
@@ -125,7 +125,7 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
   return { user, account, videoChannel }
 }
 
-async function createLocalAccountWithoutKeys (parameters: {
+export async function createLocalAccountWithoutKeys (parameters: {
   name: string
   displayName?: string
   userId: number | null
@@ -152,7 +152,7 @@ async function createLocalAccountWithoutKeys (parameters: {
   return accountInstanceCreated
 }
 
-async function createApplicationActor (applicationId: number) {
+export async function createApplicationActor (applicationId: number) {
   const accountCreated = await createLocalAccountWithoutKeys({
     name: SERVER_ACTOR_NAME,
     userId: null,
@@ -168,47 +168,64 @@ async function createApplicationActor (applicationId: number) {
 
 // ---------------------------------------------------------------------------
 
-async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
+export async function buildUserVerifyEmail (user: MUser, isPendingEmail: boolean) {
   const verificationString = await Redis.Instance.setUserVerifyEmailVerificationString(user.id)
-  let verifyEmailUrl = `${WEBSERVER.URL}/verify-account/email?userId=${user.id}&verificationString=${verificationString}`
 
-  if (isPendingEmail) verifyEmailUrl += '&isPendingEmail=true'
+  const verifyEmailUrl = `${WEBSERVER.URL}/verify-account/email?userId=${user.id}&verificationString=${verificationString}`
 
-  const to = isPendingEmail
-    ? user.pendingEmail
-    : user.email
+  if (isPendingEmail) return verifyEmailUrl + '&isPendingEmail=true'
 
-  const username = user.username
-
-  Emailer.Instance.addVerifyEmailJob({ username, to, verifyEmailUrl, isRegistrationRequest: false })
+  return verifyEmailUrl
 }
 
-async function sendVerifyRegistrationEmail (registration: MRegistration) {
+export async function buildRegistrationRequestVerifyEmail (registration: MRegistration) {
   const verificationString = await Redis.Instance.setRegistrationVerifyEmailVerificationString(registration.id)
-  const verifyEmailUrl = `${WEBSERVER.URL}/verify-account/email?registrationId=${registration.id}&verificationString=${verificationString}`
 
-  const to = registration.email
-  const username = registration.username
+  return `${WEBSERVER.URL}/verify-account/email?registrationId=${registration.id}&verificationString=${verificationString}`
+}
 
-  Emailer.Instance.addVerifyEmailJob({ username, to, verifyEmailUrl, isRegistrationRequest: true })
+export async function sendVerifyUserChangeEmail (user: MUser) {
+  Emailer.Instance.addUserVerifyChangeEmailJob({
+    username: user.username,
+    to: user.pendingEmail,
+    verifyEmailUrl: await buildUserVerifyEmail(user, true)
+  })
+}
+
+export async function sendVerifyRegistrationRequestEmail (registration: MRegistration) {
+  Emailer.Instance.addRegistrationVerifyEmailJob({
+    username: registration.username,
+    to: registration.email,
+    verifyEmailUrl: await buildRegistrationRequestVerifyEmail(registration),
+    isRegistrationRequest: true
+  })
+}
+
+export async function sendVerifyRegistrationEmail (user: MUser) {
+  Emailer.Instance.addRegistrationVerifyEmailJob({
+    username: user.username,
+    to: user.email,
+    verifyEmailUrl: await buildUserVerifyEmail(user, false),
+    isRegistrationRequest: true
+  })
 }
 
 // ---------------------------------------------------------------------------
 
-async function getOriginalVideoFileTotalFromUser (user: MUserId) {
+export async function getOriginalVideoFileTotalFromUser (user: MUserId) {
   const base = await UserModel.getUserQuota({ userId: user.id, daily: false })
 
   return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
 // Returns cumulative size of all video files uploaded in the last 24 hours.
-async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
+export async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
   const base = await UserModel.getUserQuota({ userId: user.id, daily: true })
 
   return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
-async function isUserQuotaValid (options: {
+export async function isUserQuotaValid (options: {
   userId: number
   uploadSize: number
   checkDaily?: boolean // default true
@@ -227,7 +244,8 @@ async function isUserQuotaValid (options: {
   const uploadedDaily = uploadSize + totalBytesDaily
 
   logger.debug(
-    'Check user %d quota to upload content.', userId,
+    'Check user %d quota to upload content.',
+    userId,
     { totalBytes, totalBytesDaily, videoQuota: user.videoQuota, videoQuotaDaily: user.videoQuotaDaily, uploadSize }
   )
 
@@ -237,29 +255,14 @@ async function isUserQuotaValid (options: {
   return true
 }
 
-function getUserByEmailPermissive <T extends { email: string }> (users: T[], email: string): T {
+export function getByEmailPermissive<T extends { email: string }> (users: T[], email: string, field: keyof T = 'email'): T {
   if (users.length === 1) return users[0]
 
-  return users.find(r => r.email === email)
+  return users.find(r => r[field] === email)
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  getOriginalVideoFileTotalFromUser,
-  getOriginalVideoFileTotalDailyFromUser,
-  createApplicationActor,
-  createUserAccountAndChannelAndPlaylist,
-  createLocalAccountWithoutKeys,
-
-  sendVerifyUserEmail,
-  sendVerifyRegistrationEmail,
-
-  isUserQuotaValid,
-  buildUser,
-  getUserByEmailPermissive
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | undefined) {

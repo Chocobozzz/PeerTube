@@ -22,7 +22,7 @@ import { MIMETYPES } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
-import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user.js'
+import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserChangeEmail } from '../../../lib/user.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -290,7 +290,7 @@ async function updateMe (req: express.Request, res: express.Response) {
   })
 
   if (sendVerificationEmail === true) {
-    await sendVerifyUserEmail(user, true)
+    await sendVerifyUserChangeEmail(user)
   }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()

@@ -15,7 +15,6 @@ import { JobQueue } from './job-queue/index.js'
 import { Hooks } from './plugins/hooks.js'
 
 class Emailer {
-
   private static instance: Emailer
   private initialized = false
   private transporter: Transporter
@@ -89,7 +88,29 @@ class Emailer {
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
-  addVerifyEmailJob (options: {
+  addUserVerifyChangeEmailJob (options: {
+    username: string
+    to: string
+    verifyEmailUrl: string
+  }) {
+    const { username, to, verifyEmailUrl } = options
+
+    const emailPayload: EmailPayload = {
+      template: 'verify-user-change-email',
+      to: [ to ],
+      subject: `Verify your email on ${CONFIG.INSTANCE.NAME}`,
+      locals: {
+        username,
+        verifyEmailUrl,
+
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
+  addRegistrationVerifyEmailJob (options: {
     username: string
     isRegistrationRequest: boolean
     to: string
@@ -98,7 +119,7 @@ class Emailer {
     const { username, isRegistrationRequest, to, verifyEmailUrl } = options
 
     const emailPayload: EmailPayload = {
-      template: 'verify-email',
+      template: 'verify-registration-email',
       to: [ to ],
       subject: `Verify your email on ${CONFIG.INSTANCE.NAME}`,
       locals: {
@@ -337,7 +358,7 @@ class Emailer {
   private initSMTPTransport () {
     logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
 
-    let tls: { ca: [ Buffer ] }
+    let tls: { ca: [Buffer] }
     if (CONFIG.SMTP.CA_FILE) {
       tls = {
         ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]

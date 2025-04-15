@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router'
-import { VerifyAccountAskSendEmailComponent } from './verify-account-ask-send-email/verify-account-ask-send-email.component'
+import { VerifyNewAccountAskSendEmailComponent } from './verify-new-account-ask-send-email/verify-new-account-ask-send-email.component'
 import { VerifyAccountEmailComponent } from './verify-account-email/verify-account-email.component'
 import { SignupService } from '../shared/signup.service'
 
@@ -19,7 +19,7 @@ export default [
       },
       {
         path: 'ask-send-email',
-        component: VerifyAccountAskSendEmailComponent,
+        component: VerifyNewAccountAskSendEmailComponent,
         data: {
           meta: {
             title: $localize`Ask to send an email to verify your account`

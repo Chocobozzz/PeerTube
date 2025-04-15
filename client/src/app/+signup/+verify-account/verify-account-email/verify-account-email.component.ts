@@ -2,7 +2,7 @@ import { NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { SignupService } from '@app/+signup/shared/signup.service'
-import { AuthService, Notifier, ServerService } from '@app/core'
+import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { SignupSuccessAfterEmailComponent } from '../../shared/signup-success-after-email.component'
 
@@ -13,6 +13,7 @@ import { SignupSuccessAfterEmailComponent } from '../../shared/signup-success-af
 })
 export class VerifyAccountEmailComponent implements OnInit {
   private signupService = inject(SignupService)
+  private userService = inject(UserService)
   private server = inject(ServerService)
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
@@ -44,9 +45,7 @@ export class VerifyAccountEmailComponent implements OnInit {
 
     this.userId = queryParams['userId']
     this.registrationId = queryParams['registrationId']
-
     this.verificationString = queryParams['verificationString']
-
     this.isPendingEmail = queryParams['isPendingEmail'] === 'true'
 
     if (!this.verificationString) {
@@ -62,15 +61,12 @@ export class VerifyAccountEmailComponent implements OnInit {
     this.verifyEmail()
   }
 
-  isRegistrationRequest () {
-    return !!this.registrationId
+  isRegistration () {
+    return !this.isPendingEmail
   }
 
-  displaySignupSuccess () {
-    if (!this.success) return false
-    if (!this.isRegistrationRequest() && this.isPendingEmail) return false
-
-    return true
+  isRegistrationRequest () {
+    return !!this.registrationId
   }
 
   verifyEmail () {
@@ -88,7 +84,7 @@ export class VerifyAccountEmailComponent implements OnInit {
       isPendingEmail: this.isPendingEmail
     }
 
-    this.signupService.verifyUserEmail(options)
+    this.userService.verifyUserEmail(options)
       .subscribe({
         next: () => {
           if (this.authService.isLoggedIn()) {

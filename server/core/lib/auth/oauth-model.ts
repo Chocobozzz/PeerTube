@@ -14,7 +14,7 @@ import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
-import { buildUser, createUserAccountAndChannelAndPlaylist, getUserByEmailPermissive } from '../user.js'
+import { buildUser, createUserAccountAndChannelAndPlaylist, getByEmailPermissive } from '../user.js'
 import { ExternalUser } from './external-auth.js'
 import { TokensCache } from './tokens-cache.js'
 
@@ -87,7 +87,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   if (bypassLogin && bypassLogin.bypass === true) {
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
-    let user = getUserByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
+    let user = getByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
 
     if (!user) {
       user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
@@ -105,7 +105,9 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
       if (user.pluginAuth !== bypassLogin.pluginName) {
         logger.info(
           'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
-          bypassLogin.pluginName, bypassLogin.user.email, user.pluginAuth
+          bypassLogin.pluginName,
+          bypassLogin.user.email,
+          user.pluginAuth
         )
 
         return null
@@ -123,7 +125,7 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
   let user: MUserDefault
 
   if (usernameOrEmail.includes('@')) {
-    user = getUserByEmailPermissive(users, usernameOrEmail)
+    user = getByEmailPermissive(users, usernameOrEmail)
   } else if (users.length === 1) {
     user = users[0]
   }
@@ -166,7 +168,7 @@ async function revokeToken (
     TokensCache.Instance.clearCacheByToken(token.accessToken)
 
     token.destroy()
-         .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+      .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
 
     return { success: true, redirectUrl }
   }
@@ -261,7 +263,7 @@ async function updateUserFromExternal (
 
   {
     type UserAttributeKeys = keyof AttributesOnly<UserModel>
-    const mappingKeys: { [ id in UserAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+    const mappingKeys: { [id in UserAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
       role: 'role',
       adminFlags: 'adminFlags',
       videoQuota: 'videoQuota',
@@ -278,7 +280,7 @@ async function updateUserFromExternal (
 
   {
     type AccountAttributeKeys = keyof Partial<AttributesOnly<AccountModel>>
-    const mappingKeys: { [ id in AccountAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+    const mappingKeys: { [id in AccountAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
       name: 'displayName'
     }
 

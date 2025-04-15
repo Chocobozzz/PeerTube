@@ -3,22 +3,26 @@ import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { MRegistration } from '@server/types/models/index.js'
 import { forceNumber, pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { getUserByEmailPermissive } from '@server/lib/user.js'
+import { getByEmailPermissive } from '@server/lib/user.js'
 
-function checkRegistrationIdExist (idArg: number | string, res: express.Response) {
+export function checkRegistrationIdExist (idArg: number | string, res: express.Response) {
   const id = forceNumber(idArg)
   return checkRegistrationExist(() => UserRegistrationModel.load(id), res)
 }
 
-function checkRegistrationEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
-  return checkRegistrationExist(async () => {
-    const registrations = await UserRegistrationModel.listByEmailCaseInsensitive(email)
+export function checkRegistrationEmailExistPermissive (email: string, res: express.Response, abortResponse = true) {
+  return checkRegistrationExist(
+    async () => {
+      const registrations = await UserRegistrationModel.listByEmailCaseInsensitive(email)
 
-    return getUserByEmailPermissive(registrations, email)
-  }, res, abortResponse)
+      return getByEmailPermissive(registrations, email)
+    },
+    res,
+    abortResponse
+  )
 }
 
-async function checkRegistrationHandlesDoNotAlreadyExist (options: {
+export async function checkRegistrationHandlesDoNotAlreadyExist (options: {
   username: string
   channelHandle: string
   email: string
@@ -41,7 +45,7 @@ async function checkRegistrationHandlesDoNotAlreadyExist (options: {
   return true
 }
 
-async function checkRegistrationExist (finder: () => Promise<MRegistration>, res: express.Response, abortResponse = true) {
+export async function checkRegistrationExist (finder: () => Promise<MRegistration>, res: express.Response, abortResponse = true) {
   const registration = await finder()
 
   if (!registration) {
@@ -57,11 +61,4 @@ async function checkRegistrationExist (finder: () => Promise<MRegistration>, res
 
   res.locals.userRegistration = registration
   return true
-}
-
-export {
-  checkRegistrationIdExist,
-  checkRegistrationEmailExistPermissive,
-  checkRegistrationHandlesDoNotAlreadyExist,
-  checkRegistrationExist
 }

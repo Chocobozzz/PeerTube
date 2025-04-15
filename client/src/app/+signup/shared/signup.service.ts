@@ -25,21 +25,11 @@ export class SignupService {
 
   // ---------------------------------------------------------------------------
 
-  verifyUserEmail (options: {
-    userId: number
-    verificationString: string
-    isPendingEmail: boolean
-  }) {
-    const { userId, verificationString, isPendingEmail } = options
+  askSendVerifyEmail (email: string) {
+    const url = `${UserService.BASE_USERS_URL}registrations/ask-send-verify-email`
 
-    const url = `${UserService.BASE_USERS_URL}${userId}/verify-email`
-    const body = {
-      verificationString,
-      isPendingEmail
-    }
-
-    return this.authHttp.post(url, body)
-      .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return this.authHttp.post(url, { email })
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   verifyRegistrationEmail (options: {
@@ -53,13 +43,6 @@ export class SignupService {
 
     return this.authHttp.post(url, body)
       .pipe(catchError(res => this.restExtractor.handleError(res)))
-  }
-
-  askSendVerifyEmail (email: string) {
-    const url = UserService.BASE_USERS_URL + 'ask-send-verify-email'
-
-    return this.authHttp.post(url, { email })
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   // ---------------------------------------------------------------------------

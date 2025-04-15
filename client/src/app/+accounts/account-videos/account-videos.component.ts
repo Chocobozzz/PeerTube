@@ -1,12 +1,12 @@
 import { NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
 import { VideoSortField } from '@peertube/peertube-models'
-import { first, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
 
 @Component({

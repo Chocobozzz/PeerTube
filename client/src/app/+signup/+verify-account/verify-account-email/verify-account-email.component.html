@@ -1,19 +1,20 @@
 <div *ngIf="loaded" class="margin-content">
   <h1 i18n class="title-page">Verify email</h1>
 
-  <my-signup-success-after-email
-    *ngIf="displaySignupSuccess()"
-    [requiresApproval]="isRegistrationRequest() && requiresApproval"
-  >
-  </my-signup-success-after-email>
+  @if (success) {
+    @if (this.isRegistration() || this.isRegistrationRequest()) {
+      <my-signup-success-after-email [requiresApproval]="requiresApproval"></my-signup-success-after-email>
+    } @else {
+      <my-alert type="success" i18n>Email updated.</my-alert>
+    }
 
-  <my-alert type="success" i18n *ngIf="!isRegistrationRequest() && isPendingEmail && success">Email updated.</my-alert>
+  } @else if (failed) {
+    <my-alert type="danger">
+      <span i18n>An error occurred.</span>
 
-  <my-alert type="danger" *ngIf="failed">
-    <span i18n>An error occurred.</span>
-
-    <a i18n class="ms-1 link-primary" routerLink="/verify-account/ask-send-email">
-      Request a new verification email
-    </a>
-  </my-alert>
+      <a i18n class="ms-1 link-primary" routerLink="/verify-account/ask-send-email">
+        Request a new verification email
+      </a>
+    </my-alert>
+  }
 </div>
