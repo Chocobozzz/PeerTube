@@ -3,7 +3,10 @@ import { Observable } from 'rxjs'
 import { Injectable, inject } from '@angular/core'
 import { ConfirmService } from '@app/core/confirm'
 
-export type CanComponentDeactivateResult = { text?: string, canDeactivate: Observable<boolean> | boolean }
+export type CanComponentDeactivateResult = {
+  canDeactivate: Observable<boolean> | boolean
+  text?: string
+}
 
 const debugLogger = debug('peertube:routing:CanComponentDeactivate')
 
@@ -19,12 +22,17 @@ export class CanDeactivateGuard {
     const result = component.canDeactivate()
 
     debugLogger('Checking if component can deactivate', result)
+    if (result.canDeactivate) return true
 
     const text = result.text || $localize`All unsaved data will be lost, are you sure you want to leave this page?`
 
-    return result.canDeactivate || this.confirmService.confirm(
+    return this.confirmService.confirm(
       text,
-      $localize`Warning`
-    )
+      $localize`Warning`,
+      {
+        confirmButtonText: $localize`Stay on page`,
+        cancelButtonText: $localize`Leave page`
+      }
+    ).then(result => !result) // Inverse the result, "stay on page" is the primary/default button so we don't leave the page by accident
   }
 }

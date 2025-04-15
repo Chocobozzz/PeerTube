@@ -159,7 +159,7 @@ export class PluginListInstalledComponent implements OnInit {
       const res = await this.confirmService.confirm(
         $localize`This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.`,
         $localize`Upgrade`,
-        $localize`Proceed upgrade`
+        { confirmButtonText: $localize`Proceed upgrade` }
       )
 
       if (res === false) return

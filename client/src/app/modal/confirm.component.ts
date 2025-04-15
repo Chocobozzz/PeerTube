@@ -28,6 +28,7 @@ export class ConfirmComponent implements OnInit {
   inputLabel = ''
 
   inputValue = ''
+  cancelButtonText = ''
   confirmButtonText = ''
 
   errorMessage = ''
@@ -49,7 +50,7 @@ export class ConfirmComponent implements OnInit {
         this.isPasswordInput = false
         this.errorMessage = ''
 
-        const { type, title, message, confirmButtonText, errorMessage } = payload
+        const { type, title, message, confirmButtonText, cancelButtonText, errorMessage } = payload
 
         this.title = title
 
@@ -63,6 +64,7 @@ export class ConfirmComponent implements OnInit {
         }
 
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
+        this.cancelButtonText = cancelButtonText || $localize`Cancel`
 
         this.html.toSimpleSafeHtml(message)
           .then(html => {
