@@ -1618,7 +1618,7 @@ paths:
 
   /api/v1/users/registrations/ask-send-verify-email:
     post:
-      summary: Resend verification link to registration email
+      summary: Resend verification link to registration request email
       operationId: resendEmailToVerifyRegistration
       tags:
         - Register
@@ -1700,6 +1700,56 @@ paths:
           description: invalid verification string
         '404':
           description: registration not found
+
+  /api/v1/users/ask-reset-password:
+    post:
+      summary: Ask to reset password
+      description: An email containing a reset password link
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User email
+              required:
+                - email
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/users/{id}/reset-password:
+    post:
+      summary: Reset password
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verificationString:
+                  type: string
+                  format: url
+                password:
+                  type: string
+              required:
+                - verificationString
+                - password
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: invalid verification string
+        '404':
+          description: user not found
 
   /api/v1/users/{id}/two-factor/request:
     post:
