@@ -1,9 +1,6 @@
 #!/sbin/openrc-run
 supervisor=supervise-daemon
 
-export NODE_ENV="production"
-export NODE_CONFIG_DIR="/var/www/peertube/config"
-
 name="PeerTube"
 description="PeerTube self-hosted streaming service"
 pidfile=/run/peertube/peertube.pid
