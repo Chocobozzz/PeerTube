@@ -3350,9 +3350,9 @@
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5464118521750361406" datatype="html">
+      <trans-unit id="5464118521750361406" datatype="html" xml:space="preserve">
         <source>Public profile</source>
-        <target state="translated">Offentlig profil</target>
+        <target state="translated">Öppet tillgänglig profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">60</context>
@@ -6250,9 +6250,9 @@
           <context context-type="linenumber">290</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8928816882866356838">
+      <trans-unit id="8928816882866356838" xml:space="preserve">
         <source>Public</source>
-        <target>Offentlig</target>
+        <target state="translated">Öppet tillgänglig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-watch-playlist.component.html</context>
           <context context-type="linenumber">11</context>
@@ -10628,9 +10628,9 @@
           <context context-type="linenumber">663</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="173263206605027981" datatype="html">
+      <trans-unit id="173263206605027981" datatype="html" xml:space="preserve">
         <source>Automatically follow instances of a public index</source>
-        <target state="translated">Följ instanser i ett offentligt register automatiskt</target>
+        <target state="translated">Följ instanser i ett publikt register automatiskt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">651</context>
@@ -14030,9 +14030,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7657420986523643151" datatype="html">
+      <trans-unit id="7657420986523643151" datatype="html" xml:space="preserve">
         <source>Public name</source>
-        <target state="translated">Offentligt namn</target>
+        <target state="translated">Publikt namn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">9</context>
@@ -16888,9 +16888,9 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215550763077484072" datatype="html">
+      <trans-unit id="5215550763077484072" datatype="html" xml:space="preserve">
         <source>Allow email to be publicly displayed</source>
-        <target state="translated">Tillåt att e-postadress visas offentligt</target>
+        <target state="translated">Tillåt att e-postadressen visas publikt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
@@ -17746,9 +17746,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3173210699559672958" datatype="html">
+      <trans-unit id="3173210699559672958" datatype="html" xml:space="preserve">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </source>
-        <target state="translated">Din nuvarande e-postadress är <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Den kommer aldrig visas offentligt. </target>
+        <target state="translated">Din nuvarande e-postadress är <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Den kommer aldrig visas publikt. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">14</context>
@@ -19786,9 +19786,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1276238402004616037">
+      <trans-unit id="1276238402004616037" xml:space="preserve">
         <source>The channel is required when the playlist is public.</source>
-        <target>En kanal måste anges för offentliga spellistor.</target>
+        <target state="translated">En kanal måste anges för öppet tillgängliga spellistor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">41</context>
@@ -19922,9 +19922,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9115337161597088460">
+      <trans-unit id="9115337161597088460" xml:space="preserve">
         <source>Video privacy is required.</source>
-        <target>Videons offentlighetsstatus måste fyllas i.</target>
+        <target state="translated">Videons tillgänglighet måste fyllas i.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">25</context>
