@@ -1,0 +1,94 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_form-mixins' as *;
+
+h2 {
+    font-weight: $font-bold;
+    color: pvar(--fg-350);
+    line-height: 1;
+  
+    @include font-size(2rem);
+    @include rfs(2rem, margin-bottom);
+  
+    my-global-icon {
+      @include global-icon-size(28px);
+      @include margin-right(0.5rem);
+    }
+  
+    @include on-small-main-col {
+      text-align: center;
+    }
+  }
+
+  .current-filename-container {
+    text-align: center;
+    margin-top: 1.5rem;
+  
+    strong {
+      display: block;
+      font-size: 1.1rem;
+    }
+  
+    label {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .root {
+    min-height: 260px;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: 4px;
+    border: 1px dashed pvar(--secondary-icon-color);
+  
+    @include on-mobile-main-col {
+      border: 0;
+    }
+  }
+
+my-embed {
+  max-width: 500px;
+  width: 500px;
+
+  max-height: 280px;
+  height: 280px;
+}
+
+.root.dragover {
+  background-color: pvar(--bg-secondary-400);
+  border-color: pvar(--primary);
+
+  .no-image {
+    color: pvar(--primary);
+  }
+}
+
+.form-columns {
+    display: grid;
+    grid-template-columns: fit-content(66%) 1fr;
+  
+    @include rfs(40px, grid-gap);
+  
+    &.disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  
+    &.reverse {
+      > *:nth-child(1) {
+        order: 1;
+      }
+  
+      > *:nth-child(2) {
+        order: -1;
+      }
+    }
+  
+    @media screen and (max-width: $medium-view) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+}
+

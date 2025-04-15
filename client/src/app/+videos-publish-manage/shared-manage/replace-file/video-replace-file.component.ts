@@ -24,7 +24,7 @@ type Form = {
 @Component({
   selector: 'my-video-replace-file',
   styleUrls: [
-    '../common/video-manage-page-common.scss'
+    './video-replace-file.component.scss',
   ],
   templateUrl: './video-replace-file.component.html',
   imports: [
@@ -96,9 +96,23 @@ export class VideoReplaceFileComponent implements OnInit, OnDestroy {
 
   @ViewChild('reactiveFileInput') reactiveFile: ReactiveFileComponent
   onFileDropped (files: FileList) {
-    if (!files || files.length === 0) return
-
     this.reactiveFile.fileChange({ target: { files } })
+    //this.onFileChanged(files[0])
+  }
+
+  onFileChanged (file: File | Blob) {
+    if (!file) return
+
+    if (!(file instanceof File)) {
+        //console.error('Received unexpected non-File:', file)
+        return
+    }
+
+    // Put the file in the form control to activate the save button
+    this.form.controls.replaceFile.setValue(file)
+    this.form.controls.replaceFile.markAsDirty()
+    this.form.markAsDirty()
+    this.form.updateValueAndValidity()
   }
 
   getVideoExtensions () {
