@@ -1,83 +1,78 @@
-import { AnonymousSettingsPage } from '../po/anonymous-settings.po'
+import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
-import { VideoPublishPage } from '../po/video-publish.po'
-import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import {
+  browserSleep,
+  findEmailTo,
+  getEmailPort,
+  getScreenshotPath,
+  getVerificationLink,
+  go,
+  isMobileDevice,
+  MockSMTPServer,
+  waitServerUp
+} from '../utils'
 
 describe('User settings', () => {
-  let videoPublishPage: VideoPublishPage
   let loginPage: LoginPage
-  let videoWatchPage: VideoWatchPage
   let myAccountPage: MyAccountPage
-  let anonymousSettingsPage: AnonymousSettingsPage
+  let adminConfigPage: AdminConfigPage
+
+  const emails: any[] = []
 
   before(async () => {
     await waitServerUp()
 
     loginPage = new LoginPage(isMobileDevice())
-    videoPublishPage = new VideoPublishPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
     myAccountPage = new MyAccountPage()
-    anonymousSettingsPage = new AnonymousSettingsPage()
+    adminConfigPage = new AdminConfigPage()
+
+    await MockSMTPServer.Instance.collectEmails(await getEmailPort(), emails)
 
     await browser.maximizeWindow()
   })
 
-  describe('P2P', function () {
-    let videoUrl: string
-
-    async function goOnVideoWatchPage () {
-      await go(videoUrl)
-      await videoWatchPage.waitWatchVideoName('video')
-    }
-
-    async function checkP2P (enabled: boolean) {
-      await goOnVideoWatchPage()
-      expect(await videoWatchPage.isPrivacyWarningDisplayed()).toEqual(enabled)
-
-      await videoWatchPage.goOnAssociatedEmbed()
-      expect(await videoWatchPage.isEmbedWarningDisplayed()).toEqual(enabled)
-    }
-
-    before(async () => {
+  describe('Email', function () {
+    before(async function () {
       await loginPage.loginAsRootUser()
-      await videoPublishPage.navigateTo()
-      await videoPublishPage.uploadVideo('video.mp4')
-      await videoPublishPage.validSecondStep('video')
 
-      await videoPublishPage.clickOnWatch()
-      await videoWatchPage.waitWatchVideoName('video')
+      await adminConfigPage.toggleSignup(true)
+      await adminConfigPage.toggleSignupEmailVerification(true)
+      await adminConfigPage.save()
 
-      videoUrl = await browser.getUrl()
+      await browser.refresh()
     })
 
-    beforeEach(async function () {
-      await goOnVideoWatchPage()
-    })
-
-    it('Should have P2P enabled for a logged in user', async function () {
-      await checkP2P(true)
-    })
-
-    it('Should disable P2P for a logged in user', async function () {
+    it('Should ask to change the email', async function () {
       await myAccountPage.navigateToMySettings()
-      await myAccountPage.clickOnP2PCheckbox()
+      await myAccountPage.updateEmail('email2@example.com', loginPage.getRootPassword())
 
-      await checkP2P(false)
+      const pendingEmailBlock = $('.pending-email')
+      await pendingEmailBlock.waitForDisplayed()
+      await expect(pendingEmailBlock).toHaveText(expect.stringContaining('email2@example.com is awaiting email verification'))
+
+      let email: { text: string }
+
+      while (!(email = findEmailTo(emails, 'email2@example.com'))) {
+        await browserSleep(100)
+      }
+
+      await go(getVerificationLink(email))
+
+      const alertBlock = $('.alert-success')
+      await alertBlock.waitForDisplayed()
+      await expect(alertBlock).toHaveText(expect.stringContaining('Email updated'))
+
+      await myAccountPage.navigateToMySettings()
+      const changeEmailBlock = $('.change-email .form-group-description')
+      await changeEmailBlock.waitForDisplayed()
+      await expect(changeEmailBlock).toHaveText(expect.stringContaining('Your current email is email2@example.com'))
     })
+  })
 
-    it('Should have P2P enabled for anonymous users', async function () {
-      await loginPage.logout()
+  after(async () => {
+    MockSMTPServer.Instance.kill()
 
-      await checkP2P(true)
-    })
-
-    it('Should disable P2P for an anonymous user', async function () {
-      await anonymousSettingsPage.openSettings()
-      await anonymousSettingsPage.clickOnP2PCheckbox()
-
-      await checkP2P(false)
-    })
+    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

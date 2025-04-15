@@ -1,9 +1,7 @@
 import { browserSleep, go, isAndroid } from '../utils'
 
 export class LoginPage {
-
   constructor (private isMobileDevice: boolean) {
-
   }
 
   async login (options: {
@@ -51,8 +49,12 @@ export class LoginPage {
     return $('.alert-danger').getText()
   }
 
-  async loginAsRootUser () {
-    return this.login({ username: 'root', password: 'test' + this.getSuffix() })
+  loginAsRootUser () {
+    return this.login({ username: 'root', password: this.getRootPassword() })
+  }
+
+  getRootPassword () {
+    return 'test' + this.getSuffix()
   }
 
   loginOnPeerTube2 () {

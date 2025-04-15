@@ -13,7 +13,9 @@ export class MyAccountPage {
     return $('a[href="/my-library/history/videos"]').click()
   }
 
-  // Settings
+  // ---------------------------------------------------------------------------
+  // My account settings
+  // ---------------------------------------------------------------------------
 
   navigateToMySettings () {
     return $('a[href="/my-account"]').click()
@@ -50,7 +52,24 @@ export class MyAccountPage {
     await submit.click()
   }
 
-  // My account Videos
+  async updateEmail (email: string, password: string) {
+    const emailInput = $('my-account-change-email #new-email')
+    await emailInput.waitForDisplayed()
+    await emailInput.setValue(email)
+
+    const passwordInput = $('my-account-change-email #password')
+    await passwordInput.waitForDisplayed()
+    await passwordInput.setValue(password)
+
+    const submit = $('my-account-change-email input[type=submit]')
+    await submit.waitForClickable()
+    await submit.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
+    await submit.click()
+  }
+
+  // ---------------------------------------------------------------------------
+  // My account videos
+  // ---------------------------------------------------------------------------
 
   async removeVideo (name: string) {
     const container = await this.getVideoRow(name)
@@ -84,7 +103,21 @@ export class MyAccountPage {
     return elements.length
   }
 
+  async getVideoRow (name: string) {
+    let el = $('.name*=' + name)
+
+    await el.waitForDisplayed()
+
+    while (await el.getTagName() !== 'tr') {
+      el = el.parentElement()
+    }
+
+    return el
+  }
+
+  // ---------------------------------------------------------------------------
   // My account playlists
+  // ---------------------------------------------------------------------------
 
   async getPlaylistVideosText (name: string) {
     const elem = await this.getPlaylist(name)
@@ -133,22 +166,6 @@ export class MyAccountPage {
       return (await browser.getUrl()).includes('my-library/video-playlists')
     })
   }
-
-  // My account Videos
-
-  private async getVideoRow (name: string) {
-    let el = $('.name*=' + name)
-
-    await el.waitForDisplayed()
-
-    while (await el.getTagName() !== 'tr') {
-      el = el.parentElement()
-    }
-
-    return el
-  }
-
-  // My account playlists
 
   private async getPlaylist (name: string) {
     const playlist = () => {

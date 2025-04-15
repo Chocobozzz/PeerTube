@@ -81,7 +81,7 @@ function buildConfig (suiteFile: string = undefined) {
     }
   }
 
-  if (filename === 'signup.e2e-spec.ts') {
+  if (filename === 'signup.e2e-spec.ts' || filename === 'user-settings.e2e-spec.ts') {
     return {
       signup: {
         limit: -1

@@ -5,6 +5,7 @@ import { SignupPage } from '../po/signup.po'
 import {
   browserSleep,
   findEmailTo,
+  getEmailPort,
   getScreenshotPath,
   getVerificationLink,
   go,
@@ -236,15 +237,9 @@ describe('Signup', () => {
 
   describe('Email verification enabled', function () {
     const emails: any[] = []
-    let emailPort: number
 
     before(async () => {
-      const key = browser.options.baseUrl + '-emailPort'
-      // FIXME: typings are wrong, get returns a promise
-      // FIXME: use * because the key is not properly escaped by the shared store when using get(key)
-      emailPort = (await (browser.sharedStore.get('*') as unknown as Promise<number>))[key]
-
-      await MockSMTPServer.Instance.collectEmails(emailPort, emails)
+      await MockSMTPServer.Instance.collectEmails(await getEmailPort(), emails)
     })
 
     describe('Direct registration', function () {

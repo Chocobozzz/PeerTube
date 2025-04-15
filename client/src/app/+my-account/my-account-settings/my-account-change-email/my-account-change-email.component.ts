@@ -2,7 +2,8 @@ import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, ServerService, UserService } from '@app/core'
-import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { LOGIN_PASSWORD_VALIDATOR } from '@app/shared/form-validators/login-validators'
+import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -31,7 +32,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       'new-email': USER_EMAIL_VALIDATOR,
-      'password': USER_PASSWORD_VALIDATOR
+      'password': LOGIN_PASSWORD_VALIDATOR
     })
 
     this.user = this.authService.getUser()
