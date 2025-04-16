@@ -60,7 +60,7 @@ storage:
   cache: '../data/cache/'
   plugins: '../data/plugins/'
   well_known: '../data/well-known/'
-  # Overridable client files in client/dist/assets/images :
+  # Overridable client files in client/dist/assets/images:
   # - logo.svg
   # - favicon.png
   # - default-playlist.jpg
@@ -69,7 +69,7 @@ storage:
   # - and icons/*.png (PWA)
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
-  # If not, peertube will fallback to the default fil
+  # If not, peertube will fallback to the default file
   client_overrides: '../data/client-overrides/'
 
 
