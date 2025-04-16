@@ -215,12 +215,7 @@ sudo systemctl enable --now redis
 sudo systemctl enable --now postgresql
 ```
 
-6. Configure the peertube user:
-```sh
-sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
-```
-
-7. Unknown missing steps:
+6. Unknown missing steps:
 - Steps missing here... these were adapted from the CentOS 8 steps which abruptly ended.
 - /var/www/peertube does not exist yet (expected? done in future steps? documentation?).
 - Nothing about Certbot, NGINX, Firewall settings, and etc.
@@ -234,32 +229,23 @@ sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
 dnf upgrade
 ```
 
-2. Add a user with sudoers group access:
-
-```sh
-useradd my-peertube-user
-passwd my-peertube-user
-usermod my-peertube-user -a -G wheel	# Add my-peertube-user to sudoers
-su my-peertube-user
-```
-
-3. (Optional) Install certbot (choose instructions for your distribution):
+2. (Optional) Install certbot (choose instructions for your distribution):
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
 
-4. Install NodeJS 20.x:
+3. Install NodeJS 20.x:
 [https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
-5. Install yarn:
+4. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
 
-6. Enable [RPM Fusion](https://rpmfusion.org) for Fedora (available for x86, x86_64, armhfp)
+5. Enable [RPM Fusion](https://rpmfusion.org) for Fedora (available for x86, x86_64, armhfp)
 
 ```sh
 sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 ```
 This is necessary because `ffmpeg` is not in the Fedora repos.
 
-7. Run:
+6. Run:
 
 ```sh
 sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
@@ -268,7 +254,7 @@ g++ -v # Should be >= 5.x
 redis-server --version # Should be >= 6.x
 ```
 
-8. Configure nginx
+7. Configure nginx
 
 ```sh
 sudo mkdir /etc/nginx/sites-available
@@ -276,7 +262,7 @@ sudo mkdir /etc/nginx/sites-enabled
 sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
 ```
 
-9. Post-installation
+8. Post-installation
 
 _from [PostgreSQL documentation](https://www.postgresql.org/download/linux/redhat/):_
 > Due to policies for Red Hat family distributions, the PostgreSQL installation will not be enabled for automatic start or have the database initialized automatically.
@@ -294,7 +280,7 @@ sudo systemctl enable redis.service
 sudo systemctl start redis.service
 ```
 
-10. Firewall
+9. Firewall
 
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
@@ -395,20 +381,7 @@ sudo ln -s /etc/nginx/sites-enabled/peertube /etc/nginx/conf.d/peertube.conf
 sudo systemctl enable --now nginx
 ```
 
-9. Prepare directory
-
-To add the 'peertube' user, you first have to create the 'www' folder and once the 'peertube' user is added, you have to set the access permissions.
-
-```sh
-sudo mkdir /var/www
-
-sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
-sudo passwd peertube
-
-sudo chmod 755 /var/www/peertube/
-```
-
-10. Firewall
+9. Firewall
 
 By default, you cannot access your server via public IP. To do so, you must configure firewall:
 
@@ -430,7 +403,7 @@ sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --reload
 ```
 
-11. Configure max ports
+10. Configure max ports
 
 This is necessary if you are running dev setup, otherwise you will have errors with `nodemon`
 

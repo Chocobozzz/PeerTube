@@ -34,8 +34,7 @@ ls -ld /var/www/peertube # Should be drwxr-xr-x
 **On FreeBSD**
 
 ```bash
-sudo pw useradd -n peertube -d /var/www/peertube -s /usr/local/bin/bash -m
-sudo passwd peertube
+sudo pw useradd -n peertube -d /var/www/peertube -s /usr/sbin/nologin -m
 ```
 or use `adduser` to create it interactively.
 
