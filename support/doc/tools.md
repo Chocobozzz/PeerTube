@@ -228,7 +228,7 @@ To do so, first create a dedicated user. Here, we are calling it `prunner`, but 
 We are using `/srv/prunner` as his home dir, but you can choose any other path.
 
 ```bash
-useradd -m -d /srv/prunner -s /bin/bash -p prunner prunner
+useradd -m -d /srv/prunner -s /usr/sbin/nologin prunner
 ```
 
 ::: info Note
