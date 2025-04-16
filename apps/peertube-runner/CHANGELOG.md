@@ -1,9 +1,12 @@
 # Changelog
 
+## v0.1.2
+
+  * Support query params in custom upload URL
+
 ## v0.1.1
 
   * Fix adding studio watermark with audio/video split HLS file
-
 
 ## v0.1.0
 
