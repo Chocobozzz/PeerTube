@@ -47,9 +47,7 @@
   <my-video-manage-container
     [canUpdate]="hasUploadedFile()" [canWatch]="hasUploadedFile()"
     (videoUpdated)="onVideoUpdated()" [cancelLink]="getCancelLink()"
+    i18n-uploadedLabel uploadedLabel="File uploaded! Your video is now available in your private library."
   >
-    @if (hasUploadedFile() && !getUploadError()) {
-      <my-alert type="primary" i18n>Congratulations! Your video is now available in your private library.</my-alert>
-    }
   </my-video-manage-container>
 }

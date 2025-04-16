@@ -39,7 +39,6 @@ const debugLogger = debug('peertube:video-publish')
     PreviewUploadComponent,
     ButtonComponent,
     ReactiveFormsModule,
-    AlertComponent,
     VideoManageContainerComponent
   ]
 })
@@ -184,10 +183,6 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
 
   onVideoUpdated () {
     this.notifier.success($localize`Changes saved.`)
-  }
-
-  getUploadError () {
-    return this.manageController.getUploadError()
   }
 
   hasUploadedFile () {

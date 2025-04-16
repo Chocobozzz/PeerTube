@@ -41,6 +41,7 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   readonly canWatch = input.required<boolean, string | boolean>({ transform: booleanAttribute })
   readonly canUpdate = input.required<boolean, string | boolean>({ transform: booleanAttribute })
 
+  readonly uploadedLabel = input<string>()
   readonly cancelLink = input<string>()
 
   readonly videoUpdated = output()

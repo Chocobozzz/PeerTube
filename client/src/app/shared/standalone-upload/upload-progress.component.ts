@@ -15,11 +15,12 @@ export class UploadProgressComponent {
   readonly error = input<string>(undefined)
   readonly uploaded = input<boolean>(undefined)
   readonly enableRetryAfterError = input<boolean>(undefined)
+  readonly uploadedLabel = input<string>()
 
   readonly retry = output()
 
   getUploadingLabel () {
-    if (this.uploaded()) return $localize`File uploaded!`
+    if (this.uploaded()) return this.uploadedLabel() || $localize`File uploaded!`
 
     const uploadPercents = this.uploadPercents()
     if (uploadPercents === 100) return $localize`Processing…`

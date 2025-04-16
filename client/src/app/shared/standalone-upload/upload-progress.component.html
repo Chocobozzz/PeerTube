@@ -10,7 +10,7 @@
       <input type="button" class="peertube-button secondary-button ms-1" i18n-value="Retry failed upload" value="Retry" (click)="retry.emit()" />
     </div>
   } @else {
-    <my-alert type="danger" class="mt-3">
+    <my-alert type="danger">
       <div i18n>Sorry, but something went wrong.</div>
 
       {{ error() }}
