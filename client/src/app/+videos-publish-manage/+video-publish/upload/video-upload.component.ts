@@ -6,7 +6,6 @@ import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/vide
 import { VideoUploadService } from '@app/+videos-publish-manage/shared-manage/common/video-upload.service'
 import { VideoManageController } from '@app/+videos-publish-manage/shared-manage/video-manage-controller.service'
 import { CanComponentDeactivate, CanDeactivateGuard, HooksService, MetaService, Notifier, ServerService } from '@app/core'
-import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import debug from 'debug'

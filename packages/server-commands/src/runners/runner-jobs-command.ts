@@ -36,7 +36,6 @@ import { waitJobs } from '../server/jobs.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class RunnerJobsCommand extends AbstractCommand {
-
   list (options: OverrideCommandOptions & ListRunnerJobsQuery = {}) {
     const path = '/api/v1/runners/jobs'
 
@@ -111,7 +110,7 @@ export class RunnerJobsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  accept <T extends RunnerJobPayload = RunnerJobPayload> (options: OverrideCommandOptions & AcceptRunnerJobBody & { jobUUID: string }) {
+  accept<T extends RunnerJobPayload = RunnerJobPayload> (options: OverrideCommandOptions & AcceptRunnerJobBody & { jobUUID: string }) {
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/accept'
 
     return unwrapBody<AcceptRunnerJobResult<T>>(this.postBodyRequest({
@@ -295,14 +294,16 @@ export class RunnerJobsCommand extends AbstractCommand {
     }
   }
 
-  private async uploadRunnerJobRequest (options: OverrideCommandOptions & {
-    path: string
+  private async uploadRunnerJobRequest (
+    options: OverrideCommandOptions & {
+      path: string
 
-    fields: { [ fieldName: string ]: any }
-    attaches: { [ fieldName: string ]: any }
+      fields: { [fieldName: string]: any }
+      attaches: { [fieldName: string]: any }
 
-    customUploads?: (RunnerJobCustomUpload & { file: string | Blob })[]
-  }) {
+      customUploads?: (RunnerJobCustomUpload & { file: string | Blob })[]
+    }
+  ) {
     for (const customUpload of (options.customUploads || [])) {
       await this.customUpload(customUpload)
     }
@@ -318,15 +319,18 @@ export class RunnerJobsCommand extends AbstractCommand {
   private customUpload (options: RunnerJobCustomUpload & { file: Blob | string }) {
     const parsedUrl = new URL(options.url)
 
-    const reqOptions = {
+    const reqOptions: Parameters<RunnerJobsCommand['postUploadRequest']>[0] = {
       url: parsedUrl.origin,
       path: parsedUrl.pathname,
+      rawQuery: parsedUrl.searchParams.toString(),
       attaches: { file: options.file },
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     }
 
-    if (options.method === 'POST') return this.postUploadRequest(reqOptions)
+    if (options.method === 'POST') {
+      return this.postUploadRequest(reqOptions)
+    }
 
     return this.putUploadRequest(reqOptions)
   }
