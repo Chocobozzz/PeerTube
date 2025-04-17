@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
@@ -13,6 +13,7 @@ import { getReplaceFileUnavailability } from '../common/unavailable-features'
 import { VideoEdit } from '../common/video-edit.model'
 import { VideoUploadService } from '../common/video-upload.service'
 import { VideoManageController } from '../video-manage-controller.service'
+import { DragDropDirective } from '@app/+videos-publish-manage/+video-publish/shared/drag-drop.directive'
 
 const debugLogger = debug('peertube:video-manage')
 
@@ -23,7 +24,8 @@ type Form = {
 @Component({
   selector: 'my-video-replace-file',
   styleUrls: [
-    '../common/video-manage-page-common.scss'
+    '../common/video-manage-page-common.scss',
+    './video-replace-file.component.scss'
   ],
   templateUrl: './video-replace-file.component.html',
   imports: [
@@ -32,7 +34,8 @@ type Form = {
     ReactiveFormsModule,
     ReactiveFileComponent,
     AlertComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    DragDropDirective
   ]
 })
 export class VideoReplaceFileComponent implements OnInit, OnDestroy {
@@ -90,6 +93,28 @@ export class VideoReplaceFileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy (): void {
     this.updatedSub?.unsubscribe()
+  }
+
+  @ViewChild('reactiveFileInput')
+  reactiveFile: ReactiveFileComponent
+  onFileDropped (files: FileList) {
+    this.reactiveFile.fileChange({ target: { files } })
+    // this.onFileChanged(files[0])
+  }
+
+  onFileChanged (file: File | Blob) {
+    if (!file) return
+
+    if (!(file instanceof File)) {
+      // console.error('Received unexpected non-File:', file)
+      return
+    }
+
+    // Put the file in the form control to activate the save button
+    this.form.controls.replaceFile.setValue(file)
+    this.form.controls.replaceFile.markAsDirty()
+    this.form.markAsDirty()
+    this.form.updateValueAndValidity()
   }
 
   getVideoExtensions () {
