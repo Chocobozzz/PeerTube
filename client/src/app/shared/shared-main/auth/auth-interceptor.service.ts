@@ -1,10 +1,12 @@
-import { Observable, of, throwError as observableThrowError } from 'rxjs'
-import { catchError, switchMap } from 'rxjs/operators'
 import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { Injectable, Injector, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService } from '@app/core/auth/auth.service'
+import { getBackendUrl } from '@app/helpers'
 import { HttpStatusCode, OAuth2ErrorCode, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
+import { isSameOrigin } from '@root-helpers/url'
+import { Observable, throwError as observableThrowError, of } from 'rxjs'
+import { catchError, switchMap } from 'rxjs/operators'
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -61,7 +63,11 @@ export class AuthInterceptor implements HttpInterceptor {
   private cloneRequestWithAuth (req: HttpRequest<any>) {
     const authHeaderValue = this.authService.getRequestHeaderValue()
 
-    if (authHeaderValue === null) return req
+    const sameOrigin = req.url.startsWith('/') || isSameOrigin(getBackendUrl(), req.url)
+
+    if (authHeaderValue === null || !sameOrigin) {
+      return req
+    }
 
     // Clone the request to add the new header
     return req.clone({ headers: req.headers.set('Authorization', authHeaderValue) })

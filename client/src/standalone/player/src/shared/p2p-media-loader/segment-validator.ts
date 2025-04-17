@@ -1,9 +1,9 @@
-import type { ByteRange } from 'p2p-media-loader-core'
 import { removeQueryParams } from '@peertube/peertube-core-utils'
 import { logger } from '@root-helpers/logger'
+import { isSameOrigin } from '@root-helpers/url'
 import { wait } from '@root-helpers/utils'
 import debug from 'debug'
-import { isSameOrigin } from '../common'
+import type { ByteRange } from 'p2p-media-loader-core'
 
 const debugLogger = debug('peertube:player:segment-validator')
 
@@ -16,14 +16,16 @@ export class SegmentValidator {
 
   private segmentJSONPromise: Promise<SegmentsJSON>
 
-  constructor (private readonly options: {
-    serverUrl: string
-    segmentsSha256Url: string
-    authorizationHeader: () => string
-    requiresUserAuth: boolean
-    requiresPassword: boolean
-    videoPassword: () => string
-  }) {
+  constructor (
+    private readonly options: {
+      serverUrl: string
+      segmentsSha256Url: string
+      authorizationHeader: () => string
+      requiresUserAuth: boolean
+      requiresPassword: boolean
+      videoPassword: () => string
+    }
+  ) {
   }
 
   async validate (url: string, byteRange: ByteRange | undefined, data: ArrayBuffer, retry = 1): Promise<boolean> {
@@ -93,7 +95,7 @@ export class SegmentValidator {
   }
 
   private fetchSha256Segments (): Promise<SegmentsJSON> {
-    let headers: { [ id: string ]: string } = {}
+    let headers: { [id: string]: string } = {}
 
     if (isSameOrigin(this.options.serverUrl, this.options.segmentsSha256Url)) {
       if (this.options.requiresPassword) headers = { 'x-peertube-video-password': this.options.videoPassword() }

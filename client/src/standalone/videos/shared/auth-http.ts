@@ -1,5 +1,5 @@
 import { HttpStatusCode, OAuth2ErrorCode, OAuth2ErrorCodeType, UserRefreshToken } from '@peertube/peertube-models'
-import { OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
+import { isSameOrigin, OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
 import { peertubeLocalStorage } from '../../../root-helpers/peertube-web-storage'
 
 export class AuthHTTP {
@@ -12,7 +12,7 @@ export class AuthHTTP {
 
   private headers = new Headers()
 
-  constructor () {
+  constructor (private readonly serverUrl: string) {
     this.userOAuthTokens = OAuthUserTokens.getUserTokens(peertubeLocalStorage)
 
     if (this.userOAuthTokens) this.setHeadersFromTokens()
@@ -21,9 +21,11 @@ export class AuthHTTP {
   fetch (url: string, { optionalAuth, method }: { optionalAuth: boolean, method?: string }, videoPassword?: string) {
     let refreshFetchOptions: { headers?: Headers } = {}
 
-    if (videoPassword) this.headers.set('x-peertube-video-password', videoPassword)
+    if (isSameOrigin(this.serverUrl, url)) {
+      if (videoPassword) this.headers.set('x-peertube-video-password', videoPassword)
 
-    if (videoPassword || optionalAuth) refreshFetchOptions = { headers: this.headers }
+      if (videoPassword || optionalAuth) refreshFetchOptions = { headers: this.headers }
+    }
 
     return this.refreshFetch(url.toString(), { ...refreshFetchOptions, method })
   }
@@ -91,11 +93,13 @@ export class AuthHTTP {
             OAuthUserTokens.flushLocalStorage(peertubeLocalStorage)
 
             this.removeTokensFromHeaders()
-          }).then(() => fetch(url, {
-            ...options,
+          }).then(() =>
+            fetch(url, {
+              ...options,
 
-            headers: this.headers
-          }))
+              headers: this.headers
+            })
+          )
       })
   }
 

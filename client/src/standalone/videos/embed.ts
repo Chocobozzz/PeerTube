@@ -60,7 +60,7 @@ export class PeerTubeEmbed {
   constructor (videoWrapperId: string) {
     logger.registerServerSending(getBackendUrl())
 
-    this.http = new AuthHTTP()
+    this.http = new AuthHTTP(getBackendUrl())
 
     this.videoFetcher = new VideoFetcher(this.http)
     this.playlistFetcher = new PlaylistFetcher(this.http)
@@ -220,7 +220,6 @@ export class PeerTubeEmbed {
 
       return this.buildVideoPlayer({ videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay })
     } catch (err) {
-
       if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
       else this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
@@ -296,9 +295,8 @@ export class PeerTubeEmbed {
     await this.peertubePlayer.load(loadOptions)
 
     if (!this.alreadyInitialized) {
-      this.player = this.peertubePlayer.getPlayer();
-
-      (window as any)['videojsPlayer'] = this.player
+      this.player = this.peertubePlayer.getPlayer()
+      ;(window as any)['videojsPlayer'] = this.player
 
       this.buildCSS()
 
@@ -465,7 +463,7 @@ export class PeerTubeEmbed {
 
 PeerTubeEmbed.main()
   .catch(err => {
-    (window as any).displayIncompatibleBrowser()
+    ;(window as any).displayIncompatibleBrowser()
 
     logger.error('Cannot init embed.', err)
   })

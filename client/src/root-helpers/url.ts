@@ -18,3 +18,12 @@ export function objectToUrlEncoded (obj: any) {
 
   return str.join('&')
 }
+
+export function isSameOrigin (current: string, target: string) {
+  const currentUrl = new URL(current)
+  const targetUrl = new URL(target)
+
+  if (currentUrl.hostname === 'localhost' && targetUrl.hostname === 'localhost') return true
+
+  return currentUrl.origin === targetUrl.origin
+}
