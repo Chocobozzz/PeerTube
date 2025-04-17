@@ -1,3 +1,4 @@
+import { isatty } from 'tty'
 import { context, trace } from '@opentelemetry/api'
 import { omit } from '@peertube/peertube-core-utils'
 import { stat } from 'fs/promises'
@@ -7,6 +8,8 @@ import { createLogger, format, transports } from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
+
+const isCompatibleTerminal = isatty && isatty(1) && process.env.TERM && process.env.TERM !== 'dumb'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
@@ -58,6 +61,23 @@ if (CONFIG.LOG.ROTATION.ENABLED) {
 }
 
 function buildLogger (labelSuffix?: string) {
+  let consoleTransport = new transports.Console({
+    handleExceptions: true,
+    format: format.combine(
+      timestampFormatter,
+      format.colorize(),
+      consoleLoggerFormat
+    )
+  })
+  if (!isCompatibleTerminal) {
+    consoleTransport = new transports.Console({
+      handleExceptions: true,
+      format: format.combine(
+        timestampFormatter,
+        consoleLoggerFormat
+      )
+    })
+  }
   return createLogger({
     level: process.env.LOGGER_LEVEL ?? CONFIG.LOG.LEVEL,
     defaultMeta: {
@@ -71,14 +91,7 @@ function buildLogger (labelSuffix?: string) {
     ),
     transports: [
       new transports.File(fileLoggerOptions),
-      new transports.Console({
-        handleExceptions: true,
-        format: format.combine(
-          timestampFormatter,
-          format.colorize(),
-          consoleLoggerFormat
-        )
-      })
+      consoleTransport
     ],
     exitOnError: true
   })
