@@ -3,6 +3,19 @@ type StringBoolean = 'true' | 'false'
 export type EmbedMarkupData = {
   // Video or playlist uuid
   uuid: string
+  responsive?: StringBoolean
+  startAt?: string
+  stopAt?: string
+  subtitle?: string
+  autoplay?: StringBoolean
+  muted?: StringBoolean
+  loop?: StringBoolean
+  title?: StringBoolean
+  p2p?: StringBoolean
+  warningTitle?: StringBoolean
+  controlBar?: StringBoolean
+  peertubeLink?: StringBoolean
+  playlistPosition?: string // number
 }
 
 export type VideoMiniatureMarkupData = {
