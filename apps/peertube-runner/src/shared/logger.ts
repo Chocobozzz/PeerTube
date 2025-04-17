@@ -2,7 +2,7 @@ import { pino } from 'pino'
 import pretty from 'pino-pretty'
 
 const logger = pino(pretty({
-  colorize: true
+  colorize: pretty.isColorSupported
 }))
 
 logger.level = 'info'
