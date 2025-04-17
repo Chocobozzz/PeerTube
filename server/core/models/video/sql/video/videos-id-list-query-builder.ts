@@ -1,11 +1,11 @@
-import { Sequelize, Transaction } from 'sequelize'
-import validator from 'validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { VideoInclude, VideoIncludeType, VideoPrivacy, VideoPrivacyType, VideoState } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { buildSortDirectionAndField } from '@server/models/shared/index.js'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
+import { Sequelize, Transaction } from 'sequelize'
+import validator from 'validator'
 import { AbstractRunQuery } from '../../../shared/abstract-run-query.js'
 import { createSafeIn, parseRowCountResult } from '../../../shared/index.js'
 
@@ -615,7 +615,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     base += ')'
 
     this.and.push(base)
-    this.attributes.push(`COALESCE("trigramSearch"."similarity", 0) as similarity`)
+
+    let attribute = `COALESCE("trigramSearch"."similarity", 0)`
+    if (this.group) attribute = `AVG(${attribute})`
+
+    this.attributes.push(`${attribute} as similarity`)
   }
 
   private whereNotBlacklisted () {
@@ -699,12 +703,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       history: -2 * 50
     }
 
-    this.joins.push('LEFT JOIN "videoComment" ON "video"."id" = "videoComment"."videoId"')
-
     let attribute = `LOG(GREATEST(1, "video"."likes" - 1)) * ${weights.like} ` + // likes (+)
       `+ LOG(GREATEST(1, "video"."dislikes" - 1)) * ${weights.dislike} ` + // dislikes (-)
       `+ LOG("video"."views" + 1) * ${weights.view} ` + // views (+)
-      `+ LOG(GREATEST(1, COUNT(DISTINCT "videoComment"."id"))) * ${weights.comment} ` + // comments (+)
+      `+ LOG(GREATEST(1, "video"."comments")) * ${weights.comment} ` + // comments (+)
       '+ (SELECT (EXTRACT(epoch FROM "video"."publishedAt") - 1446156582) / 47000) ' // base score (in number of half-days)
 
     if (trendingAlgorithm === 'best' && user) {
@@ -713,13 +715,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       )
       this.replacements.bestUser = user.id
 
-      attribute += `+ POWER(COUNT(DISTINCT "userVideoHistory"."id"), 2.0) * ${weights.history} `
+      attribute += `+ POWER(CASE WHEN "userVideoHistory"."id" IS NULL THEN 0 ELSE 1 END, 2.0) * ${weights.history} `
     }
 
     attribute += 'AS "score"'
     this.attributes.push(attribute)
-
-    this.group = 'GROUP BY "video"."id"'
   }
 
   private setSort (sort: string) {

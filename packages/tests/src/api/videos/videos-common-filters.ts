@@ -550,6 +550,22 @@ describe('Test videos filter', function () {
     })
   })
 
+  describe('Check sorts', function () {
+    it('Should correctly sort with a search', async function () {
+      for (
+        const sort of [
+          '-match',
+          'hot',
+          'trending',
+          'best',
+          'localVideoFilesSize'
+        ]
+      ) {
+        await servers[0].videos.listAllForAdmin({ sort, search: 'toto' })
+      }
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

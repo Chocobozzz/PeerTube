@@ -76,28 +76,22 @@ describe('Test videos API validator', function () {
   })
 
   describe('When searching a video', function () {
-    it('Should fail with nothing', async function () {
-      await makeGetRequest({
-        url: server.url,
-        path: join(path, 'search'),
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
-      })
-    })
+    const path = '/api/v1/search/videos'
 
     it('Should fail with a bad start pagination', async function () {
-      await checkBadStartPagination(server.url, join(path, 'search', 'test'))
+      await checkBadStartPagination(server.url, path, undefined, { search: 'test' })
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await checkBadCountPagination(server.url, join(path, 'search', 'test'))
+      await checkBadCountPagination(server.url, path, undefined, { search: 'test' })
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, join(path, 'search', 'test'))
+      await checkBadSortPagination(server.url, path, undefined, { search: 'test' })
     })
 
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: server.url, path, query: { search: 'test' }, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
