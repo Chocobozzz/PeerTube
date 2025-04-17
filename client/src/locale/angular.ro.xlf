@@ -2310,9 +2310,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7507948636555938109" datatype="html">
+      <trans-unit id="7507948636555938109" datatype="html" xml:space="preserve">
         <source>Log out</source>
-        <target state="translated">Dezautentificare</target>
+        <target state="translated">Deconectează-te</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">70</context>
@@ -2390,9 +2390,9 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9d9983bd6d0817a5b1bb7650034a2f9a5f4b7bac" datatype="html">
+      <trans-unit id="9d9983bd6d0817a5b1bb7650034a2f9a5f4b7bac" datatype="html" xml:space="preserve">
         <source>Most liked</source>
-        <target/>
+        <target state="translated">Cele mai apreciate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">121</context>
@@ -7946,49 +7946,49 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="d9fc2b03f04056671d7d4ffcac7197189d959cd6" datatype="html">
+      <trans-unit id="d9fc2b03f04056671d7d4ffcac7197189d959cd6" datatype="html" xml:space="preserve">
         <source>240p</source>
-        <target/>
+        <target state="translated">240p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c8cfad7e7a16c57c42535331b65cb7de40d8402e" datatype="html">
+      <trans-unit id="c8cfad7e7a16c57c42535331b65cb7de40d8402e" datatype="html" xml:space="preserve">
         <source>360p</source>
-        <target/>
+        <target state="translated">360p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="48f0af5a0d0bea4e84b27eaf41b19c85a531c2a5" datatype="html">
+      <trans-unit id="48f0af5a0d0bea4e84b27eaf41b19c85a531c2a5" datatype="html" xml:space="preserve">
         <source>480p</source>
-        <target/>
+        <target state="translated">480p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6f06138daf6363746ff26bfc0cb2491c09cdfdf2" datatype="html">
+      <trans-unit id="6f06138daf6363746ff26bfc0cb2491c09cdfdf2" datatype="html" xml:space="preserve">
         <source>720p</source>
-        <target/>
+        <target state="translated">720p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="65c94f9beb6fe957808c40060da280cc7ace7ab9" datatype="html">
+      <trans-unit id="65c94f9beb6fe957808c40060da280cc7ace7ab9" datatype="html" xml:space="preserve">
         <source>1080p</source>
-        <target/>
+        <target state="translated">1080p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2303f8783df836e13c208710dc029a1d34b6a77a" datatype="html">
+      <trans-unit id="2303f8783df836e13c208710dc029a1d34b6a77a" datatype="html" xml:space="preserve">
         <source>2160p</source>
-        <target/>
+        <target state="translated">2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
