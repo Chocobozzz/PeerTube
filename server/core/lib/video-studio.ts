@@ -4,14 +4,13 @@ import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } fr
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MUser, MVideoFile, MVideoFullLight, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
-import { createTranscriptionTaskIfNeeded } from './video-captions.js'
+import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
 import { buildStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
@@ -112,7 +111,6 @@ export async function onVideoStudioEnded (options: {
 
   await JobQueue.Instance.createSequentialJobFlow(
     buildStoryboardJobIfNeeded({ video, federate: false }),
-
     {
       type: 'federate-video' as 'federate-video',
       payload: {
@@ -120,7 +118,6 @@ export async function onVideoStudioEnded (options: {
         isNewVideoForFederation: false
       }
     },
-
     {
       type: 'transcoding-job-builder' as 'transcoding-job-builder',
       payload: {
@@ -132,13 +129,7 @@ export async function onVideoStudioEnded (options: {
     }
   )
 
-  if (video.language && CONFIG.VIDEO_TRANSCRIPTION.ENABLED) {
-    const caption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, video.language)
-
-    if (caption?.automaticallyGenerated) {
-      await createTranscriptionTaskIfNeeded(video)
-    }
-  }
+  await regenerateTranscriptionTaskIfNeeded(video)
 }
 
 // ---------------------------------------------------------------------------

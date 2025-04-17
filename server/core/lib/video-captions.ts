@@ -101,6 +101,16 @@ export async function updateHLSMasterOnCaptionChange (video: MVideo, hls: MStrea
 
 // ---------------------------------------------------------------------------
 
+export async function regenerateTranscriptionTaskIfNeeded (video: MVideo) {
+  if (video.language && CONFIG.VIDEO_TRANSCRIPTION.ENABLED) {
+    const caption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, video.language)
+
+    if (caption?.automaticallyGenerated) {
+      await createTranscriptionTaskIfNeeded(video)
+    }
+  }
+}
+
 export async function createTranscriptionTaskIfNeeded (video: MVideoUUID & MVideoUrl) {
   if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED !== true) return
 

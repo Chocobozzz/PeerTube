@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import {
   AuthService,
   MarkdownService,

@@ -30,8 +30,7 @@ describe('Test videos files', function () {
     await servers[0].config.enableTranscoding({ hls: true, webVideo: true, resolutions: 'max' })
   })
 
-  function runTests (objectStorage?: ObjectStorageCommand) {
-
+  function runTests () {
     describe('When deleting all files', function () {
       let validId1: string
       let validId2: string
@@ -222,7 +221,7 @@ describe('Test videos files', function () {
 
     const objectStorage = new ObjectStorageCommand()
 
-    runTests(objectStorage)
+    runTests()
   })
 
   after(async function () {

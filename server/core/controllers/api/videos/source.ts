@@ -6,6 +6,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
+import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
 import { buildNewFile, createVideoSource } from '@server/lib/video-file.js'
 import { buildMoveVideoJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -198,7 +199,9 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
     })
   }
 
-  return JobQueue.Instance.createSequentialJobFlow(...jobs)
+  await JobQueue.Instance.createSequentialJobFlow(...jobs)
+
+  await regenerateTranscriptionTaskIfNeeded(video)
 }
 
 async function removeOldFiles (options: {

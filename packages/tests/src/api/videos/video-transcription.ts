@@ -205,7 +205,7 @@ describe('Test video transcription', function () {
         tasks: [
           {
             name: 'cut' as 'cut',
-            options: { start: 1 }
+            options: { start: 10 }
           }
         ]
       })
@@ -231,11 +231,45 @@ describe('Test video transcription', function () {
         tasks: [
           {
             name: 'cut' as 'cut',
-            options: { start: 1 }
+            options: { start: 10 }
           }
         ]
       })
 
+      await waitJobs(servers)
+
+      const newContent = await getCaptionContent(servers[0], uuid, 'en')
+      expect(oldContent).to.equal(newContent)
+    })
+
+    it('Should run transcription after a video replacement', async function () {
+      this.timeout(120000)
+
+      await servers[0].config.enableFileUpdate()
+
+      const uuid = await uploadForTranscription(servers[0])
+      await waitJobs(servers)
+
+      await checkAutoCaption({ servers, uuid })
+      const oldContent = await getCaptionContent(servers[0], uuid, 'en')
+
+      await servers[0].videos.replaceSourceFile({ videoId: uuid, fixture: 'video_short_360p.mp4' })
+      await waitJobs(servers)
+
+      const newContent = await getCaptionContent(servers[0], uuid, 'en')
+      expect(oldContent).to.not.equal(newContent)
+    })
+
+    it('Should not run transcription after video replacement if the subtitle has not been auto generated', async function () {
+      this.timeout(120000)
+
+      const uuid = await uploadForTranscription(servers[0], { language: 'en' })
+      await waitJobs(servers)
+
+      await servers[0].captions.add({ language: 'en', videoId: uuid, fixture: 'subtitle-good1.vtt' })
+      const oldContent = await getCaptionContent(servers[0], uuid, 'en')
+
+      await servers[0].videos.replaceSourceFile({ videoId: uuid, fixture: 'video_short_360p.mp4' })
       await waitJobs(servers)
 
       const newContent = await getCaptionContent(servers[0], uuid, 'en')
