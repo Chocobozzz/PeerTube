@@ -5,7 +5,6 @@
       <my-button
         theme="secondary" [icon]="quickFilter.iconName" class="me-2 mb-2"
         ptRouterLink="." [ptQueryParams]="quickFilter.filters" [active]="quickFilter.isActive()" ptQueryParamsHandling="merge"
-        (click)="onQuickFilter($event, quickFilter)"
         >{{ quickFilter.label }} </my-button>
     }
   </div>

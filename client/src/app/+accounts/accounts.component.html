@@ -73,6 +73,7 @@
 
     <my-simple-search-input
       class="ms-auto"
+      [initialValue]="search"
       [alwaysShow]="!isInSmallView()" (searchChanged)="searchChanged($event)"
       (inputDisplayChanged)="onSearchInputDisplayChanged($event)" name="search-videos"
       i18n-iconTitle icon-title="Search account videos"

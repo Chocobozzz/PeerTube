@@ -9,9 +9,12 @@ import {
   VideoSortField
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import debug from 'debug'
+
+const debugLogger = debug('peertube:videos:VideoFilters')
 
 type VideoFiltersKeys = {
-  [ id in keyof AttributesOnly<VideoFilters> ]: any
+  [id in keyof AttributesOnly<VideoFilters>]: any
 }
 
 export type VideoFilterScope = 'local' | 'federated'
@@ -55,6 +58,8 @@ export class VideoFilters {
   private onChangeCallbacks: (() => void)[] = []
   private oldFormObjectString: string
 
+  private customizedByUser = false
+
   private readonly hiddenFields: string[] = []
 
   constructor (defaultSort: string, defaultScope: VideoFilterScope, hiddenFields: string[] = []) {
@@ -63,7 +68,7 @@ export class VideoFilters {
 
     this.hiddenFields = hiddenFields
 
-    this.reset()
+    this.reset(undefined, false)
   }
 
   // ---------------------------------------------------------------------------
@@ -72,10 +77,17 @@ export class VideoFilters {
     this.onChangeCallbacks.push(cb)
   }
 
-  triggerChange () {
+  private triggerChange () {
+    if (this.onChangeCallbacks.length === 0) return
+
     // Don't run on change if the values did not change
     const currentFormObjectString = JSON.stringify(this.toFormObject())
-    if (this.oldFormObjectString && currentFormObjectString === this.oldFormObjectString) return
+
+    const noChanges = !!this.oldFormObjectString && currentFormObjectString === this.oldFormObjectString
+
+    debugLogger('Checking if we need to trigger change', { changes: !noChanges })
+
+    if (noChanges) return
 
     this.oldFormObjectString = currentFormObjectString
 
@@ -95,24 +107,40 @@ export class VideoFilters {
   }
 
   setNSFWPolicy (nsfwPolicy: NSFWPolicyType) {
-    this.updateDefaultNSFW(nsfwPolicy)
+    const nsfw = nsfwPolicy === 'do_not_list'
+      ? 'false'
+      : 'both'
+
+    this.defaultValues.set('nsfw', nsfw)
+    this.defaultNSFWPolicy = nsfwPolicy
+
+    return nsfw
   }
 
   // ---------------------------------------------------------------------------
 
-  reset (specificKey?: string) {
+  reset (specificKey?: string, triggerChange = true) {
+    debugLogger('Reset video filters', { specificKey, stack: new Error().stack })
+
     for (const [ key, value ] of this.defaultValues) {
       if (specificKey && specificKey !== key) continue
-
-      (this as any)[key] = value
+      ;(this as any)[key] = value
     }
 
     this.buildActiveFilters()
+
+    if (triggerChange) {
+      this.triggerChange()
+    }
   }
 
   // ---------------------------------------------------------------------------
 
-  load (obj: Partial<AttributesOnly<VideoFilters>>) {
+  load (obj: Partial<AttributesOnly<VideoFilters>>, customizedByUser?: boolean) {
+    debugLogger('Loading object in video filters', { obj, customizedByUser })
+
+    if (customizedByUser) this.customizedByUser = customizedByUser
+
     if (obj.sort !== undefined) this.sort = obj.sort
 
     if (obj.nsfw !== undefined) this.nsfw = obj.nsfw
@@ -128,20 +156,29 @@ export class VideoFilters {
     if (obj.search !== undefined) this.search = obj.search
 
     this.buildActiveFilters()
+    this.triggerChange()
   }
 
   clone () {
+    debugLogger('Cloning video filters', { videoFilters: this })
+
     const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
     cloned.setNSFWPolicy(this.defaultNSFWPolicy)
 
-    cloned.load(this.toUrlObject())
+    cloned.load(this.toUrlObject(), this.customizedByUser)
 
     return cloned
   }
 
   // ---------------------------------------------------------------------------
 
-  buildActiveFilters () {
+  hasBeenCustomizedByUser () {
+    return this.customizedByUser
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private buildActiveFilters () {
     this.activeFilters = []
 
     this.activeFilters.push({
@@ -203,7 +240,7 @@ export class VideoFilters {
     }
 
     this.activeFilters = this.activeFilters
-                             .filter(a => this.hiddenFields.includes(a.key) === false)
+      .filter(a => this.hiddenFields.includes(a.key) === false)
   }
 
   getActiveFilters () {
@@ -223,7 +260,7 @@ export class VideoFilters {
   }
 
   toUrlObject () {
-    const result: { [ id: string ]: any } = {}
+    const result: { [id: string]: any } = {}
 
     for (const [ key, defaultValue ] of this.defaultValues) {
       if (this[key] !== defaultValue) {
@@ -278,16 +315,5 @@ export class VideoFilters {
     if (this.defaultNSFWPolicy === 'blur') return $localize`blurred`
 
     return $localize`displayed`
-  }
-
-  private updateDefaultNSFW (nsfwPolicy: NSFWPolicyType) {
-    const nsfw = nsfwPolicy === 'do_not_list'
-      ? 'false'
-      : 'both'
-
-    this.defaultValues.set('nsfw', nsfw)
-    this.defaultNSFWPolicy = nsfwPolicy
-
-    this.reset('nsfw')
   }
 }

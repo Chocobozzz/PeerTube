@@ -17,7 +17,6 @@ import {
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
 import { expect } from 'chai'
-import { join } from 'path'
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'

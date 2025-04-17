@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common'
-import { Component, OnInit, inject, input, output } from '@angular/core'
+import { Component, OnInit, inject, input } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { AuthService, RedirectService } from '@app/core'
@@ -61,8 +61,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
   readonly displayModerationBlock = input(false)
   readonly hideScope = input(false)
 
-  readonly filtersChanged = output()
-
   areFiltersCollapsed = true
 
   form: FormGroup
@@ -98,10 +96,9 @@ export class VideoFiltersHeaderComponent implements OnInit {
     })
 
     this.form.valueChanges.subscribe(values => {
-      debugLogger('Loading values from form: %O', values)
+      debugLogger('Loading values from form', { values })
 
-      this.filters().load(values)
-      this.filtersChanged.emit()
+      this.filters().load(values, true)
     })
 
     this.serverService.getVideoCategories()
@@ -130,13 +127,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
   }
 
   // ---------------------------------------------------------------------------
-
-  onQuickFilter (e: Event, quickFilter: QuickFilter) {
-    e.preventDefault()
-
-    this.filters().load(quickFilter.filters)
-    this.filtersChanged.emit()
-  }
 
   private buildQuickFilters () {
     const trendingSort = this.redirectService.getDefaultTrendingSort()
@@ -225,6 +215,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
     const defaultValues = this.filters().toFormObject()
     this.form.patchValue(defaultValues, { emitEvent })
 
-    debugLogger('Patched form: %O', defaultValues)
+    debugLogger('Patch form', { values: defaultValues })
   }
 }

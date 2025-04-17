@@ -5,7 +5,6 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
-import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { Video, VideoSortField } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
@@ -27,16 +26,6 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
   defaultSort = '-publishedAt' as VideoSortField
-
-  displayOptions: MiniatureDisplayOptions = {
-    date: true,
-    views: true,
-    by: false,
-    avatar: false,
-    privacyLabel: true,
-    privacyText: false,
-    blacklistInfo: false
-  }
 
   videoChannel: VideoChannel
   disabled = false

@@ -155,11 +155,11 @@ export class VideoService {
   }
 
   getAccountVideos (
-    parameters: CommonVideoParams & {
+    options: CommonVideoParams & {
       account: Pick<Account, 'nameWithHost'>
     }
   ): Observable<ResultList<Video>> {
-    const { account } = parameters
+    const { account, ...parameters } = options
 
     let params = new HttpParams()
     params = this.buildCommonVideosParams({ params, ...parameters })

@@ -1,7 +1,17 @@
-import { NgClass, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
-import { AuthService, MarkdownService, MetaService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
+import {
+  AuthService,
+  MarkdownService,
+  MetaService,
+  Notifier,
+  PeerTubeRouterService,
+  RedirectService,
+  RestExtractor,
+  ScreenService,
+  UserService
+} from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
@@ -26,13 +36,12 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
   templateUrl: './accounts.component.html',
   styleUrls: [ './accounts.component.scss' ],
   imports: [
-    NgIf,
+    CommonModule,
     ActorAvatarComponent,
     UserModerationDropdownComponent,
     NgbTooltip,
     AccountBlockBadgesComponent,
     CopyButtonComponent,
-    NgClass,
     RouterLink,
     SubscribeButtonComponent,
     RouterLinkActive,
@@ -45,7 +54,6 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
 })
 export class AccountsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute)
-  private router = inject(Router)
   private userService = inject(UserService)
   private accountService = inject(AccountService)
   private videoChannelService = inject(VideoChannelService)
@@ -58,11 +66,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
   private blocklist = inject(BlocklistService)
   private screenService = inject(ScreenService)
   private metaService = inject(MetaService)
+  private peertubeRouter = inject(PeerTubeRouterService)
 
   readonly accountReportModal = viewChild<AccountReportComponent>('accountReportModal')
 
   account: Account
   accountUser: User
+
+  search = ''
 
   videoChannels: VideoChannel[] = []
 
@@ -104,6 +115,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
       { label: $localize`Channels`, routerLink: 'video-channels' },
       { label: $localize`Videos`, routerLink: 'videos' }
     ]
+
+    this.search = this.route.snapshot.queryParams['search'] || ''
   }
 
   ngOnDestroy () {
@@ -148,7 +161,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   searchChanged (search: string) {
     const queryParams = { search }
 
-    this.router.navigate([ './videos' ], { queryParams, relativeTo: this.route, queryParamsHandling: 'merge' })
+    this.peertubeRouter.silentNavigate([ './videos' ], queryParams, this.route)
   }
 
   onSearchInputDisplayChanged (displayed: boolean) {

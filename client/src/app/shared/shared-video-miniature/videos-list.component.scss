@@ -6,6 +6,11 @@
 // Cannot set margin top to videos-header because of the main header fixed position
 $margin-top: 2rem;
 
+.videos {
+  // Prevent scroll when reloading videos
+  min-height: 50vh;
+}
+
 .videos-header {
   display: grid;
   grid-template-columns: auto 1fr auto;

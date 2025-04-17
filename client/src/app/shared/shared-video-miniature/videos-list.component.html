@@ -11,8 +11,7 @@
 
   <my-video-filters-header
     *ngIf="displayFilters()" class="d-block"
-    [displayModerationBlock]="builtDisplayModerationBlock" [hideScope]="hideScopeFilter()" [filters]="filters"
-    (filtersChanged)="onFiltersChanged(true)"
+    [displayModerationBlock]="displayModerationBlock" [hideScope]="hideScopeFilter()" [filters]="filters"
   ></my-video-filters-header>
 
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0 && highlightedLives.length === 0">No results.</div>
@@ -30,8 +29,8 @@
       <ng-container *ngFor="let live of highlightedLives; trackBy: videoById;">
         <div class="video-wrapper">
           <my-video-miniature
-            [video]="live" [user]="userMiniature" [displayAsRow]="displayAsRow()"
-            [displayVideoActions]="displayVideoActions()" [displayOptions]="builtDisplayOptions"
+            [video]="live" [user]="user" [displayAsRow]="displayAsRow()"
+            [displayVideoActions]="displayVideoActions()" [displayOptions]="displayOptions"
             (videoBlocked)="removeVideoFromArray(live)" (videoRemoved)="removeVideoFromArray(live)"
           >
           </my-video-miniature>
@@ -50,8 +49,8 @@
 
       <div class="video-wrapper">
         <my-video-miniature
-          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow()"
-          [displayVideoActions]="displayVideoActions()" [displayOptions]="builtDisplayOptions"
+          [video]="video" [user]="user" [displayAsRow]="displayAsRow()"
+          [displayVideoActions]="displayVideoActions()" [displayOptions]="displayOptions"
           (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
         >
         </my-video-miniature>
