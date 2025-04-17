@@ -126,11 +126,12 @@ export class CustomMarkupService {
       autoplay: this.buildBoolean(data.autoplay) ?? false,
       muted: this.buildBoolean(data.muted) ?? false,
       loop: this.buildBoolean(data.loop) ?? false,
-      title: this.buildBoolean(data.displayTitle) ?? true,
+      title: this.buildBoolean(data.title) ?? true,
       p2p: this.buildBoolean(data.p2p) ?? true,
-      warningTitle: this.buildBoolean(data.privacyWarning) ?? true,
-      controlBar: this.buildBoolean(data.playerControl) ?? true,
-      peertubeLink: this.buildBoolean(data.peertubeLink) ?? true
+      warningTitle: this.buildBoolean(data.warningTitle) ?? true,
+      controlBar: this.buildBoolean(data.controlBar) ?? true,
+      peertubeLink: this.buildBoolean(data.peertubeLink) ?? true,
+      playlistPosition: this.buildNumber(data.playlistPosition) ?? 1
     })
 
     return { component, loadedPromise }

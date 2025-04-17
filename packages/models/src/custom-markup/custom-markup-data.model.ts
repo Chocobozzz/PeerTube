@@ -15,6 +15,7 @@ export type EmbedMarkupData = {
   warningTitle?: StringBoolean
   controlBar?: StringBoolean
   peertubeLink?: StringBoolean
+  playlistPosition?: string // number
 }
 
 export type VideoMiniatureMarkupData = {
