@@ -24,6 +24,7 @@ type Form = {
 @Component({
   selector: 'my-video-replace-file',
   styleUrls: [
+    '../common/video-manage-page-common.scss',
     './video-replace-file.component.scss'
   ],
   templateUrl: './video-replace-file.component.html',
@@ -94,7 +95,8 @@ export class VideoReplaceFileComponent implements OnInit, OnDestroy {
     this.updatedSub?.unsubscribe()
   }
 
-  @ViewChild('reactiveFileInput') reactiveFile: ReactiveFileComponent
+  @ViewChild('reactiveFileInput')
+  reactiveFile: ReactiveFileComponent
   onFileDropped (files: FileList) {
     this.reactiveFile.fileChange({ target: { files } })
     // this.onFileChanged(files[0])
