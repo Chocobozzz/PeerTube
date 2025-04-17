@@ -442,6 +442,10 @@ const CONFIG = {
     }
   },
   USER: {
+    LOGIN: {
+      get MINIMUM_PASSWORD_LENGTH () { return config.get<number>('user.login.mininum_password_length') },
+      get MAXIMUM_PASSWORD_LENGTH () { return config.get<number>('user.login.maximum_password_length') }
+    },
     HISTORY: {
       VIDEOS: {
         get ENABLED () { return config.get<boolean>('user.history.videos.enabled') }
