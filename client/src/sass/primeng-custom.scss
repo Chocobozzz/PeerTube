@@ -912,6 +912,8 @@ p-table {
     my-delete-button,
     my-button {
       display: inline-block !important;
+      max-width: 100%;
+
       @include margin-left(5px);
 
       &:first-child {
