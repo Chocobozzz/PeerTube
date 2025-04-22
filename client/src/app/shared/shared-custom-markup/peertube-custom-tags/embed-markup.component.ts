@@ -1,7 +1,13 @@
-import { environment } from 'src/environments/environment'
 import { Component, ElementRef, OnInit, inject, input } from '@angular/core'
+import {
+  buildPlaylistEmbedLink,
+  buildVideoEmbedLink,
+  decoratePlaylistLink,
+  decorateVideoLink,
+  timeToInt
+} from '@peertube/peertube-core-utils'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { buildPlaylistEmbedLink, buildVideoEmbedLink, decorateVideoLink, decoratePlaylistLink, timeToInt } from '@peertube/peertube-core-utils'
+import { environment } from 'src/environments/environment'
 import { CustomMarkupComponent } from './shared'
 
 @Component({
@@ -31,35 +37,42 @@ export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
   loaded: undefined
 
   ngOnInit () {
-      let link;
-      if (this.type() === 'video') {
-        const startTime = this.startAt() ? timeToInt(this.startAt()) : undefined
-        const stopTime = this.stopAt() ? timeToInt(this.stopAt()) : undefined
-        link = decorateVideoLink({
-            url: buildVideoEmbedLink({ uuid: this.uuid() }, environment.originServerUrl),
-            startTime,
-            stopTime,
-            subtitle: this.subtitle(),
-            loop: this.loop(),
-            autoplay: this.autoplay(),
-            muted: this.muted(),
-            title: this.title(),
-            warningTitle: this.warningTitle(),
-            controlBar: this.controlBar(),
-            peertubeLink: this.peertubeLink(),
-            p2p: this.p2p()
-        })
-    } else {
-        link = decoratePlaylistLink({
-            url: buildPlaylistEmbedLink({ uuid: this.uuid() }, environment.originServerUrl),
-            playlistPosition: this.playlistPosition()
-        })
-    }
-
-    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ 
-      embedUrl: link, 
+    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({
+      embedUrl: this.buildLink(),
       embedTitle: this.uuid(),
       responsive: this.responsive() ?? false
+    })
+  }
+
+  private buildLink () {
+    if (this.type() === 'playlist') {
+      return decoratePlaylistLink({
+        url: buildPlaylistEmbedLink({ uuid: this.uuid() }, environment.originServerUrl),
+        playlistPosition: this.playlistPosition()
+      })
+    }
+
+    const startTime = this.startAt()
+      ? timeToInt(this.startAt())
+      : undefined
+
+    const stopTime = this.stopAt()
+      ? timeToInt(this.stopAt())
+      : undefined
+
+    return decorateVideoLink({
+      url: buildVideoEmbedLink({ uuid: this.uuid() }, environment.originServerUrl),
+      startTime,
+      stopTime,
+      subtitle: this.subtitle(),
+      loop: this.loop(),
+      autoplay: this.autoplay(),
+      muted: this.muted(),
+      title: this.title(),
+      warningTitle: this.warningTitle(),
+      controlBar: this.controlBar(),
+      peertubeLink: this.peertubeLink(),
+      p2p: this.p2p()
     })
   }
 }
