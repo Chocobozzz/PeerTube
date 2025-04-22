@@ -1,6 +1,11 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+td {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
 my-embed {
   display: block;
   max-width: 500px;
