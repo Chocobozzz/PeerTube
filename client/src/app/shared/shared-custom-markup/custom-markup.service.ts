@@ -116,7 +116,23 @@ export class CustomMarkupService {
     const data = el.dataset as EmbedMarkupData
     const { component, loadedPromise } = this.dynamicElementService.createElement(EmbedMarkupComponent)
 
-    this.dynamicElementService.setModel(component, { uuid: data.uuid, type })
+    this.dynamicElementService.setModel(component, {
+      uuid: data.uuid,
+      type,
+      responsive: this.buildBoolean(data.responsive),
+      startAt: data.startAt,
+      stopAt: data.stopAt,
+      subtitle: data.subtitle,
+      autoplay: this.buildBoolean(data.autoplay),
+      muted: this.buildBoolean(data.muted),
+      loop: this.buildBoolean(data.loop),
+      title: this.buildBoolean(data.title),
+      p2p: this.buildBoolean(data.p2p),
+      warningTitle: this.buildBoolean(data.warningTitle),
+      controlBar: this.buildBoolean(data.controlBar),
+      peertubeLink: this.buildBoolean(data.peertubeLink),
+      playlistPosition: this.buildNumber(data.playlistPosition)
+    })
 
     return { component, loadedPromise }
   }
