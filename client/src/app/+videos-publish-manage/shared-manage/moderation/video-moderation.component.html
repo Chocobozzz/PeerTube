@@ -9,27 +9,54 @@
   <div class="form-columns">
     <div>
       <div class="form-group">
-        <label i18n for="commentsPolicy">Comments policy</label>
-
-        <div class="form-group-description" i18n>
-          You can require comments to be approved depending on <a routerLink="/my-account/auto-tag-policies" target="_blank">your auto-tags policies</a>
-        </div>
-
-        <my-select-options inputId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy"></my-select-options>
-
-        <div *ngIf="formErrors.commentsPolicy" class="form-error" role="alert">
-          {{ formErrors.commentsPolicy }}
-        </div>
+        <my-select-radio
+          i18n-label label="Comments policy"
+          [items]="commentPolicies"
+          inputId="commentsPolicy"
+          formControlName="commentsPolicy"
+        >
+          <div class="form-group-description" i18n>
+            You can require comments to be approved depending on <a routerLink="/my-account/auto-tag-policies" target="_blank">your auto-tags policies</a>
+          </div>
+        </my-select-radio>
       </div>
 
-      <my-peertube-checkbox inputName="nsfw" formControlName="nsfw" helpPlacement="bottom-right">
+      <my-peertube-checkbox inputName="nsfw" formControlName="nsfw">
         <ng-template ptTemplate="label">
-          <ng-container i18n>Contains sensitive content</ng-container>
+          <ng-container i18n>Your video contains sensitive content</ng-container>
         </ng-template>
 
-        <ng-template ptTemplate="help">
+        <ng-container ngProjectAs="description">
           <ng-container i18n>Some instances hide videos containing mature or explicit content by default.</ng-container>
-        </ng-template>
+        </ng-container>
+
+        <ng-container ngProjectAs="extra">
+          <my-peertube-checkbox inputName="nsfwFlagViolent" formControlName="nsfwFlagViolent">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Some images may be violent</ng-container>
+            </ng-template>
+          </my-peertube-checkbox>
+
+          <my-peertube-checkbox inputName="nsfwFlagShocking" formControlName="nsfwFlagShocking">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Parts of the video may shock or disturb</ng-container>
+            </ng-template>
+          </my-peertube-checkbox>
+
+          <my-peertube-checkbox inputName="nsfwFlagSex" formControlName="nsfwFlagSex">
+            <ng-template ptTemplate="label">
+              <ng-container i18n>Content may be perceived as sexually explicit material</ng-container>
+            </ng-template>
+          </my-peertube-checkbox>
+
+          <div class="form-group">
+            <label i18n for="nsfwSummary">Describe what makes your content sensitive</label>
+            <input type="text" id="nsfwSummary" class="form-control" formControlName="nsfwSummary" [ngClass]="{ 'input-error': formErrors.nsfwSummary }" />
+
+            <div *ngIf="formErrors.nsfwSummary" class="form-error" role="alert">{{ formErrors.nsfwSummary }}</div>
+          </div>
+       </ng-container>
+
       </my-peertube-checkbox>
     </div>
   </div>

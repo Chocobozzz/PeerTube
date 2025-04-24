@@ -52,7 +52,7 @@ export class VideoPublishPage extends VideoManage {
     await submit.click()
 
     // Wait for the import to finish
-    await this.getSaveButton().waitForClickable()
+    await this.getSaveButton().waitForClickable({ timeout: 15000 }) // Can be slow
   }
 
   async publishLive () {
@@ -71,6 +71,7 @@ export class VideoPublishPage extends VideoManage {
     await this.goOnPage('Main information')
 
     const nameInput = $('input#name')
+    await nameInput.scrollIntoView()
     await nameInput.clearValue()
     await nameInput.setValue(videoName)
 

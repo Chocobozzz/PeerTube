@@ -49,6 +49,7 @@ import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
 } from '../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-badge.component'
 import { VideoPrivacyBadgeComponent } from '../../shared/shared-video/video-privacy-badge.component'
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
@@ -95,7 +96,8 @@ type QueryParams = {
     ChannelToggleComponent,
     AutoColspanDirective,
     SelectCheckboxComponent,
-    PTDatePipe
+    PTDatePipe,
+    VideoNSFWBadgeComponent
   ]
 })
 export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDestroy {

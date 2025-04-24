@@ -68,6 +68,8 @@ import { peertubeTruncate } from '../../helpers/core-utils.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { isArray, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
 import {
+  isNSFWFlagsValid,
+  isNSFWSummaryValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
@@ -468,6 +470,18 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Is('VideoNSFW', value => throwIfNotValid(value, isBooleanValid, 'NSFW boolean'))
   @Column
   nsfw: boolean
+
+  @AllowNull(false)
+  @Default(0)
+  @Is('VideoNSFWFlags', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
+  @Column
+  nsfwFlags: number // NSFWFlagType
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoNSFWSummary', value => throwIfNotValid(value, isNSFWSummaryValid, 'NSFW summary'))
+  @Column
+  nsfwSummary: string
 
   @AllowNull(true)
   @Default(null)
@@ -1044,6 +1058,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     sort: string
 
     nsfw: boolean
+    nsfwFlagsIncluded?: number
+    nsfwFlagsExcluded?: number
+
     isLive?: boolean
     isLocal?: boolean
     include?: VideoIncludeType
@@ -1104,6 +1121,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'count',
         'sort',
         'nsfw',
+        'nsfwFlagsIncluded',
+        'nsfwFlagsExcluded',
         'isLive',
         'categoryOneOf',
         'licenceOneOf',
@@ -1143,6 +1162,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     sort: string
 
     nsfw?: boolean
+    nsfwFlagsIncluded?: number
+    nsfwFlagsExcluded?: number
+
     isLive?: boolean
     isLocal?: boolean
     include?: VideoIncludeType
@@ -1189,6 +1211,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       ...pick(options, [
         'include',
         'nsfw',
+        'nsfwFlagsIncluded',
+        'nsfwFlagsExcluded',
         'isLive',
         'categoryOneOf',
         'licenceOneOf',

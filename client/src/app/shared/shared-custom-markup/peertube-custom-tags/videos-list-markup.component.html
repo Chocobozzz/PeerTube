@@ -3,7 +3,7 @@
 
     <div class="video-wrapper" *ngFor="let video of videos">
       <my-video-miniature
-        [video]="video" [user]="getUser()" [displayAsRow]="false"
+        [video]="video" [user]="user" [displayAsRow]="false"
         [displayVideoActions]="true" [displayOptions]="displayOptions"
       >
       </my-video-miniature>

@@ -35,9 +35,7 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
     views: true,
     by: true,
     avatar: true,
-    privacyLabel: false,
-    privacyText: false,
-    blacklistInfo: false
+    privacyLabel: false
   }
 
   ngOnInit () {

@@ -786,24 +786,27 @@ paths:
       operationId: getAccountVideos
       parameters:
         - $ref: '#/components/parameters/name'
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/host'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/privacyOneOf'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/skipCount'
+        # Common video filter parameters
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
       responses:
@@ -2226,27 +2229,30 @@ paths:
         - My User
         - Videos
       parameters:
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/host'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/privacyOneOf'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/skipCount'
+        - $ref: '#/components/parameters/channelNameOneOf'
+        # Common video filter parameters
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/channelNameOneOf'
       responses:
         '200':
           description: successful operation
@@ -2329,24 +2335,27 @@ paths:
         - My Subscriptions
         - Videos
       parameters:
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/host'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/privacyOneOf'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/skipCount'
+        # Common video filter parameters
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
       responses:
@@ -2904,24 +2913,27 @@ paths:
       tags:
         - Video
       parameters:
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/host'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/privacyOneOf'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/skipCount'
+        # Common video filter parameters
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
       responses:
@@ -3056,6 +3068,10 @@ paths:
                 nsfw:
                   description: Whether or not this video contains sensitive content
                   type: boolean
+                nsfwSummary:
+                  description: More information about the sensitive content of the video
+                nsfwFlags:
+                  $ref: '#/components/schemas/NSFWFlag'
                 name:
                   description: Video name
                   type: string
@@ -3643,6 +3659,10 @@ paths:
                 nsfw:
                   description: Whether or not this live video/replay contains sensitive content
                   type: boolean
+                nsfwSummary:
+                  description: More information about the sensitive content of the video
+                nsfwFlags:
+                  $ref: '#/components/schemas/NSFWFlag'
                 name:
                   description: Live video/replay name
                   type: string
@@ -4634,24 +4654,27 @@ paths:
         - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/host'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/privacyOneOf'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/skipCount'
+        # Common video filter parameters
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/excludeAlreadyWatched'
         - $ref: '#/components/parameters/search'
       responses:
@@ -5639,27 +5662,30 @@ paths:
             you can use the REST API to fetch the complete video information and interact with it.
           schema:
             type: string
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/privacyOneOf'
         - $ref: '#/components/parameters/uuids'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/skipCount'
+        - $ref: '#/components/parameters/searchTarget'
+        # Common video filter parameters
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/searchTarget'
-        - $ref: '#/components/parameters/videosSearchSort'
-        - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/skipCount'
+        - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
         - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
         - name: startDate
           in: query
           description: Get videos that are published after this date
@@ -7655,6 +7681,18 @@ components:
         enum:
         - 'true'
         - 'false'
+    nsfwFlagsIncluded:
+      name: nsfwFlagsIncluded
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/NSFWFlag'
+    nsfwFlagsExcluded:
+      name: nsfwFlagsExcluded
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/NSFWFlag'
     isLocal:
       name: isLocal
       in: query
@@ -8127,8 +8165,27 @@ components:
       type: string
       enum:
         - display
-        - blur
+        - warn
         - do_not_list
+
+    NSFWFlag:
+      type: integer
+      enum:
+        - 0
+        - 1
+        - 2
+        - 4
+      description: >
+
+        NSFW flags (can be combined using bitwise or operator)
+
+        - `0` NONE
+
+        - `1` VIOLENT
+
+        - `2` SHOCKING_DISTURBING
+
+        - `4` EXPLICIT_SEX
 
     UserRole:
       type: integer
@@ -8530,6 +8587,12 @@ components:
           type: integer
         nsfw:
           type: boolean
+        nsfwFlags:
+          allOf:
+            - $ref: '#/components/schemas/NSFWFlag'
+        nsfwSummary:
+          type: string
+          description: "**PeerTube >= 7.2** More information about the sensitive content of the video"
         waitTranscoding:
           type: boolean
           nullable: true
@@ -10043,6 +10106,7 @@ components:
               properties:
                 id:
                   $ref: '#/components/schemas/id'
+
     VideoUploadRequestCommon:
       properties:
         name:
@@ -10082,6 +10146,10 @@ components:
         nsfw:
           description: Whether or not this video contains sensitive content
           type: boolean
+        nsfwSummary:
+            description: More information about the sensitive content of the video
+        nsfwFlags:
+          $ref: '#/components/schemas/NSFWFlag'
         tags:
           description: Video tags (maximum 5 tags each between 2 and 30 characters)
           type: array
@@ -10258,8 +10326,18 @@ components:
           type: boolean
         noWelcomeModal:
           type: boolean
+
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
+        nsfwFlagsDisplayed:
+          $ref: '#/components/schemas/NSFWFlag'
+        nsfwFlagsHidden:
+          $ref: '#/components/schemas/NSFWFlag'
+        nsfwFlagsWarned:
+          $ref: '#/components/schemas/NSFWFlag'
+        nsfwFlagsBlurred:
+          $ref: '#/components/schemas/NSFWFlag'
+
         role:
           type: object
           properties:
@@ -10381,13 +10459,21 @@ components:
           description: new name of the user in its representations
           minLength: 3
           maxLength: 120
-        displayNSFW:
+        nsfwPolicy:
           type: string
           description: new NSFW display policy
           enum:
             - 'true'
             - 'false'
             - both
+        nsfwFlagsDisplayed:
+          $ref: '#/components/schemas/NSFWFlag'
+        nsfwFlagsHidden:
+          $ref: '#/components/schemas/NSFWFlag'
+        nsfwFlagsWarned:
+          $ref: '#/components/schemas/NSFWFlag'
+        nsfwFlagsBlurred:
+          $ref: '#/components/schemas/NSFWFlag'
         p2pEnabled:
           type: boolean
           description: whether to enable P2P in the player or not

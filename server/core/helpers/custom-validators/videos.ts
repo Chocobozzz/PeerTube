@@ -98,8 +98,8 @@ export function isVideoFileMimeTypeValid (files: UploadFilesForCheck, field = 'v
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
-                                          .map(v => v.replace('.', ''))
-                                          .join('|')
+  .map(v => v.replace('.', ''))
+  .join('|')
 const videoImageTypesRegex = `image/(${videoImageTypes})`
 
 export function isVideoImageValid (files: UploadFilesForCheck, field: string, optional = true) {
@@ -192,4 +192,12 @@ export function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
   }
 
   return true
+}
+
+export function isNSFWFlagsValid (value: number) {
+  return value === null || (exists(value) && validator.default.isInt('' + value))
+}
+
+export function isNSFWSummaryValid (value: any) {
+  return value === null || (exists(value) && validator.default.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NSFW_SUMMARY))
 }

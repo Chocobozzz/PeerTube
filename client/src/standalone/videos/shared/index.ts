@@ -1,5 +1,6 @@
 export * from './auth-http'
 export * from './peertube-plugin'
+export * from './peertube-theme'
 export * from './live-manager'
 export * from './player-html'
 export * from './player-options-builder'

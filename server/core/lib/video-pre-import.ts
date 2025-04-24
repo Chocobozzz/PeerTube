@@ -1,4 +1,5 @@
 import {
+  NSFWFlag,
   ThumbnailType,
   ThumbnailType_Type,
   VideoImportCreate,
@@ -28,7 +29,8 @@ import {
   MThumbnail,
   MUser,
   MVideo,
-  MVideoAccountDefault, MVideoImportFormattable,
+  MVideoAccountDefault,
+  MVideoImportFormattable,
   MVideoTag,
   MVideoThumbnail,
   MVideoWithBlacklistLight
@@ -80,7 +82,9 @@ async function insertFromImportIntoDB (parameters: {
     const sequelizeOptions = { transaction: t }
 
     // eslint-disable-next-line max-len
-    const videoCreated = await video.save(sequelizeOptions) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnail)
+    const videoCreated = await video.save(
+      sequelizeOptions
+    ) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag & MVideoThumbnail)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
@@ -132,6 +136,8 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
     waitTranscoding: importDataOverride?.waitTranscoding ?? true,
     state: VideoState.TO_IMPORT,
     nsfw: importDataOverride?.nsfw || importData.nsfw || false,
+    nsfwFlags: importDataOverride?.nsfwFlags || NSFWFlag.NONE,
+    nsfwSummary: importDataOverride?.nsfwSummary || null,
     description: importDataOverride?.description || importData.description,
     support: importDataOverride?.support || null,
     privacy: importDataOverride?.privacy || VideoPrivacy.PRIVATE,
@@ -178,7 +184,9 @@ async function buildYoutubeDLImport (options: {
     youtubeDLInfo = await youtubeDL.getInfoForDownload()
   } catch (err) {
     throw YoutubeDlImportError.fromError(
-      err, YoutubeDlImportError.CODE.FETCH_ERROR, `Cannot fetch information from import for URL ${targetUrl}`
+      err,
+      YoutubeDlImportError.CODE.FETCH_ERROR,
+      `Cannot fetch information from import for URL ${targetUrl}`
     )
   }
 
@@ -272,9 +280,7 @@ async function buildYoutubeDLImport (options: {
 
 // ---------------------------------------------------------------------------
 
-export {
-  YoutubeDlImportError, buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB
-}
+export { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB, YoutubeDlImportError }
 
 // ---------------------------------------------------------------------------
 

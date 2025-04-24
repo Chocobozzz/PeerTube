@@ -58,7 +58,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
     }
 
     return this.hooks.wrapObsFun(
-      this.videoService.getVideos.bind(this.videoService),
+      this.videoService.listVideos.bind(this.videoService),
       params,
       'common',
       'filter:api.browse-videos.videos.list.params',

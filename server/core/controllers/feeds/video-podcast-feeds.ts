@@ -3,7 +3,7 @@ import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typin
 import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from '@peertube/peertube-core-utils'
 import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
-import { buildNSFWFilter } from '@server/helpers/express-utils.js'
+import { buildNSFWFilters } from '@server/helpers/express-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -64,13 +64,12 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
 
   const { name, description, imageUrl, ownerImageUrl, email, link, ownerLink } = await buildFeedMetadata({ videoChannel })
 
-  const nsfw = buildNSFWFilter()
+  const nsfwOptions = buildNSFWFilters()
 
   const data = await getVideosForFeeds({
-    sort: '-publishedAt',
+    ...nsfwOptions,
 
-    // Only list non-NSFW videos (for Apple)
-    nsfw,
+    sort: '-publishedAt',
 
     // Prevent podcast feeds from listing videos in other instances
     // helps prevent duplicates when they are indexed -- only the author should control them
@@ -81,7 +80,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
 
   const language = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'language')
   const category = await VideoModel.guessLanguageOrCategoryOfChannel(videoChannel.id, 'category')
-  const hasNSFW = nsfw !== false
+  const hasNSFW = nsfwOptions.nsfw !== false
     ? await VideoModel.channelHasNSFWContent(videoChannel.id)
     : false
 

@@ -12,6 +12,8 @@ class PlaylistPlugin extends Plugin {
   constructor (player: videojs.Player, options?: PlaylistPluginOptions) {
     super(player, options)
 
+    this.player.addClass('vjs-playlist')
+
     this.playlistMenu = new PlaylistMenu(player, options)
     this.playlistButton = new PlaylistButton(player, { ...options, playlistMenu: this.playlistMenu })
 

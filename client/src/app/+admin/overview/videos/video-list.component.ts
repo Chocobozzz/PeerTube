@@ -13,7 +13,7 @@ import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.c
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { FileStorage, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { FileStorage, NSFWFlag, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule, TableRowExpandEvent } from 'primeng/table'
@@ -31,6 +31,7 @@ import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
 import { VideoPrivacyBadgeComponent } from '../../../shared/shared-video/video-privacy-badge.component'
 import { VideoAdminService } from './video-admin.service'
 
@@ -58,7 +59,8 @@ import { VideoAdminService } from './video-admin.service'
     PTDatePipe,
     RouterLink,
     BytesPipe,
-    VideoPrivacyBadgeComponent
+    VideoPrivacyBadgeComponent,
+    VideoNSFWBadgeComponent
   ]
 })
 export class VideoListComponent extends RestTable<Video> implements OnInit {
@@ -305,7 +307,11 @@ export class VideoListComponent extends RestTable<Video> implements OnInit {
     this.videoAdminService.getAdminVideos({
       pagination: this.pagination,
       sort: this.sort,
-      nsfw: 'both', // Always list NSFW video, overriding instance/user setting
+
+      // Always list NSFW video, overriding instance/user setting
+      nsfw: 'both',
+      nsfwFlagsExcluded: NSFWFlag.NONE,
+
       search: this.search
     }).pipe(finalize(() => this.loading = false))
       .subscribe({

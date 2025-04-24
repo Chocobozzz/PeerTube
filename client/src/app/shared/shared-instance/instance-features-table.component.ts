@@ -66,7 +66,8 @@ export class InstanceFeaturesTableComponent implements OnInit {
     const policy = this.serverConfig().instance.defaultNSFWPolicy
 
     if (policy === 'do_not_list') return $localize`Hidden`
-    if (policy === 'blur') return $localize`Blurred with confirmation request`
+    if (policy === 'warn') return $localize`Warn users`
+    if (policy === 'blur') return $localize`Warn users and blur thumbnail`
     if (policy === 'display') return $localize`Displayed`
   }
 

@@ -185,7 +185,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
-  get user () {
+  get authUser () {
     return this.authService.getUser()
   }
 
@@ -276,11 +276,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   isUserOwner () {
-    return this.video.isLocal === true && this.video.account.name === this.user?.username
-  }
-
-  isVideoBlur (video: Video) {
-    return video.isVideoNSFWForUser(this.user, this.serverConfig)
+    return this.video.isLocal === true && this.video.account.name === this.authUser?.username
   }
 
   isChannelDisplayNameGeneric () {
@@ -526,7 +522,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.transcriptionWidgetOpened = false
     }
 
-    if (this.isVideoBlur(this.video)) {
+    if (this.video.isVideoNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) {
       const res = await this.confirmService.confirm(
         $localize`This video contains mature or explicit content. Are you sure you want to watch it?`,
         $localize`Mature or explicit content`
@@ -556,7 +552,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const videoState = this.video.state.id
     if (videoState === VideoState.LIVE_ENDED || videoState === VideoState.WAITING_FOR_LIVE) {
-      this.updatePlayerOnNoLive()
+      this.updatePlayerOnNoLive({ hasPlayed: false })
       return
     }
 
@@ -573,7 +569,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       urlOptions: this.getUrlOptions(),
       loggedInOrAnonymousUser,
       forceAutoplay,
-      user: this.user
+      user: this.authUser
     }
 
     const loadOptions = await this.hooks.wrapFun(
@@ -649,29 +645,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
-  private isAutoplay () {
+  private isAutoplay (loggedInOrAnonymousUser: User) {
     // We'll jump to the thread id, so do not play the video
     if (this.route.snapshot.params['threadId']) return false
 
-    if (this.user) return this.user.autoPlayVideo
+    // Prevent autoplay if we need to warn the user
+    if (this.video.isVideoNSFWWarnedForUser(loggedInOrAnonymousUser, this.serverConfig)) return false
 
-    if (this.anonymousUser) return this.anonymousUser.autoPlayVideo
+    if (loggedInOrAnonymousUser) return loggedInOrAnonymousUser.autoPlayVideo
 
     throw new Error('Cannot guess autoplay because user and anonymousUser are not defined')
-  }
-
-  private isAutoPlayNext () {
-    return (
-      (this.user?.autoPlayNextVideo) ||
-      this.anonymousUser.autoPlayNextVideo
-    )
-  }
-
-  private isPlaylistAutoPlayNext () {
-    return (
-      (this.user?.autoPlayNextVideoPlaylist) ||
-      this.anonymousUser.autoPlayNextVideoPlaylist
-    )
   }
 
   private buildPeerTubePlayerConstructorOptions (options: {
@@ -821,11 +804,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return {
       mode,
 
-      autoplay: this.isAutoplay(),
+      autoplay: this.isAutoplay(loggedInOrAnonymousUser),
       forceAutoplay,
 
       duration: this.video.duration,
-      poster: video.previewUrl,
       p2pEnabled: isP2PEnabled(video, this.serverConfig, loggedInOrAnonymousUser.p2pEnabled),
 
       startTime,
@@ -846,8 +828,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoFileToken: () => videoFileToken,
       requiresUserAuth: videoRequiresUserAuth(video, videoPassword),
       requiresPassword: video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
-        !video.canBypassPassword(this.user),
+        !video.canBypassPassword(this.authUser),
       videoPassword: () => videoPassword,
+
+      poster: video.isVideoNSFWBlurForUser(loggedInOrAnonymousUser, this.serverConfig)
+        ? null
+        : video.previewUrl,
+
+      nsfwWarning: video.isVideoNSFWWarnedForUser(loggedInOrAnonymousUser, this.serverConfig)
+        ? {
+          flags: video.nsfwFlags,
+          summary: video.nsfwSummary
+        }
+        : undefined,
 
       videoCaptions: playerCaptions,
       videoChapters,
@@ -877,9 +870,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       upnext: {
         isEnabled: () => {
-          if (this.playlist) return this.isPlaylistAutoPlayNext()
+          if (this.playlist) return loggedInOrAnonymousUser?.autoPlayNextVideoPlaylist
 
-          return this.isAutoPlayNext()
+          return loggedInOrAnonymousUser?.autoPlayNextVideo
         },
 
         isSuspended: (player: videojs.Player) => {
@@ -943,10 +936,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.viewers = newViewers
   }
 
-  private updatePlayerOnNoLive () {
+  private updatePlayerOnNoLive ({ hasPlayed }: { hasPlayed: boolean }) {
     this.peertubePlayer.unload()
     this.peertubePlayer.disable()
-    this.peertubePlayer.setPoster(this.video.previewPath)
+
+    if (hasPlayed || !this.video.isVideoNSFWBlurForUser(this.authUser || this.anonymousUser, this.serverConfig)) {
+      this.peertubePlayer.setPoster(this.video.previewPath)
+    }
   }
 
   private buildHotkeysHelp (video: Video) {
@@ -1039,6 +1035,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video.state.id = VideoState.LIVE_ENDED
 
-    this.updatePlayerOnNoLive()
+    this.updatePlayerOnNoLive({ hasPlayed: true })
   }
 }

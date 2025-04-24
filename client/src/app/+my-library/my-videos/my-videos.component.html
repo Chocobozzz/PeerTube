@@ -145,7 +145,7 @@
       </td>
 
       <td *ngIf="isSelected('sensitive')">
-        <span *ngIf="video.nsfw" class="pt-badge badge-yellow" i18n>NSFW</span>
+        <my-video-nsfw-badge [video]="video"></my-video-nsfw-badge>
       </td>
 
       <td *ngIf="isSelected('playlists')">

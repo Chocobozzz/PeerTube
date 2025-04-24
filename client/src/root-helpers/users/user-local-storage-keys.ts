@@ -5,6 +5,12 @@ export const UserLocalStorageKeys = {
   EMAIL: 'email',
 
   NSFW_POLICY: 'nsfw_policy',
+
+  NSFW_FLAGS_DISPLAYED: 'nsfw_flags_displayed',
+  NSFW_FLAGS_HIDDEN: 'nsfw_flags_hidden',
+  NSFW_FLAGS_WARNED: 'nsfw_flags_warned',
+  NSFW_FLAGS_BLURRED: 'nsfw_flags_blurred',
+
   P2P_ENABLED: 'peertube-videojs-webtorrent_enabled',
 
   AUTO_PLAY_VIDEO: 'auto_play_video',

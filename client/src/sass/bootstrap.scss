@@ -68,14 +68,22 @@ body {
   font-family: $main-fonts;
 }
 
-.btn-outline-secondary {
-  --bs-btn-color: #{pvar(--fg-300)};
-}
-
 .btn {
   --bs-btn-active-color: inherit;
   --bs-btn-active-bg: inherit;
   --bs-btn-active-border-color: inherit;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #{pvar(--fg)};
+  --bs-btn-border-color: #{pvar(--bg-secondary-450)};
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #{pvar(--bg-secondary-450)};
+  --bs-btn-hover-border-color: #{pvar(--bg-secondary-450)};
+
+  --bs-btn-active-color: #{pvar(--on-primary)};
+  --bs-btn-active-bg: #{pvar(--primary)};
+  --bs-btn-active-border-color: #{pvar(--primary)};
 }
 
 .flex-auto {
@@ -84,6 +92,12 @@ body {
 
 .c-hand {
   cursor: pointer !important;
+}
+
+.btn-group-vertical {
+  label {
+    margin-bottom: 0;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -283,17 +297,6 @@ body {
 
 .btn:not(.btn-sm) {
   font-size: $button-font-size;
-}
-
-.btn-outline-secondary {
-  border-color: pvar(--input-border-color);
-
-  &:focus-within,
-  &:focus,
-  &:hover {
-    color: #fff;
-    background-color: #6c757d;
-  }
 }
 
 .form-control {

@@ -122,6 +122,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   private updateVideo (channel: MChannelId, transaction?: Transaction, overrideTo?: string[]) {
     const to = overrideTo || this.videoObject.to
     const videoData = getVideoAttributesFromObject(channel, this.videoObject, to)
+
     this.video.name = videoData.name
     this.video.uuid = videoData.uuid
     this.video.url = videoData.url
@@ -131,6 +132,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.description = videoData.description
     this.video.support = videoData.support
     this.video.nsfw = videoData.nsfw
+    this.video.nsfwSummary = videoData.nsfwSummary
+    this.video.nsfwFlags = videoData.nsfwFlags
     this.video.commentsPolicy = videoData.commentsPolicy
     this.video.downloadEnabled = videoData.downloadEnabled
     this.video.waitTranscoding = videoData.waitTranscoding

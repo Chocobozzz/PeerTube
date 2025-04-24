@@ -957,7 +957,7 @@ instance:
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
   # Moreover, the NSFW checkbox on video upload will be automatically checked by default
   is_nsfw: false
-  # By default, `do_not_list` or `blur` or `display` NSFW videos
+  # By default, `do_not_list`, `blur`, `warn` or `display` NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
 

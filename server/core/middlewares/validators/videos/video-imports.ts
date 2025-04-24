@@ -1,11 +1,11 @@
-import express from 'express'
-import { body, param, query } from 'express-validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight, VideoImportCreate, VideoImportState } from '@peertube/peertube-models'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
 import { isPreImportVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserAccountId, MVideoImport } from '@server/types/models/index.js'
+import express from 'express'
+import { body, param, query } from 'express-validator'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports.js'
 import { isValidPasswordProtectedPrivacy, isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos.js'
@@ -14,7 +14,7 @@ import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { areValidationErrors, doesVideoChannelOfAccountExist, doesVideoImportExist } from '../shared/index.js'
-import { getCommonVideoEditAttributes } from './videos.js'
+import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -30,7 +30,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     .custom((value, { req }) => isVideoImportTorrentFile(req.files))
     .withMessage(
       'This torrent file is not supported or too large. Please, make sure it is of the following type: ' +
-      CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.EXTNAME.join(', ')
+        CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.EXTNAME.join(', ')
     ),
   body('name')
     .optional()
@@ -47,6 +47,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     const torrentFile = req.files?.['torrentfile'] ? req.files['torrentfile'][0] : undefined
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (areErrorsInNSFW(req, res)) return cleanUpReqFiles(req)
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
@@ -153,10 +154,10 @@ const videoImportCancelValidator = [
 // ---------------------------------------------------------------------------
 
 export {
+  getMyVideoImportsValidator,
   videoImportAddValidator,
   videoImportCancelValidator,
-  videoImportDeleteValidator,
-  getMyVideoImportsValidator
+  videoImportDeleteValidator
 }
 
 // ---------------------------------------------------------------------------

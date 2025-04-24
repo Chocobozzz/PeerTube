@@ -1,12 +1,21 @@
 import { arrayify } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  ServerErrorCode,
+  UserRight,
+  VideoCreateUpdateCommon,
+  VideosCommonQuery,
+  VideoState
+} from '@peertube/peertube-models'
+import { isHostValid } from '@server/helpers/custom-validators/servers.js'
+import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { Redis } from '@server/lib/redis.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
-import { ValidationChain, body, param, query } from 'express-validator'
+import { body, param, query, ValidationChain } from 'express-validator'
 import {
   exists,
   hasArrayLength,
@@ -23,6 +32,8 @@ import {
 import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search.js'
 import {
   areVideoTagsValid,
+  isNSFWFlagsValid,
+  isNSFWSummaryValid,
   isScheduleVideoUpdatePrivacyValid,
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
@@ -45,7 +56,8 @@ import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants.js'
 import { VideoModel } from '../../../models/video/video.js'
 import {
-  areValidationErrors, checkCanAccessVideoStaticFiles,
+  areValidationErrors,
+  checkCanAccessVideoStaticFiles,
   checkCanSeeVideo,
   checkUserCanManageVideo,
   doesVideoChannelOfAccountExist,
@@ -55,8 +67,6 @@ import {
   isValidVideoPasswordHeader
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
-import { VideoLoadType } from '@server/lib/model-loaders/video.js'
-import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 
 export const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -138,7 +148,6 @@ export const videosAddResumableValidator = [
  *
  * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
- *
  */
 export const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('filename')
@@ -206,6 +215,7 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
+    if (areErrorsInNSFW(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
@@ -352,12 +362,12 @@ export function getCommonVideoEditAttributes () {
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImageValid(req.files, 'thumbnailfile')).withMessage(
         'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
-        CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+          CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
       ),
     body('previewfile')
       .custom((value, { req }) => isVideoImageValid(req.files, 'previewfile')).withMessage(
         'This preview file is not supported or too large. Please, make sure it is of the following type: ' +
-        CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+          CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
       ),
 
     body('category')
@@ -376,6 +386,14 @@ export function getCommonVideoEditAttributes () {
       .optional()
       .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have a valid nsfw boolean'),
+    body('nsfwFlags')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isNSFWFlagsValid),
+    body('nsfwSummary')
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isNSFWSummaryValid),
     body('waitTranscoding')
       .optional()
       .customSanitizer(toBooleanOrNull)
@@ -398,7 +416,7 @@ export function getCommonVideoEditAttributes () {
       .custom(areVideoTagsValid)
       .withMessage(
         `Should have an array of up to ${CONSTRAINTS_FIELDS.VIDEOS.TAGS.max} tags between ` +
-        `${CONSTRAINTS_FIELDS.VIDEOS.TAG.min} and ${CONSTRAINTS_FIELDS.VIDEOS.TAG.max} characters each`
+          `${CONSTRAINTS_FIELDS.VIDEOS.TAG.min} and ${CONSTRAINTS_FIELDS.VIDEOS.TAG.max} characters each`
       ),
     // TODO: remove, deprecated in PeerTube 6.2
     body('commentsEnabled')
@@ -458,6 +476,14 @@ export const commonVideosFiltersValidator = [
   query('nsfw')
     .optional()
     .custom(isBooleanBothQueryValid),
+  query('nsfwFlagsIncluded')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isNSFWFlagsValid),
+  query('nsfwFlagsExcluded')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isNSFWFlagsValid),
   query('isLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
@@ -499,10 +525,19 @@ export const commonVideosFiltersValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
+    const query = req.query as VideosCommonQuery
+
+    if (((query.nsfwFlagsExcluded || 0) & (query.nsfwFlagsIncluded || 0)) !== 0) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot use same flags in nsfwFlagsIncluded and nsfwFlagsExcluded at the same time'
+      })
+    }
+
     const user = res.locals.oauth?.token.User
 
     if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-      if (req.query.include || req.query.privacyOneOf || req.query.autoTagOneOf) {
+      if (query.include || query.privacyOneOf || query.autoTagOneOf) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
           message: 'You are not allowed to see all videos, specify a custom include or auto tags filter.'
@@ -510,7 +545,7 @@ export const commonVideosFiltersValidator = [
       }
     }
 
-    if (!user && exists(req.query.excludeAlreadyWatched)) {
+    if (!user && exists(query.excludeAlreadyWatched)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'Cannot use excludeAlreadyWatched parameter when auth token is not provided'
@@ -529,6 +564,24 @@ export const commonVideosFiltersValidator = [
     return next()
   }
 ]
+
+export function areErrorsInNSFW (req: express.Request, res: express.Response) {
+  const body = req.body as VideoCreateUpdateCommon
+
+  if (!body.nsfw) {
+    if (body.nsfwFlags) {
+      res.fail({ message: 'Cannot set nsfwFlags if the video is not NSFW.' })
+      return true
+    }
+
+    if (body.nsfwSummary) {
+      res.fail({ message: 'Cannot set nsfwSummary if the video is not NSFW.' })
+      return true
+    }
+  }
+
+  return false
+}
 
 // ---------------------------------------------------------------------------
 // Private
@@ -557,6 +610,7 @@ async function commonVideoChecksPass (options: {
   const { req, res, user } = options
 
   if (areErrorsInScheduleUpdate(req, res)) return false
+  if (areErrorsInNSFW(req, res)) return false
 
   if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 

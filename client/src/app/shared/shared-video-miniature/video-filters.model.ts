@@ -1,11 +1,14 @@
+import { User } from '@app/core'
 import { splitIntoArray, toBoolean } from '@app/helpers'
 import { getAllPrivacies } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
+  NSFWFlag,
   NSFWPolicyType,
   VideoInclude,
   VideoIncludeType,
   VideoPrivacyType,
+  VideosCommonQuery,
   VideoSortField
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
@@ -29,7 +32,6 @@ export type VideoFilterActive = {
 
 export class VideoFilters {
   sort: VideoSortField
-  nsfw: BooleanBothQuery
 
   languageOneOf: string[]
   categoryOneOf: number[]
@@ -41,9 +43,14 @@ export class VideoFilters {
 
   search: string
 
+  private nsfwPolicy: NSFWPolicyType
+  private nsfwFlagsDisplayed: number
+  private nsfwFlagsHidden: number
+  private nsfwFlagsWarned: number
+  private nsfwFlagsBlurred: number
+
   private defaultValues = new Map<keyof VideoFilters, any>([
     [ 'sort', '-publishedAt' ],
-    [ 'nsfw', 'false' ],
     [ 'languageOneOf', undefined ],
     [ 'categoryOneOf', undefined ],
     [ 'scope', 'federated' ],
@@ -53,7 +60,6 @@ export class VideoFilters {
   ])
 
   private activeFilters: VideoFilterActive[] = []
-  private defaultNSFWPolicy: NSFWPolicyType
 
   private onChangeCallbacks: (() => void)[] = []
   private oldFormObjectString: string
@@ -68,7 +74,7 @@ export class VideoFilters {
 
     this.hiddenFields = hiddenFields
 
-    this.reset(undefined, false)
+    this.reset({ triggerChange: false })
   }
 
   // ---------------------------------------------------------------------------
@@ -106,21 +112,23 @@ export class VideoFilters {
     this.defaultValues.set('sort', sort)
   }
 
-  setNSFWPolicy (nsfwPolicy: NSFWPolicyType) {
-    const nsfw = nsfwPolicy === 'do_not_list'
-      ? 'false'
-      : 'both'
-
-    this.defaultValues.set('nsfw', nsfw)
-    this.defaultNSFWPolicy = nsfwPolicy
-
-    return nsfw
+  setNSFWPolicy (user: Pick<User, 'nsfwPolicy' | 'nsfwFlagsDisplayed' | 'nsfwFlagsHidden' | 'nsfwFlagsWarned' | 'nsfwFlagsBlurred'>) {
+    this.nsfwPolicy = user.nsfwPolicy
+    this.nsfwFlagsDisplayed = user.nsfwFlagsDisplayed
+    this.nsfwFlagsHidden = user.nsfwFlagsHidden
+    this.nsfwFlagsWarned = user.nsfwFlagsWarned
+    this.nsfwFlagsBlurred = user.nsfwFlagsBlurred
   }
 
   // ---------------------------------------------------------------------------
 
-  reset (specificKey?: string, triggerChange = true) {
-    debugLogger('Reset video filters', { specificKey, stack: new Error().stack })
+  private reset (options: {
+    specificKey?: string
+    triggerChange?: boolean // default true
+  }) {
+    const { specificKey, triggerChange = true } = options
+
+    debugLogger('Reset video filters', { specificKey })
 
     for (const [ key, value ] of this.defaultValues) {
       if (specificKey && specificKey !== key) continue
@@ -143,8 +151,6 @@ export class VideoFilters {
 
     if (obj.sort !== undefined) this.sort = obj.sort
 
-    if (obj.nsfw !== undefined) this.nsfw = obj.nsfw
-
     if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(obj.languageOneOf)
     if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(obj.categoryOneOf)
 
@@ -163,7 +169,14 @@ export class VideoFilters {
     debugLogger('Cloning video filters', { videoFilters: this })
 
     const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
-    cloned.setNSFWPolicy(this.defaultNSFWPolicy)
+
+    cloned.setNSFWPolicy({
+      nsfwPolicy: this.nsfwPolicy,
+      nsfwFlagsDisplayed: this.nsfwFlagsDisplayed,
+      nsfwFlagsHidden: this.nsfwFlagsHidden,
+      nsfwFlagsWarned: this.nsfwFlagsWarned,
+      nsfwFlagsBlurred: this.nsfwFlagsBlurred
+    })
 
     cloned.load(this.toUrlObject(), this.customizedByUser)
 
@@ -290,8 +303,9 @@ export class VideoFilters {
     else if (this.live === 'false') isLive = false
 
     return {
+      ...this.buildNSFWVideosAPIObject(),
+
       sort: this.sort,
-      nsfw: this.nsfw,
       languageOneOf: this.languageOneOf,
       categoryOneOf: this.categoryOneOf,
       search: this.search,
@@ -302,18 +316,66 @@ export class VideoFilters {
     }
   }
 
+  private buildNSFWVideosAPIObject (): Partial<Pick<VideosCommonQuery, 'nsfw' | 'nsfwFlagsExcluded' | 'nsfwFlagsIncluded'>> {
+    if (this.allVideos) {
+      return { nsfw: 'both', nsfwFlagsExcluded: NSFWFlag.NONE }
+    }
+
+    const nsfw: BooleanBothQuery = this.nsfwPolicy === 'do_not_list'
+      ? 'false'
+      : 'both'
+
+    let nsfwFlagsIncluded = NSFWFlag.NONE
+    let nsfwFlagsExcluded = NSFWFlag.NONE
+
+    if (this.nsfwPolicy === 'do_not_list') {
+      nsfwFlagsIncluded |= this.nsfwFlagsDisplayed
+      nsfwFlagsIncluded |= this.nsfwFlagsWarned
+      nsfwFlagsIncluded |= this.nsfwFlagsBlurred
+    } else {
+      nsfwFlagsExcluded |= this.nsfwFlagsHidden
+    }
+
+    return { nsfw, nsfwFlagsIncluded, nsfwFlagsExcluded }
+  }
+
   // ---------------------------------------------------------------------------
 
-  getNSFWDisplayLabel () {
-    if (this.defaultNSFWPolicy === 'blur') return $localize`Blurred`
+  getNSFWSettingsLabel () {
+    let result = this.getGlobalNSFWLabel()
 
-    return $localize`Displayed`
+    if (this.hasCustomNSFWFlags()) {
+      result += $localize` Some videos with a specific sensitive content category have a different policy.`
+    }
+
+    return result
+  }
+
+  private getGlobalNSFWLabel () {
+    if (this.nsfwPolicy === 'do_not_list') return $localize`Sensitive content hidden.`
+    if (this.nsfwPolicy === 'warn') return $localize`Sensitive content has a warning.`
+    if (this.nsfwPolicy === 'blur') return $localize`Sensitive content has a warning and the thumbnail is blurred.`
+
+    return $localize`Sensitive content is displayed.`
   }
 
   private getNSFWValue () {
-    if (this.nsfw === 'false') return $localize`hidden`
-    if (this.defaultNSFWPolicy === 'blur') return $localize`blurred`
+    if (this.hasCustomNSFWFlags()) {
+      if (this.nsfwPolicy === 'do_not_list') return $localize`hidden (with exceptions)`
+      if (this.nsfwPolicy === 'warn') return $localize`warned (with exceptions)`
+      if (this.nsfwPolicy === 'blur') return $localize`blurred (with exceptions)`
+
+      return $localize`displayed (with exceptions)`
+    }
+
+    if (this.nsfwPolicy === 'do_not_list') return $localize`hidden`
+    if (this.nsfwPolicy === 'warn') return $localize`warned`
+    if (this.nsfwPolicy === 'blur') return $localize`blurred`
 
     return $localize`displayed`
+  }
+
+  private hasCustomNSFWFlags () {
+    return this.nsfwFlagsDisplayed || this.nsfwFlagsHidden || this.nsfwFlagsWarned || this.nsfwFlagsBlurred
   }
 }

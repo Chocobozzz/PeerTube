@@ -238,7 +238,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private loadAccountVideosCount () {
-    this.videoService.getAccountVideos({
+    this.videoService.listAccountVideos({
       account: this.account,
       videoPagination: {
         currentPage: 1,

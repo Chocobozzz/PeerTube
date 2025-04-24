@@ -1,6 +1,6 @@
-import { VideoUpdate } from '../video-update.model.js'
+import { VideoCreateUpdateCommon } from '../video-create-update-common.model.js'
 
-export interface VideoImportCreate extends VideoUpdate {
+export interface VideoImportCreate extends VideoCreateUpdateCommon {
   targetUrl?: string
   magnetUri?: string
   torrentfile?: Blob

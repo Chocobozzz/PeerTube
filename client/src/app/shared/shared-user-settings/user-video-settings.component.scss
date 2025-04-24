@@ -9,5 +9,6 @@
 my-select-languages {
   display: block;
 
-  @include responsive-width(340px);
+  width: 340px;
+  max-width: 100%;
 }

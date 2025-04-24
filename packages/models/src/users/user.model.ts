@@ -14,7 +14,12 @@ export interface User {
 
   emailVerified: boolean
   emailPublic: boolean
+
   nsfwPolicy: NSFWPolicyType
+  nsfwFlagsDisplayed: number
+  nsfwFlagsHidden: number
+  nsfwFlagsBlurred: number
+  nsfwFlagsWarned: number
 
   adminFlags?: UserAdminFlagType
 

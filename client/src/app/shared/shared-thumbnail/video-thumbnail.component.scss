@@ -22,7 +22,6 @@
 }
 
 .watch-icon-overlay,
-.label-overlay,
 .duration-overlay,
 .live-overlay {
   font-size: 0.75rem;
@@ -33,15 +32,11 @@
 }
 
 .label-overlay {
-  border-radius: 3px;
   position: absolute;
   padding: 0 5px;
   left: 5px;
   top: 5px;
-  font-weight: $font-bold;
-
-  &.warning { background-color: #ffa500; }
-  &.danger { background-color: pvar(--red); }
+  z-index: z(miniature);
 }
 
 .duration-overlay,

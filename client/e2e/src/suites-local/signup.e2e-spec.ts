@@ -190,7 +190,7 @@ describe('Signup', () => {
       })
 
       it('Should validate the third step (account)', async function () {
-        await signupPage.fillAccountStep({ username: 'user_2', displayName: 'user_2 display name', password: 'password' })
+        await signupPage.fillAccountStep({ username: 'user_2', displayName: 'user_2 display name', password: 'superpassword' })
         await signupPage.validateStep()
       })
 
@@ -213,7 +213,7 @@ describe('Signup', () => {
       })
 
       it('Should display a message when trying to login with this account', async function () {
-        const error = await loginPage.getLoginError('user_2', 'password')
+        const error = await loginPage.getLoginError('user_2', 'superpassword')
 
         expect(error).toContain('awaiting approval')
       })
@@ -221,14 +221,14 @@ describe('Signup', () => {
       it('Should accept the registration', async function () {
         await loginPage.loginAsRootUser()
 
-        await adminRegistrationPage.navigateToRegistratonsList()
+        await adminRegistrationPage.navigateToRegistrationsList()
         await adminRegistrationPage.accept('user_2', 'moderation response')
 
         await loginPage.logout()
       })
 
       it('Should be able to login with this new account', async function () {
-        await loginPage.login({ username: 'user_2', password: 'password', displayName: 'user_2 display name' })
+        await loginPage.login({ username: 'user_2', password: 'superpassword', displayName: 'user_2 display name' })
 
         await loginPage.logout()
       })
@@ -335,7 +335,7 @@ describe('Signup', () => {
           username: 'user_4',
           displayName: 'user_4 display name',
           email: 'user_4@example.com',
-          password: 'password'
+          password: 'superpassword'
         })
         await signupPage.validateStep()
       })
@@ -359,7 +359,7 @@ describe('Signup', () => {
       })
 
       it('Should display a message when trying to login with this account', async function () {
-        const error = await loginPage.getLoginError('user_4', 'password')
+        const error = await loginPage.getLoginError('user_4', 'superpassword')
 
         expect(error).toContain('awaiting approval')
       })
@@ -367,7 +367,7 @@ describe('Signup', () => {
       it('Should accept the registration', async function () {
         await loginPage.loginAsRootUser()
 
-        await adminRegistrationPage.navigateToRegistratonsList()
+        await adminRegistrationPage.navigateToRegistrationsList()
         await adminRegistrationPage.accept('user_4', 'moderation response 2')
 
         await loginPage.logout()
@@ -398,5 +398,9 @@ describe('Signup', () => {
     after(() => {
       MockSMTPServer.Instance.kill()
     })
+  })
+
+  after(async () => {
+    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

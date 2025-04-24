@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, output, viewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, AuthStatus, LocalStorageService, User, UserService } from '@app/core'
+import { ActivatedRoute } from '@angular/router'
+import { AuthService, AuthStatus, LocalStorageService, PeerTubeRouterService, User, UserService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -30,7 +30,7 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService)
   private localStorageService = inject(LocalStorageService)
   private route = inject(ActivatedRoute)
-  private router = inject(Router)
+  private peertubeRouter = inject(PeerTubeRouterService)
 
   private static readonly QUERY_MODAL_NAME = 'quick-settings'
 
@@ -99,6 +99,6 @@ export class QuickSettingsModalComponent implements OnInit, OnDestroy {
       ? QuickSettingsModalComponent.QUERY_MODAL_NAME
       : null
 
-    this.router.navigate([], { queryParams: { modal }, queryParamsHandling: 'merge' })
+    this.peertubeRouter.silentNavigate([], { modal }, this.route)
   }
 }

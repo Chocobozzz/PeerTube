@@ -24,6 +24,7 @@ export interface VideoObject {
   views: number
 
   sensitive: boolean
+  summary: string
 
   isLiveBroadcast: boolean
   liveSaveReplay: boolean
@@ -80,7 +81,7 @@ export interface VideoObject {
 
 export interface ActivityPubStoryboard {
   type: 'Image'
-  rel: [ 'storyboard' ]
+  rel: ['storyboard']
   url: {
     href: string
     mediaType: string

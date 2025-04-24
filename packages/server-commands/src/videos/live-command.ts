@@ -106,11 +106,22 @@ export class LiveCommand extends AbstractCommand {
 
   async create (
     options: OverrideCommandOptions & {
-      fields: Omit<LiveVideoCreate, 'thumbnailfile' | 'previewfile'> & { thumbnailfile?: string | Blob, previewfile?: string | Blob }
+      fields: Omit<LiveVideoCreate, 'channelId' | 'thumbnailfile' | 'previewfile'> & {
+        thumbnailfile?: string | Blob
+        previewfile?: string | Blob
+        channelId?: number
+      }
     }
   ) {
     const { fields } = options
     const path = '/api/v1/videos/live'
+
+    let defaultChannelId = 1
+
+    try {
+      const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
+      defaultChannelId = videoChannels[0].id
+    } catch (e) { /* empty */ }
 
     const attaches: any = {}
     if (fields.thumbnailfile) attaches.thumbnailfile = fields.thumbnailfile
@@ -121,7 +132,11 @@ export class LiveCommand extends AbstractCommand {
 
       path,
       attaches,
-      fields: omit(fields, [ 'thumbnailfile', 'previewfile' ]),
+      fields: {
+        channelId: defaultChannelId,
+
+        ...omit(fields, [ 'thumbnailfile', 'previewfile' ])
+      },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))

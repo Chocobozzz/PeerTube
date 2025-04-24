@@ -59,7 +59,7 @@ export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReus
       skipCount: true
     }
 
-    return this.videoService.getAccountVideos(options)
+    return this.videoService.listAccountVideos(options)
   }
 
   getSyndicationItems () {

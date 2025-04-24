@@ -1,6 +1,6 @@
-import { HTMLServerConfig, Video, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { HTMLServerConfig, User, Video, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 
-function buildVideoOrPlaylistEmbed (options: {
+export function buildVideoOrPlaylistEmbed (options: {
   embedUrl: string
   embedTitle: string
   aspectRatio?: number
@@ -37,30 +37,71 @@ function buildVideoOrPlaylistEmbed (options: {
   return iframe.outerHTML
 }
 
-function isP2PEnabled (video: Video, config: HTMLServerConfig, userP2PEnabled: boolean) {
+export function isP2PEnabled (video: Video, config: HTMLServerConfig, userP2PEnabled: boolean) {
   if (video.isLocal && config.tracker.enabled === false) return false
   if (isWebRTCDisabled()) return false
 
   return userP2PEnabled
 }
 
-function videoRequiresUserAuth (video: Video, videoPassword?: string) {
+export function videoRequiresUserAuth (video: Video, videoPassword?: string) {
   return new Set<VideoPrivacyType>([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]).has(video.privacy.id) ||
     (video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED && !videoPassword)
-
 }
 
-function videoRequiresFileToken (video: Video) {
+export function videoRequiresFileToken (video: Video) {
   return new Set<VideoPrivacyType>([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ]).has(video.privacy.id)
 }
 
-export {
-  buildVideoOrPlaylistEmbed,
-  isP2PEnabled,
-  videoRequiresUserAuth,
-  videoRequiresFileToken
+export function isVideoNSFWWarnedForUser (video: Video, config: HTMLServerConfig, user: User) {
+  if (video.nsfw === false) return false
+  // Don't display NSFW warning for the owner of the video
+  if (user?.account?.id === video.account.id) return false
+
+  if (!user) {
+    return config.instance.defaultNSFWPolicy === 'warn' || config.instance.defaultNSFWPolicy === 'blur'
+  }
+
+  if ((user.nsfwFlagsWarned & video.nsfwFlags) !== 0) return true
+  if ((user.nsfwFlagsBlurred & video.nsfwFlags) !== 0) return true
+  if ((user.nsfwFlagsDisplayed & video.nsfwFlags) !== 0) return false
+  if ((user.nsfwFlagsHidden & video.nsfwFlags) !== 0) return false
+
+  return user.nsfwPolicy === 'warn' || user.nsfwPolicy === 'blur'
 }
 
+export function isVideoNSFWBlurForUser (video: Video, config: HTMLServerConfig, user: User) {
+  if (video.nsfw === false) return false
+  // Don't display NSFW warning for the owner of the video
+  if (user?.account?.id === video.account.id) return false
+
+  if (!user) return config.instance.defaultNSFWPolicy === 'blur'
+
+  if ((user.nsfwFlagsBlurred & video.nsfwFlags) !== 0) return true
+  if ((user.nsfwFlagsWarned & video.nsfwFlags) !== 0) return false
+  if ((user.nsfwFlagsDisplayed & video.nsfwFlags) !== 0) return false
+  if ((user.nsfwFlagsHidden & video.nsfwFlags) !== 0) return false
+
+  return user.nsfwPolicy === 'blur'
+}
+
+export function isVideoNSFWHiddenForUser (video: Video, config: HTMLServerConfig, user: User) {
+  if (video.nsfw === false) return false
+  // Video is not hidden for the owner of the video
+  if (user?.account?.id === video.account.id) return false
+
+  if (!user) return config.instance.defaultNSFWPolicy === 'do_not_list'
+
+  if ((user.nsfwFlagsHidden & video.nsfwFlags) !== 0) return true
+  if ((user.nsfwFlagsBlurred & video.nsfwFlags) !== 0) return false
+  if ((user.nsfwFlagsWarned & video.nsfwFlags) !== 0) return false
+  if ((user.nsfwFlagsDisplayed & video.nsfwFlags) !== 0) return false
+
+  return user.nsfwPolicy === 'do_not_list'
+}
+
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 function isWebRTCDisabled () {

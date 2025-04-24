@@ -1,3 +1,4 @@
+import { NSFWPolicyType } from '@peertube/peertube-models'
 import { browserSleep, go, setCheckboxEnabled } from '../utils'
 
 export class AdminConfigPage {
@@ -18,16 +19,16 @@ export class AdminConfigPage {
     await $('h2=' + waitTitles[tab]).waitForDisplayed()
   }
 
-  async updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
+  async updateNSFWSetting (newValue: NSFWPolicyType) {
     await this.navigateTo('instance-information')
 
-    const elem = $('#instanceDefaultNSFWPolicy')
+    const elem = $(`#instanceDefaultNSFWPolicy-${newValue} + label`)
 
     await elem.waitForDisplayed()
     await elem.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await elem.waitForClickable()
 
-    return elem.selectByAttribute('value', newValue)
+    return elem.click()
   }
 
   async updateHomepage (newValue: string) {

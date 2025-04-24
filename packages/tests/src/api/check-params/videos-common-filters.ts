@@ -1,14 +1,8 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import {
-  HttpStatusCode,
-  HttpStatusCodeType,
-  UserRole,
-  VideoInclude,
-  VideoIncludeType,
-  VideoPrivacy,
-  VideoPrivacyType
-} from '@peertube/peertube-models'
+import { pick } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, HttpStatusCodeType, UserRole, VideoInclude, VideoPrivacy, VideosCommonQuery } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -22,6 +16,13 @@ describe('Test video filters validators', function () {
   let server: PeerTubeServer
   let userAccessToken: string
   let moderatorAccessToken: string
+
+  const validIncludes = [
+    VideoInclude.NONE,
+    VideoInclude.BLOCKED_OWNER,
+    VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED,
+    VideoInclude.SOURCE
+  ]
 
   // ---------------------------------------------------------------
 
@@ -43,62 +44,80 @@ describe('Test video filters validators', function () {
     moderatorAccessToken = await server.login.getAccessToken(moderator)
   })
 
-  describe('When setting video filters', function () {
-    const validIncludes = [
-      VideoInclude.NONE,
-      VideoInclude.BLOCKED_OWNER,
-      VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED,
-      VideoInclude.SOURCE
+  async function testEndpoints (
+    options:
+      & Pick<
+        VideosCommonQuery,
+        | 'isLocal'
+        | 'include'
+        | 'privacyOneOf'
+        | 'autoTagOneOf'
+        | 'excludeAlreadyWatched'
+        | 'nsfw'
+        | 'nsfwFlagsExcluded'
+        | 'nsfwFlagsIncluded'
+      >
+      & {
+        token?: string
+        expectedStatus: HttpStatusCodeType
+        unauthenticatedUser?: boolean
+        filter?: string
+      }
+  ) {
+    const paths = [
+      '/api/v1/video-channels/root_channel/videos',
+      '/api/v1/accounts/root/videos',
+      '/api/v1/videos',
+      '/api/v1/search/videos'
     ]
 
-    async function testEndpoints (options: {
-      token?: string
-      isLocal?: boolean
-      include?: VideoIncludeType
-      privacyOneOf?: VideoPrivacyType[]
-      autoTagOneOf?: string[]
-      expectedStatus: HttpStatusCodeType
-      excludeAlreadyWatched?: boolean
-      unauthenticatedUser?: boolean
-      filter?: string
-    }) {
-      const paths = [
-        '/api/v1/video-channels/root_channel/videos',
-        '/api/v1/accounts/root/videos',
-        '/api/v1/videos',
-        '/api/v1/search/videos'
-      ]
-
-      if (options.unauthenticatedUser !== true) {
-        paths.push('/api/v1/users/me/videos')
-      }
-
-      for (const path of paths) {
-        const token = options.unauthenticatedUser
-          ? undefined
-          : options.token || server.accessToken
-
-        await makeGetRequest({
-          url: server.url,
-          path,
-          token,
-          query: {
-            isLocal: options.isLocal,
-            privacyOneOf: options.privacyOneOf,
-            autoTagOneOf: options.autoTagOneOf,
-            include: options.include,
-            excludeAlreadyWatched: options.excludeAlreadyWatched,
-            filter: options.filter
-          },
-          expectedStatus: options.expectedStatus
-        })
-      }
+    if (options.unauthenticatedUser !== true) {
+      paths.push('/api/v1/users/me/videos')
     }
 
+    for (const path of paths) {
+      const token = options.unauthenticatedUser
+        ? undefined
+        : options.token || server.accessToken
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token,
+        query: pick(options, [
+          'isLocal',
+          'privacyOneOf',
+          'autoTagOneOf',
+          'include',
+          'excludeAlreadyWatched',
+          'filter',
+          'nsfw',
+          'nsfwFlagsExcluded',
+          'nsfwFlagsIncluded'
+        ]),
+        expectedStatus: options.expectedStatus
+      })
+    }
+  }
+
+  describe('Local filter', function () {
     it('Should fail with the old filter query param', async function () {
       await testEndpoints({ filter: 'all-local', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should succeed on the feeds endpoint with the local filter', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: '/feeds/videos.json',
+        expectedStatus: HttpStatusCode.OK_200,
+        query: {
+          isLocal: true
+        }
+      })
+    })
+  })
+
+  describe('Privacy', function () {
     it('Should fail with a bad privacyOneOf', async function () {
       await testEndpoints({ privacyOneOf: [ 'toto' ] as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -114,7 +133,9 @@ describe('Test video filters validators', function () {
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
+  })
 
+  describe('Auto tag', function () {
     it('Should fail to use autoTagOneOf with a simple user', async function () {
       await testEndpoints({
         autoTagOneOf: [ 'test' ],
@@ -130,7 +151,9 @@ describe('Test video filters validators', function () {
         expectedStatus: HttpStatusCode.OK_200
       })
     })
+  })
 
+  describe('Include', function () {
     it('Should fail with a bad include', async function () {
       await testEndpoints({ include: 'toto' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -172,24 +195,46 @@ describe('Test video filters validators', function () {
         })
       }
     })
+  })
 
-    it('Should succeed on the feeds endpoint with the local filter', async function () {
-      await makeGetRequest({
-        url: server.url,
-        path: '/feeds/videos.json',
-        expectedStatus: HttpStatusCode.OK_200,
-        query: {
-          isLocal: true
-        }
-      })
-    })
-
+  describe('Exclude already watched', function () {
     it('Should fail when trying to exclude already watched videos for an unlogged user', async function () {
       await testEndpoints({ excludeAlreadyWatched: true, unauthenticatedUser: true, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed when trying to exclude already watched videos for a logged user', async function () {
       await testEndpoints({ token: userAccessToken, excludeAlreadyWatched: true, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
+  describe('NSFW', function () {
+    it('Should fail with an invalid nsfw', async function () {
+      await testEndpoints({ nsfw: 'hello' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an invalid nsfwFlagsExcluded', async function () {
+      await testEndpoints({ nsfwFlagsExcluded: 'hello' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an invalid nsfwFlagsIncluded', async function () {
+      await testEndpoints({ nsfwFlagsIncluded: 'hello' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with conflicted nsfwFlagsIncluded and nsfwFlagsExcluded', async function () {
+      await testEndpoints({
+        nsfwFlagsIncluded: 1,
+        nsfwFlagsExcluded: 1,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct NSFW params', async function () {
+      await testEndpoints({
+        nsfw: 'true',
+        nsfwFlagsIncluded: 2,
+        nsfwFlagsExcluded: 1,
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 

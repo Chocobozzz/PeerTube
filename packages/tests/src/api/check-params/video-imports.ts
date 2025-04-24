@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoCommentPolicy, VideoImportCreate, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, NSFWFlag, VideoCommentPolicy, VideoImportCreate, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -158,6 +158,32 @@ describe('Test video imports API validator', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail with a bad NSFW', async function () {
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwFlags: NSFWFlag.EXPLICIT_SEX }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwSummary: 'toto' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwFlags: 'toto' as any }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwSummary: 't' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+    })
+
     it('Should fail with a bad category', async function () {
       const fields = { ...baseCorrectParams, category: 125 }
 
@@ -300,6 +326,20 @@ describe('Test video imports API validator', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: {
+          ...baseCorrectParams,
+
+          nsfw: true,
+          nsfwFlags: NSFWFlag.EXPLICIT_SEX,
+          nsfwSummary: 'toto'
+        },
         expectedStatus: HttpStatusCode.OK_200
       })
     })

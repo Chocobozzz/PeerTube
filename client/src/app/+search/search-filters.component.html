@@ -35,25 +35,6 @@
         </div>
       </div>
 
-      <div class="form-group" role="radiogroup">
-        <div class="radio-label label-container">
-          <label for="sensitiveContent" i18n>Display sensitive content</label>
-          <button type="button" i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch().nsfw !== undefined">
-            Reset
-          </button>
-        </div>
-
-        <div class="peertube-radio-container">
-          <input type="radio" name="sensitiveContent" id="sensitiveContentYes" value="both" [(ngModel)]="advancedSearch().nsfw">
-          <label i18n for="sensitiveContentYes" class="radio">Yes</label>
-        </div>
-
-        <div class="peertube-radio-container">
-          <input type="radio" name="sensitiveContent" id="sensitiveContentNo" value="false" [(ngModel)]="advancedSearch().nsfw">
-          <label i18n for="sensitiveContentNo" class="radio">No</label>
-        </div>
-      </div>
-
       <div class="form-group">
         <div class="radio-label label-container">
           <label for="publishedDateRange" i18n>Published date</label>

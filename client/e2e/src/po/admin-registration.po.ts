@@ -1,8 +1,7 @@
 import { browserSleep, findParentElement, go } from '../utils'
 
 export class AdminRegistrationPage {
-
-  async navigateToRegistratonsList () {
+  async navigateToRegistrationsList () {
     await go('/admin/moderation/registrations/list')
 
     await $('my-registration-list').waitForDisplayed()
@@ -31,5 +30,4 @@ export class AdminRegistrationPage {
 
     await browserSleep(1000)
   }
-
 }

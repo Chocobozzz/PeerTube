@@ -1,0 +1,37 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+label {
+  display: block;
+
+  &.label-secondary {
+    font-size: 1rem;
+    font-weight: normal;
+    color: pvar(--fg);
+  }
+}
+
+.peertube-radio-container {
+  margin-bottom: 0.25rem;
+}
+
+.peertube-radio-container .form-group-description {
+  margin-bottom: 0;
+}
+
+// Prevent layout shift on bold
+.btn-outline-primary {
+  &::after {
+    display: block;
+    content: attr(data-label);
+    font-weight: bold;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.btn-check:checked + .btn-outline-primary {
+  font-weight: $font-bold;
+  letter-spacing: 0;
+}

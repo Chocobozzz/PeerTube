@@ -54,6 +54,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   comments: number
 
   nsfw: boolean
+  nsfwFlags: number
+  nsfwSummary: string
 
   account: AccountSummary
   channel: VideoChannelSummary

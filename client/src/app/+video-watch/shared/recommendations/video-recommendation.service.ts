@@ -59,15 +59,10 @@ export class VideoRecommendationService {
     return this.userService.getAnonymousOrLoggedUser()
       .pipe(
         switchMap(user => {
-          const nsfw = user.nsfwPolicy
-            ? this.videos.nsfwPolicyToParam(user.nsfwPolicy)
-            : undefined
-
-          const defaultSubscription = this.videos.getVideos({
+          const defaultSubscription = this.videos.listVideos({
             skipCount: true,
             videoPagination: pagination,
-            sort: '-publishedAt',
-            nsfw
+            sort: '-publishedAt'
           }).pipe(map(v => v.data))
 
           const searchIndexConfig = this.config.search.searchIndex
@@ -83,7 +78,6 @@ export class VideoRecommendationService {
               tagsOneOf: currentVideo.tags.join(','),
               sort: '-publishedAt',
               searchTarget: 'local',
-              nsfw,
               excludeAlreadyWatched: user.id
                 ? true
                 : undefined

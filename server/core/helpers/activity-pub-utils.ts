@@ -5,7 +5,7 @@ import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
 
-export type ContextFilter = <T> (arg: T) => Promise<T>
+export type ContextFilter = <T>(arg: T) => Promise<T>
 
 export function buildGlobalHTTPHeaders (
   body: any,
@@ -18,11 +18,11 @@ export function buildGlobalHTTPHeaders (
   }
 }
 
-export async function activityPubContextify <T> (data: T, type: ContextType, contextFilter: ContextFilter) {
+export async function activityPubContextify<T> (data: T, type: ContextType, contextFilter: ContextFilter) {
   return { ...await getContextData(type, contextFilter), ...data }
 }
 
-export async function signAndContextify <T> (options: {
+export async function signAndContextify<T> (options: {
   byActor: { url: string, privateKey: string }
   data: T
   contextType: ContextType | null
@@ -65,9 +65,9 @@ export function hasAPPublic (toOrCC: string[]) {
 // Private
 // ---------------------------------------------------------------------------
 
-type ContextValue = { [ id: string ]: (string | { '@type': string, '@id': string }) }
+type ContextValue = { [id: string]: string | { '@type': string, '@id': string } }
 
-const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string })[] } = {
+const contextStore: { [id in ContextType]: (string | { [id: string]: string })[] } = {
   Video: buildContext({
     Hashtag: 'as:Hashtag',
     category: 'sc:category',
@@ -93,6 +93,7 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     },
 
     Infohash: 'pt:Infohash',
+    SensitiveTag: 'pt:SensitiveTag',
 
     tileWidth: {
       '@type': 'sc:Number',

@@ -56,13 +56,10 @@
 @mixin peertube-select-container ($width) {
   padding: 0;
   margin: 0;
-  width: $width;
   position: relative;
   height: min-content;
 
-  @media screen and (max-width: $width) {
-    width: 100%;
-  }
+  @include responsive-width($width);
 
   &::after {
     top: 50%;
@@ -116,6 +113,7 @@
 
   label {
     font-size: $form-input-font-size;
+    color: pvar(--fg-350);
   }
 
   [type=radio]:focus-visible,[type=radio]:focus {
@@ -141,7 +139,6 @@
     line-height: 20px;
     display: inline-block;
     font-weight: $font-regular;
-    color: pvar(--fg);
   }
 
   [type=radio]:checked + label::before,
@@ -200,6 +197,7 @@
     box-shadow: $focus-box-shadow-form;
   }
 
+  // Checkbox
   + span {
     position: relative;
     width: 20px;
@@ -224,6 +222,7 @@
     }
   }
 
+  // Checkbox checked
   &:checked + span {
     background: pvar(--input-check-active-bg);
     animation: jelly 0.6s ease;
@@ -246,10 +245,12 @@
     }
   }
 
+  // Label
   + span + span {
     font-weight: $font-regular;
     cursor: pointer;
     display: inline;
+    color: pvar(--fg-350);
 
     @include margin-left(8px);
   }

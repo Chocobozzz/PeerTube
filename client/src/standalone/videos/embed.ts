@@ -18,6 +18,7 @@ import {
   AuthHTTP,
   LiveManager,
   PeerTubePlugin,
+  PeerTubeTheme,
   PlayerOptionsBuilder,
   PlaylistFetcher,
   PlaylistTracker,
@@ -41,6 +42,7 @@ export class PeerTubeEmbed {
   private readonly videoFetcher: VideoFetcher
   private readonly playlistFetcher: PlaylistFetcher
   private readonly peertubePlugin: PeerTubePlugin
+  private readonly peertubeTheme: PeerTubeTheme
   private readonly playerHTML: PlayerHTML
   private readonly playerOptionsBuilder: PlayerOptionsBuilder
   private readonly liveManager: LiveManager
@@ -65,6 +67,7 @@ export class PeerTubeEmbed {
     this.videoFetcher = new VideoFetcher(this.http)
     this.playlistFetcher = new PlaylistFetcher(this.http)
     this.peertubePlugin = new PeerTubePlugin(this.http)
+    this.peertubeTheme = new PeerTubeTheme(this.peertubePlugin)
     this.playerHTML = new PlayerHTML(videoWrapperId)
     this.playerOptionsBuilder = new PlayerOptionsBuilder(this.playerHTML, this.videoFetcher, this.peertubePlugin)
     this.liveManager = new LiveManager(this.playerHTML)
@@ -100,6 +103,8 @@ export class PeerTubeEmbed {
       this.config = await this.http.fetch(getBackendUrl() + '/api/v1/config', { optionalAuth: false })
         .then(res => res.json())
     }
+
+    this.peertubeTheme.loadTheme(this.config)
 
     const videoId = this.isPlaylistEmbed()
       ? await this.initPlaylist()
@@ -278,6 +283,8 @@ export class PeerTubeEmbed {
       video,
       captionsResponse,
       chaptersResponse,
+
+      config: this.config,
       translations,
 
       storyboardsResponse,
@@ -379,6 +386,7 @@ export class PeerTubeEmbed {
 
     this.peertubePlayer.unload()
     this.peertubePlayer.disable()
+
     this.peertubePlayer.setPoster(video.previewPath)
   }
 

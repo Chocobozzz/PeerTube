@@ -79,6 +79,7 @@ const icons = {
   'ownership-change': require('../../../assets/images/feather/share.svg'),
   'p2p': require('../../../assets/images/feather/airplay.svg'),
   'play': require('../../../assets/images/feather/play.svg'),
+  'circle-alert': require('../../../assets/images/feather/circle-alert.svg'),
   'playlists': require('../../../assets/images/feather/playlists.svg'),
   'refresh': require('../../../assets/images/feather/refresh-cw.svg'),
   'repeat': require('../../../assets/images/feather/repeat.svg'),

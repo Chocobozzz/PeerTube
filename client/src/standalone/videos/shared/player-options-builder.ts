@@ -16,6 +16,9 @@ import {
   getParamString,
   getParamToggle,
   isP2PEnabled,
+  isVideoNSFWBlurForUser,
+  isVideoNSFWHiddenForUser,
+  isVideoNSFWWarnedForUser,
   logger,
   peertubeLocalStorage,
   UserLocalStorageKeys,
@@ -235,6 +238,7 @@ export class PlayerOptionsBuilder {
     videoPassword: () => string
     requiresPassword: boolean
 
+    config: HTMLServerConfig
     translations: Translations
 
     playlist?: {
@@ -256,7 +260,8 @@ export class PlayerOptionsBuilder {
       playlist,
       live,
       storyboardsResponse,
-      chaptersResponse
+      chaptersResponse,
+      config
     } = options
 
     const [ videoCaptions, storyboard, chapters ] = await Promise.all([
@@ -265,10 +270,13 @@ export class PlayerOptionsBuilder {
       this.buildChapters(chaptersResponse)
     ])
 
+    const nsfwWarn = isVideoNSFWWarnedForUser(video, config, null) || isVideoNSFWHiddenForUser(video, config, null)
+    const nsfwBlur = isVideoNSFWBlurForUser(video, config, null) || isVideoNSFWHiddenForUser(video, config, null)
+
     return {
       mode: this.mode,
 
-      autoplay: forceAutoplay || alreadyPlayed || this.autoplay,
+      autoplay: !nsfwWarn && (forceAutoplay || alreadyPlayed || this.autoplay),
       forceAutoplay,
 
       p2pEnabled: this.p2pEnabled,
@@ -291,10 +299,19 @@ export class PlayerOptionsBuilder {
       videoShortUUID: video.shortUUID,
       videoUUID: video.uuid,
 
+      nsfwWarning: nsfwWarn
+        ? {
+          flags: video.nsfwFlags,
+          summary: video.nsfwSummary
+        }
+        : undefined,
+
+      poster: nsfwBlur
+        ? null
+        : getBackendUrl() + video.previewPath,
+
       duration: video.duration,
       videoRatio: video.aspectRatio,
-
-      poster: getBackendUrl() + video.previewPath,
 
       embedUrl: getBackendUrl() + video.embedPath,
       embedTitle: video.name,

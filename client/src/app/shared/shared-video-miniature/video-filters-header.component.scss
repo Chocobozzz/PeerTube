@@ -44,6 +44,10 @@ $filters-background: pvar(--bg-secondary-400);
   }
 }
 
+.form-group-description {
+  color: pvar(--fg-300);
+}
+
 .filters {
   --input-bg: #{pvar(--input-bg-in-secondary)};
   --input-border-color: #{pvar(--input-bg-in-secondary)};
@@ -134,6 +138,11 @@ my-select-options {
 }
 
 @media screen and (max-width: $small-view) {
+  .scope-select {
+    min-width: auto;
+    max-width: 90%;
+  }
+
   .filters-toggle {
     margin-top: 0.5rem;
 

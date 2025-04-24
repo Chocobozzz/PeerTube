@@ -174,9 +174,9 @@
 
     </div>
 
-    <div class="pt-two-cols mt-4"> <!-- moderation & nsfw grid -->
+    <div class="pt-two-cols mt-4"> <!-- moderation grid -->
       <div class="title-col">
-        <h2 i18n>MODERATION & NSFW</h2>
+        <h2 i18n>MODERATION & SENSITIVE CONTENT</h2>
         <div i18n class="inner-form-description">
           Manage <a class="link-primary" routerLink="/admin/overview/users">users</a> to build a moderation team.
         </div>
@@ -186,34 +186,24 @@
         <div class="form-group">
           <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
             <ng-template ptTemplate="label">
-              <ng-container i18n>This instance is dedicated to sensitive or NSFW content</ng-container>
+              <ng-container i18n>This instance is dedicated to sensitive content</ng-container>
             </ng-template>
 
             <ng-template ptTemplate="help">
               <ng-container i18n>
                 Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br />
-                Moreover, the NSFW checkbox on video upload will be automatically checked by default.
+                Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default.
               </ng-container>
             </ng-template>
           </my-peertube-checkbox>
         </div>
 
         <div class="form-group">
-          <label i18n for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
-
-          <my-help>
-            <ng-container i18n>
-              With <strong>Hide</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
-            </ng-container>
-          </my-help>
-
-          <div class="peertube-select-container">
-            <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy" class="form-control">
-              <option i18n value="do_not_list">Hide</option>
-              <option i18n value="blur">Blur thumbnails</option>
-              <option i18n value="display">Display</option>
-            </select>
-          </div>
+          <my-select-radio
+            [items]="nsfwItems" inputId="instanceDefaultNSFWPolicy" isGroup="true"
+            i18n-label label="Policy on videos containing sensitive content"
+            formControlName="defaultNSFWPolicy"
+          ></my-select-radio>
 
           <div *ngIf="formErrors().instance.defaultNSFWPolicy" class="form-error" role="alert">{{ formErrors().instance.defaultNSFWPolicy }}</div>
         </div>
@@ -238,7 +228,7 @@
 
         <div class="form-group">
           <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
+          <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</div>
 
           <my-markdown-textarea
             inputId="instanceModerationInformation" formControlName="moderationInformation" markdownType="enhanced"

@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { AfterViewInit, Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
@@ -12,7 +12,7 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-video-channel-videos',
   templateUrl: './video-channel-videos.component.html',
-  imports: [ NgIf, VideosListComponent ]
+  imports: [ CommonModule, VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {
   private screenService = inject(ScreenService)
@@ -65,7 +65,7 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
       skipCount: true
     }
 
-    return this.videoService.getVideoChannelVideos(params)
+    return this.videoService.listChannelVideos(params)
   }
 
   getSyndicationItems () {

@@ -168,7 +168,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       categories: [ 1, 2 ],
 
       isNSFW: true,
-      defaultNSFWPolicy: 'blur' as 'blur',
+      defaultNSFWPolicy: 'warn' as 'warn',
 
       serverCountry: 'France',
       support: {
@@ -450,7 +450,6 @@ describe('Test config', function () {
   })
 
   describe('Config keys', function () {
-
     it('Should have the correct default config', async function () {
       const data = await server.config.getConfig()
 
@@ -612,7 +611,6 @@ describe('Test config', function () {
   })
 
   describe('Image files', function () {
-
     async function checkAndGetServerImages () {
       const { instance } = await server.config.getAbout()
       const htmlConfig = await server.config.getConfig()

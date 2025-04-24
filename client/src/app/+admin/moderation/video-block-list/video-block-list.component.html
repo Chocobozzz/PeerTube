@@ -48,16 +48,15 @@
       <td>
         <my-video-cell [video]="videoBlock.video" size="small">
           <div>
-            <span
-              *ngIf="videoBlock.type === 2"
-              i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info" i18n
-            >Auto block</span>
+            @if (videoBlock.type === 2) {
+              <span i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info badge-small" i18n>Auto block</span>
+            }
           </div>
         </my-video-cell>
       </td>
 
       <td>
-        <span *ngIf="videoBlock.video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
+        <my-video-nsfw-badge [video]="videoBlock.video" theme="red"></my-video-nsfw-badge>
       </td>
 
       <td>

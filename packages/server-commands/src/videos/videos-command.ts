@@ -649,6 +649,8 @@ export class VideosCommand extends AbstractCommand {
       'count',
       'sort',
       'nsfw',
+      'nsfwFlagsExcluded',
+      'nsfwFlagsIncluded',
       'isLive',
       'categoryOneOf',
       'licenceOneOf',

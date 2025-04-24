@@ -77,6 +77,7 @@ import { VideoPlaylistModel } from '../video/video-playlist.js'
 import { VideoModel } from '../video/video.js'
 import { UserNotificationSettingModel } from './user-notification-setting.js'
 import { UserExportModel } from './user-export.js'
+import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -315,6 +316,30 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
   @Column(DataType.ENUM(...Object.values(NSFW_POLICY_TYPES)))
   nsfwPolicy: NSFWPolicyType
+
+  @AllowNull(false)
+  @Default(0)
+  @Is('UserNSFWFlagsDisplayed', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
+  @Column
+  nsfwFlagsDisplayed: number
+
+  @AllowNull(false)
+  @Default(0)
+  @Is('UserNSFWFlagsHidden', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
+  @Column
+  nsfwFlagsHidden: number
+
+  @AllowNull(false)
+  @Default(0)
+  @Is('nsfwFlagsBlurred', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
+  @Column
+  nsfwFlagsBlurred: number
+
+  @AllowNull(false)
+  @Default(0)
+  @Is('UserNSFWFlagsWarned', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
+  @Column
+  nsfwFlagsWarned: number
 
   @AllowNull(false)
   @Is('p2pEnabled', value => throwIfNotValid(value, isUserP2PEnabledValid, 'P2P enabled'))
@@ -974,6 +999,10 @@ export class UserModel extends SequelizeModel<UserModel> {
       emailVerified: this.emailVerified,
 
       nsfwPolicy: this.nsfwPolicy,
+      nsfwFlagsDisplayed: this.nsfwFlagsDisplayed,
+      nsfwFlagsHidden: this.nsfwFlagsHidden,
+      nsfwFlagsWarned: this.nsfwFlagsWarned,
+      nsfwFlagsBlurred: this.nsfwFlagsBlurred,
 
       p2pEnabled: this.p2pEnabled,
 

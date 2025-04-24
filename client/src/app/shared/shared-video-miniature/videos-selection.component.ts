@@ -3,7 +3,7 @@ import { AfterContentInit, Component, contentChildren, inject, input, model, Tem
 import { FormsModule } from '@angular/forms'
 import { ComponentPagination, Notifier, resetCurrentPage, User } from '@app/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { ResultList, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
+import { ResultList, VideoSortField } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { Observable, Subject } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
@@ -23,7 +23,6 @@ export type SelectionType = { [id: number]: boolean }
 export class VideosSelectionComponent implements AfterContentInit {
   private notifier = inject(Notifier)
 
-  readonly videosContainedInPlaylists = input<VideosExistInPlaylists>(undefined)
   readonly user = input<User>(undefined)
   readonly pagination = input<ComponentPagination>(undefined)
 

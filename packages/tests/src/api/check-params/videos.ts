@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit, randomInt } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, PeerTubeProblemDocument, VideoCommentPolicy, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  NSFWFlag,
+  PeerTubeProblemDocument,
+  VideoCommentPolicy,
+  VideoCreateResult,
+  VideoPrivacy
+} from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -268,6 +275,36 @@ describe('Test videos API validator', function () {
         await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
       })
 
+      it('Should fail with a bad NSFW', async function () {
+        {
+          const fields = { ...baseCorrectParams, nsfw: false, nsfwFlags: NSFWFlag.EXPLICIT_SEX }
+          const attaches = baseCorrectAttaches
+
+          await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
+        }
+
+        {
+          const fields = { ...baseCorrectParams, nsfw: false, nsfwSummary: 'toto' }
+          const attaches = baseCorrectAttaches
+
+          await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
+        }
+
+        {
+          const fields = { ...baseCorrectParams, nsfw: true, nsfwFlags: 'toto' as any }
+          const attaches = baseCorrectAttaches
+
+          await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
+        }
+
+        {
+          const fields = { ...baseCorrectParams, nsfw: true, nsfwSummary: 't' }
+          const attaches = baseCorrectAttaches
+
+          await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
+        }
+      })
+
       it('Should fail with a bad category', async function () {
         const fields = { ...baseCorrectParams, category: 125 }
         const attaches = baseCorrectAttaches
@@ -521,7 +558,7 @@ describe('Test videos API validator', function () {
 
           await checkUploadVideoParam({
             ...baseOptions(),
-            attributes: { ...fields, ...attaches },
+            attributes: { ...fields, ...attaches, nsfw: true, nsfwFlags: NSFWFlag.EXPLICIT_SEX, nsfwSummary: 'toto' },
             expectedStatus: HttpStatusCode.OK_200
           })
         }
@@ -582,6 +619,32 @@ describe('Test videos API validator', function () {
       const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
       await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad NSFW', async function () {
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwFlags: NSFWFlag.EXPLICIT_SEX }
+
+        await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwSummary: 'toto' }
+
+        await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwFlags: 'toto' as any }
+
+        await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwSummary: 't' }
+
+        await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
+      }
     })
 
     it('Should fail with a bad category', async function () {
@@ -759,6 +822,20 @@ describe('Test videos API validator', function () {
         path: path + video.shortUUID,
         token: server.accessToken,
         fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + video.shortUUID,
+        token: server.accessToken,
+        fields: {
+          ...fields,
+
+          nsfw: true,
+          nsfwFlags: NSFWFlag.EXPLICIT_SEX,
+          nsfwSummary: 'toto'
+        },
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })

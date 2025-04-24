@@ -32,7 +32,7 @@
       <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
     </div>
 
-    <my-video-alert [video]="video" [user]="user" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
+    <my-video-alert [video]="video" [user]="authUser" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
   </div>
 
   <!-- Video information -->
@@ -110,7 +110,7 @@
         class="border-top pt-3"
         [video]="video"
         [videoPassword]="videoPassword"
-        [user]="user"
+        [user]="authUser"
         (timestampClicked)="handleTimestampClicked($event)"
       ></my-video-comments>
     </div>

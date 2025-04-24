@@ -2,6 +2,7 @@ import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import {
   LiveVideoCreate,
   LiveVideoLatencyMode,
+  NSFWFlag,
   ThumbnailType,
   ThumbnailType_Type,
   VideoCreate,
@@ -56,9 +57,9 @@ export type ThumbnailOptions = {
 type ChaptersOption = { timecode: number, title: string }[]
 
 type VideoAttributeHookFilter =
-  'filter:api.video.user-import.video-attribute.result' |
-  'filter:api.video.upload.video-attribute.result' |
-  'filter:api.video.live.video-attribute.result'
+  | 'filter:api.video.user-import.video-attribute.result'
+  | 'filter:api.video.upload.video-attribute.result'
+  | 'filter:api.video.live.video-attribute.result'
 
 export class LocalVideoCreator {
   private readonly lTags: LoggerTagsFn
@@ -76,28 +77,30 @@ export class LocalVideoCreator {
   private videoFile: MVideoFile
   private videoPath: string
 
-  constructor (private readonly options: {
-    lTags: LoggerTagsFn
+  constructor (
+    private readonly options: {
+      lTags: LoggerTagsFn
 
-    videoFile: {
-      path: string
-      probe: FfprobeData
+      videoFile: {
+        path: string
+        probe: FfprobeData
+      }
+
+      videoAttributes: VideoAttributes
+      liveAttributes: LiveAttributes
+
+      channel: MChannelAccountLight
+      user: MUser
+      videoAttributeResultHook: VideoAttributeHookFilter
+      thumbnails: ThumbnailOptions
+
+      chapters: ChaptersOption | undefined
+      fallbackChapters: {
+        fromDescription: boolean
+        finalFallback: ChaptersOption | undefined
+      }
     }
-
-    videoAttributes: VideoAttributes
-    liveAttributes: LiveAttributes
-
-    channel: MChannelAccountLight
-    user: MUser
-    videoAttributeResultHook: VideoAttributeHookFilter
-    thumbnails: ThumbnailOptions
-
-    chapters: ChaptersOption | undefined
-    fallbackChapters: {
-      fromDescription: boolean
-      finalFallback: ChaptersOption | undefined
-    }
-  }) {
+  ) {
     this.videoFilePath = options.videoFile?.path
     this.videoFileProbe = options.videoFile?.probe
 
@@ -284,7 +287,11 @@ export class LocalVideoCreator {
       commentsPolicy: buildCommentsPolicy(videoInfo),
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
+
       nsfw: videoInfo.nsfw || false,
+      nsfwSummary: videoInfo.nsfwSummary,
+      nsfwFlags: videoInfo.nsfwFlags || NSFWFlag.NONE,
+
       description: videoInfo.description,
       support: videoInfo.support,
       privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,

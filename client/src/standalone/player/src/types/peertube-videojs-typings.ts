@@ -10,6 +10,7 @@ import { StoryboardPlugin } from '../shared/control-bar/storyboard-plugin'
 import { PeerTubeDockPlugin, PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { HotkeysOptions, PeerTubeHotkeysPlugin } from '../shared/hotkeys/peertube-hotkeys-plugin'
 import { PeerTubeMobilePlugin } from '../shared/mobile/peertube-mobile-plugin'
+import { PeerTubeNSFWPlugin, PeerTubeNSFWPluginOptions } from '../shared/nsfw/peertube-nsfw-plugin'
 import { Html5Hlsjs } from '../shared/p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from '../shared/p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from '../shared/p2p-media-loader/redundancy-url-manager'
@@ -24,7 +25,6 @@ import { WebVideoPlugin } from '../shared/web-video/web-video-plugin'
 import { PlayerMode } from './peertube-player-options'
 
 declare module 'video.js' {
-
   export interface VideoJsPlayer {
     srOptions_: HlsjsConfigHandlerOptions
 
@@ -32,44 +32,45 @@ declare module 'video.js' {
 
     // FIXME: add it to upstream typings
     posterImage: {
-      show (): void
-      hide (): void
+      show(): void
+      hide(): void
     }
 
-    handleTechSeeked_ (): void
+    handleTechSeeked_(): void
 
-    textTracks (): TextTrackList & {
+    textTracks(): TextTrackList & {
       tracks_: (TextTrack & { id: string, label: string, src: string })[]
     }
 
     // Plugins
 
-    peertube (): PeerTubePlugin
+    peertube(): PeerTubePlugin
 
-    webVideo (options?: any): WebVideoPlugin
+    webVideo(options?: any): WebVideoPlugin
 
-    p2pMediaLoader (options?: any): P2pMediaLoaderPlugin
-    hlsjs (options?: any): any
+    p2pMediaLoader(options?: any): P2pMediaLoaderPlugin
+    hlsjs(options?: any): any
 
-    peertubeResolutions (): PeerTubeResolutionsPlugin
+    peertubeResolutions(): PeerTubeResolutionsPlugin
 
-    contextMenu (options?: ContextMenuPluginOptions): ContextMenuPlugin
+    contextMenu(options?: ContextMenuPluginOptions): ContextMenuPlugin
 
-    bezels (): BezelsPlugin
-    peertubeMobile (): PeerTubeMobilePlugin
-    peerTubeHotkeysPlugin (options?: HotkeysOptions): PeerTubeHotkeysPlugin
+    bezels(): BezelsPlugin
+    peertubeMobile(): PeerTubeMobilePlugin
+    peerTubeHotkeysPlugin(options?: HotkeysOptions): PeerTubeHotkeysPlugin
 
-    stats (options?: StatsCardOptions): StatsForNerdsPlugin
+    stats(options?: StatsCardOptions): StatsForNerdsPlugin
 
-    storyboard (options?: StoryboardOptions): StoryboardPlugin
+    storyboard(options?: StoryboardOptions): StoryboardPlugin
 
-    peertubeDock (options?: PeerTubeDockPluginOptions): PeerTubeDockPlugin
+    peertubeDock(options?: PeerTubeDockPluginOptions): PeerTubeDockPlugin
+    peertubeNSFW(options?: PeerTubeNSFWPluginOptions): PeerTubeNSFWPlugin
 
-    chapters (options?: ChaptersOptions): ChaptersPlugin
+    chapters(options?: ChaptersOptions): ChaptersPlugin
 
-    upnext (options?: UpNextPluginOptions): UpNextPlugin
+    upnext(options?: UpNextPluginOptions): UpNextPlugin
 
-    playlist (options?: PlaylistPluginOptions): PlaylistPlugin
+    playlist(options?: PlaylistPluginOptions): PlaylistPlugin
   }
 }
 
@@ -214,7 +215,7 @@ export type WebVideoPluginOptions = {
 }
 
 export type HLSLoaderClass = {
-  new (confg: HlsConfig): Loader<LoaderContext>
+  new(confg: HlsConfig): Loader<LoaderContext>
 
   getEngine(): HlsJsP2PEngine
 }

@@ -28,7 +28,7 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
-import { getCommonVideoEditAttributes } from './videos.js'
+import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
 const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
@@ -88,6 +88,7 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (areErrorsInNSFW(req, res)) return cleanUpReqFiles(req)
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
@@ -300,7 +301,6 @@ function checkLiveSettingsReplayConsistency (options: {
 
   // We now save replays of this live, so replay settings are mandatory
   if (res.locals.videoLive.saveReplay !== true && body.saveReplay === true) {
-
     if (!exists(body.replaySettings)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,

@@ -32,19 +32,21 @@ $more-button-width: 40px;
   font-size: var(--co-fs-medium);
 }
 
-.date-and-views,
-.video-info-privacy,
-.badges {
+.date-and-views {
   font-size: var(--co-fs-small);
+  color: pvar(--fg-200);
 }
 
-.date-and-views {
-  color: pvar(--fg-200);
+.nsfw-warning {
+  my-global-icon {
+    @include global-icon-size(18px);
+  }
 }
 
 .owner-container {
   display: flex;
   min-width: 1px;
+  width: 100%;
 }
 
 my-actor-host {
@@ -144,14 +146,11 @@ my-actor-host {
     margin-bottom: 25px;
 
     .video-info {
-      margin: 0 10px;
-
       width: 100%;
       text-align: left;
     }
 
     .video-actions {
-      margin: 0;
       top: -3px;
       width: auto;
 
@@ -208,18 +207,6 @@ my-actor-host {
   my-actor-avatar {
     @include margin-right(0.5rem);
   }
-
-  .video-actions {
-    margin-top: -3px;
-  }
-}
-
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  font-size: 1rem;
-  margin-top: 0.25rem;
 }
 
 @include on-small-main-col {

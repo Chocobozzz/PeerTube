@@ -176,7 +176,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   private loadChannelVideosCount () {
-    this.videoService.getVideoChannelVideos({
+    this.videoService.listChannelVideos({
       videoChannel: this.videoChannel,
       videoPagination: {
         currentPage: 1,

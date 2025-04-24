@@ -6,7 +6,7 @@ import { cacheRouteFactory } from '@server/middlewares/index.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { extname } from 'path'
-import { buildNSFWFilter } from '../../helpers/express-utils.js'
+import { buildNSFWFilters } from '../../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -95,8 +95,9 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   })
 
   const data = await getVideosForFeeds({
+    ...buildNSFWFilters({ req, res }),
+
     sort: req.query.sort,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     accountId: account?.id,
@@ -124,8 +125,9 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   })
 
   const data = await getVideosForFeeds({
+    ...buildNSFWFilters({ req, res }),
+
     sort: req.query.sort,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     displayOnlyForFollower: {

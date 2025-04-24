@@ -13,7 +13,7 @@ import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger.js'
 import { resetSequelizeInstance } from '../../helpers/database-utils.js'
-import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
+import { buildNSFWFilters, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
 import { logger } from '../../helpers/logger.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
 import { MIMETYPES } from '../../initializers/constants.js'
@@ -395,9 +395,9 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
+    ...buildNSFWFilters({ req, res }),
 
     displayOnlyForFollower,
-    nsfw: buildNSFWFilter(res, query.nsfw),
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos

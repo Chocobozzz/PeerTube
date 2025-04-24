@@ -1,4 +1,4 @@
-import express from 'express'
+import { HttpStatusCode, ResultList, Video, VideosSearchQueryAfterSanitize } from '@peertube/peertube-models'
 import { sanitizeUrl } from '@server/helpers/core-utils.js'
 import { pickSearchVideoQuery } from '@server/helpers/query.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
@@ -9,8 +9,8 @@ import { getOrCreateAPVideo } from '@server/lib/activitypub/videos/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { HttpStatusCode, ResultList, Video, VideosSearchQueryAfterSanitize } from '@peertube/peertube-models'
-import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
+import express from 'express'
+import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
@@ -31,7 +31,8 @@ import { searchLocalUrl } from './shared/index.js'
 
 const searchVideosRouter = express.Router()
 
-searchVideosRouter.get('/videos',
+searchVideosRouter.get(
+  '/videos',
   openapiOperationDoc({ operationId: 'searchVideos' }),
   paginationValidator,
   setDefaultPagination,
@@ -104,21 +105,25 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
 async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
 
-  const apiOptions = await Hooks.wrapObject({
-    ...query,
+  const apiOptions = await Hooks.wrapObject(
+    {
+      ...query,
+      ...buildNSFWFilters({ req, res }),
 
-    displayOnlyForFollower: {
-      actorId: serverActor.id,
-      orLocalVideos: true
+      displayOnlyForFollower: {
+        actorId: serverActor.id,
+        orLocalVideos: true
+      },
+
+      countVideos: getCountVideos(req),
+
+      user: res.locals.oauth
+        ? res.locals.oauth.token.User
+        : undefined
     },
-
-    countVideos: getCountVideos(req),
-
-    nsfw: buildNSFWFilter(res, query.nsfw),
-    user: res.locals.oauth
-      ? res.locals.oauth.token.User
-      : undefined
-  }, 'filter:api.search.videos.local.list.params', { req, res })
+    'filter:api.search.videos.local.list.params',
+    { req, res }
+  )
 
   const resultList = await Hooks.wrapPromiseFun(
     VideoModel.searchAndPopulateAccountAndServer.bind(VideoModel),

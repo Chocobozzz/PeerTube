@@ -22,7 +22,12 @@ export class User implements UserServerModel {
 
   emailVerified: boolean
   emailPublic: boolean
+
   nsfwPolicy: NSFWPolicyType
+  nsfwFlagsDisplayed: number
+  nsfwFlagsHidden: number
+  nsfwFlagsWarned: number
+  nsfwFlagsBlurred: number
 
   adminFlags?: UserAdminFlagType
 
@@ -89,7 +94,7 @@ export class User implements UserServerModel {
 
   patch (obj: UserServerModel) {
     for (const key of objectKeysTyped(obj)) {
-      (this as any)[key] = obj[key]
+      ;(this as any)[key] = obj[key]
     }
 
     if (obj.account !== undefined) {

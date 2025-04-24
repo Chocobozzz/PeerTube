@@ -1,16 +1,17 @@
-import { NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
+import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-validators'
 import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig, VideoCommentPolicyType, VideoConstant } from '@peertube/peertube-models'
 import debug from 'debug'
 import { CalendarModule } from 'primeng/calendar'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
-import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { SelectRadioComponent } from '../../../shared/shared-forms/select/select-radio.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { VideoManageController } from '../video-manage-controller.service'
@@ -19,6 +20,12 @@ const debugLogger = debug('peertube:video-manage')
 
 type Form = {
   nsfw: FormControl<boolean>
+
+  nsfwFlagViolent: FormControl<boolean>
+  nsfwFlagShocking: FormControl<boolean>
+  nsfwFlagSex: FormControl<boolean>
+  nsfwSummary: FormControl<string>
+
   commentPolicies: FormControl<VideoCommentPolicyType>
 }
 
@@ -29,15 +36,15 @@ type Form = {
   ],
   templateUrl: './video-moderation.component.html',
   imports: [
+    CommonModule,
     RouterLink,
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     PeerTubeTemplateDirective,
-    SelectOptionsComponent,
     CalendarModule,
     PeertubeCheckboxComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    SelectRadioComponent
   ]
 })
 export class VideoModerationComponent implements OnInit, OnDestroy {
@@ -71,7 +78,14 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
     const videoEdit = this.manageController.getStore().videoEdit
 
     const defaultValues = videoEdit.toCommonFormPatch()
-    const obj: BuildFormArgument = { nsfw: null, commentsPolicy: null }
+    const obj: BuildFormArgument = {
+      commentsPolicy: null,
+      nsfw: null,
+      nsfwFlagViolent: null,
+      nsfwFlagShocking: null,
+      nsfwFlagSex: null,
+      nsfwSummary: VIDEO_NSFW_SUMMARY_VALIDATOR
+    }
 
     const {
       form,
@@ -97,5 +111,35 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
     this.updatedSub = this.manageController.getUpdatedObs().subscribe(() => {
       this.form.patchValue(videoEdit.toCommonFormPatch())
     })
+
+    this.updateNSFWControls(videoEdit.toCommonFormPatch().nsfw)
+    this.trackNSFWChange()
+  }
+
+  private trackNSFWChange () {
+    this.form.controls.nsfw
+      .valueChanges
+      .subscribe(newNSFW => this.updateNSFWControls(newNSFW))
+  }
+
+  private updateNSFWControls (nsfw: boolean) {
+    const controls = [
+      this.form.controls.nsfwFlagViolent,
+      this.form.controls.nsfwFlagShocking,
+      this.form.controls.nsfwFlagSex,
+      this.form.controls.nsfwSummary
+    ]
+
+    if (!nsfw) {
+      for (const control of controls) {
+        control.disable()
+      }
+
+      return
+    }
+
+    for (const control of controls) {
+      control.enable()
+    }
   }
 }

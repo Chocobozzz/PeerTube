@@ -12,6 +12,8 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'count',
     'sort',
     'nsfw',
+    'nsfwFlagsIncluded',
+    'nsfwFlagsExcluded',
     'isLive',
     'categoryOneOf',
     'licenceOneOf',

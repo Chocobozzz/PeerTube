@@ -1,3 +1,4 @@
+import { NSFWPolicyType } from '@peertube/peertube-models'
 import { getCheckbox, go, selectCustomSelect } from '../utils'
 
 export class MyAccountPage {
@@ -21,14 +22,26 @@ export class MyAccountPage {
     return $('a[href="/my-account"]').click()
   }
 
-  async updateNSFW (newValue: 'do_not_list' | 'blur' | 'display') {
-    const nsfw = $('#nsfwPolicy')
+  async updateNSFW (newValue: NSFWPolicyType) {
+    const nsfw = $(`#nsfwPolicy-${newValue} + label`)
 
     await nsfw.waitForDisplayed()
     await nsfw.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await nsfw.waitForClickable()
 
-    await nsfw.selectByAttribute('value', newValue)
+    await nsfw.click()
+
+    await this.submitVideoSettings()
+  }
+
+  async updateViolentFlag (newValue: NSFWPolicyType) {
+    const nsfw = $(`#nsfwFlagViolent-${newValue} + label`)
+
+    await nsfw.waitForDisplayed()
+    await nsfw.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
+    await nsfw.waitForClickable()
+
+    await nsfw.click()
 
     await this.submitVideoSettings()
   }
@@ -55,6 +68,7 @@ export class MyAccountPage {
   async updateEmail (email: string, password: string) {
     const emailInput = $('my-account-change-email #new-email')
     await emailInput.waitForDisplayed()
+    await emailInput.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await emailInput.setValue(email)
 
     const passwordInput = $('my-account-change-email #password')

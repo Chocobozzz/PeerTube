@@ -78,14 +78,12 @@
         <div class="form-group" role="radiogroup">
           <label for="nsfw" i18n>Sensitive content</label>
 
-          <div class="peertube-radio-container">
-            <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwBoth" value="both" />
-            <label for="nsfwBoth">{{ filters().getNSFWDisplayLabel() }}</label>
-          </div>
+          <div class="form-group-description">
+            <div>{{ filters().getNSFWSettingsLabel() }}</div>
 
-          <div class="peertube-radio-container">
-            <input formControlName="nsfw" type="radio" name="nsfw" id="nsfwFalse" value="false" />
-            <label for="nsfwFalse" i18n>Hide</label>
+            <div i18n>
+              Update your policy in <a routerLink="/my-account/settings" fragment="video-sensitive-content-policy" (click)="onAccountSettingsClick($event)">your settings</a>.
+            </div>
           </div>
         </div>
       </div>
@@ -144,7 +142,7 @@
           <my-peertube-checkbox
             formControlName="allVideos"
             inputName="allVideos"
-            i18n-labelText labelText="Display all videos (private, unlisted, password protected or not yet published)"
+            i18n-labelText labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
           ></my-peertube-checkbox>
         </div>
       </div>

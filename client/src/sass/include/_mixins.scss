@@ -96,11 +96,17 @@
   }
 }
 
-@mixin fill-svg-color ($color) {
+@mixin fill-path-svg-color ($color) {
   ::ng-deep svg {
     path {
       fill: $color;
     }
+  }
+}
+
+@mixin fill-svg-color ($color) {
+  ::ng-deep svg {
+    fill: $color;
   }
 }
 
@@ -128,7 +134,7 @@
 @mixin responsive-width ($width) {
   width: $width;
 
-  @media screen and (max-width: $width) {
+  @media screen and (max-width: #{$width - 30px}) {
     width: 100%;
   }
 }

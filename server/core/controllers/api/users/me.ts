@@ -95,13 +95,33 @@ meRouter.get(
   asyncMiddleware(listUserVideos)
 )
 
-meRouter.get('/me/videos/:videoId/rating', authenticate, asyncMiddleware(usersVideoRatingValidator), asyncMiddleware(getUserVideoRating))
+meRouter.get(
+  '/me/videos/:videoId/rating',
+  authenticate,
+  asyncMiddleware(usersVideoRatingValidator),
+  asyncMiddleware(getUserVideoRating)
+)
 
-meRouter.put('/me', authenticate, asyncMiddleware(usersUpdateMeValidator), asyncRetryTransactionMiddleware(updateMe))
+meRouter.put(
+  '/me',
+  authenticate,
+  asyncMiddleware(usersUpdateMeValidator),
+  asyncRetryTransactionMiddleware(updateMe)
+)
 
-meRouter.post('/me/avatar/pick', authenticate, reqAvatarFile, updateAvatarValidator, asyncRetryTransactionMiddleware(updateMyAvatar))
+meRouter.post(
+  '/me/avatar/pick',
+  authenticate,
+  reqAvatarFile,
+  updateAvatarValidator,
+  asyncRetryTransactionMiddleware(updateMyAvatar)
+)
 
-meRouter.delete('/me/avatar', authenticate, asyncRetryTransactionMiddleware(deleteMyAvatar))
+meRouter.delete(
+  '/me/avatar',
+  authenticate,
+  asyncRetryTransactionMiddleware(deleteMyAvatar)
+)
 
 // ---------------------------------------------------------------------------
 
@@ -248,6 +268,10 @@ async function updateMe (req: express.Request, res: express.Response) {
   const keysToUpdate: (keyof UserUpdateMe & keyof AttributesOnly<UserModel>)[] = [
     'password',
     'nsfwPolicy',
+    'nsfwFlagsDisplayed',
+    'nsfwFlagsHidden',
+    'nsfwFlagsWarned',
+    'nsfwFlagsBlurred',
     'p2pEnabled',
     'autoPlayVideo',
     'autoPlayNextVideo',

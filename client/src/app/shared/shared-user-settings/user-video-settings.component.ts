@@ -1,16 +1,32 @@
 import { NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactive } from '@app/shared/shared-forms/form-reactive'
-import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
+import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { NSFWFlag, NSFWFlagType, NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
 import { pick } from 'lodash-es'
 import { Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
+import { SelectOptionsItem } from 'src/types'
+import { BuildFormArgument } from '../form-validators/form-validator.model'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
+import { SelectRadioComponent } from '../shared-forms/select/select-radio.component'
 import { HelpComponent } from '../shared-main/buttons/help.component'
+
+type NSFWFlagPolicyType = NSFWPolicyType | 'default'
+
+type Form = {
+  nsfwPolicy: FormControl<NSFWPolicyType>
+  nsfwFlagViolent: FormControl<NSFWFlagPolicyType>
+  nsfwFlagShocking: FormControl<NSFWFlagPolicyType>
+  nsfwFlagSex: FormControl<NSFWFlagPolicyType>
+
+  p2pEnabled: FormControl<boolean>
+  autoPlayVideo: FormControl<boolean>
+  autoPlayNextVideo: FormControl<boolean>
+  videoLanguages: FormControl<string[]>
+}
 
 @Component({
   selector: 'my-user-video-settings',
@@ -22,11 +38,12 @@ import { HelpComponent } from '../shared-main/buttons/help.component'
     HelpComponent,
     SelectLanguagesComponent,
     PeertubeCheckboxComponent,
-    NgIf
+    NgIf,
+    SelectRadioComponent
   ]
 })
-export class UserVideoSettingsComponent extends FormReactive implements OnInit, OnDestroy {
-  protected formReactiveService = inject(FormReactiveService)
+export class UserVideoSettingsComponent implements OnInit, OnDestroy {
+  private formReactiveService = inject(FormReactiveService)
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
   private userService = inject(UserService)
@@ -37,26 +54,72 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   readonly notifyOnUpdate = input(true)
   readonly userInformationLoaded = input<Subject<any>>(undefined)
 
-  defaultNSFWPolicy: NSFWPolicyType
+  form: FormGroup<Form>
+  formErrors: FormReactiveErrors = {}
+  validationMessages: FormReactiveValidationMessages = {}
+
+  nsfwItems: SelectOptionsItem[] = [
+    {
+      id: 'do_not_list',
+      label: $localize`Hide`
+    },
+    {
+      id: 'warn',
+      label: $localize`Warn`
+    },
+    {
+      id: 'blur',
+      label: $localize`Blur`
+    },
+    {
+      id: 'display',
+      label: $localize`Display`
+    }
+  ]
+
+  nsfwFlagItems: SelectOptionsItem[] = [
+    {
+      id: 'default',
+      label: $localize`Default`
+    },
+    {
+      id: 'do_not_list',
+      label: $localize`Hide`
+    },
+    {
+      id: 'warn',
+      label: $localize`Warn`
+    },
+    {
+      id: 'blur',
+      label: $localize`Blur`
+    },
+    {
+      id: 'display',
+      label: $localize`Display`
+    }
+  ]
+
   formValuesWatcher: Subscription
 
   ngOnInit () {
-    this.buildForm({
-      nsfwPolicy: null,
-      p2pEnabled: null,
-      autoPlayVideo: null,
-      autoPlayNextVideo: null,
-      videoLanguages: null
-    })
+    this.buildForm()
+
+    this.updateNSFWDefaultLabel(this.user().nsfwPolicy)
+    this.form.controls.nsfwPolicy.valueChanges.subscribe(nsfwPolicy => this.updateNSFWDefaultLabel(nsfwPolicy))
 
     this.userInformationLoaded().pipe(first())
       .subscribe(
         () => {
           const serverConfig = this.serverService.getHTMLConfig()
-          this.defaultNSFWPolicy = serverConfig.instance.defaultNSFWPolicy
+          const defaultNSFWPolicy = serverConfig.instance.defaultNSFWPolicy
 
           this.form.patchValue({
-            nsfwPolicy: this.user().nsfwPolicy || this.defaultNSFWPolicy,
+            nsfwPolicy: this.user().nsfwPolicy || defaultNSFWPolicy,
+            nsfwFlagViolent: this.buildNSFWFormFlag(NSFWFlag.VIOLENT),
+            nsfwFlagShocking: this.buildNSFWFormFlag(NSFWFlag.SHOCKING_DISTURBING),
+            nsfwFlagSex: this.buildNSFWFormFlag(NSFWFlag.EXPLICIT_SEX),
+
             p2pEnabled: this.user().p2pEnabled,
             autoPlayVideo: this.user().autoPlayVideo === true,
             autoPlayNextVideo: this.user().autoPlayNextVideo,
@@ -72,13 +135,32 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
     this.formValuesWatcher?.unsubscribe()
   }
 
-  updateDetails (onlyKeys?: string[]) {
-    const nsfwPolicy = this.form.value['nsfwPolicy']
-    const p2pEnabled = this.form.value['p2pEnabled']
-    const autoPlayVideo = this.form.value['autoPlayVideo']
-    const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
+  private buildForm () {
+    const obj: BuildFormArgument = {
+      nsfwPolicy: null,
+      nsfwFlagViolent: null,
+      nsfwFlagShocking: null,
+      nsfwFlagSex: null,
 
-    const videoLanguages = this.form.value['videoLanguages']
+      p2pEnabled: null,
+      autoPlayVideo: null,
+      autoPlayNextVideo: null,
+      videoLanguages: null
+    }
+
+    const {
+      form,
+      formErrors,
+      validationMessages
+    } = this.formReactiveService.buildForm<Form>(obj)
+
+    this.form = form
+    this.formErrors = formErrors
+    this.validationMessages = validationMessages
+  }
+
+  updateDetails (onlyKeys?: string[]) {
+    const videoLanguages = this.form.value.videoLanguages
 
     if (Array.isArray(videoLanguages)) {
       if (videoLanguages.length > 20) {
@@ -87,19 +169,33 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
       }
     }
 
+    const value = this.form.value
+
     let details: UserUpdateMe = {
-      nsfwPolicy,
-      p2pEnabled,
-      autoPlayVideo,
-      autoPlayNextVideo,
+      nsfwPolicy: value.nsfwPolicy,
+      p2pEnabled: value.p2pEnabled,
+      autoPlayVideo: value.autoPlayVideo,
+      autoPlayNextVideo: value.autoPlayNextVideo,
+
+      nsfwFlagsDisplayed: this.buildNSFWUpdateFlag('display'),
+      nsfwFlagsHidden: this.buildNSFWUpdateFlag('do_not_list'),
+      nsfwFlagsWarned: this.buildNSFWUpdateFlag('warn'),
+      nsfwFlagsBlurred: this.buildNSFWUpdateFlag('blur'),
+
       videoLanguages
     }
 
-    if (videoLanguages) {
-      details = Object.assign(details, videoLanguages)
-    }
+    if (onlyKeys) {
+      const hasNSFWFlags = onlyKeys.includes('nsfwFlagViolent') ||
+        onlyKeys.includes('nsfwFlagShocking') ||
+        onlyKeys.includes('nsfwFlagSex')
 
-    if (onlyKeys) details = pick(details, onlyKeys)
+      const onlyKeysWithNSFW = hasNSFWFlags
+        ? [ ...onlyKeys, 'nsfwFlagsDisplayed', 'nsfwFlagsHidden', 'nsfwFlagsWarned', 'nsfwFlagsBlurred' ]
+        : onlyKeys
+
+      details = pick(details, onlyKeysWithNSFW)
+    }
 
     if (this.authService.isLoggedIn()) {
       return this.updateLoggedProfile(details)
@@ -113,7 +209,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
     this.formValuesWatcher = this.form.valueChanges.subscribe((formValue: any) => {
       const updatedKey = Object.keys(formValue)
-        .find(k => formValue[k] !== oldForm[k])
+        .find(k => formValue[k] !== ((oldForm as any)[k]))
 
       oldForm = { ...this.form.value }
 
@@ -140,5 +236,33 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
     if (this.notifyOnUpdate()) {
       this.notifier.success($localize`Display/Video settings updated.`)
     }
+  }
+
+  private buildNSFWFormFlag (flag: NSFWFlagType): NSFWPolicyType | 'default' {
+    const user = this.user()
+
+    if ((user.nsfwFlagsDisplayed & flag) === flag) return 'display'
+    if ((user.nsfwFlagsWarned & flag) === flag) return 'warn'
+    if ((user.nsfwFlagsBlurred & flag) === flag) return 'blur'
+    if ((user.nsfwFlagsHidden & flag) === flag) return 'do_not_list'
+
+    return 'default'
+  }
+
+  private buildNSFWUpdateFlag (type: NSFWPolicyType): number {
+    let result = NSFWFlag.NONE
+
+    if (this.form.value.nsfwFlagViolent === type) result |= NSFWFlag.VIOLENT
+    if (this.form.value.nsfwFlagShocking === type) result |= NSFWFlag.SHOCKING_DISTURBING
+    if (this.form.value.nsfwFlagSex === type) result |= NSFWFlag.EXPLICIT_SEX
+
+    return result
+  }
+
+  private updateNSFWDefaultLabel (nsfwPolicy: NSFWPolicyType) {
+    const defaultItem = this.nsfwFlagItems.find(item => item.id === 'default')
+    const nsfwPolicyLabel = this.nsfwItems.find(i => i.id === nsfwPolicy).label
+
+    defaultItem.label = $localize`Default (${nsfwPolicyLabel})`
   }
 }

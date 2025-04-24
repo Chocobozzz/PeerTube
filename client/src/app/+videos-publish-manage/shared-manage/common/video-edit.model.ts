@@ -5,6 +5,7 @@ import {
   LiveVideo,
   LiveVideoCreate,
   LiveVideoUpdate,
+  NSFWFlag,
   VideoCaption,
   VideoChapter,
   VideoCreate,
@@ -31,12 +32,19 @@ const debugLogger = debug('peertube:video-manage:video-edit')
 export type VideoEditPrivacyType = VideoPrivacyType | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
 type CommonUpdateForm =
-  & Omit<VideoUpdate, 'privacy' | 'videoPasswords' | 'thumbnailfile' | 'scheduleUpdate' | 'commentsEnabled' | 'originallyPublishedAt'>
+  & Omit<
+    VideoUpdate,
+    'privacy' | 'videoPasswords' | 'thumbnailfile' | 'scheduleUpdate' | 'commentsEnabled' | 'originallyPublishedAt' | 'nsfwFlags'
+  >
   & {
     schedulePublicationAt?: Date
     originallyPublishedAt?: Date
     privacy?: VideoEditPrivacyType
     videoPassword?: string
+
+    nsfwFlagViolent?: boolean
+    nsfwFlagSex?: boolean
+    nsfwFlagShocking?: boolean
   }
 
 type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings'> & {
@@ -82,6 +90,8 @@ type UpdateFromAPIOptions = {
     | 'description'
     | 'tags'
     | 'nsfw'
+    | 'nsfwFlags'
+    | 'nsfwSummary'
     | 'waitTranscoding'
     | 'support'
     | 'commentsPolicy'
@@ -317,6 +327,8 @@ export class VideoEdit {
         description: video.description ?? '',
         tags: video.tags ?? [],
         nsfw: video.nsfw ?? null,
+        nsfwSummary: video.nsfwSummary ?? null,
+        nsfwFlags: video.nsfwFlags ?? NSFWFlag.NONE,
         waitTranscoding: video.waitTranscoding ?? null,
         support: video.support ?? '',
         commentsPolicy: video.commentsPolicy?.id ?? null,
@@ -430,13 +442,47 @@ export class VideoEdit {
     if (values.language !== undefined) this.common.language = values.language
     if (values.description !== undefined) this.common.description = values.description
     if (values.tags !== undefined) this.common.tags = values.tags
-    if (values.nsfw !== undefined) this.common.nsfw = values.nsfw
     if (values.waitTranscoding !== undefined) this.common.waitTranscoding = values.waitTranscoding
     if (values.support !== undefined) this.common.support = values.support
     if (values.commentsPolicy !== undefined) this.common.commentsPolicy = values.commentsPolicy
     if (values.downloadEnabled !== undefined) this.common.downloadEnabled = values.downloadEnabled
     if (values.previewfile !== undefined) this.common.previewfile = values.previewfile
     if (values.pluginData !== undefined) this.common.pluginData = values.pluginData
+
+    // ---------------------------------------------------------------------------
+    // NSFW
+    // ---------------------------------------------------------------------------
+
+    if (values.nsfw !== undefined) this.common.nsfw = values.nsfw
+
+    if (this.common.nsfw) {
+      if (values.nsfwFlagSex !== undefined) {
+        this.common.nsfwFlags = values.nsfwFlagSex
+          ? this.common.nsfwFlags | NSFWFlag.EXPLICIT_SEX
+          : this.common.nsfwFlags & ~NSFWFlag.EXPLICIT_SEX
+      }
+
+      if (values.nsfwFlagShocking !== undefined) {
+        this.common.nsfwFlags = values.nsfwFlagShocking
+          ? this.common.nsfwFlags | NSFWFlag.SHOCKING_DISTURBING
+          : this.common.nsfwFlags & ~NSFWFlag.SHOCKING_DISTURBING
+      }
+
+      if (values.nsfwFlagViolent !== undefined) {
+        this.common.nsfwFlags = values.nsfwFlagViolent
+          ? this.common.nsfwFlags | NSFWFlag.VIOLENT
+          : this.common.nsfwFlags & ~NSFWFlag.VIOLENT
+      }
+
+      if (values.nsfwSummary !== undefined) {
+        this.common.nsfwSummary = values.nsfwSummary
+      }
+    } else {
+      this.common.nsfwSummary = null
+      this.common.nsfwFlags = NSFWFlag.NONE
+    }
+
+    // ---------------------------------------------------------------------------
 
     if (values.videoPassword !== undefined) {
       this.common.videoPasswords = values.privacy === VideoPrivacy.PASSWORD_PROTECTED && values.videoPassword
@@ -483,7 +529,13 @@ export class VideoEdit {
       support: this.common.support,
       name: this.common.name,
       tags: this.common.tags,
+
       nsfw: this.common.nsfw,
+      nsfwFlagSex: (this.common.nsfwFlags & NSFWFlag.EXPLICIT_SEX) === NSFWFlag.EXPLICIT_SEX,
+      nsfwFlagShocking: (this.common.nsfwFlags & NSFWFlag.SHOCKING_DISTURBING) === NSFWFlag.SHOCKING_DISTURBING,
+      nsfwFlagViolent: (this.common.nsfwFlags & NSFWFlag.VIOLENT) === NSFWFlag.VIOLENT,
+      nsfwSummary: this.common.nsfwSummary,
+
       commentsPolicy: this.common.commentsPolicy,
       waitTranscoding: this.common.waitTranscoding,
       channelId: this.common.channelId,
@@ -550,6 +602,8 @@ export class VideoEdit {
 
       tags: this.common.tags,
       nsfw: this.common.nsfw,
+      nsfwFlags: this.common.nsfwFlags,
+      nsfwSummary: this.common.nsfwSummary || null,
       waitTranscoding: this.common.waitTranscoding,
       commentsPolicy: this.common.commentsPolicy,
       downloadEnabled: this.common.downloadEnabled,

@@ -7,7 +7,7 @@
 
     <my-video-thumbnail
       *ngIf="playlistElement().video"
-      [video]="playlistElement().video" [nsfw]="isVideoBlur(playlistElement().video)"
+      [video]="playlistElement().video" [blur]="hasNSFWBlur(playlistElement().video)"
       [videoRouterLink]="buildRouterLink()" [queryParams]="buildRouterQuery()" [ariaLabel]="getVideoAriaLabel()"
     ></my-video-thumbnail>
 
@@ -21,8 +21,18 @@
             [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
           >{{ playlistElement().video.name }}</a>
 
-          <span i18n *ngIf="isVideoPrivate()" class="pt-badge badge-yellow">Private</span>
-          <span i18n *ngIf="isVideoPasswordProtected()" class="pt-badge badge-yellow">Password protected</span>
+          @if (isVideoPrivate()) {
+            <span i18n class="pt-badge badge-yellow">Private</span>
+          } @else if(isVideoPasswordProtected()) {
+            <span i18n class="pt-badge badge-yellow">Password protected</span>
+          }
+
+          <button
+            type="button" class="nsfw-warning button-unstyle ms-2"
+            *ngIf="hasNSFWWarning(playlistElement().video)" [attr.aria-label]="getNSFWTooltip(playlistElement().video)" [ngbTooltip]="getNSFWTooltip(playlistElement().video)"
+          >
+            <my-global-icon iconName="eye-close"></my-global-icon>
+          </button>
         </div>
 
         <span class="date-and-views">

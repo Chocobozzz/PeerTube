@@ -30,6 +30,9 @@ export type BuildVideosListQueryOptions = {
   sort: string
 
   nsfw?: boolean
+  nsfwFlagsIncluded?: number
+  nsfwFlagsExcluded?: number
+
   host?: string
   isLive?: boolean
   isLocal?: boolean
@@ -223,9 +226,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     if (options.nsfw === true) {
-      this.whereNSFW()
+      this.whereNSFW(options.nsfwFlagsExcluded)
     } else if (options.nsfw === false) {
-      this.whereSFW()
+      this.whereSFW(options.nsfwFlagsIncluded)
+    } else if (options.nsfwFlagsExcluded) {
+      this.whereNSFWFlagsExcluded(options.nsfwFlagsExcluded)
     }
 
     if (options.isLive === true) {
@@ -541,12 +546,31 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  private whereNSFW () {
-    this.and.push('"video"."nsfw" IS TRUE')
+  private whereNSFW (nsfwFlagsExcluded?: number) {
+    let filter = '"video"."nsfw" IS TRUE'
+
+    if (nsfwFlagsExcluded) {
+      filter += ' AND "video"."nsfwFlags" & :nsfwFlagsExcluded = 0'
+      this.replacements.nsfwFlagsExcluded = nsfwFlagsExcluded
+    }
+
+    this.and.push(filter)
   }
 
-  private whereSFW () {
-    this.and.push('"video"."nsfw" IS FALSE')
+  private whereSFW (nsfwFlagsIncluded?: number) {
+    let filter = '"video"."nsfw" IS FALSE'
+
+    if (nsfwFlagsIncluded) {
+      filter = `(${filter} OR "video"."nsfwFlags" & :nsfwFlagsIncluded != 0)`
+      this.replacements.nsfwFlagsIncluded = nsfwFlagsIncluded
+    }
+
+    this.and.push(filter)
+  }
+
+  private whereNSFWFlagsExcluded (nsfwFlagsExcluded: number) {
+    this.and.push('"video"."nsfwFlags" & :nsfwFlagsExcluded = 0')
+    this.replacements.nsfwFlagsExcluded = nsfwFlagsExcluded
   }
 
   private whereLive () {

@@ -1,0 +1,74 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_icons' as *;
+@use './_player-variables' as *;
+
+.video-js.vjs-peertube-skin {
+  --container-margin-x: 20px;
+  --container-margin-y: 20px;
+
+  &.vjs-size-570 {
+    --container-margin-x: 10px;
+    --container-margin-y: 10px;
+  }
+
+  .nsfw-container {
+    font-size: 14px;
+    position: absolute;
+    top: var(--container-margin-y);
+    right: var(--container-margin-x);
+    width: 100%;
+    width: fit-content;
+    background-color: pvar(--bg-secondary-500);
+    color: pvar(--fg-400);
+    max-width: calc(40% - 2 * var(--container-margin-x));
+    max-height: calc(100% - 2 * var(--container-margin-y));
+    padding: 1rem;;
+    border-radius: 4px;
+    overflow: auto;
+
+    .nsfw-title {
+      font-size: 1.25rem;
+      font-weight: $font-bold;
+      margin-bottom: 0.5rem;
+    }
+
+    button,
+    .nsfw-more-flags,
+    .nsfw-more-summary {
+      margin-top: 0.75rem;
+      font-size: 13px;
+    }
+
+    button {
+      padding: 0;
+      color: pvar(--fg-450);
+      text-decoration: underline;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &::after {
+        @include chevron-down(8px, 2px);
+        @include margin-left(5px);
+      }
+    }
+
+    .nsfw-more-content {
+      strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  &.peertube-dock {
+    .nsfw-container {
+      top: unset;
+      bottom: var(--container-margin-y);
+      max-width: 90%;
+    }
+  }
+}

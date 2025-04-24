@@ -41,19 +41,30 @@ export async function selectCustomSelect (id: string, valueLabel: string) {
   await wrapper.waitForClickable()
   await wrapper.click()
 
-  const option = await $$(`[formcontrolname=${id}] li[role=option]`).filter(async o => {
-    const text = await o.getText()
+  const getOption = async () => {
+    const options = await $$(`[formcontrolname=${id}] li[role=option]`).filter(async o => {
+      const text = await o.getText()
 
-    return text.trimStart().startsWith(valueLabel)
-  }).then(options => options[0])
+      return text.trimStart().startsWith(valueLabel)
+    })
 
-  await option.waitForDisplayed()
+    if (options.length === 0) return undefined
 
-  return option.click()
+    return options[0]
+  }
+
+  await browser.waitUntil(async () => {
+    const option = await getOption()
+    if (!option) return false
+
+    return option.isDisplayed()
+  })
+
+  return (await getOption()).click()
 }
 
 export async function findParentElement (
-  el: WebdriverIO.Element,
+  el: ChainablePromiseElement,
   finder: (el: WebdriverIO.Element) => Promise<boolean>
 ) {
   if (await finder(el) === true) return el

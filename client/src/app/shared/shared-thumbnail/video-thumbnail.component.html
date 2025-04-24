@@ -9,7 +9,7 @@
 }
 
 <ng-template #aContent>
-  <img alt="" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw() }" />
+  <img alt="" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': blur() }"  />
 
   <div *ngIf="displayWatchLaterPlaylist()" class="actions-overlay">
     <button
@@ -25,8 +25,8 @@
     </button>
   </div>
 
-  <div class="label-overlay warning"><ng-content select="label-warning"></ng-content></div>
-  <div class="label-overlay danger"><ng-content select="label-danger"></ng-content></div>
+  <div class="label-overlay pt-badge badge-warning"><ng-content select="label-warning"></ng-content></div>
+  <div class="label-overlay pt-badge badge-danger"><ng-content select="label-danger"></ng-content></div>
 
   @if (video().isLive) {
     <div  class="live-overlay" [ngClass]="{ 'live-streaming': isLiveStreaming(), 'ended-live': isEndedLive() }">

@@ -46,7 +46,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 890
+export const LAST_MIGRATION_VERSION = 895
 
 // ---------------------------------------------------------------------------
 
@@ -417,6 +417,7 @@ export const CONSTRAINTS_FIELDS = {
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
+    NSFW_SUMMARY: { min: 3, max: 250 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
       EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
@@ -837,6 +838,7 @@ export const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
 export const NSFW_POLICY_TYPES: { [id: string]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
+  WARN: 'warn',
   BLUR: 'blur',
   DISPLAY: 'display'
 }

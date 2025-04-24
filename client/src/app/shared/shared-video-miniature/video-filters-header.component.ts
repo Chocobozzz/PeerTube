@@ -81,7 +81,6 @@ export class VideoFiltersHeaderComponent implements OnInit {
 
     this.form = this.fb.group({
       sort: [ '' ],
-      nsfw: [ '' ],
       languageOneOf: [ '' ],
       categoryOneOf: [ '' ],
       scope: [ '' ],

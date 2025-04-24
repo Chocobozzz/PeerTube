@@ -155,7 +155,10 @@ export function isAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject
 function setValidRemoteTags (video: VideoObject) {
   if (Array.isArray(video.tag) === false) video.tag = []
 
-  video.tag = video.tag.filter(t => t.type === 'Hashtag' && isVideoTagValid(t.name))
+  video.tag = video.tag.filter(t => {
+    return (t.type === 'Hashtag' && isVideoTagValid(t.name)) ||
+      (t.type === 'SensitiveTag' && !!t.name)
+  })
 
   return true
 }

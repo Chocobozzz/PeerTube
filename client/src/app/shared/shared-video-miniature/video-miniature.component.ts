@@ -1,9 +1,8 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  LOCALE_ID,
   OnInit,
   booleanAttribute,
   inject,
@@ -11,12 +10,13 @@ import {
   numberAttribute,
   output
 } from '@angular/core'
-import { RouterLink } from '@angular/router'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy } from '@peertube/peertube-models'
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
+import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy } from '@peertube/peertube-models'
 import { switchMap } from 'rxjs/operators'
 import { LinkType } from '../../../types/link.type'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { LinkComponent } from '../shared-main/common/link.component'
 import { DateToggleComponent } from '../shared-main/date/date-toggle.component'
 import { Video } from '../shared-main/video/video.model'
@@ -32,9 +32,6 @@ export type MiniatureDisplayOptions = {
   views?: boolean
   avatar?: boolean
   privacyLabel?: boolean
-  privacyText?: boolean
-  blacklistInfo?: boolean
-  nsfw?: boolean
 
   by?: boolean
   forceChannelInBy?: boolean
@@ -46,17 +43,16 @@ export type MiniatureDisplayOptions = {
   templateUrl: './video-miniature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgClass,
+    CommonModule,
     VideoThumbnailComponent,
-    NgIf,
     ActorAvatarComponent,
     LinkComponent,
     DateToggleComponent,
     VideoViewsCounterComponent,
-    RouterLink,
-    NgFor,
     VideoActionsDropdownComponent,
-    ActorHostComponent
+    ActorHostComponent,
+    GlobalIconComponent,
+    NgbTooltipModule
   ]
 })
 export class VideoMiniatureComponent implements OnInit {
@@ -66,11 +62,9 @@ export class VideoMiniatureComponent implements OnInit {
   private videoPlaylistService = inject(VideoPlaylistService)
   private videoService = inject(VideoService)
   private cd = inject(ChangeDetectorRef)
-  private localeId = inject(LOCALE_ID)
 
-  readonly user = input<User>(undefined)
-  readonly video = input<Video>(undefined)
-  readonly containedInPlaylists = input<VideoExistInPlaylist[]>(undefined)
+  readonly user = input.required<User>()
+  readonly video = input.required<Video>()
 
   readonly displayOptions = input<MiniatureDisplayOptions>({
     date: true,
@@ -78,8 +72,6 @@ export class VideoMiniatureComponent implements OnInit {
     by: true,
     avatar: true,
     privacyLabel: false,
-    privacyText: false,
-    blacklistInfo: false,
     forceChannelInBy: false
   })
 
@@ -127,23 +119,25 @@ export class VideoMiniatureComponent implements OnInit {
   ownerHref: string
   ownerTarget: string
 
+  nsfwTooltip: string
+
   private ownerDisplayType: 'account' | 'videoChannel'
   private actionsLoaded = false
 
-  get authorAccount () {
+  get preferAuthorDisplayName () {
     return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+  }
+
+  get authorAccount () {
+    return this.preferAuthorDisplayName
       ? this.video().account.displayName
       : this.video().account.name
   }
 
   get authorChannel () {
-    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+    return this.preferAuthorDisplayName
       ? this.video().channel.displayName
       : this.video().channel.name
-  }
-
-  get isVideoBlur () {
-    return this.video().isVideoNSFWForUser(this.user(), this.serverConfig)
   }
 
   ngOnInit () {
@@ -154,6 +148,7 @@ export class VideoMiniatureComponent implements OnInit {
 
     this.setUpBy()
 
+    this.nsfwTooltip = this.videoService.buildNSFWTooltip(this.video())
     this.channelLinkTitle = $localize`${this.video().channel.name} (channel page)`
 
     // We rely on mouseenter to lazy load actions
@@ -162,7 +157,7 @@ export class VideoMiniatureComponent implements OnInit {
     }
   }
 
-  buildVideoLink () {
+  private buildVideoLink () {
     const videoLinkType = this.videoLinkType()
     const video = this.video()
     if (videoLinkType === 'internal' || !video.url) {
@@ -181,7 +176,7 @@ export class VideoMiniatureComponent implements OnInit {
     this.videoRouterLink = [ '/search/lazy-load-video', { url: video.url } ]
   }
 
-  buildOwnerLink () {
+  private buildOwnerLink () {
     const video = this.video()
 
     const linkType = this.videoLinkType()
@@ -301,6 +296,18 @@ export class VideoMiniatureComponent implements OnInit {
       'has-avatar': this.displayOptions().avatar
     }
   }
+
+  // ---------------------------------------------------------------------------
+
+  hasNSFWWarning () {
+    return this.video().isVideoNSFWWarnedForUser(this.user(), this.serverConfig)
+  }
+
+  hasNSFWBlur () {
+    return this.video().isVideoNSFWBlurForUser(this.user(), this.serverConfig)
+  }
+
+  // ---------------------------------------------------------------------------
 
   private setUpBy () {
     if (this.displayOptions().forceChannelInBy) {

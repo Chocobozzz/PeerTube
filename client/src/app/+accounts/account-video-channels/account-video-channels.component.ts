@@ -59,9 +59,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     views: true,
     by: false,
     avatar: false,
-    privacyLabel: false,
-    privacyText: false,
-    blacklistInfo: false
+    privacyLabel: false
   }
 
   private accountSub: Subscription
@@ -109,7 +107,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
             nsfw: this.videoService.nsfwPolicyToParam(this.nsfwPolicy)
           }
 
-          return this.videoService.getVideoChannelVideos(options)
+          return this.videoService.listChannelVideos(options)
             .pipe(map(data => ({ videoChannel, videos: data.data, total: data.total })))
         })
       )

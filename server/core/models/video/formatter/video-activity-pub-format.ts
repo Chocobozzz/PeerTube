@@ -1,10 +1,13 @@
 import {
+  ActivityHashTagObject,
   ActivityIconObject,
   ActivityPlaylistUrlObject,
   ActivityPubStoryboard,
+  ActivitySensitiveTagObject,
   ActivityTagObject,
   ActivityTrackerUrlObject,
   ActivityUrlObject,
+  nsfwFlagsToString,
   VideoCommentPolicy,
   VideoObject
 } from '@peertube/peertube-models'
@@ -69,7 +72,10 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     licence,
     language,
     views: video.views,
+
     sensitive: video.nsfw,
+    summary: video.nsfwSummary,
+
     waitTranscoding: video.waitTranscoding,
 
     state: video.state,
@@ -281,13 +287,26 @@ function buildTrackerUrls (video: MVideoAP): ActivityTrackerUrlObject[] {
 
 // ---------------------------------------------------------------------------
 
-function buildTags (video: MVideoAP) {
-  if (!isArray(video.Tags)) return []
+function buildTags (video: MVideoAP): (ActivitySensitiveTagObject | ActivityHashTagObject)[] {
+  const tags = isArray(video.Tags)
+    ? video.Tags
+    : []
 
-  return video.Tags.map(t => ({
-    type: 'Hashtag' as 'Hashtag',
-    name: t.name
-  }))
+  return [
+    ...tags.map(t =>
+      ({
+        type: 'Hashtag' as 'Hashtag',
+        name: t.name
+      }) as ActivityHashTagObject
+    ),
+
+    ...nsfwFlagsToString(video.nsfwFlags).map(f =>
+      ({
+        type: 'SensitiveTag' as 'SensitiveTag',
+        name: f
+      }) as ActivitySensitiveTagObject
+    )
+  ]
 }
 
 function buildIcon (video: MVideoAP): ActivityIconObject[] {

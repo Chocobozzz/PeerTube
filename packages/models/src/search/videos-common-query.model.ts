@@ -9,6 +9,8 @@ export interface VideosCommonQuery {
   sort?: string
 
   nsfw?: BooleanBothQuery
+  nsfwFlagsIncluded?: number
+  nsfwFlagsExcluded?: number
 
   isLive?: boolean
 

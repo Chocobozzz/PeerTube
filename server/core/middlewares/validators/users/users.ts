@@ -1,5 +1,5 @@
 import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, UserRole, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/user/user.js'
@@ -42,6 +42,7 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
+import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
 
 export const usersListValidator = [
   query('blocked')
@@ -232,9 +233,23 @@ export const usersUpdateMeValidator = [
   body('email')
     .optional()
     .isEmail(),
+
   body('nsfwPolicy')
     .optional()
     .custom(isUserNSFWPolicyValid),
+  body('nsfwFlagsDisplayed')
+    .optional()
+    .custom(isNSFWFlagsValid),
+  body('nsfwFlagsHidden')
+    .optional()
+    .custom(isNSFWFlagsValid),
+  body('nsfwFlagsWarned')
+    .optional()
+    .custom(isNSFWFlagsValid),
+  body('nsfwFlagsBlurred')
+    .optional()
+    .custom(isNSFWFlagsValid),
+
   body('autoPlayVideo')
     .optional()
     .custom(isUserAutoPlayVideoValid),
@@ -268,16 +283,32 @@ export const usersUpdateMeValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
 
-    if (req.body.password || req.body.email) {
+    const body = req.body as UserUpdateMe
+
+    if (
+      ((body.nsfwFlagsBlurred || 0) & (body.nsfwFlagsWarned || 0)) !== 0 ||
+      ((body.nsfwFlagsBlurred || 0) & (body.nsfwFlagsDisplayed || 0)) !== 0 ||
+      ((body.nsfwFlagsBlurred || 0) & (body.nsfwFlagsHidden || 0)) !== 0 ||
+      ((body.nsfwFlagsDisplayed || 0) & (body.nsfwFlagsHidden || 0)) !== 0 ||
+      ((body.nsfwFlagsDisplayed || 0) & (body.nsfwFlagsWarned || 0)) !== 0 ||
+      ((body.nsfwFlagsHidden || 0) & (body.nsfwFlagsWarned || 0)) !== 0
+    ) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot use same flags in nsfwFlagsDisplayed, nsfwFlagsHidden, nsfwFlagsBlurred and nsfwFlagsWarned at the same time'
+      })
+    }
+
+    if (body.password || body.email) {
       if (user.pluginAuth !== null) {
         return res.fail({ message: 'You cannot update your email or password that is associated with an external auth system.' })
       }
 
-      if (!req.body.currentPassword) {
+      if (!body.currentPassword) {
         return res.fail({ message: 'currentPassword parameter is missing' })
       }
 
-      if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
+      if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
           message: 'currentPassword is invalid.',
@@ -288,7 +319,7 @@ export const usersUpdateMeValidator = [
 
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
 
-    if (req.body.email && req.body.email !== user.email && !await checkEmailDoesNotAlreadyExist(req.body.email, res)) return
+    if (body.email && body.email !== user.email && !await checkEmailDoesNotAlreadyExist(body.email, res)) return
 
     return next()
   }

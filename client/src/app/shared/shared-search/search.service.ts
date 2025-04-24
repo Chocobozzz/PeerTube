@@ -57,8 +57,11 @@ export class SearchService {
 
     if (advancedSearch) {
       const advancedSearchObject = advancedSearch.toVideosAPIObject()
+
       params = this.restService.addObjectParams(params, advancedSearchObject)
     }
+
+    params = this.videoService.buildNSFWParams(params, {})
 
     return this.authHttp
       .get<ResultList<VideoServerModel>>(url, { params })

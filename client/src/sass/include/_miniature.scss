@@ -13,12 +13,6 @@
   &:hover {
     text-decoration: none;
   }
-
-  &.blur-filter {
-    filter: blur(3px);
-
-    @include padding-left(4px);
-  }
 }
 
 @mixin miniature-thumbnail {
@@ -94,7 +88,6 @@
 
     &.blur-filter {
       filter: blur(20px);
-      transform: scale(1.03);
     }
   }
 }

@@ -5,6 +5,7 @@ import {
   HttpStatusCode,
   LiveVideoCreate,
   LiveVideoLatencyMode,
+  NSFWFlag,
   VideoCommentPolicy,
   VideoCreateResult,
   VideoPrivacy
@@ -107,6 +108,32 @@ describe('Test video lives API validator', function () {
       const fields = { ...baseCorrectParams, name: 'super'.repeat(65) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad NSFW', async function () {
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwFlags: NSFWFlag.EXPLICIT_SEX }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: false, nsfwSummary: 'toto' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwFlags: 'toto' as any }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
+
+      {
+        const fields = { ...baseCorrectParams, nsfw: true, nsfwSummary: 't' }
+
+        await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      }
     })
 
     it('Should fail with a bad category', async function () {
@@ -346,7 +373,6 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When getting live information', function () {
-
     it('Should fail with a bad access token', async function () {
       await command.get({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -395,7 +421,6 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When getting live sessions', function () {
-
     it('Should fail with a bad access token', async function () {
       await command.listSessions({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -426,7 +451,6 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When getting live session of a replay', function () {
-
     it('Should fail with a bad video id', async function () {
       await command.getReplaySession({ videoId: 'toto', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
@@ -441,7 +465,6 @@ describe('Test video lives API validator', function () {
   })
 
   describe('When updating live information', async function () {
-
     it('Should fail without access token', async function () {
       await command.update({ token: '', videoId: video.id, fields: {}, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -510,7 +533,6 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: video.shortUUID, fields: { saveReplay: false } })
 
       await command.update({ videoId: video.id, fields: { saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
-
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {

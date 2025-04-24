@@ -86,6 +86,14 @@ export const VIDEO_SUPPORT_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const VIDEO_NSFW_SUMMARY_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.minLength(3), Validators.maxLength(250) ],
+  MESSAGES: {
+    minlength: $localize`Video support must be at least 3 characters long.`,
+    maxlength: $localize`Video support cannot be more than 250 characters long.`
+  }
+}
+
 export const VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [], // Required is set dynamically
   MESSAGES: {

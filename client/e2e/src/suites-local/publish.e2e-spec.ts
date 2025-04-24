@@ -1,20 +1,39 @@
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
-import { getScreenshotPath, isMobileDevice, waitServerUp } from '../utils'
+import { VideoWatchPage } from '../po/video-watch.po'
+import { getScreenshotPath, isMobileDevice, isSafari, waitServerUp } from '../utils'
 
 describe('Publish video', () => {
   let videoPublishPage: VideoPublishPage
   let loginPage: LoginPage
+  let videoWatchPage: VideoWatchPage
 
   before(async () => {
     await waitServerUp()
 
     loginPage = new LoginPage(isMobileDevice())
     videoPublishPage = new VideoPublishPage()
+    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
     await browser.maximizeWindow()
 
     await loginPage.loginAsRootUser()
+  })
+
+  describe('Default upload values', function () {
+    it('Should have default video values', async function () {
+      await videoPublishPage.navigateTo()
+      await videoPublishPage.uploadVideo('video3.mp4')
+      await videoPublishPage.validSecondStep('video')
+
+      await videoPublishPage.clickOnWatch()
+      await videoWatchPage.waitWatchVideoName('video')
+
+      expect(await videoWatchPage.getPrivacy()).toBe('Public')
+      expect(await videoWatchPage.getLicence()).toBe('Unknown')
+      expect(await videoWatchPage.isDownloadEnabled()).toBeTruthy()
+      expect(await videoWatchPage.areCommentsEnabled()).toBeTruthy()
+    })
   })
 
   describe('Common', function () {

@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, inject, input, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ScreenService } from '@app/core'
@@ -27,13 +27,12 @@ export type VideoThumbnailInput = Pick<
   selector: 'my-video-thumbnail',
   styleUrls: [ './video-thumbnail.component.scss' ],
   templateUrl: './video-thumbnail.component.html',
-  imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
+  imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent ]
 })
 export class VideoThumbnailComponent implements OnChanges {
   private screenService = inject(ScreenService)
 
   readonly video = input.required<VideoThumbnailInput>()
-  readonly nsfw = input(false)
 
   readonly videoRouterLink = input<string | any[]>(undefined)
   readonly queryParams = input<{
@@ -47,6 +46,7 @@ export class VideoThumbnailComponent implements OnChanges {
   readonly playOverlay = input<boolean, boolean | string>(true, { transform: booleanAttribute })
 
   readonly ariaLabel = input.required<string>()
+  readonly blur = input.required({ transform: booleanAttribute })
 
   readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
   readonly watchLaterClick = output<boolean>()

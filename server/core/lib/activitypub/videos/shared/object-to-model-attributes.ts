@@ -5,9 +5,12 @@ import {
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
   ActivityPlaylistUrlObject,
+  ActivitySensitiveTagObject,
   ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
+  NSFWFlag,
+  stringToNSFWFlag,
   VideoFileFormatFlag,
   VideoFileStream,
   VideoObject,
@@ -28,7 +31,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MChannelId, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId, isStreamingPlaylist } from '@server/types/models/index.js'
+import { isStreamingPlaylist, MChannelId, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId } from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
@@ -271,7 +274,14 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
     language,
     description,
     support,
+
     nsfw: videoObject.sensitive,
+    nsfwSummary: videoObject.sensitive
+      ? videoObject.summary
+      : null,
+    nsfwFlags: videoObject.sensitive
+      ? getNSFWFlags(videoObject.tag)
+      : NSFWFlag.NONE,
 
     commentsPolicy: videoObject.commentsPolicy,
 
@@ -320,8 +330,12 @@ function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
   return url && url.mediaType === 'application/x-bittorrent;x-scheme-handler/magnet'
 }
 
-function isAPHashTagObject (url: any): url is ActivityHashTagObject {
-  return url && url.type === 'Hashtag'
+function isAPHashTagObject (tag: any): tag is ActivityHashTagObject {
+  return tag && tag.type === 'Hashtag'
+}
+
+function isAPSensitiveTagObject (tag: any): tag is ActivitySensitiveTagObject {
+  return tag && tag.type === 'SensitiveTag'
 }
 
 function getTorrentRelatedInfo (options: {
@@ -360,4 +374,11 @@ function getTorrentRelatedInfo (options: {
 
     infoHash: magnetParsed.infoHash
   }
+}
+
+function getNSFWFlags (tags: ActivityTagObject[]) {
+  return tags.filter(t => isAPSensitiveTagObject(t))
+    .map(t => stringToNSFWFlag(t.name))
+    .filter(t => !!t)
+    .reduce((acc, t) => acc | t, 0)
 }

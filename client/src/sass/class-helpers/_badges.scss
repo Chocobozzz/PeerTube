@@ -40,6 +40,11 @@ $badge-grey-dark: #2D3448;
     font-size: 100%;
   }
 
+  &.badge-small {
+    font-size: 10px;
+    padding: 1px 3px;
+  }
+
   &.badge-primary {
     color: pvar(--on-primary);
     background-color: pvar(--primary);

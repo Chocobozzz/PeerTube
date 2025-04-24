@@ -19,6 +19,7 @@ import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-co
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
+import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
 
 @Component({
   selector: 'my-video-block-list',
@@ -36,7 +37,8 @@ import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.com
     VideoCellComponent,
     AutoColspanDirective,
     EmbedComponent,
-    PTDatePipe
+    PTDatePipe,
+    VideoNSFWBadgeComponent
   ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit {

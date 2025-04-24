@@ -74,7 +74,7 @@
 
           <my-video-privacy-badge [video]="video"></my-video-privacy-badge>
 
-          <span *ngIf="video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
+          <my-video-nsfw-badge [video]="video" theme="red"></my-video-nsfw-badge>
 
           <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow">{{ video.state.label }}</span>
 

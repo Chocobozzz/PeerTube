@@ -26,9 +26,9 @@ describe('Test index HTML generation', function () {
   }
 
   before(async function () {
-    this.timeout(120000);
+    this.timeout(120000)
 
-    ({
+    ;({
       servers,
       playlistIds,
       videoIds,
@@ -44,7 +44,6 @@ describe('Test index HTML generation', function () {
   })
 
   describe('Instance tags', function () {
-
     it('Should have valid index html tags (title, description...)', async function () {
       const config = await servers[0].config.getConfig()
       const res = await makeHTMLRequest(servers[0].url, '/videos/browse')
@@ -60,7 +59,7 @@ describe('Test index HTML generation', function () {
             shortDescription: 'my short description',
             description: 'my super description',
             terms: 'my super terms',
-            defaultNSFWPolicy: 'blur',
+            defaultNSFWPolicy: 'warn',
             defaultClientRoute: '/videos/recently-added',
             customizations: {
               javascript: 'alert("coucou")',
@@ -85,7 +84,6 @@ describe('Test index HTML generation', function () {
   })
 
   describe('Canonical tags', function () {
-
     it('Should use the original video URL for the canonical tag', async function () {
       for (const basePath of getWatchVideoBasePaths()) {
         for (const id of videoIds) {
@@ -126,7 +124,6 @@ describe('Test index HTML generation', function () {
   })
 
   describe('Indexation tags', function () {
-
     it('Should not index remote videos', async function () {
       for (const basePath of getWatchVideoBasePaths()) {
         for (const id of videoIds) {
@@ -223,7 +220,6 @@ describe('Test index HTML generation', function () {
   })
 
   describe('Check no leaks for private objects', function () {
-
     it('Should not display internal/private/password protected video', async function () {
       for (const basePath of getWatchVideoBasePaths()) {
         for (const id of [ privateVideoId, internalVideoId, passwordProtectedVideoId ]) {

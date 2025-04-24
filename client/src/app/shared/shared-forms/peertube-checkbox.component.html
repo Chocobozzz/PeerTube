@@ -6,7 +6,7 @@
         [(ngModel)]="checked"
         (ngModelChange)="onModelChange()"
         [id]="inputName()"
-        [disabled]="disabled()"
+        [disabled]="disabled"
         [attr.aria-describedby]="inputName() + '-description'"
       />
       <span></span>

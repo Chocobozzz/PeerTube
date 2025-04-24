@@ -1,23 +1,19 @@
+import { VideoFileStream, VideoInclude } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
+import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import truncate from 'lodash-es/truncate.js'
 import { ErrorLevel, SitemapStream, streamToPromise } from 'sitemap'
-import { logger } from '@server/helpers/logger.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { buildNSFWFilter } from '../helpers/express-utils.js'
+import { buildNSFWFilters } from '../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, cacheRoute } from '../middlewares/index.js'
 import { AccountModel } from '../models/account/account.js'
-import { VideoModel } from '../models/video/video.js'
 import { VideoChannelModel } from '../models/video/video-channel.js'
-import { VideoFileStream, VideoInclude } from '@peertube/peertube-models'
+import { VideoModel } from '../models/video/video.js'
 
 const sitemapRouter = express.Router()
 
-sitemapRouter.use('/sitemap.xml',
-  apiRateLimiter,
-  cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP),
-  asyncMiddleware(getSitemap)
-)
+sitemapRouter.use('/sitemap.xml', apiRateLimiter, cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP), asyncMiddleware(getSitemap))
 
 // ---------------------------------------------------------------------------
 
@@ -81,6 +77,8 @@ async function getSitemapLocalVideoUrls () {
 
   while (hasData && i < 1000) {
     const { data } = await VideoModel.listForApi({
+      ...buildNSFWFilters(),
+
       start: chunkSize * i,
       count: chunkSize,
       sort: 'createdAt',
@@ -89,7 +87,6 @@ async function getSitemapLocalVideoUrls () {
         orLocalVideos: true
       },
       isLocal: true,
-      nsfw: buildNSFWFilter(),
       countVideos: false,
       include: VideoInclude.FILES | VideoInclude.TAGS
     })

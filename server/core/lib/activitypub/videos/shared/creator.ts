@@ -18,7 +18,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
   }
 
   async create () {
-    logger.debug('Adding remote video %s.', this.videoObject.id, this.lTags())
+    logger.debug('Adding remote video %s.', this.videoObject.id, { ...this.videoObject, ...this.lTags() })
 
     const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
     const channel = channelActor.VideoChannel

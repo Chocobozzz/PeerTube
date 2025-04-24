@@ -3,7 +3,7 @@ import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
 
 describe('Player settings', () => {
   let videoPublishPage: VideoPublishPage
@@ -79,5 +79,9 @@ describe('Player settings', () => {
 
       await checkP2P(false)
     })
+  })
+
+  after(async () => {
+    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

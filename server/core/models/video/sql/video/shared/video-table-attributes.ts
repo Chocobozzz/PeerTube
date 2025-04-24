@@ -271,6 +271,8 @@ export class VideoTableAttributes {
       'language',
       'privacy',
       'nsfw',
+      'nsfwSummary',
+      'nsfwFlags',
       'description',
       'support',
       'duration',

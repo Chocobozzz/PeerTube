@@ -28,7 +28,7 @@
       color: pvar(--fg-400);
 
       &[iconName=npm] {
-        @include fill-svg-color(pvar(--fg-400));
+        @include fill-path-svg-color(pvar(--fg-400));
       }
     }
   }

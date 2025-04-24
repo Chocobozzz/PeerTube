@@ -1,5 +1,13 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ThumbnailType, VideoCommentPolicy, VideoPrivacy, VideoPrivacyType, VideoUpdate } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  NSFWFlag,
+  ThumbnailType,
+  VideoCommentPolicy,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoUpdate
+} from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
 import { isNewVideoPrivacyForFederation, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
@@ -35,7 +43,8 @@ const updateRouter = express.Router()
 
 const reqVideoFileUpdate = createReqFiles([ 'thumbnailfile', 'previewfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
-updateRouter.put('/:id',
+updateRouter.put(
+  '/:id',
   openapiOperationDoc({ operationId: 'putVideo' }),
   authenticate,
   reqVideoFileUpdate,
@@ -54,7 +63,7 @@ export {
 async function updateVideo (req: express.Request, res: express.Response) {
   const videoFromReq = res.locals.videoAll
   const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())
-  const videoInfoToUpdate: VideoUpdate = req.body
+  const body: VideoUpdate = req.body
 
   const hadPrivacyForFederation = isPrivacyForFederation(videoFromReq.privacy)
   const oldPrivacy = videoFromReq.privacy
@@ -77,6 +86,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
         'licence',
         'language',
         'nsfw',
+        'nsfwFlags',
+        'nsfwSummary',
         'waitTranscoding',
         'support',
         'description',
@@ -84,31 +95,36 @@ async function updateVideo (req: express.Request, res: express.Response) {
       ]
 
       for (const key of keysToUpdate) {
-        if (videoInfoToUpdate[key] !== undefined) video.set(key, videoInfoToUpdate[key])
+        if (body[key] !== undefined) video.set(key, body[key])
+      }
+
+      if (!video.nsfw) {
+        video.nsfwFlags = NSFWFlag.NONE
+        video.nsfwSummary = null
       }
 
       // Special treatment for comments policy to support deprecated commentsEnabled attribute
-      if (videoInfoToUpdate.commentsPolicy !== undefined) {
-        video.commentsPolicy = videoInfoToUpdate.commentsPolicy
-      } else if (videoInfoToUpdate.commentsEnabled === true) {
+      if (body.commentsPolicy !== undefined) {
+        video.commentsPolicy = body.commentsPolicy
+      } else if (body.commentsEnabled === true) {
         video.commentsPolicy = VideoCommentPolicy.ENABLED
-      } else if (videoInfoToUpdate.commentsEnabled === false) {
+      } else if (body.commentsEnabled === false) {
         video.commentsPolicy = VideoCommentPolicy.DISABLED
       }
 
-      if (videoInfoToUpdate.originallyPublishedAt !== undefined) {
-        video.originallyPublishedAt = videoInfoToUpdate.originallyPublishedAt
-          ? new Date(videoInfoToUpdate.originallyPublishedAt)
+      if (body.originallyPublishedAt !== undefined) {
+        video.originallyPublishedAt = body.originallyPublishedAt
+          ? new Date(body.originallyPublishedAt)
           : null
       }
 
       // Privacy update?
       let isNewVideoForFederation = false
 
-      if (videoInfoToUpdate.privacy !== undefined) {
+      if (body.privacy !== undefined) {
         isNewVideoForFederation = await updateVideoPrivacy({
           videoInstance: video,
-          videoInfoToUpdate,
+          videoInfoToUpdate: body,
           hadPrivacyForFederation,
           transaction: t
         })
@@ -127,8 +143,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Video tags update?
-      if (videoInfoToUpdate.tags !== undefined) {
-        await setVideoTags({ video: videoInstanceUpdated, tags: videoInfoToUpdate.tags, transaction: t })
+      if (body.tags !== undefined) {
+        await setVideoTags({ video: videoInstanceUpdated, tags: body.tags, transaction: t })
       }
 
       // Video channel update?
@@ -142,7 +158,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Schedule an update in the future?
-      await updateSchedule(videoInstanceUpdated, videoInfoToUpdate, t)
+      await updateSchedule(videoInstanceUpdated, body, t)
 
       if (oldDescription !== video.description) {
         await replaceChaptersFromDescriptionIfNeeded({
@@ -181,7 +197,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
     await addVideoJobsAfterUpdate({
       video: videoInstanceUpdated,
-      nameChanged: !!videoInfoToUpdate.name,
+      nameChanged: !!body.name,
       oldPrivacy,
       isNewVideoForFederation
     })
@@ -196,8 +212,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
   }
 
   return res.type('json')
-            .status(HttpStatusCode.NO_CONTENT_204)
-            .end()
+    .status(HttpStatusCode.NO_CONTENT_204)
+    .end()
 }
 
 // Return a boolean indicating if the video is considered as "new" for remote instances in the federation

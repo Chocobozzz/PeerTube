@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {
@@ -50,9 +50,7 @@ enum GroupDate {
   templateUrl: './videos-list.component.html',
   styleUrls: [ './videos-list.component.scss' ],
   imports: [
-    NgIf,
-    NgClass,
-    NgFor,
+    CommonModule,
     ButtonComponent,
     ButtonComponent,
     VideoFiltersHeaderComponent,
@@ -109,11 +107,9 @@ export class VideosListComponent implements OnInit, OnDestroy {
     views: true,
     by: true,
     avatar: true,
-    privacyLabel: true,
-    privacyText: false,
-    blacklistInfo: false
+    privacyLabel: true
   }
-  displayModerationBlock = false
+  displayModerationBlock = true
 
   private routeSub: Subscription
   private userSub: Subscription
@@ -268,9 +264,9 @@ export class VideosListComponent implements OnInit, OnDestroy {
   }
 
   private loadUserSettings (user: User) {
-    const nsfw = this.filters.setNSFWPolicy(user.nsfwPolicy)
+    this.filters.setNSFWPolicy(user)
 
-    this.filters.load({ languageOneOf: user.videoLanguages, nsfw })
+    this.filters.load({ languageOneOf: user.videoLanguages })
   }
 
   private reloadSyndicationItems () {
@@ -297,6 +293,8 @@ export class VideosListComponent implements OnInit, OnDestroy {
       .pipe(switchMap(() => this.userService.getAnonymousOrLoggedUser()))
       .subscribe(user => {
         debugLogger('User changed', { user })
+
+        this.user = user
 
         if (this.loadUserVideoPreferences()) {
           this.loadUserSettings(user)

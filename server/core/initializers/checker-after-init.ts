@@ -25,8 +25,8 @@ async function checkActivityPubUrls () {
 
     logger.warn(
       'It seems PeerTube was started (and created some data) with another domain name. ' +
-      'This means you will not be able to federate! ' +
-      'Please use %s %s npm run update-host to fix this.',
+        'This means you will not be able to federate! ' +
+        'Please use %s %s npm run update-host to fix this.',
       NODE_CONFIG_DIR ? `NODE_CONFIG_DIR=${NODE_CONFIG_DIR}` : '',
       NODE_ENV ? `NODE_ENV=${NODE_ENV}` : ''
     )
@@ -35,7 +35,6 @@ async function checkActivityPubUrls () {
 
 // Some checks on configuration files or throw if there is an error
 function checkConfig () {
-
   const configFiles = config.util.getConfigSources().map(s => s.name).join(' -> ')
   logger.info('Using following configuration file hierarchy: %s.', configFiles)
 
@@ -102,7 +101,11 @@ async function checkFFmpegVersion () {
 
 export {
   applicationExist,
-  checkActivityPubUrls, checkConfig, checkFFmpegVersion, clientsExist, usersExist
+  checkActivityPubUrls,
+  checkConfig,
+  checkFFmpegVersion,
+  clientsExist,
+  usersExist
 }
 
 // ---------------------------------------------------------------------------
@@ -149,8 +152,10 @@ function checkEmailConfig () {
     }
 
     if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_APPROVAL) {
-      // eslint-disable-next-line max-len
-      logger.warn('SMTP is not configured but signup approval is enabled: PeerTube will not be able to send an email to the user upon acceptance/rejection of the registration request')
+      logger.warn(
+        'SMTP is not configured but signup approval is enabled: ' +
+          'PeerTube will not be able to send an email to the user upon acceptance/rejection of the registration request'
+      )
     }
 
     if (CONFIG.CONTACT_FORM.ENABLED) {
@@ -162,7 +167,7 @@ function checkEmailConfig () {
 function checkNSFWPolicyConfig () {
   const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
 
-  const available = [ 'do_not_list', 'blur', 'display' ]
+  const available = [ 'do_not_list', 'warn', 'blur', 'display' ]
   if (available.includes(defaultNSFWPolicy) === false) {
     throw new Error('NSFW policy setting should be ' + available.join(' or ') + ' instead of ' + defaultNSFWPolicy)
   }
@@ -211,7 +216,7 @@ function checkRemoteRedundancyConfig () {
 function checkStorageConfig () {
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = config.get<{ [ name: string ]: string }>('storage')
+    const configStorage = config.get<{ [name: string]: string }>('storage')
 
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {
@@ -324,7 +329,6 @@ function checkObjectStorageConfig () {
   }
 
   if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
-
     if (!CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME) {
       throw new Error('original_video_files_bucket should be set when object storage support is enabled.')
     }
@@ -359,7 +363,10 @@ function checkObjectStorageConfig () {
 
   if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
     // eslint-disable-next-line max-len
-    logger.warn(`Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). Consider using a lower one (like 100MB).`)
+    logger.warn(
+      `Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). ` +
+        `Consider using a lower one (like 100MB).`
+    )
   }
 }
 

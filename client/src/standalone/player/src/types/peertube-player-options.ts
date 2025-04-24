@@ -86,6 +86,11 @@ export type PeerTubePlayerLoadOptions = {
   requiresPassword: boolean
   videoPassword: () => string
 
+  nsfwWarning?: {
+    flags: number
+    summary: string
+  }
+
   nextVideo: {
     enabled: boolean
     getVideoTitle: () => string

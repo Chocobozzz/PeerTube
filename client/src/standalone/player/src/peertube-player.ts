@@ -1,20 +1,37 @@
-import './shared/context-menu'
-import './shared/upnext/end-card'
-import './shared/upnext/upnext-plugin'
-import './shared/stats/stats-card'
-import './shared/stats/stats-plugin'
+import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
+import { logger } from '@root-helpers/logger'
+import { PluginsManager } from '@root-helpers/plugins-manager'
+import { TranslationsManager } from '@root-helpers/translations-manager'
+import { copyToClipboard } from '@root-helpers/utils'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
+import { isMobile } from '@root-helpers/web-browser'
+import videojs, { VideoJsPlayer } from 'video.js'
+import { saveAverageBandwidth } from './peertube-player-local-storage'
 import './shared/bezels/bezels-plugin'
-import './shared/peertube/peertube-plugin'
-import './shared/resolutions/peertube-resolutions-plugin'
+import './shared/context-menu'
 import './shared/control-bar/caption-toggle-button'
-import './shared/control-bar/storyboard-plugin'
 import './shared/control-bar/chapters-plugin'
-import './shared/control-bar/time-tooltip'
 import './shared/control-bar/next-previous-video-button'
 import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
-import './shared/control-bar/theater-button'
 import './shared/control-bar/peertube-live-display'
+import './shared/control-bar/storyboard-plugin'
+import './shared/control-bar/theater-button'
+import './shared/control-bar/time-tooltip'
+import './shared/dock/peertube-dock-component'
+import './shared/dock/peertube-dock-plugin'
+import './shared/nsfw/peertube-nsfw-component'
+import './shared/nsfw/peertube-nsfw-plugin'
+import './shared/hotkeys/peertube-hotkeys-plugin'
+import './shared/metrics/metrics-plugin'
+import './shared/mobile/peertube-mobile-buttons'
+import './shared/mobile/peertube-mobile-plugin'
+import './shared/p2p-media-loader/hls-plugin'
+import './shared/p2p-media-loader/p2p-media-loader-plugin'
+import './shared/peertube/peertube-plugin'
+import { ControlBarOptionsBuilder, HLSOptionsBuilder, WebVideoOptionsBuilder } from './shared/player-options-builder'
+import './shared/playlist/playlist-plugin'
+import './shared/resolutions/peertube-resolutions-plugin'
 import './shared/settings/menu-focus-fixed'
 import './shared/settings/resolution-menu-button'
 import './shared/settings/resolution-menu-item'
@@ -23,36 +40,22 @@ import './shared/settings/settings-menu-button'
 import './shared/settings/settings-menu-item'
 import './shared/settings/settings-panel'
 import './shared/settings/settings-panel-child'
-import './shared/playlist/playlist-plugin'
-import './shared/mobile/peertube-mobile-plugin'
-import './shared/mobile/peertube-mobile-buttons'
-import './shared/hotkeys/peertube-hotkeys-plugin'
-import './shared/metrics/metrics-plugin'
-import './shared/p2p-media-loader/hls-plugin'
-import './shared/p2p-media-loader/p2p-media-loader-plugin'
+import './shared/stats/stats-card'
+import './shared/stats/stats-plugin'
+import './shared/upnext/end-card'
+import './shared/upnext/upnext-plugin'
 import './shared/web-video/web-video-plugin'
-import './shared/dock/peertube-dock-component'
-import './shared/dock/peertube-dock-plugin'
-import videojs, { VideoJsPlayer } from 'video.js'
-import { logger } from '@root-helpers/logger'
-import { PluginsManager } from '@root-helpers/plugins-manager'
-import { copyToClipboard } from '@root-helpers/utils'
-import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { isMobile } from '@root-helpers/web-browser'
-import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
-import { saveAverageBandwidth } from './peertube-player-local-storage'
-import { ControlBarOptionsBuilder, HLSOptionsBuilder, WebVideoOptionsBuilder } from './shared/player-options-builder'
-import { TranslationsManager } from '@root-helpers/translations-manager'
 import { PeerTubePlayerConstructorOptions, PeerTubePlayerLoadOptions, PlayerNetworkInfo, VideoJSPluginOptions } from './types'
-
-// Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
-(videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
 
 const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC
 CaptionsButton.prototype.controlText_ = 'Subtitles/CC'
 // We just want to display 'Off' instead of 'captions off', keep a space so the variable == true (hacky I know)
 CaptionsButton.prototype.label_ = ' '
+
+// Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
+const PlaybackRateMenuButton = videojs.getComponent('PlaybackRateMenuButton') as any
+PlaybackRateMenuButton.prototype.controlText_ = 'Speed'
 
 // TODO: remove when https://github.com/videojs/video.js/pull/7598 is merged
 const PlayProgressBar = videojs.getComponent('PlayProgressBar') as any
@@ -100,8 +103,11 @@ export class PeerTubePlayer {
 
     this.loadDynamicPlugins()
 
-    if (this.options.controlBar === false) this.player.controlBar.hide()
-    else this.player.controlBar.show()
+    if (this.options.controlBar === false) {
+      this.player.controlBar.hide()
+    } else {
+      this.player.controlBar.show()
+    }
 
     this.player.autoplay(this.getAutoPlayValue(this.currentLoadOptions.autoplay))
 
@@ -134,8 +140,7 @@ export class PeerTubePlayer {
 
   enable () {
     if (!this.player) return
-
-    (this.player.el() as HTMLElement).style.pointerEvents = 'auto'
+    ;(this.player.el() as HTMLElement).style.pointerEvents = 'auto'
   }
 
   disable () {
@@ -148,9 +153,8 @@ export class PeerTubePlayer {
     // Disable player
     this.player.hasStarted(false)
     this.player.removeClass('vjs-has-autoplay')
-    this.player.bigPlayButton.hide();
-
-    (this.player.el() as HTMLElement).style.pointerEvents = 'none'
+    this.player.bigPlayButton.hide()
+    ;(this.player.el() as HTMLElement).style.pointerEvents = 'none'
   }
 
   setCurrentTime (currentTime: number) {
@@ -252,6 +256,7 @@ export class PeerTubePlayer {
     if (this.player.usingPlugin('stats')) this.player.stats().dispose()
     if (this.player.usingPlugin('storyboard')) this.player.storyboard().dispose()
     if (this.player.usingPlugin('chapters')) this.player.chapters().dispose()
+    if (this.player.usingPlugin('peertubeNSFW')) this.player.peertubeNSFW().dispose()
 
     if (this.player.usingPlugin('peertubeDock')) this.player.peertubeDock().dispose()
 
@@ -305,11 +310,14 @@ export class PeerTubePlayer {
     if (this.currentLoadOptions.dock) {
       this.player.peertubeDock(this.currentLoadOptions.dock)
     }
+
+    if (this.currentLoadOptions.nsfwWarning) {
+      this.player.peertubeNSFW(this.currentLoadOptions.nsfwWarning)
+    }
   }
 
   private async tryToRecoverHLSError (err: any) {
     if (err.code === MediaError.MEDIA_ERR_DECODE) {
-
       // Display a notification to user
       if (this.videojsDecodeErrors === 0) {
         this.options.errorNotifier(this.player.localize('The video failed to play, will try to fast forward.'))
@@ -425,6 +433,7 @@ export class PeerTubePlayer {
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
       poster: this.currentLoadOptions.poster,
+
       inactivityTimeout: this.options.inactivityTimeout,
       playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
 
@@ -485,7 +494,6 @@ export class PeerTubePlayer {
   }
 
   private getContextMenuOptions () {
-
     const content = () => {
       const self = this
       const player = this.player

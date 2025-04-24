@@ -83,7 +83,14 @@ const playerKeys = {
   'Enable {1} subtitle': 'Enable {1} subtitle',
   '{1} (auto-generated)': '{1} (auto-generated)',
   'Go back': 'Go back',
-  'Audio only': 'Audio only'
+  'Audio only': 'Audio only',
+  'Sensitive content': 'Sensitive content',
+  'This video contains sensitive content.': 'This video contains sensitive content.',
+  'Learn more': 'Learn more',
+  'Content warning': 'Content warning',
+  'Violence': 'Violence',
+  'Shocking Content': 'Shocking Content',
+  'Explicit Sex': 'Explicit Sex'
 }
 Object.assign(playerKeys, videojs)
 
@@ -114,7 +121,9 @@ Object.values(VIDEO_CATEGORIES)
     'By {1}',
     'Unavailable video'
   ])
-  .forEach(v => { serverKeys[v] = v })
+  .forEach(v => {
+    serverKeys[v] = v
+  })
 
 // More keys
 Object.assign(serverKeys, {
@@ -124,7 +133,9 @@ Object.assign(serverKeys, {
 // ISO 639 keys
 const languageKeys: any = {}
 const languages = buildLanguages()
-Object.keys(languages).forEach(k => { languageKeys[languages[k]] = languages[k] })
+Object.keys(languages).forEach(k => {
+  languageKeys[languages[k]] = languages[k]
+})
 
 Object.assign(serverKeys, languageKeys)
 

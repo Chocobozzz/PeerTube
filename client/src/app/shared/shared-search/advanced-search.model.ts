@@ -1,6 +1,5 @@
 import { splitIntoArray } from '@app/helpers'
 import {
-  BooleanBothQuery,
   BooleanQuery,
   SearchTargetType,
   VideoChannelsSearchQuery,
@@ -16,8 +15,6 @@ export class AdvancedSearch {
 
   originallyPublishedStartDate: string // ISO 8601
   originallyPublishedEndDate: string // ISO 8601
-
-  nsfw: BooleanBothQuery
 
   categoryOneOf: string
 
@@ -47,7 +44,6 @@ export class AdvancedSearch {
     endDate?: string
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
-    nsfw?: BooleanBothQuery
     categoryOneOf?: string
     licenceOneOf?: string
     languageOneOf?: string
@@ -74,7 +70,6 @@ export class AdvancedSearch {
     this.originallyPublishedStartDate = options.originallyPublishedStartDate || undefined
     this.originallyPublishedEndDate = options.originallyPublishedEndDate || undefined
 
-    this.nsfw = options.nsfw || undefined
     this.isLive = options.isLive || undefined
 
     this.categoryOneOf = options.categoryOneOf || undefined
@@ -112,7 +107,6 @@ export class AdvancedSearch {
     this.endDate = undefined
     this.originallyPublishedStartDate = undefined
     this.originallyPublishedEndDate = undefined
-    this.nsfw = undefined
     this.categoryOneOf = undefined
     this.licenceOneOf = undefined
     this.languageOneOf = undefined
@@ -132,7 +126,6 @@ export class AdvancedSearch {
       endDate: this.endDate,
       originallyPublishedStartDate: this.originallyPublishedStartDate,
       originallyPublishedEndDate: this.originallyPublishedEndDate,
-      nsfw: this.nsfw,
       categoryOneOf: this.categoryOneOf,
       licenceOneOf: this.licenceOneOf,
       languageOneOf: this.languageOneOf,
@@ -158,7 +151,6 @@ export class AdvancedSearch {
       endDate: this.endDate,
       originallyPublishedStartDate: this.originallyPublishedStartDate,
       originallyPublishedEndDate: this.originallyPublishedEndDate,
-      nsfw: this.nsfw,
       categoryOneOf: splitIntoArray(this.categoryOneOf),
       licenceOneOf: splitIntoArray(this.licenceOneOf),
       languageOneOf: splitIntoArray(this.languageOneOf),
@@ -194,7 +186,6 @@ export class AdvancedSearch {
     if (this.isValidValue(this.startDate) || this.isValidValue(this.endDate)) acc++
     if (this.isValidValue(this.originallyPublishedStartDate) || this.isValidValue(this.originallyPublishedEndDate)) acc++
 
-    if (this.isValidValue(this.nsfw)) acc++
     if (this.isValidValue(this.categoryOneOf)) acc++
     if (this.isValidValue(this.licenceOneOf)) acc++
     if (this.isValidValue(this.languageOneOf)) acc++
@@ -221,7 +212,6 @@ export class AdvancedSearch {
       this.endDate !== undefined ||
       this.originallyPublishedStartDate !== undefined ||
       this.originallyPublishedEndDate !== undefined ||
-      this.nsfw !== undefined ||
       this.categoryOneOf !== undefined ||
       this.licenceOneOf !== undefined ||
       this.languageOneOf !== undefined ||

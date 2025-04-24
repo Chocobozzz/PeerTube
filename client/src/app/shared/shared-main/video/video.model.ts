@@ -19,6 +19,7 @@ import {
   VideoStreamingPlaylist,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
+import { isVideoNSFWBlurForUser, isVideoNSFWHiddenForUser, isVideoNSFWWarnedForUser } from '@root-helpers/video'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -68,7 +69,10 @@ export class Video implements VideoServerModel {
 
   likes: number
   dislikes: number
+
   nsfw: boolean
+  nsfwFlags: number
+  nsfwSummary: string
 
   originInstanceUrl: string
   originInstanceHost: string
@@ -176,6 +180,8 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
 
     this.nsfw = hash.nsfw
+    this.nsfwFlags = hash.nsfwFlags
+    this.nsfwSummary = hash.nsfwSummary
 
     this.account = hash.account
     this.channel = hash.channel
@@ -217,15 +223,16 @@ export class Video implements VideoServerModel {
     this.comments = hash.comments
   }
 
-  isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {
-    // Video is not NSFW, skip
-    if (this.nsfw === false) return false
+  isVideoNSFWWarnedForUser (user: User, serverConfig: HTMLServerConfig) {
+    return isVideoNSFWWarnedForUser(this, serverConfig, user)
+  }
 
-    // Return user setting if logged in
-    if (user) return user.nsfwPolicy !== 'display'
+  isVideoNSFWBlurForUser (user: User, serverConfig: HTMLServerConfig) {
+    return isVideoNSFWBlurForUser(this, serverConfig, user)
+  }
 
-    // Return default instance config
-    return serverConfig.instance.defaultNSFWPolicy !== 'display'
+  isVideoNSFWHiddenForUser (user: User, serverConfig: HTMLServerConfig) {
+    return isVideoNSFWHiddenForUser(this, serverConfig, user)
   }
 
   isRemovableBy (user: AuthUser) {

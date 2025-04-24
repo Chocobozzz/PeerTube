@@ -1,4 +1,4 @@
-import { clickOnRadio, getCheckbox, go, isRadioSelected, selectCustomSelect } from '../utils'
+import { clickOnRadio, getCheckbox, go, isRadioSelected, selectCustomSelect, setCheckboxEnabled } from '../utils'
 
 export abstract class VideoManage {
   async clickOnSave () {
@@ -19,13 +19,24 @@ export abstract class VideoManage {
 
   // ---------------------------------------------------------------------------
 
-  async setAsNSFW () {
+  async setAsNSFW (options: {
+    violent?: boolean
+    summary?: string
+  } = {}) {
     await this.goOnPage('Moderation')
 
     const checkbox = await getCheckbox('nsfw')
     await checkbox.waitForClickable()
 
-    return checkbox.click()
+    await checkbox.click()
+
+    if (options.violent) {
+      await setCheckboxEnabled('nsfwFlagViolent', true)
+    }
+
+    if (options.summary) {
+      await $('#nsfwSummary').setValue(options.summary)
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -65,10 +76,11 @@ export abstract class VideoManage {
     await input.waitForClickable()
     await input.click()
 
-    const nextDay = $('.p-datepicker-today + td > span')
-    await nextDay.waitForClickable()
-    await nextDay.click()
-    await nextDay.waitForDisplayed({ reverse: true })
+    const nextMonth = $('.p-datepicker-next')
+    await nextMonth.click()
+
+    await $('.p-datepicker-calendar td[aria-label="1"] > span').click()
+    await $('.p-datepicker-calendar').waitForDisplayed({ reverse: true, timeout: 15000 }) // Can be slow
   }
 
   getScheduleInput () {
@@ -92,7 +104,7 @@ export abstract class VideoManage {
   async getLiveState () {
     await this.goOnPage('Live settings')
 
-    if (await isRadioSelected('#permanentLiveTrue')) return 'permanent'
+    if (await isRadioSelected('permanentLiveTrue')) return 'permanent'
 
     return 'normal'
   }

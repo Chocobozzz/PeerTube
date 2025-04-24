@@ -93,7 +93,10 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
       id: video.privacy,
       label: getPrivacyLabel(video.privacy)
     },
+
     nsfw: video.nsfw,
+    nsfwFlags: video.nsfwFlags,
+    nsfwSummary: video.nsfwSummary,
 
     truncatedDescription: video.getTruncatedDescription(),
     description: options && options.completeDescription === true

@@ -40,7 +40,7 @@ export class VideoWatchPage {
   }
 
   isPrivacyWarningDisplayed () {
-    return $('my-privacy-concerns').isDisplayed()
+    return $('.privacy-concerns-text').isDisplayed()
   }
 
   async goOnAssociatedEmbed (passwordProtected = false) {
@@ -74,6 +74,79 @@ export class VideoWatchPage {
     return go(FIXTURE_URLS.HLS_PLAYLIST_EMBED)
   }
 
+  getModalTitleEl () {
+    return $('.modal-content .modal-title')
+  }
+
+  confirmModal () {
+    return $('.modal-content .modal-footer .primary-button').click()
+  }
+
+  private async getVideoNameElement () {
+    // We have 2 video info name block, pick the first that is not empty
+    const elem = async () => {
+      const elems = await $$('.video-info-first-row .video-info-name').filter(e => e.isDisplayed())
+
+      return elems[0]
+    }
+
+    await browser.waitUntil(async () => {
+      const e = await elem()
+
+      return e?.isDisplayed()
+    })
+
+    return elem()
+  }
+
+  // ---------------------------------------------------------------------------
+  // Video password
+  // ---------------------------------------------------------------------------
+
+  isPasswordProtected () {
+    return $('#confirmInput').isExisting()
+  }
+
+  async fillVideoPassword (videoPassword: string) {
+    const videoPasswordInput = await $('input#confirmInput')
+    await videoPasswordInput.waitForClickable()
+    await videoPasswordInput.clearValue()
+    await videoPasswordInput.setValue(videoPassword)
+
+    const confirmButton = await $('input[value="Confirm"]')
+    await confirmButton.waitForClickable()
+    return confirmButton.click()
+  }
+
+  // ---------------------------------------------------------------------------
+  // Video actions
+  // ---------------------------------------------------------------------------
+
+  async like () {
+    const likeButton = await $('.action-button-like')
+    const isActivated = (await likeButton.getAttribute('class')).includes('activated')
+
+    let count: number
+    try {
+      count = parseInt(await $('.action-button-like > .count').getText())
+    } catch (error) {
+      count = 0
+    }
+
+    await likeButton.waitForClickable()
+    await likeButton.click()
+
+    if (isActivated) {
+      if (count === 1) {
+        return expect(!await $('.action-button-like > .count').isExisting())
+      } else {
+        return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count - 1)
+      }
+    } else {
+      return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count + 1)
+    }
+  }
+
   async clickOnManage () {
     await this.clickOnMoreDropdownIcon()
 
@@ -89,6 +162,17 @@ export class VideoWatchPage {
       }
     }
   }
+
+  async clickOnMoreDropdownIcon () {
+    const dropdown = $('my-video-actions-dropdown .action-button')
+    await dropdown.click()
+
+    await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
+  }
+
+  // ---------------------------------------------------------------------------
+  // Playlists
+  // ---------------------------------------------------------------------------
 
   clickOnSave () {
     return $('.action-button-save').click()
@@ -116,69 +200,9 @@ export class VideoWatchPage {
     return playlist().click()
   }
 
-  async clickOnMoreDropdownIcon () {
-    const dropdown = $('my-video-actions-dropdown .action-button')
-    await dropdown.click()
-
-    await $('.dropdown-menu.show .dropdown-item').waitForDisplayed()
-  }
-
-  private async getVideoNameElement () {
-    // We have 2 video info name block, pick the first that is not empty
-    const elem = async () => {
-      const elems = await $$('.video-info-first-row .video-info-name').filter(e => e.isDisplayed())
-
-      return elems[0]
-    }
-
-    await browser.waitUntil(async () => {
-      const e = await elem()
-
-      return e?.isDisplayed()
-    })
-
-    return elem()
-  }
-
-  isPasswordProtected () {
-    return $('#confirmInput').isExisting()
-  }
-
-  async fillVideoPassword (videoPassword: string) {
-    const videoPasswordInput = await $('input#confirmInput')
-    await videoPasswordInput.waitForClickable()
-    await videoPasswordInput.clearValue()
-    await videoPasswordInput.setValue(videoPassword)
-
-    const confirmButton = await $('input[value="Confirm"]')
-    await confirmButton.waitForClickable()
-    return confirmButton.click()
-  }
-
-  async like () {
-    const likeButton = await $('.action-button-like')
-    const isActivated = (await likeButton.getAttribute('class')).includes('activated')
-
-    let count: number
-    try {
-      count = parseInt(await $('.action-button-like > .count').getText())
-    } catch (error) {
-      count = 0
-    }
-
-    await likeButton.waitForClickable()
-    await likeButton.click()
-
-    if (isActivated) {
-      if (count === 1) {
-        return expect(!await $('.action-button-like > .count').isExisting())
-      } else {
-        return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count - 1)
-      }
-    } else {
-      return expect(parseInt(await $('.action-button-like > .count').getText())).toBe(count + 1)
-    }
-  }
+  // ---------------------------------------------------------------------------
+  // Comments
+  // ---------------------------------------------------------------------------
 
   async createThread (comment: string) {
     const textarea = await $('my-video-comment-add textarea')

@@ -1,4 +1,5 @@
 import { AbusePredefinedReasonsString } from '../../moderation/abuse/abuse-reason.model.js'
+import { NSFWFlagString } from '../../videos/nsfw-flag.enum.js'
 
 export interface ActivityIdentifierObject {
   identifier: string
@@ -122,11 +123,17 @@ export interface ActivityFlagReasonObject {
   name: AbusePredefinedReasonsString
 }
 
+export interface ActivitySensitiveTagObject {
+  type: 'SensitiveTag'
+  name: NSFWFlagString
+}
+
 export type ActivityTagObject =
   | ActivityPlaylistSegmentHashesObject
   | ActivityStreamingPlaylistInfohashesObject
   | ActivityVideoUrlObject
   | ActivityHashTagObject
+  | ActivitySensitiveTagObject
   | ActivityMentionObject
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject

@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnInit, inject, input } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
+import { SelectRadioComponent } from '@app/shared/shared-forms/select/select-radio.component'
 import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
 import { maxBy } from '@peertube/peertube-core-utils'
 import { ActorImage, HTMLServerConfig } from '@peertube/peertube-models'
@@ -16,8 +17,8 @@ import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCheckboxComponent } from '../../../shared/shared-forms/select/select-checkbox.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 
 @Component({
   selector: 'my-edit-instance-information',
@@ -28,8 +29,8 @@ import { HelpComponent } from '../../../shared/shared-main/buttons/help.componen
     ReactiveFormsModule,
     ActorAvatarEditComponent,
     ActorBannerEditComponent,
-    NgClass,
-    NgIf,
+    SelectRadioComponent,
+    CommonModule,
     CustomMarkupHelpComponent,
     MarkdownTextareaComponent,
     SelectCheckboxComponent,
@@ -53,6 +54,25 @@ export class EditInstanceInformationComponent implements OnInit {
 
   instanceBannerUrl: string
   instanceAvatars: ActorImage[] = []
+
+  nsfwItems: SelectOptionsItem[] = [
+    {
+      id: 'do_not_list',
+      label: $localize`Hide`
+    },
+    {
+      id: 'warn',
+      label: $localize`Warn`
+    },
+    {
+      id: 'blur',
+      label: $localize`Blur`
+    },
+    {
+      id: 'display',
+      label: $localize`Display`
+    }
+  ]
 
   private serverConfig: HTMLServerConfig
 

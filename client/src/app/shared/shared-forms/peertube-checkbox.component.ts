@@ -23,9 +23,9 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterCon
   readonly labelText = input<string>(undefined)
   readonly labelInnerHTML = input<string>(undefined)
   readonly helpPlacement = input('top auto')
-  readonly disabled = model(false)
   readonly recommended = input(false)
 
+  disabled = false
   describedby: string
 
   readonly templates = contentChildren(PeerTubeTemplateDirective)
@@ -66,6 +66,6 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterCon
   }
 
   setDisabledState (isDisabled: boolean) {
-    this.disabled.set(isDisabled)
+    this.disabled = isDisabled
   }
 }

@@ -102,13 +102,7 @@ export const config = {
     bail: true
   },
 
-  autoCompileOpts: {
-    autoCompile: true,
-
-    tsNodeOpts: {
-      project: require('path').join(__dirname, './tsconfig.json')
-    }
-  },
+  tsConfigPath: require('path').join(__dirname, './tsconfig.json'),
 
   before: function () {
     require('./src/commands/upload')
