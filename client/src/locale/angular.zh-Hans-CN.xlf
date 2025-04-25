@@ -6331,7 +6331,7 @@
       </trans-unit>
       <trans-unit id="2392048495773035896" datatype="html" xml:space="preserve">
         <source>Open the modal to support the video uploader</source>
-        <target state="translated">打开模式以支持视频上传者</target>
+        <target state="translated">打开以支持视频上传者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">91</context>
