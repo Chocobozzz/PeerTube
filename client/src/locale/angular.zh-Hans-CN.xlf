@@ -2155,7 +2155,7 @@
       </trans-unit>
       <trans-unit id="8295656255868159329" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="translated">你可以 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>申请账户<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 在我们的平台上</target>
+        <target state="translated">你可以在我们的平台上<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>请求账号<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">86,88</context>
@@ -4512,7 +4512,7 @@
       </trans-unit>
       <trans-unit id="3171444589366264129" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>兼容 Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 也支持 <x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>自定义 PeerTube HTML 标签<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>兼容 Markdown 的<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 也支持<x id="START_LINK_1" equiv-text="&lt;a class=&quot;text-decoration-underline&quot; href=&quot;https://docs.joinpeertube.org/api/custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>自定义 PeerTube HTML 标记<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2,3</context>
@@ -4916,7 +4916,7 @@
       </trans-unit>
       <trans-unit id="8107526517508236784" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></source>
-        <target state="translated"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> 取消创建 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> 取消编辑 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> 取消删除 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> 取消创建 <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> 取消编辑<x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> 取消删除<x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">37</context>
