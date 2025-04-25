@@ -1759,7 +1759,7 @@
       </trans-unit>
       <trans-unit id="6621122803162844810" datatype="html" xml:space="preserve">
         <source>This video already has captions.</source>
-        <target state="translated">This video already has captions.</target>
+        <target state="translated">这个视频已经有字幕了。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">398</context>
