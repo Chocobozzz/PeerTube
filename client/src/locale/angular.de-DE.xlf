@@ -1589,41 +1589,41 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545636587679565725" datatype="html">
+      <trans-unit id="7545636587679565725" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being transcoding.</source>
-        <target state="new">File replacement is not available while the video is being transcoding.</target>
+        <target state="translated">Während der Transkodierung des Videos ist die Dateiersetzung nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="942718789410221156" datatype="html">
+      <trans-unit id="942718789410221156" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being edited.</source>
-        <target state="new">File replacement is not available while the video is being edited.</target>
+        <target state="translated">Während der Bearbeitung des Videos ist die Dateiersetzung nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8573772649653209009" datatype="html">
+      <trans-unit id="8573772649653209009" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being imported.</source>
-        <target state="new">File replacement is not available while the video is being imported.</target>
+        <target state="translated">Während der Importierung des Videos ist die Dateiersetzung nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1622943505826483882" datatype="html">
+      <trans-unit id="1622943505826483882" datatype="html" xml:space="preserve">
         <source>File replacement is not available.</source>
-        <target state="new">File replacement is not available.</target>
+        <target state="translated">Dateiersetzung ist nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="915313658414662035" datatype="html">
+      <trans-unit id="915313658414662035" datatype="html" xml:space="preserve">
         <source>Studio is not enabled on <x id="PH" equiv-text="instanceName"/>.</source>
-        <target state="new">Studio is not enabled on <x id="PH" equiv-text="instanceName"/>.</target>
+        <target state="translated">Studio ist für <x id="PH" equiv-text="instanceName"/> nicht aktiviert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">34</context>
@@ -1637,25 +1637,25 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1280514590647661947" datatype="html">
+      <trans-unit id="1280514590647661947" datatype="html" xml:space="preserve">
         <source>Studio is not available while the video is being transcoding.</source>
-        <target state="new">Studio is not available while the video is being transcoding.</target>
+        <target state="translated">Während der Transkodierung des Videos ist das Studio nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8834864291736520740" datatype="html">
+      <trans-unit id="8834864291736520740" datatype="html" xml:space="preserve">
         <source>Studio is not available while the video is being edited.</source>
-        <target state="new">Studio is not available while the video is being edited.</target>
+        <target state="translated">Während der Bearbeitung des Videos ist das Studio nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5363833911902491766" datatype="html">
+      <trans-unit id="5363833911902491766" datatype="html" xml:space="preserve">
         <source>Studio is not available while the video is being imported.</source>
-        <target state="new">Studio is not available while the video is being imported.</target>
+        <target state="translated">Während der Importierung des Videos ist das Studio nicht verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">40</context>
@@ -4339,9 +4339,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4898214338486241896" datatype="html">
+      <trans-unit id="4898214338486241896" datatype="html" xml:space="preserve">
         <source>Edit raw</source>
-        <target state="new">Edit raw</target>
+        <target state="translated">Rohdaten bearbeiten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4503,9 +4503,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8797603333570754589" datatype="html">
+      <trans-unit id="8797603333570754589" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.actor.name"/> (instance page)</source>
-        <target state="new"><x id="PH" equiv-text="this.actor.name"/> (instance page)</target>
+        <target state="translated"><x id="PH" equiv-text="this.actor.name"/> (Instanzseite)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -4804,9 +4804,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5762774516857408346" datatype="html">
+      <trans-unit id="5762774516857408346" datatype="html" xml:space="preserve">
         <source>Publish video after transcoding</source>
-        <target state="new">Publish video after transcoding</target>
+        <target state="translated">Video nach der Transkodierung veröffentlichen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">159</context>
@@ -4828,9 +4828,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2849879057149700533" datatype="html">
+      <trans-unit id="2849879057149700533" datatype="html" xml:space="preserve">
         <source>Replace file</source>
-        <target state="new">Replace file</target>
+        <target state="translated">Datei ersetzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">4</context>
@@ -4844,9 +4844,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6220453864421244663" datatype="html">
+      <trans-unit id="6220453864421244663" datatype="html" xml:space="preserve">
         <source>Current uploaded file:</source>
-        <target state="new">Current uploaded file:</target>
+        <target state="translated">Aktuell hochgeladene Datei:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -4860,17 +4860,17 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3717862857627538007" datatype="html">
+      <trans-unit id="3717862857627538007" datatype="html" xml:space="preserve">
         <source>Delete your video</source>
-        <target state="new">Delete your video</target>
+        <target state="translated">Dein Video löschen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">168,169</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2364932147716378858" datatype="html">
+      <trans-unit id="2364932147716378858" datatype="html" xml:space="preserve">
         <source>Warning: this is a definitive action!</source>
-        <target state="new">Warning: this is a definitive action!</target>
+        <target state="translated">Warnung: Dies ist eine endgültige Aktion!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">169,171</context>
@@ -4884,9 +4884,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4784303436041135088" datatype="html">
+      <trans-unit id="4784303436041135088" datatype="html" xml:space="preserve">
         <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</source>
-        <target state="new">Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</target>
+        <target state="translated">Hochgeladen am <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">53,55</context>
@@ -4916,9 +4916,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8107526517508236784" datatype="html">
+      <trans-unit id="8107526517508236784" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Erstellung abbrechen <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Bearbeitung abbrechen <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Löschung abbrechen <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">37</context>
@@ -4990,9 +4990,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4768953288635735928" datatype="html">
+      <trans-unit id="4768953288635735928" datatype="html" xml:space="preserve">
         <source>Some chapters are invalid</source>
-        <target state="new">Some chapters are invalid</target>
+        <target state="translated">Manche Kapitel sind ungültig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -5162,9 +5162,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1582661564914737553" datatype="html">
+      <trans-unit id="1582661564914737553" datatype="html" xml:space="preserve">
         <source>Name of the uploaded file.</source>
-        <target state="new"> Name of the uploaded file. </target>
+        <target state="translated">Name der hochgeladenen Datei.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -5258,9 +5258,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8072551128947614417" datatype="html">
+      <trans-unit id="8072551128947614417" datatype="html" xml:space="preserve">
         <source>Main information</source>
-        <target state="new">Main information</target>
+        <target state="translated">Wichtigste Informationen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5278,9 +5278,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6585268061238979045" datatype="html">
+      <trans-unit id="6585268061238979045" datatype="html" xml:space="preserve">
         <source>Video title</source>
-        <target state="new">Video title</target>
+        <target state="translated">Videotitel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -5342,9 +5342,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3434410278501759813" datatype="html">
+      <trans-unit id="3434410278501759813" datatype="html" xml:space="preserve">
         <source>Thumbnail</source>
-        <target state="new">Thumbnail</target>
+        <target state="translated">Miniaturansicht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">89,91</context>
@@ -5438,9 +5438,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2321566121166630784" datatype="html">
+      <trans-unit id="2321566121166630784" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="video.name"/>" deleted</source>
-        <target state="new">"<x id="PH" equiv-text="video.name"/>" deleted</target>
+        <target state="translated">„<x id="PH" equiv-text="video.name"/>“ gelöscht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
           <context context-type="linenumber">486</context>
@@ -5502,9 +5502,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3319838915969302847" datatype="html">
+      <trans-unit id="3319838915969302847" datatype="html" xml:space="preserve">
         <source>File uploaded! Your video is now available in your private library.</source>
-        <target state="new">File uploaded! Your video is now available in your private library.</target>
+        <target state="translated">Datei hochgeladen! Dein Video ist jetzt in deiner privaten Bibliothek verfügbar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -5518,9 +5518,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6288814204222524322" datatype="html">
+      <trans-unit id="6288814204222524322" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.uploadPercents"/>%</source>
-        <target state="new"><x id="PH" equiv-text="this.uploadPercents"/>%</target>
+        <target state="translated"><x id="PH" equiv-text="this.uploadPercents"/> %</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -5535,9 +5535,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="159182233259245277" datatype="html">
+      <trans-unit id="159182233259245277" datatype="html" xml:space="preserve">
         <source>Sorry, but something went wrong.</source>
-        <target state="new">Sorry, but something went wrong.</target>
+        <target state="translated">Entschuldigung, aber da ist etwas schiefgelaufen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -5727,9 +5727,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1069523139277190436" datatype="html">
+      <trans-unit id="1069523139277190436" datatype="html" xml:space="preserve">
         <source>Statistics</source>
-        <target state="new">Statistics</target>
+        <target state="translated">Statistiken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5883,9 +5883,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1588042004294678369" datatype="html">
+      <trans-unit id="1588042004294678369" datatype="html" xml:space="preserve">
         <source>UNAVAILABLE</source>
-        <target state="new">UNAVAILABLE</target>
+        <target state="translated">NICHT VERFÜGBAR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -5903,9 +5903,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">10,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5007027170771093295" datatype="html">
+      <trans-unit id="5007027170771093295" datatype="html" xml:space="preserve">
         <source>Feature unavailable</source>
-        <target state="new">Feature unavailable</target>
+        <target state="translated">Funktion nicht verfügbar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">83</context>
@@ -6015,9 +6015,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3522196594292220614" datatype="html">
+      <trans-unit id="3522196594292220614" datatype="html" xml:space="preserve">
         <source>Playlist URL</source>
-        <target state="new">Playlist URL</target>
+        <target state="translated">URL der Wiedergabeliste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -6087,9 +6087,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4631262903114543634" datatype="html">
+      <trans-unit id="4631262903114543634" datatype="html" xml:space="preserve">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">Video-URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">126,127</context>
@@ -6179,9 +6179,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4278992604323819883" datatype="html">
+      <trans-unit id="4278992604323819883" datatype="html" xml:space="preserve">
         <source>on <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </source>
-        <target state="new"> on <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </target>
+        <target state="translated">auf <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/video-cell.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -6411,17 +6411,17 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">16,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6995933519629969124" datatype="html">
+      <trans-unit id="6995933519629969124" datatype="html" xml:space="preserve">
         <source>Unsubscribe from all channels</source>
-        <target state="new">Unsubscribe from all channels</target>
+        <target state="translated">Abonnement von allen Kanälen abbestellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1698114086921246480" datatype="html">
+      <trans-unit id="1698114086921246480" datatype="html" xml:space="preserve">
         <source>Unsubscribe</source>
-        <target state="new">Unsubscribe</target>
+        <target state="translated">Abbestellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">28</context>
@@ -7064,17 +7064,17 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3245220240937722814" datatype="html">
+      <trans-unit id="3245220240937722814" datatype="html" xml:space="preserve">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Meine Kanäle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="913810105049472842" datatype="html">
+      <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
-        <target state="new">Manage my channels</target>
+        <target state="translated">Meine Kanäle verwalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -7896,25 +7896,25 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6410388482930606788" datatype="html">
+      <trans-unit id="6410388482930606788" datatype="html" xml:space="preserve">
         <source>This video has been reported multiple times</source>
-        <target state="new">This video has been reported multiple times</target>
+        <target state="translated">Dieses Video wurde mehrfach gemeldet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216288352598663055" datatype="html">
+      <trans-unit id="5216288352598663055" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 Missbrauch} other {<x id="INTERPOLATION"/> Missbräuche}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4984728317230462494" datatype="html">
+      <trans-unit id="4984728317230462494" datatype="html" xml:space="preserve">
         <source>The video is blocked</source>
-        <target state="new">The video is blocked</target>
+        <target state="translated">Das Video ist blockiert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">70</context>
@@ -8040,9 +8040,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3755780063671912599" datatype="html">
+      <trans-unit id="3755780063671912599" datatype="html" xml:space="preserve">
         <source>Watched words</source>
-        <target state="new">Watched words</target>
+        <target state="translated">Überwachte Wörter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -8388,9 +8388,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5810973984628060415" datatype="html">
+      <trans-unit id="5810973984628060415" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</source>
-        <target state="new">{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</target>
+        <target state="translated">{count, plural, =1 {Kommentar genehmigt.} other {<x id="count"/> Kommentare genehmigt.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -8606,9 +8606,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2655875876987395619" datatype="html">
+      <trans-unit id="2655875876987395619" datatype="html" xml:space="preserve">
         <source>Deleted video</source>
-        <target state="new">Deleted video</target>
+        <target state="translated">Gelöschtes Video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81,82</context>
@@ -8810,9 +8810,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9025984970788474055" datatype="html">
+      <trans-unit id="9025984970788474055" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted.</target>
+        <target state="translated">Plattform <x id="PH" equiv-text="domain"/> stummgeschaltet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -8926,9 +8926,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5533643003593202766" datatype="html">
+      <trans-unit id="5533643003593202766" datatype="html" xml:space="preserve">
         <source>Installed themes</source>
-        <target state="new">Installed themes</target>
+        <target state="translated">Installierte Themen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -19086,9 +19086,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5727962096948024837" datatype="html">
+      <trans-unit id="5727962096948024837" datatype="html" xml:space="preserve">
         <source>Concurrency must be greater or equal to 1.</source>
-        <target state="new">Concurrency must be greater or equal to 1.</target>
+        <target state="translated">Gleichzeitigkeit muss größer oder gleich 1 sein.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">122</context>
