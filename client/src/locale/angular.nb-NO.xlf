@@ -7101,9 +7101,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6661432123838461687" datatype="html">
+      <trans-unit id="6661432123838461687" datatype="html" xml:space="preserve">
         <source>Your subscriptions and followers</source>
-        <target state="new">Your subscriptions and followers</target>
+        <target state="translated">Dine abonnenter og følgere</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">19</context>
@@ -8275,9 +8275,9 @@
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8390803680962035202" datatype="html">
+      <trans-unit id="8390803680962035202" datatype="html" xml:space="preserve">
         <source>Follower</source>
-        <target state="translated">Abonent</target>
+        <target state="translated">Følger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">30</context>
@@ -13377,9 +13377,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4369572538341036106" datatype="html">
+      <trans-unit id="4369572538341036106" datatype="html" xml:space="preserve">
         <source>Show more followers</source>
-        <target state="new">Show more followers</target>
+        <target state="translated">Vis flere følgere</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">77</context>
@@ -13665,9 +13665,9 @@
           <context context-type="linenumber">45,46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1481887811671001508" datatype="html">
+      <trans-unit id="1481887811671001508" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {follower} other {followers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {follower} other {followers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {følger} other {følgere}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">55</context>
@@ -17032,9 +17032,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658016127287571612" datatype="html">
+      <trans-unit id="658016127287571612" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="config.instance.name"/> has a new follower</source>
-        <target state="new"><x id="PH" equiv-text="config.instance.name"/> has a new follower</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/> har en ny følger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -17136,9 +17136,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">Lagre profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">42</context>
@@ -17412,9 +17412,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="782403351079933650" datatype="html">
+      <trans-unit id="782403351079933650" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</source>
-        <target state="new"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {follower} other {followers}}</target>
+        <target state="translated"><x id="PH" equiv-text="this.pagination.totalItems"/> {total, plural, =1 {følger} other {følgere}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -21944,9 +21944,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4177382096054023179" datatype="html">
+      <trans-unit id="4177382096054023179" datatype="html" xml:space="preserve">
         <source>Followers (accounts will need to re-follow your channels)</source>
-        <target state="new">Followers (accounts will need to re-follow your channels)</target>
+        <target state="translated">Følgere (kontoer må følge kanalene dine på nytt)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">35</context>
@@ -22769,57 +22769,57 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3403196612855474932" datatype="html">
+      <trans-unit id="3403196612855474932" datatype="html" xml:space="preserve">
         <source>Lives</source>
-        <target state="new">Lives</target>
+        <target state="translated">Direktesendinger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4998592027845693576" datatype="html">
+      <trans-unit id="4998592027845693576" datatype="html" xml:space="preserve">
         <source>Public videos</source>
-        <target state="new">Public videos</target>
+        <target state="translated">Offentlige videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4970567719750648547" datatype="html">
+      <trans-unit id="4970567719750648547" datatype="html" xml:space="preserve">
         <source>Internal videos</source>
-        <target state="new">Internal videos</target>
+        <target state="translated">Interne videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2457309597882219063" datatype="html">
+      <trans-unit id="2457309597882219063" datatype="html" xml:space="preserve">
         <source>Unlisted videos</source>
-        <target state="new">Unlisted videos</target>
+        <target state="translated">Uoppførte videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7650736596900384878" datatype="html">
+      <trans-unit id="7650736596900384878" datatype="html" xml:space="preserve">
         <source>Password protected videos</source>
-        <target state="new">Password protected videos</target>
+        <target state="translated">Passordbeskyttede videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6081858129717915969" datatype="html">
+      <trans-unit id="6081858129717915969" datatype="html" xml:space="preserve">
         <source>Private videos</source>
-        <target state="new">Private videos</target>
+        <target state="translated">Private videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5093002376262354382" datatype="html">
+      <trans-unit id="5093002376262354382" datatype="html" xml:space="preserve">
         <source>Transcoding failed</source>
-        <target state="new">Transcoding failed</target>
+        <target state="translated">Omkoding feilet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -22829,25 +22829,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1831940730037919560" datatype="html">
+      <trans-unit id="1831940730037919560" datatype="html" xml:space="preserve">
         <source>Moving to file system</source>
-        <target state="new">Moving to file system</target>
+        <target state="translated">Flytter til filsystem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4707274274243790782" datatype="html">
+      <trans-unit id="4707274274243790782" datatype="html" xml:space="preserve">
         <source>Moving to file system failed</source>
-        <target state="new">Moving to file system failed</target>
+        <target state="translated">Flytting til filsystem feilet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792259951302458040" datatype="html">
+      <trans-unit id="1792259951302458040" datatype="html" xml:space="preserve">
         <source>Moving to external storage</source>
-        <target state="new">Moving to external storage</target>
+        <target state="translated">Flytter til ekstern lagring</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -22861,17 +22861,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4887724548587271148" datatype="html">
+      <trans-unit id="4887724548587271148" datatype="html" xml:space="preserve">
         <source>Waiting transcoding</source>
-        <target state="new">Waiting transcoding</target>
+        <target state="translated">Venter på omkoding</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4517785179607945981" datatype="html">
+      <trans-unit id="4517785179607945981" datatype="html" xml:space="preserve">
         <source>To transcode</source>
-        <target state="new">To transcode</target>
+        <target state="translated">Å omkode</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">93</context>
@@ -22885,81 +22885,81 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6963802198225789806" datatype="html">
+      <trans-unit id="6963802198225789806" datatype="html" xml:space="preserve">
         <source>To edit</source>
-        <target state="new">To edit</target>
+        <target state="translated">Å redigere</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5722034318470457785" datatype="html">
+      <trans-unit id="5722034318470457785" datatype="html" xml:space="preserve">
         <source>Your video file is being processed.</source>
-        <target state="new">Your video file is being processed.</target>
+        <target state="translated">Videofilen din blir behandlet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5489245301010887885" datatype="html">
+      <trans-unit id="5489245301010887885" datatype="html" xml:space="preserve">
         <source>This can take a while and some features may not be available until it is complete.</source>
-        <target state="new">This can take a while and some features may not be available until it is complete.</target>
+        <target state="translated">Dette kan ta en stund, og noen funksjoner er kanskje ikke tilgjengelige før det er fullført.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3911848809598246025" datatype="html">
+      <trans-unit id="3911848809598246025" datatype="html" xml:space="preserve">
         <source>Contact your administrator to fix it.</source>
-        <target state="new">Contact your administrator to fix it.</target>
+        <target state="translated">Kontakt administratoren din for å fikse det.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6610623780037367849" datatype="html">
+      <trans-unit id="6610623780037367849" datatype="html" xml:space="preserve">
         <source>Your web browser may not be able to play it.</source>
-        <target state="new">Your web browser may not be able to play it.</target>
+        <target state="translated">Nettleseren din kan kanskje ikke spille den av.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3115242563270499472" datatype="html">
+      <trans-unit id="3115242563270499472" datatype="html" xml:space="preserve">
         <source>Transcoding in progress</source>
-        <target state="new">Transcoding in progress</target>
+        <target state="translated">Omkoding pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9094272343501770717" datatype="html">
+      <trans-unit id="9094272343501770717" datatype="html" xml:space="preserve">
         <source>Import in progress</source>
-        <target state="new">Import in progress</target>
+        <target state="translated">Import pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8473873393873007257" datatype="html">
+      <trans-unit id="8473873393873007257" datatype="html" xml:space="preserve">
         <source>Your remote video is being imported.</source>
-        <target state="new">Your remote video is being imported.</target>
+        <target state="translated">Den eksterne videoen din importeres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="762981882514577877" datatype="html">
+      <trans-unit id="762981882514577877" datatype="html" xml:space="preserve">
         <source>The remote video is being imported, it will be available when the import is complete.</source>
-        <target state="new">The remote video is being imported, it will be available when the import is complete.</target>
+        <target state="translated">Den eksterne videoen importeres, og den vil være tilgjengelig når importprosessen er fullført.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6132063630865598642" datatype="html">
+      <trans-unit id="6132063630865598642" datatype="html" xml:space="preserve">
         <source>Moving video files</source>
-        <target state="new">Moving video files</target>
+        <target state="translated">Flytter videofiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">40</context>
@@ -22969,17 +22969,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8780054161177843365" datatype="html">
+      <trans-unit id="8780054161177843365" datatype="html" xml:space="preserve">
         <source>The video is being moved to the file system.</source>
-        <target state="new">The video is being moved to the file system.</target>
+        <target state="translated">Videoen flyttes til filsystemet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6414709216834299238" datatype="html">
+      <trans-unit id="6414709216834299238" datatype="html" xml:space="preserve">
         <source>Failed to move video files to the platform file system.</source>
-        <target state="new">Failed to move video files to the platform file system.</target>
+        <target state="translated">Kunne ikke flytte videofiler til plattformens filsystem.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">48</context>
@@ -23161,9 +23161,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240556993302961443" datatype="html">
+      <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
-        <target state="new">Save interface settings</target>
+        <target state="translated">Lagre grensesnitt-innstillinger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">9</context>
