@@ -6981,121 +6981,121 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1131691653475304132" datatype="html">
+      <trans-unit id="1131691653475304132" datatype="html" xml:space="preserve">
         <source>Your automatic tag policies</source>
-        <target state="new">Your automatic tag policies</target>
+        <target state="translated">Dine retningslinjer for automatisk markering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2742480382106792999" datatype="html">
+      <trans-unit id="2742480382106792999" datatype="html" xml:space="preserve">
         <source>Automatically block comments:</source>
-        <target state="new">Automatically block comments:</target>
+        <target state="translated">Blokker kommentarer automatisk:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4896271345443040077" datatype="html">
+      <trans-unit id="4896271345443040077" datatype="html" xml:space="preserve">
         <source>That contain an external link</source>
-        <target state="new">That contain an external link</target>
+        <target state="translated">Som inneholder en ekstern lenke</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7260030884541952275" datatype="html">
+      <trans-unit id="7260030884541952275" datatype="html" xml:space="preserve">
         <source>That contain any word from your "<x id="PH" equiv-text="tag.name"/>" watched word list</source>
-        <target state="new">That contain any word from your "<x id="PH" equiv-text="tag.name"/>" watched word list</target>
+        <target state="translated">Som inneholder et hvilket som helst ord fra din overvåkede ordliste "<x id="PH" equiv-text="tag.name"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3545282528084392289" datatype="html">
+      <trans-unit id="3545282528084392289" datatype="html" xml:space="preserve">
         <source>Comment policies updated</source>
-        <target state="new">Comment policies updated</target>
+        <target state="translated">Kommentarretningslinjene er oppdatert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-auto-tag-policies/my-auto-tag-policies.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3245220240937722814" datatype="html">
+      <trans-unit id="3245220240937722814" datatype="html" xml:space="preserve">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Mine kanaler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="913810105049472842" datatype="html">
+      <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
-        <target state="new">Manage my channels</target>
+        <target state="translated">Administrer kanalene mine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3140041890374956085" datatype="html">
+      <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
-        <target state="new">Comments on your videos</target>
+        <target state="translated">Kommentarer til videoene dine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7996232964209657116" datatype="html">
+      <trans-unit id="7996232964209657116" datatype="html" xml:space="preserve">
         <source>EXPORT</source>
-        <target state="new">EXPORT</target>
+        <target state="translated">EKSPORTER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6327599466774745087" datatype="html">
+      <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="new">You can request an archive of your account containing:</target>
+        <target state="translated">Du kan be om et arkiv med kontoen din som inneholder:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215128747477502320" datatype="html">
+      <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="new">Your account settings with avatar file</target>
+        <target state="translated">Kontoinnstillingene dine med profilbildefilen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189339781940878663" datatype="html">
+      <trans-unit id="4189339781940878663" datatype="html" xml:space="preserve">
         <source>Your channels with banner and avatar files</source>
-        <target state="new">Your channels with banner and avatar files</target>
+        <target state="translated">Kanalene dine med banner- og profilbildefiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3569169060435002504" datatype="html">
+      <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="new">Your muted accounts and servers</target>
+        <target state="translated">Dine dempede kontoer og servere</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2084686551517263033" datatype="html">
+      <trans-unit id="2084686551517263033" datatype="html" xml:space="preserve">
         <source>Your comments</source>
-        <target state="new">Your comments</target>
+        <target state="translated">Dine kommentarer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="511089124158737322" datatype="html">
+      <trans-unit id="511089124158737322" datatype="html" xml:space="preserve">
         <source>Your likes and dislikes</source>
-        <target state="new">Your likes and dislikes</target>
+        <target state="translated">Dine liker og missliker-klikk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7109,81 +7109,81 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8728252018840518768" datatype="html">
+      <trans-unit id="8728252018840518768" datatype="html" xml:space="preserve">
         <source>Your video playlists with thumbnail files</source>
-        <target state="new">Your video playlists with thumbnail files</target>
+        <target state="translated">Videospillelistene dine med miniatyrbildefiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6339334908260162420" datatype="html">
+      <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="new">Your videos with thumbnail, caption files. Video files can also be included in the archive</target>
+        <target state="translated">Videoene dine med miniatyrbilder og undertekstfiler. Videofiler kan også inkluderes i arkivet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5019912911402302063" datatype="html">
+      <trans-unit id="5019912911402302063" datatype="html" xml:space="preserve">
         <source>Your video history</source>
-        <target state="new">Your video history</target>
+        <target state="translated">Videohistorikken din</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4333560211154634761" datatype="html">
+      <trans-unit id="4333560211154634761" datatype="html" xml:space="preserve">
         <source>The exported data will contain multiple directories:</source>
-        <target state="new">The exported data will contain multiple directories:</target>
+        <target state="translated">De eksporterte dataene vil inneholde flere kataloger:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3192985534238875835" datatype="html">
+      <trans-unit id="3192985534238875835" datatype="html" xml:space="preserve">
         <source>A directory containing an export in ActivityPub format, readable by any compliant software</source>
-        <target state="new">A directory containing an export in ActivityPub format, readable by any compliant software</target>
+        <target state="translated">En mappe som inneholder en eksport i ActivityPub-format, lesbar av all kompatibel programvare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="896330674868470367" datatype="html">
+      <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="new">A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</target>
+        <target state="translated">En mappe som inneholder en eksportfil i et tilpasset PeerTube JSON-format som kan brukes til å importere kontoen din på nytt til en annen PeerTube-instans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7743206617778542802" datatype="html">
+      <trans-unit id="7743206617778542802" datatype="html" xml:space="preserve">
         <source>A directory containing static files (thumbnails, avatars, video files etc.)</source>
-        <target state="new">A directory containing static files (thumbnails, avatars, video files etc.)</target>
+        <target state="translated">En mappe som inneholder statiske filer (miniatyrbilder, profilbilder, videofiler osv.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5507694448548293913" datatype="html">
+      <trans-unit id="5507694448548293913" datatype="html" xml:space="preserve">
         <source>You can only request one archive at a time.</source>
-        <target state="new">You can only request one archive at a time.</target>
+        <target state="translated">Du kan bare be om ett arkiv om gangen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448402358500159809" datatype="html">
+      <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="new">An email will be sent when the export archive is available.</target>
+        <target state="translated">En e-post vil bli sendt når eksportarkivet er tilgjengelig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3973931101896534797" datatype="html">
+      <trans-unit id="3973931101896534797" datatype="html" xml:space="preserve">
         <source>Date</source>
-        <target state="new">Date</target>
+        <target state="translated">Dato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">41</context>
@@ -7261,9 +7261,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6738889286784295744" datatype="html">
+      <trans-unit id="6738889286784295744" datatype="html" xml:space="preserve">
         <source>Toggle</source>
-        <target state="new">Toggle</target>
+        <target state="translated">Veksle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-switch.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -7345,9 +7345,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8898602327647937914" datatype="html">
+      <trans-unit id="8898602327647937914" datatype="html" xml:space="preserve">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">Åpne aktørside i en ny fane</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">50</context>
@@ -7853,25 +7853,25 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6410388482930606788" datatype="html">
+      <trans-unit id="6410388482930606788" datatype="html" xml:space="preserve">
         <source>This video has been reported multiple times</source>
-        <target state="new">This video has been reported multiple times</target>
+        <target state="translated">Denne videoen er rapportert flere ganger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216288352598663055" datatype="html">
+      <trans-unit id="5216288352598663055" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 misbruk} other {<x id="INTERPOLATION"/> misbruk}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4984728317230462494" datatype="html">
+      <trans-unit id="4984728317230462494" datatype="html" xml:space="preserve">
         <source>The video is blocked</source>
-        <target state="new">The video is blocked</target>
+        <target state="translated">Videoen er blokkert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">70</context>
@@ -7953,9 +7953,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867580290622941314" datatype="html">
+      <trans-unit id="5867580290622941314" datatype="html" xml:space="preserve">
         <source>Mutes</source>
-        <target state="new">Mutes</target>
+        <target state="translated">Dempet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -7981,9 +7981,9 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668793810321242853" datatype="html">
+      <trans-unit id="5668793810321242853" datatype="html" xml:space="preserve">
         <source>Muted servers</source>
-        <target state="translated">Stilnede servere</target>
+        <target state="translated">Dempede servere</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -7997,9 +7997,9 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3755780063671912599" datatype="html">
+      <trans-unit id="3755780063671912599" datatype="html" xml:space="preserve">
         <source>Watched words</source>
-        <target state="new">Watched words</target>
+        <target state="translated">Overvåkede ord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -8147,9 +8147,9 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7405580225397904114" datatype="html">
+      <trans-unit id="7405580225397904114" datatype="html" xml:space="preserve">
         <source>No more information is available for this row</source>
-        <target state="new">No more information is available for this row</target>
+        <target state="translated">Ingen mer informasjon er tilgjengelig for denne raden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">34</context>
@@ -8291,9 +8291,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8098332505860203521" datatype="html">
+      <trans-unit id="8098332505860203521" datatype="html" xml:space="preserve">
         <source>Only display comments with this tag</source>
-        <target state="new">Only display comments with this tag</target>
+        <target state="translated">Vis bare kommentarer med denne markøren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">92</context>
@@ -8339,17 +8339,17 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4759830021629072866" datatype="html">
+      <trans-unit id="4759830021629072866" datatype="html" xml:space="preserve">
         <source>Display comments awaiting your approval</source>
-        <target state="new">Display comments awaiting your approval</target>
+        <target state="translated">Vis kommentarer som venter på godkjenning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5810973984628060415" datatype="html">
+      <trans-unit id="5810973984628060415" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</source>
-        <target state="new">{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</target>
+        <target state="translated">{count, plural, =1 {Kommentar godkjent.} other {<x id="count"/> kommentarer godkjent.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -8563,9 +8563,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2655875876987395619" datatype="html">
+      <trans-unit id="2655875876987395619" datatype="html" xml:space="preserve">
         <source>Deleted video</source>
-        <target state="new">Deleted video</target>
+        <target state="translated">Slettet video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81,82</context>
@@ -8615,9 +8615,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8768058451023203482" datatype="html">
+      <trans-unit id="8768058451023203482" datatype="html" xml:space="preserve">
         <source>Link health <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">Link health <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Lenkehelse <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -8747,9 +8747,9 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3223753904455402496" datatype="html">
+      <trans-unit id="3223753904455402496" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> unmuted.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> unmuted.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> fjernet demping.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -8759,25 +8759,25 @@
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8024366868273320899" datatype="html">
+      <trans-unit id="8024366868273320899" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> unmuted by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> unmuted by your platform.</target>
+        <target state="translated"><x id="PH" equiv-text="host"/> fjernet demping av platformen din.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9025984970788474055" datatype="html">
+      <trans-unit id="9025984970788474055" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted.</target>
+        <target state="translated">Platform <x id="PH" equiv-text="domain"/> dempet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6750929335415365131" datatype="html">
+      <trans-unit id="6750929335415365131" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted by your platform.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted by your platform.</target>
+        <target state="translated">Platform <x id="PH" equiv-text="domain"/> dempet av din platform.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -8883,17 +8883,17 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5533643003593202766" datatype="html">
+      <trans-unit id="5533643003593202766" datatype="html" xml:space="preserve">
         <source>Installed themes</source>
-        <target state="new">Installed themes</target>
+        <target state="translated">Installerte temaer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7602762965940763238" datatype="html">
+      <trans-unit id="7602762965940763238" datatype="html" xml:space="preserve">
         <source>Search themes</source>
-        <target state="new">Search themes</target>
+        <target state="translated">Søk etter temaer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -8915,9 +8915,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1217842609094113552" datatype="html">
+      <trans-unit id="1217842609094113552" datatype="html" xml:space="preserve">
         <source>Installed plugins</source>
-        <target state="new">Installed plugins</target>
+        <target state="translated">Installerte programtillegg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -8939,25 +8939,25 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7186771264833643704" datatype="html">
+      <trans-unit id="7186771264833643704" datatype="html" xml:space="preserve">
         <source>This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="new">This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</target>
+        <target state="translated">Dette programtillegget er utviklet av Framasoft, den ideelle organisasjonen som utvikler PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8852490424970169127" datatype="html">
+      <trans-unit id="8852490424970169127" datatype="html" xml:space="preserve">
         <source>Official</source>
-        <target state="new">Official</target>
+        <target state="translated">Offisiell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5976946399792378437" datatype="html">
+      <trans-unit id="5976946399792378437" datatype="html" xml:space="preserve">
         <source>This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="new">This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</target>
+        <target state="translated">Dette programtillegget anbefales av Framasoft, den ideelle organisasjonen som utvikler PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">50</context>
@@ -9031,9 +9031,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1780056719120519633" datatype="html">
+      <trans-unit id="1780056719120519633" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
@@ -9131,9 +9131,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="284741121040858744" datatype="html">
+      <trans-unit id="284741121040858744" datatype="html" xml:space="preserve">
         <source>Approve this comment</source>
-        <target state="new">Approve this comment</target>
+        <target state="translated">Godkjenn denne kommentaren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -9263,9 +9263,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7242197455061561082" datatype="html">
+      <trans-unit id="7242197455061561082" datatype="html" xml:space="preserve">
         <source>Processed/Finished</source>
-        <target state="new">Processed/Finished</target>
+        <target state="translated">Behandlet/ferdig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">42</context>
@@ -9307,17 +9307,17 @@
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653926345388884833" datatype="html">
+      <trans-unit id="1653926345388884833" datatype="html" xml:space="preserve">
         <source>Log type</source>
-        <target state="new">Log type</target>
+        <target state="translated">Loggtype</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="888341446683346521" datatype="html">
+      <trans-unit id="888341446683346521" datatype="html" xml:space="preserve">
         <source>Start date</source>
-        <target state="new">Start date</target>
+        <target state="translated">Startdato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">15</context>
@@ -9363,9 +9363,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5311176376484381099" datatype="html">
+      <trans-unit id="5311176376484381099" datatype="html" xml:space="preserve">
         <source>Log level</source>
-        <target state="new">Log level</target>
+        <target state="translated">Loggføringsnivå</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">25</context>
@@ -9379,9 +9379,9 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9053612499880707554" datatype="html">
+      <trans-unit id="9053612499880707554" datatype="html" xml:space="preserve">
         <source>Example: ffmpeg, api</source>
-        <target state="new">Example: ffmpeg, api</target>
+        <target state="translated">Eksempel: ffmpeg, api</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">40</context>
@@ -9395,17 +9395,17 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2308490727635384266" datatype="html">
+      <trans-unit id="2308490727635384266" datatype="html" xml:space="preserve">
         <source>Logs copied</source>
-        <target state="new">Logs copied</target>
+        <target state="translated">Logger kopiert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2064122482972455058" datatype="html">
+      <trans-unit id="2064122482972455058" datatype="html" xml:space="preserve">
         <source>Copy logs</source>
-        <target state="new">Copy logs</target>
+        <target state="translated">Kopier logger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">55</context>
@@ -9435,41 +9435,41 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3470254178332563634" datatype="html">
+      <trans-unit id="3470254178332563634" datatype="html" xml:space="preserve">
         <source>Square icon</source>
-        <target state="new">Square icon</target>
+        <target state="translated">Firkantet ikon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7072202226437407363" datatype="html">
+      <trans-unit id="7072202226437407363" datatype="html" xml:space="preserve">
         <source>Square icon can be used on your custom homepage.</source>
-        <target state="new">Square icon can be used on your custom homepage.</target>
+        <target state="translated">Firkantet ikon kan brukes på din tilpassede hjemmeside.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5401784168930937916" datatype="html">
+      <trans-unit id="5401784168930937916" datatype="html" xml:space="preserve">
         <source>Banner</source>
-        <target state="new">Banner</target>
+        <target state="translated">Banner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1702458049569424041" datatype="html">
+      <trans-unit id="1702458049569424041" datatype="html" xml:space="preserve">
         <source>Banner is displayed in the about, login and registration pages and be used on your custom homepage.</source>
-        <target state="new">Banner is displayed in the about, login and registration pages and be used on your custom homepage.</target>
+        <target state="translated">Banneret vises på Om-, innloggings- og registreringssidene og kan brukes på din tilpassede hjemmeside.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6614390687854488723" datatype="html">
+      <trans-unit id="6614390687854488723" datatype="html" xml:space="preserve">
         <source>It can also be displayed on external websites to promote your instance, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new">It can also be displayed on external websites to promote your instance, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Den kan også vises på eksterne nettsteder for å markedsføre instansen din, for eksempel <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">30</context>
@@ -9571,9 +9571,9 @@
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1243134386580173960" datatype="html">
+      <trans-unit id="1243134386580173960" datatype="html" xml:space="preserve">
         <source>Save video settings</source>
-        <target state="new">Save video settings</target>
+        <target state="translated">Lagre videoinnstillinger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">75</context>
@@ -22985,9 +22985,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6106629040656502843" datatype="html">
+      <trans-unit id="6106629040656502843" datatype="html" xml:space="preserve">
         <source>Failed to move video files</source>
-        <target state="new">Failed to move video files</target>
+        <target state="translated">Kunne ikke flytte videofiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">51</context>
@@ -22997,41 +22997,41 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5947879152561825850" datatype="html">
+      <trans-unit id="5947879152561825850" datatype="html" xml:space="preserve">
         <source>The video is being moved to an external storage.</source>
-        <target state="new">The video is being moved to an external storage.</target>
+        <target state="translated">Videoen flyttes til en ekstern lagringsenhet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="542526490067261846" datatype="html">
+      <trans-unit id="542526490067261846" datatype="html" xml:space="preserve">
         <source>Failed to move video files to an external storage.</source>
-        <target state="new">Failed to move video files to an external storage.</target>
+        <target state="translated">Kunne ikke flytte videofiler til en ekstern lagringsenhet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910852061199012281" datatype="html">
+      <trans-unit id="5910852061199012281" datatype="html" xml:space="preserve">
         <source>Studio edition in progress</source>
-        <target state="new">Studio edition in progress</target>
+        <target state="translated">Studioutgave pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7170696328218243679" datatype="html">
+      <trans-unit id="7170696328218243679" datatype="html" xml:space="preserve">
         <source>Failure during transcoding of your video files</source>
-        <target state="new">Failure during transcoding of your video files</target>
+        <target state="translated">Feil under omkoding av videofilene dine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="76275487642696165" datatype="html">
+      <trans-unit id="76275487642696165" datatype="html" xml:space="preserve">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
-        <target state="new">Watch video <x id="PH" equiv-text="this.video.name"/></target>
+        <target state="translated">Se video <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">228</context>
@@ -23041,57 +23041,57 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7659756233411947529" datatype="html">
+      <trans-unit id="7659756233411947529" datatype="html" xml:space="preserve">
         <source>Current lives</source>
-        <target state="new">Current lives</target>
+        <target state="translated">Aktive direktesendinger</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4730491486461828294" datatype="html">
+      <trans-unit id="4730491486461828294" datatype="html" xml:space="preserve">
         <source>Today's videos</source>
-        <target state="new">Today's videos</target>
+        <target state="translated">Dagens videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2119901811749731155" datatype="html">
+      <trans-unit id="2119901811749731155" datatype="html" xml:space="preserve">
         <source>Yesterday's videos</source>
-        <target state="new">Yesterday's videos</target>
+        <target state="translated">Gårsdagens videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6176155005688410697" datatype="html">
+      <trans-unit id="6176155005688410697" datatype="html" xml:space="preserve">
         <source>This week's videos</source>
-        <target state="new">This week's videos</target>
+        <target state="translated">Denne ukens videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1461056025742190110" datatype="html">
+      <trans-unit id="1461056025742190110" datatype="html" xml:space="preserve">
         <source>This month's videos</source>
-        <target state="new">This month's videos</target>
+        <target state="translated">Denne månedens videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="929646918212830182" datatype="html">
+      <trans-unit id="929646918212830182" datatype="html" xml:space="preserve">
         <source>Last month's videos</source>
-        <target state="new">Last month's videos</target>
+        <target state="translated">Videoer fra forrige måned</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8691195592124291757" datatype="html">
+      <trans-unit id="8691195592124291757" datatype="html" xml:space="preserve">
         <source>Older videos</source>
-        <target state="new">Older videos</target>
+        <target state="translated">Eldre videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -23153,9 +23153,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3386106491172606235" datatype="html">
+      <trans-unit id="3386106491172606235" datatype="html" xml:space="preserve">
         <source>Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></source>
-        <target state="new">Video duration is <x id="PH" equiv-text="this.video.durationLabel"/></target>
+        <target state="translated">Videoens varighet er <x id="PH" equiv-text="this.video.durationLabel"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -23169,9 +23169,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7570883748440392027" datatype="html">
+      <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
-        <target state="new"><x id="PH" equiv-text="this.instanceName"/> theme</target>
+        <target state="translated"><x id="PH" equiv-text="this.instanceName"/> tema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -23185,17 +23185,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="704703576647033533" datatype="html">
+      <trans-unit id="704703576647033533" datatype="html" xml:space="preserve">
         <source>WAIT LIVE</source>
-        <target state="new">WAIT LIVE</target>
+        <target state="translated">VENT PÅ DIREKTESENDING</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4020649426522537303" datatype="html">
+      <trans-unit id="4020649426522537303" datatype="html" xml:space="preserve">
         <source>You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</source>
-        <target state="new">You watched <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% of this video</target>
+        <target state="translated">Du så <x id="INTERPOLATION" equiv-text="{{ getProgressPercent() }}"/>% av denne videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">51</context>
@@ -23225,33 +23225,33 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">459</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5731228558519519588" datatype="html">
+      <trans-unit id="5731228558519519588" datatype="html" xml:space="preserve">
         <source>Only users of this platform can see this video</source>
-        <target state="new">Only users of this platform can see this video</target>
+        <target state="translated">Bare brukere på denne plattformen kan se denne videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">460</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6173113330681958102" datatype="html">
+      <trans-unit id="6173113330681958102" datatype="html" xml:space="preserve">
         <source>Only users with the appropriate password can see this video</source>
-        <target state="new">Only users with the appropriate password can see this video</target>
+        <target state="translated">Bare brukere med riktig passord kan se denne videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">461</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1219739004043110649" datatype="html">
+      <trans-unit id="1219739004043110649" datatype="html" xml:space="preserve">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="new">Your video is not uploaded yet, are you sure you want to leave this page?</target>
+        <target state="translated">Videoen din er ikke lastet opp ennå. Er du sikker på at du vil forlate denne siden?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3680241561185438605" datatype="html">
+      <trans-unit id="3680241561185438605" datatype="html" xml:space="preserve">
         <source>Your video was uploaded to your library. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your video was uploaded to your library. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">Videoen din ble lastet opp til biblioteket ditt. Men der er ulagrede endringer: er du sikker på at du vil forlate denne siden?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -23273,11 +23273,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8278735427925094503" datatype="html">
+      <trans-unit id="8278735427925094503" datatype="html" xml:space="preserve">
         <source>Upload <x id="PH"/> </source>
-        <target state="new">Upload 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Last opp <x id="PH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.ts</context>
           <context context-type="linenumber">180</context>
@@ -23291,49 +23289,49 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7978464307296909824" datatype="html">
+      <trans-unit id="7978464307296909824" datatype="html" xml:space="preserve">
         <source>You have unsaved changes. Are you sure you want to leave?</source>
-        <target state="new">You have unsaved changes. Are you sure you want to leave?</target>
+        <target state="translated">Du har ulagrede endringer. Er du sikker på at du vil avslutte?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-manage/video-manage.component.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3323006969479129148" datatype="html">
+      <trans-unit id="3323006969479129148" datatype="html" xml:space="preserve">
         <source>Your video will also be automatically blocked since video publication requires manual validation by moderators.</source>
-        <target state="new">Your video will also be automatically blocked since video publication requires manual validation by moderators.</target>
+        <target state="translated">Videoen din vil også bli automatisk blokkert siden videopublisering krever manuell validering av moderatorer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6552806326413045734" datatype="html">
+      <trans-unit id="6552806326413045734" datatype="html" xml:space="preserve">
         <source>Uploading a new version of your video will completely erase the current version.</source>
-        <target state="new">Uploading a new version of your video will completely erase the current version.</target>
+        <target state="translated">Hvis du laster opp en ny versjon av videoen din, slettes den nåværende versjonen fullstendig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">380</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5315061036888228823" datatype="html">
+      <trans-unit id="5315061036888228823" datatype="html" xml:space="preserve">
         <source>&lt;br /&gt;&lt;br /&gt;Do you still want to replace your video file?</source>
-        <target state="new">&lt;br /&gt;&lt;br /&gt;Do you still want to replace your video file?</target>
+        <target state="translated">&lt;br /&gt;&lt;br /&gt;Vil du fortsatt erstatte videofilen din?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5434400211005236230" datatype="html">
+      <trans-unit id="5434400211005236230" datatype="html" xml:space="preserve">
         <source>Replace file warning</source>
-        <target state="new">Replace file warning</target>
+        <target state="translated">Advarsel om å erstatte fil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7894988827815329889" datatype="html">
+      <trans-unit id="7894988827815329889" datatype="html" xml:space="preserve">
         <source>Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</source>
-        <target state="new">Are you sure you want to create studio tasks for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
+        <target state="translated">Er du sikker på at du vil opprette studiooppgaver for "<x id="PH" equiv-text="this.videoEdit.getVideoAttributes().name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">394</context>
@@ -23351,81 +23349,81 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1011549395664876962" datatype="html">
+      <trans-unit id="1011549395664876962" datatype="html" xml:space="preserve">
         <source>Watch the video</source>
-        <target state="new">Watch the video</target>
+        <target state="translated">Se videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1752865245649568961" datatype="html">
+      <trans-unit id="1752865245649568961" datatype="html" xml:space="preserve">
         <source>Save and run studio tasks</source>
-        <target state="new">Save and run studio tasks</target>
+        <target state="translated">Lagre og kjør studiooppgaver</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9042759538160678922" datatype="html">
+      <trans-unit id="9042759538160678922" datatype="html" xml:space="preserve">
         <source>Save and replace file</source>
-        <target state="new">Save and replace file</target>
+        <target state="translated">Lagre og erstatt fil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9206119333094797882" datatype="html">
+      <trans-unit id="9206119333094797882" datatype="html" xml:space="preserve">
         <source>You cannot replace the video file and also have studio tasks.</source>
-        <target state="new">You cannot replace the video file and also have studio tasks.</target>
+        <target state="translated">Du kan ikke erstatte videofilen og samtidig ha studiooppgaver.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">362</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2763845919408843325" datatype="html">
+      <trans-unit id="2763845919408843325" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" vil bli lagt til i begynnelsen av videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">740</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4952096817126306891" datatype="html">
+      <trans-unit id="4952096817126306891" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" vil bli lagt til på slutten av videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">744</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="665518679871959619" datatype="html">
+      <trans-unit id="665518679871959619" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" bildevannmerket vil bli lagt til videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">748</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2677581013897190613" datatype="html">
+      <trans-unit id="2677581013897190613" datatype="html" xml:space="preserve">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">Videoen starter ved <x id="PH" equiv-text="secondsToTime(start)"/> og stopper ved <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">755</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2299077646120636288" datatype="html">
+      <trans-unit id="2299077646120636288" datatype="html" xml:space="preserve">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></target>
+        <target state="translated">Videoen begynner ved <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">759</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7209039243783736285" datatype="html">
+      <trans-unit id="7209039243783736285" datatype="html" xml:space="preserve">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">Videoen stopper ved <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">763</context>
@@ -23439,33 +23437,33 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5964038603724691720" datatype="html">
+      <trans-unit id="5964038603724691720" datatype="html" xml:space="preserve">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">Slett og lag et nytt utkast</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7163633882758007711" datatype="html">
+      <trans-unit id="7163633882758007711" datatype="html" xml:space="preserve">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="new">Do you really want to delete and re-draft this comment?</target>
+        <target state="translated">Vil du virkelig slette og skrive et nytt utkast for denne kommentaren?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7364261164248038345" datatype="html">
+      <trans-unit id="7364261164248038345" datatype="html" xml:space="preserve">
         <source>Comment approved</source>
-        <target state="new">Comment approved</target>
+        <target state="translated">Kommentar godkjent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="723038562278401061" datatype="html">
+      <trans-unit id="723038562278401061" datatype="html" xml:space="preserve">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder:</target>
+        <target state="translated">Vennlig påminnelse:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -23479,33 +23477,33 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5149234672404299151" datatype="html">
+      <trans-unit id="5149234672404299151" datatype="html" xml:space="preserve">
         <source>Autoplay next video</source>
-        <target state="new">Autoplay next video</target>
+        <target state="translated">Spill av neste video automatisk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5870421136141540382" datatype="html">
+      <trans-unit id="5870421136141540382" datatype="html" xml:space="preserve">
         <source>Stop looping playlist videos</source>
-        <target state="new">Stop looping playlist videos</target>
+        <target state="translated">Stopp gjentakende avspilling av spillelistevideoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1599585307037758139" datatype="html">
+      <trans-unit id="1599585307037758139" datatype="html" xml:space="preserve">
         <source>Loop playlist videos</source>
-        <target state="new">Loop playlist videos</target>
+        <target state="translated">Gjennta spillelistevideoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1254111869788332501" datatype="html">
+      <trans-unit id="1254111869788332501" datatype="html" xml:space="preserve">
         <source>Other videos</source>
-        <target state="new">Other videos</target>
+        <target state="translated">Andre videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4</context>
@@ -23519,33 +23517,33 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">449</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6851759241723629925" datatype="html">
+      <trans-unit id="6851759241723629925" datatype="html" xml:space="preserve">
         <source>You need a password to watch this video</source>
-        <target state="new">You need a password to watch this video</target>
+        <target state="translated">Du trenger et passord for å se denne videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">481</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7116606560384080593" datatype="html">
+      <trans-unit id="7116606560384080593" datatype="html" xml:space="preserve">
         <source>This video is password protected</source>
-        <target state="new">This video is password protected</target>
+        <target state="translated">Denne videoen er passordbeskyttet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">482</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6566384659758828708" datatype="html">
+      <trans-unit id="6566384659758828708" datatype="html" xml:space="preserve">
         <source>Incorrect password, please enter a correct password</source>
-        <target state="new">Incorrect password, please enter a correct password</target>
+        <target state="translated">Feil passord, vennligst skriv inn riktig passord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">483</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8858527736400081688" datatype="html">
+      <trans-unit id="8858527736400081688" datatype="html" xml:space="preserve">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
-        <target state="new">This video contains mature or explicit content. Are you sure you want to watch it?</target>
+        <target state="translated">Denne videoen inneholder voksent eller eksplisitt innhold. Er du sikker på at du vil se den?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">531</context>
@@ -23659,9 +23657,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5856931617181450881" datatype="html">
+      <trans-unit id="5856931617181450881" datatype="html" xml:space="preserve">
         <source>Enter/exit fullscreen</source>
-        <target state="new">Enter/exit fullscreen</target>
+        <target state="translated">Gå inn/ut av fullskjerm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">959</context>
@@ -23683,9 +23681,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">961</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4791956574676305640" datatype="html">
+      <trans-unit id="4791956574676305640" datatype="html" xml:space="preserve">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
-        <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
+        <target state="translated">Hopp til en prosentandel av videoen: 0 er 0 % og 9 er 90 %</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">976</context>
@@ -23739,17 +23737,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">982</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3860402955823859506" datatype="html">
+      <trans-unit id="3860402955823859506" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the previous frame</source>
-        <target state="new">Navigate in the video to the previous frame</target>
+        <target state="translated">Naviger i videoen til forrige bilde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">984</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8232494782895420700" datatype="html">
+      <trans-unit id="8232494782895420700" datatype="html" xml:space="preserve">
         <source>Navigate in the video to the next frame</source>
-        <target state="new">Navigate in the video to the next frame</target>
+        <target state="translated">Naviger i videoen til neste bilde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">985</context>
@@ -23763,49 +23761,49 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">969</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8025996572234182184" datatype="html">
+      <trans-unit id="8025996572234182184" datatype="html" xml:space="preserve">
         <source>Like the video</source>
-        <target state="new">Like the video</target>
+        <target state="translated">Lik videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7692127636377222448" datatype="html">
+      <trans-unit id="7692127636377222448" datatype="html" xml:space="preserve">
         <source>Dislike the video</source>
-        <target state="new">Dislike the video</target>
+        <target state="translated">Misslik videoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3093549590814158078" datatype="html">
+      <trans-unit id="3093549590814158078" datatype="html" xml:space="preserve">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">Du må være logget inn for å vurdere denne videoen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1729036051846673606" datatype="html">
+      <trans-unit id="1729036051846673606" datatype="html" xml:space="preserve">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="new">When active, the next video is automatically played after the current one.</target>
+        <target state="translated">Når den er aktiv, spilles den neste videoen automatisk av etter den gjeldende.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/recommendations/recommended-videos.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9065310971920830281" datatype="html">
+      <trans-unit id="9065310971920830281" datatype="html" xml:space="preserve">
         <source>Sorry, but this video did not load because the remote instance did not respond.</source>
-        <target state="new">Sorry, but this video did not load because the remote instance did not respond.</target>
+        <target state="translated">Beklager, men denne videoen lastet ikke inn fordi den eksterne instansen ikke svarte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7621888306128470863" datatype="html">
+      <trans-unit id="7621888306128470863" datatype="html" xml:space="preserve">
         <source>Please try refreshing the page, or try again later.</source>
-        <target state="new">Please try refreshing the page, or try again later.</target>
+        <target state="translated">Prøv å oppdatere siden, eller prøv igjen senere.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">10</context>
@@ -23871,9 +23869,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2587910160708766081" datatype="html">
+      <trans-unit id="2587910160708766081" datatype="html" xml:space="preserve">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="new">Toggle this date format to "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">Veksle dette datoformatet til "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -23931,9 +23929,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1914592173926880968" datatype="html">
+      <trans-unit id="1914592173926880968" datatype="html" xml:space="preserve">
         <source>Skip to main content</source>
-        <target state="new">Skip to main content</target>
+        <target state="translated">Hopp til hovedinnhold</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">3</context>
