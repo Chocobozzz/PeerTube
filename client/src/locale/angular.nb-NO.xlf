@@ -843,9 +843,9 @@
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3487499610963157344" datatype="html">
+      <trans-unit id="3487499610963157344" datatype="html" xml:space="preserve">
         <source>MANAGE MY VIDEO</source>
-        <target state="new">MANAGE MY VIDEO</target>
+        <target state="translated">ADMINISTRER VIDEOEN MIN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-menu.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -1503,9 +1503,9 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8994207260868115497" datatype="html">
+      <trans-unit id="8994207260868115497" datatype="html" xml:space="preserve">
         <source>&lt;a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer"&gt;Mastodon verification link&lt;/a&gt; is also supported.</source>
-        <target state="new">&lt;a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer"&gt;Mastodon verification link&lt;/a&gt; is also supported.</target>
+        <target state="translated">&lt;a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer"&gt;Verifiseringslenke via Mastodon&lt;/a&gt; støttes også.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/help.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -1531,137 +1531,137 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7523440000124910081" datatype="html">
+      <trans-unit id="7523440000124910081" datatype="html" xml:space="preserve">
         <source>Use this frame</source>
-        <target state="new">Use this frame</target>
+        <target state="translated">Bruk dette bildet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4052135535335116638" datatype="html">
+      <trans-unit id="4052135535335116638" datatype="html" xml:space="preserve">
         <source>Current thumbnail</source>
-        <target state="new">Current thumbnail</target>
+        <target state="translated">Nåværende miniatyrbilde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4170151929241782619" datatype="html">
+      <trans-unit id="4170151929241782619" datatype="html" xml:space="preserve">
         <source>In <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/> formats, <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSizeInBytes }}"/> maximum.</source>
-        <target state="new">In <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/> formats, <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSizeInBytes }}"/> maximum.</target>
+        <target state="translated">I <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/> format, maksimalt <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSizeInBytes }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2804650977749842371" datatype="html">
+      <trans-unit id="2804650977749842371" datatype="html" xml:space="preserve">
         <source>Recommended size: 1280x720px.</source>
-        <target state="new">Recommended size: 1280x720px.</target>
+        <target state="translated">Anbefalt størrelse: 1280x720px.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4822431364265606" datatype="html">
+      <trans-unit id="4822431364265606" datatype="html" xml:space="preserve">
         <source>Select from video</source>
-        <target state="new"> Select from video </target>
+        <target state="translated">Velg fra video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6415678299744947414" datatype="html">
+      <trans-unit id="6415678299744947414" datatype="html" xml:space="preserve">
         <source>File replacement is not enabled on <x id="PH" equiv-text="instanceName"/>.</source>
-        <target state="new">File replacement is not enabled on <x id="PH" equiv-text="instanceName"/>.</target>
+        <target state="translated">Filerstatning er ikke aktivert hos <x id="PH" equiv-text="instanceName"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1439057370359538654" datatype="html">
+      <trans-unit id="1439057370359538654" datatype="html" xml:space="preserve">
         <source>File replacement is not available on a live.</source>
-        <target state="new">File replacement is not available on a live.</target>
+        <target state="translated">Filerstatning er ikke tilgjengelig for direktesendinger.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7545636587679565725" datatype="html">
+      <trans-unit id="7545636587679565725" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being transcoding.</source>
-        <target state="new">File replacement is not available while the video is being transcoding.</target>
+        <target state="translated">Filerstatning er ikke tilgjengelig når videoen blir omkodet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="942718789410221156" datatype="html">
+      <trans-unit id="942718789410221156" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being edited.</source>
-        <target state="new">File replacement is not available while the video is being edited.</target>
+        <target state="translated">Filerstatning er ikke tilgjengelig når videoen aktivt redigeres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8573772649653209009" datatype="html">
+      <trans-unit id="8573772649653209009" datatype="html" xml:space="preserve">
         <source>File replacement is not available while the video is being imported.</source>
-        <target state="new">File replacement is not available while the video is being imported.</target>
+        <target state="translated">Filerstatning er ikke tilgjengelig når videoen importeres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1622943505826483882" datatype="html">
+      <trans-unit id="1622943505826483882" datatype="html" xml:space="preserve">
         <source>File replacement is not available.</source>
-        <target state="new">File replacement is not available.</target>
+        <target state="translated">Filerstatning er ikke tilgjengelig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="915313658414662035" datatype="html">
+      <trans-unit id="915313658414662035" datatype="html" xml:space="preserve">
         <source>Studio is not enabled on <x id="PH" equiv-text="instanceName"/>.</source>
-        <target state="new">Studio is not enabled on <x id="PH" equiv-text="instanceName"/>.</target>
+        <target state="translated">Studio er ikke aktivert hos <x id="PH" equiv-text="instanceName"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4289458489048046810" datatype="html">
+      <trans-unit id="4289458489048046810" datatype="html" xml:space="preserve">
         <source>Studio is not available on a live.</source>
-        <target state="new">Studio is not available on a live.</target>
+        <target state="translated">Studio er ikke tilgjengelig for direktesendinger.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1280514590647661947" datatype="html">
+      <trans-unit id="1280514590647661947" datatype="html" xml:space="preserve">
         <source>Studio is not available while the video is being transcoding.</source>
-        <target state="new">Studio is not available while the video is being transcoding.</target>
+        <target state="translated">Studio er ikke tilgjengelig når videon blir omkodet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8834864291736520740" datatype="html">
+      <trans-unit id="8834864291736520740" datatype="html" xml:space="preserve">
         <source>Studio is not available while the video is being edited.</source>
-        <target state="new">Studio is not available while the video is being edited.</target>
+        <target state="translated">Studio er ikke tilgjengelig når videoen aktivt redigeres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5363833911902491766" datatype="html">
+      <trans-unit id="5363833911902491766" datatype="html" xml:space="preserve">
         <source>Studio is not available while the video is being imported.</source>
-        <target state="new">Studio is not available while the video is being imported.</target>
+        <target state="translated">Studio er ikke tilgjengelig når videoen importeres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4049189676696742071" datatype="html">
+      <trans-unit id="4049189676696742071" datatype="html" xml:space="preserve">
         <source>Studio is not available.</source>
-        <target state="new">Studio is not available.</target>
+        <target state="translated">Studio er ikke tilgjengelig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">42</context>
@@ -1691,9 +1691,9 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691897331062834756" datatype="html">
+      <trans-unit id="6691897331062834756" datatype="html" xml:space="preserve">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Abonner med en konto fra denne instansen.</target>
+        <target state="translated">Abonner med en konto på denne instansen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">52</context>
@@ -1731,33 +1731,33 @@
           <context context-type="linenumber">372</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6334544592573094529" datatype="html">
+      <trans-unit id="6334544592573094529" datatype="html" xml:space="preserve">
         <source>Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="new">Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Omkodingsjobb opprettet for "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6323039311444223540" datatype="html">
+      <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="new">Transcription job created for "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Transkriberingsjobb opprettet for "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">396</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890980168396748709" datatype="html">
+      <trans-unit id="8890980168396748709" datatype="html" xml:space="preserve">
         <source>This video is already being transcribed.</source>
-        <target state="new">This video is already being transcribed.</target>
+        <target state="translated">Denne videoen transkriberes allerede.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6621122803162844810" datatype="html">
+      <trans-unit id="6621122803162844810" datatype="html" xml:space="preserve">
         <source>This video already has captions.</source>
-        <target state="new">This video already has captions.</target>
+        <target state="translated">Denne videoen har allerede undertekster.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">398</context>
@@ -1771,9 +1771,9 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2414550489713494400" datatype="html">
+      <trans-unit id="2414550489713494400" datatype="html" xml:space="preserve">
         <source>Subscribe via Podcast Feed</source>
-        <target state="new">Subscribe via Podcast Feed</target>
+        <target state="translated">Abonner via podkastfeeden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">64,65</context>
@@ -1819,17 +1819,17 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3805147953573030976" datatype="html">
+      <trans-unit id="3805147953573030976" datatype="html" xml:space="preserve">
         <source>Default NSFW/sensitive videos policy</source>
-        <target state="new">Default NSFW/sensitive videos policy</target>
+        <target state="translated">Standard retningslinjer for NSFW/sensitive videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5211109801015470691" datatype="html">
+      <trans-unit id="5211109801015470691" datatype="html" xml:space="preserve">
         <source>can be redefined by the users</source>
-        <target state="new">can be redefined by the users</target>
+        <target state="translated">kan omdefineres av brukerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1863,9 +1863,9 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2152404288547034295" datatype="html">
+      <trans-unit id="2152404288547034295" datatype="html" xml:space="preserve">
         <source>Automatic transcription</source>
-        <target state="new">Automatic transcription</target>
+        <target state="translated">Automatisk transkribering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -1903,9 +1903,9 @@
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591172858390995209" datatype="html">
+      <trans-unit id="2591172858390995209" datatype="html" xml:space="preserve">
         <source>Video Import</source>
-        <target state="new">Video Import</target>
+        <target state="translated">Importering av video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">96</context>
@@ -1967,17 +1967,17 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7341673457181006273" datatype="html">
+      <trans-unit id="7341673457181006273" datatype="html" xml:space="preserve">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target state="new"> Congratulations, the video will be imported with BitTorrent! You can already add information about this video. </target>
+        <target state="translated">Gratulerer, videoen vil bli importert med BitTorrent! Du kan allerede legge til informasjon om denne videoen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-torrent.component.html</context>
           <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8221855044244620896" datatype="html">
+      <trans-unit id="8221855044244620896" datatype="html" xml:space="preserve">
         <source>Your video is being imported. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your video is being imported. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">Videoen din importeres. Men der er ulagrede endringer: er du sikker på at du vil forlate denne siden?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-torrent.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -1987,9 +1987,9 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5365292350251865320" datatype="html">
+      <trans-unit id="5365292350251865320" datatype="html" xml:space="preserve">
         <source>Changes saved.</source>
-        <target state="new">Changes saved.</target>
+        <target state="translated">Endringer lagret.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-torrent.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -2039,25 +2039,25 @@
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4229153235358296216" datatype="html">
+      <trans-unit id="4229153235358296216" datatype="html" xml:space="preserve">
         <source>User Import/Export</source>
-        <target state="new">User Import/Export</target>
+        <target state="translated">Brukerimport/eksport</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3384006887221192665" datatype="html">
+      <trans-unit id="3384006887221192665" datatype="html" xml:space="preserve">
         <source>Users can export their data</source>
-        <target state="new">Users can export their data</target>
+        <target state="translated">Brukere kan eksportere dataene sine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552722059425094536" datatype="html">
+      <trans-unit id="5552722059425094536" datatype="html" xml:space="preserve">
         <source>Users can import their data</source>
-        <target state="new">Users can import their data</target>
+        <target state="translated">Brukere kan importere dataene sine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">132</context>
@@ -2071,9 +2071,9 @@
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5559612210462560518" datatype="html">
+      <trans-unit id="5559612210462560518" datatype="html" xml:space="preserve">
         <source>Remote</source>
-        <target state="new">Remote</target>
+        <target state="translated">Ekstern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">72</context>
@@ -2111,161 +2111,161 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4574617080493559336" datatype="html">
+      <trans-unit id="4574617080493559336" datatype="html" xml:space="preserve">
         <source>hosted videos</source>
-        <target state="new">hosted videos</target>
+        <target state="translated">vertede videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5396896586834940621" datatype="html">
+      <trans-unit id="5396896586834940621" datatype="html" xml:space="preserve">
         <source>Usage rules</source>
-        <target state="new">Usage rules</target>
+        <target state="translated">Bruksregler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776113937628941635" datatype="html">
+      <trans-unit id="4776113937628941635" datatype="html" xml:space="preserve">
         <source>This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></source>
-        <target state="new">This platform has been created in <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
+        <target state="translated">Denne plattformen ble opprettet i <x id="INTERPOLATION" equiv-text="{{ config.instance.serverCountry }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">60,61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6778930185647013602" datatype="html">
+      <trans-unit id="6778930185647013602" datatype="html" xml:space="preserve">
         <source>Your content (comments, videos...) must comply with the legislation in force in this country.</source>
-        <target state="new">Your content (comments, videos...) must comply with the legislation in force in this country.</target>
+        <target state="translated">Innholdet ditt (kommentarer, videoer...) må være i samsvar med gjeldende lovgivning i dette landet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5074204504213350982" datatype="html">
+      <trans-unit id="5074204504213350982" datatype="html" xml:space="preserve">
         <source>You must also follow our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>code of conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> You must also follow our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>code of conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Du må også følge våre <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/instance/moderation&quot;&gt;"/>retningslinjer for oppførsel<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8295656255868159329" datatype="html">
+      <trans-unit id="8295656255868159329" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="new">You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>request an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</target>
+        <target state="translated">Du kan <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>be om en konto<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> på vår platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">86,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4700057689494115926" datatype="html">
+      <trans-unit id="4700057689494115926" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</source>
-        <target state="new">Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">Moderatoren vår vil validere det innen <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">89,90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4819914947083527459" datatype="html">
+      <trans-unit id="4819914947083527459" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a few days.</source>
-        <target state="new">Our moderator will validate it within a few days.</target>
+        <target state="translated">Moderatoren vår vil validere det innen få dager.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7984721141162083495" datatype="html">
+      <trans-unit id="7984721141162083495" datatype="html" xml:space="preserve">
         <source>You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>create an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</source>
-        <target state="new">You can <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>create an account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on our platform</target>
+        <target state="translated">Du kan <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/signup&quot;&gt;"/>opprette en konto<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> på vår platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">94,95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8017622347308758772" datatype="html">
+      <trans-unit id="8017622347308758772" datatype="html" xml:space="preserve">
         <source>Public registration on our platform is not allowed</source>
-        <target state="new">Public registration on our platform is not allowed</target>
+        <target state="translated">Offentlig registrering på plattformen vår er ikke tillatt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="707876467820107191" datatype="html">
+      <trans-unit id="707876467820107191" datatype="html" xml:space="preserve">
         <source>This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</source>
-        <target state="new">This platform is compatible with Mastodon, Lemmy, Misskey and other services from the Fediverse</target>
+        <target state="translated">Denne plattformen er kompatibel med Mastodon, Lemmy, Misskey og andre tjenester fra Fediverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">112,114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5640969812017556311" datatype="html">
+      <trans-unit id="5640969812017556311" datatype="html" xml:space="preserve">
         <source>You can use these services to interact with our videos</source>
-        <target state="new">You can use these services to interact with our videos</target>
+        <target state="translated">Du kan bruke disse tjenestene til å samhandle med videoene våre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="122439550833449127" datatype="html">
+      <trans-unit id="122439550833449127" datatype="html" xml:space="preserve">
         <source>You can publish videos</source>
-        <target state="new">You can publish videos</target>
+        <target state="translated">Du kan publisere videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193674330844209801" datatype="html">
+      <trans-unit id="9193674330844209801" datatype="html" xml:space="preserve">
         <source>By default, your account allows you to publish videos.</source>
-        <target state="new">By default, your account allows you to publish videos.</target>
+        <target state="translated">Som standard lar kontoen din deg publisere videoer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7471320952405612533" datatype="html">
+      <trans-unit id="7471320952405612533" datatype="html" xml:space="preserve">
         <source>You can also stream lives.</source>
-        <target state="new"> You can also stream lives.</target>
+        <target state="translated">Du kan også strømme direktesendinger.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5303097409974075102" datatype="html">
+      <trans-unit id="5303097409974075102" datatype="html" xml:space="preserve">
         <source>Contact us to publish videos</source>
-        <target state="new">Contact us to publish videos</target>
+        <target state="translated">Kontakt oss for å publisere videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">148,149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6096043378628857552" datatype="html">
+      <trans-unit id="6096043378628857552" datatype="html" xml:space="preserve">
         <source>You can't publish videos</source>
-        <target state="new">You can't publish videos</target>
+        <target state="translated">Du kan ikke publisere videoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">150,151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7445632181028998943" datatype="html">
+      <trans-unit id="7445632181028998943" datatype="html" xml:space="preserve">
         <source>By default, your account does not allow to publish videos.</source>
-        <target state="new">By default, your account does not allow to publish videos.</target>
+        <target state="translated">Som standard tillater ikke kontoen din publisering av videoer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1763989965529610778" datatype="html">
+      <trans-unit id="1763989965529610778" datatype="html" xml:space="preserve">
         <source>If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new"> If you want to publish videos, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>contact us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Dersom du ønsker å publisere videoer, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/contact&quot;&gt;"/>kontakt oss<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4301908502265861759" datatype="html">
+      <trans-unit id="4301908502265861759" datatype="html" xml:space="preserve">
         <source>This platform is powered by PeerTube</source>
-        <target state="new"> This platform is powered by PeerTube </target>
+        <target state="translated">Denne plattformen drives av PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -2311,9 +2311,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242255798983858463" datatype="html">
+      <trans-unit id="3242255798983858463" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="days"/> days</source>
-        <target state="new"><x id="PH" equiv-text="days"/> days</target>
+        <target state="translated"><x id="PH" equiv-text="days"/> dager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -2327,57 +2327,57 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5646229632737908639" datatype="html">
+      <trans-unit id="5646229632737908639" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</target>
+        <target state="translated">Filformatet <x id="PH" equiv-text="name"/> støttes ikke av plattformen din.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4591025453509397472" datatype="html">
+      <trans-unit id="4591025453509397472" datatype="html" xml:space="preserve">
         <source>The server encountered an error.</source>
-        <target state="new">The server encountered an error.</target>
+        <target state="translated">Serveren støtte på en feil.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3083362298006411773" datatype="html">
+      <trans-unit id="3083362298006411773" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</target>
+        <target state="translated"><x id="PH" equiv-text="name"/>-filen din kunne ikke overføres før proxy-serverens tidsavbrudd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5514835993053540551" datatype="html">
+      <trans-unit id="5514835993053540551" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large.</target>
+        <target state="translated">Din fil <x id="PH" equiv-text="name"/> var for stor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8456000313168556766" datatype="html">
+      <trans-unit id="8456000313168556766" datatype="html" xml:space="preserve">
         <source>Max size is <x id="PH" equiv-text="maxFileSize"/>.</source>
-        <target state="new"> Max size is <x id="PH" equiv-text="maxFileSize"/>.</target>
+        <target state="translated">Maks størrelse er <x id="PH" equiv-text="maxFileSize"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4892001398723483418" datatype="html">
+      <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
-        <target state="new">Enable hotkeys in this web browser</target>
+        <target state="translated">Aktiver hurtigtaster i denne nettleseren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4831075576673859232" datatype="html">
+      <trans-unit id="4831075576673859232" datatype="html" xml:space="preserve">
         <source>Keyboard Shortcuts</source>
-        <target state="new">Keyboard Shortcuts</target>
+        <target state="translated">Hurtigtaster</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -2523,9 +2523,9 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019610224237760025" datatype="html">
+      <trans-unit id="4019610224237760025" datatype="html" xml:space="preserve">
         <source>Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">Logg inn hos <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">2</context>
