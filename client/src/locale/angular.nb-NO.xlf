@@ -11159,41 +11159,41 @@
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8778692018772808354" datatype="html">
+      <trans-unit id="8778692018772808354" datatype="html" xml:space="preserve">
         <source>Store the audio stream in a separate file from the video.</source>
-        <target state="new">Store the audio stream in a separate file from the video.</target>
+        <target state="translated">Lagre lydstrømmen i en separat fil fra videoen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4806060468959678872" datatype="html">
+      <trans-unit id="4806060468959678872" datatype="html" xml:space="preserve">
         <source>This option adds the ability for the HLS player to propose the "Audio only" quality to users.</source>
-        <target state="new">This option adds the ability for the HLS player to propose the "Audio only" quality to users.</target>
+        <target state="translated">Dette alternativet gir HLS-spilleren muligheten til å foreslå kvaliteten «Kun lyd» til brukere.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7702925566184017292" datatype="html">
+      <trans-unit id="7702925566184017292" datatype="html" xml:space="preserve">
         <source>It also saves disk space by not duplicating the audio stream in each resolution file</source>
-        <target state="new">It also saves disk space by not duplicating the audio stream in each resolution file</target>
+        <target state="translated">Det sparer også diskplass ved å ikke duplisere lydstrømmen i hver oppløsningsfil.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2798443406255719006" datatype="html">
+      <trans-unit id="2798443406255719006" datatype="html" xml:space="preserve">
         <source>Max video FPS</source>
-        <target state="new">Max video FPS</target>
+        <target state="translated">Maks video FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145,147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6032385969775568523" datatype="html">
+      <trans-unit id="6032385969775568523" datatype="html" xml:space="preserve">
         <source>Cap transcoded video FPS. Max resolution file still keeps the original FPS.</source>
-        <target state="new">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
+        <target state="translated">Sett et tak på omkodede vidoers bildefrekvens. Filen med kaks oppløsning beholder fortsatt den opprinnelige bildefrekvensen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147,149</context>
@@ -11207,9 +11207,9 @@
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2720128810058691158" datatype="html">
+      <trans-unit id="2720128810058691158" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new">Even if it's above your maximum enabled resolution</target>
+        <target state="translated">Selv om den er over den maksimale tillatte oppløsningen din</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">178</context>
@@ -11223,73 +11223,73 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1126867109775813762" datatype="html">
+      <trans-unit id="1126867109775813762" datatype="html" xml:space="preserve">
         <source>Transcoding threads</source>
-        <target state="new">Transcoding threads</target>
+        <target state="translated">Omkodingstråder</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7815122216882553289" datatype="html">
+      <trans-unit id="7815122216882553289" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">vil kreve maksimalt <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> ved omkoding av direktesending </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8685484763568827375" datatype="html">
+      <trans-unit id="8685484763568827375" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">vil kreve minst <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> ved omkoding av direktesending </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7185278676178506632" datatype="html">
+      <trans-unit id="7185278676178506632" datatype="html" xml:space="preserve">
         <source>Transcoding jobs concurrency</source>
-        <target state="new">Transcoding jobs concurrency</target>
+        <target state="translated">Samtidig omkoding av jobber</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969393594784140832" datatype="html">
+      <trans-unit id="1969393594784140832" datatype="html" xml:space="preserve">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">lar deg omkode flere filer parallelt. ⚠️ Krever omstart av PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2184317712452071847" datatype="html">
+      <trans-unit id="2184317712452071847" datatype="html" xml:space="preserve">
         <source>Transcoding profile</source>
-        <target state="new">Transcoding profile</target>
+        <target state="translated">Omkodingsprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6289966287765074028" datatype="html">
+      <trans-unit id="6289966287765074028" datatype="html" xml:space="preserve">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">nye omkodingsprofiler kan legges til av PeerTube-programtillegg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5843661880070076970" datatype="html">
+      <trans-unit id="5843661880070076970" datatype="html" xml:space="preserve">
         <source>VIDEO STUDIO</source>
-        <target state="new">VIDEO STUDIO</target>
+        <target state="translated">VIDEOSTUDIO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4078329985026583770" datatype="html">
+      <trans-unit id="4078329985026583770" datatype="html" xml:space="preserve">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="new"> Allows your users to edit their video (cut, add intro/outro, add a watermark etc) </target>
+        <target state="translated">Lar brukerne dine redigere videoen sin (klippe, legge til intro/outro, legge til et vannmerke osv.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">256</context>
@@ -11303,9 +11303,9 @@
           <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3313548535394806921" datatype="html">
+      <trans-unit id="3313548535394806921" datatype="html" xml:space="preserve">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="new">⚠️ You need to enable transcoding first to enable video studio</target>
+        <target state="translated">⚠️ Du må først aktivere omkoding for å aktivere videostudio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">269</context>
@@ -11327,33 +11327,33 @@
           <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671557140564655234" datatype="html">
+      <trans-unit id="1671557140564655234" datatype="html" xml:space="preserve">
         <source>Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Aktiver automatisk HLS-omkoding fordi minst 1 utdataformat må aktiveres når omkoding er aktivert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2487046557845958040" datatype="html">
+      <trans-unit id="2487046557845958040" datatype="html" xml:space="preserve">
         <source>Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</source>
-        <target state="new">Automatically enable Web Videos transcoding because at least 1 output format must be enabled when transcoding is enabled</target>
+        <target state="translated">Aktiver automatisk omkoding av nettvideoer fordi minst 1 utdataformat må aktiveres når omkoding er aktivert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context>
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6879611446286948126" datatype="html">
+      <trans-unit id="6879611446286948126" datatype="html" xml:space="preserve">
         <source>CACHE</source>
-        <target state="new">CACHE</target>
+        <target state="translated">HURTIGBUFFER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5511334650211127631" datatype="html">
+      <trans-unit id="5511334650211127631" datatype="html" xml:space="preserve">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">Noen filer er ikke forent, og hentes ved behov. Definer mellomlagringsreglene deres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">8</context>
