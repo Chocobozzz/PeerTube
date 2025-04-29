@@ -11345,7 +11345,7 @@
       </trans-unit>
       <trans-unit id="6879611446286948126" datatype="html" xml:space="preserve">
         <source>CACHE</source>
-        <target state="translated">HURTIGBUFFER</target>
+        <target state="translated">MELLOMLAGRING</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">6</context>
@@ -11359,57 +11359,57 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4382565260112874406" datatype="html">
+      <trans-unit id="4382565260112874406" datatype="html" xml:space="preserve">
         <source>Number of previews to keep in cache</source>
-        <target state="new">Number of previews to keep in cache</target>
+        <target state="translated">Antall forhåndsvisninger som skal oppbevares i mellomlageret</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3710881484246327863" datatype="html">
+      <trans-unit id="3710881484246327863" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {mellomlagret bilde} other {mellomlagrede bilder}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2279905277031617076" datatype="html">
+      <trans-unit id="2279905277031617076" datatype="html" xml:space="preserve">
         <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
+        <target state="translated">Antall undertekster som skal oppbevares i mellomlageret</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6193666854590647323" datatype="html">
+      <trans-unit id="6193666854590647323" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {mellomlagret undertekst} other {mellomlagrede undertekster}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="330647913034301472" datatype="html">
+      <trans-unit id="330647913034301472" datatype="html" xml:space="preserve">
         <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
+        <target state="translated">Antall videotorrenter som skal oppbevares i mellomlageret</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4613961764793311850" datatype="html">
+      <trans-unit id="4613961764793311850" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {mellomlagret torrent} other {mellomlagrede torrenter}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9180372875725189823" datatype="html">
+      <trans-unit id="9180372875725189823" datatype="html" xml:space="preserve">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="new">Number of video storyboard images to keep in cache</target>
+        <target state="translated">Antall bilder for videodreiebøker som skal oppbevares i mellomlageret</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
