@@ -5318,25 +5318,25 @@
           <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2190068095391152848" datatype="html">
+      <trans-unit id="2190068095391152848" datatype="html" xml:space="preserve">
         <source>This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">あなたの動画を視聴している視聴者が、<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたをどのように応援できるかを理解する<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>ための文章です。 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>資金調達ツールへのリンク<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を含めたり、<x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>マークダウン記法<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>を使用できます。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">58,61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2993337224487346050" datatype="html">
+      <trans-unit id="2993337224487346050" datatype="html" xml:space="preserve">
         <source>Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">すべての動画で同じ文章を使用したいですか？<x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>チャンネル設定<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>から、<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>デフォルトの文章と応援ボタン<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を設定できます。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3434410278501759813" datatype="html">
+      <trans-unit id="3434410278501759813" datatype="html" xml:space="preserve">
         <source>Thumbnail</source>
-        <target state="new">Thumbnail</target>
+        <target state="translated">サムネイル</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">89,91</context>
@@ -5382,9 +5382,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7949715708714367297" datatype="html">
+      <trans-unit id="7949715708714367297" datatype="html" xml:space="preserve">
         <source>Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> is being imported! You can already add information about this video. </source>
-        <target state="new"> Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> is being imported! You can already add information about this video. </target>
+        <target state="translated">おめでとうございます。<x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/>をインポート中です！この動画に関する情報を設定できるようになりました。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-url.component.html</context>
           <context context-type="linenumber">38,40</context>
@@ -5422,17 +5422,17 @@
           <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1061834486939635373" datatype="html">
+      <trans-unit id="1061834486939635373" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete your video "<x id="PH" equiv-text="video.name"/>?</source>
-        <target state="new">Are you sure you want to delete your video "<x id="PH" equiv-text="video.name"/>?</target>
+        <target state="translated">動画"<x id="PH" equiv-text="video.name"/>"を削除してもよろしいですか？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2321566121166630784" datatype="html">
+      <trans-unit id="2321566121166630784" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="video.name"/>" deleted</source>
-        <target state="new">"<x id="PH" equiv-text="video.name"/>" deleted</target>
+        <target state="translated">"<x id="PH" equiv-text="video.name"/>"を削除しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
           <context context-type="linenumber">486</context>
@@ -5494,9 +5494,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3319838915969302847" datatype="html">
+      <trans-unit id="3319838915969302847" datatype="html" xml:space="preserve">
         <source>File uploaded! Your video is now available in your private library.</source>
-        <target state="new">File uploaded! Your video is now available in your private library.</target>
+        <target state="translated">ファイルがアップロードされました！動画は非公開ライブラリで利用可能になりました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -5527,9 +5527,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="159182233259245277" datatype="html">
+      <trans-unit id="159182233259245277" datatype="html" xml:space="preserve">
         <source>Sorry, but something went wrong.</source>
-        <target state="new">Sorry, but something went wrong.</target>
+        <target state="translated">申し訳ありません、問題が発生しました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -5719,9 +5719,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1069523139277190436" datatype="html">
+      <trans-unit id="1069523139277190436" datatype="html" xml:space="preserve">
         <source>Statistics</source>
-        <target state="new">Statistics</target>
+        <target state="translated">統計</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.html</context>
           <context context-type="linenumber">4</context>
