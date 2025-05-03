@@ -6711,9 +6711,9 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7494537777006082055">
+      <trans-unit id="7494537777006082055" xml:space="preserve">
         <source>No comments.</source>
-        <target>沒有評論。</target>
+        <target state="translated">沒有留言。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">30</context>
@@ -9151,9 +9151,9 @@
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2850960459131251840" datatype="html">
+      <trans-unit id="2850960459131251840" datatype="html" xml:space="preserve">
         <source>Comments are deleted after a few minutes</source>
-        <target state="translated">幾分鐘刪除留言</target>
+        <target state="translated">留言將於幾分鐘後刪除</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">100</context>
