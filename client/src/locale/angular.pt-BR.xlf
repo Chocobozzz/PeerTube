@@ -12601,9 +12601,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8557236926089115309" datatype="html">
+      <trans-unit id="8557236926089115309" datatype="html" xml:space="preserve">
         <source>Resend your verification email</source>
-        <target state="new">Resend your verification email</target>
+        <target state="translated">Reenviar seu email de verificação</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -13005,9 +13005,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7678377121420709355" datatype="html">
+      <trans-unit id="7678377121420709355" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not require email verification.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not require email verification.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> não requer verificação por email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -15971,17 +15971,17 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7751069057792041822" datatype="html">
+      <trans-unit id="7751069057792041822" datatype="html" xml:space="preserve">
         <source>Stay on page</source>
-        <target state="new">Stay on page</target>
+        <target state="translated">Ficar na página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="729881853265307704" datatype="html">
+      <trans-unit id="729881853265307704" datatype="html" xml:space="preserve">
         <source>Leave page</source>
-        <target state="new">Leave page</target>
+        <target state="translated">Sair da página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">34</context>
