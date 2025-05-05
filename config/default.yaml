@@ -323,7 +323,7 @@ trending:
         - 'most-viewed' # Number of views in the last x days
         - 'most-liked' # Global views since the upload of the video
 
-      default: 'most-viewed'
+      default: 'hot'
 
 # Cache remote videos on your server, to help other instances to broadcast the video
 # You can define multiple caches using different sizes/strategies
