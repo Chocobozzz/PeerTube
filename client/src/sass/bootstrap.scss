@@ -61,9 +61,9 @@ body {
 }
 
 .popover {
-  --bs-popover-bg: #{pvar(--bg)};
-  --bs-popover-body-color: #{pvar(--fg)};
-  --bs-popover-header-color: #{pvar(--fg)};
+  --bs-popover-bg: #{pvar(--bg-secondary-450)};
+  --bs-popover-body-color: #{pvar(--fg-300)};
+  --bs-popover-header-color: #{pvar(--fg-450)};
 
   font-family: $main-fonts;
 }

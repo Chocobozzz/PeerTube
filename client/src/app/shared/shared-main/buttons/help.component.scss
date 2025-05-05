@@ -11,8 +11,6 @@
 
 ::ng-deep {
   .help-popover {
-    --bs-popover-bg: #{pvar(--bg-secondary-450)};
-
     border: 0;
     min-width: 200px;
     max-width: 300px;
@@ -20,12 +18,10 @@
     .popover-body {
       padding: 1rem;
       border-radius: 14px;
-      color: pvar(--fg-200);
 
       .help-title {
         display: block;
         margin-bottom: 0.5rem;
-        color: pvar(--fg-450);
 
         @include font-size(20px);
       }
