@@ -242,7 +242,7 @@ object_storage:
     # which can be a problem depending on your object storage provider
     # You can also choose to disable this feature to reduce live streams latency
     # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
-    store_live_streams: true
+    store_live_streams: false
 
   web_videos:
     bucket_name: 'web-videos'
