@@ -68,22 +68,35 @@ import {
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
 
-export const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
-  body('videofile')
-    .custom((_, { req }) => isFileValid({ files: req.files, field: 'videofile', mimeTypeRegex: null, maxSize: null }))
-    .withMessage('Should have a file'),
+const getVideoUploadCommonValidator = () => [
   body('name')
     .trim()
     .custom(isVideoNameValid).withMessage(
       `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
     ),
+
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+
   body('videoPasswords')
     .optional()
     .isArray()
     .withMessage('Video passwords should be an array.'),
+
+  body('generateTranscription')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid generateTranscription boolean')
+]
+
+export const videosAddLegacyValidator = [
+  ...getCommonVideoEditAttributes(),
+  ...getVideoUploadCommonValidator(),
+
+  body('videofile')
+    .custom((_, { req }) => isFileValid({ files: req.files, field: 'videofile', mimeTypeRegex: null, maxSize: null }))
+    .withMessage('Should have a file'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -102,7 +115,7 @@ export const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 
     return next()
   }
-])
+]
 
 /**
  * Gets called after the last PUT request
@@ -149,21 +162,12 @@ export const videosAddResumableValidator = [
  * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
  */
-export const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+export const videosAddResumableInitValidator = [
+  ...getCommonVideoEditAttributes(),
+  ...getVideoUploadCommonValidator(),
+
   body('filename')
     .custom(isVideoSourceFilenameValid),
-  body('name')
-    .trim()
-    .custom(isVideoNameValid).withMessage(
-      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
-    ),
-  body('channelId')
-    .customSanitizer(toIntOrNull)
-    .custom(isIdValid),
-  body('videoPasswords')
-    .optional()
-    .isArray()
-    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
@@ -192,7 +196,7 @@ export const videosAddResumableInitValidator = getCommonVideoEditAttributes().co
 
     return next()
   }
-])
+]
 
 export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   isValidVideoIdParam('id'),

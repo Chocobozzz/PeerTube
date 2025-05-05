@@ -136,6 +136,16 @@ describe('Test video transcription', function () {
       await servers[0].config.disableTranscoding()
     })
 
+    it('Should run transcription if enabled by user', async function () {
+      this.timeout(120000)
+
+      const uuid = await uploadForTranscription(servers[0], { generateTranscription: true })
+
+      await waitJobs(servers)
+      await checkAutoCaption({ servers, uuid })
+      await checkLanguage(servers, uuid, 'en')
+    })
+
     it('Should not run transcription if disabled by user', async function () {
       this.timeout(120000)
 
