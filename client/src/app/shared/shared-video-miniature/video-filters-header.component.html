@@ -24,7 +24,7 @@
           @for (filter of filters().getActiveFilters(); track filter.key + (filter.value || '')) {
             @if (filter.key !== 'scope') {
               <div class="d-inline-block active-filter">
-                <span i18n *ngIf="filter.value">{{ filter.label }}: </span>
+                <span *ngIf="filter.value">{{ filter.label }}: </span>
                 <strong>{{ getFilterValue(filter) || filter.label }}</strong>
               </div>
             }
