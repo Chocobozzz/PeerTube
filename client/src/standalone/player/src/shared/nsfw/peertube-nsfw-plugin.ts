@@ -16,10 +16,10 @@ class PeerTubeNSFWPlugin extends Plugin {
 
     player.ready(() => {
       player.addClass('peertube-nsfw')
-    })
 
-    this.nsfwComponent = new PeerTubeNSFWComponent(player, options)
-    player.addChild(this.nsfwComponent)
+      this.nsfwComponent = new PeerTubeNSFWComponent(player, options)
+      player.addChild(this.nsfwComponent)
+    })
 
     player.one('play', () => {
       this.nsfwComponent.hide()
