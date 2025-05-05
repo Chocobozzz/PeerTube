@@ -67,6 +67,12 @@
   "json": {},
   "markdown": {},
   "toml": {},
+  "malva": {
+    "quotes": "preferDouble",
+    "printWidth": 140,
+    "hexCase": "ignore",
+    "blockSelectorLinebreak": "always"
+  },
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
@@ -76,6 +82,7 @@
     "https://plugins.dprint.dev/typescript-0.91.1.wasm",
     "https://plugins.dprint.dev/json-0.19.3.wasm",
     "https://plugins.dprint.dev/markdown-0.17.1.wasm",
-    "https://plugins.dprint.dev/toml-0.6.2.wasm"
+    "https://plugins.dprint.dev/toml-0.6.2.wasm",
+    "https://plugins.dprint.dev/g-plane/malva-v0.12.0.wasm"
   ]
 }
