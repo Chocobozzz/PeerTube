@@ -272,7 +272,8 @@ describe('Object storage for lives', function () {
           streaming_playlists: {
             bucket_name: bucketName,
             prefix: '',
-            base_url: baseMockUrl
+            base_url: baseMockUrl,
+            store_live_streams: true
           }
         }
       }
