@@ -1,11 +1,16 @@
 <div class="root" [formGroup]="form">
-
   <div class="d-flex flex-wrap mb-3">
     @for (quickFilter of quickFilters; track quickFilter) {
       <my-button
-        theme="secondary" [icon]="quickFilter.iconName" class="me-2 mb-2"
-        ptRouterLink="." [ptQueryParams]="quickFilter.filters" [active]="quickFilter.isActive()" ptQueryParamsHandling="merge"
-        >{{ quickFilter.label }} </my-button>
+        theme="secondary"
+        [icon]="quickFilter.iconName"
+        class="me-2 mb-2"
+        ptRouterLink="."
+        [ptQueryParams]="quickFilter.filters"
+        [active]="quickFilter.isActive()"
+        ptQueryParamsHandling="merge"
+      >{{ quickFilter.label }}
+      </my-button>
     }
   </div>
 
@@ -32,8 +37,10 @@
         </div>
 
         <button
-          class="filters-toggle peertube-button-like-link" (click)="areFiltersCollapsed = !areFiltersCollapsed"
-          [attr.aria-expanded]="!areFiltersCollapsed" aria-controls="collapseBasic"
+          class="filters-toggle peertube-button-like-link"
+          (click)="areFiltersCollapsed = !areFiltersCollapsed"
+          [attr.aria-expanded]="!areFiltersCollapsed"
+          aria-controls="collapseBasic"
           [ngClass]="{ active: !areFiltersCollapsed }"
         >
           @if (areFiltersCollapsed) {
@@ -61,11 +68,12 @@
           <ng-container i18n>Content preferences</ng-container>
 
           <div class="with-description">
-            <ng-container i18n>You always use the same preferences?</ng-container>
+            <span i18n>You always use the same preferences?</span>
 
-            <ng-container i18n>
-              Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)">default settings</a>
-            </ng-container>
+            <span i18n>
+              Update your <a routerLink="/my-account/settings" fragment="video-languages-subtitles" (click)="onAccountSettingsClick($event)"
+              >default settings</a>
+            </span>
           </div>
         </div>
 
@@ -82,7 +90,8 @@
             <div>{{ filters().getNSFWSettingsLabel() }}</div>
 
             <div i18n>
-              Update your policy in <a routerLink="/my-account/settings" fragment="video-sensitive-content-policy" (click)="onAccountSettingsClick($event)">your settings</a>.
+              Update your policy in <a routerLink="/my-account/settings" fragment="video-sensitive-content-policy" (click)="onAccountSettingsClick($event)"
+              >your settings</a>.
             </div>
           </div>
         </div>
@@ -90,16 +99,18 @@
 
       <div class="section" *ngIf="totalFollowing && !hideScope()">
         <div class="section-title">
-         <ng-container i18n>Platforms order</ng-container>
+          <ng-container i18n>Platforms order</ng-container>
 
           <div class="with-description">
-            <div i18n>{{ instanceName }} platform subscribes to content from  <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} other platforms</a>.</div>
+            <div i18n>
+              {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} other platforms</a>.
+            </div>
 
             <div i18n>Set your display preferences here.</div>
           </div>
         </div>
 
-        <div class="form-group" >
+        <div class="form-group">
           <label for="scope" i18n>Displayed videos</label>
 
           <my-select-options inputId="scope" class="scope-select" formControlName="scope" [items]="availableScopes"></my-select-options>
@@ -142,11 +153,11 @@
           <my-peertube-checkbox
             formControlName="allVideos"
             inputName="allVideos"
-            i18n-labelText labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
+            i18n-labelText
+            labelText="Display all videos (private, unlisted, password protected, not yet published or sensitive videos)"
           ></my-peertube-checkbox>
         </div>
       </div>
     </div>
   </div>
-
 </div>
