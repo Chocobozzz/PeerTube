@@ -846,7 +846,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   static async removeFiles (instance: VideoModel, options) {
     const tasks: Promise<any>[] = []
 
-    logger.info('Removing files of video %s.', instance.url, { toto: new Error().stack })
+    logger.info('Removing files of video ' + instance.url)
 
     if (instance.isOwned()) {
       if (!Array.isArray(instance.VideoFiles)) {

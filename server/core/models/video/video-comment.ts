@@ -251,6 +251,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async transaction => {
           const video = await VideoModel.load(videoId, transaction)
+          if (!video) return
 
           video.comments = await new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, {
             selectType: 'comment-only',

@@ -183,7 +183,8 @@ export class ObjectStorageCommand {
 
         streaming_playlists: {
           bucket_name: this.DEFAULT_SCALEWAY_BUCKET,
-          prefix: `test:server-${serverNumber}-streaming-playlists:`
+          prefix: `test:server-${serverNumber}-streaming-playlists:`,
+          store_live_streams: true
         },
 
         web_videos: {
