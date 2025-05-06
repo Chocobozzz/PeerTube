@@ -179,7 +179,6 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
   }
 
   private async buildUploadMessages () {
-    // eslint-disable-next-line max-len
     const noQuota =
       $localize`Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.`
     const autoBlock =
@@ -188,7 +187,6 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
     const quotaLeftDaily =
       // eslint-disable-next-line max-len
       $localize`Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.`
-    // eslint-disable-next-line max-len
     const quotaLeft = $localize`Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.`
 
     const uploadMessages = {

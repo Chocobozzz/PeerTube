@@ -108,12 +108,12 @@ export class VideoWatchPage {
   }
 
   async fillVideoPassword (videoPassword: string) {
-    const videoPasswordInput = await $('input#confirmInput')
+    const videoPasswordInput = $('input#confirmInput')
     await videoPasswordInput.waitForClickable()
     await videoPasswordInput.clearValue()
     await videoPasswordInput.setValue(videoPassword)
 
-    const confirmButton = await $('input[value="Confirm"]')
+    const confirmButton = $('input[value="Confirm"]')
     await confirmButton.waitForClickable()
     return confirmButton.click()
   }
@@ -123,7 +123,7 @@ export class VideoWatchPage {
   // ---------------------------------------------------------------------------
 
   async like () {
-    const likeButton = await $('.action-button-like')
+    const likeButton = $('.action-button-like')
     const isActivated = (await likeButton.getAttribute('class')).includes('activated')
 
     let count: number
@@ -150,7 +150,7 @@ export class VideoWatchPage {
   async clickOnManage () {
     await this.clickOnMoreDropdownIcon()
 
-    const items = await $$('.dropdown-menu.show .dropdown-item')
+    const items = $$('.dropdown-menu.show .dropdown-item')
 
     for (const item of items) {
       const content = await item.getText()
@@ -205,36 +205,36 @@ export class VideoWatchPage {
   // ---------------------------------------------------------------------------
 
   async createThread (comment: string) {
-    const textarea = await $('my-video-comment-add textarea')
+    const textarea = $('my-video-comment-add textarea')
     await textarea.waitForClickable()
 
     await textarea.setValue(comment)
 
-    const confirmButton = await $('.comment-buttons .primary-button')
+    const confirmButton = $('.comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await confirmButton.click()
 
-    const createdComment = await (await $('.comment-html p')).getText()
+    const createdComment = await $('.comment-html p').getText()
 
     return expect(createdComment).toBe(comment)
   }
 
   async createReply (comment: string) {
-    const replyButton = await $('button.comment-action-reply')
+    const replyButton = $('button.comment-action-reply')
     await replyButton.waitForClickable()
     await replyButton.scrollIntoView({ block: 'center' })
     await replyButton.click()
 
-    const textarea = await $('my-video-comment my-video-comment-add textarea')
+    const textarea = $('my-video-comment my-video-comment-add textarea')
     await textarea.waitForClickable()
     await textarea.setValue(comment)
 
-    const confirmButton = await $('my-video-comment .comment-buttons .primary-button')
+    const confirmButton = $('my-video-comment .comment-buttons .primary-button')
     await confirmButton.waitForClickable()
     await replyButton.scrollIntoView({ block: 'center' })
     await confirmButton.click()
 
-    const createdComment = await $('.is-child .comment-html p')
+    const createdComment = $('.is-child .comment-html p')
     await createdComment.waitForDisplayed()
 
     return expect(await createdComment.getText()).toBe(comment)

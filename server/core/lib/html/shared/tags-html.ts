@@ -117,7 +117,6 @@ export class TagsHtml {
 
     // OEmbed
     for (const oembedLinkTag of oembedLinkTags) {
-      // eslint-disable-next-line max-len
       tagsStr += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${
         escapeAttribute(oembedLinkTag.escapedTitle)
       }" />`

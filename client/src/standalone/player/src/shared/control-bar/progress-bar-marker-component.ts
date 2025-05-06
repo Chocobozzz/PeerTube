@@ -6,7 +6,6 @@ const ClickableComponent = videojs.getComponent('ClickableComponent')
 export class ProgressBarMarkerComponent extends ClickableComponent {
   declare options_: ProgressBarMarkerComponentOptions & videojs.ComponentOptions
 
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor (player: videojs.Player, options?: ProgressBarMarkerComponentOptions & videojs.ComponentOptions) {
     super(player, options)
 

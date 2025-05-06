@@ -17,7 +17,6 @@ const lTags = loggerTagsFactory('youtube-dl')
 const youtubeDLBinaryPath = join(CONFIG.STORAGE.BIN_DIR, CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME)
 
 export class YoutubeDLCLI {
-
   static async safeGet () {
     if (!await pathExists(youtubeDLBinaryPath)) {
       await ensureDir(dirname(youtubeDLBinaryPath))
@@ -86,7 +85,7 @@ export class YoutubeDLCLI {
      * case #3 is the resolution-degraded equivalent of #1, and already a pretty safe fallback
      *
      * in any case we avoid AV1, see https://github.com/Chocobozzz/PeerTube/issues/3499
-     **/
+     */
 
     let result: string[] = []
 
@@ -111,7 +110,6 @@ export class YoutubeDLCLI {
   }
 
   private constructor () {
-
   }
 
   download (options: {
@@ -199,7 +197,7 @@ export class YoutubeDLCLI {
     for (let i = 0, len = data.length; i < len; i++) {
       const line = data[i]
 
-      if (line.indexOf(skipString) === 0) {
+      if (line.startsWith(skipString)) {
         files.push(line.slice(skipString.length))
       }
     }

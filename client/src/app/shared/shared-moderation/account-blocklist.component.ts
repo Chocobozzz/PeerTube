@@ -1,11 +1,10 @@
-import { SortMeta } from 'primeng/api'
 import { Directive, OnInit, inject } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
+import { SortMeta } from 'primeng/api'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Directive()
-// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericAccountBlocklistComponent extends RestTable implements OnInit {
   private notifier = inject(Notifier)
   private blocklistService = inject(BlocklistService)

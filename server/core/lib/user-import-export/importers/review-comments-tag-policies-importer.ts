@@ -5,10 +5,9 @@ import { AbstractUserImporter } from './abstract-user-importer.js'
 
 type SanitizedObject = AutoTagPoliciesJSON['reviewComments']
 
-// eslint-disable-next-line max-len
 export class ReviewCommentsTagPoliciesImporter
-  extends AbstractUserImporter <AutoTagPoliciesJSON, AutoTagPoliciesJSON['reviewComments'] & { archiveFiles?: never }, SanitizedObject> {
-
+  extends AbstractUserImporter<AutoTagPoliciesJSON, AutoTagPoliciesJSON['reviewComments'] & { archiveFiles?: never }, SanitizedObject>
+{
   protected getImportObjects (json: AutoTagPoliciesJSON) {
     if (!json.reviewComments) return []
 

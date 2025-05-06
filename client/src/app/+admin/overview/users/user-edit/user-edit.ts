@@ -7,7 +7,6 @@ import { SelectOptionsItem } from '../../../../../types/select-options-item.mode
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 
 @Directive()
-// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: SelectOptionsItem[] = []
   videoQuotaDailyOptions: SelectOptionsItem[] = []
@@ -53,7 +52,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
       .subscribe(translations => {
         if (authUser.role.id === UserRole.ADMINISTRATOR) {
           this.roles = Object.entries(USER_ROLE_LABELS)
-                .map(([ key, value ]) => ({ value: key.toString(), label: peertubeTranslate(value, translations) }))
+            .map(([ key, value ]) => ({ value: key.toString(), label: peertubeTranslate(value, translations) }))
           return
         }
 

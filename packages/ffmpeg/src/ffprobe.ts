@@ -3,9 +3,7 @@ import { VideoResolution } from '@peertube/peertube-models'
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
 
 /**
- *
  * Helpers to run ffprobe and extract data from the JSON output
- *
  */
 
 function ffprobePromise (path: string) {
@@ -23,9 +21,45 @@ function ffprobePromise (path: string) {
 // ---------------------------------------------------------------------------
 
 const imageCodecs = new Set([
-  'ansi', 'apng', 'bintext', 'bmp', 'brender_pix', 'dpx', 'exr', 'fits', 'gem', 'gif', 'jpeg2000', 'jpgls', 'mjpeg', 'mjpegb', 'msp2',
-  'pam', 'pbm', 'pcx', 'pfm', 'pgm', 'pgmyuv', 'pgx', 'photocd', 'pictor', 'png', 'ppm', 'psd', 'sgi', 'sunrast', 'svg', 'targa', 'tiff',
-  'txd', 'webp', 'xbin', 'xbm', 'xface', 'xpm', 'xwd'
+  'ansi',
+  'apng',
+  'bintext',
+  'bmp',
+  'brender_pix',
+  'dpx',
+  'exr',
+  'fits',
+  'gem',
+  'gif',
+  'jpeg2000',
+  'jpgls',
+  'mjpeg',
+  'mjpegb',
+  'msp2',
+  'pam',
+  'pbm',
+  'pcx',
+  'pfm',
+  'pgm',
+  'pgmyuv',
+  'pgx',
+  'photocd',
+  'pictor',
+  'png',
+  'ppm',
+  'psd',
+  'sgi',
+  'sunrast',
+  'svg',
+  'targa',
+  'tiff',
+  'txd',
+  'webp',
+  'xbin',
+  'xbm',
+  'xface',
+  'xpm',
+  'xwd'
 ])
 
 async function isAudioFile (path: string, existingProbe?: FfprobeData) {
@@ -61,7 +95,7 @@ async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
   return { absolutePath: data.format.filename }
 }
 
-function getMaxAudioBitrate (type: 'aac' | 'mp3' | string, bitrate: number) {
+function getMaxAudioBitrate (type: string, bitrate: number) {
   const maxKBitrate = 384
   const kToBits = (kbits: number) => kbits * 1000
 
@@ -209,16 +243,13 @@ export {
   ffprobePromise,
   getAudioStream,
   getChaptersFromContainer,
-
   getMaxAudioBitrate,
-
   getVideoStream,
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
   getVideoStreamDuration,
   getVideoStreamFPS,
   hasAudioStream,
-
   hasVideoStream,
   isAudioFile
 }

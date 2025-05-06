@@ -1,12 +1,11 @@
-import { SortMeta } from 'primeng/api'
 import { Directive, OnInit, inject, viewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-domains-modal.component'
 import { ServerBlock } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Directive()
-// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericServerBlocklistComponent extends RestTable implements OnInit {
   protected notifier = inject(Notifier)
   protected blocklistService = inject(BlocklistService)

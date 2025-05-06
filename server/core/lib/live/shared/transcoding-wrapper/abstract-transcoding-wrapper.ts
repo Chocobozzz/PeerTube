@@ -10,13 +10,16 @@ interface TranscodingWrapperEvents {
   'error': (options: { err: Error }) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 declare interface AbstractTranscodingWrapper {
   on<U extends keyof TranscodingWrapperEvents>(
-    event: U, listener: TranscodingWrapperEvents[U]
+    event: U,
+    listener: TranscodingWrapperEvents[U]
   ): this
 
   emit<U extends keyof TranscodingWrapperEvents>(
-    event: U, ...args: Parameters<TranscodingWrapperEvents[U]>
+    event: U,
+    ...args: Parameters<TranscodingWrapperEvents[U]>
   ): boolean
 }
 
@@ -48,6 +51,7 @@ interface AbstractTranscodingWrapperOptions {
   outDirectory: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 abstract class AbstractTranscodingWrapper extends EventEmitter {
   protected readonly videoLive: MVideoLiveVideo
 
@@ -111,6 +115,5 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
 
 export {
   type AbstractTranscodingWrapperOptions,
-
   AbstractTranscodingWrapper
 }

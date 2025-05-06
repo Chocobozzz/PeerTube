@@ -51,11 +51,9 @@
     { "path": "../packages/models" },
     { "path": "../packages/typescript-utils" }
   ],
-  "files": [
-    "src/polyfills.ts"
-  ],
   "include": [
     "src/polyfills.ts",
+    "src/environments/*.ts",
     "src/main*.ts",
     "src/**/*.d.ts",
     "src/app/**/*.ts",

@@ -6,7 +6,7 @@ const dictionary: { max: number, type: string }[] = [
   { max: 1.125899906842624e15, type: 'TB' }
 ]
 
-function getBytes (value: number, precision?: number | undefined): string | number {
+function getBytes (value: number, precision?: number): string | number {
   const format = dictionary.find(d => value < d.max) || dictionary[dictionary.length - 1]
   const calc = value / (format.max / 1024)
 

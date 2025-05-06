@@ -372,7 +372,6 @@ export class VideoManageController implements OnDestroy {
 
     let blockedWarning = ''
     if (willBeBlocked) {
-      // eslint-disable-next-line max-len
       blockedWarning = ' ' +
         $localize`Your video will also be automatically blocked since video publication requires manual validation by moderators.`
     }

@@ -171,7 +171,7 @@ export class MyAccountPage {
     await selectCustomSelect('videoChannelId', 'Main root channel')
     await selectCustomSelect('privacy', privacy)
 
-    const submit = await $('form input[type=submit]')
+    const submit = $('form input[type=submit]')
     await submit.waitForClickable()
     await submit.scrollIntoView()
     await submit.click()

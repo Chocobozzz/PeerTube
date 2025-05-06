@@ -3,7 +3,7 @@ import { getCheckbox } from '../utils'
 
 export class AnonymousSettingsPage {
   async openSettings () {
-    const link = await $('my-header .settings-button')
+    const link = $('my-header .settings-button')
     await link.waitForClickable()
     await link.click()
 
@@ -11,7 +11,7 @@ export class AnonymousSettingsPage {
   }
 
   async closeSettings () {
-    const closeModal = await $('.modal.show .modal-header > button')
+    const closeModal = $('.modal.show .modal-header > button')
     await closeModal.waitForClickable()
     await closeModal.click()
 

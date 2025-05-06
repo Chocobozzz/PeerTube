@@ -74,7 +74,7 @@ type Form = {
   previewfile: FormControl<Blob>
   support: FormControl<string>
   schedulePublicationAt: FormControl<Date>
-  pluginData: FormGroup<any>
+  pluginData: FormGroup
 }
 
 @Component({

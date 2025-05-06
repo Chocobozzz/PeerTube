@@ -22,9 +22,7 @@ export class PlayerPage {
   }
 
   waitUntilPlayerWrapper () {
-    return browser.waitUntil(async () => {
-      return !!(await $('#placeholder-preview'))
-    })
+    return $('#placeholder-preview').waitForExist()
   }
 
   waitUntilPlaying () {
@@ -98,7 +96,7 @@ export class PlayerPage {
 
   async fillEmbedVideoPassword (videoPassword: string) {
     const videoPasswordInput = $('input#video-password-input')
-    const confirmButton = await $('button#video-password-submit')
+    const confirmButton = $('button#video-password-submit')
 
     await videoPasswordInput.clearValue()
     await videoPasswordInput.setValue(videoPassword)

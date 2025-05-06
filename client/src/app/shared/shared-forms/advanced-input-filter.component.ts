@@ -39,6 +39,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   readonly placeholder = input($localize`Filter...`)
   readonly inputId = input('table-filter')
 
+  // eslint-disable-next-line @angular-eslint/no-output-native
   readonly search = output<string>()
 
   searchValue: string

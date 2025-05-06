@@ -372,13 +372,11 @@ export class VideoListComponent extends RestTable<Video> implements OnInit {
     let message: string
 
     if (type === 'hls') {
-      // eslint-disable-next-line max-len
       message = formatICU(
         $localize`Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {{count} HLS streaming playlists}}?`,
         { count: videos.length }
       )
     } else {
-      // eslint-disable-next-line max-len
       message = formatICU(
         $localize`Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {{count} videos}}?`,
         { count: videos.length }

@@ -20,11 +20,20 @@ import { pick } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('user-import')
 
-type SanitizedObject = Pick<UserSettingsExportJSON, 'nsfwPolicy' | 'autoPlayVideo' | 'autoPlayNextVideo' | 'autoPlayNextVideo' |
-'autoPlayNextVideoPlaylist' | 'p2pEnabled' | 'videosHistoryEnabled' | 'videoLanguages' | 'theme' | 'notificationSettings'>
+type SanitizedObject = Pick<
+  UserSettingsExportJSON,
+  | 'nsfwPolicy'
+  | 'autoPlayVideo'
+  | 'autoPlayNextVideo'
+  | 'autoPlayNextVideoPlaylist'
+  | 'p2pEnabled'
+  | 'videosHistoryEnabled'
+  | 'videoLanguages'
+  | 'theme'
+  | 'notificationSettings'
+>
 
-export class UserSettingsImporter extends AbstractUserImporter <UserSettingsExportJSON, UserSettingsExportJSON, SanitizedObject> {
-
+export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExportJSON, UserSettingsExportJSON, SanitizedObject> {
   protected getImportObjects (json: UserSettingsExportJSON) {
     return [ json ]
   }

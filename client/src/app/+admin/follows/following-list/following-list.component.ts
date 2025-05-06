@@ -93,7 +93,6 @@ export class FollowingListComponent extends RestTable<ActorFollow> implements On
     this.followService.unfollow(follows)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`You are not following {count, plural, =1 {{entryName} anymore.} other {these {count} entries anymore.}}`,
             icuParams

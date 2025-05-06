@@ -170,7 +170,6 @@ export async function checkResolutionsInMasterPlaylist (options: {
 
   if (splittedAudio && hasAudio && hasVideo) {
     expect(masterPlaylist).to.match(
-      // eslint-disable-next-line max-len
       new RegExp(
         `#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="(group_Audio|audio)",NAME="(Audio|audio_0)"(,AUTOSELECT=YES)?,DEFAULT=YES,URI="[^.]*0.m3u8"`
       )

@@ -143,7 +143,7 @@ elif [ "$1" = "external-plugins" ]; then
     runJSTest "$1" 1 $externalPluginsFiles
     MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $peertubeRunnerFiles
 elif [ "$1" = "lint" ]; then
-    npm run eslint -- --ext .ts "server/**/*.ts"  "scripts/**/*.ts" "packages/**/*.ts" "apps/**/*.ts"
+    npm run eslint
 
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 

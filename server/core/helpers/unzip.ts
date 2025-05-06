@@ -47,7 +47,7 @@ export async function unzip (options: {
         const entryPath = join(destination, entry.fileName)
 
         try {
-          if (/\/$/.test(entry.fileName)) {
+          if (entry.fileName.endsWith('/')) {
             await ensureDir(entryPath)
             logger.debug(`Creating directory from zip ${entryPath}`, lTags())
 

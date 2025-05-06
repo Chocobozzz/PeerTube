@@ -55,10 +55,9 @@ const STATIC_CACHE = {
 
 const localCache = new Map<string, any>()
 
-const nodeDocumentLoader = (jsonld as any).documentLoaders.node();
+const nodeDocumentLoader = (jsonld as any).documentLoaders.node()
 
-/* eslint-disable no-import-assign */
-(jsonld as any).documentLoader = async (url: string) => {
+;(jsonld as any).documentLoader = async (url: string) => {
   if (url in STATIC_CACHE) {
     return {
       contextUrl: null,

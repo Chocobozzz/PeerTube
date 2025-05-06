@@ -8,18 +8,18 @@ export class AdminRegistrationPage {
   }
 
   async accept (username: string, moderationResponse: string) {
-    const usernameEl = await $('*=' + username)
+    const usernameEl = $('*=' + username)
     await usernameEl.waitForDisplayed()
 
     const tr = await findParentElement(usernameEl, async el => await el.getTagName() === 'tr')
 
     await tr.$('.action-cell .dropdown-root').click()
 
-    const accept = await $('span*=Accept this request')
+    const accept = $('span*=Accept this request')
     await accept.waitForClickable()
     await accept.click()
 
-    const moderationResponseTextarea = await $('#moderationResponse')
+    const moderationResponseTextarea = $('#moderationResponse')
     await moderationResponseTextarea.waitForDisplayed()
 
     await moderationResponseTextarea.setValue(moderationResponse)

@@ -208,7 +208,6 @@ function parseSemVersion (s: string) {
 function execShell (command: string, options?: ExecOptions) {
   return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
     exec(command, options, (err, stdout, stderr) => {
-      // eslint-disable-next-line prefer-promise-reject-errors
       if (err) return rej({ err, stdout, stderr })
 
       return res({ stdout, stderr })
@@ -274,25 +273,17 @@ const pipelinePromise = promisify(pipeline)
 export {
   objectConverter,
   mapToJSON,
-
   sanitizeUrl,
   sanitizeHost,
-
   execShell,
-
   pageToStartAndCount,
   peertubeTruncate,
-
   scryptPromise,
-
   randomBytesPromise,
-
   generateRSAKeyPairPromise,
   generateED25519KeyPairPromise,
-
   execPromise2,
   execPromise,
   pipelinePromise,
-
   parseSemVersion
 }

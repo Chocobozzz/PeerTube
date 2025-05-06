@@ -79,7 +79,7 @@ const I18N_LOCALE_ALIAS = {
   'zh': 'zh-Hans-CN'
 }
 
-export const POSSIBLE_LOCALES = (Object.keys(I18N_LOCALES) as string[]).concat(Object.keys(I18N_LOCALE_ALIAS))
+export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES).concat(Object.keys(I18N_LOCALE_ALIAS))
 
 export function getDefaultLocale () {
   return 'en-US'
@@ -89,7 +89,7 @@ export function isDefaultLocale (locale: string) {
   return getCompleteLocale(locale) === getCompleteLocale(getDefaultLocale())
 }
 
-export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
+export function peertubeTranslate (str: string, translations?: { [id: string]: string }) {
   if (!translations?.[str]) return str
 
   return translations[str]

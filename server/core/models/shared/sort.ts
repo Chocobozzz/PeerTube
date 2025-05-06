@@ -134,7 +134,7 @@ export function buildSortDirectionAndField (value: string) {
   let field: string
   let direction: 'ASC' | 'DESC'
 
-  if (value.substring(0, 1) === '-') {
+  if (value.startsWith('-')) {
     direction = 'DESC'
     field = value.substring(1)
   } else {

@@ -122,7 +122,7 @@ export function makeUploadRequest (
     method?: 'POST' | 'PUT'
 
     fields: { [fieldName: string]: any }
-    attaches?: { [attachName: string]: any | any[] }
+    attaches?: { [attachName: string]: any }
   }
 ) {
   let req = options.method === 'PUT'

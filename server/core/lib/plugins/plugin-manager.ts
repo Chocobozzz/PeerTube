@@ -54,13 +54,13 @@ export interface RegisteredPlugin {
 
   // Only if this is a plugin
   registerHelpers?: RegisterHelpers
-  unregister?: Function
+  unregister?: () => any
 }
 
 export interface HookInformationValue {
   npmName: string
   pluginName: string
-  handler: Function
+  handler: () => any
   priority: number
 }
 
@@ -69,7 +69,6 @@ type PluginLocalesTranslations = {
 }
 
 export class PluginManager implements ServerHook {
-
   private static instance: PluginManager
 
   private registeredPlugins: { [name: string]: RegisteredPlugin } = {}
@@ -267,7 +266,9 @@ export class PluginManager implements ServerHook {
         hookType,
         result,
         params,
-        onError: err => { logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err }) }
+        onError: err => {
+          logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
+        }
       })
     }
 
@@ -358,9 +359,8 @@ export class PluginManager implements ServerHook {
 
       const packageJSON = await this.getPackageJSON(pluginName, pluginType)
 
-      this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, pluginType);
-
-      [ plugin ] = await PluginModel.upsert({
+      this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, pluginType)
+      ;[ plugin ] = await PluginModel.upsert({
         name: pluginName,
         description: packageJSON.description,
         homepage: packageJSON.homepage,
@@ -662,7 +662,7 @@ export class PluginManager implements ServerHook {
     const { result: packageJSONValid, badFields } = isPackageJSONValid(packageJSON, pluginType)
     if (!packageJSONValid) {
       const formattedFields = badFields.map(f => `"${f}"`)
-                                       .join(', ')
+        .join(', ')
 
       throw new Error(`PackageJSON is invalid (invalid fields: ${formattedFields}).`)
     }

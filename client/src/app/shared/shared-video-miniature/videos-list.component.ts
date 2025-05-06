@@ -398,9 +398,7 @@ export class VideosListComponent implements OnInit, OnDestroy {
     for (const video of this.videos) {
       const publishedDate = video.publishedAt
 
-      for (let i = 0; i < periods.length; i++) {
-        const period = periods[i]
-
+      for (const period of periods) {
         if (currentGroupedDate <= period.value && period.validator(publishedDate)) {
           if (currentGroupedDate !== period.value) {
             if (period.value !== GroupDate.OLDER) onlyOlderPeriod = false

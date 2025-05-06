@@ -261,7 +261,7 @@ describe('NSFW', () => {
         expect(await playerPage.getNSFWContentText()).toContain('This video contains sensitive content')
         expect(await playerPage.hasPoster()).toBeTruthy()
 
-        const moreButton = await playerPage.getMoreNSFWInfoButton()
+        const moreButton = playerPage.getMoreNSFWInfoButton()
         expect(await moreButton.isDisplayed()).toBeTruthy()
 
         await moreButton.click()
@@ -310,7 +310,7 @@ describe('NSFW', () => {
       it('Should use a confirm modal when viewing the video and watch the video', async function () {
         await go(videoUrl)
 
-        const confirmTitle = await videoWatchPage.getModalTitleEl()
+        const confirmTitle = videoWatchPage.getModalTitleEl()
         await confirmTitle.waitForDisplayed()
         expect(await confirmTitle.getText()).toContain('Mature or explicit content')
 

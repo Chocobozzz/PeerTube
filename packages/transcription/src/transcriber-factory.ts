@@ -39,7 +39,7 @@ export class TranscriberFactory {
   getEngineByName (engineName: string) {
     const engine = this.engines.find(({ name }) => name === engineName)
     if (!engine) {
-      throw new Error(`Unknow engine ${engineName}`)
+      throw new Error(`Unknown engine ${engineName}`)
     }
 
     return engine

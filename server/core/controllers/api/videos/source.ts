@@ -164,7 +164,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile) {
   const jobs: (CreateJobArgument & CreateJobOptions)[] = [
     {
-      type: 'manage-video-torrent' as 'manage-video-torrent',
+      type: 'manage-video-torrent' as const,
       payload: {
         videoId: video.id,
         videoFileId: videoFile.id,
@@ -175,7 +175,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
     buildStoryboardJobIfNeeded({ video, federate: false }),
 
     {
-      type: 'federate-video' as 'federate-video',
+      type: 'federate-video' as const,
       payload: {
         videoUUID: video.uuid,
         isNewVideoForFederation: false
@@ -189,7 +189,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
 
   if (video.state === VideoState.TO_TRANSCODE) {
     jobs.push({
-      type: 'transcoding-job-builder' as 'transcoding-job-builder',
+      type: 'transcoding-job-builder' as const,
       payload: {
         videoUUID: video.uuid,
         optimizeJob: {

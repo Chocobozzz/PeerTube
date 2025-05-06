@@ -256,7 +256,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // Inject JS
     if (this.serverConfig.instance.customizations.javascript) {
       try {
-        /* eslint-disable no-eval */
         window.eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
         logger.error('Cannot eval custom JavaScript.', err)

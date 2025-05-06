@@ -11,7 +11,6 @@ import { logger } from '@server/helpers/logger.js'
 // Try to keep consistency with their metric name/description so it's easier to process (grafana dashboard template etc)
 
 export class NodeJSObserversBuilder {
-
   constructor (private readonly meter: Meter) {
   }
 
@@ -62,7 +61,6 @@ export class NodeJSObserversBuilder {
       observableResult.observe(cpuTotal, (userUsageMicros + systemUsageMicros) / 1e6)
       observableResult.observe(cpuUser, userUsageMicros / 1e6)
       observableResult.observe(cpuSystem, systemUsageMicros / 1e6)
-
     }, [ cpuTotal, cpuUser, cpuSystem ])
   }
 
@@ -119,7 +117,7 @@ export class NodeJSObserversBuilder {
   }
 
   private buildEventLoopLagObserver () {
-    const reportEventloopLag = (start: [ number, number ], observableResult: ObservableResult, res: () => void) => {
+    const reportEventloopLag = (start: [number, number], observableResult: ObservableResult, res: () => void) => {
       const delta = process.hrtime(start)
       const nanosec = delta[0] * 1e9 + delta[1]
       const seconds = nanosec / 1e9
@@ -180,6 +178,7 @@ export class NodeJSObserversBuilder {
 
       const data = {}
 
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < resources.length; i++) {
         const resource = resources[i]
 

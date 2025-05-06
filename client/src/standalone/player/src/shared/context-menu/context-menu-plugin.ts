@@ -57,7 +57,6 @@ class ContextMenuPlugin extends Plugin {
 
     menu.on('dispose', () => {
       for (const event of [ 'click', 'tap' ]) {
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         videojs.off(documentEl as Element, event, menu.dispose)
       }
 
@@ -84,7 +83,6 @@ class ContextMenuPlugin extends Plugin {
     }
 
     for (const event of [ 'click', 'tap' ]) {
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       videojs.on(documentEl as Element, event, menu.dispose)
     }
   }

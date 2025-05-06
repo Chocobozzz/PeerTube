@@ -72,8 +72,7 @@ function getRemoteObjectOrDie (
   settings: Settings,
   netrc: Netrc
 ): { url: string, username: string, password: string } {
-
-  function exitIfNoOptions (optionNames: string[], errorPrefix: string = '') {
+  function exitIfNoOptions (optionNames: string[], errorPrefix = '') {
     let exit = false
 
     for (const key of optionNames) {
@@ -126,9 +125,9 @@ function listOptions (val: string) {
 
 function getServerCredentials (options: CommonProgramOptions) {
   return Promise.all([ getSettings(), getNetrc() ])
-                .then(([ settings, netrc ]) => {
-                  return getRemoteObjectOrDie(options, settings, netrc)
-                })
+    .then(([ settings, netrc ]) => {
+      return getRemoteObjectOrDie(options, settings, netrc)
+    })
 }
 
 function buildServer (url: string) {
@@ -184,11 +183,8 @@ export {
   getRemoteObjectOrDie,
   writeSettings,
   deleteSettings,
-
   getServerCredentials,
-
   listOptions,
-
   getAdminTokenOrDie,
   buildServer,
   assignToken

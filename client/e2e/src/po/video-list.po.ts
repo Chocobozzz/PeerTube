@@ -60,7 +60,7 @@ export class VideoListPage {
   }
 
   async getVideosListName () {
-    const elems = await $$('.videos .video-miniature .video-name')
+    const elems = $$('.videos .video-miniature .video-name')
     const texts = await elems.map(e => e.getText())
 
     return texts.map(t => t.trim())
@@ -93,7 +93,7 @@ export class VideoListPage {
   }
 
   private async getVideoMiniature (name: string) {
-    const videoName = await $('.video-name=' + name)
+    const videoName = $('.video-name=' + name)
     await videoName.waitForDisplayed()
 
     return findParentElement(videoName, async el => await el.getTagName() === 'my-video-miniature')

@@ -79,7 +79,6 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
     this.followService.acceptFollower(follows)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`Accepted {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
             { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
@@ -94,7 +93,6 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
   }
 
   async rejectFollower (follows: ActorFollow[]) {
-    // eslint-disable-next-line max-len
     const message = formatICU(
       $localize`Do you really want to reject {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`,
       { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
@@ -106,7 +104,6 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
     this.followService.rejectFollower(follows)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
             { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
@@ -126,7 +123,6 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
     let message = $localize`Deleted followers will be able to send again a follow request.`
     message += '<br /><br />'
 
-    // eslint-disable-next-line max-len
     message += formatICU(
       $localize`Do you really want to delete {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`,
       icuParams
@@ -138,7 +134,6 @@ export class FollowersListComponent extends RestTable<ActorFollow> implements On
     this.followService.removeFollower(follows)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
             icuParams

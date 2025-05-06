@@ -35,6 +35,7 @@ export class ThemeManager {
   loadThemeStyle (name: string) {
     const links = document.getElementsByTagName('link')
 
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < links.length; i++) {
       const link = links[i]
       if (link.getAttribute('rel').includes('style') && link.getAttribute('title')) {

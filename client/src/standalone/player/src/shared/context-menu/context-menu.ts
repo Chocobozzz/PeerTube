@@ -14,14 +14,15 @@ class ContextMenu extends Menu {
 
     // Each menu component has its own `dispose` method that can be
     // safely bound and unbound to events while maintaining its context.
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     this.dispose = videojs.bind(this, this.dispose)
 
     for (const c of options.content()) {
-      this.addItem(new ContextMenuItem(player, {
-        label: c.label,
-        listener: videojs.bind(player, c.listener)
-      }))
+      this.addItem(
+        new ContextMenuItem(player, {
+          label: c.label,
+          listener: videojs.bind(player, c.listener)
+        })
+      )
     }
   }
 

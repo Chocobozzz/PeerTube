@@ -23,7 +23,7 @@ export type MActorAudience = MActorUrl & MActorFollowersUrl
 export type MActorWithInboxes = Pick<ActorModel, 'sharedInboxUrl' | 'inboxUrl' | 'getSharedInbox'>
 export type MActorSignature = MActorAccountChannelId
 
-export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
+export type MActorLight = Omit<MActor, 'privateKey' | 'publicKey'>
 
 // ############################################################################
 

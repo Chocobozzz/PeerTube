@@ -273,25 +273,18 @@ async function getObjectStorageFileSize (options: {
 
 export {
   type BucketInfo,
-
   buildKey,
-
   storeObject,
   storeContent,
   storeStream,
-
   removeObject,
   removeObjectByFullKey,
   removePrefix,
-
   makeAvailable,
-
   updateObjectACL,
   updatePrefixACL,
-
   listKeysOfPrefix,
   createObjectReadStream,
-
   getObjectStorageFileSize
 }
 
@@ -344,11 +337,15 @@ async function uploadToStorage (options: {
 
     logger.debug(
       'Completed %s%s in bucket %s',
-      bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, { ...lTags(), responseMetadata: response.$metadata }
+      bucketInfo.PREFIX,
+      objectStorageKey,
+      bucketInfo.BUCKET_NAME,
+      { ...lTags(), responseMetadata: response.$metadata }
     )
 
     return getInternalUrl(bucketInfo, objectStorageKey)
   } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw parseS3Error(err)
   }
 }

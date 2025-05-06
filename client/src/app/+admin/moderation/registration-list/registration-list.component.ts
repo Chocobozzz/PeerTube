@@ -143,7 +143,6 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
   private async removeRegistrations (registrations: UserRegistration[]) {
     const icuParams = { count: registrations.length, username: registrations[0].username }
 
-    // eslint-disable-next-line max-len
     const message = formatICU(
       $localize`Do you really want to delete {count, plural, =1 {{username} registration request?} other {{count} registration requests?}}`,
       icuParams
@@ -155,7 +154,6 @@ export class RegistrationListComponent extends RestTable<UserRegistration> imple
     this.adminRegistrationService.removeRegistrations(registrations)
       .subscribe({
         next: () => {
-          // eslint-disable-next-line max-len
           const message = formatICU(
             $localize`Removed {count, plural, =1 {{username} registration request} other {{count} registration requests}}`,
             icuParams

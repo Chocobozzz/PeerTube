@@ -1,10 +1,7 @@
 import { VideoPlaylistPrivacy, VideoPlaylistType, VideoPlaylistsExportJSON } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import {
-  MChannelBannerAccountDefault, MVideoPlaylistFull,
-  MVideoPlaylistThumbnail
-} from '@server/types/models/index.js'
+import { MChannelBannerAccountDefault, MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
@@ -33,11 +30,9 @@ import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
 const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = VideoPlaylistsExportJSON['videoPlaylists'][0]
-type SanitizedObject = Pick<ImportObject, 'type' | 'displayName' | 'privacy' | 'elements' | 'description' | 'elements' | 'channel' |
-'archiveFiles'>
+type SanitizedObject = Pick<ImportObject, 'type' | 'displayName' | 'privacy' | 'elements' | 'description' | 'channel' | 'archiveFiles'>
 
-export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylistsExportJSON, ImportObject, SanitizedObject> {
-
+export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsExportJSON, ImportObject, SanitizedObject> {
   protected getImportObjects (json: VideoPlaylistsExportJSON) {
     return json.videoPlaylists
   }

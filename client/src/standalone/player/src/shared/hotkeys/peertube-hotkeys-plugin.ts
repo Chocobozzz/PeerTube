@@ -240,11 +240,11 @@ class PeerTubeHotkeysPlugin extends Plugin {
     const isNonLatin = key.charCodeAt(0) >= capitalHetaCode
 
     if (isNonLatin) {
-      if (code.indexOf('Key') === 0 && code.length === 4) { // i.e. 'KeyW'
+      if (code.startsWith('Key') && code.length === 4) { // i.e. 'KeyW'
         return code.charAt(3)
       }
 
-      if (code.indexOf('Digit') === 0 && code.length === 6) { // i.e. 'Digit7'
+      if (code.startsWith('Digit') && code.length === 6) { // i.e. 'Digit7'
         return code.charAt(5)
       }
     }

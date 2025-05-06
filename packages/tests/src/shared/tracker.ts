@@ -5,6 +5,7 @@ export async function checkTrackerInfohash (serverUrl: string, infohash: string)
   const path = '/tracker/announce'
 
   // From bittorrent-tracker
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   const infohashBinary = escape(Buffer.from(infohash, 'hex').toString('binary')).replace(/[@*/+]/g, function (char) {
     return '%' + char.charCodeAt(0).toString(16).toUpperCase()
   })

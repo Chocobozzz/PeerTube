@@ -33,9 +33,9 @@ async function getSitemap (req: express.Request, res: express.Response) {
   const sitemapStream = new SitemapStream({
     hostname: WEBSERVER.URL,
     errorHandler: (err: Error, level: ErrorLevel) => {
-      if (level === 'warn') {
+      if (level === ErrorLevel.WARN) {
         logger.warn('Warning in sitemap generation.', { err })
-      } else if (level === 'throw') {
+      } else if (level === ErrorLevel.THROW) {
         logger.error('Error in sitemap generation.', { err })
 
         throw err

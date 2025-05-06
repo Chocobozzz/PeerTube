@@ -93,9 +93,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
 
     const live = video.isLive
       ? await VideoLiveModel.loadByVideoIdWithSettings(videoId)
-      : undefined
-
-    // We already have captions, so we can set it to the video object
+      : undefined // We already have captions, so we can set it to the video object
     ;(video as any).VideoCaptions = captions
     // Then fetch more attributes for AP serialization
     const videoAP = await video.lightAPToFullAP(undefined)

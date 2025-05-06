@@ -5,15 +5,15 @@ import { buildStreamSuffix } from '../ffmpeg-utils.js'
 export function addDefaultEncoderGlobalParams (command: FfmpegCommand) {
   // avoid issues when transcoding some files: https://trac.ffmpeg.org/ticket/6375
   command.outputOption('-max_muxing_queue_size 1024')
-         // strip all metadata
-         .outputOption('-map_metadata -1')
-         // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
-         .outputOption('-pix_fmt yuv420p')
+    // strip all metadata
+    .outputOption('-map_metadata -1')
+    // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
+    .outputOption('-pix_fmt yuv420p')
 }
 
 export function addDefaultEncoderParams (options: {
   command: FfmpegCommand
-  encoder: 'libx264' | string
+  encoder: string
   fps: number
 
   streamNum?: number

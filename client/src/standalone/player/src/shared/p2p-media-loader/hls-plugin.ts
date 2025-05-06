@@ -11,7 +11,7 @@ import { omit } from '@peertube/peertube-core-utils'
 const HlsWithP2P = HlsJsP2PEngine.injectMixin(Hlsjs)
 
 type ErrorCounts = {
-  [ type: string ]: number
+  [type: string]: number
 }
 
 // ---------------------------------------------------------------------------
@@ -35,10 +35,8 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 
   if (alreadyRegistered) return
 
-  alreadyRegistered = true;
-
-  // FIXME: typings
-  (html5 as any).registerSourceHandler({
+  alreadyRegistered = true // FIXME: typings
+  ;(html5 as any).registerSourceHandler({
     canHandleSource: function (source: videojs.Tech.SourceObject) {
       const hlsTypeRE = /^application\/x-mpegURL|application\/vnd\.apple\.mpegurl$/i
       const hlsExtRE = /\.m3u8/i
@@ -58,10 +56,8 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 
       return tech.hlsProvider
     }
-  }, 0);
-
-  // FIXME: typings
-  (vjs as any).Html5Hlsjs = Html5Hlsjs
+  }, 0) // FIXME: typings
+  ;(vjs as any).Html5Hlsjs = Html5Hlsjs
 }
 
 // ---------------------------------------------------------------------------
@@ -71,7 +67,6 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 const Plugin = videojs.getPlugin('plugin')
 
 class HLSJSConfigHandler extends Plugin {
-
   constructor (player: videojs.Player, options: HlsjsConfigHandlerOptions) {
     super(player, options)
 
@@ -132,7 +127,7 @@ export class Html5Hlsjs {
 
   private liveEnded = false
 
-  private handlers: { [ id in 'play' | 'error' ]: EventListener } = {
+  private handlers: { [id in 'play' | 'error']: EventListener } = {
     play: null,
     error: null
   }
@@ -143,8 +138,8 @@ export class Html5Hlsjs {
     this.vjs = vjs
     this.source = source
 
-    this.tech = tech;
-    (this.tech as any).name_ = 'Hlsjs'
+    this.tech = tech
+    ;(this.tech as any).name_ = 'Hlsjs'
 
     this.videoElement = tech.el() as HTMLVideoElement
     this.player = vjs((tech.options_ as any).playerId)
@@ -162,7 +157,7 @@ export class Html5Hlsjs {
           break
         case mediaError.MEDIA_ERR_DECODE:
           errorTxt = 'The video playback was aborted due to a corruption problem or because the video used features ' +
-                     'your browser did not support'
+            'your browser did not support'
           this._handleMediaError(mediaError)
           break
         case mediaError.MEDIA_ERR_NETWORK:
@@ -222,7 +217,7 @@ export class Html5Hlsjs {
     }
   }
 
-  private _handleUnrecovarableError (error: any) {
+  private _handleUnrecoverableError (error: any) {
     if (this.hls.levels.filter(l => l.id > -1).length > 1) {
       this._removeQuality(this.hls.loadLevel)
       return
@@ -255,7 +250,7 @@ export class Html5Hlsjs {
     }
 
     if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] > 2) {
-      this._handleUnrecovarableError(error)
+      this._handleUnrecoverableError(error)
     }
   }
 
@@ -264,9 +259,8 @@ export class Html5Hlsjs {
 
     // We may have errors if the live ended because of a fast-restream in the same permanent live
     if (this.liveEnded) {
-      logger.info('Forcing end of live stream after a network error');
-
-      (this.player as any)?.handleTechEnded_()
+      logger.info('Forcing end of live stream after a network error')
+      ;(this.player as any)?.handleTechEnded_()
       this.hls?.stopLoad()
 
       return
@@ -286,7 +280,7 @@ export class Html5Hlsjs {
       return
     }
 
-    this._handleUnrecovarableError(error)
+    this._handleUnrecoverableError(error)
   }
 
   private _onError (_event: any, data: ErrorData) {
@@ -307,11 +301,14 @@ export class Html5Hlsjs {
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
       error.code = 2
       this._handleNetworkError(error)
-    } else if (data.fatal && data.type === Hlsjs.ErrorTypes.MEDIA_ERROR && data.details !== 'manifestIncompatibleCodecsError') {
+    } else if (
+      data.fatal && data.type === Hlsjs.ErrorTypes.MEDIA_ERROR &&
+      data.details !== Hlsjs.ErrorDetails.MANIFEST_INCOMPATIBLE_CODECS_ERROR
+    ) {
       error.code = 3
       this._handleMediaError(error)
     } else if (data.fatal) {
-      this._handleUnrecovarableError(error)
+      this._handleUnrecoverableError(error)
     }
   }
 

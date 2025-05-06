@@ -200,15 +200,12 @@ function createAccountAbuse (options: {
 
 export {
   isLocalLiveVideoAccepted,
-
   isLocalVideoFileAccepted,
   isLocalVideoThreadAccepted,
   isRemoteVideoCommentAccepted,
   isLocalVideoCommentReplyAccepted,
   isPreImportVideoAccepted,
   isPostImportVideoAccepted,
-
-  createAbuse,
   createVideoAbuse,
   createVideoCommentAbuse,
   createAccountAbuse

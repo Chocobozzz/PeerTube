@@ -73,9 +73,7 @@ lazyStaticRouter.use(
 // ---------------------------------------------------------------------------
 
 export {
-  lazyStaticRouter,
-  getPreview,
-  getVideoCaption
+  lazyStaticRouter
 }
 
 // ---------------------------------------------------------------------------

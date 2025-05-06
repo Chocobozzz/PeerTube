@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-namespace-keyword */
+
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse.js'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse.js'
 import { ApplicationModel } from '@server/models/application/application.js'

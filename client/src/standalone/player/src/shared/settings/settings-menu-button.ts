@@ -144,9 +144,9 @@ class SettingsButton extends Button {
   }
 
   showDialog () {
-    this.player().peertube().onMenuOpened();
+    this.player().peertube().onMenuOpened()
 
-    (this.menu.el() as HTMLElement).style.opacity = '1'
+    ;(this.menu.el() as HTMLElement).style.opacity = '1'
 
     this.dialog.show()
     this.el().setAttribute('aria-expanded', 'true')
@@ -162,8 +162,8 @@ class SettingsButton extends Button {
     this.dialog.hide()
     this.el().setAttribute('aria-expanded', 'false')
 
-    this.setDialogSize(this.getComponentSize(this.menu));
-    (this.menu.el() as HTMLElement).style.opacity = '1'
+    this.setDialogSize(this.getComponentSize(this.menu))
+    ;(this.menu.el() as HTMLElement).style.opacity = '1'
     this.resetChildren()
   }
 
@@ -248,7 +248,6 @@ class SettingsButton extends Button {
 
     // Hide children to avoid sub menus stacking on top of each other
     // or having multiple menus open
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     settingsMenuItem.on('click', videojs.bind(this, this.hideChildren))
 
     // Whether to add or remove selected class on the settings sub menu element
@@ -273,7 +272,6 @@ class SettingsButton extends Button {
   isInIframe () {
     return window.self !== window.top
   }
-
 }
 
 Component.registerComponent('SettingsButton', SettingsButton)

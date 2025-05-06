@@ -58,8 +58,7 @@ export const unsafeSSRFGot = got.extend({
 
       const bodyLimit = bodyKBLimit * 1000
 
-      /* eslint-disable @typescript-eslint/no-floating-promises */
-      promiseOrStream.on('downloadProgress', progress => {
+      void promiseOrStream.on('downloadProgress', progress => {
         if (progress.transferred > bodyLimit && progress.percent !== 1) {
           const message = `Exceeded the download limit of ${bodyLimit} B`
           logger.warn(message, lTags())

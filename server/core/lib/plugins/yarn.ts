@@ -60,7 +60,7 @@ async function execYarn (command: string) {
   } catch (result) {
     logger.error('Cannot exec yarn.', { command, err: result.err, stderr: result.stderr })
 
-    throw result.err
+    throw result.err as Error
   }
 }
 

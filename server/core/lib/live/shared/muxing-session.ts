@@ -49,6 +49,7 @@ interface MuxingSessionEvents {
   'after-cleanup': (options: { videoUUID: string }) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 declare interface MuxingSession {
   on<U extends keyof MuxingSessionEvents>(
     event: U,
@@ -61,7 +62,8 @@ declare interface MuxingSession {
   ): boolean
 }
 
-class MuxingSession extends EventEmitter {
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+class MuxingSession extends EventEmitter implements MuxingSession {
   private transcodingWrapper: AbstractTranscodingWrapper
 
   private readonly context: any

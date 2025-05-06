@@ -1,4 +1,4 @@
-import { HttpMethodType, PeerTubeProblemDocumentData, ServerLogLevel, VideoCreate } from '@peertube/peertube-models'
+import { HttpMethodType, PeerTubeProblemDocumentData, ServerErrorCodeType, ServerLogLevel, VideoCreate } from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -77,8 +77,8 @@ declare module 'express' {
   // ---------------------------------------------------------------------------
 
   // Upload file with a duration added by our middleware
-  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size', 'originalname'> & {
-    duration: number
+  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size' | 'originalname'> & {
+    duration?: number
   }
 
   // Our custom UploadXFile object using our custom metadata
@@ -106,7 +106,7 @@ declare module 'express' {
 
       title?: string
       status?: number
-      type?: ServerErrorCode | string
+      type?: ServerErrorCodeType
       instance?: string
 
       data?: PeerTubeProblemDocumentData

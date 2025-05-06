@@ -121,7 +121,6 @@ class PluginsManager {
 
   async runHook<T> (hookName: ClientHookName, resultArg?: T | Promise<T>, params?: any) {
     if (!this.hooks[hookName]) {
-      // eslint-disable-next-line no-return-await
       return await resultArg
     }
 

@@ -16,28 +16,32 @@ const lTags = loggerTagsFactory('api', 'runner')
 
 const runnerJobFilesRouter = express.Router()
 
-runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/max-quality/audio',
+runnerJobFilesRouter.post(
+  '/jobs/:jobUUID/files/videos/:videoId/max-quality/audio',
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   asyncMiddleware(getMaxQualitySeparatedAudioFile)
 )
 
-runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/max-quality',
+runnerJobFilesRouter.post(
+  '/jobs/:jobUUID/files/videos/:videoId/max-quality',
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   asyncMiddleware(getMaxQualityVideoFile)
 )
 
-runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/previews/max-quality',
+runnerJobFilesRouter.post(
+  '/jobs/:jobUUID/files/videos/:videoId/previews/max-quality',
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   getMaxQualityVideoPreview
 )
 
-runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/studio/task-files/:filename',
+runnerJobFilesRouter.post(
+  '/jobs/:jobUUID/files/videos/:videoId/studio/task-files/:filename',
   apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
@@ -59,7 +63,10 @@ async function getMaxQualitySeparatedAudioFile (req: express.Request, res: expre
   const video = res.locals.videoAll
 
   logger.info(
-    'Get max quality separated audio file of video %s of job %s for runner %s', video.uuid, runnerJob.uuid, runner.name,
+    'Get max quality separated audio file of video %s of job %s for runner %s',
+    video.uuid,
+    runnerJob.uuid,
+    runner.name,
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
@@ -74,7 +81,10 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
   const video = res.locals.videoAll
 
   logger.info(
-    'Get max quality file of video %s of job %s for runner %s', video.uuid, runnerJob.uuid, runner.name,
+    'Get max quality file of video %s of job %s for runner %s',
+    video.uuid,
+    runnerJob.uuid,
+    runner.name,
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
@@ -124,7 +134,10 @@ function getMaxQualityVideoPreview (req: express.Request, res: express.Response)
   const video = res.locals.videoAll
 
   logger.info(
-    'Get max quality preview file of video %s of job %s for runner %s', video.uuid, runnerJob.uuid, runner.name,
+    'Get max quality preview file of video %s of job %s for runner %s',
+    video.uuid,
+    runnerJob.uuid,
+    runner.name,
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
@@ -140,7 +153,11 @@ function getVideoStudioTaskFile (req: express.Request, res: express.Response) {
   const filename = req.params.filename
 
   logger.info(
-    'Get video studio task file %s of video %s of job %s for runner %s', filename, video.uuid, runnerJob.uuid, runner.name,
+    'Get video studio task file %s of video %s of job %s for runner %s',
+    filename,
+    video.uuid,
+    runnerJob.uuid,
+    runner.name,
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 

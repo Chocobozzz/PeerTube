@@ -127,7 +127,7 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, option
     waitTranscoding: true
   }
 
-  const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } | {} = {}
+  const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } = {} as any
 
   for (const key of Object.keys(defaultBooleanAttributes)) {
     if (options[key] !== undefined) {

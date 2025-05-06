@@ -4,7 +4,7 @@ import { FIXTURE_URLS } from '../utils'
 
 export class VideoPublishPage extends VideoManage {
   async navigateTo (tab?: 'Go live') {
-    const publishButton = await $('.publish-button > a')
+    const publishButton = $('.publish-button > a')
 
     await publishButton.waitForClickable()
     await publishButton.click()
@@ -31,7 +31,7 @@ export class VideoPublishPage extends VideoManage {
 
     await browser.pause(1000)
 
-    const elem = await $(fileInputSelector)
+    const elem = $(fileInputSelector)
     await elem.chooseFile(fileToUpload)
 
     // Wait for the upload to finish

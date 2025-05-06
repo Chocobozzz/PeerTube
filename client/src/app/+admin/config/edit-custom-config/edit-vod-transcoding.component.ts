@@ -122,7 +122,6 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
         if (newValue === false && hlsControl.value === false) {
           hlsControl.setValue(true)
 
-          // eslint-disable-next-line max-len
           this.notifier.info(
             $localize`Automatically enable HLS transcoding because at least 1 output format must be enabled when transcoding is enabled`,
             '',
