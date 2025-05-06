@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import {
   BooleanBothQuery,
+  NSFWFlag,
   VideoChannelsSearchQuery,
   VideoPlaylistPrivacy,
   VideoPlaylistsSearchQuery,
@@ -16,6 +16,7 @@ import {
   SearchCommand,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test index search', function () {
   const localVideoName = 'local video' + new Date().toISOString()
@@ -36,7 +37,6 @@ describe('Test index search', function () {
   })
 
   describe('Default search', async function () {
-
     it('Should make a local videos search by default', async function () {
       await server.config.updateExistingConfig({
         newConfig: {
@@ -88,7 +88,6 @@ describe('Test index search', function () {
   })
 
   describe('Videos search', async function () {
-
     async function check (search: VideosSearchQuery, exists = true) {
       const body = await command.advancedVideoSearch({ search })
 
@@ -179,6 +178,29 @@ describe('Test index search', function () {
         const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
         await check(search, true)
       }
+    })
+
+    it('Should search by nsfw flag', async function () {
+      const checkNSFW = async (search: VideosSearchQuery, exists = true) => {
+        const body = await command.advancedVideoSearch({ search: { search: 'NSFW', host: 'peertube2.cpy.re', ...search } })
+        const video = body.data.find(v => v.name === 'NSFW test')
+
+        if (exists === false) {
+          expect(video).to.not.exist
+          return
+        }
+
+        expect(video).to.exist
+        expect(video.nsfw).to.be.true
+        expect(video.nsfwFlags).to.equal(NSFWFlag.VIOLENT)
+        expect(video.nsfwSummary).to.equal('This video can be violent')
+      }
+
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT }, true)
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT | NSFWFlag.SHOCKING_DISTURBING }, true)
+      await checkNSFW({ nsfw: 'true', nsfwFlagsExcluded: NSFWFlag.VIOLENT }, false)
+      await checkNSFW({ nsfw: 'both', nsfwFlagsExcluded: NSFWFlag.VIOLENT | NSFWFlag.SHOCKING_DISTURBING }, false)
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.SHOCKING_DISTURBING }, false)
     })
 
     it('Should search by host', async function () {
@@ -279,7 +301,6 @@ describe('Test index search', function () {
   })
 
   describe('Channels search', async function () {
-
     async function check (search: VideoChannelsSearchQuery, exists = true) {
       const body = await command.advancedChannelSearch({ search })
 
@@ -335,7 +356,6 @@ describe('Test index search', function () {
   })
 
   describe('Playlists search', async function () {
-
     async function check (search: VideoPlaylistsSearchQuery, exists = true) {
       const body = await command.advancedPlaylistSearch({ search })
 
