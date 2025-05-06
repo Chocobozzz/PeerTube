@@ -63,8 +63,7 @@ export type BuildVideosListQueryOptions = {
 
   videoPlaylistId?: number
 
-  trendingAlgorithm?: string // best, hot, or any other algorithm implemented
-  trendingDays?: number
+  trendingDays: number
 
   // Used to include user history information, exclude blocked videos, include internal videos, adapt hot algorithm...
   user?: MUserAccountId
@@ -253,10 +252,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     // We don't exclude results in this so if we do a count we don't need to add this complex clause
     if (options.isCount !== true) {
-      if (options.trendingDays) {
+      if (options.sort.endsWith('trending')) {
         this.groupForTrending(options.trendingDays)
-      } else if ([ 'best', 'hot' ].includes(options.trendingAlgorithm)) {
-        this.groupForHotOrBest(options.trendingAlgorithm, options.user)
+      } else if (options.sort.endsWith('hot') || options.sort.endsWith('best')) {
+        this.addAttributeForHotOrBest(options.sort, options.user)
       }
     }
 
@@ -703,7 +702,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.group = 'GROUP BY "video"."id"'
   }
 
-  private groupForHotOrBest (trendingAlgorithm: string, user?: MUserAccountId) {
+  private addAttributeForHotOrBest (sort: string, user?: MUserAccountId) {
     /**
      * "Hotness" is a measure based on absolute view/comment/like/dislike numbers,
      * with fixed weights only applied to their log values.
@@ -733,7 +732,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       `+ LOG(GREATEST(1, "video"."comments")) * ${weights.comment} ` + // comments (+)
       '+ (SELECT (EXTRACT(epoch FROM "video"."publishedAt") - 1446156582) / 47000) ' // base score (in number of half-days)
 
-    if (trendingAlgorithm === 'best' && user) {
+    if (sort.endsWith('best') && user) {
       this.joins.push(
         'LEFT JOIN "userVideoHistory" ON "video"."id" = "userVideoHistory"."videoId" AND "userVideoHistory"."userId" = :bestUser'
       )

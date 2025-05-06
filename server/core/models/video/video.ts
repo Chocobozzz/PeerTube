@@ -1105,14 +1105,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     VideoModel.throwIfPrivateIncludeWithoutUser(options)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options)
 
-    const trendingDays = options.sort.endsWith('trending')
-      ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
-      : undefined
-
-    let trendingAlgorithm: string
-    if (options.sort.endsWith('hot')) trendingAlgorithm = 'hot'
-    if (options.sort.endsWith('best')) trendingAlgorithm = 'best'
-
     const serverActor = await getServerActor()
 
     const queryOptions = {
@@ -1149,8 +1141,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       ]),
 
       serverAccountIdForBlock: serverActor.Account.id,
-      trendingDays,
-      trendingAlgorithm
+      trendingDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
     }
 
     return VideoModel.getAvailableForApi(queryOptions, options.countVideos)
@@ -1240,6 +1231,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'displayOnlyForFollower',
         'excludeAlreadyWatched'
       ]),
+
+      trendingDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS,
       serverAccountIdForBlock: serverActor.Account.id
     }
 
@@ -1579,7 +1572,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       displayOnlyForFollower: {
         actorId: serverActor.id,
         orLocalVideos: true
-      }
+      },
+      trendingDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
     }
 
     const queryBuilder = new VideosIdListQueryBuilder(VideoModel.sequelize)
@@ -1617,7 +1611,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       sort: '-total',
       videoChannelId: channelId,
       displayOnlyForFollower: null,
-      serverAccountIdForBlock: null
+      serverAccountIdForBlock: null,
+      trendingDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
     }
 
     const queryBuilder = new VideosIdListQueryBuilder(VideoModel.sequelize)

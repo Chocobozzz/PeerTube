@@ -377,6 +377,26 @@ describe('Test videos search', function () {
     expect(videos[3].name).to.equal('1111 2222 3333')
   })
 
+  it('Should make an advanced search and sort results', async function () {
+    const query = {
+      search: '1111 2222 3333',
+      languageOneOf: [ 'pl', 'fr' ],
+      durationMax: 4,
+      nsfw: 'false' as 'false',
+      licenceOneOf: [ 1, 4 ],
+      sort: '-hot'
+    }
+
+    const body = await command.advancedVideoSearch({ search: query })
+    expect(body.total).to.equal(4)
+
+    const videos = body.data
+    expect(videos[0].name).to.equal('1111 2222 3333 - 8')
+    expect(videos[1].name).to.equal('1111 2222 3333 - 7')
+    expect(videos[2].name).to.equal('1111 2222 3333 - 6')
+    expect(videos[3].name).to.equal('1111 2222 3333')
+  })
+
   it('Should make an advanced search and only show the first result', async function () {
     const query = {
       search: '1111 2222 3333',

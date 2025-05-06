@@ -148,6 +148,10 @@ describe('Test index search', function () {
       await check(baseSearch)
     })
 
+    it('Should sort results', async function () {
+      await check({ ...baseSearch, sort: '-hot' }, true)
+    })
+
     it('Should search by start date', async function () {
       const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
       await check(search, false)
