@@ -4803,17 +4803,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="993434970851951481" datatype="html">
+      <trans-unit id="993434970851951481" datatype="html" xml:space="preserve">
         <source>Content may be perceived as sexually explicit material</source>
-        <target state="new">Content may be perceived as sexually explicit material</target>
+        <target state="translated">Nội dung có thể được coi là chứa khiêu dâm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1922792486639674435" datatype="html">
+      <trans-unit id="1922792486639674435" datatype="html" xml:space="preserve">
         <source>Describe what makes your content sensitive</source>
-        <target state="new">Describe what makes your content sensitive</target>
+        <target state="translated">Mô tả những gì làm cho nội dung của bạn nhạy cảm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">53,54</context>
@@ -5191,9 +5191,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8043791498070371772" datatype="html">
+      <trans-unit id="8043791498070371772" datatype="html" xml:space="preserve">
         <source>Your video contains sensitive content</source>
-        <target state="new">Your video contains sensitive content</target>
+        <target state="translated">Video của bạn có chứa nội dung nhạy cảm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">26</context>
@@ -7768,9 +7768,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910947217931634219" datatype="html">
+      <trans-unit id="5910947217931634219" datatype="html" xml:space="preserve">
         <source>Warn</source>
-        <target state="new">Warn</target>
+        <target state="translated">Cảnh báo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -7784,9 +7784,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5416471102816014001" datatype="html">
+      <trans-unit id="5416471102816014001" datatype="html" xml:space="preserve">
         <source>Blur</source>
-        <target state="new">Blur</target>
+        <target state="translated">Che mờ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -9628,17 +9628,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8817920941077743476" datatype="html">
+      <trans-unit id="8817920941077743476" datatype="html" xml:space="preserve">
         <source>This instance is dedicated to sensitive content</source>
-        <target state="new">This instance is dedicated to sensitive content</target>
+        <target state="translated">Máy chủ này dành riêng cho nội dung nhạy cảm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7611566203467532051" datatype="html">
+      <trans-unit id="7611566203467532051" datatype="html" xml:space="preserve">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </source>
-        <target state="new"> Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </target>
+        <target state="translated">Bật tính năng này sẽ cho phép những quản trị viên khác biết rằng bạn chủ yếu đang liên hợp nội dung nhạy cảm.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Ngoài ra, hộp kiểm "nội dung nhạy cảm" khi tải video lên sẽ được tự động chọn theo mặc định. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">194,195</context>
@@ -9656,9 +9656,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5509417153332543255" datatype="html">
+      <trans-unit id="5509417153332543255" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</target>
+        <target state="translated">Ai là người kiểm duyệt máy chủ này? Chính sách về nội dung nhạy cảm là gì? Video chính trị? v.v.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">231,233</context>
@@ -11776,9 +11776,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630677130087951545" datatype="html">
+      <trans-unit id="5630677130087951545" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</source>
-        <target state="new">Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</target>
+        <target state="translated">Hiển thị tất cả video (video riêng tư, hạn chế, được bảo vệ bằng mật khẩu, chưa được xuất bản hoặc nhạy cảm)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">145,146</context>
@@ -11992,9 +11992,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">162,164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4258030282828995238" datatype="html">
+      <trans-unit id="4258030282828995238" datatype="html" xml:space="preserve">
         <source>MODERATION &amp; SENSITIVE CONTENT</source>
-        <target state="new">MODERATION &amp; SENSITIVE CONTENT</target>
+        <target state="translated">KIỂM DUYỆT &amp; NỘI DUNG NHẠY CẢM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">179,180</context>
@@ -13692,9 +13692,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6517624161149187953" datatype="html">
+      <trans-unit id="6517624161149187953" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> dành riêng cho nội dung nhạy cảm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -14144,9 +14144,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9158483906909080531" datatype="html">
+      <trans-unit id="9158483906909080531" datatype="html" xml:space="preserve">
         <source>Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Cập nhật chính sách của bạn tại <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>thiết lập<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85,86</context>
@@ -14316,17 +14316,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7216759144314993217" datatype="html">
+      <trans-unit id="7216759144314993217" datatype="html" xml:space="preserve">
         <source>Some videos with a specific sensitive content category have a different policy.</source>
-        <target state="new"> Some videos with a specific sensitive content category have a different policy.</target>
+        <target state="translated">Một số video có danh mục nội dung nhạy cảm cụ thể sẽ có chính sách khác.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">348</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3343072271931497433" datatype="html">
+      <trans-unit id="3343072271931497433" datatype="html" xml:space="preserve">
         <source>Sensitive content hidden.</source>
-        <target state="new">Sensitive content hidden.</target>
+        <target state="translated">Nội dung nhạy cảm bị ẩn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">355</context>
