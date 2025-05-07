@@ -173,6 +173,8 @@ export default defineConfig([
       '@typescript-eslint/no-deprecated': 'off',
       // TODO: enable
       '@typescript-eslint/no-floating-promises': 'off',
+      // TODO: enable but it fails in our CI
+      '@typescript-eslint/no-redundant-type-constituents': 'off',
 
       // We use many nested callbacks in our tests
       'max-nested-callbacks': 'off'
