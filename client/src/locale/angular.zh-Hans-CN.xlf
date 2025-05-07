@@ -335,9 +335,9 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7885094785640544496" datatype="html">
+      <trans-unit id="7885094785640544496" datatype="html" xml:space="preserve">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated">在帐户 <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> 中发现<x id="START_LINK"/>新的帐户滥用行为<x id="CLOSE_LINK"/></target>
+        <target state="translated">在账户 <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> 中发现<x id="START_LINK"/>新的账户滥用行为<x id="CLOSE_LINK"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">54</context>
@@ -1041,9 +1041,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3267631941074558910" datatype="html">
+      <trans-unit id="3267631941074558910" datatype="html" xml:space="preserve">
         <source>Cannot fetch information of this remote account</source>
-        <target state="translated">无法获取此远程帐户的信息</target>
+        <target state="translated">无法获取此远程账户的信息</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -1673,33 +1673,33 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1779391511451594552">
+      <trans-unit id="1779391511451594552" xml:space="preserve">
         <source>Using an ActivityPub account</source>
-        <target>使用 ActivityPub 帐户</target>
+        <target state="translated">使用 ActivityPub 账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3372646000533908418" datatype="html">
+      <trans-unit id="3372646000533908418" datatype="html" xml:space="preserve">
         <source>Subscribe with a remote account:</source>
-        <target state="translated">订阅远程帐户：</target>
+        <target state="translated">订阅远程账户：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691897331062834756" datatype="html">
+      <trans-unit id="6691897331062834756" datatype="html" xml:space="preserve">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">使用此实例上的帐户订阅</target>
+        <target state="translated">使用此实例上的账户订阅</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1740917574463702967">
+      <trans-unit id="1740917574463702967" xml:space="preserve">
         <source>Subscribe with your local account</source>
-        <target>使用本地帐户订阅</target>
+        <target state="translated">使用本地账户订阅</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">50</context>
@@ -2215,7 +2215,7 @@
       </trans-unit>
       <trans-unit id="9193674330844209801" datatype="html" xml:space="preserve">
         <source>By default, your account allows you to publish videos.</source>
-        <target state="translated">默认情况下，您的帐户允许您发布视频。</target>
+        <target state="translated">默认情况下，您的账户允许您发布视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">132</context>
@@ -2247,7 +2247,7 @@
       </trans-unit>
       <trans-unit id="7445632181028998943" datatype="html" xml:space="preserve">
         <source>By default, your account does not allow to publish videos.</source>
-        <target state="translated">默认情况下，您的帐户不允许发布视频。</target>
+        <target state="translated">默认情况下，您的账户不允许发布视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">154</context>
@@ -2303,7 +2303,7 @@
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html" xml:space="preserve">
         <source>Request an account</source>
-        <target state="translated">请求帐户</target>
+        <target state="translated">请求账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/signup-label.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2381,9 +2381,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7908493851025027368">
+      <trans-unit id="7908493851025027368" xml:space="preserve">
         <source>A banned user will no longer be able to login.</source>
-        <target>被封禁的用户无法再登入。</target>
+        <target state="translated">被封禁的用户无法再登录。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2481,9 +2481,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1909492071130899005" datatype="html">
+      <trans-unit id="1909492071130899005" datatype="html" xml:space="preserve">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK"/>contact an administrator<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">实在抱歉，外部登入进程存在问题。请 <x id="START_LINK"/>联系管理员<x id="CLOSE_LINK"/>。 </target>
+        <target state="translated">实在抱歉，外部登录进程存在问题。请 <x id="START_LINK"/>联系管理员<x id="CLOSE_LINK"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2597,17 +2597,17 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2101170466365500913" datatype="html">
+      <trans-unit id="2101170466365500913" datatype="html" xml:space="preserve">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">登入帐户就可以让你发布内容</target>
+        <target state="translated">登录账户就可以让你发布内容</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6584143415159913044" datatype="html">
+      <trans-unit id="6584143415159913044" datatype="html" xml:space="preserve">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">此实例允许注册。但是在创建帐户前请注意检查<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。你也可以在下面的网站中搜索符合你具体需求的其他实例：<x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
+        <target state="translated">此实例允许注册。但是在创建账户前请注意检查<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。你也可以在下面的网站中搜索符合你具体需求的其他实例：<x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2615,15 +2615,15 @@
       </trans-unit>
       <trans-unit id="921088049695906924" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">目前该实例不允许用户注册，您可以检查 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 了解更多详情，或查找允许您注册帐户并上传视频的实例。在以下多个实例中找到您的实例： <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">目前该实例不允许用户注册，您可以检查 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>条款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 了解更多详情，或查找允许您注册账户并上传视频的实例。在以下多个实例中找到您的实例： <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3183213940445113677" datatype="html">
+      <trans-unit id="3183213940445113677" datatype="html" xml:space="preserve">
         <source>Or sign in with</source>
-        <target state="translated">或使用其他帐号登入</target>
+        <target state="translated">或使用其他帐号登录</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">91</context>
@@ -2787,9 +2787,9 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1779569416352510488" datatype="html">
+      <trans-unit id="1779569416352510488" datatype="html" xml:space="preserve">
         <source>Why creating an account?</source>
-        <target state="translated">为什么要创建帐户？</target>
+        <target state="translated">为什么要创建账户？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2971,9 +2971,9 @@
           <context context-type="linenumber">26,28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3848077896245199337" datatype="html">
+      <trans-unit id="3848077896245199337" datatype="html" xml:space="preserve">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">设置你的帐户，管理视频播放列表，搜索第三方应用程序……</target>
+        <target state="translated">设置你的账户，管理视频播放列表，搜索第三方应用程序……</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3377,9 +3377,9 @@
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8893390761160292681" datatype="html">
+      <trans-unit id="8893390761160292681" datatype="html" xml:space="preserve">
         <source>My account</source>
-        <target state="translated">我的帐户</target>
+        <target state="translated">我的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3401,9 +3401,9 @@
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2308975396733519902">
+      <trans-unit id="2308975396733519902" xml:space="preserve">
         <source>Create an account</source>
-        <target>创建帐户</target>
+        <target state="translated">创建账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">85</context>
@@ -3575,7 +3575,7 @@
       </trans-unit>
       <trans-unit id="8246967116432095499" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>我已经有帐户，<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>进行登录 </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>我已经有账户，<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>进行登录 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3589,9 +3589,9 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5788965650054506209" datatype="html">
+      <trans-unit id="5788965650054506209" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>建立<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>你的帐户<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>建立<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>你的账户<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">60</context>
@@ -3693,9 +3693,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8821712929823045567" datatype="html">
+      <trans-unit id="8821712929823045567" datatype="html" xml:space="preserve">
         <source>It's time to set up your account profile!</source>
-        <target state="translated">是时候设置你的帐户资料了！</target>
+        <target state="translated">是时候设置你的账户资料了！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -3818,33 +3818,33 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8497991113445747319" datatype="html">
+      <trans-unit id="8497991113445747319" datatype="html" xml:space="preserve">
         <source>You might need to login to see the video.</source>
-        <target state="translated">你可能需要登入才能观看视频。</target>
+        <target state="translated">你可能需要登录才能观看视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="250608669543270729" datatype="html">
+      <trans-unit id="250608669543270729" datatype="html" xml:space="preserve">
         <source>You might need to login to see the resource.</source>
-        <target state="translated">你可能需要登入参能查看资源。</target>
+        <target state="translated">你可能需要登录参能查看资源。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6209939621665316894" datatype="html">
+      <trans-unit id="6209939621665316894" datatype="html" xml:space="preserve">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="translated">你可能需要检查你的帐户是否被视频或实例所有者允许。</target>
+        <target state="translated">你可能需要检查你的账户是否被视频或实例所有者允许。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3543381263966122204" datatype="html">
+      <trans-unit id="3543381263966122204" datatype="html" xml:space="preserve">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="translated">你可能需要检查你的帐户是否被资源或实例所有者允许。</target>
+        <target state="translated">你可能需要检查你的账户是否被资源或实例所有者允许。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">26</context>
@@ -5689,17 +5689,17 @@
           <context context-type="linenumber">511</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="285180972645018518" datatype="html">
+      <trans-unit id="285180972645018518" datatype="html" xml:space="preserve">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="translated">对不起，你的帐户的上传功能已被禁用。如果你想添加视频，管理员必须解锁你的权限。</target>
+        <target state="translated">对不起，你的账户的上传功能已被禁用。如果你想添加视频，管理员必须解锁你的权限。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.ts</context>
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1138810463037464722" datatype="html">
+      <trans-unit id="1138810463037464722" datatype="html" xml:space="preserve">
         <source>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</source>
-        <target state="translated">你的帐户上传的视频将在发布前审核。如果你想要无需受审核就添加视频，需要管理员关闭你的视频自动屏蔽。</target>
+        <target state="translated">你的账户上传的视频将在发布前审核。如果你想要无需受审核就添加视频，需要管理员关闭你的视频自动屏蔽。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.ts</context>
           <context context-type="linenumber">187</context>
@@ -5751,7 +5751,7 @@
       </trans-unit>
       <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="translated">我们建议您不要使用 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 用户发布您的视频，因为它是您的实例的超级管理员帐户。</target>
+        <target state="translated">我们建议您不要使用 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 用户发布您的视频，因为它是您的实例的超级管理员账户。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5759,7 +5759,7 @@
       </trans-unit>
       <trans-unit id="4434906642654067529" datatype="html" xml:space="preserve">
         <source>Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos.</source>
-        <target state="translated">我们建议您<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>创建专用帐户<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 来上传您的视频。</target>
+        <target state="translated">我们建议您<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;text-decoration-underline alert-link&quot; routerLink=&quot;/admin/users&quot;&gt;"/>创建专用账户<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 来上传您的视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">22</context>
@@ -6849,9 +6849,9 @@
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2958389355547305739" datatype="html">
+      <trans-unit id="2958389355547305739" datatype="html" xml:space="preserve">
         <source>Login to comment</source>
-        <target state="translated">登入以评论</target>
+        <target state="translated">登录以评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">82</context>
@@ -7035,7 +7035,7 @@
       </trans-unit>
       <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="translated">您可以请求包含以下内容的帐户存档：</target>
+        <target state="translated">您可以请求包含以下内容的账户存档：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
@@ -7059,7 +7059,7 @@
       </trans-unit>
       <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="translated">您的已屏蔽的帐户和服务器</target>
+        <target state="translated">您的已屏蔽的账户和服务器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
@@ -7131,7 +7131,7 @@
       </trans-unit>
       <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="translated">包含自定义 PeerTube JSON 格式导出的目录，可用于在另一个 PeerTube 实例上重新导入你的帐户</target>
+        <target state="translated">包含自定义 PeerTube JSON 格式导出的目录，可用于在另一个 PeerTube 实例上重新导入你的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
@@ -7249,9 +7249,9 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4266779970063047572" datatype="html">
+      <trans-unit id="4266779970063047572" datatype="html" xml:space="preserve">
         <source>Video/Comment/Account</source>
-        <target state="translated">视频/评论/帐户</target>
+        <target state="translated">视频/评论/账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">24</context>
@@ -7829,9 +7829,9 @@
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2348557406282409966" datatype="html">
+      <trans-unit id="2348557406282409966" datatype="html" xml:space="preserve">
         <source>Open account in a new tab</source>
-        <target state="translated">在新标签页中打开帐户</target>
+        <target state="translated">在新标签页中打开账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -7857,9 +7857,9 @@
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3111569165173971676" datatype="html">
+      <trans-unit id="3111569165173971676" datatype="html" xml:space="preserve">
         <source>Deleted account</source>
-        <target state="translated">已删除帐户</target>
+        <target state="translated">已删除账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">57</context>
@@ -7973,9 +7973,9 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7815838401315213887">
+      <trans-unit id="7815838401315213887" xml:space="preserve">
         <source>Muted accounts</source>
-        <target>已隐藏的帐户</target>
+        <target state="translated">已隐藏的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-moderation.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -8581,9 +8581,9 @@
           <context context-type="linenumber">81,82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1530731524535521716" datatype="html">
+      <trans-unit id="1530731524535521716" datatype="html" xml:space="preserve">
         <source>Account deleted</source>
-        <target state="translated">帐户已删除</target>
+        <target state="translated">账户已删除</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">111</context>
@@ -8829,9 +8829,9 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4086606389696938932">
+      <trans-unit id="4086606389696938932" xml:space="preserve">
         <source>Account</source>
-        <target>帐户</target>
+        <target state="translated">账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">35</context>
@@ -8849,9 +8849,9 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8564972645418093229" datatype="html">
+      <trans-unit id="8564972645418093229" datatype="html" xml:space="preserve">
         <source>No account found matching current filters.</source>
-        <target state="translated">找不到与当前过滤规则匹配的帐户。</target>
+        <target state="translated">找不到与当前过滤规则匹配的账户。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">48</context>
@@ -8861,9 +8861,9 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3819155299647062711" datatype="html">
+      <trans-unit id="3819155299647062711" datatype="html" xml:space="preserve">
         <source>No account found.</source>
-        <target state="translated">没有找到帐户。</target>
+        <target state="translated">没有找到账户。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">49</context>
@@ -9127,9 +9127,9 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327751240218085797" datatype="html">
+      <trans-unit id="3327751240218085797" datatype="html" xml:space="preserve">
         <source>Delete all comments of this account</source>
-        <target state="translated">删除此帐户的所有评论</target>
+        <target state="translated">删除此账户的所有评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -9183,9 +9183,9 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="289582790179344391" datatype="html">
+      <trans-unit id="289582790179344391" datatype="html" xml:space="preserve">
         <source>This view also shows comments from muted accounts.</source>
-        <target state="translated">此视图同时显示来自隐藏帐户的评论。</target>
+        <target state="translated">此视图同时显示来自隐藏账户的评论。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">1</context>
@@ -9895,9 +9895,9 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5444889468197427724" datatype="html">
+      <trans-unit id="5444889468197427724" datatype="html" xml:space="preserve">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
-        <target state="translated">当用户点击菜单中的登入按钮时重定向用户到单点外部身份验证</target>
+        <target state="translated">当用户点击菜单中的登录按钮时重定向用户到单点外部身份验证</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">73</context>
@@ -10023,9 +10023,9 @@
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1663379405062033606" datatype="html">
+      <trans-unit id="1663379405062033606" datatype="html" xml:space="preserve">
         <source>Minimum required age to create an account</source>
-        <target state="translated">创建帐户所需的最低年龄</target>
+        <target state="translated">创建账户所需的最低年龄</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">199</context>
@@ -10693,7 +10693,7 @@
       </trans-unit>
       <trans-unit id="5402438532456058874" datatype="html" xml:space="preserve">
         <source>Indicates the Twitter/X account for the website or platform where the content was published.</source>
-        <target state="translated">表示发布内容的网站或平台的 Twitter/X 帐户。</target>
+        <target state="translated">表示发布内容的网站或平台的 Twitter/X 账户。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">727</context>
@@ -10701,7 +10701,7 @@
       </trans-unit>
       <trans-unit id="8113899484555907381" datatype="html" xml:space="preserve">
         <source>This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</source>
-        <target state="translated">这只是 Twitter/X 所需的 PeerTube HTML 中注入的额外信息。如果您没有 Twitter/X 帐户，请保留默认值。</target>
+        <target state="translated">这只是 Twitter/X 所需的 PeerTube HTML 中注入的额外信息。如果您没有 Twitter/X 账户，请保留默认值。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">729</context>
@@ -11561,7 +11561,7 @@
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html" xml:space="preserve">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="translated">双重身份验证通过在您登录时要求从另一台设备（最常见的是手机）输入数字代码，为您的帐户增加了额外的安全保障。</target>
+        <target state="translated">双重身份验证通过在您登录时要求从另一台设备（最常见的是手机）输入数字代码，为您的账户增加了额外的安全保障。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -11585,7 +11585,7 @@
       </trans-unit>
       <trans-unit id="4561231095368496452" datatype="html" xml:space="preserve">
         <source>Are you sure you want to disable two factor authentication of your account?</source>
-        <target state="translated">您确定要禁用帐户的双重身份验证吗？</target>
+        <target state="translated">您确定要禁用账户的双重身份验证吗？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -12075,9 +12075,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5417361655914085905" datatype="html">
+      <trans-unit id="5417361655914085905" datatype="html" xml:space="preserve">
         <source>Account page</source>
-        <target state="translated">帐户页面</target>
+        <target state="translated">账户页面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">86</context>
@@ -12247,9 +12247,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4247400351982331798" datatype="html">
+      <trans-unit id="4247400351982331798" datatype="html" xml:space="preserve">
         <source>Account settings</source>
-        <target state="translated">帐户设置</target>
+        <target state="translated">账户设置</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/routes.ts</context>
           <context context-type="linenumber">49</context>
@@ -12369,9 +12369,9 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8173902679178787744" datatype="html">
+      <trans-unit id="8173902679178787744" datatype="html" xml:space="preserve">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="translated">一旦你删除你的帐户，就无法挽回了。你将被要求确认这一操作。</target>
+        <target state="translated">一旦你删除你的账户，就无法挽回了。你将被要求确认这一操作。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">2</context>
@@ -12425,9 +12425,9 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="228548407872312756" datatype="html">
+      <trans-unit id="228548407872312756" datatype="html" xml:space="preserve">
         <source>Owner account page</source>
-        <target state="translated">所有者帐户页面</target>
+        <target state="translated">所有者账户页面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">21</context>
@@ -12699,7 +12699,7 @@
       </trans-unit>
       <trans-unit id="6904641160356013310" datatype="html" xml:space="preserve">
         <source>Account request sent</source>
-        <target state="translated">帐户请求已发送</target>
+        <target state="translated">账户请求已发送</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12901,9 +12901,9 @@
           <context context-type="linenumber">361</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2454050363478003966" datatype="html">
+      <trans-unit id="2454050363478003966" datatype="html" xml:space="preserve">
         <source>Login</source>
-        <target state="translated">登入</target>
+        <target state="translated">登录</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">76</context>
@@ -12973,17 +12973,17 @@
           <context context-type="linenumber">20,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="248731258067914565" datatype="html">
+      <trans-unit id="248731258067914565" datatype="html" xml:space="preserve">
         <source>Verify account via email</source>
-        <target state="translated">通过电子邮件验证帐户</target>
+        <target state="translated">通过电子邮件验证账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6040639330855198542" datatype="html">
+      <trans-unit id="6040639330855198542" datatype="html" xml:space="preserve">
         <source>Ask to send an email to verify your account</source>
-        <target state="translated">要求发送电子邮件以验证你的帐户</target>
+        <target state="translated">要求发送电子邮件以验证你的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">25</context>
@@ -12999,7 +12999,7 @@
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="translated">您的电子邮件已经验证，您的帐户请求已发送！</target>
+        <target state="translated">您的电子邮件已经验证，您的账户请求已发送！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
@@ -13019,7 +13019,7 @@
       </trans-unit>
       <trans-unit id="381800444567495906" datatype="html" xml:space="preserve">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="translated">您的电子邮件已经验证并且您的帐户已创建！</target>
+        <target state="translated">您的电子邮件已经验证并且您的账户已创建！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">13</context>
@@ -13047,15 +13047,15 @@
       </trans-unit>
       <trans-unit id="8412827353958624080" datatype="html" xml:space="preserve">
         <source>Your account request has been sent!</source>
-        <target state="translated">您的帐户请求已发送！</target>
+        <target state="translated">您的账户请求已发送！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422394577857179995" datatype="html">
+      <trans-unit id="4422394577857179995" datatype="html" xml:space="preserve">
         <source>Your account has been created!</source>
-        <target state="translated">你的帐户已经创建！</target>
+        <target state="translated">你的账户已经创建！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">14</context>
@@ -13063,7 +13063,7 @@
       </trans-unit>
       <trans-unit id="7273859988396814188" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>检查你的电子邮件<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 验证您的帐户并完成您的注册请求。 </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>检查你的电子邮件<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 验证您的账户并完成您的注册请求。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -13071,7 +13071,7 @@
       </trans-unit>
       <trans-unit id="7056036938435794110" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>检查你的电子邮件<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 验证您的帐户并完成注册。 </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>检查你的电子邮件<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 验证您的账户并完成注册。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -13113,9 +13113,9 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8661266239199665830" datatype="html">
+      <trans-unit id="8661266239199665830" datatype="html" xml:space="preserve">
         <source>Copy account handle</source>
-        <target state="translated">复制帐户名</target>
+        <target state="translated">复制账户名</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">31</context>
@@ -13145,25 +13145,25 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6808894347744915561" datatype="html">
+      <trans-unit id="6808894347744915561" datatype="html" xml:space="preserve">
         <source>Manage account</source>
-        <target state="translated">管理帐户</target>
+        <target state="translated">管理账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1311667768861466464" datatype="html">
+      <trans-unit id="1311667768861466464" datatype="html" xml:space="preserve">
         <source>Search account videos</source>
-        <target state="translated">搜索帐户视频</target>
+        <target state="translated">搜索账户视频</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3666829335406793239">
+      <trans-unit id="3666829335406793239" xml:space="preserve">
         <source>This account does not have channels.</source>
-        <target>此帐户没有频道。</target>
+        <target state="translated">此账户没有频道。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">5</context>
@@ -13581,9 +13581,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8674693181203168033" datatype="html">
+      <trans-unit id="8674693181203168033" datatype="html" xml:space="preserve">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target>探寻如何设置你的帐户，什么是频道，如何创建播放列表以及更多！</target>
+        <target state="translated">探寻如何设置你的账户，什么是频道，如何创建播放列表以及更多！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">32</context>
@@ -13869,9 +13869,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="220345070199640496">
+      <trans-unit id="220345070199640496" xml:space="preserve">
         <source>PeerTube is creating your account...</source>
-        <target>PeerTube 正在创建你的帐户……</target>
+        <target state="translated">PeerTube 正在创建你的账户……</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">108</context>
@@ -13989,9 +13989,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6433602064879074151" datatype="html">
+      <trans-unit id="6433602064879074151" datatype="html" xml:space="preserve">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="translated">频道标识符跟你的帐户不能相同。你可以点击第一步更新你的帐户名。</target>
+        <target state="translated">频道标识符跟你的账户不能相同。你可以点击第一步更新你的账户名。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">51</context>
@@ -14037,9 +14037,9 @@
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1081343670550705648" datatype="html">
+      <trans-unit id="1081343670550705648" datatype="html" xml:space="preserve">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="translated">此实例已禁用视频上传，因此你的帐户无法上传视频。</target>
+        <target state="translated">此实例已禁用视频上传，因此你的账户无法上传视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">2</context>
@@ -14085,17 +14085,17 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5856397248272246243" datatype="html">
+      <trans-unit id="5856397248272246243" datatype="html" xml:space="preserve">
         <source>This email address will be used to validate your account.</source>
-        <target state="translated">此电子邮件地址会用于验证你的帐户。</target>
+        <target state="translated">此电子邮件地址会用于验证你的账户。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1789116494691736014" datatype="html">
+      <trans-unit id="1789116494691736014" datatype="html" xml:space="preserve">
         <source>Request email for account verification</source>
-        <target state="translated">请求帐户验证的电子邮件</target>
+        <target state="translated">请求账户验证的电子邮件</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -14141,9 +14141,9 @@
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4605517634011438234" datatype="html">
+      <trans-unit id="4605517634011438234" datatype="html" xml:space="preserve">
         <source>ACCOUNT</source>
-        <target state="translated">帐户</target>
+        <target state="translated">账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">8</context>
@@ -14449,9 +14449,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6250999352462648289" datatype="html">
+      <trans-unit id="6250999352462648289" datatype="html" xml:space="preserve">
         <source>Report this account</source>
-        <target state="translated">举报此帐户</target>
+        <target state="translated">举报此账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">234</context>
@@ -14781,9 +14781,9 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5065410539274460415" datatype="html">
+      <trans-unit id="5065410539274460415" datatype="html" xml:space="preserve">
         <source>Account reported.</source>
-        <target state="translated">帐户已举报。</target>
+        <target state="translated">账户已举报。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/account-report.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -15214,9 +15214,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3596798855644241001" datatype="html">
+      <trans-unit id="3596798855644241001" datatype="html" xml:space="preserve">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="translated">每行 1 个主机（无需“http://”）、帐户名或者频道名</target>
+        <target state="translated">每行 1 个主机（无需“http://”）、账户名或者频道名</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">13</context>
@@ -15418,9 +15418,9 @@
           <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5793550984155962433" datatype="html">
+      <trans-unit id="5793550984155962433" datatype="html" xml:space="preserve">
         <source>Actions for the flagged account</source>
-        <target state="translated">受标记帐户的操作</target>
+        <target state="translated">受标记账户的操作</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">346</context>
@@ -16108,7 +16108,7 @@
       </trans-unit>
       <trans-unit id="4070550899383572841" datatype="html" xml:space="preserve">
         <source>Go to the manage your account page</source>
-        <target state="translated">前往管理您的帐户页面</target>
+        <target state="translated">前往管理您的账户页面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">37</context>
@@ -16384,7 +16384,7 @@
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html" xml:space="preserve">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="translated">电子邮件将发送至 <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> 解释其帐户已创建，并附有您将在下面写的审核回应。 </target>
+        <target state="translated">电子邮件将发送至 <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> 解释其账户已创建，并附有您将在下面写的审核回应。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -16392,7 +16392,7 @@
       </trans-unit>
       <trans-unit id="6252848909934071768" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="translated">此实例未启用电子邮件，因此 PeerTube 无法向以下对象发送电子邮件： <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> 解释其帐户已创建。 </target>
+        <target state="translated">此实例未启用电子邮件，因此 PeerTube 无法向以下对象发送电子邮件： <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> 解释其账户已创建。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -16448,7 +16448,7 @@
       </trans-unit>
       <trans-unit id="5919197630789088814" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.registration.username"/> account created</source>
-        <target state="translated"><x id="PH" equiv-text="this.registration.username"/> 创建帐户成功</target>
+        <target state="translated"><x id="PH" equiv-text="this.registration.username"/> 创建账户成功</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -16710,9 +16710,9 @@
           <context context-type="linenumber">361</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3855396975723886053" datatype="html">
+      <trans-unit id="3855396975723886053" datatype="html" xml:space="preserve">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="translated">用户无法再登入，但视频和评论都将保留。</target>
+        <target state="translated">用户无法再登录，但视频和评论都将保留。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">158</context>
@@ -16766,9 +16766,9 @@
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7910076708497708162" datatype="html">
+      <trans-unit id="7910076708497708162" datatype="html" xml:space="preserve">
         <source>Last login</source>
-        <target state="translated">上次登入</target>
+        <target state="translated">上次登录</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">188</context>
@@ -16846,9 +16846,9 @@
           <context context-type="linenumber">331</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7390990800435887351">
+      <trans-unit id="7390990800435887351" xml:space="preserve">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target>已解除对帐户 <x id="PH"/> 的隐藏。</target>
+        <target state="translated">已解除对账户 <x id="PH"/> 的隐藏。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -16864,7 +16864,7 @@
       </trans-unit>
       <trans-unit id="6648970559549602356" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="blockedAccount.nameWithHost"/> unmuted by your platform.</source>
-        <target state="translated">帐户 <x id="PH" equiv-text="blockedAccount.nameWithHost"/> 已由您的平台取消屏蔽。</target>
+        <target state="translated">账户 <x id="PH" equiv-text="blockedAccount.nameWithHost"/> 已由您的平台取消屏蔽。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -16954,9 +16954,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3122895472333547524" datatype="html">
+      <trans-unit id="3122895472333547524" datatype="html" xml:space="preserve">
         <source>Delete your account</source>
-        <target state="translated">删除你的帐户</target>
+        <target state="translated">删除你的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">4</context>
@@ -16966,9 +16966,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="577064441120663273" datatype="html">
+      <trans-unit id="577064441120663273" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete your account?</source>
-        <target state="translated">你确定要删除你的帐户吗？</target>
+        <target state="translated">你确定要删除你的账户吗？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -16990,17 +16990,17 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2520605306994744004">
+      <trans-unit id="2520605306994744004" xml:space="preserve">
         <source>Delete my account</source>
-        <target>删除我的帐户</target>
+        <target state="translated">删除我的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3902597758945766483">
+      <trans-unit id="3902597758945766483" xml:space="preserve">
         <source>Your account is deleted.</source>
-        <target>你的帐户已被删除。</target>
+        <target state="translated">你的账户已被删除。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -17776,7 +17776,7 @@
       </trans-unit>
       <trans-unit id="8501241441398968873" datatype="html" xml:space="preserve">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">它将删除 {count, plural, =1 {1 个视频} other {<x id="count"/> 视频}} ，您将无法创建同名的其他频道或帐户 (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">它将删除 {count, plural, =1 {1 个视频} other {<x id="count"/> 视频}} ，您将无法创建同名的其他频道或账户 (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -18074,9 +18074,9 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1783173774503340906">
+      <trans-unit id="1783173774503340906" xml:space="preserve">
         <source>Subscribe to the account</source>
-        <target>订阅此帐户</target>
+        <target state="translated">订阅此账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -18398,9 +18398,9 @@
           <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6974874606619467663" datatype="html">
+      <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
-        <target state="translated">你的帐户已被屏蔽。</target>
+        <target state="translated">你的账户已被屏蔽。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">240</context>
@@ -18408,7 +18408,7 @@
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
-        <target state="translated">该帐户正在等待版主的批准。</target>
+        <target state="translated">该账户正在等待版主的批准。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">245</context>
@@ -18416,7 +18416,7 @@
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="translated">此帐户的注册批准已被拒绝。</target>
+        <target state="translated">此账户的注册批准已被拒绝。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">250</context>
@@ -19764,9 +19764,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3954099618513992825">
+      <trans-unit id="3954099618513992825" xml:space="preserve">
         <source>You can only transfer ownership to a local account</source>
-        <target>你只能将视频转移到另一个本地帐户中</target>
+        <target state="translated">你只能将视频转移到另一个本地账户中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -20899,9 +20899,9 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1209500590333005801" datatype="html">
+      <trans-unit id="1209500590333005801" datatype="html" xml:space="preserve">
         <source><x id="PH"/> (account page) </source>
-        <target state="translated"><x id="PH"/>（帐户页面） </target>
+        <target state="translated"><x id="PH"/>（账户页面） </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/metadata/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -21123,9 +21123,9 @@
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8150022485860412528">
+      <trans-unit id="8150022485860412528" xml:space="preserve">
         <source>Account <x id="PH"/> muted.</source>
-        <target>已屏蔽帐户 <x id="PH"/>。</target>
+        <target state="translated">已屏蔽账户 <x id="PH"/>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">142</context>
@@ -21183,33 +21183,33 @@
           <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8173437618471379044" datatype="html">
+      <trans-unit id="8173437618471379044" datatype="html" xml:space="preserve">
         <source>Are you sure you want to remove all the comments of this account?</source>
-        <target state="translated">你确定要移除此帐户的所有评论吗？</target>
+        <target state="translated">你确定要移除此账户的所有评论吗？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6315346579373254461" datatype="html">
+      <trans-unit id="6315346579373254461" datatype="html" xml:space="preserve">
         <source>Delete account comments</source>
-        <target state="translated">删除帐户评论</target>
+        <target state="translated">删除账户评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8559170154828316298" datatype="html">
+      <trans-unit id="8559170154828316298" datatype="html" xml:space="preserve">
         <source>Will remove comments of this account (may take several minutes).</source>
-        <target state="translated">将移除此帐户的评论（可能需要数分钟）。</target>
+        <target state="translated">将移除此账户的评论（可能需要数分钟）。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">258</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4268530178786707817" datatype="html">
+      <trans-unit id="4268530178786707817" datatype="html" xml:space="preserve">
         <source>My account moderation</source>
-        <target state="translated">我的帐户审核</target>
+        <target state="translated">我的账户审核</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">299</context>
@@ -21247,9 +21247,9 @@
           <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3508163549683020253" datatype="html">
+      <trans-unit id="3508163549683020253" datatype="html" xml:space="preserve">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="translated">允许用户重新登入和创建视频/评论</target>
+        <target state="translated">允许用户重新登录和创建视频/评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -21305,7 +21305,7 @@
       </trans-unit>
       <trans-unit id="2970277936786210016" datatype="html" xml:space="preserve">
         <source>Remove comments made by this account from your platform.</source>
-        <target state="translated">从您的平台上删除该帐户发表的评论。</target>
+        <target state="translated">从您的平台上删除该账户发表的评论。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">421</context>
@@ -21319,9 +21319,9 @@
           <context context-type="linenumber">430</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1888272455383898478">
+      <trans-unit id="1888272455383898478" xml:space="preserve">
         <source>Mute this account</source>
-        <target>屏蔽此帐户</target>
+        <target state="translated">屏蔽此账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">304</context>
@@ -21339,9 +21339,9 @@
           <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4043508901590508211">
+      <trans-unit id="4043508901590508211" xml:space="preserve">
         <source>Unmute this account</source>
-        <target>解除此帐户的隐藏</target>
+        <target state="translated">解除此账户的隐藏</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -21403,9 +21403,9 @@
           <context context-type="linenumber">328</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4810478487244286994" datatype="html">
+      <trans-unit id="4810478487244286994" datatype="html" xml:space="preserve">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="translated">移除此帐户对你视频所作的评论。</target>
+        <target state="translated">移除此账户对你视频所作的评论。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">329</context>
@@ -21813,7 +21813,7 @@
       </trans-unit>
       <trans-unit id="6099744911889532030" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</source>
-        <target state="translated">帐户 <x id="PH" equiv-text="account.nameWithHost"/> 被你的平台屏蔽了。</target>
+        <target state="translated">账户 <x id="PH" equiv-text="account.nameWithHost"/> 被你的平台屏蔽了。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">494</context>
@@ -21993,7 +21993,7 @@
       </trans-unit>
       <trans-unit id="3383933587008035091" datatype="html" xml:space="preserve">
         <source>Update your account metadata (display name, description, avatar...)</source>
-        <target state="translated">更新您的帐户元数据（显示名称、描述、头像......）</target>
+        <target state="translated">更新您的账户元数据（显示名称、描述、头像......）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">20</context>
@@ -22743,9 +22743,9 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4903651219400691248" datatype="html">
+      <trans-unit id="4903651219400691248" datatype="html" xml:space="preserve">
         <source>Mute account</source>
-        <target state="translated">隐藏帐户</target>
+        <target state="translated">隐藏账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">352</context>
@@ -22787,9 +22787,9 @@
           <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3719503424625455635" datatype="html">
+      <trans-unit id="3719503424625455635" datatype="html" xml:space="preserve">
         <source>Mute server account</source>
-        <target state="translated">隐藏服务器帐户</target>
+        <target state="translated">隐藏服务器账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">358</context>
@@ -24073,9 +24073,9 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7147755274837297932" datatype="html">
+      <trans-unit id="7147755274837297932" datatype="html" xml:space="preserve">
         <source>Exclude muted accounts</source>
-        <target state="translated">排除隐藏的帐户</target>
+        <target state="translated">排除隐藏的账户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">97</context>
