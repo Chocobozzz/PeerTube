@@ -14332,57 +14332,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4167711622812285080" datatype="html">
+      <trans-unit id="4167711622812285080" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning.</source>
-        <target state="new">Sensitive content has a warning.</target>
+        <target state="translated">Nội dung nhạy cảm có cảnh báo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2995961823224509765" datatype="html">
+      <trans-unit id="2995961823224509765" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning and the thumbnail is blurred.</source>
-        <target state="new">Sensitive content has a warning and the thumbnail is blurred.</target>
+        <target state="translated">Nội dung nhạy cảm sẽ có cảnh báo và hình thu nhỏ sẽ bị làm mờ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">357</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6447635594696346395" datatype="html">
+      <trans-unit id="6447635594696346395" datatype="html" xml:space="preserve">
         <source>Sensitive content is displayed.</source>
-        <target state="new">Sensitive content is displayed.</target>
+        <target state="translated">Hiển thị nội dung nhạy cảm.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8383768985718581098" datatype="html">
+      <trans-unit id="8383768985718581098" datatype="html" xml:space="preserve">
         <source>hidden (with exceptions)</source>
-        <target state="new">hidden (with exceptions)</target>
+        <target state="translated">ẩn (có ngoại lệ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4104450881162058902" datatype="html">
+      <trans-unit id="4104450881162058902" datatype="html" xml:space="preserve">
         <source>warned (with exceptions)</source>
-        <target state="new">warned (with exceptions)</target>
+        <target state="translated">cảnh báo (có ngoại lệ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8042820180196501836" datatype="html">
+      <trans-unit id="8042820180196501836" datatype="html" xml:space="preserve">
         <source>blurred (with exceptions)</source>
-        <target state="new">blurred (with exceptions)</target>
+        <target state="translated">che mờ (có ngoại lệ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">366</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5493896943986215282" datatype="html">
+      <trans-unit id="5493896943986215282" datatype="html" xml:space="preserve">
         <source>displayed (with exceptions)</source>
-        <target state="new">displayed (with exceptions)</target>
+        <target state="translated">hiển thị (có ngoại lệ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">368</context>
@@ -14396,9 +14396,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8640163781966564737" datatype="html">
+      <trans-unit id="8640163781966564737" datatype="html" xml:space="preserve">
         <source>warned</source>
-        <target state="new">warned</target>
+        <target state="translated">cảnh báo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">372</context>
@@ -17024,25 +17024,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1344869904113046420" datatype="html">
+      <trans-unit id="1344869904113046420" datatype="html" xml:space="preserve">
         <source>Redefine policy for violent content</source>
-        <target state="new">Redefine policy for violent content</target>
+        <target state="translated">Xác định lại chính sách cho nội dung bạo lực</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">16,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="731686177150899725" datatype="html">
+      <trans-unit id="731686177150899725" datatype="html" xml:space="preserve">
         <source>Redefine policy for shocking or disturbing content</source>
-        <target state="new">Redefine policy for shocking or disturbing content</target>
+        <target state="translated">Xác định lại chính sách đối với nội dung gây sốc hoặc gây khó chịu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7823736241125544478" datatype="html">
+      <trans-unit id="7823736241125544478" datatype="html" xml:space="preserve">
         <source>Redefine policy for sexually explicit material</source>
-        <target state="new">Redefine policy for sexually explicit material</target>
+        <target state="translated">Xác định lại chính sách đối với tài liệu khiêu dâm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -17328,9 +17328,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3780312603830034411" datatype="html">
+      <trans-unit id="3780312603830034411" datatype="html" xml:space="preserve">
         <source>Default (<x id="PH" equiv-text="nsfwPolicyLabel"/>)</source>
-        <target state="new">Default (<x id="PH" equiv-text="nsfwPolicyLabel"/>)</target>
+        <target state="translated">Mặc định (<x id="PH" equiv-text="nsfwPolicyLabel"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">266</context>
@@ -20124,9 +20124,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3982872570618397592" datatype="html">
+      <trans-unit id="3982872570618397592" datatype="html" xml:space="preserve">
         <source>Video support cannot be more than 250 characters long.</source>
-        <target state="new">Video support cannot be more than 250 characters long.</target>
+        <target state="translated">Độ dài video tối đa 250 ký tự.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -20729,17 +20729,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1652024247924208981" datatype="html">
+      <trans-unit id="1652024247924208981" datatype="html" xml:space="preserve">
         <source>Warn users</source>
-        <target state="new">Warn users</target>
+        <target state="translated">Cảnh báo người dùng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3624586880997617732" datatype="html">
+      <trans-unit id="3624586880997617732" datatype="html" xml:space="preserve">
         <source>Warn users and blur thumbnail</source>
-        <target state="new">Warn users and blur thumbnail</target>
+        <target state="translated">Cảnh báo người dùng và che mờ hình thu nhỏ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -23333,41 +23333,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">522</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7556792076818503558" datatype="html">
+      <trans-unit id="7556792076818503558" datatype="html" xml:space="preserve">
         <source>violence</source>
-        <target state="new">violence</target>
+        <target state="translated">bạo lực</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">543</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="857006890257675623" datatype="html">
+      <trans-unit id="857006890257675623" datatype="html" xml:space="preserve">
         <source>shocking content</source>
-        <target state="new">shocking content</target>
+        <target state="translated">nội dung sốc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">547</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8977658296907974818" datatype="html">
+      <trans-unit id="8977658296907974818" datatype="html" xml:space="preserve">
         <source>explicit sex</source>
-        <target state="new">explicit sex</target>
+        <target state="translated">quan hệ tình dục rõ ràng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">551</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2249128431249193118" datatype="html">
+      <trans-unit id="2249128431249193118" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content</source>
-        <target state="new">This video contains sensitive content</target>
+        <target state="translated">Video này chứa nội dung nhạy cảm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">555</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189036340433233769" datatype="html">
+      <trans-unit id="4189036340433233769" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></source>
-        <target state="new">This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></target>
+        <target state="translated">Video này chứa nội dung nhạy cảm: <x id="PH" equiv-text="flags.join(' - ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">558</context>
