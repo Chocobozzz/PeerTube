@@ -316,11 +316,11 @@ export class PluginService implements ClientHook {
 
       markdownRenderer: {
         textMarkdownToHTML: (textMarkdown: string) => {
-          return this.markdownRenderer.textMarkdownToHTML({ markdown: textMarkdown })
+          return this.markdownRenderer.textMarkdownToHTML({ markdown: textMarkdown, userGeneratedLinks: false })
         },
 
         enhancedMarkdownToHTML: (enhancedMarkdown: string) => {
-          return this.markdownRenderer.enhancedMarkdownToHTML({ markdown: enhancedMarkdown })
+          return this.markdownRenderer.enhancedMarkdownToHTML({ markdown: enhancedMarkdown, userGeneratedLinks: false })
         }
       },
 
