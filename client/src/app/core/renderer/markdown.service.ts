@@ -67,28 +67,30 @@ export class MarkdownService {
     markdown: string
     withHtml?: boolean // default false
     withEmoji?: boolean // default false
+    userGeneratedLinks?: boolean // default true
   }) {
-    const { markdown, withHtml = false, withEmoji = false } = options
+    const { markdown, withHtml = false, withEmoji = false, userGeneratedLinks = true } = options
 
-    if (withHtml) return this.render({ name: 'textWithHTMLMarkdownIt', markdown, withEmoji })
+    if (withHtml) return this.render({ name: 'textWithHTMLMarkdownIt', markdown, withEmoji, userGeneratedLinks })
 
-    return this.render({ name: 'textMarkdownIt', markdown, withEmoji })
+    return this.render({ name: 'textMarkdownIt', markdown, withEmoji, userGeneratedLinks })
   }
 
   enhancedMarkdownToHTML (options: {
     markdown: string
     withHtml?: boolean // default false
     withEmoji?: boolean // default false
+    userGeneratedLinks?: boolean // default true
   }) {
-    const { markdown, withHtml = false, withEmoji = false } = options
+    const { markdown, withHtml = false, withEmoji = false, userGeneratedLinks = true } = options
 
-    if (withHtml) return this.render({ name: 'enhancedWithHTMLMarkdownIt', markdown, withEmoji })
+    if (withHtml) return this.render({ name: 'enhancedWithHTMLMarkdownIt', markdown, withEmoji, userGeneratedLinks })
 
-    return this.render({ name: 'enhancedMarkdownIt', markdown, withEmoji })
+    return this.render({ name: 'enhancedMarkdownIt', markdown, withEmoji, userGeneratedLinks })
   }
 
   markdownToUnsafeHTML (options: { markdown: string }) {
-    return this.render({ name: 'unsafeMarkdownIt', markdown: options.markdown, withEmoji: true })
+    return this.render({ name: 'unsafeMarkdownIt', markdown: options.markdown, withEmoji: true, userGeneratedLinks: true })
   }
 
   customPageMarkdownToHTML (options: {
@@ -97,7 +99,7 @@ export class MarkdownService {
   }) {
     const { markdown, additionalAllowedTags } = options
 
-    return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
+    return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags, userGeneratedLinks: false })
   }
 
   // ---------------------------------------------------------------------------
@@ -121,13 +123,14 @@ export class MarkdownService {
     markdown: string
     withEmoji: boolean
     additionalAllowedTags?: string[]
+    userGeneratedLinks: boolean
   }) {
-    const { name, markdown, withEmoji, additionalAllowedTags } = options
+    const { name, markdown, withEmoji, additionalAllowedTags, userGeneratedLinks } = options
     if (!markdown) return ''
 
     const config = this.parsersConfig[name]
     if (!this.markdownParsers[name]) {
-      this.markdownParsers[name] = await this.createMarkdownIt(config)
+      this.markdownParsers[name] = await this.createMarkdownIt(config, { userGeneratedLinks })
 
       if (withEmoji) {
         if (!this.emojiModule) {
@@ -151,7 +154,7 @@ export class MarkdownService {
     return html
   }
 
-  private async createMarkdownIt (config: MarkdownConfig) {
+  private async createMarkdownIt (config: MarkdownConfig, options: { userGeneratedLinks: boolean }) {
     const MarkdownItClass = (await import('markdown-it')).default
 
     const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: config.breaks, html: config.html })
@@ -160,12 +163,12 @@ export class MarkdownService {
       markdownIt.enable(rule)
     }
 
-    this.setTargetToLinks(markdownIt)
+    this.setTargetToLinks(markdownIt, options)
 
     return markdownIt
   }
 
-  private setTargetToLinks (markdownIt: MarkdownIt) {
+  private setTargetToLinks (markdownIt: MarkdownIt, { userGeneratedLinks }: { userGeneratedLinks: boolean }) {
     // Snippet from markdown-it documentation: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
     const defaultRender = markdownIt.renderer.rules.link_open || function (tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options)
@@ -178,7 +181,7 @@ export class MarkdownService {
       if (targetIndex < 0) token.attrPush([ 'target', '_blank' ])
       else token.attrs[targetIndex][1] = '_blank'
 
-      const relValues = 'noopener noreferrer ugc'
+      const relValues = 'noopener noreferrer '.concat(userGeneratedLinks ? 'ugc' : '')
       const relIndex = token.attrIndex('rel')
       if (relIndex < 0) token.attrPush([ 'rel', relValues ])
       else token.attrs[relIndex][1] = relValues
