@@ -1,10 +1,9 @@
+import { Meter, ObservableResult } from '@opentelemetry/api'
+import { AggregationType, InstrumentType, ViewOptions } from '@opentelemetry/sdk-metrics'
+import { logger } from '@server/helpers/logger.js'
 import { readdir } from 'fs/promises'
 import { constants, NodeGCPerformanceDetail, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
-import { Meter, ObservableResult } from '@opentelemetry/api'
-import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics'
-import { View } from '@opentelemetry/sdk-metrics/build/src/view/View.js'
-import { logger } from '@server/helpers/logger.js'
 
 // Thanks to https://github.com/siimon/prom-client
 // We took their logic and adapter it for opentelemetry
@@ -14,12 +13,18 @@ export class NodeJSObserversBuilder {
   constructor (private readonly meter: Meter) {
   }
 
-  static getViews () {
+  static getViews (): ViewOptions[] {
     return [
-      new View({
-        aggregation: new ExplicitBucketHistogramAggregation([ 0.001, 0.01, 0.1, 1, 2, 5 ]),
-        instrumentName: 'nodejs_gc_duration_seconds'
-      })
+      {
+        instrumentType: InstrumentType.HISTOGRAM,
+        instrumentName: 'nodejs_gc_duration_seconds',
+        aggregation: {
+          type: AggregationType.EXPLICIT_BUCKET_HISTOGRAM,
+          options: {
+            boundaries: [ 0.001, 0.01, 0.1, 1, 2, 5 ]
+          }
+        }
+      }
     ]
   }
 
@@ -117,7 +122,7 @@ export class NodeJSObserversBuilder {
   }
 
   private buildEventLoopLagObserver () {
-    const reportEventloopLag = (start: [number, number], observableResult: ObservableResult, res: () => void) => {
+    const reportEventLoopLag = (start: [number, number], observableResult: ObservableResult, res: () => void) => {
       const delta = process.hrtime(start)
       const nanosec = delta[0] * 1e9 + delta[1]
       const seconds = nanosec / 1e9
@@ -133,7 +138,7 @@ export class NodeJSObserversBuilder {
       return new Promise(res => {
         const start = process.hrtime()
 
-        setImmediate(reportEventloopLag, start, observableResult, res)
+        setImmediate(reportEventLoopLag, start, observableResult, res)
       })
     })
   }

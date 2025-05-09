@@ -1,11 +1,11 @@
-import { Application, Request, Response } from 'express'
 import { Meter, metrics } from '@opentelemetry/api'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { MeterProvider } from '@opentelemetry/sdk-metrics'
+import { PlaybackMetricCreate } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideoImmutable } from '@server/types/models/index.js'
-import { PlaybackMetricCreate } from '@peertube/peertube-models'
+import { Application, Request, Response } from 'express'
 import {
   BittorrentTrackerObserversBuilder,
   JobQueueObserversBuilder,
@@ -18,7 +18,6 @@ import {
 import { WorkerThreadsObserversBuilder } from './metric-helpers/worker-threads-observers.js'
 
 class OpenTelemetryMetrics {
-
   private static instance: OpenTelemetryMetrics
 
   private meter: Meter

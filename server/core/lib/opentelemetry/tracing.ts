@@ -73,7 +73,7 @@ async function registerOpentelemetryTracing () {
         new JaegerExporter({ endpoint: CONFIG.OPEN_TELEMETRY.TRACING.JAEGER_EXPORTER.ENDPOINT })
       )
     ],
-    resource: new Resource.default.Resource({
+    resource: Resource.default.resourceFromAttributes({
       [SemanticResourceAttributes.default.ATTR_SERVICE_NAME]: 'peertube'
     })
   })

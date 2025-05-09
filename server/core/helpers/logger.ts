@@ -6,9 +6,9 @@ import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
 import { isatty } from 'tty'
 import { createLogger, format, transports } from 'winston'
-import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
+import { FileTransportOptions } from 'winston/lib/winston/transports/index.js'
 
 const consoleSupportsColor = isTestOrDevInstance() ||
   (isatty(1) && process.env.TERM && process.env.TERM !== 'dumb')
