@@ -53,13 +53,13 @@ export class ThemeManager {
   }
 
   injectCoreColorPalette (iteration = 0) {
-    if (iteration > 10) {
+    if (iteration > 100) {
       logger.error('Cannot inject core color palette: too many iterations')
       return
     }
 
     if (!this.canInjectCoreColorPalette()) {
-      return setTimeout(() => this.injectCoreColorPalette(iteration + 1))
+      return setTimeout(() => this.injectCoreColorPalette(iteration + 1), Math.floor(iteration / 10))
     }
 
     return this.injectColorPalette()
