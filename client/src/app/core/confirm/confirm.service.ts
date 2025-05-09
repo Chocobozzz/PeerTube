@@ -1,11 +1,15 @@
-import { firstValueFrom, map, Observable, Subject } from 'rxjs'
 import { Injectable } from '@angular/core'
+import { firstValueFrom, map, Observable, Subject } from 'rxjs'
 
 type ConfirmOptions =
   & {
     title: string
     message: string
     errorMessage?: string
+    moreInfo?: {
+      title: string
+      content: string
+    }
     confirmButtonText?: string
     cancelButtonText?: string
   }
@@ -32,16 +36,14 @@ export class ConfirmService {
   confirm (
     message: string,
     title = '',
-    options: {
-      confirmButtonText?: string
-      cancelButtonText?: string
-    } = {}
+    options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>> = {}
   ) {
     this.showConfirm.next({
       type: 'confirm',
       title,
       message,
       confirmButtonText: options.confirmButtonText,
+      moreInfo: options.moreInfo,
       cancelButtonText: options.cancelButtonText
     })
 

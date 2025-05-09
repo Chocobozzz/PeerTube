@@ -223,17 +223,23 @@ export class Video implements VideoServerModel {
     this.comments = hash.comments
   }
 
-  isVideoNSFWWarnedForUser (user: User, serverConfig: HTMLServerConfig) {
+  isNSFWWarnedForUser (user: User, serverConfig: HTMLServerConfig) {
     return isVideoNSFWWarnedForUser(this, serverConfig, user)
   }
 
-  isVideoNSFWBlurForUser (user: User, serverConfig: HTMLServerConfig) {
+  isNSFWBlurForUser (user: User, serverConfig: HTMLServerConfig) {
     return isVideoNSFWBlurForUser(this, serverConfig, user)
   }
 
-  isVideoNSFWHiddenForUser (user: User, serverConfig: HTMLServerConfig) {
+  isNSFWHiddenForUser (user: User, serverConfig: HTMLServerConfig) {
     return isVideoNSFWHiddenForUser(this, serverConfig, user)
   }
+
+  isNSFWHiddenOrWarned (user: User, serverConfig: HTMLServerConfig) {
+    return this.isNSFWHiddenForUser(user, serverConfig) || this.isNSFWWarnedForUser(user, serverConfig)
+  }
+
+  // ---------------------------------------------------------------------------
 
   isRemovableBy (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))

@@ -11,6 +11,14 @@
   <div class="modal-body" >
     <div [innerHtml]="message"></div>
 
+    @if (moreInfo) {
+      <details class="mt-3">
+        <summary i18n>{{ moreInfo.title }}</summary>
+
+        {{ moreInfo.content }}
+      </details>
+    }
+
     <div *ngIf="inputLabel" class="form-group mt-3">
       <label for="confirmInput">{{ inputLabel }}</label>
 

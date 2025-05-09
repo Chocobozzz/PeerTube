@@ -126,11 +126,11 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   }
 
   hasNSFWBlur (video: Video) {
-    return video.isVideoNSFWBlurForUser(this.user, this.serverConfig)
+    return video.isNSFWBlurForUser(this.user, this.serverConfig)
   }
 
   hasNSFWWarning (video: Video) {
-    return video.isVideoNSFWWarnedForUser(this.user, this.serverConfig)
+    return video.isNSFWWarnedForUser(this.user, this.serverConfig)
   }
 
   getNSFWTooltip (video: Video) {

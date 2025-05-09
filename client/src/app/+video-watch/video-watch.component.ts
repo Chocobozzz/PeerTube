@@ -522,10 +522,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.transcriptionWidgetOpened = false
     }
 
-    if (this.video.isVideoNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) {
+    if (this.video.isNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) {
       const res = await this.confirmService.confirm(
-        $localize`This video contains mature or explicit content. Are you sure you want to watch it?`,
-        $localize`Mature or explicit content`
+        $localize`This video contains sensitive content. Are you sure you want to display the video page?`,
+        $localize`Sensitive video`,
+        {
+          confirmButtonText: $localize`Display the page`,
+          cancelButtonText: $localize`Quit that page`,
+          moreInfo: video.nsfwSummary
+            ? {
+              title: $localize`Learn more`,
+              content: video.nsfwSummary
+            }
+            : undefined
+        }
       )
       if (res === false) return this.location.back()
     }
@@ -645,12 +655,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
-  private isAutoplay (loggedInOrAnonymousUser: User) {
+  private isAutoplay (video: Video, loggedInOrAnonymousUser: User) {
     // We'll jump to the thread id, so do not play the video
     if (this.route.snapshot.params['threadId']) return false
 
-    // Prevent autoplay if we need to warn the user
-    if (this.video.isVideoNSFWWarnedForUser(loggedInOrAnonymousUser, this.serverConfig)) return false
+    // Prevent autoplay on NSFW hide/warn
+    if (video.isNSFWHiddenOrWarned(loggedInOrAnonymousUser, this.serverConfig)) return false
 
     if (loggedInOrAnonymousUser) return loggedInOrAnonymousUser.autoPlayVideo
 
@@ -804,10 +814,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return {
       mode,
 
-      autoplay: this.isAutoplay(loggedInOrAnonymousUser),
+      autoplay: this.isAutoplay(video, loggedInOrAnonymousUser),
       forceAutoplay,
 
-      duration: this.video.duration,
+      duration: video.duration,
       p2pEnabled: isP2PEnabled(video, this.serverConfig, loggedInOrAnonymousUser.p2pEnabled),
 
       startTime,
@@ -831,11 +841,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         !video.canBypassPassword(this.authUser),
       videoPassword: () => videoPassword,
 
-      poster: video.isVideoNSFWBlurForUser(loggedInOrAnonymousUser, this.serverConfig)
+      poster: video.isNSFWBlurForUser(loggedInOrAnonymousUser, this.serverConfig)
         ? null
         : video.previewUrl,
 
-      nsfwWarning: video.isVideoNSFWWarnedForUser(loggedInOrAnonymousUser, this.serverConfig)
+      nsfwWarning: video.isNSFWHiddenOrWarned(loggedInOrAnonymousUser, this.serverConfig)
         ? {
           flags: video.nsfwFlags,
           summary: video.nsfwSummary
@@ -940,7 +950,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.peertubePlayer.unload()
     this.peertubePlayer.disable()
 
-    if (hasPlayed || !this.video.isVideoNSFWBlurForUser(this.authUser || this.anonymousUser, this.serverConfig)) {
+    if (hasPlayed || !this.video.isNSFWBlurForUser(this.authUser || this.anonymousUser, this.serverConfig)) {
       this.peertubePlayer.setPoster(this.video.previewPath)
     }
   }

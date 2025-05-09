@@ -300,11 +300,11 @@ export class VideoMiniatureComponent implements OnInit {
   // ---------------------------------------------------------------------------
 
   hasNSFWWarning () {
-    return this.video().isVideoNSFWWarnedForUser(this.user(), this.serverConfig)
+    return this.video().isNSFWWarnedForUser(this.user(), this.serverConfig)
   }
 
   hasNSFWBlur () {
-    return this.video().isVideoNSFWBlurForUser(this.user(), this.serverConfig)
+    return this.video().isNSFWBlurForUser(this.user(), this.serverConfig)
   }
 
   // ---------------------------------------------------------------------------
