@@ -35,6 +35,7 @@ export function isBaseActivityValid (activity: any, type: string) {
 
 export function isUrlCollectionValid (collection: any) {
   return collection === undefined ||
+    (typeof collection === 'string' && isActivityPubUrlValid(collection)) ||
     (Array.isArray(collection) && collection.every(t => isActivityPubUrlValid(t)))
 }
 

@@ -1,4 +1,4 @@
-export function findCommonElement <T> (array1: T[], array2: T[]) {
+export function findCommonElement<T> (array1: T[], array2: T[]) {
   for (const a of array1) {
     for (const b of array2) {
       if (a === b) return a
@@ -9,13 +9,14 @@ export function findCommonElement <T> (array1: T[], array2: T[]) {
 }
 
 // Avoid conflict with other toArray() functions
-export function arrayify <T> (element: T | T[]) {
+export function arrayify<T> (element: T | T[]) {
   if (Array.isArray(element)) return element
+  if (element === undefined || element === null) return []
 
   return [ element ]
 }
 
-export function unarray <T> (element: T | T[]) {
+export function unarray<T> (element: T | T[]) {
   if (Array.isArray(element)) {
     if (element.length === 0) return undefined
 
@@ -26,24 +27,24 @@ export function unarray <T> (element: T | T[]) {
 }
 
 // Avoid conflict with other uniq() functions
-export function uniqify <T> (elements: T[]) {
+export function uniqify<T> (elements: T[]) {
   return Array.from(new Set(elements))
 }
 
 // Thanks: https://stackoverflow.com/a/12646864
-export function shuffle <T> (elements: T[]) {
+export function shuffle<T> (elements: T[]) {
   const shuffled = [ ...elements ]
 
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(Math.random() * (i + 1))
 
-    [ shuffled[i], shuffled[j] ] = [ shuffled[j], shuffled[i] ]
+    ;[ shuffled[i], shuffled[j] ] = [ shuffled[j], shuffled[i] ]
   }
 
   return shuffled
 }
 
-export function sortBy <T> (obj: T[], key1: string, key2?: string): T[] {
+export function sortBy<T> (obj: T[], key1: string, key2?: string): T[] {
   return obj.sort((a, b) => {
     const elem1 = key2 ? a[key1][key2] : a[key1]
     const elem2 = key2 ? b[key1][key2] : b[key1]
@@ -54,7 +55,7 @@ export function sortBy <T> (obj: T[], key1: string, key2?: string): T[] {
   })
 }
 
-export function maxBy <T> (arr: T[], property: keyof T) {
+export function maxBy<T> (arr: T[], property: keyof T) {
   let result: T
 
   for (const obj of arr) {
@@ -64,7 +65,7 @@ export function maxBy <T> (arr: T[], property: keyof T) {
   return result
 }
 
-export function minBy <T> (arr: T[], property: keyof T) {
+export function minBy<T> (arr: T[], property: keyof T) {
   let result: T
 
   for (const obj of arr) {

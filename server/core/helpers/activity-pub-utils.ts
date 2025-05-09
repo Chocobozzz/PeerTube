@@ -1,3 +1,4 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '@server/initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
@@ -53,12 +54,10 @@ export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Publ
   return 'https://www.w3.org/ns/activitystreams#Public'
 }
 
-export function hasAPPublic (toOrCC: string[]) {
-  if (!isArray(toOrCC)) return false
-
+export function hasAPPublic (toOrCC: string[] | string) {
   const publicValue = getAPPublicValue()
 
-  return toOrCC.some(f => f === 'as:Public' || publicValue)
+  return arrayify(toOrCC).some(f => f === 'as:Public' || publicValue)
 }
 
 // ---------------------------------------------------------------------------

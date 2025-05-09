@@ -1,3 +1,4 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
   ActivityPubActorType,
@@ -78,7 +79,7 @@ async function processUpdateVideo (activity: ActivityUpdate<VideoObject | string
   if (created) return
 
   const updater = new APVideoUpdater(videoObject, video)
-  return updater.update(activity.to)
+  return updater.update(arrayify(activity.to))
 }
 
 async function processUpdateCacheFile (
@@ -127,5 +128,5 @@ async function processUpdatePlaylist (
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot update video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: activity.to })
+  await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: arrayify(activity.to) })
 }

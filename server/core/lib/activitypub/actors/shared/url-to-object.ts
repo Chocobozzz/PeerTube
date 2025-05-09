@@ -1,9 +1,9 @@
-import { sanitizeAndCheckActorObject } from '@server/helpers/custom-validators/activitypub/actor.js'
-import { logger } from '@server/helpers/logger.js'
 import { ActivityPubActor, ActivityPubOrderedCollection } from '@peertube/peertube-models'
+import { sanitizeAndCheckActorObject } from '@server/helpers/custom-validators/activitypub/actor.js'
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { logger } from '@server/helpers/logger.js'
 import { fetchAP } from '../../activity.js'
 import { checkUrlsSameHost } from '../../url.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 
 export async function fetchRemoteActor (
   actorUrl: string,
@@ -17,7 +17,7 @@ export async function fetchRemoteActor (
     logger.debug('Remote actor JSON is not valid.', { actorJSON: body })
 
     // Retry with the public key owner
-    if (canRefetchPublicKeyOwner && hasPublicKeyOwner(body)) {
+    if (canRefetchPublicKeyOwner && hasPublicKeyOwner(actorUrl, body)) {
       logger.debug('Retrying with public key owner ' + body.publicKey.owner)
 
       return fetchRemoteActor(body.publicKey.owner, false)
@@ -63,6 +63,6 @@ async function fetchActorTotalItems (url: string) {
   }
 }
 
-function hasPublicKeyOwner (actor: ActivityPubActor) {
-  return isUrlValid(actor?.publicKey?.owner)
+function hasPublicKeyOwner (actorUrl: string, actor: ActivityPubActor) {
+  return isUrlValid(actor?.publicKey?.owner) && checkUrlsSameHost(actorUrl, actor.publicKey.owner)
 }

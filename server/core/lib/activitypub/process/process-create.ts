@@ -27,6 +27,7 @@ import { sendReplyApproval } from '../send/send-reply-approval.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { resolveThread } from '../video-comments.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
+import { arrayify } from '@peertube/peertube-core-utils'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate<ActivityCreateObject>>) {
   const { activity, byActor } = options
@@ -186,5 +187,5 @@ async function processCreatePlaylist (
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: activity.to })
+  await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: byActor.url, to: arrayify(activity.to) })
 }

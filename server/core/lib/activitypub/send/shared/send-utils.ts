@@ -17,6 +17,7 @@ import {
 } from '../../../../types/models/index.js'
 import { JobQueue } from '../../../job-queue/index.js'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getOriginVideoAudience } from './audience-utils.js'
+import { arrayify } from '@peertube/peertube-core-utils'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
@@ -102,8 +103,8 @@ async function forwardActivity (
 ) {
   logger.info('Forwarding activity %s.', activity.id)
 
-  const to = activity.to || []
-  const cc = activity.cc || []
+  const to = arrayify(activity.to)
+  const cc = arrayify(activity.cc)
 
   const followersUrls = additionalFollowerUrls
   for (const dest of to.concat(cc)) {
@@ -285,7 +286,7 @@ async function computeUris (toActors: MActor[], actorsException: MActorWithInbox
 
   const sharedInboxesException = await buildSharedInboxesException(actorsException)
   return Array.from(toActorSharedInboxesSet)
-              .filter(sharedInbox => sharedInboxesException.includes(sharedInbox) === false)
+    .filter(sharedInbox => sharedInboxesException.includes(sharedInbox) === false)
 }
 
 async function buildSharedInboxesException (actorsException: MActorWithInboxes[]) {
