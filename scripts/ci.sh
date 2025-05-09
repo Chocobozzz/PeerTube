@@ -49,9 +49,10 @@ if [ "$1" = "types-package" ]; then
     mkdir -p /tmp/types-generator
     cp -r packages/types-generator/tests /tmp/types-generator/tests
     cp -r packages/types-generator/dist /tmp/types-generator/dist
-    (cd /tmp/types-generator/dist && npm install)
 
-    npm run tsc -- --noEmit --esModuleInterop --moduleResolution node16 --module Node16 /tmp/types-generator/tests/test.ts
+    (cd /tmp/types-generator/dist && npm install)
+    (cd /tmp/types-generator/tests && npx tsc --noEmit --esModuleInterop --moduleResolution node16 --module Node16 ./test.ts)
+
     rm -r /tmp/types-generator
 elif [ "$1" = "client" ]; then
     npm run build
