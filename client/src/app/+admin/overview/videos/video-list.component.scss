@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 td {
   padding-top: 0.25rem;
@@ -13,7 +13,8 @@ my-embed {
 }
 
 .pt-badge,
-my-video-privacy-badge {
+my-video-privacy-badge,
+my-video-nsfw-badge {
   @include margin-right(5px);
 }
 
