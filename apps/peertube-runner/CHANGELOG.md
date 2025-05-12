@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.3
+
+ * Disable log coloring when TTY does not support it
+ * Add download file timeout (2 hours) to prevent stuck jobs
+
 ## v0.1.2
 
   * Support query params in custom upload URL
