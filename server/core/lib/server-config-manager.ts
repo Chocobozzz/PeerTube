@@ -19,14 +19,11 @@ import { getThemeOrDefault } from './plugins/theme-utils.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
 
 /**
- *
  * Used to send the server config to clients (using REST/API or plugins API)
  * We need a singleton class to manage config state depending on external events (to build menu entries etc)
- *
  */
 
 class ServerConfigManager {
-
   private static instance: ServerConfigManager
 
   private serverCommit: string
@@ -356,6 +353,10 @@ class ServerConfigManager {
 
       webrtc: {
         stunServers: CONFIG.WEBRTC.STUN_SERVERS
+      },
+
+      nsfwFlagsSettings: {
+        enabled: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
       }
     }
   }
@@ -363,14 +364,12 @@ class ServerConfigManager {
   async getServerConfig (ip?: string): Promise<ServerConfig> {
     const { allowed } = await Hooks.wrapPromiseFun(
       isSignupAllowed,
-
       {
         ip,
         signupMode: CONFIG.SIGNUP.REQUIRES_APPROVAL
           ? 'request-registration'
           : 'direct-registration'
       },
-
       CONFIG.SIGNUP.REQUIRES_APPROVAL
         ? 'filter:api.user.request-signup.allowed.result'
         : 'filter:api.user.signup.allowed.result'
@@ -393,14 +392,14 @@ class ServerConfigManager {
 
   getRegisteredThemes () {
     return PluginManager.Instance.getRegisteredThemes()
-                        .map(t => ({
-                          npmName: PluginModel.buildNpmName(t.name, t.type),
-                          name: t.name,
-                          version: t.version,
-                          description: t.description,
-                          css: t.css,
-                          clientScripts: t.clientScripts
-                        }))
+      .map(t => ({
+        npmName: PluginModel.buildNpmName(t.name, t.type),
+        name: t.name,
+        version: t.version,
+        description: t.description,
+        css: t.css,
+        clientScripts: t.clientScripts
+      }))
   }
 
   getBuiltInThemes () {
@@ -416,13 +415,13 @@ class ServerConfigManager {
 
   getRegisteredPlugins () {
     return PluginManager.Instance.getRegisteredPlugins()
-                        .map(p => ({
-                          npmName: PluginModel.buildNpmName(p.name, p.type),
-                          name: p.name,
-                          version: p.version,
-                          description: p.description,
-                          clientScripts: p.clientScripts
-                        }))
+      .map(p => ({
+        npmName: PluginModel.buildNpmName(p.name, p.type),
+        name: p.name,
+        version: p.version,
+        description: p.description,
+        clientScripts: p.clientScripts
+      }))
   }
 
   getEnabledResolutions (type: 'vod' | 'live') {
@@ -431,8 +430,8 @@ class ServerConfigManager {
       : CONFIG.LIVE.TRANSCODING
 
     return Object.keys(transcoding.RESOLUTIONS)
-                 .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
-                 .map(r => parseInt(r, 10) as VideoResolutionType)
+      .filter(key => transcoding.ENABLED && transcoding.RESOLUTIONS[key] === true)
+      .map(r => parseInt(r, 10) as VideoResolutionType)
   }
 
   private getIdAndPassAuthPlugins () {

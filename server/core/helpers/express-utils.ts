@@ -1,4 +1,4 @@
-import { VideosCommonQuery } from '@peertube/peertube-models'
+import { NSFWFlag, VideosCommonQuery } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
@@ -19,8 +19,14 @@ export function buildNSFWFilters (options: {
 } = {}) {
   return {
     nsfw: buildNSFWFilter(options),
-    nsfwFlagsIncluded: buildNSFWFlagsIncluded(options),
-    nsfwFlagsExcluded: buildNSFWFlagsExcluded(options)
+
+    nsfwFlagsIncluded: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+      ? buildNSFWFlagsIncluded(options)
+      : NSFWFlag.NONE,
+
+    nsfwFlagsExcluded: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+      ? buildNSFWFlagsExcluded(options)
+      : NSFWFlag.NONE
   }
 }
 

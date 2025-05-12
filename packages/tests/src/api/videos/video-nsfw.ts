@@ -549,6 +549,34 @@ describe('Test video NSFW policy', function () {
         expect(data.map(v => v.name)).to.have.members([ 'not nsfw', 'nsfw simple', 'nsfw sex', 'import violent', 'live violent' ])
       }
     })
+
+    it('Should disable NSFW flags policy', async function () {
+      await servers[0].users.updateMe({
+        token: userAccessToken,
+        nsfwPolicy: 'do_not_list',
+        nsfwFlagsHidden: NSFWFlag.EXPLICIT_SEX,
+        nsfwFlagsWarned: NSFWFlag.NONE,
+        nsfwFlagsBlurred: NSFWFlag.SHOCKING_DISTURBING,
+        nsfwFlagsDisplayed: NSFWFlag.VIOLENT
+      })
+
+      await servers[0].kill()
+      await servers[0].run({ nsfw_flags_settings: { enabled: false } })
+
+      const me = await servers[0].users.getMyInfo({ token: userAccessToken })
+      expect(me.nsfwPolicy).to.equal('do_not_list')
+      expect(me.nsfwFlagsHidden).to.equal(0)
+      expect(me.nsfwFlagsWarned).to.equal(0)
+      expect(me.nsfwFlagsBlurred).to.equal(0)
+      expect(me.nsfwFlagsDisplayed).to.equal(0)
+
+      for (const { total, data } of await getVideosFunctions(userAccessToken)) {
+        expect(total).to.equal(1)
+
+        expect(data).to.have.lengthOf(1)
+        expect(data.map(v => v.name)).to.have.members([ 'not nsfw' ])
+      }
+    })
   })
 
   after(async function () {

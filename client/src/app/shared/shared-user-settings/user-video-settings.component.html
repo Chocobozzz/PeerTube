@@ -1,42 +1,61 @@
 <form (ngSubmit)="updateDetails()" [formGroup]="form">
   <div class="form-group">
-    <div class="anchor" id="video-sensitive-content-policy"></div> <!-- video-sensitive-content-policy anchor -->
+    <div class="anchor" id="video-sensitive-content-policy"></div>
+    <!-- video-sensitive-content-policy anchor -->
 
     <div class="form-group">
       <my-select-radio
-        [items]="nsfwItems" inputId="nsfwPolicy" isGroup="true"
-        i18n-label label="Policy on videos containing sensitive content"
+        [items]="nsfwItems"
+        inputId="nsfwPolicy"
+        isGroup="true"
+        i18n-label
+        label="Policy on videos containing sensitive content"
         formControlName="nsfwPolicy"
       ></my-select-radio>
     </div>
 
-    <div class="form-group mb-3">
-      <my-select-radio
-        [items]="nsfwFlagItems" inputId="nsfwFlagViolent" isGroup="true"
-        labelSecondary="true" i18n-label label="Redefine policy for violent content"
-        formControlName="nsfwFlagViolent"
-      ></my-select-radio>
-    </div>
+    @if (isNsfwFlagsEnabled()) {
+      <div class="form-group mb-3">
+        <my-select-radio
+          [items]="nsfwFlagItems"
+          inputId="nsfwFlagViolent"
+          isGroup="true"
+          labelSecondary="true"
+          i18n-label
+          label="Redefine policy for violent content"
+          formControlName="nsfwFlagViolent"
+        ></my-select-radio>
+      </div>
 
-    <div class="form-group mb-3">
-      <my-select-radio
-        [items]="nsfwFlagItems" inputId="nsfwFlagShocking" isGroup="true"
-        labelSecondary="true" i18n-label label="Redefine policy for shocking or disturbing content"
-        formControlName="nsfwFlagShocking"
-      ></my-select-radio>
-    </div>
+      <div class="form-group mb-3">
+        <my-select-radio
+          [items]="nsfwFlagItems"
+          inputId="nsfwFlagShocking"
+          isGroup="true"
+          labelSecondary="true"
+          i18n-label
+          label="Redefine policy for shocking or disturbing content"
+          formControlName="nsfwFlagShocking"
+        ></my-select-radio>
+      </div>
 
-    <div class="form-group mb-3">
-      <my-select-radio
-        [items]="nsfwFlagItems" inputId="nsfwFlagSex" isGroup="true"
-        labelSecondary="true" i18n-label label="Redefine policy for sexually explicit material"
-        formControlName="nsfwFlagSex"
-      ></my-select-radio>
-    </div>
+      <div class="form-group mb-3">
+        <my-select-radio
+          [items]="nsfwFlagItems"
+          inputId="nsfwFlagSex"
+          isGroup="true"
+          labelSecondary="true"
+          i18n-label
+          label="Redefine policy for sexually explicit material"
+          formControlName="nsfwFlagSex"
+        ></my-select-radio>
+      </div>
+    }
   </div>
 
   <div class="form-group">
-    <div class="anchor" id="video-languages-subtitles"></div> <!-- video-languages-subtitles anchor -->
+    <div class="anchor" id="video-languages-subtitles"></div>
+    <!-- video-languages-subtitles anchor -->
 
     <div class="pt-label-container">
       <label i18n for="videoLanguages">Only display videos in the following languages/subtitles</label>
@@ -53,21 +72,18 @@
   <ng-content select="inner-title"></ng-content>
 
   <div class="form-group">
-    <my-peertube-checkbox
-      inputName="p2pEnabled" formControlName="p2pEnabled" [recommended]="true"
-      i18n-labelText labelText="Help share videos being played"
-    >
+    <my-peertube-checkbox inputName="p2pEnabled" formControlName="p2pEnabled" [recommended]="true" i18n-labelText labelText="Help share videos being played">
       <ng-container ngProjectAs="description">
-        <span i18n>The <a class="link-primary" href="https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy" target="_blank">sharing system</a> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</span>
+        <span i18n
+        >The <a class="link-primary" href="https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy" target="_blank">sharing system</a> implies
+          that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server
+          load.</span>
       </ng-container>
     </my-peertube-checkbox>
   </div>
 
   <div class="form-group">
-    <my-peertube-checkbox
-      inputName="autoPlayVideo" formControlName="autoPlayVideo"
-      i18n-labelText labelText="Automatically play videos"
-    >
+    <my-peertube-checkbox inputName="autoPlayVideo" formControlName="autoPlayVideo" i18n-labelText labelText="Automatically play videos">
       <ng-container ngProjectAs="description">
         <span i18n>When on a video page, directly start playing the video.</span>
       </ng-container>
@@ -76,8 +92,10 @@
 
   <div class="form-group">
     <my-peertube-checkbox
-      inputName="autoPlayNextVideo" formControlName="autoPlayNextVideo"
-      i18n-labelText labelText="Automatically start playing the next video"
+      inputName="autoPlayNextVideo"
+      formControlName="autoPlayNextVideo"
+      i18n-labelText
+      labelText="Automatically start playing the next video"
     >
       <ng-container ngProjectAs="description">
         <span i18n>When a video ends, follow up with the next suggested video.</span>

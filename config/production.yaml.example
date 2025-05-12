@@ -531,6 +531,11 @@ webrtc:
     - 'stun:stunserver2024.stunprotocol.org'
     - 'stun:stun.framasoft.org'
 
+nsfw_flags_settings:
+  # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
+  # using NSFW flags (violent content, etc.) set by video authors
+  enabled: false
+
 ###############################################################################
 #
 # From this point, almost all following keys can be overridden by the web interface
@@ -1086,6 +1091,11 @@ client:
       # If you enable only one external auth plugin
       # You can automatically redirect your users on this external platform when they click on the login button
       redirect_on_single_external_auth: false
+
+  # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
+  # using NSFW flags (violent content, etc.) set by video authors
+  nsfw_flags_settings:
+    enabled: true
 
   open_in_app:
     android:

@@ -399,6 +399,10 @@ export interface ServerConfig {
   webrtc: {
     stunServers: string[]
   }
+
+  nsfwFlagsSettings: {
+    enabled: boolean
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

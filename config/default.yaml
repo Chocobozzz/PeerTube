@@ -533,6 +533,11 @@ webrtc:
     - 'stun:stunserver2024.stunprotocol.org'
     - 'stun:stun.framasoft.org'
 
+nsfw_flags_settings:
+  # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
+  # using NSFW flags (violent content, etc.) set by video authors
+  enabled: true
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

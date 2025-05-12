@@ -74,34 +74,60 @@ const CONFIG = {
     }
   },
 
+  NSFW_FLAGS_SETTINGS: {
+    ENABLED: config.get<boolean>('nsfw_flags_settings.enabled')
+  },
+
   CLIENT: {
     VIDEOS: {
       MINIATURE: {
-        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
+        get PREFER_AUTHOR_DISPLAY_NAME () {
+          return config.get<boolean>('client.videos.miniature.prefer_author_display_name')
+        }
       },
       RESUMABLE_UPLOAD: {
-        get MAX_CHUNK_SIZE () { return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0) }
+        get MAX_CHUNK_SIZE () {
+          return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0)
+        }
       }
     },
     MENU: {
       LOGIN: {
-        get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () { return config.get<boolean>('client.menu.login.redirect_on_single_external_auth') }
+        get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () {
+          return config.get<boolean>('client.menu.login.redirect_on_single_external_auth')
+        }
       }
     },
     OPEN_IN_APP: {
       ANDROID: {
         INTENT: {
-          get ENABLED () { return config.get<boolean>('client.open_in_app.android.intent.enabled') },
-          get HOST () { return config.get<string>('client.open_in_app.android.intent.host') },
-          get SCHEME () { return config.get<string>('client.open_in_app.android.intent.scheme') },
-          get FALLBACK_URL () { return config.get<string>('client.open_in_app.android.intent.fallback_url') }
+          get ENABLED () {
+            return config.get<boolean>('client.open_in_app.android.intent.enabled')
+          },
+          get HOST () {
+            return config.get<string>('client.open_in_app.android.intent.host')
+          },
+          get SCHEME () {
+            return config.get<string>('client.open_in_app.android.intent.scheme')
+          },
+          get FALLBACK_URL () {
+            return config.get<string>('client.open_in_app.android.intent.fallback_url')
+          }
         }
       },
       IOS: {
-        get ENABLED () { return config.get<boolean>('client.open_in_app.ios.enabled') },
-        get HOST () { return config.get<string>('client.open_in_app.ios.host') },
-        get SCHEME () { return config.get<string>('client.open_in_app.ios.scheme') },
-        get FALLBACK_URL () { return config.get<string>('client.open_in_app.ios.fallback_url') }
+        get ENABLED () {
+          return config.get<boolean>('client.open_in_app.ios.enabled')
+        },
+        get HOST () {
+          return config.get<string>('client.open_in_app.ios.host')
+        },
+        get SCHEME () {
+          return config.get<string>('client.open_in_app.ios.scheme')
+        },
+        get FALLBACK_URL () {
+          return config.get<string>('client.open_in_app.ios.fallback_url')
+        }
       }
     }
   },
@@ -122,7 +148,9 @@ const CONFIG = {
       }
     },
     PLAYER: {
-      get AUTO_PLAY () { return config.get<boolean>('defaults.player.auto_play') }
+      get AUTO_PLAY () {
+        return config.get<boolean>('defaults.player.auto_play')
+      }
     }
   },
 
@@ -293,8 +321,12 @@ const CONFIG = {
     VIDEOS: {
       INTERVAL_DAYS: config.get<number>('trending.videos.interval_days'),
       ALGORITHMS: {
-        get ENABLED () { return config.get<string[]>('trending.videos.algorithms.enabled') },
-        get DEFAULT () { return config.get<string>('trending.videos.algorithms.default') }
+        get ENABLED () {
+          return config.get<string[]>('trending.videos.algorithms.enabled')
+        },
+        get DEFAULT () {
+          return config.get<string>('trending.videos.algorithms.default')
+        }
       }
     }
   },
@@ -423,177 +455,353 @@ const CONFIG = {
     STUN_SERVERS: config.get<string[]>('webrtc.stun_servers')
   },
   ADMIN: {
-    get EMAIL () { return config.get<string>('admin.email') }
+    get EMAIL () {
+      return config.get<string>('admin.email')
+    }
   },
   CONTACT_FORM: {
-    get ENABLED () { return config.get<boolean>('contact_form.enabled') }
+    get ENABLED () {
+      return config.get<boolean>('contact_form.enabled')
+    }
   },
   SIGNUP: {
-    get ENABLED () { return config.get<boolean>('signup.enabled') },
-    get REQUIRES_APPROVAL () { return config.get<boolean>('signup.requires_approval') },
-    get LIMIT () { return config.get<number>('signup.limit') },
-    get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
-    get MINIMUM_AGE () { return config.get<number>('signup.minimum_age') },
+    get ENABLED () {
+      return config.get<boolean>('signup.enabled')
+    },
+    get REQUIRES_APPROVAL () {
+      return config.get<boolean>('signup.requires_approval')
+    },
+    get LIMIT () {
+      return config.get<number>('signup.limit')
+    },
+    get REQUIRES_EMAIL_VERIFICATION () {
+      return config.get<boolean>('signup.requires_email_verification')
+    },
+    get MINIMUM_AGE () {
+      return config.get<number>('signup.minimum_age')
+    },
     FILTERS: {
       CIDR: {
-        get WHITELIST () { return config.get<string[]>('signup.filters.cidr.whitelist') },
-        get BLACKLIST () { return config.get<string[]>('signup.filters.cidr.blacklist') }
+        get WHITELIST () {
+          return config.get<string[]>('signup.filters.cidr.whitelist')
+        },
+        get BLACKLIST () {
+          return config.get<string[]>('signup.filters.cidr.blacklist')
+        }
       }
     }
   },
   USER: {
     HISTORY: {
       VIDEOS: {
-        get ENABLED () { return config.get<boolean>('user.history.videos.enabled') }
+        get ENABLED () {
+          return config.get<boolean>('user.history.videos.enabled')
+        }
       }
     },
-    get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
-    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) },
-    get DEFAULT_CHANNEL_NAME () { return config.get<string>('user.default_channel_name') }
+    get VIDEO_QUOTA () {
+      return parseBytes(config.get<number>('user.video_quota'))
+    },
+    get VIDEO_QUOTA_DAILY () {
+      return parseBytes(config.get<number>('user.video_quota_daily'))
+    },
+    get DEFAULT_CHANNEL_NAME () {
+      return config.get<string>('user.default_channel_name')
+    }
   },
   VIDEO_CHANNELS: {
-    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }
+    get MAX_PER_USER () {
+      return config.get<number>('video_channels.max_per_user')
+    }
   },
   TRANSCODING: {
-    get ENABLED () { return config.get<boolean>('transcoding.enabled') },
-    ORIGINAL_FILE: {
-      get KEEP () { return config.get<boolean>('transcoding.original_file.keep') }
+    get ENABLED () {
+      return config.get<boolean>('transcoding.enabled')
     },
-    get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
-    get ALLOW_AUDIO_FILES () { return config.get<boolean>('transcoding.allow_audio_files') },
-    get THREADS () { return config.get<number>('transcoding.threads') },
-    get CONCURRENCY () { return config.get<number>('transcoding.concurrency') },
-    get PROFILE () { return config.get<string>('transcoding.profile') },
-    get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('transcoding.always_transcode_original_resolution') },
+    ORIGINAL_FILE: {
+      get KEEP () {
+        return config.get<boolean>('transcoding.original_file.keep')
+      }
+    },
+    get ALLOW_ADDITIONAL_EXTENSIONS () {
+      return config.get<boolean>('transcoding.allow_additional_extensions')
+    },
+    get ALLOW_AUDIO_FILES () {
+      return config.get<boolean>('transcoding.allow_audio_files')
+    },
+    get THREADS () {
+      return config.get<number>('transcoding.threads')
+    },
+    get CONCURRENCY () {
+      return config.get<number>('transcoding.concurrency')
+    },
+    get PROFILE () {
+      return config.get<string>('transcoding.profile')
+    },
+    get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {
+      return config.get<boolean>('transcoding.always_transcode_original_resolution')
+    },
     RESOLUTIONS: {
-      get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
-      get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
-      get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
-      get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
-      get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
-      get '720p' () { return config.get<boolean>('transcoding.resolutions.720p') },
-      get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') },
-      get '1440p' () { return config.get<boolean>('transcoding.resolutions.1440p') },
-      get '2160p' () { return config.get<boolean>('transcoding.resolutions.2160p') }
+      get '0p' () {
+        return config.get<boolean>('transcoding.resolutions.0p')
+      },
+      get '144p' () {
+        return config.get<boolean>('transcoding.resolutions.144p')
+      },
+      get '240p' () {
+        return config.get<boolean>('transcoding.resolutions.240p')
+      },
+      get '360p' () {
+        return config.get<boolean>('transcoding.resolutions.360p')
+      },
+      get '480p' () {
+        return config.get<boolean>('transcoding.resolutions.480p')
+      },
+      get '720p' () {
+        return config.get<boolean>('transcoding.resolutions.720p')
+      },
+      get '1080p' () {
+        return config.get<boolean>('transcoding.resolutions.1080p')
+      },
+      get '1440p' () {
+        return config.get<boolean>('transcoding.resolutions.1440p')
+      },
+      get '2160p' () {
+        return config.get<boolean>('transcoding.resolutions.2160p')
+      }
     },
     FPS: {
-      get MAX () { return config.get<number>('transcoding.fps.max') }
+      get MAX () {
+        return config.get<number>('transcoding.fps.max')
+      }
     },
     HLS: {
-      get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') },
-      get SPLIT_AUDIO_AND_VIDEO () { return config.get<boolean>('transcoding.hls.split_audio_and_video') }
+      get ENABLED () {
+        return config.get<boolean>('transcoding.hls.enabled')
+      },
+      get SPLIT_AUDIO_AND_VIDEO () {
+        return config.get<boolean>('transcoding.hls.split_audio_and_video')
+      }
     },
     WEB_VIDEOS: {
-      get ENABLED () { return config.get<boolean>('transcoding.web_videos.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('transcoding.web_videos.enabled')
+      }
     },
     REMOTE_RUNNERS: {
-      get ENABLED () { return config.get<boolean>('transcoding.remote_runners.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('transcoding.remote_runners.enabled')
+      }
     }
   },
   LIVE: {
-    get ENABLED () { return config.get<boolean>('live.enabled') },
+    get ENABLED () {
+      return config.get<boolean>('live.enabled')
+    },
 
-    get MAX_DURATION () { return parseDurationToMs(config.get<string>('live.max_duration')) },
-    get MAX_INSTANCE_LIVES () { return config.get<number>('live.max_instance_lives') },
-    get MAX_USER_LIVES () { return config.get<number>('live.max_user_lives') },
+    get MAX_DURATION () {
+      return parseDurationToMs(config.get<string>('live.max_duration'))
+    },
+    get MAX_INSTANCE_LIVES () {
+      return config.get<number>('live.max_instance_lives')
+    },
+    get MAX_USER_LIVES () {
+      return config.get<number>('live.max_user_lives')
+    },
 
-    get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
+    get ALLOW_REPLAY () {
+      return config.get<boolean>('live.allow_replay')
+    },
 
     LATENCY_SETTING: {
-      get ENABLED () { return config.get<boolean>('live.latency_setting.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('live.latency_setting.enabled')
+      }
     },
 
     RTMP: {
-      get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
-      get PORT () { return config.get<number>('live.rtmp.port') },
-      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') },
-      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmp.public_hostname') }
+      get ENABLED () {
+        return config.get<boolean>('live.rtmp.enabled')
+      },
+      get PORT () {
+        return config.get<number>('live.rtmp.port')
+      },
+      get HOSTNAME () {
+        return config.get<number>('live.rtmp.hostname')
+      },
+      get PUBLIC_HOSTNAME () {
+        return config.get<number>('live.rtmp.public_hostname')
+      }
     },
 
     RTMPS: {
-      get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
-      get PORT () { return config.get<number>('live.rtmps.port') },
-      get HOSTNAME () { return config.get<number>('live.rtmps.hostname') },
-      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmps.public_hostname') },
-      get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
-      get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
+      get ENABLED () {
+        return config.get<boolean>('live.rtmps.enabled')
+      },
+      get PORT () {
+        return config.get<number>('live.rtmps.port')
+      },
+      get HOSTNAME () {
+        return config.get<number>('live.rtmps.hostname')
+      },
+      get PUBLIC_HOSTNAME () {
+        return config.get<number>('live.rtmps.public_hostname')
+      },
+      get KEY_FILE () {
+        return config.get<string>('live.rtmps.key_file')
+      },
+      get CERT_FILE () {
+        return config.get<string>('live.rtmps.cert_file')
+      }
     },
 
     TRANSCODING: {
-      get ENABLED () { return config.get<boolean>('live.transcoding.enabled') },
-      get THREADS () { return config.get<number>('live.transcoding.threads') },
-      get PROFILE () { return config.get<string>('live.transcoding.profile') },
+      get ENABLED () {
+        return config.get<boolean>('live.transcoding.enabled')
+      },
+      get THREADS () {
+        return config.get<number>('live.transcoding.threads')
+      },
+      get PROFILE () {
+        return config.get<string>('live.transcoding.profile')
+      },
 
-      get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('live.transcoding.always_transcode_original_resolution') },
+      get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () {
+        return config.get<boolean>('live.transcoding.always_transcode_original_resolution')
+      },
 
       RESOLUTIONS: {
-        get '0p' () { return config.get<boolean>('live.transcoding.resolutions.0p') },
-        get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },
-        get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },
-        get '360p' () { return config.get<boolean>('live.transcoding.resolutions.360p') },
-        get '480p' () { return config.get<boolean>('live.transcoding.resolutions.480p') },
-        get '720p' () { return config.get<boolean>('live.transcoding.resolutions.720p') },
-        get '1080p' () { return config.get<boolean>('live.transcoding.resolutions.1080p') },
-        get '1440p' () { return config.get<boolean>('live.transcoding.resolutions.1440p') },
-        get '2160p' () { return config.get<boolean>('live.transcoding.resolutions.2160p') }
+        get '0p' () {
+          return config.get<boolean>('live.transcoding.resolutions.0p')
+        },
+        get '144p' () {
+          return config.get<boolean>('live.transcoding.resolutions.144p')
+        },
+        get '240p' () {
+          return config.get<boolean>('live.transcoding.resolutions.240p')
+        },
+        get '360p' () {
+          return config.get<boolean>('live.transcoding.resolutions.360p')
+        },
+        get '480p' () {
+          return config.get<boolean>('live.transcoding.resolutions.480p')
+        },
+        get '720p' () {
+          return config.get<boolean>('live.transcoding.resolutions.720p')
+        },
+        get '1080p' () {
+          return config.get<boolean>('live.transcoding.resolutions.1080p')
+        },
+        get '1440p' () {
+          return config.get<boolean>('live.transcoding.resolutions.1440p')
+        },
+        get '2160p' () {
+          return config.get<boolean>('live.transcoding.resolutions.2160p')
+        }
       },
 
       FPS: {
-        get MAX () { return config.get<number>('live.transcoding.fps.max') }
+        get MAX () {
+          return config.get<number>('live.transcoding.fps.max')
+        }
       },
 
       REMOTE_RUNNERS: {
-        get ENABLED () { return config.get<boolean>('live.transcoding.remote_runners.enabled') }
+        get ENABLED () {
+          return config.get<boolean>('live.transcoding.remote_runners.enabled')
+        }
       }
     }
   },
   VIDEO_STUDIO: {
-    get ENABLED () { return config.get<boolean>('video_studio.enabled') },
+    get ENABLED () {
+      return config.get<boolean>('video_studio.enabled')
+    },
     REMOTE_RUNNERS: {
-      get ENABLED () { return config.get<boolean>('video_studio.remote_runners.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('video_studio.remote_runners.enabled')
+      }
     }
   },
   VIDEO_FILE: {
     UPDATE: {
-      get ENABLED () { return config.get<boolean>('video_file.update.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('video_file.update.enabled')
+      }
     }
   },
   VIDEO_TRANSCRIPTION: {
-    get ENABLED () { return config.get<boolean>('video_transcription.enabled') },
-    get ENGINE () { return config.get<TranscriptionEngineName>('video_transcription.engine') },
-    get ENGINE_PATH () { return config.get<string>('video_transcription.engine_path') },
-    get MODEL () { return config.get<WhisperBuiltinModelName>('video_transcription.model') },
-    get MODEL_PATH () { return config.get<string>('video_transcription.model_path') },
+    get ENABLED () {
+      return config.get<boolean>('video_transcription.enabled')
+    },
+    get ENGINE () {
+      return config.get<TranscriptionEngineName>('video_transcription.engine')
+    },
+    get ENGINE_PATH () {
+      return config.get<string>('video_transcription.engine_path')
+    },
+    get MODEL () {
+      return config.get<WhisperBuiltinModelName>('video_transcription.model')
+    },
+    get MODEL_PATH () {
+      return config.get<string>('video_transcription.model_path')
+    },
     REMOTE_RUNNERS: {
-      get ENABLED () { return config.get<boolean>('video_transcription.remote_runners.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('video_transcription.remote_runners.enabled')
+      }
     }
   },
   IMPORT: {
     VIDEOS: {
-      get CONCURRENCY () { return config.get<number>('import.videos.concurrency') },
-      get TIMEOUT () { return parseDurationToMs(config.get<string>('import.videos.timeout')) },
+      get CONCURRENCY () {
+        return config.get<number>('import.videos.concurrency')
+      },
+      get TIMEOUT () {
+        return parseDurationToMs(config.get<string>('import.videos.timeout'))
+      },
 
       HTTP: {
-        get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
-
-        YOUTUBE_DL_RELEASE: {
-          get URL () { return config.get<string>('import.videos.http.youtube_dl_release.url') },
-          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') },
-          get PYTHON_PATH () { return config.get<string>('import.videos.http.youtube_dl_release.python_path') }
+        get ENABLED () {
+          return config.get<boolean>('import.videos.http.enabled')
         },
 
-        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') },
+        YOUTUBE_DL_RELEASE: {
+          get URL () {
+            return config.get<string>('import.videos.http.youtube_dl_release.url')
+          },
+          get NAME () {
+            return config.get<string>('import.videos.http.youtube_dl_release.name')
+          },
+          get PYTHON_PATH () {
+            return config.get<string>('import.videos.http.youtube_dl_release.python_path')
+          }
+        },
 
-        get PROXIES () { return config.get<string[]>('import.videos.http.proxies') }
+        get FORCE_IPV4 () {
+          return config.get<boolean>('import.videos.http.force_ipv4')
+        },
+
+        get PROXIES () {
+          return config.get<string[]>('import.videos.http.proxies')
+        }
       },
       TORRENT: {
-        get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
+        get ENABLED () {
+          return config.get<boolean>('import.videos.torrent.enabled')
+        }
       }
     },
     VIDEO_CHANNEL_SYNCHRONIZATION: {
-      get ENABLED () { return config.get<boolean>('import.video_channel_synchronization.enabled') },
-      get MAX_PER_USER () { return config.get<number>('import.video_channel_synchronization.max_per_user') },
-      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check_interval')) },
+      get ENABLED () {
+        return config.get<boolean>('import.video_channel_synchronization.enabled')
+      },
+      get MAX_PER_USER () {
+        return config.get<number>('import.video_channel_synchronization.max_per_user')
+      },
+      get CHECK_INTERVAL () {
+        return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check_interval'))
+      },
       get VIDEOS_LIMIT_PER_SYNCHRONIZATION () {
         return config.get<number>('import.video_channel_synchronization.videos_limit_per_synchronization')
       },
@@ -602,88 +810,162 @@ const CONFIG = {
       }
     },
     USERS: {
-      get ENABLED () { return config.get<boolean>('import.users.enabled') }
+      get ENABLED () {
+        return config.get<boolean>('import.users.enabled')
+      }
     }
   },
   EXPORT: {
     USERS: {
-      get ENABLED () { return config.get<boolean>('export.users.enabled') },
-      get MAX_USER_VIDEO_QUOTA () { return parseBytes(config.get<string>('export.users.max_user_video_quota')) },
-      get EXPORT_EXPIRATION () { return parseDurationToMs(config.get<string>('export.users.export_expiration')) }
+      get ENABLED () {
+        return config.get<boolean>('export.users.enabled')
+      },
+      get MAX_USER_VIDEO_QUOTA () {
+        return parseBytes(config.get<string>('export.users.max_user_video_quota'))
+      },
+      get EXPORT_EXPIRATION () {
+        return parseDurationToMs(config.get<string>('export.users.export_expiration'))
+      }
     }
   },
   AUTO_BLACKLIST: {
     VIDEOS: {
       OF_USERS: {
-        get ENABLED () { return config.get<boolean>('auto_blacklist.videos.of_users.enabled') }
+        get ENABLED () {
+          return config.get<boolean>('auto_blacklist.videos.of_users.enabled')
+        }
       }
     }
   },
   CACHE: {
     PREVIEWS: {
-      get SIZE () { return config.get<number>('cache.previews.size') }
+      get SIZE () {
+        return config.get<number>('cache.previews.size')
+      }
     },
     VIDEO_CAPTIONS: {
-      get SIZE () { return config.get<number>('cache.captions.size') }
+      get SIZE () {
+        return config.get<number>('cache.captions.size')
+      }
     },
     TORRENTS: {
-      get SIZE () { return config.get<number>('cache.torrents.size') }
+      get SIZE () {
+        return config.get<number>('cache.torrents.size')
+      }
     },
     STORYBOARDS: {
-      get SIZE () { return config.get<number>('cache.storyboards.size') }
+      get SIZE () {
+        return config.get<number>('cache.storyboards.size')
+      }
     }
   },
   INSTANCE: {
-    get NAME () { return config.get<string>('instance.name') },
-    get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
-    get DESCRIPTION () { return config.get<string>('instance.description') },
-    get TERMS () { return config.get<string>('instance.terms') },
-    get CODE_OF_CONDUCT () { return config.get<string>('instance.code_of_conduct') },
+    get NAME () {
+      return config.get<string>('instance.name')
+    },
+    get SHORT_DESCRIPTION () {
+      return config.get<string>('instance.short_description')
+    },
+    get DESCRIPTION () {
+      return config.get<string>('instance.description')
+    },
+    get TERMS () {
+      return config.get<string>('instance.terms')
+    },
+    get CODE_OF_CONDUCT () {
+      return config.get<string>('instance.code_of_conduct')
+    },
 
-    get CREATION_REASON () { return config.get<string>('instance.creation_reason') },
+    get CREATION_REASON () {
+      return config.get<string>('instance.creation_reason')
+    },
 
-    get MODERATION_INFORMATION () { return config.get<string>('instance.moderation_information') },
-    get ADMINISTRATOR () { return config.get<string>('instance.administrator') },
-    get MAINTENANCE_LIFETIME () { return config.get<string>('instance.maintenance_lifetime') },
-    get BUSINESS_MODEL () { return config.get<string>('instance.business_model') },
-    get HARDWARE_INFORMATION () { return config.get<string>('instance.hardware_information') },
+    get MODERATION_INFORMATION () {
+      return config.get<string>('instance.moderation_information')
+    },
+    get ADMINISTRATOR () {
+      return config.get<string>('instance.administrator')
+    },
+    get MAINTENANCE_LIFETIME () {
+      return config.get<string>('instance.maintenance_lifetime')
+    },
+    get BUSINESS_MODEL () {
+      return config.get<string>('instance.business_model')
+    },
+    get HARDWARE_INFORMATION () {
+      return config.get<string>('instance.hardware_information')
+    },
 
-    get LANGUAGES () { return config.get<string[]>('instance.languages') || [] },
-    get CATEGORIES () { return config.get<number[]>('instance.categories') || [] },
+    get LANGUAGES () {
+      return config.get<string[]>('instance.languages') || []
+    },
+    get CATEGORIES () {
+      return config.get<number[]>('instance.categories') || []
+    },
 
-    get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
-    get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
+    get IS_NSFW () {
+      return config.get<boolean>('instance.is_nsfw')
+    },
+    get DEFAULT_NSFW_POLICY () {
+      return config.get<NSFWPolicyType>('instance.default_nsfw_policy')
+    },
 
-    get SERVER_COUNTRY () { return config.get<string>('instance.server_country') },
+    get SERVER_COUNTRY () {
+      return config.get<string>('instance.server_country')
+    },
 
     SUPPORT: {
-      get TEXT () { return config.get<string>('instance.support.text') }
+      get TEXT () {
+        return config.get<string>('instance.support.text')
+      }
     },
 
     SOCIAL: {
-      get EXTERNAL_LINK () { return config.get<string>('instance.social.external_link') },
-      get MASTODON_LINK () { return config.get<string>('instance.social.mastodon_link') },
-      get BLUESKY () { return config.get<string>('instance.social.bluesky_link') }
+      get EXTERNAL_LINK () {
+        return config.get<string>('instance.social.external_link')
+      },
+      get MASTODON_LINK () {
+        return config.get<string>('instance.social.mastodon_link')
+      },
+      get BLUESKY () {
+        return config.get<string>('instance.social.bluesky_link')
+      }
     },
 
-    get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
+    get DEFAULT_CLIENT_ROUTE () {
+      return config.get<string>('instance.default_client_route')
+    },
 
     CUSTOMIZATIONS: {
-      get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
-      get CSS () { return config.get<string>('instance.customizations.css') }
+      get JAVASCRIPT () {
+        return config.get<string>('instance.customizations.javascript')
+      },
+      get CSS () {
+        return config.get<string>('instance.customizations.css')
+      }
     },
-    get ROBOTS () { return config.get<string>('instance.robots') },
-    get SECURITYTXT () { return config.get<string>('instance.securitytxt') }
+    get ROBOTS () {
+      return config.get<string>('instance.robots')
+    },
+    get SECURITYTXT () {
+      return config.get<string>('instance.securitytxt')
+    }
   },
   SERVICES: {
     TWITTER: {
-      get USERNAME () { return config.get<string>('services.twitter.username') }
+      get USERNAME () {
+        return config.get<string>('services.twitter.username')
+      }
     }
   },
   FOLLOWERS: {
     INSTANCE: {
-      get ENABLED () { return config.get<boolean>('followers.instance.enabled') },
-      get MANUAL_APPROVAL () { return config.get<boolean>('followers.instance.manual_approval') }
+      get ENABLED () {
+        return config.get<boolean>('followers.instance.enabled')
+      },
+      get MANUAL_APPROVAL () {
+        return config.get<boolean>('followers.instance.manual_approval')
+      }
     }
   },
   FOLLOWINGS: {
@@ -704,28 +986,52 @@ const CONFIG = {
     }
   },
   THEME: {
-    get DEFAULT () { return config.get<string>('theme.default') }
+    get DEFAULT () {
+      return config.get<string>('theme.default')
+    }
   },
   BROADCAST_MESSAGE: {
-    get ENABLED () { return config.get<boolean>('broadcast_message.enabled') },
-    get MESSAGE () { return config.get<string>('broadcast_message.message') },
-    get LEVEL () { return config.get<BroadcastMessageLevel>('broadcast_message.level') },
-    get DISMISSABLE () { return config.get<boolean>('broadcast_message.dismissable') }
+    get ENABLED () {
+      return config.get<boolean>('broadcast_message.enabled')
+    },
+    get MESSAGE () {
+      return config.get<string>('broadcast_message.message')
+    },
+    get LEVEL () {
+      return config.get<BroadcastMessageLevel>('broadcast_message.level')
+    },
+    get DISMISSABLE () {
+      return config.get<boolean>('broadcast_message.dismissable')
+    }
   },
   SEARCH: {
     REMOTE_URI: {
-      get USERS () { return config.get<boolean>('search.remote_uri.users') },
-      get ANONYMOUS () { return config.get<boolean>('search.remote_uri.anonymous') }
+      get USERS () {
+        return config.get<boolean>('search.remote_uri.users')
+      },
+      get ANONYMOUS () {
+        return config.get<boolean>('search.remote_uri.anonymous')
+      }
     },
     SEARCH_INDEX: {
-      get ENABLED () { return config.get<boolean>('search.search_index.enabled') },
-      get URL () { return config.get<string>('search.search_index.url') },
-      get DISABLE_LOCAL_SEARCH () { return config.get<boolean>('search.search_index.disable_local_search') },
-      get IS_DEFAULT_SEARCH () { return config.get<boolean>('search.search_index.is_default_search') }
+      get ENABLED () {
+        return config.get<boolean>('search.search_index.enabled')
+      },
+      get URL () {
+        return config.get<string>('search.search_index.url')
+      },
+      get DISABLE_LOCAL_SEARCH () {
+        return config.get<boolean>('search.search_index.disable_local_search')
+      },
+      get IS_DEFAULT_SEARCH () {
+        return config.get<boolean>('search.search_index.is_default_search')
+      }
     }
   },
   STORYBOARDS: {
-    get ENABLED () { return config.get<boolean>('storyboards.enabled') }
+    get ENABLED () {
+      return config.get<boolean>('storyboards.enabled')
+    }
   }
 }
 
@@ -791,7 +1097,6 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 }
 
 export function reloadConfig () {
-
   function getConfigDirectories () {
     if (process.env.NODE_CONFIG_DIR) {
       return process.env.NODE_CONFIG_DIR.split(':')
@@ -804,7 +1109,7 @@ export function reloadConfig () {
     const directories = getConfigDirectories()
 
     for (const fileName in require.cache) {
-      if (directories.some((dir) => fileName.includes(dir)) === false) {
+      if (directories.some(dir => fileName.includes(dir)) === false) {
         continue
       }
 

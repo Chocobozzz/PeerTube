@@ -31,24 +31,20 @@ configRouter.use(apiRateLimiter)
 
 const auditLogger = auditLoggerFactory('config')
 
-configRouter.get('/',
-  openapiOperationDoc({ operationId: 'getConfig' }),
-  asyncMiddleware(getConfig)
-)
+configRouter.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
 
-configRouter.get('/about',
-  openapiOperationDoc({ operationId: 'getAbout' }),
-  asyncMiddleware(getAbout)
-)
+configRouter.get('/about', openapiOperationDoc({ operationId: 'getAbout' }), asyncMiddleware(getAbout))
 
-configRouter.get('/custom',
+configRouter.get(
+  '/custom',
   openapiOperationDoc({ operationId: 'getCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
 
-configRouter.put('/custom',
+configRouter.put(
+  '/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -57,7 +53,8 @@ configRouter.put('/custom',
   asyncMiddleware(updateCustomConfig)
 )
 
-configRouter.delete('/custom',
+configRouter.delete(
+  '/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -67,7 +64,8 @@ configRouter.delete('/custom',
 
 // ---------------------------------------------------------------------------
 
-configRouter.post('/instance-banner/pick',
+configRouter.post(
+  '/instance-banner/pick',
   authenticate,
   createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -75,7 +73,8 @@ configRouter.post('/instance-banner/pick',
   asyncMiddleware(updateInstanceImageFactory(ActorImageType.BANNER))
 )
 
-configRouter.delete('/instance-banner',
+configRouter.delete(
+  '/instance-banner',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteInstanceImageFactory(ActorImageType.BANNER))
@@ -83,7 +82,8 @@ configRouter.delete('/instance-banner',
 
 // ---------------------------------------------------------------------------
 
-configRouter.post('/instance-avatar/pick',
+configRouter.post(
+  '/instance-avatar/pick',
   authenticate,
   createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -91,7 +91,8 @@ configRouter.post('/instance-avatar/pick',
   asyncMiddleware(updateInstanceImageFactory(ActorImageType.AVATAR))
 )
 
-configRouter.delete('/instance-avatar',
+configRouter.delete(
+  '/instance-avatar',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))

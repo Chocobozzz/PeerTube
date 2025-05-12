@@ -204,6 +204,10 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
     return this.updateAnonymousProfile(details)
   }
 
+  isNsfwFlagsEnabled () {
+    return this.serverService.getHTMLConfig().nsfwFlagsSettings.enabled
+  }
+
   private handleReactiveUpdate () {
     let oldForm = { ...this.form.value }
 

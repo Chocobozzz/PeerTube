@@ -2,15 +2,18 @@ import { forceNumber, hasUserRight, USER_ROLE_LABELS } from '@peertube/peertube-
 import {
   AbuseState,
   MyUser,
+  NSFWFlag,
   User,
   UserAdminFlag,
   UserRightType,
+  UserRole,
   VideoPlaylistType,
   type NSFWPolicyType,
   type UserAdminFlagType,
-  type UserRoleType,
-  UserRole
+  type UserRoleType
 } from '@peertube/peertube-models'
+import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { LiveQuotaStore } from '@server/lib/live/index.js'
 import {
@@ -75,9 +78,8 @@ import { VideoImportModel } from '../video/video-import.js'
 import { VideoLiveModel } from '../video/video-live.js'
 import { VideoPlaylistModel } from '../video/video-playlist.js'
 import { VideoModel } from '../video/video.js'
-import { UserNotificationSettingModel } from './user-notification-setting.js'
 import { UserExportModel } from './user-export.js'
-import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { UserNotificationSettingModel } from './user-notification-setting.js'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -999,10 +1001,22 @@ export class UserModel extends SequelizeModel<UserModel> {
       emailVerified: this.emailVerified,
 
       nsfwPolicy: this.nsfwPolicy,
-      nsfwFlagsDisplayed: this.nsfwFlagsDisplayed,
-      nsfwFlagsHidden: this.nsfwFlagsHidden,
-      nsfwFlagsWarned: this.nsfwFlagsWarned,
-      nsfwFlagsBlurred: this.nsfwFlagsBlurred,
+
+      nsfwFlagsDisplayed: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+        ? this.nsfwFlagsDisplayed
+        : NSFWFlag.NONE,
+
+      nsfwFlagsHidden: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+        ? this.nsfwFlagsHidden
+        : NSFWFlag.NONE,
+
+      nsfwFlagsWarned: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+        ? this.nsfwFlagsWarned
+        : NSFWFlag.NONE,
+
+      nsfwFlagsBlurred: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
+        ? this.nsfwFlagsBlurred
+        : NSFWFlag.NONE,
 
       p2pEnabled: this.p2pEnabled,
 
