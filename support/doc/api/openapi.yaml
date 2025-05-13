@@ -2304,7 +2304,7 @@ paths:
                 value:
                   uri: 008a0e54-375d-49d0-8379-143202e24152@video.lqdn.fr
       responses:
-        '200':
+        '204':
           description: successful operation
 
   /api/v1/users/me/subscriptions/exist:
@@ -2393,7 +2393,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/subscriptionHandle'
       responses:
-        '200':
+        '204':
           description: successful operation
 
   /api/v1/users/me/notifications:
@@ -5112,7 +5112,36 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoListResponse'
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    maxItems: 100
+                    items:
+                    
+                      type: object
+                      properties:
+                        id:
+                          description: object id for the video
+                          allOf:
+                            - $ref: '#/components/schemas/id'
+                        position:
+                          type: integer
+                          example: 2
+                        startTimestamp:
+                          type: integer
+                          nullable: true
+                          example: 10
+                          format: seconds
+                        stopTimestamp:
+                          type: integer
+                          nullable: true
+                          example: 42
+                          format: seconds
+                        video:
+                          $ref: '#/components/schemas/Video'
     post:
       summary: Add a video in a playlist
       operationId: addVideoPlaylistVideo
@@ -5272,8 +5301,11 @@ paths:
                         startTimestamp:
                           type: integer
                           format: seconds
+                          nullable: true
                         stopTimestamp:
                           type: integer
+                          format: seconds
+                          nullable: true
 
   '/api/v1/accounts/{name}/video-playlists':
     get:
@@ -9177,6 +9209,7 @@ components:
           description: server on which the actor is resident
         hostRedundancyAllowed:
           type: boolean
+          nullable: true
           description: whether this actor's host allows redundancy of its videos
         followingCount:
           type: integer
