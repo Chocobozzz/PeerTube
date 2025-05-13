@@ -61,7 +61,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function buildPluginLogger (npmName: string) {
-  return buildLogger(npmName)
+  return buildLogger({ labelSuffix: npmName })
 }
 
 function buildDatabaseHelpers () {

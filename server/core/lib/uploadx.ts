@@ -7,7 +7,7 @@ import { extname } from 'path'
 import { authenticate } from '@server/middlewares/auth.js'
 import { resumableInitValidator } from '@server/middlewares/validators/resumable-upload.js'
 
-const logger = buildLogger('uploadx')
+const logger = buildLogger({ labelSuffix: 'uploadx' })
 
 export const uploadx = new Uploadx({
   directory: getResumableUploadPath(),

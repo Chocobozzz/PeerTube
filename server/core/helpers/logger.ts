@@ -10,9 +10,6 @@ import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
 import { FileTransportOptions } from 'winston/lib/winston/transports/index.js'
 
-const consoleSupportsColor = isTestOrDevInstance() ||
-  (isatty(1) && process.env.TERM && process.env.TERM !== 'dumb')
-
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 const consoleLoggerFormat = format.printf(info => {
@@ -35,43 +32,50 @@ const consoleLoggerFormat = format.printf(info => {
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const jsonLoggerFormat = format.printf(info => {
+export const jsonLoggerFormat = format.printf(info => {
   return JSON.stringify(info, removeCyclicValues())
 })
 
-const timestampFormatter = format.timestamp({
-  format: 'YYYY-MM-DD HH:mm:ss.SSS'
-})
-const labelFormatter = (suffix?: string) => {
+export const labelFormatter = (suffix?: string) => {
   return format.label({
     label: suffix ? `${label} ${suffix}` : label
   })
 }
 
-const fileLoggerOptions: FileTransportOptions = {
-  filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
-  handleExceptions: true,
-  format: format.combine(
-    format.timestamp(),
-    jsonLoggerFormat
-  )
-}
+export function buildLogger (options: {
+  labelSuffix?: string
+  handleExceptions?: boolean // default false
+}) {
+  const { labelSuffix, handleExceptions = false } = options
 
-if (CONFIG.LOG.ROTATION.ENABLED) {
-  fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
-  fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
-}
+  const formatters = [
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss.SSS'
+    })
+  ]
 
-function buildLogger (labelSuffix?: string) {
-  const formatters = [ timestampFormatter ]
+  if (doesConsoleSupportColor()) formatters.push(format.colorize())
 
-  if (consoleSupportsColor) formatters.push(format.colorize())
   formatters.push(consoleLoggerFormat)
 
   const consoleTransport = new transports.Console({
-    handleExceptions: true,
+    handleExceptions,
     format: format.combine(...formatters)
   })
+
+  const fileLoggerOptions: FileTransportOptions = {
+    filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
+    handleExceptions,
+    format: format.combine(
+      format.timestamp(),
+      jsonLoggerFormat
+    )
+  }
+
+  if (CONFIG.LOG.ROTATION.ENABLED) {
+    fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
+    fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
+  }
 
   return createLogger({
     level: process.env.LOGGER_LEVEL ?? CONFIG.LOG.LEVEL,
@@ -98,9 +102,22 @@ function buildLogger (labelSuffix?: string) {
   })
 }
 
-const logger = buildLogger()
+export const logger = buildLogger({ handleExceptions: true })
 
 // ---------------------------------------------------------------------------
+// Bunyan logger adapter for Winston
+// ---------------------------------------------------------------------------
+
+export const bunyanLogger = {
+  level: () => {},
+  trace: bunyanLogFactory('debug'),
+  debug: bunyanLogFactory('debug'),
+  verbose: bunyanLogFactory('debug'),
+  info: bunyanLogFactory('info'),
+  warn: bunyanLogFactory('warn'),
+  error: bunyanLogFactory('error'),
+  fatal: bunyanLogFactory('error')
+}
 
 function bunyanLogFactory (level: string) {
   return function (...params: any[]) {
@@ -121,22 +138,13 @@ function bunyanLogFactory (level: string) {
   }
 }
 
-const bunyanLogger = {
-  level: () => {},
-  trace: bunyanLogFactory('debug'),
-  debug: bunyanLogFactory('debug'),
-  verbose: bunyanLogFactory('debug'),
-  info: bunyanLogFactory('info'),
-  warn: bunyanLogFactory('warn'),
-  error: bunyanLogFactory('error'),
-  fatal: bunyanLogFactory('error')
-}
-
+// ---------------------------------------------------------------------------
+// Logger tags helpers
 // ---------------------------------------------------------------------------
 
-type LoggerTags = { tags: (string | number)[] }
-type LoggerTagsFn = (...tags: (string | number)[]) => LoggerTags
-function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
+export type LoggerTags = { tags: (string | number)[] }
+export type LoggerTagsFn = (...tags: (string | number)[]) => LoggerTags
+export function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
   return (...tags: (string | number)[]) => {
     return { tags: defaultTags.concat(tags) }
   }
@@ -144,7 +152,7 @@ function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
 
 // ---------------------------------------------------------------------------
 
-async function mtimeSortFilesDesc (files: string[], basePath: string) {
+export async function mtimeSortFilesDesc (files: string[], basePath: string) {
   const promises = []
   const out: { file: string, mtime: number }[] = []
 
@@ -165,21 +173,7 @@ async function mtimeSortFilesDesc (files: string[], basePath: string) {
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  buildLogger,
-  bunyanLogger,
-  consoleLoggerFormat,
-  jsonLoggerFormat,
-  labelFormatter,
-  logger,
-  loggerTagsFactory,
-  mtimeSortFilesDesc,
-  timestampFormatter,
-  type LoggerTags,
-  type LoggerTagsFn
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function removeCyclicValues () {
@@ -221,4 +215,9 @@ function getAdditionalInfo (info: any) {
   const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql', 'tags' ]
 
   return omit(info, toOmit)
+}
+
+function doesConsoleSupportColor () {
+  return isTestOrDevInstance() ||
+    (isatty(1) && process.env.TERM && process.env.TERM !== 'dumb')
 }
