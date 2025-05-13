@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .peertube-radio-container {
   @include peertube-radio-container;
@@ -15,11 +15,10 @@
 }
 
 .input-error:not(:focus) {
-
   &,
-  +.nav-preview,
+  + .nav-preview,
   // Markdown textarea
-  +*+.tab-content {
+  + * + .tab-content {
     border-color: pvar(--red) !important;
   }
 }
@@ -42,11 +41,10 @@
 // Disable red error on input focus
 .input-error:focus,
 .input-group:focus-within {
-
-  +.form-error,
-  +*+.form-error,
+  + .form-error,
+  + * + .form-error,
   // Markdown textarea
-  +*+*+.form-error {
+  + * + * + .form-error {
     color: pvar(--fg);
   }
 }
@@ -84,6 +82,7 @@ label,
 }
 
 label + .form-group-description,
+.label + .form-group-description,
 .label-container + .form-group-description {
   margin-bottom: 10px;
   margin-top: -0.5rem;
