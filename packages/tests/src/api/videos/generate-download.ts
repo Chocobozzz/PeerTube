@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getHLS } from '@peertube/peertube-core-utils'
-import { VideoDetails, VideoFile, VideoResolution } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoDetails, VideoFile, VideoResolution } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -17,8 +17,11 @@ import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { probeResBody } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { remove } from 'fs-extra'
+import { basename } from 'path'
 
 describe('Test generate download', function () {
+  const resolutions = [ VideoResolution.H_NOVIDEO, VideoResolution.H_144P ]
   let servers: PeerTubeServer[]
 
   before(async function () {
@@ -47,8 +50,6 @@ describe('Test generate download', function () {
         await server.kill()
         await server.run(objectStorage.getDefaultMockConfig())
       }
-
-      const resolutions = [ VideoResolution.H_NOVIDEO, VideoResolution.H_144P ]
 
       {
         await server.config.enableTranscoding({ hls: true, webVideo: true, splitAudioAndVideo: false, resolutions })
@@ -132,13 +133,37 @@ describe('Test generate download', function () {
     })
   }
 
+  describe('Download crash', function () {
+    it('Should not crash the server on non existing file', async function () {
+      this.timeout(120000)
+
+      await servers[0].config.enableTranscoding({ webVideo: false, hls: true, splitAudioAndVideo: true, resolutions })
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'crash' })
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        const file = getHLS(video).files.find(f => f.hasVideo)
+
+        await remove(servers[0].getDirectoryPath('streaming-playlists/hls/' + uuid + '/' + basename(file.fileUrl)))
+
+        await server.videos.generateDownload({
+          videoId: uuid,
+          videoFileIds: [ file.id ],
+          expectedStatus: server === servers[0]
+            ? HttpStatusCode.OK_200
+            : HttpStatusCode.INTERNAL_SERVER_ERROR_500
+        })
+      }
+    })
+  })
+
   for (const objectStorage of [ undefined, new ObjectStorageCommand() ]) {
     const testName = objectStorage
       ? 'On Object Storage'
       : 'On filesystem'
 
     describe(testName, function () {
-
       describe('Videos on local server', function () {
         runSuite(() => servers[0], objectStorage)
       })

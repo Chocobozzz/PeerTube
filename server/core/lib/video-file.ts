@@ -272,84 +272,112 @@ export async function muxToMergeVideoFiles (options: {
 
   const inputs: (string | Readable)[] = []
   const tmpDestinations: string[] = []
+  let ffmpegContainer: FFmpegContainer
 
-  try {
-    let maxResolution = 0
+  return new Promise<void>(async (res, rej) => {
+    const cleanup = async () => {
+      for (const destination of tmpDestinations) {
+        await remove(destination)
+      }
 
-    for (const videoFile of videoFiles) {
-      if (!videoFile) continue
+      for (const input of inputs) {
+        if (input instanceof Readable) {
+          if (!input.destroyed) input.destroy()
+        }
+      }
 
-      maxResolution = Math.max(maxResolution, videoFile.resolution)
-
-      const { input, isTmpDestination } = await buildMuxInput(video, videoFile)
-
-      inputs.push(input)
-
-      if (isTmpDestination === true) tmpDestinations.push(input)
+      if (ffmpegContainer) {
+        ffmpegContainer.forceKill()
+        ffmpegContainer = undefined
+      }
     }
-
-    // Include cover to audio file?
-    const { coverPath, isTmpDestination } = maxResolution === 0
-      ? await buildCoverInput(video)
-      : { coverPath: undefined, isTmpDestination: false }
-
-    if (coverPath && isTmpDestination) tmpDestinations.push(coverPath)
-
-    const inputsToLog = inputs.map(i => {
-      if (typeof i === 'string') return i
-
-      return 'ReadableStream'
-    })
-
-    logger.info(`Muxing files for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
-
-    const ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
 
     try {
-      await ffmpegContainer.mergeInputs({
-        inputs,
-        output,
-        logError: false,
+      let maxResolution = 0
 
-        // Include a cover if this is an audio file
-        coverPath
+      for (const videoFile of videoFiles) {
+        if (!videoFile) continue
+
+        maxResolution = Math.max(maxResolution, videoFile.resolution)
+
+        const { input, isTmpDestination } = await buildMuxInput(
+          video,
+          videoFile,
+          err => {
+            logger.warn(`Cannot build mux input of video ${video.url}`, { err, inputs: inputsToLog, ...lTags(video.uuid) })
+
+            cleanup()
+              .catch(cleanupErr => logger.error('Cannot cleanup after mux error', { err: cleanupErr, ...lTags(video.uuid) }))
+
+            rej(buildRequestError(err as any))
+          }
+        )
+
+        inputs.push(input)
+
+        if (isTmpDestination === true) tmpDestinations.push(input)
+      }
+
+      // Include cover to audio file?
+      const { coverPath, isTmpDestination } = maxResolution === 0
+        ? await buildCoverInput(video)
+        : { coverPath: undefined, isTmpDestination: false }
+
+      if (coverPath && isTmpDestination) tmpDestinations.push(coverPath)
+
+      const inputsToLog = inputs.map(i => {
+        if (typeof i === 'string') return i
+
+        return 'ReadableStream'
       })
 
-      logger.info(`Mux ended for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
+      logger.info(`Muxing files for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
+
+      ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
+
+      try {
+        await ffmpegContainer.mergeInputs({
+          inputs,
+          output,
+          logError: false,
+
+          // Include a cover if this is an audio file
+          coverPath
+        })
+
+        logger.info(`Mux ended for video ${video.url}`, { inputs: inputsToLog, ...lTags(video.uuid) })
+
+        res()
+      } catch (err) {
+        const message = err?.message || ''
+
+        if (message.includes('Output stream closed')) {
+          logger.info(`Client aborted mux for video ${video.url}`, lTags(video.uuid))
+          return
+        }
+
+        logger.warn(`Cannot mux files of video ${video.url}`, { err, inputs: inputsToLog, ...lTags(video.uuid) })
+
+        if (err.inputStreamError) {
+          err.inputStreamError = buildRequestError(err.inputStreamError)
+        }
+
+        throw err
+      } finally {
+        ffmpegContainer.forceKill()
+      }
     } catch (err) {
-      const message = err?.message || ''
-
-      if (message.includes('Output stream closed')) {
-        logger.info(`Client aborted mux for video ${video.url}`, lTags(video.uuid))
-        return
-      }
-
-      logger.warn(`Cannot mux files of video ${video.url}`, { err, inputs: inputsToLog, ...lTags(video.uuid) })
-
-      if (err.inputStreamError) {
-        err.inputStreamError = buildRequestError(err.inputStreamError)
-      }
-
-      throw err
+      rej(err)
     } finally {
-      ffmpegContainer.forceKill()
+      await cleanup()
     }
-  } finally {
-    for (const destination of tmpDestinations) {
-      await remove(destination)
-    }
-
-    for (const input of inputs) {
-      if (input instanceof Readable) {
-        if (!input.destroyed) input.destroy()
-      }
-    }
-  }
+  })
 }
 
 async function buildMuxInput (
   video: MVideo,
-  videoFile: MVideoFile
+  videoFile: MVideoFile,
+  onStreamError: (err: Error) => void
 ): Promise<{ input: Readable, isTmpDestination: false } | { input: string, isTmpDestination: boolean }> {
   // ---------------------------------------------------------------------------
   // Remote
@@ -375,7 +403,10 @@ async function buildMuxInput (
       return { input: destination, isTmpDestination: true }
     }
 
-    return { input: generateRequestStream(videoFile.fileUrl, { timeout, bodyKBLimit }), isTmpDestination: false }
+    return {
+      input: generateRequestStream(videoFile.fileUrl, { timeout, bodyKBLimit }).on('error', onStreamError),
+      isTmpDestination: false
+    }
   }
 
   // ---------------------------------------------------------------------------
