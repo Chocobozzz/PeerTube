@@ -15,7 +15,8 @@ You can get a chance to see translations before the official release by going to
  * Create an account: https://weblate.framasoft.org/accounts/register/
  * Validate your email and follow the link sent
  * Create your password (keep the `Current password` field empty) and setup your account
- * Go to the PeerTube page https://weblate.framasoft.org/projects/peertube/
+ * To translate the PeerTube web, visit the PeerTube project page: https://weblate.framasoft.org/projects/peertube/
+ * To translate the PeerTube mobile application, visit the PeerTube App project page: https://weblate.framasoft.org/projects/peertube-app/
  * Choose the file and the locale you want to translate
 
 
