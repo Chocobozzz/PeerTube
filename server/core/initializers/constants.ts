@@ -1057,6 +1057,7 @@ export const MEMOIZE_LENGTH = {
 export const totalCPUs = Math.max(cpus().length, 1)
 
 export const WORKER_THREADS = {
+  IDLE_TIMEOUT: 1000 * 10, // 10 seconds
   DOWNLOAD_IMAGE: {
     CONCURRENCY: 3,
     MAX_THREADS: 1

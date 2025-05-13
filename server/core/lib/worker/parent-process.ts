@@ -18,7 +18,8 @@ export function downloadImageFromWorker (options: Parameters<typeof downloadImag
       filename: new URL(join('workers', 'image-downloader.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.DOWNLOAD_IMAGE.CONCURRENCY,
       maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     downloadImageWorker.on('error', err => logger.error('Error in download image worker', { err }))
@@ -37,7 +38,8 @@ export function processImageFromWorker (options: Parameters<typeof processImage>
       filename: new URL(join('workers', 'image-processor.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.PROCESS_IMAGE.CONCURRENCY,
       maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     processImageWorker.on('error', err => logger.error('Error in process image worker', { err }))
@@ -56,7 +58,8 @@ export function getImageSizeFromWorker (options: Parameters<typeof getImageSize>
       filename: new URL(join('workers', 'get-image-size.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.GET_IMAGE_SIZE.CONCURRENCY,
       maxThreads: WORKER_THREADS.GET_IMAGE_SIZE.MAX_THREADS,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     getImageSizeWorker.on('error', err => logger.error('Error in get image size worker', { err }))
@@ -76,7 +79,8 @@ export function parallelHTTPBroadcastFromWorker (options: Parameters<typeof http
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast-parallel'],
       maxThreads: 1,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     parallelHTTPBroadcastWorker.on('error', err => logger.error('Error in parallel HTTP broadcast worker', { err }))
@@ -98,7 +102,8 @@ export function sequentialHTTPBroadcastFromWorker (
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast'],
       maxThreads: 1,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     sequentialHTTPBroadcastWorker.on('error', err => logger.error('Error in sequential HTTP broadcast image worker', { err }))
@@ -120,7 +125,8 @@ export function httpUnicastFromWorker (
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-unicast'],
       maxThreads: 1,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     httpUnicastWorker.on('error', err => logger.error('Error in HTTP unicast worker', { err }))
@@ -133,7 +139,7 @@ export function httpUnicastFromWorker (
 
 let signJsonLDObjectWorker: Piscina
 
-export function signJsonLDObjectFromWorker <T> (
+export function signJsonLDObjectFromWorker<T> (
   options: Parameters<typeof signJsonLDObject<T>>[0]
 ): ReturnType<typeof signJsonLDObject<T>> {
   if (!signJsonLDObjectWorker) {
@@ -141,7 +147,8 @@ export function signJsonLDObjectFromWorker <T> (
       filename: new URL(join('workers', 'sign-json-ld-object.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.SIGN_JSON_LD_OBJECT.CONCURRENCY,
       maxThreads: WORKER_THREADS.SIGN_JSON_LD_OBJECT.MAX_THREADS,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     signJsonLDObjectWorker.on('error', err => logger.error('Error in sign JSONLD object worker', { err }))
@@ -163,7 +170,8 @@ export function buildDigestFromWorker (
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: WORKER_THREADS.BUILD_DIGEST.CONCURRENCY,
       maxThreads: WORKER_THREADS.BUILD_DIGEST.MAX_THREADS,
-      minThreads: 1
+      minThreads: 1,
+      idleTimeout: WORKER_THREADS.IDLE_TIMEOUT
     })
 
     buildDigestWorker.on('error', err => logger.error('Error in build digest worker', { err }))
