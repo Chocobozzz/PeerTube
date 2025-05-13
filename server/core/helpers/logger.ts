@@ -5,10 +5,11 @@ import { stat } from 'fs/promises'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
 import { isatty } from 'tty'
-import { createLogger, format, transports } from 'winston'
+import { createLogger, format, transport, transports } from 'winston'
+import { FileTransportOptions } from 'winston/lib/winston/transports/index.js'
+import { isMainThread } from 'worker_threads'
 import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
-import { FileTransportOptions } from 'winston/lib/winston/transports/index.js'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
@@ -77,6 +78,16 @@ export function buildLogger (options: {
     fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
   }
 
+  const loggerTransports: transport[] = []
+
+  // Don't add file logger transport in worker threads in production
+  // See https://github.com/winstonjs/winston/issues/2393
+  if (isMainThread || isTestOrDevInstance()) {
+    loggerTransports.push(new transports.File(fileLoggerOptions))
+  }
+
+  loggerTransports.push(consoleTransport)
+
   return createLogger({
     level: process.env.LOGGER_LEVEL ?? CONFIG.LOG.LEVEL,
     defaultMeta: {
@@ -94,10 +105,7 @@ export function buildLogger (options: {
       labelFormatter(labelSuffix),
       format.splat()
     ),
-    transports: [
-      new transports.File(fileLoggerOptions),
-      consoleTransport
-    ],
+    transports: loggerTransports,
     exitOnError: true
   })
 }
@@ -218,6 +226,7 @@ function getAdditionalInfo (info: any) {
 }
 
 function doesConsoleSupportColor () {
-  return isTestOrDevInstance() ||
-    (isatty(1) && process.env.TERM && process.env.TERM !== 'dumb')
+  if (isTestOrDevInstance()) return true
+
+  return isatty(1) && process.env.TERM && process.env.TERM !== 'dumb'
 }
