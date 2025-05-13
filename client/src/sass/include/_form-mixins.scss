@@ -1,8 +1,8 @@
-@use 'sass:math';
-@use 'sass:color';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "sass:math";
+@use "sass:color";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 @mixin peertube-input-text($width, $font-size: $form-input-font-size) {
   font-size: $font-size;
@@ -42,7 +42,7 @@
   }
 }
 
-@mixin peertube-textarea ($width, $height) {
+@mixin peertube-textarea($width, $height) {
   @include peertube-input-text($width);
 
   & {
@@ -53,7 +53,7 @@
   }
 }
 
-@mixin peertube-select-container ($width) {
+@mixin peertube-select-container($width) {
   padding: 0;
   margin: 0;
   position: relative;
@@ -64,7 +64,7 @@
   &::after {
     top: 50%;
     right: calc(0% + 15px);
-    content: ' ';
+    content: " ";
     height: 0;
     width: 0;
     position: absolute;
@@ -116,14 +116,15 @@
     color: pvar(--fg-350);
   }
 
-  [type=radio]:focus-visible,[type=radio]:focus {
+  [type="radio"]:focus-visible,
+  [type="radio"]:focus {
     & + label::before {
       box-shadow: $focus-box-shadow-form;
     }
   }
 
-  [type=radio]:checked,
-  [type=radio]:not(:checked) {
+  [type="radio"]:checked,
+  [type="radio"]:not(:checked) {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -131,8 +132,8 @@
     width: 0;
   }
 
-  [type=radio]:checked + label,
-  [type=radio]:not(:checked) + label {
+  [type="radio"]:checked + label,
+  [type="radio"]:not(:checked) + label {
     position: relative;
     padding-left: 28px;
     cursor: pointer;
@@ -141,9 +142,9 @@
     font-weight: $font-regular;
   }
 
-  [type=radio]:checked + label::before,
-  [type=radio]:not(:checked) + label::before {
-    content: '';
+  [type="radio"]:checked + label::before,
+  [type="radio"]:not(:checked) + label::before {
+    content: "";
     position: absolute;
     left: 0;
     top: -1px;
@@ -153,9 +154,9 @@
     border-radius: 100%;
   }
 
-  [type=radio]:checked + label::after,
-  [type=radio]:not(:checked) + label::after {
-    content: '';
+  [type="radio"]:checked + label::after,
+  [type="radio"]:not(:checked) + label::after {
+    content: "";
     width: 10px;
     height: 10px;
     background: pvar(--input-check-active-bg);
@@ -165,16 +166,16 @@
     border-radius: 100%;
     transition: all 0.2s ease;
   }
-  [type=radio]:not(:checked) + label::after {
+  [type="radio"]:not(:checked) + label::after {
     opacity: 0;
     transform: scale(0);
   }
 
-  [type=radio]:checked + label::before {
+  [type="radio"]:checked + label::before {
     border: 2px solid pvar(--fg);
   }
 
-  [type=radio]:checked + label::after {
+  [type="radio"]:checked + label::after {
     opacity: 1;
     transform: scale(1);
   }
@@ -209,7 +210,7 @@
     cursor: pointer;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 4px;
       left: 6px;
@@ -228,7 +229,7 @@
     animation: jelly 0.6s ease;
 
     &::before {
-      content: '';
+      content: "";
       width: 100%;
       height: 100%;
       background: pvar(--input-check-active-bg);

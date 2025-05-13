@@ -64,12 +64,12 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
       label: $localize`Hide`
     },
     {
-      id: 'warn',
-      label: $localize`Warn`
-    },
-    {
       id: 'blur',
       label: $localize`Blur`
+    },
+    {
+      id: 'warn',
+      label: $localize`Warn`
     },
     {
       id: 'display',
@@ -87,12 +87,12 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
       label: $localize`Hide`
     },
     {
-      id: 'warn',
-      label: $localize`Warn`
-    },
-    {
       id: 'blur',
       label: $localize`Blur`
+    },
+    {
+      id: 'warn',
+      label: $localize`Warn`
     },
     {
       id: 'display',
