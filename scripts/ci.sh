@@ -51,7 +51,7 @@ if [ "$1" = "types-package" ]; then
     cp -r packages/types-generator/dist /tmp/types-generator/dist
 
     (cd /tmp/types-generator/dist && npm install)
-    (cd /tmp/types-generator/tests && npx tsc --noEmit --esModuleInterop --moduleResolution node16 --module Node16 ./test.ts)
+    (cd /tmp/types-generator/tests && npx --package typescript tsc --noEmit --esModuleInterop --moduleResolution node16 --module Node16 ./test.ts)
 
     rm -r /tmp/types-generator
 elif [ "$1" = "client" ]; then
