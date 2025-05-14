@@ -11,7 +11,7 @@ import {
   getOriginalFileReadStream,
   getWebVideoFileReadStream
 } from '@server/lib/object-storage/videos.js'
-import { muxToMergeVideoFiles } from '@server/lib/video-file.js'
+import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -391,7 +391,8 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     if (separatedAudioFile) {
       const stream = new PassThrough()
 
-      muxToMergeVideoFiles({ video, videoFiles: [ videoFile, separatedAudioFile ], output: stream })
+      await new VideoDownload({ video, videoFiles: [ videoFile, separatedAudioFile ] })
+        .muxToMergeVideoFiles(stream)
         .catch(err => logger.error('Cannot mux video files', { err }))
 
       return Promise.resolve(stream)

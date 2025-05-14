@@ -249,7 +249,8 @@ export function checkMissedConfig () {
     'live.transcoding.remote_runners.enabled',
     'storyboards.enabled',
     'webrtc.stun_servers',
-    'nsfw_flags_settings.enabled'
+    'nsfw_flags_settings.enabled',
+    'download_generate_video.max_parallel_downloads'
   ]
 
   const requiredAlternatives = [

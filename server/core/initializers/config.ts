@@ -78,6 +78,10 @@ const CONFIG = {
     ENABLED: config.get<boolean>('nsfw_flags_settings.enabled')
   },
 
+  DOWNLOAD_GENERATE_VIDEO: {
+    MAX_PARALLEL_DOWNLOADS: config.get<number>('download_generate_video.max_parallel_downloads')
+  },
+
   CLIENT: {
     VIDEOS: {
       MINIATURE: {

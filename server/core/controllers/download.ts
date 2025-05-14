@@ -12,7 +12,7 @@ import {
 } from '@server/lib/object-storage/index.js'
 import { getFSUserExportFilePath } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { muxToMergeVideoFiles } from '@server/lib/video-file.js'
+import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import {
   MStreamingPlaylist,
@@ -27,7 +27,9 @@ import cors from 'cors'
 import express from 'express'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
-  asyncMiddleware, buildRateLimiter, optionalAuthenticate,
+  asyncMiddleware,
+  buildRateLimiter,
+  optionalAuthenticate,
   originalVideoFileDownloadValidator,
   userExportDownloadValidator,
   videosDownloadValidator,
@@ -244,6 +246,13 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
+  if (VideoDownload.totalDownloads > CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
+    return res.fail({
+      status: HttpStatusCode.TOO_MANY_REQUESTS_429,
+      message: `Too many parallel downloads on this server. Please try again later.`
+    })
+  }
+
   const maxResolutionFile = maxBy(videoFiles, 'resolution')
 
   // Prefer m4a extension for the user if this is a mp4 audio file only
@@ -260,7 +269,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
 
   res.type(extname)
 
-  await muxToMergeVideoFiles({ video, videoFiles, output: res })
+  await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res)
 }
 
 // ---------------------------------------------------------------------------

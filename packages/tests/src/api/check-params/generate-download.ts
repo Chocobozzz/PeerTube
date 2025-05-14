@@ -123,10 +123,61 @@ describe('Test generate download API validator', function () {
       await server.videos.generateDownload({ videoId, videoFileIds, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
-    it('Should suceed with the correct params', async function () {
+    it('Should succeed with the correct params', async function () {
       const videoFileIds = [ audioStreamId, videoStreamIds[0] ]
 
       await server.videos.generateDownload({ videoId, videoFileIds })
+    })
+  })
+
+  describe('Download rate limit', function () {
+    let videoId: string
+    let fileId: number
+
+    before(async function () {
+      this.timeout(60000)
+
+      await server.kill()
+
+      await server.run({
+        download_generate_video: {
+          max_parallel_downloads: 2
+        }
+      })
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video' })
+      videoId = uuid
+      await waitJobs([ server ])
+
+      const video = await server.videos.get({ id: uuid })
+      fileId = video.files[0].id
+    })
+
+    it('Should succeed with a single download', async function () {
+      const videoFileIds = [ fileId ]
+
+      for (let i = 0; i < 3; i++) {
+        await server.videos.generateDownload({ videoId, videoFileIds })
+      }
+    })
+
+    it('Should fail with too many parallel downloads', async function () {
+      const videoFileIds = [ fileId ]
+
+      const promises: Promise<any>[] = []
+
+      for (let i = 0; i < 10; i++) {
+        promises.push(
+          server.videos.generateDownload({ videoId, videoFileIds })
+            .catch(err => {
+              if (err.message.includes('429')) return
+
+              throw err
+            })
+        )
+      }
+
+      await Promise.all(promises)
     })
   })
 

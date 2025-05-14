@@ -538,6 +538,12 @@ nsfw_flags_settings:
   # using NSFW flags (violent content, etc.) set by video authors
   enabled: true
 
+download_generate_video:
+  # Max parallel downloads on your instance
+  # Each download spawns an ffmpeg process
+  # The ffmpeg process ends when users have downloaded the entire file or cancelled the download
+  max_parallel_downloads: 100
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

@@ -534,7 +534,13 @@ webrtc:
 nsfw_flags_settings:
   # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
   # using NSFW flags (violent content, etc.) set by video authors
-  enabled: false
+  enabled: true
+
+download_generate_video:
+  # Max parallel downloads on your instance
+  # Each download spawns an ffmpeg process
+  # The ffmpeg process ends when users have downloaded the entire file or cancelled the download
+  max_parallel_downloads: 100
 
 ###############################################################################
 #
@@ -1091,11 +1097,6 @@ client:
       # If you enable only one external auth plugin
       # You can automatically redirect your users on this external platform when they click on the login button
       redirect_on_single_external_auth: false
-
-  # Allow logged-in/anonymous users to have a more granular control over their NSFW policy
-  # using NSFW flags (violent content, etc.) set by video authors
-  nsfw_flags_settings:
-    enabled: true
 
   open_in_app:
     android:

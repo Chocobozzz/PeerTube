@@ -15,6 +15,9 @@ rates_limit:
   signup:
     window: 5 minutes
     max: 200
+  download_generate_video:
+    window: 5 seconds
+    max: 500000
 
 database:
   hostname: '127.0.0.1'
