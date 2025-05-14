@@ -201,10 +201,10 @@ describe('Test index search', function () {
       }
 
       await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT }, true)
-      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT | NSFWFlag.SHOCKING_DISTURBING }, true)
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.VIOLENT | NSFWFlag.EXPLICIT_SEX }, true)
       await checkNSFW({ nsfw: 'true', nsfwFlagsExcluded: NSFWFlag.VIOLENT }, false)
-      await checkNSFW({ nsfw: 'both', nsfwFlagsExcluded: NSFWFlag.VIOLENT | NSFWFlag.SHOCKING_DISTURBING }, false)
-      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.SHOCKING_DISTURBING }, false)
+      await checkNSFW({ nsfw: 'both', nsfwFlagsExcluded: NSFWFlag.VIOLENT | NSFWFlag.EXPLICIT_SEX }, false)
+      await checkNSFW({ nsfw: 'false', nsfwFlagsIncluded: NSFWFlag.EXPLICIT_SEX }, false)
     })
 
     it('Should search by host', async function () {

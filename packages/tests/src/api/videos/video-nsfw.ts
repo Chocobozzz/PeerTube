@@ -127,7 +127,7 @@ describe('Test video NSFW policy', function () {
         attributes: {
           name: 'nsfw sex',
           nsfw: true,
-          nsfwFlags: NSFWFlag.SHOCKING_DISTURBING | NSFWFlag.EXPLICIT_SEX,
+          nsfwFlags: NSFWFlag.VIOLENT | NSFWFlag.EXPLICIT_SEX,
           nsfwSummary: 'This is a shocking and disturbing video',
           category: 1
         }
@@ -140,7 +140,7 @@ describe('Test video NSFW policy', function () {
         const video = await server.videos.get({ id: uuid })
 
         expect(video.nsfw).to.be.true
-        expect(video.nsfwFlags).to.equal(6)
+        expect(video.nsfwFlags).to.equal(3)
         expect(video.nsfwSummary).to.equal('This is a shocking and disturbing video')
       }
     })
@@ -556,7 +556,7 @@ describe('Test video NSFW policy', function () {
         nsfwPolicy: 'do_not_list',
         nsfwFlagsHidden: NSFWFlag.EXPLICIT_SEX,
         nsfwFlagsWarned: NSFWFlag.NONE,
-        nsfwFlagsBlurred: NSFWFlag.SHOCKING_DISTURBING,
+        nsfwFlagsBlurred: NSFWFlag.NONE,
         nsfwFlagsDisplayed: NSFWFlag.VIOLENT
       })
 

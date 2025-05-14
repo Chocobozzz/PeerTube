@@ -22,7 +22,6 @@ type Form = {
   nsfw: FormControl<boolean>
 
   nsfwFlagViolent: FormControl<boolean>
-  nsfwFlagShocking: FormControl<boolean>
   nsfwFlagSex: FormControl<boolean>
   nsfwSummary: FormControl<string>
 
@@ -82,7 +81,6 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
       commentsPolicy: null,
       nsfw: null,
       nsfwFlagViolent: null,
-      nsfwFlagShocking: null,
       nsfwFlagSex: null,
       nsfwSummary: VIDEO_NSFW_SUMMARY_VALIDATOR
     }
@@ -125,7 +123,6 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
   private updateNSFWControls (nsfw: boolean) {
     const controls = [
       this.form.controls.nsfwFlagViolent,
-      this.form.controls.nsfwFlagShocking,
       this.form.controls.nsfwFlagSex,
       this.form.controls.nsfwSummary
     ]

@@ -8215,9 +8215,7 @@ components:
 
         - `1` VIOLENT
 
-        - `2` SHOCKING_DISTURBING
-
-        - `4` EXPLICIT_SEX
+        - `2` EXPLICIT_SEX
 
     UserRole:
       type: integer

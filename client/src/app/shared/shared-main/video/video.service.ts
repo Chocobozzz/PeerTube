@@ -543,10 +543,6 @@ export class VideoService {
       flags.push($localize`violence`)
     }
 
-    if ((video.nsfwFlags & NSFWFlag.SHOCKING_DISTURBING) === NSFWFlag.SHOCKING_DISTURBING) {
-      flags.push($localize`shocking content`)
-    }
-
     if ((video.nsfwFlags & NSFWFlag.EXPLICIT_SEX) === NSFWFlag.EXPLICIT_SEX) {
       flags.push($localize`explicit sex`)
     }

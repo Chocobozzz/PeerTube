@@ -73,10 +73,6 @@ class PeerTubeNSFWComponent extends Component {
       flagStrings.push(this.player().localize(`Violence`))
     }
 
-    if ((flags & NSFWFlag.SHOCKING_DISTURBING) === NSFWFlag.SHOCKING_DISTURBING) {
-      flagStrings.push(this.player().localize(`Shocking Content`))
-    }
-
     if ((flags & NSFWFlag.EXPLICIT_SEX) === NSFWFlag.EXPLICIT_SEX) {
       flagStrings.push(this.player().localize(`Explicit Sex`))
     }
