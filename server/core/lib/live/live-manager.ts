@@ -27,7 +27,6 @@ import { Server, createServer } from 'net'
 import context from 'node-media-server/src/node_core_ctx.js'
 import nodeMediaServerLogger from 'node-media-server/src/node_core_logger.js'
 import NodeRtmpSession from 'node-media-server/src/node_rtmp_session.js'
-import { join } from 'path'
 import { Server as ServerTLS, createServer as createServerTLS } from 'tls'
 import { federateVideoIfNeeded } from '../activitypub/videos/index.js'
 import { JobQueue } from '../job-queue/index.js'
@@ -621,7 +620,7 @@ class LiveManager {
 
     if (files.length === 0) return undefined
 
-    return join(directory, files.sort().reverse()[0])
+    return files.sort().reverse()[0]
   }
 
   private buildAllResolutionsToTranscode (originResolution: number, hasAudio: boolean) {

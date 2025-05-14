@@ -102,7 +102,7 @@ describe('Test videos files', function () {
         await waitJobs(servers)
       })
 
-      it('Shoulde delete a web video file', async function () {
+      it('Should delete a web video file', async function () {
         this.timeout(30_000)
 
         const video = await servers[0].videos.get({ id: webVideoId })

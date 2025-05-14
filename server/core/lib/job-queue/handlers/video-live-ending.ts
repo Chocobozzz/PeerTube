@@ -39,13 +39,13 @@ import {
 import { Job } from 'bullmq'
 import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
-import { join } from 'path'
+import { isAbsolute, join } from 'path'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 
-async function processVideoLiveEnding (job: Job) {
+export async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
 
   logger.info('Processing video live ending for %s.', payload.videoId, { payload, ...lTags() })
@@ -72,38 +72,47 @@ async function processVideoLiveEnding (job: Job) {
     return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
-  if (await hasReplayFiles(payload.replayDirectory) !== true) {
-    logger.info(`No replay files found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
+  let replayDirectory = payload.replayDirectory
 
-    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+  // Introduced in PeerTube 7.2, allow to use the appropriate base directory even if the live privacy changed
+  if (!isAbsolute(replayDirectory)) {
+    replayDirectory = join(getLiveReplayBaseDirectory(video), replayDirectory)
   }
 
-  if (permanentLive) {
-    await saveReplayToExternalVideo({
-      liveVideo: video,
-      liveSession,
-      publishedAt: payload.publishedAt,
-      replayDirectory: payload.replayDirectory
-    })
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+  try {
+    await video.reload()
+
+    if (await hasReplayFiles(replayDirectory) !== true) {
+      logger.info(`No replay files found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
+
+      await cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+    } else if (permanentLive) {
+      await saveReplayToExternalVideo({
+        liveVideo: video,
+        liveSession,
+        publishedAt: payload.publishedAt,
+        replayDirectory
+      })
+
+      await cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+    } else {
+      await replaceLiveByReplay({
+        video,
+        liveSession,
+        live,
+        permanentLive,
+        replayDirectory
+      })
+    }
+  } finally {
+    inputFileMutexReleaser()
   }
-
-  return replaceLiveByReplay({
-    video,
-    liveSession,
-    live,
-    permanentLive,
-    replayDirectory: payload.replayDirectory
-  })
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  processVideoLiveEnding
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function saveReplayToExternalVideo (options: {
@@ -167,16 +176,10 @@ async function saveReplayToExternalVideo (options: {
     })
   }
 
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(liveVideo.uuid)
+  await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
 
-  try {
-    await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
-
-    logger.info(`Removing replay directory ${replayDirectory}`, lTags(liveVideo.uuid))
-    await remove(replayDirectory)
-  } finally {
-    inputFileMutexReleaser()
-  }
+  logger.info(`Removing replay directory ${replayDirectory}`, lTags(liveVideo.uuid))
+  await remove(replayDirectory)
 
   try {
     await copyOrRegenerateThumbnails({ liveVideo, replayVideo })
@@ -266,25 +269,19 @@ async function replaceLiveByReplay (options: {
   hlsPlaylist.segmentsSha256Filename = generateHlsSha256SegmentsFilename()
   await hlsPlaylist.save()
 
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoWithFiles.uuid)
+  await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
 
-  try {
-    await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
+  // Should not happen in this function, but we keep the code if in the future we can replace the permanent live by a replay
+  if (permanentLive) { // Remove session replay
+    await remove(replayDirectory)
+  } else {
+    // We won't stream again in this live, we can delete the base replay directory
+    await remove(getLiveReplayBaseDirectory(liveVideo))
 
-    // Should not happen in this function, but we keep the code if in the future we can replace the permanent live by a replay
-    if (permanentLive) { // Remove session replay
-      await remove(replayDirectory)
-    } else {
-      // We won't stream again in this live, we can delete the base replay directory
-      await remove(getLiveReplayBaseDirectory(liveVideo))
-
-      // If the live was in another base directory, also delete it
-      if (replayInAnotherDirectory) {
-        await remove(getHLSDirectory(liveVideo))
-      }
+    // If the live was in another base directory, also delete it
+    if (replayInAnotherDirectory) {
+      await remove(getHLSDirectory(liveVideo))
     }
-  } finally {
-    inputFileMutexReleaser()
   }
 
   // Regenerate the thumbnail & preview?
