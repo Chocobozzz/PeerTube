@@ -150,7 +150,9 @@ export class VideoWatchPage {
   async clickOnManage () {
     await this.clickOnMoreDropdownIcon()
 
-    const items = $$('.dropdown-menu.show .dropdown-item')
+    // We need the await expression
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    const items = await $$('.dropdown-menu.show .dropdown-item')
 
     for (const item of items) {
       const content = await item.getText()

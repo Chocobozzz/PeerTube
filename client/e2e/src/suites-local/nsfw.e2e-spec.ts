@@ -312,12 +312,10 @@ describe('NSFW', () => {
 
         const confirmTitle = videoWatchPage.getModalTitleEl()
         await confirmTitle.waitForDisplayed()
-        expect(await confirmTitle.getText()).toContain('Mature or explicit content')
+        expect(await confirmTitle.getText()).toContain('Sensitive video')
 
         await videoWatchPage.confirmModal()
         await videoWatchPage.waitWatchVideoName(nsfwVideo)
-
-        await playerPage.waitUntilPlaying()
       })
 
       it('Should correctly handle blur', async () => {

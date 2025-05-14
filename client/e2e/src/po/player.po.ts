@@ -22,7 +22,7 @@ export class PlayerPage {
   }
 
   waitUntilPlayerWrapper () {
-    return $('#placeholder-preview').waitForExist()
+    return $('#video-wrapper').waitForExist()
   }
 
   waitUntilPlaying () {
