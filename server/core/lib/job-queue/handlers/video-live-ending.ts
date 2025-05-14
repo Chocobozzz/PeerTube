@@ -37,7 +37,7 @@ import {
   MVideoWithFileThumbnail
 } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
-import { remove } from 'fs-extra/esm'
+import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
@@ -369,5 +369,5 @@ function createStoryboardJob (video: MVideo) {
 }
 
 async function hasReplayFiles (replayDirectory: string) {
-  return (await readdir(replayDirectory)).length !== 0
+  return await pathExists(replayDirectory) && (await readdir(replayDirectory)).length !== 0
 }
