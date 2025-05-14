@@ -1,10 +1,5 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
-import {
-  ActivityIconObject,
-  ActorImageType,
-  ActorImageType_Type,
-  type ActivityPubActorType
-} from '@peertube/peertube-models'
+import { ActivityIconObject, ActorImageType, ActorImageType_Type, type ActivityPubActorType } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
@@ -34,13 +29,7 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import {
-  ACTIVITY_PUB,
-  ACTIVITY_PUB_ACTOR_TYPES,
-  CONSTRAINTS_FIELDS,
-  SERVER_ACTOR_NAME,
-  WEBSERVER
-} from '../../initializers/constants.js'
+import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants.js'
 import {
   MActor,
   MActorAPAccount,
@@ -574,7 +563,13 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     let image: ActivityIconObject[] // Banners
 
     if (this.hasImage(ActorImageType.AVATAR)) {
-      icon = this.Avatars.map(a => a.toActivityPubObject())
+      let avatars = this.Avatars
+
+      // Use 120px avatar as first position if possible, so that remote servers use it in priority (instead of using 48x48px)
+      const avatar120Px = avatars.find(a => a.width === 120)
+      if (avatar120Px) avatars = [ avatar120Px, ...avatars.filter(a => a.width !== 120) ]
+
+      icon = avatars.map(a => a.toActivityPubObject())
     }
 
     if (this.hasImage(ActorImageType.BANNER)) {

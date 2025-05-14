@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
   HttpStatusCode,
@@ -15,6 +16,8 @@ import {
   makeActivityPubGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
 import { processViewersStats } from '@tests/shared/views.js'
@@ -26,7 +29,7 @@ describe('Test ActivityPub', function () {
   let playlist: { id: number, uuid: string, shortUUID: string }
   let comment: VideoComment
 
-  async function testAccount (path: string) {
+  async function testAccount (path: string, hasIcon: boolean) {
     const res = await makeActivityPubGetRequest(servers[0].url, path)
     const object = res.body as ActivityPubActor
 
@@ -34,6 +37,12 @@ describe('Test ActivityPub', function () {
     expect(object.id).to.equal(servers[0].url + '/accounts/root')
     expect(object.name).to.equal('root')
     expect(object.preferredUsername).to.equal('root')
+
+    if (hasIcon) {
+      expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
+    } else {
+      expect(object.icon).to.not.exist
+    }
 
     // TODO: enable in v8
     // const htmlURLs = [
@@ -47,7 +56,7 @@ describe('Test ActivityPub', function () {
     // }
   }
 
-  async function testChannel (path: string) {
+  async function testChannel (path: string, hasIcon: boolean) {
     const res = await makeActivityPubGetRequest(servers[0].url, path)
     const object = res.body as ActivityPubActor
 
@@ -55,6 +64,12 @@ describe('Test ActivityPub', function () {
     expect(object.id).to.equal(servers[0].url + '/video-channels/root_channel')
     expect(object.name).to.equal('Main root channel')
     expect(object.preferredUsername).to.equal('root_channel')
+
+    if (hasIcon) {
+      expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
+    } else {
+      expect(object.icon).to.not.exist
+    }
 
     // TODO: enable in v8
     // const htmlURLs = [
@@ -130,13 +145,21 @@ describe('Test ActivityPub', function () {
   })
 
   it('Should return the account object', async function () {
-    await testAccount('/accounts/root')
-    await testAccount('/a/root')
+    await testAccount('/accounts/root', false)
+    await testAccount('/a/root', false)
   })
 
   it('Should return the channel object', async function () {
-    await testChannel('/video-channels/root_channel')
-    await testChannel('/c/root_channel')
+    await testChannel('/video-channels/root_channel', false)
+    await testChannel('/c/root_channel', false)
+  })
+
+  it('Should return account & channels with icons', async function () {
+    await setDefaultAccountAvatar(servers)
+    await setDefaultChannelAvatar(servers)
+
+    await testAccount('/a/root', true)
+    await testChannel('/c/root_channel', true)
   })
 
   it('Should return the video comment object', async function () {
