@@ -391,7 +391,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     if (separatedAudioFile) {
       const stream = new PassThrough()
 
-      await new VideoDownload({ video, videoFiles: [ videoFile, separatedAudioFile ] })
+      new VideoDownload({ video, videoFiles: [ videoFile, separatedAudioFile ] })
         .muxToMergeVideoFiles(stream)
         .catch(err => logger.error('Cannot mux video files', { err }))
 
