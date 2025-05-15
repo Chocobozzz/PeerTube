@@ -186,6 +186,7 @@
 
           <my-video-actions-dropdown
             placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
+            [moreActions]="moreVideoActions"
             (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()" (transcodingCreated)="reloadData()"
           ></my-video-actions-dropdown>
         </div>
