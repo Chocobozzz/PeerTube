@@ -2,7 +2,7 @@ import { NgFor, NgStyle } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
-import { CommonVideoParams, VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoListParams, VideoService } from '@app/shared/shared-main/video/video.service'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ResultList, VideoSortField } from '@peertube/peertube-models'
 import { Observable } from 'rxjs'
@@ -86,7 +86,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   }
 
   getVideosObservable () {
-    const options: CommonVideoParams = {
+    const options: VideoListParams = {
       videoPagination: {
         currentPage: 1,
         itemsPerPage: this.count()

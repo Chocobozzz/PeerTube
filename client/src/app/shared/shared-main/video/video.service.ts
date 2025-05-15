@@ -45,12 +45,14 @@ import { from, Observable, of, throwError } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
+import { AccountService } from '../account/account.service'
 import { VideoChannel } from '../channel/video-channel.model'
+import { VideoChannelService } from '../channel/video-channel.service'
 import { VideoDetails } from './video-details.model'
 import { VideoPasswordService } from './video-password.service'
 import { Video } from './video.model'
 
-export type CommonVideoParams = Omit<VideosCommonQuery, 'start' | 'count' | 'sort'> & {
+export type VideoListParams = Omit<VideosCommonQuery, 'start' | 'count' | 'sort'> & {
   videoPagination?: ComponentPaginationLight
   sort: VideoSortField | SortMeta
 }
@@ -155,15 +157,15 @@ export class VideoService {
   }
 
   listAccountVideos (
-    options: CommonVideoParams & {
+    options: VideoListParams & {
       account: Pick<Account, 'nameWithHost'>
     }
   ): Observable<ResultList<Video>> {
-    return this.listVideos({ ...options, videoChannel: options.account })
+    return this.listVideos({ ...options, account: options.account })
   }
 
   listChannelVideos (
-    options: CommonVideoParams & {
+    options: VideoListParams & {
       videoChannel: Pick<VideoChannel, 'nameWithHost'>
     }
   ): Observable<ResultList<Video>> {
@@ -171,23 +173,34 @@ export class VideoService {
   }
 
   listVideos (
-    options: CommonVideoParams & {
+    optionsArg: VideoListParams & {
       videoChannel?: Pick<VideoChannel, 'nameWithHost'>
       account?: Pick<Account, 'nameWithHost'>
     }
   ): Observable<ResultList<Video>> {
+    const { account, videoChannel, ...options } = optionsArg
+
     let params = new HttpParams()
-    params = this.buildCommonVideosParams({ params, ...options })
+    params = this.buildVideoListParams({ params, ...options })
+
+    let url: string
+    if (videoChannel) {
+      url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos'
+    } else if (account) {
+      url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos'
+    } else {
+      url = VideoService.BASE_VIDEO_URL
+    }
 
     return this.authHttp
-      .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
+      .get<ResultList<Video>>(url, { params })
       .pipe(
         switchMap(res => this.extractVideos(res)),
         catchError(err => this.restExtractor.handleError(err))
       )
   }
 
-  buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
+  buildVideoListParams (options: VideoListParams & { params: HttpParams }) {
     const {
       params,
       videoPagination,
@@ -221,7 +234,7 @@ export class VideoService {
     return this.restService.addObjectParams(newParams, otherOptions)
   }
 
-  buildNSFWParams (params: HttpParams, options: Pick<CommonVideoParams, 'nsfw' | 'nsfwFlagsExcluded' | 'nsfwFlagsIncluded'> = {}) {
+  buildNSFWParams (params: HttpParams, options: Pick<VideoListParams, 'nsfw' | 'nsfwFlagsExcluded' | 'nsfwFlagsIncluded'> = {}) {
     const { nsfw, nsfwFlagsExcluded, nsfwFlagsIncluded } = options
 
     const anonymous = this.auth.isLoggedIn()
