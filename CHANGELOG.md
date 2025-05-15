@@ -6,6 +6,7 @@
 
   * Prefer to not store lives in object storage by default: `object_storage.streaming_playlists.store_live_streams` is now `false` in the config template
   * Use `hot` trending algorithm by default:  `trending.videos.default` is now `hot` in the config template
+  * Add global rate limit to video download that can be changed by `download_generate_video.max_parallel_downloads`
 
 ### Docker
 
@@ -65,6 +66,7 @@
   * Fix federation compatibility with GoToSocial
   * Fix PeerTube account client redirection
   * Prevent plugins to log exceptions
+  * Fix broken replay on live privacy change
 
 
 ## v7.1.1
