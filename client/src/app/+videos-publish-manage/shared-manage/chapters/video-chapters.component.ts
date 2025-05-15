@@ -6,7 +6,6 @@ import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
 import { Subscription } from 'rxjs'
 import { TimestampInputComponent } from '../../../shared/shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
@@ -37,7 +36,6 @@ type Form = {
     FormsModule,
     ReactiveFormsModule,
     NgIf,
-    CalendarModule,
     NgFor,
     NgClass,
     TimestampInputComponent,

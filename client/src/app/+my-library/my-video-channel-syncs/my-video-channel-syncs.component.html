@@ -11,7 +11,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <a class="peertube-create-button" routerLink="{{ getSyncCreateLink() }}">
@@ -22,7 +22,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 10%;">
         <span i18n class="visually-hidden">Actions</span>
@@ -35,7 +35,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>
+  <ng-template #body let-expanded="expanded" let-videoChannelSync>
     <tr>
       <td class="action-cell">
         <my-action-dropdown
@@ -75,7 +75,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

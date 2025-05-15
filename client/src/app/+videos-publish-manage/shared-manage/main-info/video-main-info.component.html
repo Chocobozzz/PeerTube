@@ -107,12 +107,12 @@
 
       <div *ngIf="schedulePublicationSelected" class="form-group">
         <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
-        <p-calendar
+        <p-datepicker
           id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
           [firstDayOfWeek]="0" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
-          baseZIndex="20000"
+          baseZIndex="20000" fluid="true"
         >
-      </p-calendar>
+      </p-datepicker>
 
       <div *ngIf="formErrors.schedulePublicationAt" class="form-error" role="alert">
         {{ formErrors.schedulePublicationAt }}

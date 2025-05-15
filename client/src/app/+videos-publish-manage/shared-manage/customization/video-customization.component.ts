@@ -7,14 +7,13 @@ import { VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR } from '@app/shared/form-valida
 import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
+import { DatePickerModule } from 'primeng/datepicker'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { I18nPrimengCalendarService } from '../common/i18n-primeng-calendar.service'
 import { VideoEdit } from '../common/video-edit.model'
 import { VideoManageController } from '../video-manage-controller.service'
-
 const debugLogger = debug('peertube:video-manage')
 
 type Form = {
@@ -32,7 +31,7 @@ type Form = {
     FormsModule,
     ReactiveFormsModule,
     NgIf,
-    CalendarModule,
+    DatePickerModule,
     PeertubeCheckboxComponent,
     GlobalIconComponent
   ]

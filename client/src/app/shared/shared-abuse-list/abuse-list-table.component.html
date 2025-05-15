@@ -4,7 +4,7 @@
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="ms-auto">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
@@ -12,7 +12,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr> <!-- header -->
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
@@ -22,14 +22,14 @@
       </th>
       <th scope="col" *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th scope="col" i18n>Video/Comment/Account</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th scope="col" i18n style="width: 80px;">Messages</th>
       <th scope="col" i18n *ngIf="isAdminView()" style="width: 100px;">Internal note</th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
+  <ng-template #body let-expanded="expanded" let-abuse>
     <tr>
       <td class="expand-cell">
         <my-table-expander-icon [pRowToggler]="abuse" [expanded]="expanded"></my-table-expander-icon>
@@ -144,7 +144,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-abuse>
+  <ng-template #expandedrow let-abuse>
       <tr>
         <td *ngIf="isAdminView()" class="expand-cell" myAutoColspan>
           <my-abuse-details [abuse]="abuse" [isAdminView]="true"></my-abuse-details>
@@ -155,7 +155,7 @@
       </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

@@ -2,12 +2,12 @@
   [value]="videoChangeOwnerships" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [first]="pagination.start" [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 150px;" i18n>Actions</th>
       <th scope="col" style="width: 35%;" i18n>Initiator</th>
       <th scope="col" style="width: 65%;" i18n>Video</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">
         Created
         <p-sortIcon field="createdAt"></p-sortIcon>
       </th>
@@ -15,7 +15,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-videoChangeOwnership>
+  <ng-template #body let-videoChangeOwnership>
     <tr>
       <td class="action-cell">
         <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
@@ -48,7 +48,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

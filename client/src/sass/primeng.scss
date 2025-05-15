@@ -1,0 +1,366 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.p-select-list .p-select-option:hover {
+  color: pvar(--fg);
+  background: pvar(--bg-secondary-400);
+}
+
+// ---------------------------------------------------------------------------
+// Input chips
+// ---------------------------------------------------------------------------
+
+.p-chip:has(.p-chip-remove-icon) {
+  // TODO: remove when https://github.com/primefaces/primeng/pull/18344 is released
+  padding-inline-end: var(--p-chip-padding-x) !important;
+}
+
+.p-inputchips-input {
+  // TODO: fix in upstream?
+  gap: 1rem !important;
+}
+
+.p-inputchips-input:has(.p-inputchips-chip) {
+  padding-left: pvar(--input-x-padding) !important;
+  padding-right: pvar(--input-x-padding) !important;
+}
+
+.p-inputchips.p-input-wrapper {
+  width: 100%;
+}
+
+.p-chip-label {
+  text-transform: uppercase;
+}
+
+// ---------------------------------------------------------------------------
+// Multi Select
+// ---------------------------------------------------------------------------
+
+p-multiselect-item {
+  line-height: 1;
+}
+
+// ---------------------------------------------------------------------------
+// Checkbox
+// ---------------------------------------------------------------------------
+
+.p-checkbox.p-disabled .p-checkbox-box {
+  opacity: 0.6;
+}
+
+.p-checkbox {
+  vertical-align: middle !important;
+}
+
+// ---------------------------------------------------------------------------
+// Toast (notifications)
+// ---------------------------------------------------------------------------
+
+p-toast {
+  .p-toast {
+    width: auto;
+    max-width: 300px;
+    min-width: 200px;
+
+    .p-toast-icon-close {
+      color: pvar(--fg-300);
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      width: 18px;
+      height: 18px;
+      background: url("../assets/images/feather/x.svg") no-repeat;
+      background-size: contain;
+    }
+  }
+
+  .p-toast-message {
+    font-family: $main-fonts;
+    background-color: pvar(--bg) !important;
+    color: pvar(--fg) !important;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #EBEEF5 !important;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .notification-block {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      .message {
+        flex-grow: 1;
+
+        @include margin-left(10px);
+
+        h3 {
+          font-size: 21px;
+        }
+
+        p {
+          margin-bottom: 0;
+
+          @include peertube-word-wrap;
+        }
+      }
+    }
+  }
+
+  .p-toast-message-success my-global-icon {
+    color: #8BC34A !important;
+  }
+
+  .p-toast-message-error my-global-icon {
+    color: #F44336 !important;
+  }
+
+  .p-toast-message-warn my-global-icon {
+    color: #F1680D !important;
+  }
+
+  .p-toast-message-info my-global-icon {
+    color: #03A9F4 !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Data table
+// ---------------------------------------------------------------------------
+
+p-table {
+  table {
+    table-layout: fixed;
+  }
+
+  th {
+    @include ellipsis;
+  }
+
+  .p-datatable-table-container {
+    overflow-x: auto;
+    max-width: 100%;
+
+    table {
+      width: 100%;
+    }
+  }
+
+  .p-datatable-header {
+    .caption {
+      min-height: 40px;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      .left-buttons {
+        color: pvar(--fg-300);
+
+        @include font-size(22px);
+      }
+    }
+  }
+
+  .p-datatable-tbody {
+    tr {
+      &:hover {
+        background-color: pvar(--bg-secondary-350);
+      }
+    }
+  }
+
+  td.checkbox-cell,
+  th.checkbox-cell {
+    @include padding-left(0.25rem !important);
+    @include padding-right(0 !important);
+
+    @media screen and (max-width: $mobile-view) {
+      @include padding-left(0 !important);
+    }
+  }
+
+  .action-cell {
+    width: 250px !important;
+
+    .dropdown-root,
+    my-edit-button,
+    my-delete-button,
+    my-button {
+      display: inline-block !important;
+      max-width: 100%;
+
+      @include margin-left(5px);
+
+      &:first-child {
+        @include margin-left(0);
+      }
+    }
+  }
+
+  .pt-badge {
+    text-transform: uppercase;
+  }
+
+  p-paginator {
+    .p-paginator {
+      border-top: 1px solid pvar(--bg-secondary-400) !important;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .p-paginator-first {
+      margin-left: auto;
+    }
+
+    .p-paginator-last {
+      margin-right: auto;
+    }
+
+    .p-iconwrapper {
+      color: pvar(--fg-300);
+    }
+  }
+
+  @media screen and (max-width: $small-view) {
+    .p-datatable-container {
+      table {
+        width: auto;
+      }
+    }
+
+    p-paginator {
+      .p-paginator-current {
+        display: none !important;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    p-paginator {
+      .p-paginator-page:not(.p-paginator-page-selected) {
+        display: none;
+      }
+
+      .p-paginator-rpp-dropdown {
+        display: none;
+      }
+
+      .p-paginator-content-end {
+        display: none;
+      }
+    }
+
+    .p-datatable-header .caption > * {
+      width: 100%;
+    }
+  }
+}
+
+p-table:not(.cell-wrap) {
+  td:not(.action-cell):not(.expand-cell):not(.checkbox-cell) {
+    @include ellipsis;
+  }
+}
+
+p-tablecheckbox:hover div .p-checkbox-box {
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+}
+
+.new-p-table {
+  margin-bottom: 0.5rem;
+  display: block;
+
+  &.loading table {
+    opacity: 0.5;
+  }
+
+  .column-toggle .tertiary-button:not(.active) {
+    color: pvar(--fg-300) !important;
+  }
+
+  th {
+    font-size: 14px;
+    padding: 5px 0.25rem 5px 1rem !important;
+
+    .column-toggle {
+      .dropdown > my-button::after {
+        display: none;
+      }
+    }
+  }
+
+  .p-sortable-column-icon {
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+
+    .tertiary-button:not(.active) {
+      color: pvar(--secondary-icon-color) !important;
+    }
+  }
+
+  p-paginator {
+    .p-paginator {
+      padding-top: 1.5rem;
+      margin-top: 0.75rem;
+      height: auto !important;
+
+      .p-paginator-page-selected {
+        font-weight: $font-bold !important;
+      }
+    }
+  }
+
+  .p-paginator-content-end {
+    color: pvar(--fg-300);
+
+    @include margin-left(0);
+  }
+
+  .action-cell {
+    width: 0 !important;
+
+    @include padding-right(0.25rem);
+  }
+}
+
+.sticky-p-table {
+  table {
+    table-layout: auto;
+  }
+
+  @media screen and (min-width: $small-view) {
+    .action-cell,
+    .action-head {
+      position: sticky;
+      right: 0;
+      padding-right: 0.5rem;
+    }
+
+    .action-cell {
+      z-index: 10;
+      background-color: inherit;
+    }
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .p-datatable,
+  .p-datatable-table-container {
+    max-height: inherit;
+  }
+
+  .p-datatable-table-container {
+    overflow: auto;
+  }
+}

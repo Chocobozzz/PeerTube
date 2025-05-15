@@ -5,7 +5,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <button type="button" *ngIf="!isInSelectionMode()" class="peertube-create-button" (click)="openCreateOrUpdateList()">
@@ -20,7 +20,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
@@ -30,11 +30,11 @@
       </th>
       <th scope="col" style="width: 300px;" i18n>List name</th>
       <th scope="col" style="width: 300px;" i18n>Words</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="updatedAt">Date <p-sortIcon field="updatedAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="updatedAt">Date <p-sortIcon field="updatedAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-list let-expanded="expanded">
+  <ng-template #body let-list let-expanded="expanded">
     <tr>
 
       <td class="expand-cell">
@@ -60,7 +60,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-list>
+  <ng-template #expandedrow let-list>
     <tr>
       <td class="expand-cell" myAutoColspan>
         <ul>
@@ -72,7 +72,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

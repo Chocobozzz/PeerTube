@@ -16,7 +16,6 @@ import {
   VideoState
 } from '@peertube/peertube-models'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
 import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
@@ -53,7 +52,6 @@ type Form = {
     PeerTubeTemplateDirective,
     SelectOptionsComponent,
     InputTextComponent,
-    CalendarModule,
     PeertubeCheckboxComponent,
     LiveDocumentationLinkComponent,
     AlertComponent,

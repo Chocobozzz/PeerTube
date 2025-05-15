@@ -5,7 +5,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [(selection)]="selectedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
@@ -28,20 +28,20 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
-      <th scope="col" style="width: 40px">
+      <th class="checkbox-cell" scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th scope="col" style="width: 150px;" i18n>Action</th>
       <th scope="col" i18n>Following</th>
       <th scope="col" style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th scope="col" style="width: 160px;" i18n pSortableColumn="redundancyAllowed">Redundancy allowed <p-sortIcon field="redundancyAllowed"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-follow>
+  <ng-template #body let-follow>
     <tr pSelectableRow="follow">
       <td class="checkbox-cell">
         <p-tableCheckbox [value]="follow" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
@@ -73,7 +73,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

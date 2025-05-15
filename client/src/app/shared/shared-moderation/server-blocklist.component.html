@@ -5,7 +5,7 @@
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <button class="peertube-create-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
@@ -20,15 +20,15 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 150px;" i18n>Action</th> <!-- column for action buttons -->
       <th scope="col" i18n>Instance</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-serverBlock>
+  <ng-template #body let-serverBlock>
     <tr>
       <td class="action-cell">
         <button class="peertube-button secondary-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
@@ -43,7 +43,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

@@ -5,7 +5,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }" (onRowExpand)="onVideoPanelOpened($event)"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
@@ -24,9 +24,9 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
-      <th scope="col" style="width: 40px">
+      <th class="checkbox-cell" scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th scope="col" style="width: 40px;">
@@ -38,11 +38,11 @@
       <th scope="col" i18n>Video</th>
       <th scope="col" i18n>Info</th>
       <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="localVideoFilesSize">Files <p-sortIcon field="localVideoFilesSize"></p-sortIcon></th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-video>
+  <ng-template #body let-expanded="expanded" let-video>
 
     <tr [pSelectableRow]="video" (onRowExpand)="onVideoPanelOpened(video)">
       <td class="checkbox-cell">
@@ -112,7 +112,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-video>
+  <ng-template #expandedrow let-video>
     <tr>
       <td class="video-info expand-cell" myAutoColspan>
         <div>

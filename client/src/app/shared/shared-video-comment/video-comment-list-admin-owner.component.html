@@ -5,7 +5,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows" [(selection)]="selectedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div>
         <my-action-dropdown
@@ -23,9 +23,9 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
-      <th scope="col" style="width: 40px;">
+      <th class="checkbox-cell" scope="col" style="width: 40px;">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th scope="col" style="width: 40px;">
@@ -38,11 +38,11 @@
       <th scope="col" i18n>Video</th>
       <th scope="col" i18n>Comment</th>
       <th scope="col" i18n>Auto tags</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-videoComment let-expanded="expanded">
+  <ng-template #body let-videoComment let-expanded="expanded">
     <tr [pSelectableRow]="videoComment">
 
       <td class="checkbox-cell">
@@ -100,7 +100,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-videoComment>
+  <ng-template #expandedrow let-videoComment>
     <tr>
       <td class="expand-cell" myAutoColspan>
         <div [innerHTML]="videoComment.textHtml"></div>
@@ -108,7 +108,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

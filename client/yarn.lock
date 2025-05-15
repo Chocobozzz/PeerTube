@@ -1634,6 +1634,25 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
+"@primeng/themes@^19.1.2":
+  version "19.1.2"
+  resolved "https://registry.yarnpkg.com/@primeng/themes/-/themes-19.1.2.tgz#82006754acf26d7b20b78f183b629c7b74578245"
+  integrity sha512-6q6jYks+S9+oqJUtsBKSAt9PdO2eUIkYyg4qGZAF2Dsp7YZ5nt4W/S5JUjxEDEjrtwUe+uDLeQr7PxNJErN4Gg==
+  dependencies:
+    "@primeuix/styled" "^0.3.2"
+
+"@primeuix/styled@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@primeuix/styled/-/styled-0.3.2.tgz#a6093e81a66fc78b915b5e8d998cc73c2c47a1dc"
+  integrity sha512-ColZes0+/WKqH4ob2x8DyNYf1NENpe5ZguOvx5yCLxaP8EIMVhLjWLO/3umJiDnQU4XXMLkn2mMHHw+fhTX/mw==
+  dependencies:
+    "@primeuix/utils" "^0.3.2"
+
+"@primeuix/utils@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@primeuix/utils/-/utils-0.3.2.tgz#dbf92f6b5e18abe214f592a0b51bf4ca02a1f808"
+  integrity sha512-B+nphqTQeq+i6JuICLdVWnDMjONome2sNz0xI65qIOyeB4EF12CoKRiCsxuZ5uKAkHi/0d1LqlQ9mIWRSdkavw==
+
 "@promptbook/utils@0.69.5":
   version "0.69.5"
   resolved "https://registry.yarnpkg.com/@promptbook/utils/-/utils-0.69.5.tgz#a78e49fe09001f1ae0a59c50fc2390f0c4765087"
@@ -7807,11 +7826,13 @@ pretty-ms@^9.0.0:
   dependencies:
     parse-ms "^4.0.0"
 
-primeng@^17:
-  version "17.18.15"
-  resolved "https://registry.yarnpkg.com/primeng/-/primeng-17.18.15.tgz#073a3ebc2336727aa784bcf81c9dcad8639ac328"
-  integrity sha512-66iKLPBxuZguebSylKbAst5V3Qz+2dbzT+oCHQnCbv4Gu4JH6WqbBJWr283HacQB1mUNGvyxgcHVVPhQbnEXvA==
+primeng@^19.1.2:
+  version "19.1.2"
+  resolved "https://registry.yarnpkg.com/primeng/-/primeng-19.1.2.tgz#d5d1652768acf33352e7be6f057d5f771bfa3bda"
+  integrity sha512-iu4lDrStBPCyYn+iSfofp/Hsv/dHVlnlsOhqFZlYTQB1o+MlVXa4PanLgHdoBr1thy3ozRkNDZHsICkUecWu0A==
   dependencies:
+    "@primeuix/styled" "^0.3.2"
+    "@primeuix/utils" "^0.3.2"
     tslib "^2.3.0"
 
 proc-log@^5.0.0:

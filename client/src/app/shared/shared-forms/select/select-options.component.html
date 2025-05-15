@@ -1,4 +1,4 @@
-<p-dropdown
+<p-select
   [inputId]="inputId()"
 
   [options]="items()"
@@ -19,26 +19,30 @@
 
   [virtualScroll]="virtualScroll()"
   [virtualScrollItemSize]="virtualScrollItemSize()"
+
+  fluid="true"
 >
   <ng-template #itemTemplate let-item let-description="description">
     @if (customItemTemplate) {
       <ng-template [ngTemplateOutlet]="customItemTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
     } @else {
-      <div class="d-flex align-items-center item-label">
-        <img *ngIf="item.imageUrl" alt="" class="me-2" [src]="item.imageUrl" />
+      <div>
+        <div class="d-flex align-items-center item-label">
+          <img *ngIf="item.imageUrl" alt="" class="me-2" [src]="item.imageUrl" />
 
-        <span class="ellipsis" [ngClass]="item.classes">{{ item.label }}</span>
+          <span class="ellipsis" [ngClass]="item.classes">{{ item.label }}</span>
+        </div>
+
+        <span *ngIf="description" class="muted">{{ description }}</span>
       </div>
-
-      <span *ngIf="description" class="muted">{{ description }}</span>
     }
   </ng-template>
 
-  <ng-template pTemplate="selectedItem">
+  <ng-template #selectedItem>
     <ng-template [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{ $implicit: getSelectedItem() }"></ng-template>
   </ng-template>
 
-  <ng-template let-item pTemplate="item">
+  <ng-template let-item #item>
     <ng-template [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{ $implicit: item, description: item.description }"></ng-template>
   </ng-template>
-</p-dropdown>
+</p-select>

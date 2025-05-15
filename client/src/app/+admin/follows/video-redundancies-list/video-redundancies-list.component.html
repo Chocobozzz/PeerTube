@@ -17,7 +17,7 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
@@ -29,7 +29,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-redundancy>
+  <ng-template #body let-expanded="expanded" let-redundancy>
     <tr>
       <td class="expand-cell">
         <my-table-expander-icon [pRowToggler]="redundancy" [expanded]="expanded" i18n-tooltip tooltip="List redundancies"></my-table-expander-icon>
@@ -52,7 +52,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-redundancy>
+  <ng-template #expandedrow let-redundancy>
     <tr *ngIf="redundancy.redundancies.files.length !== 0">
       <td class="expand-cell" myAutoColspan>
         <div *ngFor="let file of redundancy.redundancies.files" class="expansion-block">
@@ -70,7 +70,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

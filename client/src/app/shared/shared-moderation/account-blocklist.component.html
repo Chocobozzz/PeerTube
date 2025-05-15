@@ -4,7 +4,7 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="ms-auto">
         <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
@@ -12,15 +12,15 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 150px;" i18n>Action</th> <!-- column for action buttons -->
       <th scope="col" i18n>Account</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-accountBlock>
+  <ng-template #body let-accountBlock>
     <tr>
       <td class="action-cell">
         <button class="peertube-button secondary-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
@@ -41,7 +41,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

@@ -5,7 +5,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="ms-auto">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
@@ -13,7 +13,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
@@ -24,11 +24,11 @@
       <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th>
       <th scope="col" style="width: 100px;" i18n>Sensitive</th>
       <th scope="col" style="width: 120px;" i18n>Unfederated</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-videoBlock let-expanded="expanded">
+  <ng-template #body let-videoBlock let-expanded="expanded">
     <tr>
       <td *ngIf="!videoBlock.reason">
         <span i18n class="visually-hidden">No more information is available for this row</span>
@@ -69,7 +69,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-videoBlock>
+  <ng-template #expandedrow let-videoBlock>
     <tr>
       <td class="expand-cell" myAutoColspan>
         <div class="d-flex moderation-expanded">
@@ -88,7 +88,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

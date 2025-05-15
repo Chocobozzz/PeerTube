@@ -8,7 +8,6 @@ import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-
 import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig, VideoCommentPolicyType, VideoConstant } from '@peertube/peertube-models'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectRadioComponent } from '../../../shared/shared-forms/select/select-radio.component'
@@ -40,7 +39,6 @@ type Form = {
     FormsModule,
     ReactiveFormsModule,
     PeerTubeTemplateDirective,
-    CalendarModule,
     PeertubeCheckboxComponent,
     GlobalIconComponent,
     SelectRadioComponent

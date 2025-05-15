@@ -8,13 +8,13 @@
 
 <p-table
   [value]="videos" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="false"
   [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }"
   class="new-p-table sticky-p-table cell-wrap"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         @if (isInSelectionMode()) {
@@ -61,7 +61,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="sorticon" let-sortOrder>
+  <ng-template #sorticon let-sortOrder>
     @if (sortOrder === 1) {
       <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-up"></my-button>
     } @else if (sortOrder === -1) {
@@ -71,11 +71,11 @@
     }
   </ng-template>
 
-  <ng-template pTemplate="paginatorright" let-item>
+  <ng-template #paginatorright let-item>
     <ng-container i18n>videos per page</ng-container>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" width="25px" class="checkbox-cell">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
@@ -121,7 +121,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-video>
+  <ng-template #body let-video>
 
     <tr [pSelectableRow]="video">
       <td class="checkbox-cell">
@@ -195,7 +195,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

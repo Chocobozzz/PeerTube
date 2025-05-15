@@ -8,7 +8,7 @@
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
@@ -17,11 +17,11 @@
       <th scope="col" style="width: 45%" i18n>Target</th>
       <th scope="col" style="width: 55%" i18n>Video</th>
       <th scope="col" style="width: 150px" i18n>State</th>
-      <th scope="col" style="width: 150px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
+  <ng-template #body let-expanded="expanded" let-videoImport>
     <tr>
       <td class="expand-cell">
         <my-table-expander-icon *ngIf="videoImport.error" [pRowToggler]="videoImport" [expanded]="expanded"></my-table-expander-icon>
@@ -59,7 +59,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-videoImport>
+  <ng-template #expandedrow let-videoImport>
     <tr class="video-import-error" *ngIf="videoImport.error">
       <td myAutoColspan>
         <pre>{{ videoImport.error }}</pre>

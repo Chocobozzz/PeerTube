@@ -28,7 +28,7 @@
   (onLazyLoad)="loadLazy($event)" dataKey="uniqId" [first]="pagination.start" [tableStyle]="{'table-layout':'auto'}"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
@@ -43,7 +43,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-job>
+  <ng-template #body let-expanded="expanded" let-job>
     <tr>
       <td class="expand-cell">
         <my-table-expander-icon [pRowToggler]="job" [expanded]="expanded"></my-table-expander-icon>
@@ -74,7 +74,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-job>
+  <ng-template #expandedrow let-job>
     <tr>
       <td myAutoColspan>
         <pre>{{ [
@@ -99,7 +99,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

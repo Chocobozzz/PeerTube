@@ -49,7 +49,7 @@ export class ThemeManager {
       }
     }
 
-    document.body.dataset.ptTheme = name
+    document.documentElement.dataset.ptTheme = name
   }
 
   injectCoreColorPalette (iteration = 0) {
@@ -72,7 +72,7 @@ export class ThemeManager {
   }
 
   private canInjectCoreColorPalette () {
-    const computedStyle = getComputedStyle(document.body)
+    const computedStyle = getComputedStyle(document.documentElement)
     const isDark = computedStyle.getPropertyValue('--is-dark')
 
     return isDark === '0' || isDark === '1'
@@ -81,8 +81,8 @@ export class ThemeManager {
   private injectColorPalette () {
     console.log(`Injecting color palette`)
 
-    const rootStyle = document.body.style
-    const computedStyle = getComputedStyle(document.body)
+    const rootStyle = document.documentElement.style
+    const computedStyle = getComputedStyle(document.documentElement)
 
     // FIXME: Remove previously injected properties
     for (const property of this.oldInjectedProperties) {
@@ -127,7 +127,7 @@ export class ThemeManager {
         : 1
 
       if (!mainColor) {
-        console.error(`Cannot create palette of nonexistent "--${prefix}" CSS body variable`)
+        console.error(`Cannot create palette of nonexistent "--${prefix}" CSS documentElement variable`)
         continue
       }
 
@@ -175,7 +175,7 @@ export class ThemeManager {
       }
     }
 
-    document.body.dataset.bsTheme = isGlobalDarkTheme()
+    document.documentElement.dataset.bsTheme = isGlobalDarkTheme()
       ? 'dark'
       : ''
   }

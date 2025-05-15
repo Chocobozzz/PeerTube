@@ -40,7 +40,7 @@ import {
 import { logger } from '@root-helpers/logger'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import debug from 'debug'
-import { CalendarModule } from 'primeng/calendar'
+import { DatePickerModule } from 'primeng/datepicker'
 import { forkJoin, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
@@ -94,7 +94,7 @@ type Form = {
     SelectChannelComponent,
     SelectOptionsComponent,
     InputTextComponent,
-    CalendarModule,
+    DatePickerModule,
     PeertubeCheckboxComponent,
     ThumbnailManagerComponent,
     GlobalIconComponent,

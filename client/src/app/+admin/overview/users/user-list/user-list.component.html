@@ -4,7 +4,7 @@
   [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
 >
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <my-action-dropdown
@@ -26,9 +26,9 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
-      <th scope="col" style="width: 40px">
+      <th class="checkbox-cell" scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
 
@@ -71,12 +71,12 @@
       <th scope="col" *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
       <th scope="col" *ngIf="isSelected('totalVideoFileSize')" style="width: 100px;">{{ getColumn('totalVideoFileSize').label }}</th>
       <th scope="col" *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
-      <th scope="col" *ngIf="isSelected('createdAt')" style="width: 150px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 150px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('createdAt')" style="width: 170px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 170px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-user>
+  <ng-template #body let-expanded="expanded" let-user>
 
     <tr [pSelectableRow]="user" [ngClass]="{ banned: highlightBannedUsers && user.blocked }">
       <td class="checkbox-cell">
@@ -148,7 +148,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-user>
+  <ng-template #expandedrow let-user>
     <tr class="user-blocked-reason">
       <td myAutoColspan>
         <span i18n class="ban-reason-label">Ban reason:</span>

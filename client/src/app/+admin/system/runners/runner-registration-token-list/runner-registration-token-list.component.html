@@ -4,18 +4,18 @@
   [lazy]="true" (onLazyLoad)="loadLazy($event)"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
       <th scope="col" style="width: 120px;">
         <span i18n class="visually-hidden">Actions</span>
       </th>
       <th scope="col" i18n>Token</th>
-      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th scope="col" style="width: 160px;" i18n>Associated runners</th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
     <div class="caption">
       <div class="left-buttons">
         <my-button theme="primary" i18n-label label="Generate token" icon="add" (click)="generateToken()"></my-button>
@@ -23,7 +23,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="body" let-registrationToken>
+  <ng-template #body let-registrationToken>
     <tr>
       <td class="action-cell">
         <my-action-dropdown
@@ -47,7 +47,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">

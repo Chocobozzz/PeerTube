@@ -5,9 +5,9 @@
   [(selection)]="selectedRows" [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows" dataKey="uuid"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <tr>
-      <th scope="col" style="width: 40px">
+      <th class="checkbox-cell" scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
       <th scope="col" style="width: 40px;">
@@ -27,7 +27,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="caption">
+  <ng-template #caption>
 
     <div class="caption">
       <div class="left-buttons">
@@ -46,7 +46,7 @@
     </div>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-runnerJob>
+  <ng-template #body let-expanded="expanded" let-runnerJob>
     <tr [pSelectableRow]="runnerJob">
       <td class="checkbox-cell">
         <p-tableCheckbox [value]="runnerJob" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
@@ -93,7 +93,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-runnerJob>
+  <ng-template #expandedrow let-runnerJob>
     <tr>
       <td myAutoColspan>
         <div class="mt-2 fs-7 font-monospace">
@@ -117,7 +117,7 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template #emptymessage>
     <tr>
       <td myAutoColspan>
         <div class="no-results">
