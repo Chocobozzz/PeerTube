@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, input } from '@angular/core'
-import { Notifier } from '@app/core'
-import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { Notifier, ServerService } from '@app/core'
+import { getUserPasswordValidator } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { UserUpdate } from '@peertube/peertube-models'
@@ -18,16 +18,22 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
   private notifier = inject(Notifier)
   private userAdminService = inject(UserAdminService)
+  private serverService = inject(ServerService)
 
   readonly userId = input<number>(undefined)
   readonly username = input<string>(undefined)
 
   error: string
   showPassword = false
+  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>
 
   ngOnInit () {
+    this.serverService.getConfig().subscribe(config => {
+      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length, config.signup.maximum_password_length);
+    });
+
     this.buildForm({
-      password: USER_PASSWORD_VALIDATOR
+      password: this.userPasswordValidator
     })
   }
 

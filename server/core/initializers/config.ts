@@ -496,6 +496,10 @@ const CONFIG = {
     }
   },
   USER: {
+    SIGNUP: {
+      get MINIMUM_PASSWORD_LENGTH () { return config.get<number>('user.signup.mininum_password_length') },
+      get MAXIMUM_PASSWORD_LENGTH () { return config.get<number>('user.signup.maximum_password_length') }
+    },
     HISTORY: {
       VIDEOS: {
         get ENABLED () {

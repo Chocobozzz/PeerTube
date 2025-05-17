@@ -382,7 +382,9 @@ class ServerConfigManager {
       allowedForCurrentIP,
       minimumAge: CONFIG.SIGNUP.MINIMUM_AGE,
       requiresApproval: CONFIG.SIGNUP.REQUIRES_APPROVAL,
-      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION,
+      minimum_password_length: CONFIG.USER.SIGNUP.MINIMUM_PASSWORD_LENGTH,
+      maximum_password_length: CONFIG.USER.SIGNUP.MAXIMUM_PASSWORD_LENGTH
     }
 
     const htmlConfig = await this.getHTMLServerConfig()

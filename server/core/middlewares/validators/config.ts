@@ -48,6 +48,8 @@ const customConfigUpdateValidator = [
   body('signup.requiresEmailVerification').isBoolean(),
   body('signup.requiresApproval').isBoolean(),
   body('signup.minimumAge').isInt(),
+  body('signup.minimum_password_length').isInt(),
+  body('signup.maximum_password_length').isInt(),
 
   body('admin.email').isEmail(),
   body('contactForm.enabled').isBoolean(),

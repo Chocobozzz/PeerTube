@@ -5,7 +5,7 @@ import { SignupService } from '@app/+signup/shared/signup.service'
 import {
   USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
   USER_EMAIL_VALIDATOR,
-  USER_PASSWORD_VALIDATOR,
+  getUserPasswordValidator,
   USER_USERNAME_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -14,6 +14,7 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { concat, of } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
+import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-register-step-user',
@@ -24,21 +25,28 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
   private signupService = inject(SignupService)
+  private serverService = inject(ServerService)
 
   readonly videoUploadDisabled = input(false)
   readonly requiresEmailVerification = input(false)
 
   readonly formBuilt = output<FormGroup>()
 
+  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>;
+
   get instanceHost () {
     return window.location.host
   }
 
   ngOnInit () {
+    this.serverService.getConfig().subscribe(config => {
+      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length, config.signup.maximum_password_length);
+    });
+    
     this.buildForm({
       displayName: USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
       username: USER_USERNAME_VALIDATOR,
-      password: USER_PASSWORD_VALIDATOR,
+      password: this.userPasswordValidator,
       email: USER_EMAIL_VALIDATOR
     })
 
@@ -52,7 +60,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
   }
 
   getMinPasswordLengthMessage () {
-    return USER_PASSWORD_VALIDATOR.MESSAGES.minlength
+    return this.userPasswordValidator.MESSAGES.minlength
   }
 
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {

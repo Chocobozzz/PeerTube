@@ -7,8 +7,8 @@ import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
   USER_EMAIL_VALIDATOR,
-  USER_PASSWORD_OPTIONAL_VALIDATOR,
-  USER_PASSWORD_VALIDATOR,
+  getUserPasswordOptionalValidator,
+  getUserPasswordValidator,
   USER_ROLE_VALIDATOR,
   USER_USERNAME_VALIDATOR,
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
@@ -62,6 +62,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   private userAdminService = inject(UserAdminService)
 
   error: string
+  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>;
+  userPasswordOptionalValidator: ReturnType<typeof getUserPasswordOptionalValidator>
 
   constructor () {
     super()
@@ -71,6 +73,12 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
   ngOnInit () {
     super.ngOnInit()
+    this.serverService.getConfig().subscribe(config => {
+      const minLength = config.signup.minimum_password_length || 6;
+      const maxLength = config.signup.maximum_password_length || 255;
+      this.userPasswordValidator = getUserPasswordValidator(minLength, maxLength);
+      this.userPasswordOptionalValidator = getUserPasswordOptionalValidator(minLength, maxLength);
+    });
 
     const defaultValues = {
       role: UserRole.USER.toString(),
@@ -82,7 +90,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       username: USER_USERNAME_VALIDATOR,
       channelName: USER_CHANNEL_NAME_VALIDATOR,
       email: USER_EMAIL_VALIDATOR,
-      password: this.isPasswordOptional() ? USER_PASSWORD_OPTIONAL_VALIDATOR : USER_PASSWORD_VALIDATOR,
+      password: this.isPasswordOptional() ? this.userPasswordOptionalValidator : this.userPasswordValidator,
       role: USER_ROLE_VALIDATOR,
       videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
       videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR,

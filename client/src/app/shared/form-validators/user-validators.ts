@@ -1,4 +1,4 @@
-import { Validators } from '@angular/forms'
+import { ValidatorFn, Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
 
 export const USER_USERNAME_REGEX_CHARACTERS = '[a-z0-9][a-z0-9._]'
@@ -70,28 +70,33 @@ export const USER_OTP_TOKEN_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const USER_PASSWORD_VALIDATOR = {
-  VALIDATORS: [
-    Validators.required,
-    Validators.minLength(6),
-    Validators.maxLength(255)
-  ],
-  MESSAGES: {
-    required: $localize`Password is required.`,
-    minlength: $localize`Password must be at least 6 characters long.`,
-    maxlength: $localize`Password cannot be more than 255 characters long.`
-  }
+export function getUserPasswordValidator (minLength: number = 6, maxLength: number = 255) {
+  return {
+    VALIDATORS: [
+      Validators.required,
+      Validators.minLength(minLength),
+      Validators.maxLength(maxLength)
+    ] as ValidatorFn[],
+    MESSAGES: {
+      required: $localize`Password is required.`,
+      minlength: $localize`Password must be at least ${minLength} characters long.`,
+      maxlength: $localize`Password cannot be more than ${maxLength} characters long.`
+    }
+  };
 }
 
-export const USER_PASSWORD_OPTIONAL_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [
-    Validators.minLength(6),
-    Validators.maxLength(255)
-  ],
-  MESSAGES: {
-    minlength: $localize`Password must be at least 6 characters long.`,
-    maxlength: $localize`Password cannot be more than 255 characters long.`
-  }
+
+export function getUserPasswordOptionalValidator (minLength: number = 6, maxLength: number = 255) {
+  return {
+    VALIDATORS: [
+      Validators.minLength(minLength),
+      Validators.maxLength(maxLength)
+    ] as ValidatorFn[],
+    MESSAGES: {
+      minlength: $localize`Password must be at least ${minLength} characters long.`,
+      maxlength: $localize`Password cannot be more than ${maxLength} characters long.`
+    }
+  };
 }
 
 export const USER_CONFIRM_PASSWORD_VALIDATOR: BuildFormValidator = {
