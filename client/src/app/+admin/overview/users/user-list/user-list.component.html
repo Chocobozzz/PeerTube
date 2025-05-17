@@ -67,6 +67,7 @@
       <th scope="col" *ngIf="isSelected('username')" pResizableColumn [ngbTooltip]="sortTooltip" container="body" pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('role')" style="width: 120px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
+      <th scope="col" *ngIf="isSelected('2FA')">{{ getColumn('2FA').label }}</th>
       <th scope="col" *ngIf="isSelected('quota')" style="width: 160px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
       <th scope="col" *ngIf="isSelected('totalVideoFileSize')" style="width: 100px;">{{ getColumn('totalVideoFileSize').label }}</th>
@@ -116,6 +117,10 @@
 
       <td *ngIf="isSelected('email')">
         <my-user-email-info [entry]="user" showEmailVerifyInformation="true"></my-user-email-info>
+      </td>
+
+      <td *ngIf="isSelected('2FA')">
+        {{ user.twoFactorEnabled | boolean }}
       </td>
 
       <td *ngIf="isSelected('quota')">
