@@ -10306,7 +10306,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1fe26e49476ac701885abc59127e96a3760847f0" datatype="html">
-        <source>Password must be at least 6 characters long.</source>
+        <source>Password must be at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters long.</source>
         <target>Fjalëkalimi duhet të jetë e pakta 6 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
@@ -10318,7 +10318,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e" datatype="html">
-        <source>Password cannot be more than 255 characters long.</source>
+        <source>Password cannot be more than <x id="INTERPOLATION" equiv-text="{{ maxLength }}"/> characters long.</source>
         <target>Fjalëkalimi s’mund të jetë më shumë se 255 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
