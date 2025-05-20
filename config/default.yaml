@@ -229,6 +229,8 @@ object_storage:
   max_request_attempts: 3
 
   streaming_playlists:
+    # Bucket name created on your object storage provider
+    # PeerTube will access it via {bucket_name}.example.com
     bucket_name: 'streaming-playlists'
 
     # Allows setting all buckets to the same value but with a different prefix
