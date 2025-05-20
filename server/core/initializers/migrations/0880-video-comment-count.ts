@@ -14,11 +14,6 @@ async function up (utils: {
       allowNull: false
     }, { transaction })
   }
-
-  {
-    const query = 'UPDATE "video" SET "comments" = (SELECT COUNT(*) FROM "videoComment" WHERE "videoComment"."videoId" = "video"."id")'
-    await utils.sequelize.query(query, { transaction })
-  }
 }
 
 function down (options) {
