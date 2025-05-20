@@ -114,7 +114,7 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
       beforeDismiss: () => {
         return this.confirmService.confirm(
           $localize`Are you sure you want to close this modal without saving your changes?`,
-          $localize`Closing caption editing modal`
+          $localize`Close modal window`
         )
       }
     })

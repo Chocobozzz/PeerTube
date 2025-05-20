@@ -83,7 +83,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
     const serverConfig = this.serverService.getHTMLConfig()
 
     const videoEdit = VideoEdit.createFromLive(serverConfig, {
-      name: $localize`Live`,
+      name: $localize`:The translation must be at least 3 characters long:Live`,
       channelId: this.firstStepChannelId,
       support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
       permanentLive: this.firstStepPermanentLive,
@@ -122,7 +122,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
           const error = err.body as PeerTubeProblemDocument
 
           if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
-            message = $localize`Cannot create live because this platform have too many created lives`
+            message = $localize`Cannot create live because this platform has too many created lives`
           } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
             message = $localize`Cannot create live because you created too many lives`
           }
