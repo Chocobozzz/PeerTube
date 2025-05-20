@@ -174,13 +174,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const iosConfig = this.htmlConfig.client.openInApp.ios
 
     const getVideoId = (url: string) => {
-      const matches = url.match(/^\/w\/([^/]+)$/)
+      const matches = url.match(/^\/w\/([^/?;]+)/)
 
       if (matches) return matches[1]
     }
 
     const getChannelId = (url: string) => {
-      const matches = url.match(/^\/c\/([^/]+)/)
+      const matches = url.match(/^\/c\/([^/?;]+)/)
 
       if (matches) return matches[1]
     }
