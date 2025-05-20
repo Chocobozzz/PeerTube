@@ -28,7 +28,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.serverService.getConfig().subscribe(config => {
         this.buildForm({
-        'password': getUserPasswordValidator(config.signup.minimum_password_length, config.signup.maximum_password_length),
+        'password': getUserPasswordValidator(config.signup.minimum_password_length),
         'password-confirm': RESET_PASSWORD_CONFIRM_VALIDATOR
       })
     });

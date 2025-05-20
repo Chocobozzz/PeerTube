@@ -312,7 +312,6 @@ function customConfig (): CustomConfig {
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION,
       minimumAge: CONFIG.SIGNUP.MINIMUM_AGE,
       minimum_password_length: CONFIG.USER.SIGNUP.MINIMUM_PASSWORD_LENGTH,
-      maximum_password_length: CONFIG.USER.SIGNUP.MAXIMUM_PASSWORD_LENGTH
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL

@@ -179,7 +179,6 @@ export interface ServerConfig {
     requiresApproval: boolean
     minimumAge: number
     minimum_password_length: number
-    maximum_password_length: number
   }
 
   transcoding: {

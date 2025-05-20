@@ -586,7 +586,6 @@ user:
   # https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#implement-proper-password-strength-controls
   signup:
     mininum_password_length: 8
-    maximum_password_length: 255
   history:
     videos:
       # Enable or disable video history by default for new users.

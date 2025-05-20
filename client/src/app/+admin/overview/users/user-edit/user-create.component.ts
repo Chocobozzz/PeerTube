@@ -75,9 +75,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     super.ngOnInit()
     this.serverService.getConfig().subscribe(config => {
       const minLength = config.signup.minimum_password_length;
-      const maxLength = config.signup.maximum_password_length;
-      this.userPasswordValidator = getUserPasswordValidator(minLength, maxLength);
-      this.userPasswordOptionalValidator = getUserPasswordOptionalValidator(minLength, maxLength);
+      this.userPasswordValidator = getUserPasswordValidator(minLength);
+      this.userPasswordOptionalValidator = getUserPasswordOptionalValidator(minLength);
     });
 
     const defaultValues = {
