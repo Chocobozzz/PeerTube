@@ -34,7 +34,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   private router = inject(Router)
 
   readonly filters = input<AdvancedInputFilter[]>([])
-  readonly emitOnInit = input(true, { transform: booleanAttribute })
+  readonly emitOnInit = input(false, { transform: booleanAttribute })
   readonly icon = input(false, { transform: booleanAttribute })
   readonly placeholder = input($localize`Filter...`)
   readonly inputId = input('table-filter')

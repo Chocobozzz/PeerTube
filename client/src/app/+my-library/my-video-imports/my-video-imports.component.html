@@ -1,69 +1,69 @@
-<div class="mb-4 d-flex justify-content-between">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
-</div>
-
-<p-table
-  [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" dataKey="id"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
-  [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="MyVideoImportsComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="imports per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
 >
-  <ng-template #header>
-    <tr>
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" style="width: 200px">Action</th>
-      <th scope="col" style="width: 45%" i18n>Target</th>
-      <th scope="col" style="width: 55%" i18n>Video</th>
-      <th scope="col" style="width: 150px" i18n>State</th>
-      <th scope="col" style="width: 170px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-    </tr>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No import} =1 {1 import} other {{{ totalRecords | myNumberFormatter }} imports}}</ng-container>
   </ng-template>
 
-  <ng-template #body let-expanded="expanded" let-videoImport>
-    <tr>
-      <td class="expand-cell">
-        <my-table-expander-icon *ngIf="videoImport.error" [pRowToggler]="videoImport" [expanded]="expanded"></my-table-expander-icon>
-      </td>
+  <ng-template #captionRight>
+    <my-advanced-input-filter (search)="table.onSearch($event)"></my-advanced-input-filter>
+  </ng-template>
 
-      <td class="action-cell">
-        <my-button *ngIf="isVideoImportPending(videoImport)" i18n-label label="Cancel" icon="no" (click)="cancelImport(videoImport)"></my-button>
-        <my-delete-button *ngIf="isVideoImportFailed(videoImport) || isVideoImportCancelled(videoImport) || !videoImport.video" (click)="deleteImport(videoImport)"></my-delete-button>
-        <my-edit-button *ngIf="isVideoImportSuccess(videoImport) && videoImport.video" [ptRouterLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
-      </td>
+  <ng-template #tableCells let-videoImport>
+    <td class="max-width-300px">
+      @if (videoImport.targetUrl) {
+        <a [href]="videoImport.targetUrl" target="_blank" rel="noopener noreferrer" [title]="videoImport.targetUrl">{{ videoImport.targetUrl }}</a>
+      } @else {
+        <span [title]="videoImport.torrentName || videoImport.magnetUri">{{ videoImport.torrentName || videoImport.magnetUri }}</span>
+      }
+    </td>
 
-      <td>
-        <a *ngIf="videoImport.targetUrl; else torrent" [href]="videoImport.targetUrl" target="_blank" rel="noopener noreferrer">{{ videoImport.targetUrl }}</a>
-        <ng-template #torrent>
-          <span [title]="videoImport.torrentName || videoImport.magnetUri">{{ videoImport.torrentName || videoImport.magnetUri }}</span>
-        </ng-template>
-      </td>
-
-      <td>
-        <ng-container *ngIf="isVideoImportPending(videoImport)">{{ videoImport.video?.name }}</ng-container>
-        <ng-container *ngIf="isVideoImportSuccess(videoImport) && videoImport.video">
+    <td>
+      @if (isVideoImportPending(videoImport)) {
+        {{ videoImport.video?.name }}
+      } @else if (isVideoImportSuccess(videoImport)) {
+        @if (videoImport.video) {
           <a [href]="getVideoUrl(videoImport.video)" target="_blank" rel="noopener noreferrer">{{ videoImport.video?.name }}</a>
-        </ng-container>
-        <ng-container *ngIf="isVideoImportSuccess(videoImport) && !videoImport.video" i18n>This video was deleted</ng-container>
-        <ng-container *ngIf="isVideoImportFailed(videoImport)"></ng-container>
-      </td>
+        } @else {
+          <ng-container i18n>This video has been deleted</ng-container>
+        }
+      }
+    </td>
 
-      <td>
-        <span class="pt-badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
-          {{ videoImport.state.label }}
-        </span>
-      </td>
+    <td>
+      <span class="pt-badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
+        {{ videoImport.state.label }}
+      </span>
+    </td>
 
-      <td>{{ videoImport.createdAt | ptDate: 'short' }}</td>
-    </tr>
+    <td>{{ videoImport.createdAt | ptDate: 'short' }}</td>
   </ng-template>
 
-  <ng-template #expandedrow let-videoImport>
-    <tr class="video-import-error" *ngIf="videoImport.error">
-      <td myAutoColspan>
-        <pre>{{ videoImport.error }}</pre>
-      </td>
-    </tr>
+  <ng-template #actionCell let-videoImport>
+    @if (isVideoImportPending(videoImport)) {
+      <my-button i18n-label label="Cancel" icon="no" (click)="cancelImport(videoImport)"></my-button>
+    }
+
+    @if (isVideoImportFailed(videoImport) || isVideoImportCancelled(videoImport) || !videoImport.video) {
+      <my-delete-button (click)="deleteImport(videoImport)"></my-delete-button>
+    }
+
+    @if (isVideoImportSuccess(videoImport) && videoImport.video) {
+      <my-edit-button [ptRouterLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
+    }
   </ng-template>
-</p-table>
+
+  <ng-template #expandedRow let-videoImport>
+    <pre>{{ videoImport.error }}</pre>
+  </ng-template>
+
+  <ng-template #noResults>
+    <ng-container i18n>No video import found.</ng-container>
+  </ng-template>
+</my-table>

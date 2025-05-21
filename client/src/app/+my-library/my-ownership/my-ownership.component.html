@@ -1,62 +1,50 @@
-<p-table
-  [value]="videoChangeOwnerships" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-  [first]="pagination.start" [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+<my-table
+  #table
+  key="MyOwnershipComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="entries per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
 >
-  <ng-template #header>
-    <tr>
-      <th scope="col" style="width: 150px;" i18n>Actions</th>
-      <th scope="col" style="width: 35%;" i18n>Initiator</th>
-      <th scope="col" style="width: 65%;" i18n>Video</th>
-      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">
-        Created
-        <p-sortIcon field="createdAt"></p-sortIcon>
-      </th>
-      <th scope="col" style="width: 100px;" i18n>Status</th>
-    </tr>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No entry} =1 {1 entry} other {{{ totalRecords | myNumberFormatter }} entries}}</ng-container>
   </ng-template>
 
-  <ng-template #body let-videoChangeOwnership>
-    <tr>
-      <td class="action-cell">
-        <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
-          <my-button i18n-title title="Accept" icon="tick" (click)="openAcceptModal(videoChangeOwnership)"></my-button>
-          <my-button i18n-title title="Refuse" icon="cross" (click)="refuse(videoChangeOwnership)"></my-button>
-        </ng-container>
-      </td>
-      <td>
-        <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
-          <div class="chip two-lines">
-            <my-actor-avatar [actor]="videoChangeOwnership.initiatorAccount" actorType="account" size="32"></my-actor-avatar>
-            <div>
-              {{ videoChangeOwnership.initiatorAccount.displayName }}
-              <span class="muted">{{ videoChangeOwnership.initiatorAccount.nameWithHost }}</span>
-            </div>
+  <ng-template #tableCells let-entry>
+    <td>
+      <a [href]="entry.initiatorAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+        <div class="chip two-lines">
+          <my-actor-avatar [actor]="entry.initiatorAccount" actorType="account" size="32"></my-actor-avatar>
+          <div>
+            {{ entry.initiatorAccount.displayName }}
+            <span class="muted">{{ entry.initiatorAccount.nameWithHost }}</span>
           </div>
-        </a>
-      </td>
-
-      <td>
-        <my-video-cell [video]="videoChangeOwnership.video" size="small"></my-video-cell>
-      </td>
-
-      <td>{{ videoChangeOwnership.createdAt | ptDate: 'short' }}</td>
-
-      <td>
-        <span class="pt-badge"
-          [ngClass]="getStatusClass(videoChangeOwnership.status)">{{ videoChangeOwnership.status }}</span>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template #emptymessage>
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container i18n>No ownership change request found.</ng-container>
         </div>
-      </td>
-    </tr>
+      </a>
+    </td>
+
+    <td>
+      <my-video-cell [video]="entry.video" size="small"></my-video-cell>
+    </td>
+
+    <td>{{ entry.createdAt | ptDate: 'short' }}</td>
+
+    <td>
+      <span class="pt-badge" [ngClass]="getStatusClass(entry.status)">{{ entry.status }}</span>
+    </td>
   </ng-template>
-</p-table>
+
+  <ng-template #actionCell let-entry>
+    @if (entry.status === 'WAITING') {
+      <my-button i18n-title title="Accept" icon="tick" (click)="openAcceptModal(entry)"></my-button>
+      <my-button i18n-title title="Refuse" icon="cross" (click)="refuse(entry)"></my-button>
+    }
+  </ng-template>
+
+  <ng-template #noResults>
+    <ng-container i18n>No ownership change request found.</ng-container>
+  </ng-template>
+</my-table>
 
 <my-accept-ownership #myAcceptOwnershipComponent (accepted)="accepted()"></my-accept-ownership>

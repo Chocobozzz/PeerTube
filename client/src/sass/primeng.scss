@@ -130,16 +130,55 @@ p-toast {
 // ---------------------------------------------------------------------------
 
 p-table {
+  --action-cell-padding-right: 0.25em;
+
+  margin-bottom: 0.5rem;
+  display: block;
+
+  &.loading table {
+    opacity: 0.5;
+  }
+
   table {
-    table-layout: fixed;
+    table-layout: auto;
   }
 
   th {
+    font-size: 14px;
+    padding: 5px 0.25rem 5px 1rem !important;
+
+    .column-toggle {
+      .dropdown > my-button::after {
+        display: none;
+      }
+    }
+
     @include ellipsis;
   }
 
+  .column-toggle .tertiary-button:not(.active) {
+    color: pvar(--fg-300) !important;
+  }
+
+  td,
+  th {
+    // It's like min-height in tables
+    min-height: 46px;
+  }
+
+  .p-sortable-column-icon {
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+
+    .tertiary-button:not(.active) {
+      color: pvar(--secondary-icon-color) !important;
+    }
+  }
+
   .p-datatable-table-container {
-    overflow-x: auto;
+    overflow: auto;
     max-width: 100%;
 
     table {
@@ -148,6 +187,8 @@ p-table {
   }
 
   .p-datatable-header {
+    border: 0;
+
     .caption {
       min-height: 40px;
       width: 100%;
@@ -160,6 +201,12 @@ p-table {
         color: pvar(--fg-300);
 
         @include font-size(22px);
+      }
+
+      .right-block {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
       }
     }
   }
@@ -183,20 +230,11 @@ p-table {
   }
 
   .action-cell {
-    width: 250px !important;
+    @include padding-right(var(--action-cell-padding-right));
 
-    .dropdown-root,
-    my-edit-button,
-    my-delete-button,
-    my-button {
-      display: inline-block !important;
-      max-width: 100%;
-
-      @include margin-left(5px);
-
-      &:first-child {
-        @include margin-left(0);
-      }
+    // Align with "actions" head title
+    &.has-action.has-column-config {
+      @include padding-right(calc(42px + var(--action-cell-padding-right)));
     }
   }
 
@@ -206,8 +244,9 @@ p-table {
 
   p-paginator {
     .p-paginator {
+      padding-top: 1rem;
+
       border-top: 1px solid pvar(--bg-secondary-400) !important;
-      height: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -223,6 +262,16 @@ p-table {
 
     .p-iconwrapper {
       color: pvar(--fg-300);
+    }
+
+    .p-paginator-page-selected {
+      font-weight: $font-bold !important;
+    }
+
+    .p-paginator-content-end {
+      color: pvar(--fg-300);
+
+      @include margin-left(0);
     }
   }
 
@@ -261,106 +310,23 @@ p-table {
   }
 }
 
-p-table:not(.cell-wrap) {
-  td:not(.action-cell):not(.expand-cell):not(.checkbox-cell) {
-    @include ellipsis;
-  }
-}
-
 p-tablecheckbox:hover div .p-checkbox-box {
   box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
 }
 
-.new-p-table {
-  margin-bottom: 0.5rem;
-  display: block;
-
-  &.loading table {
-    opacity: 0.5;
-  }
-
-  .column-toggle .tertiary-button:not(.active) {
-    color: pvar(--fg-300) !important;
-  }
-
-  th {
-    font-size: 14px;
-    padding: 5px 0.25rem 5px 1rem !important;
-
-    .column-toggle {
-      .dropdown > my-button::after {
-        display: none;
-      }
-    }
-  }
-
-  .p-sortable-column-icon {
-    display: inline-block;
-    position: relative;
-    top: -1px;
-    vertical-align: middle;
-
-    .tertiary-button:not(.active) {
-      color: pvar(--secondary-icon-color) !important;
-    }
-  }
-
-  p-paginator {
-    .p-paginator {
-      padding-top: 1.5rem;
-      margin-top: 0.75rem;
-      height: auto !important;
-
-      .p-paginator-page-selected {
-        font-weight: $font-bold !important;
-      }
-    }
-  }
-
-  .p-paginator-content-end {
-    color: pvar(--fg-300);
-
-    @include margin-left(0);
-  }
-
-  .action-cell {
-    width: 0 !important;
-
-    @include padding-right(0.25rem);
-  }
-}
-
-.sticky-p-table {
-  table {
-    table-layout: auto;
-  }
-
+.sticky-table {
   @media screen and (min-width: $small-view) {
     .action-cell,
     .action-head {
       position: sticky;
       right: 0;
-      padding-right: 0.5rem;
+
+      @include padding-right(0.5rem !important);
     }
 
     .action-cell {
       z-index: 10;
       background-color: inherit;
     }
-  }
-
-  thead th {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-  }
-
-  .p-datatable,
-  .p-datatable-table-container {
-    max-height: inherit;
-  }
-
-  .p-datatable-table-container {
-    overflow: auto;
   }
 }

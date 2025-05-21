@@ -1,49 +1,24 @@
-<p-table
-  [value]="abuses" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="AbuseListTableComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="abuses per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
 >
-  <ng-template #caption>
-    <div class="caption">
-      <div class="ms-auto">
-        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
-      </div>
-    </div>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No abuse} =1 {1 abuse} other {{{ totalRecords | myNumberFormatter }} abuses}}</ng-container>
   </ng-template>
 
-  <ng-template #header>
-    <tr> <!-- header -->
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" style="width: 70px;">
-        <span i18n class="visually-hidden">Actions</span>
-      </th>
-      <th scope="col" *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
-      <th scope="col" i18n>Video/Comment/Account</th>
-      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
-      <th scope="col" i18n style="width: 80px;">Messages</th>
-      <th scope="col" i18n *ngIf="isAdminView()" style="width: 100px;">Internal note</th>
-    </tr>
+  <ng-template #captionRight>
+    <my-advanced-input-filter [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
   </ng-template>
 
-  <ng-template #body let-expanded="expanded" let-abuse>
-    <tr>
-      <td class="expand-cell">
-        <my-table-expander-icon [pRowToggler]="abuse" [expanded]="expanded"></my-table-expander-icon>
-      </td>
-
-      <td class="action-cell">
-        <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          [actions]="abuseActions" [entry]="abuse" buttonSize="small"
-        ></my-action-dropdown>
-      </td>
-
-      <td *ngIf="isAdminView()">
-        <a *ngIf="abuse.reporterAccount" [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+  <ng-template #tableCells let-abuse>
+    <td *ngIf="isAdminView()">
+      @if (abuse.reporterAccount) {
+        <a [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
             <my-actor-avatar [actor]="abuse.reporterAccount" actorType="account" size="32"></my-actor-avatar>
             <div>
@@ -52,27 +27,14 @@
             </div>
           </div>
         </a>
+      } @else {
+        <span i18n>Deleted account</span>
+      }
+    </td>
 
-        <span i18n *ngIf="!abuse.reporterAccount">
-          Deleted account
-        </span>
-      </td>
-
-      <ng-container *ngIf="abuse.video">
-
-        <td *ngIf="!abuse.video.deleted">
-          <my-video-cell [video]="abuse.video" size="small">
-            <div>
-              <span *ngIf="abuse.count > 1" class="pt-badge badge-secondary me-1" i18n-title title="This video has been reported multiple times" i18n>
-                {abuse.count, plural, =1 {1 abuse} other {{{ abuse.count }} abuses}}
-              </span>
-
-              <span *ngIf="abuse.video.blacklisted" class="pt-badge badge-red" i18n-title title="The video is blocked" i18n>Blocked</span>
-            </div>
-          </my-video-cell>
-        </td>
-
-        <td *ngIf="abuse.video.deleted" class="c-hand" [pRowToggler]="abuse">
+    @if (abuse.video) {
+      @if (abuse.video.deleted) {
+        <td>
           <div class="table-video" i18n-title title="Video was deleted">
             <div class="table-video-text">
               <div>
@@ -85,87 +47,89 @@
             </div>
           </div>
         </td>
-      </ng-container>
-
-      <ng-container *ngIf="abuse.comment">
+      } @else {
         <td>
-          <a
-            [href]="getCommentUrl(abuse)" [innerHTML]="abuse.commentHTML" class="table-comment-link ellipsis-multiline-1"
-            [title]="abuse.comment.video.name" target="_blank" rel="noopener noreferrer"
-          ></a>
+          <my-video-cell [video]="abuse.video" size="small">
+            <div>
+              <span *ngIf="abuse.count > 1" class="pt-badge badge-secondary me-1" i18n-title title="This video has been reported multiple times" i18n>
+                {abuse.count, plural, =1 {1 abuse} other {{{ abuse.count }} abuses}}
+              </span>
 
-          <div class="comment-flagged-account" *ngIf="abuse.flaggedAccount">by {{ abuse.flaggedAccount.displayName }}</div>
+              <span *ngIf="abuse.video.blacklisted" class="pt-badge badge-red" i18n-title title="The video is blocked" i18n>Blocked</span>
+            </div>
+          </my-video-cell>
         </td>
-      </ng-container>
+      }
+    } @else if (abuse.comment) {
+      <td>
+        <a
+          [href]="getCommentUrl(abuse)" [innerHTML]="abuse.commentHTML" class="table-comment-link ellipsis-multiline-1"
+          [title]="abuse.comment.video.name" target="_blank" rel="noopener noreferrer"
+        ></a>
 
-      <ng-container *ngIf="!abuse.comment && !abuse.video">
-        <td *ngIf="abuse.flaggedAccount">
-          <a [href]="getAccountUrl(abuse)"  class="table-account-link" target="_blank" rel="noopener noreferrer">
-            <span>{{ abuse.flaggedAccount.displayName }}</span>
-
-            <span class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</span>
-          </a>
-        </td>
-
-        <td i18n *ngIf="!abuse.flaggedAccount">
-          Account deleted
-        </td>
-
-      </ng-container>
-
-      <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | ptDate: 'short'  }}</td>
-
-      <td class="c-hand abuse-states" [pRowToggler]="abuse">
-        <div *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="pt-badge badge-success">
-          <my-global-icon iconName="tick"></my-global-icon>
-        </div>
-
-        <div *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="pt-badge badge-danger">
-          <my-global-icon iconName="cross"></my-global-icon>
-        </div>
+        <div class="comment-flagged-account" *ngIf="abuse.flaggedAccount">by {{ abuse.flaggedAccount.displayName }}</div>
       </td>
+    } @else if(abuse.flaggedAccount) {
+      <td>
+        <a [href]="getAccountUrl(abuse)"  class="table-account-link" target="_blank" rel="noopener noreferrer">
+          <span>{{ abuse.flaggedAccount.displayName }}</span>
 
-      <td class="abuse-messages">
-        <button
-          *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)"
-          class="peertube-button secondary-button icon-only"
-          [ariaLabel]="getSendMessageButtonLabel(abuse)"
-          [title]="getSendMessageButtonLabel(abuse)"
-        >
-          {{ abuse.countMessages }}
-
-          <my-global-icon aria- iconName="message-circle"></my-global-icon>
-        </button>
+          <span class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</span>
+        </a>
       </td>
+    } @else {
+      <td i18n>Account deleted</td>
+    }
 
-      <td *ngIf="isAdminView()" class="internal-note" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
-        {{ abuse.moderationComment }}
-      </td>
-    </tr>
+    <td>{{ abuse.createdAt | ptDate: 'short'  }}</td>
+
+    <td class="abuse-states">
+      <div *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="pt-badge badge-success">
+        <my-global-icon iconName="tick"></my-global-icon>
+      </div>
+
+      <div *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="pt-badge badge-danger">
+        <my-global-icon iconName="cross"></my-global-icon>
+      </div>
+    </td>
+
+    <td class="abuse-messages">
+      <button
+        *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)"
+        class="peertube-button secondary-button icon-only"
+        [ariaLabel]="getSendMessageButtonLabel(abuse)"
+        [title]="getSendMessageButtonLabel(abuse)"
+      >
+        {{ abuse.countMessages }}
+
+        <my-global-icon aria- iconName="message-circle"></my-global-icon>
+      </button>
+    </td>
+
+    <td *ngIf="isAdminView()" class="internal-note max-width-300px" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
+      {{ abuse.moderationComment }}
+    </td>
   </ng-template>
 
-  <ng-template #expandedrow let-abuse>
-      <tr>
-        <td *ngIf="isAdminView()" class="expand-cell" myAutoColspan>
-          <my-abuse-details [abuse]="abuse" [isAdminView]="true"></my-abuse-details>
-        </td>
-        <td *ngIf="!isAdminView()" class="expand-cell" myAutoColspan>
-          <my-abuse-details [abuse]="abuse" [isAdminView]="false"></my-abuse-details>
-        </td>
-      </tr>
+  <ng-template #actionCell let-abuse>
+    <my-action-dropdown
+      placement="bottom-right top-right left auto" container="body"
+      [actions]="abuseActions" [entry]="abuse"
+    ></my-action-dropdown>
   </ng-template>
 
-  <ng-template #emptymessage>
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container *ngIf="search" i18n>No abuses found matching current filters.</ng-container>
-          <ng-container *ngIf="!search" i18n>No abuses found.</ng-container>
-        </div>
-      </td>
-    </tr>
+  <ng-template #expandedRow let-abuse>
+    <my-abuse-details [abuse]="abuse" [isAdminView]="isAdminView()"></my-abuse-details>
   </ng-template>
-</p-table>
+
+  <ng-template #noResults let-search>
+    @if (search) {
+      <ng-container i18n>No abuses found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No abuses found.</ng-container>
+    }
+  </ng-template>
+</my-table>
 
 <my-moderation-comment-modal #moderationCommentModal (commentUpdated)="onModerationCommentUpdated()"></my-moderation-comment-modal>
 <my-abuse-message-modal #abuseMessagesModal [isAdminView]="isAdminView()" (countMessagesUpdated)="onCountMessagesUpdated($event)"></my-abuse-message-modal>

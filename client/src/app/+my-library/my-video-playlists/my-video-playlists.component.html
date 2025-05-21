@@ -1,7 +1,7 @@
-<div class="video-playlists-header d-flex justify-content-between align-items-end gap-2 flex-wrap">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
-
+<div class="video-playlists-header d-flex align-items-end gap-2 flex-wrap">
   <span class="total-items" *ngIf="pagination.totalItems"> {{ getTotalTitle() }}</span>
+
+  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
 
   <a class="peertube-create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>

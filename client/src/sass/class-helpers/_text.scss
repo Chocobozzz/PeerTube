@@ -1,8 +1,8 @@
-@use 'sass:color';
-@use '_badges' as *;
-@use '_icons' as *;
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "sass:color";
+@use "_badges" as *;
+@use "_icons" as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .red {
   color: pvar(--red);
@@ -13,56 +13,58 @@
 }
 
 .text-fg {
-  color: pvar(--fg)
+  color: pvar(--fg);
 }
 
 .fg-100 {
-  color: pvar(--fg-100)
+  color: pvar(--fg-100);
 }
 
 // ---------------------------------------------------------------------------
 
 .fg-100 {
-  color: pvar(--fg-100)
+  color: pvar(--fg-100);
 }
 
 .fg-150 {
-  color: pvar(--fg-150)
+  color: pvar(--fg-150);
 }
 
 .fg-200 {
-  color: pvar(--fg-200)
+  color: pvar(--fg-200);
 }
 
 .fg-250 {
-  color: pvar(--fg-250)
+  color: pvar(--fg-250);
 }
 
 .fg-300 {
-  color: pvar(--fg-300)
+  color: pvar(--fg-300);
 }
 
 .fg-350 {
-  color: pvar(--fg-350)
+  color: pvar(--fg-350);
 }
 
 .fg-400 {
-  color: pvar(--fg-400)
+  color: pvar(--fg-400);
 }
 
 .fg-450 {
-  color: pvar(--fg-450)
+  color: pvar(--fg-450);
 }
 
 .fg-500 {
-  color: pvar(--fg-500)
+  color: pvar(--fg-500);
 }
 
 // ---------------------------------------------------------------------------
 
 .total-items {
   color: pvar(--fg-300);
-  font-weight: $font-semibold;
+  font-weight: $font-bold;
+
+  @include font-size(22px);
 }
 
 .link-primary {
@@ -82,7 +84,7 @@
 
 .border-highlight {
   &::after {
-    content: '';
+    content: "";
     display: block;
     height: 4px;
     background-color: pvar(--border-primary);

@@ -1,7 +1,7 @@
 <div class="followers-header d-flex justify-content-between align-items-end gap-2 flex-wrap">
   <span class="total-items" *ngIf="pagination.totalItems"> {{ getTotalTitle() }}</span>
 
-  <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+  <my-advanced-input-filter class="d-block ms-auto" [filters]="inputFilters" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
 </div>
 
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No follower found.</div>

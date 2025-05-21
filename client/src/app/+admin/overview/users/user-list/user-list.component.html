@@ -1,161 +1,105 @@
-<p-table
-  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
-  [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="UserListComponent"
+  [defaultColumns]="columns"
+  defaultSort="createdAt"
+  i18n-paginatorText
+  paginatorText="users per page"
+  defaultRowsPerPage="10"
+  [bulkActions]="bulkActions"
+  [dataLoader]="dataLoader"
+  columnConfig="true"
+  [hasExpandedRow]="hasExpandedRow"
 >
-  <ng-template #caption>
-    <div class="caption">
-      <div class="left-buttons">
-        <my-action-dropdown
-          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="primary"
-          [actions]="bulkActions" [entry]="selectedRows"
-        >
-        </my-action-dropdown>
-
-        <a *ngIf="!isInSelectionMode()" class="peertube-create-button" routerLink="/admin/overview/users/create">
-          <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
-          <ng-container i18n>Create user</ng-container>
-        </a>
-      </div>
-
-      <div class="ms-auto">
-        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
-      </div>
-
-    </div>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No users} =1 {1 user} other {{{ totalRecords | myNumberFormatter }} users}}</ng-container>
   </ng-template>
 
-  <ng-template #header>
-    <tr>
-      <th class="checkbox-cell" scope="col" style="width: 40px">
-        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
-      </th>
+  <ng-template #captionRight>
+    <my-advanced-input-filter [filters]="inputFilters" (search)="table.onSearch($event)"></my-advanced-input-filter>
 
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
+    <a class="peertube-create-button" routerLink="/admin/overview/users/create">
+      <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Create user</ng-container>
+    </a>
+  </ng-template>
 
-      <th scope="col" style="width: 70px;">
-        <div class="c-hand column-toggle" ngbDropdown placement="bottom-left auto" container="body" autoClose="outside">
-          <button type="button" class="border-0 p-0" ngbDropdownToggle i18n-title title="Open table configuration">
-            <my-global-icon iconName="columns"></my-global-icon>
-          </button>
-
-          <div ngbDropdownMenu class="p-3">
-            <div class="form-group">
-              <label i18n for="select-columns">Select the columns to display</label>
-
-              <my-select-checkbox
-                inputId="select-columns"
-                [availableItems]="columns"
-                [selectableGroup]="false" [(ngModel)]="selectedColumns"
-                i18n-placeholder placeholder="Select the columns to display"
-              >
-              </my-select-checkbox>
-            </div>
-
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="highlightBannedUsers" [(ngModel)]="highlightBannedUsers"
-                i18n-labelText labelText="Highlight banned users"
-              ></my-peertube-checkbox>
-            </div>
+  <ng-template #tableCells let-user>
+    <td *ngIf="table.isColumnDisplayed('username')" class="cell-username">
+      <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
+        <div class="chip two-lines">
+          <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
+          <div>
+            <span>{{ user.account.displayName }}</span>
+            <span class="muted">{{ user.username }}</span>
           </div>
         </div>
-      </th>
-      <th scope="col" *ngIf="isSelected('username')" pResizableColumn [ngbTooltip]="sortTooltip" container="body" pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('role')" style="width: 120px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
-      <th scope="col" *ngIf="isSelected('quota')" style="width: 160px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
-      <th scope="col" *ngIf="isSelected('totalVideoFileSize')" style="width: 100px;">{{ getColumn('totalVideoFileSize').label }}</th>
-      <th scope="col" *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
-      <th scope="col" *ngIf="isSelected('createdAt')" style="width: 170px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 170px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
-    </tr>
+      </a>
+
+      <div *ngIf="user.accountMutedStatus.mutedByInstance" class="pt-badge badge-red" i18n>Muted</div>
+      <div *ngIf="user.blocked" class="pt-badge badge-red" i18n>Banned</div>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('role')">
+      @if (user.blocked) {
+        <span class="pt-badge badge-banned" i18n-title title="The user is banned">{{ user.role.label }}</span>
+      } @else {
+        <span class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
+      }
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('email')">
+      <my-user-email-info [entry]="user" showEmailVerifyInformation="true"></my-user-email-info>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('videoQuotaUsed')">
+      <my-progress-bar
+        i18n-label label="Total video quota" [max]="user.rawVideoQuota" [value]="user.rawVideoQuotaUsed"
+        [valueFormatted]="user.videoQuotaUsed" [maxFormatted]="user.videoQuota" size="small"
+      >
+      </my-progress-bar>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('videoQuotaDailyUsed')">
+      <my-progress-bar
+        i18n-label label="Total daily video quota" [max]="user.rawVideoQuotaDaily" [value]="user.rawVideoQuotaUsedDaily"
+        [valueFormatted]="user.videoQuotaUsedDaily" [maxFormatted]="user.videoQuotaDaily" size="small"
+      >
+      </my-progress-bar>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('totalVideoFileSize')">
+      {{ user.totalVideoFileSize | bytes }}
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('pluginAuth')">
+      <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth.replace('peertube-plugin-', '') }}</span>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('createdAt')" [title]="user.createdAt">{{ user.createdAt | ptDate: 'short' }}</td>
+
+    <td *ngIf="table.isColumnDisplayed('lastLoginDate')" [title]="user.lastLoginDate">
+      @if (user.lastLoginDate) {
+        {{ user.lastLoginDate | ptDate: 'short' }}
+      } @else {
+        <span i18n>never</span>
+      }
+    </td>
   </ng-template>
 
-  <ng-template #body let-expanded="expanded" let-user>
-
-    <tr [pSelectableRow]="user" [ngClass]="{ banned: highlightBannedUsers && user.blocked }">
-      <td class="checkbox-cell">
-        <p-tableCheckbox [value]="user" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
-      </td>
-
-      <td class="expand-cell" [ngClass]="{ 'empty-cell': !user.blockedReason }">
-        <my-table-expander-icon *ngIf="user.blockedReason" [pRowToggler]="user" [expanded]="expanded"></my-table-expander-icon>
-      </td>
-
-      <td class="action-cell">
-        <my-user-moderation-dropdown
-          *ngIf="!isInSelectionMode()" [user]="user" [account]="user.accountMutedStatus" [displayOptions]="userModerationDisplayOptions"
-          container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()" buttonSize="small">
-        </my-user-moderation-dropdown>
-      </td>
-
-      <td *ngIf="isSelected('username')" class="cell-username">
-        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
-          <div class="chip two-lines">
-            <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
-            <div>
-              <span>{{ user.account.displayName }}</span>
-              <span class="muted">{{ user.username }}</span>
-            </div>
-          </div>
-        </a>
-
-        <div *ngIf="user.accountMutedStatus.mutedByInstance" class="pt-badge badge-red" i18n>Muted</div>
-        <div *ngIf="user.blocked" class="pt-badge badge-red" i18n>Banned</div>
-      </td>
-
-      <td *ngIf="isSelected('role')">
-        <span *ngIf="user.blocked" class="pt-badge badge-banned" i18n-title title="The user was banned">{{ user.role.label }}</span>
-        <span *ngIf="!user.blocked" class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
-      </td>
-
-      <td *ngIf="isSelected('email')">
-        <my-user-email-info [entry]="user" showEmailVerifyInformation="true"></my-user-email-info>
-      </td>
-
-      <td *ngIf="isSelected('quota')">
-        <my-progress-bar
-          i18n-label label="Total video quota" [max]="user.rawVideoQuota" [value]="user.rawVideoQuotaUsed"
-          [valueFormatted]="user.videoQuotaUsed" [maxFormatted]="user.videoQuota" size="small"
-        >
-        </my-progress-bar>
-      </td>
-
-      <td *ngIf="isSelected('quotaDaily')">
-        <my-progress-bar
-          i18n-label label="Total daily video quota" [max]="user.rawVideoQuotaDaily" [value]="user.rawVideoQuotaUsedDaily"
-          [valueFormatted]="user.videoQuotaUsedDaily" [maxFormatted]="user.videoQuotaDaily" size="small"
-        >
-        </my-progress-bar>
-      </td>
-
-      <td *ngIf="isSelected('totalVideoFileSize')">
-        {{ user.totalVideoFileSize | bytes }}
-      </td>
-
-      <td *ngIf="isSelected('pluginAuth')">
-        <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth }}</span>
-      </td>
-
-      <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | ptDate: 'short' }}</td>
-
-      <td *ngIf="isSelected('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | ptDate: 'short' }}</td>
-    </tr>
+  <ng-template #actionCell let-user>
+    <my-user-moderation-dropdown
+      [user]="user" [account]="user.accountMutedStatus" [displayOptions]="userModerationDisplayOptions"
+      container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()"
+    >
+    </my-user-moderation-dropdown>
   </ng-template>
 
-  <ng-template #expandedrow let-user>
-    <tr class="user-blocked-reason">
-      <td myAutoColspan>
-        <span i18n class="ban-reason-label">Ban reason:</span>
-        {{ user.blockedReason }}
-      </td>
-    </tr>
+  <ng-template #expandedRow let-user>
+    <span i18n class="ban-reason-label">Ban reason:</span>
+
+    {{ user.blockedReason }}
   </ng-template>
-</p-table>
+</my-table>
 
 <my-user-ban-modal #userBanModal (userBanned)="onUserChanged()"></my-user-ban-modal>

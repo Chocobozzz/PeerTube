@@ -1,87 +1,64 @@
-<div class="admin-sub-header">
-  <div class="select-filter-block">
-    <label for="displayType" i18n>Display</label>
-
-    <div class="peertube-select-container">
-      <select id="displayType" name="displayType" [(ngModel)]="displayType" (ngModelChange)="onDisplayTypeChanged()" class="form-control">
-        <option value="my-videos" i18n>My videos duplicated by remote instances</option>
-        <option value="remote-videos" i18n>Remote videos duplicated by my instance</option>
-      </select>
-    </div>
-  </div>
-</div>
-
-<p-table
-  [value]="videoRedundancies" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords"
-  [rows]="rowsPerPage"  [first]="pagination.start" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
-  [expandedRowKeys]="expandedRows"
+<my-table
+  #table
+  key="VideoRedundanciesListComponent"
+  [defaultColumns]="columns"
+  defaultSort="name"
+  defaultSortOrder="asc"
+  i18n-paginatorText
+  paginatorText="redundancies per page"
+  [dataLoader]="dataLoader"
+  [customParseQueryParams]="customParseQueryParams"
+  [customUpdateUrl]="customUpdateUrl"
+  columnConfig="false"
 >
-  <ng-template #header>
-    <tr>
-      <th scope="col" style="width: 40px;">
-        <span i18n class="visually-hidden">More information</span>
-      </th>
-      <th scope="col" style="width: 150px;" i18n>Action</th>
-      <th scope="col" style="width: 160px;" i18n *ngIf="isDisplayingRemoteVideos()">Strategy</th>
-      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th >
-      <th scope="col" style="width: 100px;" i18n *ngIf="isDisplayingRemoteVideos()">Total size</th>
-    </tr>
+<ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No redundancy} =1 {1 redundancy} other {{{ totalRecords | myNumberFormatter }} redundancies}}</ng-container>
   </ng-template>
 
-  <ng-template #body let-expanded="expanded" let-redundancy>
-    <tr>
-      <td class="expand-cell">
-        <my-table-expander-icon [pRowToggler]="redundancy" [expanded]="expanded" i18n-tooltip tooltip="List redundancies"></my-table-expander-icon>
-      </td>
+  <ng-template #captionRight>
+    <div class="select-filter-block">
+      <label for="displayType" i18n>Display</label>
 
-      <td class="action-cell">
-        <my-delete-button label (click)="removeRedundancy(redundancy)"></my-delete-button>
-      </td>
-
-      <td *ngIf="isDisplayingRemoteVideos()">{{ getRedundancyStrategy(redundancy) }}</td>
-
-      <td>
-        <a [href]="redundancy.url" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
-          {{ redundancy.name }}
-          <my-global-icon iconName="external-link"></my-global-icon>
-        </a>
-      </td>
-
-      <td *ngIf="isDisplayingRemoteVideos()">{{ getTotalSize(redundancy) | bytes: 1 }}</td>
-    </tr>
+      <div class="peertube-select-container">
+        <select id="displayType" name="displayType" [(ngModel)]="displayType" (ngModelChange)="onDisplayTypeChanged()" class="form-control">
+          <option value="my-videos" i18n>My videos duplicated by remote instances</option>
+          <option value="remote-videos" i18n>Remote videos duplicated by my instance</option>
+        </select>
+      </div>
+    </div>
   </ng-template>
 
-  <ng-template #expandedrow let-redundancy>
-    <tr *ngIf="redundancy.redundancies.files.length !== 0">
-      <td class="expand-cell" myAutoColspan>
-        <div *ngFor="let file of redundancy.redundancies.files" class="expansion-block">
-          <my-video-redundancy-information [redundancyElement]="file"></my-video-redundancy-information>
-        </div>
-      </td>
-    </tr>
+  <ng-template #tableCells let-redundancy>
+    <td *ngIf="isDisplayingRemoteVideos()">{{ getRedundancyStrategy(redundancy) }}</td>
 
-    <tr *ngIf="redundancy.redundancies.streamingPlaylists.length !== 0">
-      <td class="expand-cell" myAutoColspan>
-        <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
-          <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
-        </div>
-      </td>
-    </tr>
+    <td>
+      <a [href]="redundancy.url" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
+        {{ redundancy.name }}
+        <my-global-icon iconName="external-link"></my-global-icon>
+      </a>
+    </td>
+
+    <td *ngIf="isDisplayingRemoteVideos()">{{ getTotalSize(redundancy) | bytes: 1 }}</td>
   </ng-template>
 
-  <ng-template #emptymessage>
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container *ngIf="isDisplayingRemoteVideos()" i18n>Your instance doesn't mirror any video.</ng-container>
-          <ng-container *ngIf="!isDisplayingRemoteVideos()" i18n>Your instance has no mirrored videos.</ng-container>
-        </div>
-      </td>
-    </tr>
+  <ng-template #actionCell let-redundancy>
+    <my-delete-button label (click)="removeRedundancy(redundancy)"></my-delete-button>
   </ng-template>
-</p-table>
 
+  <ng-template #expandedRow let-redundancy>
+    <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
+      <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
+    </div>
+  </ng-template>
+
+  <ng-template #noResults>
+    @if (isDisplayingRemoteVideos()) {
+      <ng-container i18n>Your instance doesn't mirror any video.</ng-container>
+    } @else {
+      <ng-container i18n>Your instance has no mirrored videos.</ng-container>
+    }
+  </ng-template>
+</my-table>
 
 <div class="redundancies-charts" *ngIf="isDisplayingRemoteVideos() && dataLoaded">
   <h6 i18n>Enabled strategies stats</h6>

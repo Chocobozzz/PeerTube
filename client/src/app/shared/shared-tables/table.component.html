@@ -1,0 +1,174 @@
+<p-table
+  [value]="data"
+  [paginator]="totalRecords > 0"
+  [totalRecords]="totalRecords"
+  [rows]="pagination.count"
+  [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field"
+  [sortOrder]="sort.order"
+  [dataKey]="dataKey()"
+  resizableColumns="false"
+  [(selection)]="selectedRows"
+  lazy="true"
+  (onLazyLoad)="onLoadLazy($event)"
+  [currentPageReportTemplate]="getPaginationTemplate()"
+  lazyLoadOnInit="false"
+  selectionPageOnly="true"
+  showCurrentPageReport="true"
+  [expandedRowKeys]="expandedRows"
+  (onRowExpand)="rowExpand.emit($event)"
+  [ngClass]="{ loading: loading, 'sticky-table': actionCell }"
+>
+  <ng-template #caption>
+    <div class="caption">
+      <div class="left-buttons">
+        @if (isInSelectionMode()) {
+          <my-action-dropdown i18n-label label="Batch actions" theme="primary" [actions]="bulkActions()" [entry]="selectedRows"></my-action-dropdown>
+        } @else {
+          <strong *ngIf="totalTitle" i18n [ngClass]="{ 'opacity-0': loading }">
+            <ng-template *ngTemplateOutlet="totalTitle; context: { $implicit: totalRecords }"></ng-template>
+          </strong>
+
+          <div *ngIf="captionLeft" class="ms-auto right-block">
+            <ng-template *ngTemplateOutlet="captionLeft"></ng-template>
+          </div>
+        }
+      </div>
+
+      <div *ngIf="captionRight" class="ms-auto right-block">
+        <ng-template *ngTemplateOutlet="captionRight"></ng-template>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #sorticon let-sortOrder>
+    @if (sortOrder === 1) {
+      <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-up"></my-button>
+    } @else if (sortOrder === -1) {
+      <my-button class="ms-2" small="true" active="true" rounded="true" theme="tertiary" icon="chevron-down"></my-button>
+    } @else if (sortOrder === 0) {
+      <my-button class="ms-2" small="true" rounded="true" theme="tertiary" icon="chevron-down"></my-button>
+    }
+  </ng-template>
+
+  <ng-template #paginatorright>
+    {{ paginatorText() }}
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th *ngIf="hasBulkActions()" scope="col" width="25px" class="checkbox-cell">
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
+      </th>
+
+      <th *ngIf="expandedRow">
+        <div class="visually-hidden">{{ expandedIconTooltip() }}</div>
+      </th>
+
+      @for (column of columns; track column.id) {
+        @if (isColumnDisplayed(column.id)) {
+          @if (column.sortable) {
+            <th
+              scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="getUntypedColumnId(column)" [ngClass]="column.class"
+            >
+              {{ column.label }}
+              <small *ngIf="column.labelSmall">{{ column.labelSmall }}</small>
+
+              <p-sortIcon [field]="getUntypedColumnId(column)"></p-sortIcon>
+            </th>
+          } @else {
+            <th scope="col" [ngClass]="column.class">
+              {{ column.label }}
+
+              <small *ngIf="column.labelSmall">{{ column.labelSmall }}</small>
+            </th>
+          }
+        }
+      }
+
+      <th *ngIf="columnConfig() || actionCell" scope="col" class="action-head" [ngClass]="{ 'has-column-config': columnConfig(), 'has-action': actionCell }">
+        <div class="d-flex align-items-center justify-content-end gap-2">
+          <span *ngIf="actionCell" i18>Actions</span>
+
+          <span *ngIf="columnConfig()" class="column-toggle">
+            <div ngbDropdown placement="bottom-left auto" container="body" autoClose="outside" #columnsDropdown="ngbDropdown">
+              <my-button
+                theme="tertiary"
+                icon="columns"
+                ngbDropdownToggle
+                i18n-title
+                title="Open table configuration"
+                [show]="columnsDropdown.isOpen()"
+              ></my-button>
+
+              <div ngbDropdownMenu class="p-3">
+                <div class="form-group">
+                  <div class="muted small mb-2" i18n>Column displayed:</div>
+
+                  @for (column of columns; track column) {
+                    <div class="ms-1 mb-1">
+                      <my-peertube-checkbox
+                        [inputName]="'column-' + column.id"
+                        [(ngModel)]="column.selected"
+                        i18n-labelText
+                        [labelText]="column.label"
+                        (ngModelChange)="saveSelectedColumns()"
+                      ></my-peertube-checkbox>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </span>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-item let-expanded="expanded">
+    <tr [pSelectableRow]="item">
+      <td *ngIf="hasBulkActions()" class="checkbox-cell">
+        <p-tableCheckbox [value]="item" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
+      </td>
+
+      <td *ngIf="expandedRow" class="expand-cell">
+        <my-table-expander-icon *ngIf="hasExpandedRow()(item)" [pRowToggler]="item" [tooltip]="expandedIconTooltip()" [expanded]="expanded"></my-table-expander-icon>
+      </td>
+
+      <ng-template *ngTemplateOutlet="tableCells; context: { $implicit: item }"></ng-template>
+
+      @if (columnConfig() || actionCell) {
+        <td class="action-cell" [ngClass]="{ 'has-column-config': columnConfig(), 'has-action': actionCell }">
+          <div class="d-flex justify-content-end gap-2">
+            <ng-template *ngTemplateOutlet="actionCell; context: { $implicit: item }"></ng-template>
+          </div>
+        </td>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr *ngIf="loaded && !loading">
+      <td myAutoColspan>
+        <div class="no-results">
+          @if (noResults) {
+            <ng-template *ngTemplateOutlet="noResults; context: { $implicit: search }"></ng-template>
+          } @else {
+            <ng-container i18n>No results found.</ng-container>
+          }
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  @if (expandedRow) {
+    <ng-template #expandedrow let-item>
+      <tr>
+        <td class="expand-cell" myAutoColspan>
+          <ng-template *ngTemplateOutlet="expandedRow; context: { $implicit: item }"></ng-template>
+        </td>
+      </tr>
+    </ng-template>
+  }
+</p-table>

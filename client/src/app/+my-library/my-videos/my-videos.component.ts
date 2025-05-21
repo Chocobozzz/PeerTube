@@ -1,26 +1,16 @@
-import { CommonModule, NgClass, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import {
-  AuthService,
-  AuthUser,
-  ConfirmService,
-  LocalStorageService,
-  Notifier,
-  PeerTubeRouterService,
-  RestPagination,
-  RestTable,
-  ServerService
-} from '@app/core'
+import { RouterLink } from '@angular/router'
+import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { formatICU } from '@app/helpers'
-import { AutoColspanDirective } from '@app/shared/shared-main/common/auto-colspan.directive'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { ChannelToggleComponent } from '@app/shared/standalone-channels/channel-toggle.component'
-import { NgbDropdownModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { arrayify, pick } from '@peertube/peertube-core-utils'
 import {
   UserRight,
@@ -30,17 +20,13 @@ import {
   VideoPrivacyType,
   VideosExistInPlaylists
 } from '@peertube/peertube-models'
-import { logger } from '@root-helpers/logger'
-import debug from 'debug'
 import uniqBy from 'lodash-es/uniqBy'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableLazyLoadEvent, TableModule } from 'primeng/table'
-import { finalize } from 'rxjs/operators'
+import { SortMeta } from 'primeng/api'
+import { tap } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCheckboxComponent } from '../../shared/shared-forms/select/select-checkbox.component'
-import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
+import { DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
 import { PTDatePipe } from '../../shared/shared-main/common/date.pipe'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
@@ -54,20 +40,14 @@ import { VideoPrivacyBadgeComponent } from '../../shared/shared-video/video-priv
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
-const debugLogger = debug('peertube:my-videos')
-
-type Column = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
+type ColumnName = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
 type CommonFilter = 'live' | 'vod' | 'private' | 'internal' | 'unlisted' | 'password-protected' | 'public'
+
 type VideoType = 'live' | 'vod'
-type QueryParams = {
+type QueryParams = TableQueryParams & {
   channelNameOneOf?: string[]
   privacyOneOf?: string[]
-  start?: number
-  count?: number
-  sortOrder?: number
-  sortField?: string
   search?: string
-
   videoType?: VideoType
 }
 
@@ -78,14 +58,9 @@ type QueryParams = {
   imports: [
     CommonModule,
     FormsModule,
-    TableModule,
-    NgClass,
-    SharedModule,
-    NgIf,
-    ActionDropdownComponent,
     AdvancedInputFilterComponent,
     ButtonComponent,
-    NgbTooltip,
+    NgbTooltipModule,
     VideoActionsDropdownComponent,
     VideoCellComponent,
     RouterLink,
@@ -93,38 +68,24 @@ type QueryParams = {
     VideoChangeOwnershipComponent,
     VideoPrivacyBadgeComponent,
     VideoStateBadgeComponent,
-    NgbDropdownModule,
-    PeertubeCheckboxComponent,
     ChannelToggleComponent,
-    AutoColspanDirective,
     SelectCheckboxComponent,
     PTDatePipe,
-    VideoNSFWBadgeComponent
+    VideoNSFWBadgeComponent,
+    TableComponent
   ]
 })
-export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDestroy {
-  protected route = inject(ActivatedRoute)
-  protected router = inject(Router)
+export class MyVideosComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmService)
   private auth = inject(AuthService)
   private notifier = inject(Notifier)
   private videoService = inject(VideoService)
   private playlistService = inject(VideoPlaylistService)
   private server = inject(ServerService)
-  private peertubeLocalStorage = inject(LocalStorageService)
-  private peertubeRouter = inject(PeerTubeRouterService)
   private headerService = inject(HeaderService)
 
-  private static readonly LS_SELECTED_COLUMNS_KEY = 'user-my-videos-selected-columns'
-
   readonly videoChangeOwnershipModal = viewChild<VideoChangeOwnershipComponent>('videoChangeOwnershipModal')
-
-  videos: Video[] = []
-
-  totalRecords = 0
-  sort: SortMeta = { field: 'publishedAt', order: -1 }
-  rowsPerPage = 5
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<Video, ColumnName, QueryParams>>('table')
 
   videosContainedInPlaylists: VideosExistInPlaylists = {}
 
@@ -145,7 +106,6 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
   }
 
   moreVideoActions: DropdownAction<{ video: Video }>[][] = []
-  loading = true
 
   user: AuthUser
   channels: (VideoChannel & { selected: boolean })[] = []
@@ -153,29 +113,37 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
   filterItems: SelectOptionsItem<CommonFilter>[] = []
   selectedFilterItems: CommonFilter[] = []
 
-  columns: { id: Column, label: string, selected: boolean }[] = []
+  columns: TableColumnInfo<ColumnName>[] = []
+
+  customUpdateUrl: typeof this._customUpdateUrl
+  customParseQueryParams: typeof this._customParseQueryParams
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.customUpdateUrl = this._customUpdateUrl.bind(this)
+    this.customParseQueryParams = this._customParseQueryParams.bind(this)
+    this.dataLoader = this._dataLoader.bind(this)
+  }
 
   get serverConfig () {
     return this.server.getHTMLConfig()
   }
 
   ngOnInit () {
-    this.initialize()
-
     this.headerService.setSearchHidden(true)
 
     this.user = this.auth.getUser()
 
     this.columns = [
-      { id: 'duration', label: $localize`Duration`, selected: true },
-      { id: 'name', label: $localize`Name`, selected: true },
-      { id: 'privacy', label: $localize`Privacy`, selected: true },
-      { id: 'sensitive', label: $localize`Sensitive`, selected: true },
-      { id: 'playlists', label: $localize`Playlists`, selected: true },
-      { id: 'insights', label: $localize`Insights`, selected: true },
-      { id: 'comments', label: $localize`Comments`, selected: true },
-      { id: 'published', label: $localize`Published`, selected: true },
-      { id: 'state', label: $localize`State`, selected: true }
+      { id: 'duration', label: $localize`Duration`, selected: true, sortable: true },
+      { id: 'name', label: $localize`Name`, selected: true, sortable: true },
+      { id: 'privacy', label: $localize`Privacy`, selected: true, sortable: false },
+      { id: 'sensitive', label: $localize`Sensitive`, selected: true, sortable: false },
+      { id: 'playlists', label: $localize`Playlists`, selected: true, sortable: false },
+      { id: 'insights', label: $localize`Insights`, selected: true, sortable: true, sortKey: 'views' },
+      { id: 'comments', label: $localize`Comments`, selected: true, sortable: true },
+      { id: 'published', label: $localize`Published`, selected: true, sortable: true, sortKey: 'publishedAt' },
+      { id: 'state', label: $localize`State`, selected: true, sortable: false }
     ]
 
     this.filterItems = [
@@ -209,24 +177,14 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       }
     ]
 
-    this.subscribeToQueryChanges()
     this.buildActions()
-    this.loadSelectedColumns()
   }
 
   ngOnDestroy () {
     this.headerService.setSearchHidden(false)
   }
 
-  private subscribeToQueryChanges () {
-    this.route.queryParams.subscribe(queryParams => {
-      this.parseQueryParams(queryParams)
-    })
-  }
-
-  private parseQueryParams (queryParams: QueryParams) {
-    debugLogger('Parse query params', { queryParams })
-
+  private _customParseQueryParams (queryParams: QueryParams) {
     {
       const enabledChannels = queryParams.channelNameOneOf
         ? new Set(arrayify(queryParams.channelNameOneOf))
@@ -257,98 +215,32 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       if (enabledPrivacies.has(VideoPrivacy.PASSWORD_PROTECTED)) this.selectedFilterItems.push('password-protected')
       if (enabledPrivacies.has(VideoPrivacy.PRIVATE)) this.selectedFilterItems.push('private')
     }
-
-    if (queryParams.start !== undefined) this.pagination.start = +queryParams.start
-
-    if (queryParams.count !== undefined) {
-      this.pagination.count = this.rowsPerPage = +queryParams.count
-    }
-
-    if (queryParams.sortOrder !== undefined) this.sort.order = +queryParams.sortOrder
-    if (queryParams.sortField !== undefined) this.sort.field = queryParams.sortField
-
-    if (queryParams.search !== undefined) this.search = queryParams.search
-
-    this.reloadData()
-  }
-
-  loadLazy (event: TableLazyLoadEvent) {
-    if (this.parseLazy(event)) {
-      this.updateUrl()
-      this.saveSort()
-    }
-  }
-
-  getIdentifier () {
-    return 'MyVideosComponent'
   }
 
   // ---------------------------------------------------------------------------
 
-  isSelected (id: Column) {
-    return this.columns.some(c => c.id === id && c.selected)
-  }
-
-  getColumn (id: Column) {
-    return this.columns.find(c => c.id === id)
-  }
-
-  private loadSelectedColumns () {
-    const enabledString = this.peertubeLocalStorage.getItem(MyVideosComponent.LS_SELECTED_COLUMNS_KEY)
-
-    if (!enabledString) return
-    try {
-      const enabled = JSON.parse(enabledString)
-
-      for (const column of this.columns) {
-        column.selected = enabled.includes(column.id)
-      }
-    } catch (err) {
-      logger.error('Cannot load selected columns.', err)
+  getNoResults (search?: string) {
+    if (search || this.selectedFilterItems.length !== 0) {
+      return $localize`No videos found matching your filters.`
     }
-  }
 
-  saveSelectedColumns () {
-    const enabled = this.columns.filter(c => c.selected).map(c => c.id)
+    if (this.channels.some(c => c.selected)) {
+      return $localize`No videos found in selected channels.`
+    }
 
-    this.peertubeLocalStorage.setItem(MyVideosComponent.LS_SELECTED_COLUMNS_KEY, JSON.stringify(enabled))
+    return $localize`You don't have any videos published yet.`
   }
 
   // ---------------------------------------------------------------------------
 
-  // Override REST table method
-  onSearch (search: string) {
-    this.search = search
-    this.sort = {
-      field: 'match',
-      order: -1
-    }
-
-    this.onFilter()
-  }
-
-  onFilter () {
-    this.resetPagination()
-    this.updateUrl()
-  }
-
-  private updateUrl () {
+  private _customUpdateUrl (): Partial<Record<keyof QueryParams, any>> {
     const channelNameOneOf = this.channels.filter(c => c.selected).map(c => c.name)
 
-    const newParams: Record<keyof QueryParams, any> = {
-      ...this.route.snapshot.queryParams,
-
+    return {
       ...pick(this.buildCommonVideoFilters(), [ 'privacyOneOf', 'videoType' ]),
 
-      search: this.search,
-      channelNameOneOf,
-      start: this.pagination.start,
-      count: this.pagination.count,
-      sortOrder: this.sort.order,
-      sortField: this.sort.field
+      channelNameOneOf
     }
-
-    this.peertubeRouter.silentNavigate([ '.' ], newParams, this.route)
   }
 
   private buildCommonVideoFilters () {
@@ -384,32 +276,26 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
 
   // ---------------------------------------------------------------------------
 
-  protected reloadDataInternal () {
-    this.loading = true
+  private _dataLoader (options: {
+    pagination: RestPagination
+    sort: SortMeta
+    search: string
+  }) {
+    const { pagination, sort, search } = options
 
     const channelNameOneOf = this.channels.filter(c => c.selected).map(c => c.name)
 
     return this.videoService.listMyVideos({
-      restPagination: this.pagination,
-      sort: this.sort,
-      search: this.search,
+      restPagination: pagination,
+      sort,
+      search,
 
       channelNameOneOf: channelNameOneOf.length !== 0
         ? channelNameOneOf
         : undefined,
 
       ...pick(this.buildCommonVideoFilters(), [ 'isLive', 'privacyOneOf' ])
-    }).pipe(finalize(() => this.loading = false))
-      .subscribe({
-        next: resultList => {
-          this.videos = resultList.data
-          this.totalRecords = resultList.total
-
-          this.fetchVideosContainedInPlaylists(resultList.data)
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
+    }).pipe(tap(({ data }) => this.fetchVideosContainedInPlaylists(data)))
   }
 
   fetchVideosContainedInPlaylists (videos: Video[]) {
@@ -441,15 +327,11 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
             )
           )
 
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
       })
-  }
-
-  changeOwnership (video: Video) {
-    this.videoChangeOwnershipModal().show(video)
   }
 
   private buildActions () {
@@ -457,7 +339,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       [
         {
           label: $localize`Change ownership`,
-          handler: ({ video }) => this.changeOwnership(video),
+          handler: ({ video }) => this.videoChangeOwnershipModal().show(video),
           iconName: 'ownership-change'
         }
       ]

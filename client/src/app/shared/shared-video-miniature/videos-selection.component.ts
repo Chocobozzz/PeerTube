@@ -63,8 +63,6 @@ export class VideosSelectionComponent implements AfterContentInit {
       const t = this.templates().find(t => t.name() === 'globalButtons')
       if (t) this.globalButtonsTemplate = t.template
     }
-
-    this.loadMoreVideos()
   }
 
   getVideosObservable (page: number) {

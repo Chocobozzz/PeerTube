@@ -1,11 +1,11 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 my-copy-button {
   @include margin-left(3px);
 }
 
-tr:not(:hover) {
+my-table ::ng-deep tr:not(:hover) {
   my-copy-button {
     opacity: 0;
   }

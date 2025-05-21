@@ -1,29 +1,26 @@
-import { NgClass, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
+import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AbuseState, AbuseStateType, AdminAbuse } from '@peertube/peertube-models'
+import { AbuseState, AbuseStateType, AdminAbuse, ResultList } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
-import { lastValueFrom } from 'rxjs'
+import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Account } from '../shared-main/account/account.model'
 import { Actor } from '../shared-main/account/actor.model'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
-import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
+import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
 import { Video } from '../shared-main/video/video.model'
 import { VideoService } from '../shared-main/video/video.service'
 import { AbuseService } from '../shared-moderation/abuse.service'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
-import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { VideoCellComponent } from '../shared-tables/video-cell.component'
 import { VideoCommentService } from '../shared-video-comment/video-comment.service'
 import { AbuseDetailsComponent } from './abuse-details.component'
@@ -38,27 +35,22 @@ const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
   imports: [
-    TableModule,
-    SharedModule,
+    CommonModule,
     AdvancedInputFilterComponent,
-    NgIf,
     NgbTooltip,
-    TableExpanderIconComponent,
     ActionDropdownComponent,
-    NgClass,
     ActorAvatarComponent,
     VideoCellComponent,
     GlobalIconComponent,
-    AutoColspanDirective,
     AbuseDetailsComponent,
     ModerationCommentModalComponent,
     AbuseMessageModalComponent,
-    PTDatePipe
+    PTDatePipe,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class AbuseListTableComponent extends RestTable implements OnInit, OnDestroy {
-  protected route = inject(ActivatedRoute)
-  protected router = inject(Router)
+export class AbuseListTableComponent implements OnInit, OnDestroy {
   private notifier = inject(Notifier)
   private abuseService = inject(AbuseService)
   private blocklistService = inject(BlocklistService)
@@ -72,13 +64,9 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
 
   readonly viewType = input<'admin' | 'user'>(undefined)
 
+  readonly table = viewChild<TableComponent<ProcessedAbuse>>('table')
   readonly abuseMessagesModal = viewChild<AbuseMessageModalComponent>('abuseMessagesModal')
   readonly moderationCommentModal = viewChild<ModerationCommentModalComponent>('moderationCommentModal')
-
-  abuses: ProcessedAbuse[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: 1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   abuseActions: DropdownAction<ProcessedAbuse>[][] = []
 
@@ -110,10 +98,32 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     }
   ]
 
+  columns: TableColumnInfo<string>[] = [
+    { id: 'target', label: $localize`Video/Comment/Account`, sortable: false },
+    { id: 'createdAt', label: $localize`Created`, sortable: true },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'comment', label: $localize`Messages`, sortable: false }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
+  }
+
   async ngOnInit () {
     const viewType = this.viewType()
+
     if (viewType === 'admin') {
-      this.pluginService.addAction('admin-abuse-list:load-data', () => this.reloadDataInternal())
+      this.pluginService.addAction('admin-abuse-list:load-data', () => this.table().loadData())
+
+      this.columns = [
+        { id: 'reporterAccount', label: $localize`Reporter`, sortable: false },
+
+        ...this.columns,
+
+        { id: 'internalNote', label: $localize`Internal note`, sortable: false }
+      ]
     }
 
     const abuseActions: DropdownAction<ProcessedAbuse>[][] = [
@@ -127,8 +137,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
 
       this.buildAccountActions()
     ]
-
-    this.initialize()
 
     this.abuseActions = viewType === 'admin'
       ? await this.hooks.wrapObject(abuseActions, 'admin-comments', 'filter:admin-abuse-list.actions.create.result')
@@ -145,16 +153,12 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     return this.viewType() === 'admin'
   }
 
-  getIdentifier () {
-    return 'AbuseListTableComponent'
-  }
-
   openModerationCommentModal (abuse: AdminAbuse) {
     this.moderationCommentModal().openModal(abuse)
   }
 
   onModerationCommentUpdated () {
-    this.reloadData()
+    this.table().loadData()
   }
 
   isAbuseAccepted (abuse: AdminAbuse) {
@@ -185,7 +189,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
       .subscribe({
         next: () => {
           this.notifier.success($localize`Abuse deleted.`)
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
@@ -195,14 +199,14 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
   updateAbuseState (abuse: AdminAbuse, state: AbuseStateType) {
     this.abuseService.updateAbuse(abuse, { state })
       .subscribe({
-        next: () => this.reloadData(),
+        next: () => this.table().loadData(),
 
         error: err => this.notifier.error(err.message)
       })
   }
 
   onCountMessagesUpdated (event: { abuseId: number, countMessages: number }) {
-    const abuse = this.abuses.find(a => a.id === event.abuseId)
+    const abuse = this.table().data.find(a => a.id === event.abuseId)
 
     if (!abuse) {
       logger.error(`Cannot find abuse ${event.abuseId}`)
@@ -237,29 +241,17 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
     )
   }
 
-  protected async reloadDataInternal () {
+  private _dataLoader (options: DataLoaderOptions) {
     debugLogger('Loading data.')
-
-    const options = {
-      pagination: this.pagination,
-      sort: this.sort,
-      search: this.search
-    }
 
     const observable = this.viewType() === 'admin'
       ? this.abuseService.getAdminAbuses(options)
       : this.abuseService.getUserAbuses(options)
 
-    try {
-      const resultList = await lastValueFrom(observable)
+    return observable.pipe(switchMap(async (resultList: ResultList<ProcessedAbuse>) => {
+      const abuses: ProcessedAbuse[] = []
 
-      this.totalRecords = resultList.total
-
-      this.abuses = []
-
-      for (const a of resultList.data) {
-        const abuse = a as ProcessedAbuse
-
+      for (const abuse of resultList.data) {
         abuse.reasonHtml = await this.toHtml(abuse.reason)
 
         if (abuse.moderationComment) {
@@ -290,11 +282,11 @@ export class AbuseListTableComponent extends RestTable implements OnInit, OnDest
 
         if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
 
-        this.abuses.push(abuse)
+        abuses.push(abuse)
       }
-    } catch (err) {
-      this.notifier.error(err.message)
-    }
+
+      return { total: resultList.total, data: abuses }
+    }))
   }
 
   private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {

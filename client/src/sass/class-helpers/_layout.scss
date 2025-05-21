@@ -1,6 +1,6 @@
-@use 'sass:color';
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "sass:color";
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .pt-two-cols {
   @include make-row();
@@ -46,6 +46,10 @@
 // See https://css-tricks.com/flexbox-truncated-text/
 .min-width-0 {
   min-width: 0;
+}
+
+.max-width-300px {
+  max-width: 300px;
 }
 
 .d-none-mw {

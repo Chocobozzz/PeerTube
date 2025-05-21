@@ -1,18 +1,17 @@
-import { NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { Component, OnInit, inject, viewChild } from '@angular/core'
-import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { ActorFollow } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { AutoColspanDirective } from '../../../shared/shared-main/common/auto-colspan.directive'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
 import { RedundancyCheckboxComponent } from '../shared/redundancy-checkbox.component'
 import { FollowModalComponent } from './follow-modal.component'
 
@@ -20,39 +19,44 @@ import { FollowModalComponent } from './follow-modal.component'
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
   imports: [
+    CommonModule,
     GlobalIconComponent,
-    TableModule,
-    SharedModule,
-    NgIf,
-    ActionDropdownComponent,
     AdvancedInputFilterComponent,
     DeleteButtonComponent,
     RedundancyCheckboxComponent,
-    AutoColspanDirective,
     FollowModalComponent,
     PTDatePipe,
-    ButtonComponent
+    ButtonComponent,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class FollowingListComponent extends RestTable<ActorFollow> implements OnInit {
+export class FollowingListComponent implements OnInit {
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
   private followService = inject(InstanceFollowService)
 
   readonly followModal = viewChild<FollowModalComponent>('followModal')
-
-  following: ActorFollow[] = []
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<ActorFollow>>('table')
 
   searchFilters: AdvancedInputFilter[] = []
 
   bulkActions: DropdownAction<ActorFollow[]>[] = []
 
-  ngOnInit () {
-    this.initialize()
+  columns: TableColumnInfo<string>[] = [
+    { id: 'following', label: $localize`Following`, sortable: false },
+    { id: 'state', label: $localize`State`, sortable: true },
+    { id: 'createdAt', label: $localize`Created`, sortable: true },
+    { id: 'redundancyAllowed', label: $localize`Redundancy allowed`, sortable: true }
+  ]
 
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
+  }
+
+  ngOnInit () {
     this.searchFilters = this.followService.buildFollowsListFilters()
 
     this.bulkActions = [
@@ -61,10 +65,6 @@ export class FollowingListComponent extends RestTable<ActorFollow> implements On
         handler: follows => this.removeFollowing(follows)
       }
     ]
-  }
-
-  getIdentifier () {
-    return 'FollowingListComponent'
   }
 
   openFollowModal () {
@@ -99,22 +99,16 @@ export class FollowingListComponent extends RestTable<ActorFollow> implements On
           )
 
           this.notifier.success(message)
-          this.reloadData()
+          this.table().loadData()
         },
 
         error: err => this.notifier.error(err.message)
       })
   }
 
-  protected reloadDataInternal () {
-    this.followService.getFollowing({ pagination: this.pagination, sort: this.sort, search: this.search })
-      .subscribe({
-        next: resultList => {
-          this.following = resultList.data
-          this.totalRecords = resultList.total
-        },
+  private _dataLoader (options: DataLoaderOptions) {
+    const { pagination, sort, search } = options
 
-        error: err => this.notifier.error(err.message)
-      })
+    return this.followService.getFollowing({ pagination, sort, search })
   }
 }

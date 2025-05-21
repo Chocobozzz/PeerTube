@@ -1,59 +1,44 @@
-<p-table
-  [value]="registrationTokens" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
-  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)"
-  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
+<my-table
+  #table
+  key="RunnerRegistrationTokenListComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="tokens per page"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
 >
-  <ng-template #header>
-    <tr>
-      <th scope="col" style="width: 120px;">
-        <span i18n class="visually-hidden">Actions</span>
-      </th>
-      <th scope="col" i18n>Token</th>
-      <th scope="col" style="width: 170px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" style="width: 160px;" i18n>Associated runners</th>
-    </tr>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No token} =1 {1 token} other {{{ totalRecords | myNumberFormatter }} tokens}}</ng-container>
   </ng-template>
 
-  <ng-template #caption>
-    <div class="caption">
-      <div class="left-buttons">
-        <my-button theme="primary" i18n-label label="Generate token" icon="add" (click)="generateToken()"></my-button>
-      </div>
-    </div>
+  <ng-template #captionRight>
+            <my-button theme="primary" i18n-label label="Generate token" icon="add" (click)="generateToken()"></my-button>
+
   </ng-template>
 
-  <ng-template #body let-registrationToken>
-    <tr>
-      <td class="action-cell">
-        <my-action-dropdown
-          placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="actions" [entry]="registrationToken" buttonSize="small"
-        ></my-action-dropdown>
-      </td>
+  <ng-template #tableCells let-registrationToken>
+    <td>
+      {{ registrationToken.registrationToken }}
 
-      <td>
-        {{ registrationToken.registrationToken }}
+      <my-copy-button
+        [value]="registrationToken.registrationToken" i18n-notification notification="Registration token copied"
+        i18n-title title="Copy registration token"
+      ></my-copy-button>
+    </td>
 
-        <my-copy-button
-          [value]="registrationToken.registrationToken" i18n-notification notification="Registration token copied"
-          i18n-title title="Copy registration token"
-        ></my-copy-button>
-      </td>
+    <td>{{ registrationToken.createdAt | ptDate: 'short'  }}</td>
 
-      <td>{{ registrationToken.createdAt | ptDate: 'short'  }}</td>
-
-      <td>{{ registrationToken.registeredRunnersCount }}</td>
-    </tr>
+    <td>{{ registrationToken.registeredRunnersCount }}</td>
   </ng-template>
 
-  <ng-template #emptymessage>
-    <tr>
-      <td myAutoColspan>
-        <div class="no-results">
-          <ng-container i18n>No registration token found for remote runners.</ng-container>
-        </div>
-      </td>
-    </tr>
+  <ng-template #actionCell let-registrationToken>
+    <my-action-dropdown
+      placement="bottom-right top-right left auto" container="body"
+      i18n-label label="Actions" [actions]="actions" [entry]="registrationToken"
+    ></my-action-dropdown>
   </ng-template>
-</p-table>
+
+  <ng-template #noResults>
+    <ng-container i18n>No registration token found for remote runners.</ng-container>
+  </ng-template>
+</my-table>

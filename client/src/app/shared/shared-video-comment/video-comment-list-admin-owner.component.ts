@@ -1,47 +1,46 @@
-import { NgClass, NgIf } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
+import { CommonModule } from '@angular/common'
+import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
+import { ActivatedRoute, RouterLink } from '@angular/router'
+import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoCommentForAdminOrUser } from '@app/shared/shared-video-comment/video-comment.model'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserRight } from '@peertube/peertube-models'
-import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
-import { lastValueFrom } from 'rxjs'
+import { switchMap } from 'rxjs'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
-import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
-import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe'
+import { DataLoaderOptions, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+
+type ColumnName =
+  | 'account'
+  | 'video'
+  | 'comment'
+  | 'autoTags'
+  | 'createdAt'
 
 @Component({
   selector: 'my-video-comment-list-admin-owner',
   templateUrl: './video-comment-list-admin-owner.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
   imports: [
-    TableModule,
-    SharedModule,
-    NgIf,
+    CommonModule,
     ActionDropdownComponent,
     AdvancedInputFilterComponent,
     ButtonComponent,
-    NgbTooltip,
-    TableExpanderIconComponent,
-    NgClass,
     ActorAvatarComponent,
-    AutoColspanDirective,
     PTDatePipe,
-    RouterLink
+    RouterLink,
+    TableComponent,
+    NumberFormatterPipe
   ]
 })
-export class VideoCommentListAdminOwnerComponent extends RestTable<VideoCommentForAdminOrUser> implements OnInit, OnDestroy {
-  protected router = inject(Router)
-  protected route = inject(ActivatedRoute)
+export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute)
   private auth = inject(AuthService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
@@ -51,28 +50,36 @@ export class VideoCommentListAdminOwnerComponent extends RestTable<VideoCommentF
   private hooks = inject(HooksService)
   private pluginService = inject(PluginService)
 
+  readonly key = input.required<string>()
   readonly mode = input.required<'user' | 'admin'>()
 
-  comments: VideoCommentForAdminOrUser[]
-  totalRecords = 0
-  sort: SortMeta = { field: 'createdAt', order: -1 }
-  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  readonly table = viewChild<TableComponent<VideoCommentForAdminOrUser, ColumnName>>('table')
 
   videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = []
-
   bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = []
-
   inputFilters: AdvancedInputFilter[] = []
+
+  columns: TableColumnInfo<ColumnName>[] = [
+    { id: 'account', label: $localize`Account`, sortable: false },
+    { id: 'video', label: $localize`Video`, sortable: false },
+    { id: 'comment', label: $localize`Comment`, sortable: false },
+    { id: 'autoTags', label: $localize`Auto tags`, sortable: false },
+    { id: 'createdAt', label: $localize`Date`, sortable: true }
+  ]
+
+  dataLoader: typeof this._dataLoader
+
+  constructor () {
+    this.dataLoader = this._dataLoader.bind(this)
+  }
 
   get authUser () {
     return this.auth.getUser()
   }
 
   async ngOnInit () {
-    this.initialize()
-
     if (this.mode() === 'admin') {
-      this.pluginService.addAction('admin-video-comment-list:load-data', () => this.reloadDataInternal())
+      this.pluginService.addAction('admin-video-comment-list:load-data', () => this.table().loadData())
     }
 
     this.buildInputFilters()
@@ -175,10 +182,6 @@ export class VideoCommentListAdminOwnerComponent extends RestTable<VideoCommentF
     ]
   }
 
-  getIdentifier () {
-    return 'VideoCommentListAdminOwnerComponent'
-  }
-
   toHtml (text: string) {
     return this.markdownRenderer.textMarkdownToHTML({ markdown: text, withHtml: true, withEmoji: true })
   }
@@ -186,31 +189,32 @@ export class VideoCommentListAdminOwnerComponent extends RestTable<VideoCommentF
   buildSearchAutoTag (tag: string) {
     const str = `autoTag:"${tag}"`
 
-    if (this.search) return this.search + ' ' + str
+    const search = this.route.snapshot.queryParams.search
+    if (search) return search + ' ' + str
 
     return str
   }
 
-  protected async reloadDataInternal () {
+  private _dataLoader (options: DataLoaderOptions) {
     const method = this.mode() === 'admin'
       ? this.videoCommentService.listAdminVideoComments.bind(this.videoCommentService)
       : this.videoCommentService.listVideoCommentsOfMyVideos.bind(this.videoCommentService)
 
-    const obs = method({ pagination: this.pagination, sort: this.sort, search: this.search })
+    return method(options)
+      .pipe(
+        switchMap(async result => {
+          const comments: VideoCommentForAdminOrUser[] = []
 
-    try {
-      const resultList = await lastValueFrom(obs)
+          for (const c of result.data) {
+            comments.push(new VideoCommentForAdminOrUser(c, await this.toHtml(c.text)))
+          }
 
-      this.totalRecords = resultList.total
-
-      this.comments = []
-
-      for (const c of resultList.data) {
-        this.comments.push(new VideoCommentForAdminOrUser(c, await this.toHtml(c.text)))
-      }
-    } catch (err) {
-      this.notifier.error(err.message)
-    }
+          return {
+            total: result.total,
+            data: comments
+          }
+        })
+      )
   }
 
   private approveComments (comments: VideoCommentForAdminOrUser[]) {
@@ -226,12 +230,10 @@ export class VideoCommentListAdminOwnerComponent extends RestTable<VideoCommentF
             )
           )
 
-          this.reloadData()
+          this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message),
-
-        complete: () => this.selectedRows = []
+        error: err => this.notifier.error(err.message)
       })
   }
 
@@ -248,19 +250,17 @@ export class VideoCommentListAdminOwnerComponent extends RestTable<VideoCommentF
             )
           )
 
-          this.reloadData()
+          this.table().loadData()
         },
 
-        error: err => this.notifier.error(err.message),
-
-        complete: () => this.selectedRows = []
+        error: err => this.notifier.error(err.message)
       })
   }
 
   private removeComment (comment: VideoCommentForAdminOrUser) {
     this.videoCommentService.deleteVideoComment(comment.video.id, comment.id)
       .subscribe({
-        next: () => this.reloadData(),
+        next: () => this.table().loadData(),
 
         error: err => this.notifier.error(err.message)
       })

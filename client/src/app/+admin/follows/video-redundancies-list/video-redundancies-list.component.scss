@@ -1,22 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
-
-a {
-  color: pvar(--fg);
-}
-
-.expansion-block {
-  margin-bottom: 20px;
-}
-
-.admin-sub-header {
-  justify-content: flex-end;
-
-  .peertube-select-container {
-    @include peertube-select-container(auto);
-  }
-}
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .redundancies-charts {
   margin-top: 50px;

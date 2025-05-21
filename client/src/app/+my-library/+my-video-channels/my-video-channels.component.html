@@ -1,9 +1,9 @@
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
 
-<div class="video-channels-header d-flex justify-content-between align-items-end gap-2 flex-wrap">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
-
+<div class="video-channels-header d-flex align-items-end gap-2 flex-wrap">
   <span *ngIf="pagination.totalItems" class="total-items">{{ getTotalTitle() }}</span>
+
+  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
 
   <a class="peertube-create-button" routerLink="/manage/create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>

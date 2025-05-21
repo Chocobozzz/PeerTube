@@ -26,7 +26,13 @@ export class VideoImportService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  getMyVideoImports (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<VideoImport>> {
+  getMyVideoImports (options: {
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+  }): Observable<ResultList<VideoImport>> {
+    const { pagination, sort, search } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
