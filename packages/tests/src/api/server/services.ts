@@ -80,7 +80,7 @@ describe('Test services', function () {
         const res = await server.services.getOEmbed({ oembedUrl })
         const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
           `title="${video.name}" src="http://${server.host}/videos/embed/${video.shortUUID}${suffix.output}" ` +
-          'frameborder="0" allowfullscreen></iframe>'
+          'style="border:none" allow="fullscreen"></iframe>'
 
         const expectedThumbnailUrl = 'http://' + server.host + video.previewPath
 
@@ -104,7 +104,7 @@ describe('Test services', function () {
         const res = await server.services.getOEmbed({ oembedUrl })
         const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
           `title="${playlistDisplayName}" src="http://${server.host}/video-playlists/embed/${playlistShortUUID}${suffix.output}" ` +
-          'frameborder="0" allowfullscreen></iframe>'
+          'style="border:none" allow="fullscreen"></iframe>'
 
         expect(res.body.html).to.equal(expectedHtml)
         expect(res.body.title).to.equal('The Life and Times of Scrooge McDuck')
@@ -125,7 +125,7 @@ describe('Test services', function () {
 
     const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
       `title="${video.name}" src="http://${server.host}/videos/embed/${video.shortUUID}${query}" ` +
-      'frameborder="0" allowfullscreen></iframe>'
+      'style="border:none" allow="fullscreen"></iframe>'
 
     expect(res.body.html).to.equal(expectedHtml)
   })
@@ -140,7 +140,7 @@ describe('Test services', function () {
       const res = await server.services.getOEmbed({ oembedUrl, format, maxHeight, maxWidth })
       const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
         `title="${video.name}" src="http://${server.host}/videos/embed/${video.shortUUID}" ` +
-        'frameborder="0" allowfullscreen></iframe>'
+        'style="border:none" allow="fullscreen"></iframe>'
 
       expect(res.body.html).to.equal(expectedHtml)
       expect(res.body.title).to.equal(video.name)
