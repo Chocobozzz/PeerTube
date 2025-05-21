@@ -214,7 +214,7 @@ export class UserListComponent extends RestTable<User> implements OnInit, OnDest
     }
 
     // Default behaviour
-    this.selectedColumns = [ 'username', 'role', 'email', 'quota', 'totalVideoFileSize', 'createdAt', 'lastLoginDate' ]
+    this.selectedColumns = [ 'username', 'role', 'email', '2FA', 'quota', 'totalVideoFileSize', 'createdAt', 'lastLoginDate' ]
     return
   }
 
