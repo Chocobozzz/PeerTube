@@ -5843,9 +5843,9 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327538490069601336" datatype="html">
+      <trans-unit id="3327538490069601336" datatype="html" xml:space="preserve">
         <source>Cannot create live because this platform has too many created lives</source>
-        <target state="new">Cannot create live because this platform has too many created lives</target>
+        <target state="translated">No es pot crear el directe perquè aquesta plataforma en té massa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -17069,33 +17069,33 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6784127216978878229" datatype="html">
+      <trans-unit id="6784127216978878229" datatype="html" xml:space="preserve">
         <source>Override sensitive content policy for certain videos</source>
-        <target state="new">Override sensitive content policy for certain videos</target>
+        <target state="translated">Anul·lar la política de contingut sensible per a determinats vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8679065902183523301" datatype="html">
+      <trans-unit id="8679065902183523301" datatype="html" xml:space="preserve">
         <source>These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment.</source>
-        <target state="new"> These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment. </target>
+        <target state="translated">Aquests criteris subjectius es poden aplicar opcionalment a determinats vídeos. La classificació d'alguns vídeos pot diferir del vostre criteri personal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2144169480053809136" datatype="html">
+      <trans-unit id="2144169480053809136" datatype="html" xml:space="preserve">
         <source>Violent content</source>
-        <target state="new">Violent content</target>
+        <target state="translated">Contingut violent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">31,32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4929011786711188964" datatype="html">
+      <trans-unit id="4929011786711188964" datatype="html" xml:space="preserve">
         <source>Sexually explicit material</source>
-        <target state="new">Sexually explicit material</target>
+        <target state="translated">Material sexualment explícit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">43</context>
@@ -23694,41 +23694,41 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
           <context context-type="linenumber">479</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="785960720847076177" datatype="html">
+      <trans-unit id="785960720847076177" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content. Are you sure you want to display the video page?</source>
-        <target state="new">This video contains sensitive content. Are you sure you want to display the video page?</target>
+        <target state="translated">Aquest vídeo conté contingut sensible. Confirmeu que voleu mostrar la pàgina del vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3000101082394601351" datatype="html">
+      <trans-unit id="3000101082394601351" datatype="html" xml:space="preserve">
         <source>Sensitive video</source>
-        <target state="new">Sensitive video</target>
+        <target state="translated">Vídeo sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">528</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3982297826462365916" datatype="html">
+      <trans-unit id="3982297826462365916" datatype="html" xml:space="preserve">
         <source>Display the page</source>
-        <target state="new">Display the page</target>
+        <target state="translated">Mostrar la pàgina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">530</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3393221397715061387" datatype="html">
+      <trans-unit id="3393221397715061387" datatype="html" xml:space="preserve">
         <source>Quit that page</source>
-        <target state="new">Quit that page</target>
+        <target state="translated">Sortir d'aqueixa pàgina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">531</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="819996403327805209" datatype="html">
+      <trans-unit id="819996403327805209" datatype="html" xml:space="preserve">
         <source>Learn more</source>
-        <target state="new">Learn more</target>
+        <target state="translated">Saber-ne més</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">534</context>
