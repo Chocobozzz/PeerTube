@@ -21,7 +21,7 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { ChannelToggleComponent } from '@app/shared/standalone-channels/channel-toggle.component'
 import { NgbDropdownModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { arrayify } from '@peertube/peertube-core-utils'
+import { arrayify, pick } from '@peertube/peertube-core-utils'
 import {
   UserRight,
   VideoChannel,
@@ -58,15 +58,17 @@ const debugLogger = debug('peertube:my-videos')
 
 type Column = 'duration' | 'name' | 'privacy' | 'sensitive' | 'playlists' | 'insights' | 'published' | 'state' | 'comments'
 type CommonFilter = 'live' | 'vod' | 'private' | 'internal' | 'unlisted' | 'password-protected' | 'public'
+type VideoType = 'live' | 'vod'
 type QueryParams = {
   channelNameOneOf?: string[]
   privacyOneOf?: string[]
-  isLive?: string
   start?: number
   count?: number
   sortOrder?: number
   sortField?: string
   search?: string
+
+  videoType?: VideoType
 }
 
 @Component({
@@ -240,9 +242,10 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
 
     {
       this.selectedFilterItems = []
+      const videoType = arrayify(queryParams.videoType)
 
-      if (queryParams.isLive === 'true') this.selectedFilterItems.push('live')
-      if (queryParams.isLive === 'false') this.selectedFilterItems.push('vod')
+      if (videoType.includes('live')) this.selectedFilterItems.push('live')
+      if (videoType.includes('vod')) this.selectedFilterItems.push('vod')
 
       const enabledPrivacies = queryParams.privacyOneOf
         ? new Set(arrayify(queryParams.privacyOneOf).map(t => parseInt(t) as VideoPrivacyType))
@@ -330,7 +333,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     const newParams: Record<keyof QueryParams, any> = {
       ...this.route.snapshot.queryParams,
 
-      ...this.buildCommonVideoFilters(),
+      ...pick(this.buildCommonVideoFilters(), [ 'privacyOneOf', 'videoType' ]),
 
       search: this.search,
       channelNameOneOf,
@@ -347,10 +350,17 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     const selectedFilterSet = new Set(this.selectedFilterItems)
 
     let isLive: boolean
-    if (selectedFilterSet.has('live') && !selectedFilterSet.has('vod')) {
-      isLive = true
-    } else if (!selectedFilterSet.has('live') && selectedFilterSet.has('vod')) {
-      isLive = false
+    const videoType: VideoType[] = []
+    if (selectedFilterSet.has('live')) {
+      videoType.push('live')
+
+      if (!selectedFilterSet.has('vod')) isLive = true
+    }
+
+    if (selectedFilterSet.has('vod')) {
+      videoType.push('vod')
+
+      if (!selectedFilterSet.has('live')) isLive = false
     }
 
     const privacyOneOf: VideoPrivacyType[] = []
@@ -362,6 +372,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
 
     return {
       isLive,
+      videoType,
       privacyOneOf
     }
   }
@@ -382,7 +393,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
         ? channelNameOneOf
         : undefined,
 
-      ...this.buildCommonVideoFilters()
+      ...pick(this.buildCommonVideoFilters(), [ 'isLive', 'privacyOneOf' ])
     }).pipe(finalize(() => this.loading = false))
       .subscribe({
         next: resultList => {

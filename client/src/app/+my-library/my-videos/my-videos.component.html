@@ -1,7 +1,7 @@
 <div class="channel-filters">
   <div class="channels-label" i18n>Per channel:</div>
 
-  @for (channel of channels; track channel) {
+  @for (channel of channels; track channel.id) {
     <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="onFilter()"></my-channel-toggle>
   }
 </div>
