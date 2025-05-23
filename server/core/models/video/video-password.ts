@@ -93,7 +93,7 @@ export class VideoPasswordModel extends SequelizeModel<VideoPasswordModel> {
 
   static async addPasswords (passwords: string[], videoId: number, transaction?: Transaction): Promise<void> {
     for (const password of passwords) {
-      VideoPasswordModel.addPassword(password, videoId, transaction);
+      await VideoPasswordModel.addPassword(password, videoId, transaction)
     }
   }
 

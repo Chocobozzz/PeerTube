@@ -604,7 +604,11 @@ describe('Test video passwords validator', function () {
     const emptyPassword = ""
 
     it('Should fail with duplicate password', async function () {
-      await server.videoPasswords.addOne({ videoId: video.id, password: passwords[0].password, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.videoPasswords.addOne({ 
+        videoId: video.id, 
+        password: passwords[0].password, 
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400 
+      })
     })
 
     it('Should fail with empty password', async function () {
