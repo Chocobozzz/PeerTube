@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
-import { UserRegistrationState, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRegistrationState, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -31,6 +31,13 @@ describe('Test registrations', function () {
 
   describe('Direct registrations of a new user', function () {
     let user1Token: string
+
+    it('Should throw password length exception while registering a new user', async function () {
+      const user = { displayName: 'super user 1', username: 'user_1', password: 'passw' }
+      const channel = { name: 'my_user_1_channel', displayName: 'my channel rocks' }
+
+      await server.registrations.register({ ...user, channel, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
 
     it('Should register a new user', async function () {
       const user = { displayName: 'super user 1', username: 'user_1', password: 'my super password' }
