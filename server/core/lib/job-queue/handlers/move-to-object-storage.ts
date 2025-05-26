@@ -122,8 +122,7 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
       caption.m3u8Url = await storeHLSFileFromContent({
         playlist: hls,
         pathOrFilename: caption.m3u8Filename,
-        content,
-        contentType: 'application/vnd.apple.mpegurl; charset=utf-8'
+        content
       })
 
       await caption.save()

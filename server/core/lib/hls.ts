@@ -144,8 +144,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
       playlist.playlistUrl = await storeHLSFileFromContent({
         playlist,
         pathOrFilename: playlist.playlistFilename,
-        content: masterPlaylistContent,
-        contentType: 'application/x-mpegurl; charset=utf-8'
+        content: masterPlaylistContent
       })
 
       logger.info(`Updated master playlist file of video ${video.uuid} to object storage ${playlist.playlistUrl}`, lTags(video.uuid))
@@ -202,8 +201,7 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
       playlist.segmentsSha256Url = await storeHLSFileFromContent({
         playlist,
         pathOrFilename: playlist.segmentsSha256Filename,
-        content: JSON.stringify(json),
-        contentType: 'application/json; charset=utf-8'
+        content: JSON.stringify(json)
       })
     } else {
       const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename)

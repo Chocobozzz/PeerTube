@@ -1368,7 +1368,7 @@ function buildVideoMimetypeExt () {
 
         // The standard video format used by many Sony and Panasonic HD camcorders.
         // It is also used for storing high definition video on Blu-ray discs.
-        'video/mp2t': '.mts',
+        'video/mp2t': [ '.mts', 'ts' ],
         'video/vnd.dlna.mpeg-tts': '.mts',
 
         'video/m2ts': '.m2ts',

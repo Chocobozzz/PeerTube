@@ -229,8 +229,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
             {
               playlist: this.streamingPlaylist,
               pathOrFilename: this.streamingPlaylist.playlistFilename,
-              content: masterContent,
-              contentType: 'application/x-mpegurl; charset=utf-8'
+              content: masterContent
             }
           )
 
@@ -419,8 +418,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
         storeHLSFileFromContent({
           playlist: this.streamingPlaylist,
           pathOrFilename: m3u8Path,
-          content: filteredPlaylistContent,
-          contentType: 'application/x-mpegurl; charset=utf-8'
+          content: filteredPlaylistContent
         })
       )
     } catch (err) {

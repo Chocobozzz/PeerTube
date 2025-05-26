@@ -50,8 +50,7 @@ async function storeObject (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
-
-  contentType?: string
+  contentType: string
 }): Promise<string> {
   const { inputPath, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
@@ -67,8 +66,7 @@ async function storeContent (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
-
-  contentType?: string
+  contentType: string
 }): Promise<string> {
   const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
@@ -82,8 +80,7 @@ async function storeStream (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
-
-  contentType?: string
+  contentType: string
 }): Promise<string> {
   const { stream, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
