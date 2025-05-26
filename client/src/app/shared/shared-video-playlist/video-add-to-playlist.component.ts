@@ -10,7 +10,8 @@ import {
   OnInit,
   SimpleChanges,
   inject,
-  input
+  input,
+  output
 } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { secondsToTime } from '@peertube/peertube-core-utils'
@@ -74,6 +75,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   readonly video = input<Video>(undefined)
   readonly currentVideoTimestamp = input<number>(undefined)
+
+  readonly videoExistsInPlaylistChange = output()
 
   isNewPlaylistBlockOpened = false
 
@@ -288,6 +291,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
       .subscribe({
         next: () => {
           this.notifier.success($localize`Timestamps updated`)
+
+          this.videoExistsInPlaylistChange.emit()
         },
 
         error: err => this.notifier.error(err.message),
@@ -320,6 +325,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
       .subscribe({
         next: () => {
           this.notifier.success($localize`Video removed from ${playlist.displayName}`)
+
+          this.videoExistsInPlaylistChange.emit()
         },
 
         error: err => this.notifier.error(err.message),
@@ -396,6 +403,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           this.notifier.success(message)
 
           if (element) element.playlistElementId = res.videoPlaylistElement.id
+
+          this.videoExistsInPlaylistChange.emit()
         },
 
         error: err => {

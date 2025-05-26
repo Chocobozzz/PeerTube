@@ -407,7 +407,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       })
   }
 
-  private fetchVideosContainedInPlaylists (videos: Video[]) {
+  fetchVideosContainedInPlaylists (videos: Video[]) {
     this.playlistService.doVideosExistInPlaylist(videos.map(v => v.id))
       .subscribe(result => {
         this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({

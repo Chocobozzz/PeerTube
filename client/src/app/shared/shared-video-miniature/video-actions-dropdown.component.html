@@ -10,7 +10,7 @@
 
     <div ngbDropdownMenu>
       @defer (when dropdownOpened) {
-        <my-video-add-to-playlist #playlistAdd [video]="video()"></my-video-add-to-playlist>
+        <my-video-add-to-playlist #playlistAdd [video]="video()" (videoExistsInPlaylistChange)="videoExistsInPlaylistChange.emit()"></my-video-add-to-playlist>
       }
     </div>
   </div>

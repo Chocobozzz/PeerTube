@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 my-select-checkbox {
   min-width: 250px;
@@ -7,6 +7,14 @@ my-select-checkbox {
 
 .pt-badge {
   @include margin-right(5px);
+}
+
+.playlists {
+  .pt-badge {
+    max-width: 200px;
+
+    @include ellipsis;
+  }
 }
 
 .video-info > div {
@@ -41,7 +49,7 @@ td {
   gap: 1rem;
   overflow: hidden;
 
-  &:hover  {
+  &:hover {
     overflow: auto;
   }
 

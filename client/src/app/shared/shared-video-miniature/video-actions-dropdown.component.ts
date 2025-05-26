@@ -113,6 +113,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   readonly videoAccountMuted = output()
   readonly transcodingCreated = output()
   readonly modalOpened = output()
+  readonly videoExistsInPlaylistChange = output()
 
   readonly showTranscriptionWidget = output()
   readonly hideTranscriptionWidget = output()
