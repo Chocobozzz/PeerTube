@@ -72,7 +72,12 @@ export function defineUploadProgram () {
 
         await run({ ...options, url, username, password })
       } catch (err) {
-        console.error('Cannot upload video: ' + err.message)
+        if (err.code === 'ECONNREFUSED') {
+          console.error(`Server is not responding`)
+        } else {
+          console.error('Cannot upload video: ' + err.message)
+        }
+
         process.exit(-1)
       }
     })
