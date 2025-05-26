@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 h2 {
   font-weight: $font-bold;
@@ -33,7 +33,7 @@ my-timestamp-input {
   width: 100px;
 }
 
-input[type=text] {
+input[type="text"] {
   display: block;
 
   @include peertube-input-text(100%);
@@ -76,7 +76,7 @@ p-calendar {
 }
 
 .dragover {
-    border: 3px dashed pvar(--primary);
+  border: 3px dashed pvar(--primary);
 }
 
 .plugin-fields {
@@ -84,7 +84,15 @@ p-calendar {
   flex-wrap: wrap;
   column-gap: 2.5rem;
 
-  > *:nth-child(2n + 1) {
-    width: 66%
+  > *:nth-child(2n+1) {
+    width: 66%;
+  }
+}
+
+.danger-zone {
+  h3 {
+    color: pvar(--red);
+    font-weight: $font-bold;
+    font-size: 1rem;
   }
 }

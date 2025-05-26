@@ -163,8 +163,14 @@
         <ng-container i18n>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</ng-container>
       </ng-template>
     </my-peertube-checkbox>
+  </div>
+</div>
 
-    <div *ngIf="canBeDeleted()" class="form-group">
+<div *ngIf="canBeDeleted()">
+  <div class="danger-zone mt-5">
+    <h3 class="mb-3" i18n>DANGER ZONE</h3>
+
+    <div class="form-group">
       <label i18n for="deleteVideo">Delete your video</label>
       <div class="form-group-description" i18n>Warning: this is a definitive action!</div>
 
