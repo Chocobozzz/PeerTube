@@ -113,7 +113,7 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
     }
 
     return Promise.all([
-      VideoChangeOwnershipModel.scope(ScopeNames.WITH_ACCOUNTS).count(query),
+      VideoChangeOwnershipModel.count(query),
       VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ]).findAll<MVideoChangeOwnershipFull>(query)
     ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
