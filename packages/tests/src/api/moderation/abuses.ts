@@ -578,7 +578,7 @@ describe('Test abuses', function () {
     before(async function () {
       this.timeout(50000)
 
-      await servers[0].users.create({ username: 'user_1', password: 'donald' })
+      await servers[0].users.create({ username: 'user_1', password: 'donald duck' })
 
       const token = await servers[1].users.generateUserAndToken('user_2')
       await servers[1].videos.upload({ token, attributes: { name: 'super video' } })
