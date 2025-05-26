@@ -33,8 +33,8 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   ngOnInit () {
     this.serverService.getConfig().subscribe(config => {
-      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length);
-    });
+      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length)
+    })
     this.buildForm({
       'current-password': USER_EXISTING_PASSWORD_VALIDATOR,
       'new-password': this.userPasswordValidator,

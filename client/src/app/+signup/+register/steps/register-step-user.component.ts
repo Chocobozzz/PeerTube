@@ -32,7 +32,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
 
   readonly formBuilt = output<FormGroup>()
 
-  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>;
+  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>
 
   get instanceHost () {
     return window.location.host
@@ -40,8 +40,8 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.serverService.getConfig().subscribe(config => {
-      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length);
-    });
+      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length)
+    })
     
     this.buildForm({
       displayName: USER_DISPLAY_NAME_REQUIRED_VALIDATOR,

@@ -29,8 +29,8 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.serverService.getConfig().subscribe(config => {
-      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length);
-    });
+      this.userPasswordValidator = getUserPasswordValidator(config.signup.minimum_password_length)
+    })
 
     this.buildForm({
       password: this.userPasswordValidator

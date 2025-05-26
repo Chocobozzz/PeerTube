@@ -62,7 +62,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   private userAdminService = inject(UserAdminService)
 
   error: string
-  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>;
+  userPasswordValidator: ReturnType<typeof getUserPasswordValidator>
   userPasswordOptionalValidator: ReturnType<typeof getUserPasswordOptionalValidator>
 
   constructor () {
@@ -74,10 +74,10 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   ngOnInit () {
     super.ngOnInit()
     this.serverService.getConfig().subscribe(config => {
-      const minLength = config.signup.minimum_password_length;
-      this.userPasswordValidator = getUserPasswordValidator(minLength);
-      this.userPasswordOptionalValidator = getUserPasswordOptionalValidator(minLength);
-    });
+      const minLength = config.signup.minimum_password_length
+      this.userPasswordValidator = getUserPasswordValidator(minLength)
+      this.userPasswordOptionalValidator = getUserPasswordOptionalValidator(minLength)
+    })
 
     const defaultValues = {
       role: UserRole.USER.toString(),

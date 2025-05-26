@@ -70,7 +70,7 @@ export const USER_OTP_TOKEN_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export function getUserPasswordValidator (minLength: number = 6, maxLength: number = 255) {
+export function getUserPasswordValidator (minLength = 6, maxLength = 255) {
   return {
     VALIDATORS: [
       Validators.required,
@@ -82,11 +82,11 @@ export function getUserPasswordValidator (minLength: number = 6, maxLength: numb
       minlength: $localize`Password must be at least ${minLength} characters long.`,
       maxlength: $localize`Password cannot be more than ${maxLength} characters long.`
     }
-  };
+  }
 }
 
 
-export function getUserPasswordOptionalValidator (minLength: number = 6, maxLength: number = 255) {
+export function getUserPasswordOptionalValidator (minLength = 6, maxLength = 255) {
   return {
     VALIDATORS: [
       Validators.minLength(minLength),
@@ -96,7 +96,7 @@ export function getUserPasswordOptionalValidator (minLength: number = 6, maxLeng
       minlength: $localize`Password must be at least ${minLength} characters long.`,
       maxlength: $localize`Password cannot be more than ${maxLength} characters long.`
     }
-  };
+  }
 }
 
 export const USER_CONFIRM_PASSWORD_VALIDATOR: BuildFormValidator = {
