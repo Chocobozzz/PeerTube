@@ -31,7 +31,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
         'password': getUserPasswordValidator(config.signup.minimum_password_length),
         'password-confirm': RESET_PASSWORD_CONFIRM_VALIDATOR
       })
-    });
+    })
 
     this.userId = this.route.snapshot.queryParams['userId']
     this.verificationString = this.route.snapshot.queryParams['verificationString']
