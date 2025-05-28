@@ -3069,14 +3069,13 @@
     "@typescript-eslint/types" "8.32.0"
     eslint-visitor-keys "^4.2.0"
 
-"@uploadx/core@^6.0.0":
-  version "6.1.7"
-  resolved "https://registry.yarnpkg.com/@uploadx/core/-/core-6.1.7.tgz#33e1bf1490f420faa8ec1a780c5fceefe20ba348"
-  integrity sha512-0JwsUjS9AWuU50/iC3mHWpxYsoj4GxhDSlTHZUjVuY28za/RH6csce1PDRLRr0aGhZcgCxngfmw6sDGaApfbbg==
+"@uploadx/core@^6.1.8":
+  version "6.1.8"
+  resolved "https://registry.yarnpkg.com/@uploadx/core/-/core-6.1.8.tgz#4c745fc12617dcc10b9a848cde2c41d5e0ade44d"
+  integrity sha512-4IGyNXzOG9mH7Wd0FRgNiEyOfTylBAt+/wQFq5Ke80Ush9GLAAdpXMRXa0bw1PD18jHQpHegc5ElpwwrC/BGYw==
   dependencies:
     bytes "^3.1.0"
     multiparty "^4.2.2"
-    parse-duration "^2.1.4"
 
 "@vue/compiler-core@3.5.13":
   version "3.5.13"
@@ -8651,11 +8650,6 @@ parse-bmfont-xml@^1.1.4:
   dependencies:
     xml-parse-from-string "^1.0.0"
     xml2js "^0.5.0"
-
-parse-duration@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/parse-duration/-/parse-duration-2.1.4.tgz#02918736726f657eaf70b52bb8da7910316df51d"
-  integrity sha512-b98m6MsCh+akxfyoz9w9dt0AlH2dfYLOBss5SdDsr9pkhKNvkWBXU/r8A4ahmIGByBOLV2+4YwfCuFxbDDaGyg==
 
 parse-headers@^2.0.0:
   version "2.0.6"
