@@ -1,17 +1,47 @@
-<ng-container [formGroup]="form()">
+<my-admin-save-bar i18n-title title="Platform information" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
+
+<ng-container [formGroup]="form">
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h2 i18n>ADMINISTRATORS</h2>
+    </div>
+
+    <div class="content-col">
+
+      <div class="form-group" formGroupName="admin">
+        <label i18n for="adminEmail">Admin email</label>
+
+        <input
+          type="text" id="adminEmail" class="form-control"
+          formControlName="email" [ngClass]="{ 'input-error': formErrors.admin.email }"
+        >
+
+        <div *ngIf="formErrors.admin.email" class="form-error" role="alert">{{ formErrors.admin.email }}</div>
+      </div>
+
+      <div class="form-group" formGroupName="contactForm">
+        <my-peertube-checkbox
+          inputName="enableContactForm" formControlName="enabled"
+          i18n-labelText labelText="Enable contact form"
+        ></my-peertube-checkbox>
+      </div>
+
+    </div>
+  </div>
 
   <ng-container formGroupName="instance">
 
-    <div class="pt-two-cols mt-5"> <!-- instance grid -->
+    <div class="pt-two-cols">
       <div class="title-col">
-        <h2 i18n>INSTANCE</h2>
+        <h2 i18n>PLATFORM</h2>
       </div>
 
       <div class="content-col">
         <div class="form-group">
           <label i18n for="avatarfile">Square icon</label>
 
-          <div class="label-small-info">
+          <div class="form-group-description">
             <p i18n class="mb-0">Square icon can be used on your custom homepage.</p>
           </div>
 
@@ -25,7 +55,7 @@
         <div class="form-group">
           <label i18n for="bannerfile">Banner</label>
 
-          <div class="label-small-info">
+          <div class="form-group-description">
             <p i18n class="mb-0">Banner is displayed in the about, login and registration pages and be used on your custom homepage.</p>
             <p i18n>It can also be displayed on external websites to promote your instance, such as <a target="_blank"  href="https://joinpeertube.org/instances">JoinPeerTube.org</a>.</p>
           </div>
@@ -41,10 +71,10 @@
 
           <input
             type="text" id="instanceName" class="form-control"
-            formControlName="name" [ngClass]="{ 'input-error': formErrors().instance.name }"
+            formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
           >
 
-          <div *ngIf="formErrors().instance.name" class="form-error" role="alert">{{ formErrors().instance.name }}</div>
+          <div *ngIf="formErrors.instance.name" class="form-error" role="alert">{{ formErrors.instance.name }}</div>
         </div>
 
         <div class="form-group">
@@ -52,22 +82,22 @@
 
           <textarea
             id="instanceShortDescription" formControlName="shortDescription" class="form-control small"
-            [ngClass]="{ 'input-error': formErrors()['instance.shortDescription'] }"
+            [ngClass]="{ 'input-error': formErrors.instance.shortDescription }"
           ></textarea>
 
-          <div *ngIf="formErrors().instance.shortDescription" class="form-error" role="alert">{{ formErrors().instance.shortDescription }}</div>
+          <div *ngIf="formErrors.instance.shortDescription" class="form-error" role="alert">{{ formErrors.instance.shortDescription }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceDescription">Description</label>
-          <div class="label-small-info">
+          <div class="form-group-description">
             <my-custom-markup-help supportRelMe="true"></my-custom-markup-help>
           </div>
 
           <my-markdown-textarea
             inputId="instanceDescription" formControlName="description"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
-            [formError]="formErrors()['instance.description']"
+            [formError]="formErrors.instance.description"
           ></my-markdown-textarea>
         </div>
 
@@ -77,7 +107,7 @@
           <div>
             <my-select-checkbox
               inputId="instanceCategories"
-              formControlName="categories" [availableItems]="categoryItems()"
+              formControlName="categories" [availableItems]="categoryItems"
               [selectableGroup]="false"
               i18n-placeholder placeholder="Add a new category"
             >
@@ -91,7 +121,7 @@
           <div>
             <my-select-checkbox
               inputId="instanceLanguages"
-              formControlName="languages" [availableItems]="languageItems()"
+              formControlName="languages" [availableItems]="languageItems"
               [selectableGroup]="false"
               i18n-placeholder placeholder="Add a new language"
             >
@@ -101,20 +131,20 @@
 
         <div class="form-group">
           <label i18n for="instanceServerCountry">Server country</label>
-          <div i18n class="label-small-info">PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</div>
+          <div i18n class="form-group-description">PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</div>
 
           <input
             type="text" id="instanceServerCountry" class="form-control"
-            formControlName="serverCountry" [ngClass]="{ 'input-error': formErrors().instance.serverCountry }"
+            formControlName="serverCountry" [ngClass]="{ 'input-error': formErrors.instance.serverCountry }"
           >
 
-          <div *ngIf="formErrors().instance.serverCountry" class="form-error" role="alert">{{ formErrors().instance.serverCountry }}</div>
+          <div *ngIf="formErrors.instance.serverCountry" class="form-error" role="alert">{{ formErrors.instance.serverCountry }}</div>
         </div>
 
       </div>
     </div>
 
-    <div class="pt-two-cols mt-4"> <!-- social grid -->
+    <div class="pt-two-cols mt-4">
       <div class="title-col">
         <h2 i18n>SOCIAL</h2>
         <div i18n class="inner-form-description">
@@ -126,25 +156,25 @@
 
         <div class="form-group" formGroupName="support">
           <label i18n for="instanceSupportText">Support text</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</div>
+          <div i18n class="form-group-description">Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</div>
 
           <my-markdown-textarea
             inputId="instanceSupportText" formControlName="text" markdownType="enhanced"
-            [formError]="formErrors()['instance.support.text']"
+            [formError]="formErrors.instance.support.text"
           ></my-markdown-textarea>
         </div>
 
         <ng-container formGroupName="social">
           <div class="form-group">
             <label i18n for="instanceSocialExternalLink">External link</label>
-            <div i18n class="label-small-info">Link to your main website</div>
+            <div i18n class="form-group-description">Link to your main website</div>
 
             <input
               type="text" id="instanceSocialExternalLink" class="form-control"
-              formControlName="externalLink" [ngClass]="{ 'input-error': formErrors().instance.social.externalLink }"
+              formControlName="externalLink" [ngClass]="{ 'input-error': formErrors.instance.social.externalLink }"
             >
 
-            <div *ngIf="formErrors().instance.social.externalLink" class="form-error" role="alert">{{ formErrors().instance.social.externalLink }}</div>
+            <div *ngIf="formErrors.instance.social.externalLink" class="form-error" role="alert">{{ formErrors.instance.social.externalLink }}</div>
           </div>
 
           <div class="form-group">
@@ -152,10 +182,10 @@
 
             <input
               type="text" id="instanceSocialMastodonLink" class="form-control"
-              formControlName="mastodonLink" [ngClass]="{ 'input-error': formErrors().instance.social.mastodonLink }"
+              formControlName="mastodonLink" [ngClass]="{ 'input-error': formErrors.instance.social.mastodonLink }"
             >
 
-            <div *ngIf="formErrors().instance.social.mastodonLink" class="form-error" role="alert">{{ formErrors().instance.social.mastodonLink }}</div>
+            <div *ngIf="formErrors.instance.social.mastodonLink" class="form-error" role="alert">{{ formErrors.instance.social.mastodonLink }}</div>
           </div>
 
           <div class="form-group">
@@ -163,10 +193,10 @@
 
             <input
               type="text" id="instanceSocialBlueskyLink" class="form-control"
-              formControlName="blueskyLink" [ngClass]="{ 'input-error': formErrors().instance.social.blueskyLink }"
+              formControlName="blueskyLink" [ngClass]="{ 'input-error': formErrors.instance.social.blueskyLink }"
             >
 
-            <div *ngIf="formErrors().instance.social.blueskyLink" class="form-error" role="alert">{{ formErrors().instance.social.blueskyLink }}</div>
+            <div *ngIf="formErrors.instance.social.blueskyLink" class="form-error" role="alert">{{ formErrors.instance.social.blueskyLink }}</div>
           </div>
         </ng-container>
 
@@ -174,7 +204,7 @@
 
     </div>
 
-    <div class="pt-two-cols mt-4"> <!-- moderation grid -->
+    <div class="pt-two-cols mt-4">
       <div class="title-col">
         <h2 i18n>MODERATION & SENSITIVE CONTENT</h2>
         <div i18n class="inner-form-description">
@@ -205,7 +235,7 @@
             formControlName="defaultNSFWPolicy"
           ></my-select-radio>
 
-          <div *ngIf="formErrors().instance.defaultNSFWPolicy" class="form-error" role="alert">{{ formErrors().instance.defaultNSFWPolicy }}</div>
+          <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error" role="alert">{{ formErrors.instance.defaultNSFWPolicy }}</div>
         </div>
 
         <div class="form-group">
@@ -213,7 +243,7 @@
 
           <my-markdown-textarea
             inputId="instanceTerms" formControlName="terms" markdownType="enhanced"
-            [formError]="formErrors()['instance.terms']"
+            [formError]="formErrors.instance.terms"
           ></my-markdown-textarea>
         </div>
 
@@ -222,74 +252,74 @@
 
           <my-markdown-textarea
             inputId="instanceCodeOfConduct" formControlName="codeOfConduct" markdownType="enhanced"
-            [formError]="formErrors()['instance.codeOfConduct']"
+            [formError]="formErrors.instance.codeOfConduct"
           ></my-markdown-textarea>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</div>
+          <div i18n class="form-group-description">Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</div>
 
           <my-markdown-textarea
             inputId="instanceModerationInformation" formControlName="moderationInformation" markdownType="enhanced"
-            [formError]="formErrors()['instance.moderationInformation']"
+            [formError]="formErrors.instance.moderationInformation"
           ></my-markdown-textarea>
         </div>
 
       </div>
     </div>
 
-    <div class="pt-two-cols mt-4"> <!-- you and your instance grid -->
+    <div class="pt-two-cols mt-4">
       <div class="title-col">
-        <h2 i18n>YOU AND YOUR INSTANCE</h2>
+        <h2 i18n>YOU AND YOUR PLATFORM</h2>
       </div>
 
       <div class="content-col">
 
         <div class="form-group">
           <label i18n for="instanceAdministrator">Who is behind the instance?</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
+          <div i18n class="form-group-description">A single person? A non-profit? A company?</div>
 
           <my-markdown-textarea
             inputId="instanceAdministrator" formControlName="administrator" markdownType="enhanced"
-            [formError]="formErrors()['instance.administrator']"
+            [formError]="formErrors.instance.administrator"
           ></my-markdown-textarea>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceCreationReason">Why did you create this instance?</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
+          <div i18n class="form-group-description">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
           <my-markdown-textarea
             inputId="instanceCreationReason" formControlName="creationReason" markdownType="enhanced"
-            [formError]="formErrors()['instance.creationReason']"
+            [formError]="formErrors.instance.creationReason"
           ></my-markdown-textarea>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
+          <div i18n class="form-group-description">It's important to know for users who want to register on your instance</div>
 
           <my-markdown-textarea
             inputId="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" markdownType="enhanced"
-            [formError]="formErrors()['instance.maintenanceLifetime']"
+            [formError]="formErrors.instance.maintenanceLifetime"
           ></my-markdown-textarea>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label><my-help helpType="markdownText"></my-help>
-          <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
+          <div i18n class="form-group-description">With your own funds? With user donations? Advertising?</div>
 
           <my-markdown-textarea
             inputId="instanceBusinessModel" formControlName="businessModel" markdownType="enhanced"
-            [formError]="formErrors()['instance.businessModel']"
+            [formError]="formErrors.instance.businessModel"
           ></my-markdown-textarea>
         </div>
 
       </div>
     </div>
 
-    <div class="pt-two-cols mt-4"> <!-- other information grid -->
+    <div class="pt-two-cols mt-4">
       <div class="title-col">
         <h2 i18n>OTHER INFORMATION</h2>
       </div>
@@ -298,11 +328,11 @@
 
         <div class="form-group">
           <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
-          <div i18n class="label-small-info">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
+          <div i18n class="form-group-description">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
 
           <my-markdown-textarea
             inputId="instanceHardwareInformation" formControlName="hardwareInformation" markdownType="enhanced"
-            [formError]="formErrors()['instance.hardwareInformation']"
+            [formError]="formErrors.instance.hardwareInformation"
           ></my-markdown-textarea>
         </div>
 

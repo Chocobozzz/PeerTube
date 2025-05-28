@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
-@import 'bootstrap/scss/mixins';
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+@import "bootstrap/scss/mixins";
 
 h1 {
   color: pvar(--fg-200);
@@ -105,6 +105,10 @@ a {
 
   @include padding-right(1.5rem);
 
+  &:last-child {
+    display: none;
+  }
+
   > div {
     height: 2px;
     width: 100%;
@@ -132,7 +136,7 @@ a {
     position: fixed;
     bottom: 0;
     top: unset;
-    width: calc(100vw - #{pvar(--menu-width)} - (#{pvar(--x-margin-content)} * 2));
+    width: calc(100vw - #{pvar(--menu-width)} - #{pvar(--x-margin-content)} * 2);
     padding: 0.75rem 0.5rem;
     border: 1px solid pvar(--bg-secondary-450);
     border-bottom: 0;

@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { AdminConfigService } from '@app/+admin/config/shared/admin-config.service'
 import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
 import {
   USER_EMAIL_VALIDATOR,
@@ -52,7 +52,7 @@ import { UserPasswordComponent } from './user-password.component'
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   protected formReactiveService = inject(FormReactiveService)
   protected serverService = inject(ServerService)
-  protected configService = inject(ConfigService)
+  protected configService = inject(AdminConfigService)
   protected screenService = inject(ScreenService)
   protected auth = inject(AuthService)
   private route = inject(ActivatedRoute)

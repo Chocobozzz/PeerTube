@@ -51,9 +51,9 @@ type Card = { label: string, value: string | number, moreInfo?: string, help?: s
 
 const isBarGraph = (graphId: ActiveGraphId): graphId is BarGraphs => BAR_GRAPHS.some(graph => graph === graphId)
 
-ChartJSDefaults.backgroundColor = getComputedStyle(document.body).getPropertyValue('--bg')
-ChartJSDefaults.borderColor = getComputedStyle(document.body).getPropertyValue('--bg-secondary-500')
-ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--fg')
+ChartJSDefaults.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg')
+ChartJSDefaults.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary-500')
+ChartJSDefaults.color = getComputedStyle(document.documentElement).getPropertyValue('--fg')
 
 @Component({
   templateUrl: './video-stats.component.html',
@@ -654,7 +654,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private buildChartColor () {
-    return getComputedStyle(document.body).getPropertyValue('--border-primary')
+    return getComputedStyle(document.documentElement).getPropertyValue('--border-primary')
   }
 
   private formatXTick (options: {

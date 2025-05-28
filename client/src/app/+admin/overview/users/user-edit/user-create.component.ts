@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { AdminConfigService } from '@app/+admin/config/shared/admin-config.service'
 import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
@@ -54,7 +54,7 @@ import { UserPasswordComponent } from './user-password.component'
 export class UserCreateComponent extends UserEdit implements OnInit {
   protected serverService = inject(ServerService)
   protected formReactiveService = inject(FormReactiveService)
-  protected configService = inject(ConfigService)
+  protected configService = inject(AdminConfigService)
   protected screenService = inject(ScreenService)
   protected auth = inject(AuthService)
   private router = inject(Router)

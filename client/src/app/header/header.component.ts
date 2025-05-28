@@ -132,8 +132,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.getSearchHiddenSub = this.headerService.getSearchHiddenObs()
       .subscribe(hidden => {
-        if (hidden) document.body.classList.add('global-search-hidden')
-        else document.body.classList.remove('global-search-hidden')
+        if (hidden) document.documentElement.classList.add('global-search-hidden')
+        else document.documentElement.classList.remove('global-search-hidden')
 
         this.searchHidden = hidden
       })
@@ -167,7 +167,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!isAndroid() && !isIphone()) return
 
     this.mobileMsg = true
-    document.body.classList.add('mobile-app-msg')
+    document.documentElement.classList.add('mobile-app-msg')
 
     const host = window.location.host
     const intentConfig = this.htmlConfig.client.openInApp.android.intent
@@ -228,7 +228,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   hideMobileMsg () {
     this.mobileMsg = false
-    document.body.classList.remove('mobile-app-msg')
+    document.documentElement.classList.remove('mobile-app-msg')
 
     peertubeLocalStorage.setItem(HeaderComponent.LS_HIDE_MOBILE_MSG, 'true')
   }

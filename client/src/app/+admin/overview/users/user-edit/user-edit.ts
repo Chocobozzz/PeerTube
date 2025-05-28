@@ -1,10 +1,11 @@
 import { Directive, OnInit } from '@angular/core'
-import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { AdminConfigService } from '@app/+admin/config/shared/admin-config.service'
+import { getVideoQuotaDailyOptions, getVideoQuotaOptions } from '@app/+admin/shared/user-quota-options'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { peertubeTranslate, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '../../../../../types/select-options-item.model'
-import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 
 @Directive()
 export abstract class UserEdit extends FormReactive implements OnInit {
@@ -18,7 +19,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   protected serverConfig: HTMLServerConfig
 
   protected abstract serverService: ServerService
-  protected abstract configService: ConfigService
+  protected abstract configService: AdminConfigService
   protected abstract screenService: ScreenService
   protected abstract auth: AuthService
   abstract isCreation (): boolean
@@ -88,7 +89,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   }
 
   protected buildQuotaOptions () {
-    this.videoQuotaOptions = this.configService.videoQuotaOptions
-    this.videoQuotaDailyOptions = this.configService.videoQuotaDailyOptions
+    this.videoQuotaOptions = getVideoQuotaOptions()
+    this.videoQuotaDailyOptions = getVideoQuotaDailyOptions()
   }
 }

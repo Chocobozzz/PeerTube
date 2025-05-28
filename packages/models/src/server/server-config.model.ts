@@ -162,6 +162,19 @@ export interface ServerConfig {
     builtIn: { name: 'peertube-core-light-beige' | 'peertube-core-dark-brown' }[]
 
     default: string
+
+    customization: {
+      primaryColor: string
+      foregroundColor: string
+      backgroundColor: string
+      backgroundSecondaryColor: string
+      menuForegroundColor: string
+      menuBackgroundColor: string
+      menuBorderRadius: string
+      headerForegroundColor: string
+      headerBackgroundColor: string
+      inputBorderRadius: string
+    }
   }
 
   email: {

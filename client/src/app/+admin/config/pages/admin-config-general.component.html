@@ -1,22 +1,12 @@
-<ng-container [formGroup]="form()">
-  <div class="pt-two-cols mt-5"> <!-- appearance grid -->
-    <div class="title-col">
-      <h2 i18n>APPEARANCE</h2>
+<my-admin-save-bar i18n-title title="General configuration" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
 
-      <div i18n class="inner-form-description">
-        Use <a class="link-primary" routerLink="/admin/settings/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-primary" routerLink="/admin/settings/config/edit-custom" fragment="advanced-configuration">customizations</a>.
-      </div>
+<ng-container [formGroup]="form">
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h2 i18n>BEHAVIOR</h2>
     </div>
 
     <div class="content-col">
-
-      <ng-container formGroupName="theme">
-        <div class="form-group">
-          <label i18n for="themeDefault">Theme</label>
-
-          <my-select-options formControlName="default" inputId="themeDefault" [items]="availableThemes"></my-select-options>
-        </div>
-      </ng-container>
 
       <div class="form-group" formGroupName="instance">
         <label i18n id="instanceDefaultClientRouteLabel" for="instanceDefaultClientRoute">Landing page</label>
@@ -30,7 +20,7 @@
           [clearable]="false"
         ></my-select-custom-value>
 
-        <div *ngIf="formErrors().instance.defaultClientRoute" class="form-error" role="alert">{{ formErrors().instance.defaultClientRoute }}</div>
+        <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error" role="alert">{{ formErrors.instance.defaultClientRoute }}</div>
       </div>
 
       <div class="form-group" formGroupName="trending">
@@ -47,23 +37,12 @@
               </select>
             </div>
 
-            <div *ngIf="formErrors().trending.videos.algorithms.default" class="form-error" role="alert">{{ formErrors().trending.videos.algorithms.default }}</div>
+            <div *ngIf="formErrors.trending.videos.algorithms.default" class="form-error" role="alert">{{ formErrors.trending.videos.algorithms.default }}</div>
           </ng-container>
         </ng-container>
       </div>
 
       <ng-container formGroupName="client">
-
-        <ng-container formGroupName="videos">
-          <ng-container formGroupName="miniature">
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="clientVideosMiniaturePreferAuthorDisplayName" formControlName="preferAuthorDisplayName"
-                i18n-labelText labelText="Prefer author display name in video miniature"
-              ></my-peertube-checkbox>
-            </div>
-          </ng-container>
-        </ng-container>
 
         <ng-container formGroupName="menu">
           <ng-container formGroupName="login">
@@ -73,8 +52,11 @@
                 i18n-labelText labelText="Redirect users on single external auth when users click on the login button in menu"
               >
                 <ng-container ngProjectAs="description">
-                  <span *ngIf="countExternalAuth() === 0" i18n>⚠️ You don't have any external auth plugin enabled.</span>
-                  <span *ngIf="countExternalAuth() > 1" i18n>⚠️ You have multiple external auth plugins enabled.</span>
+                  @if (countExternalAuth() === 0) {
+                    <span *ngIf="" i18n>⚠️ You don't have any external auth plugin enabled.</span>
+                  } @else if (countExternalAuth() > 1) {
+                    <span i18n>⚠️ You have multiple external auth plugins enabled.</span>
+                  }
                 </ng-container>
              </my-peertube-checkbox>
             </div>
@@ -85,11 +67,11 @@
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- broadcast grid -->
+  <div class="pt-two-cols mt-4">
     <div class="title-col">
       <h2 i18n>BROADCAST MESSAGE</h2>
       <div i18n class="inner-form-description">
-        Display a message on your instance
+        Display a message on your platform
       </div>
     </div>
 
@@ -122,7 +104,7 @@
             </select>
           </div>
 
-          <div *ngIf="formErrors().broadcastMessage.level" class="form-error" role="alert">{{ formErrors().broadcastMessage.level }}</div>
+          <div *ngIf="formErrors.broadcastMessage.level" class="form-error" role="alert">{{ formErrors.broadcastMessage.level }}</div>
         </div>
 
         <div class="form-group">
@@ -130,10 +112,10 @@
 
           <my-markdown-textarea
             inputId="broadcastMessageMessage" formControlName="message"
-            [formError]="formErrors()['broadcastMessage.message']" markdownType="to-unsafe-html"
+            [formError]="formErrors.broadcastMessage.message" markdownType="to-unsafe-html"
           ></my-markdown-textarea>
 
-          <div *ngIf="formErrors().broadcastMessage.message" class="form-error" role="alert">{{ formErrors().broadcastMessage.message }}</div>
+          <div *ngIf="formErrors.broadcastMessage.message" class="form-error" role="alert">{{ formErrors.broadcastMessage.message }}</div>
         </div>
 
       </ng-container>
@@ -144,9 +126,6 @@
   <div class="pt-two-cols mt-4"> <!-- new users grid -->
     <div class="title-col">
       <h2 i18n>NEW USERS</h2>
-      <div i18n class="inner-form-description">
-        Manage <a class="link-primary" routerLink="/admin/overview/users">users</a> to set their quota individually.
-      </div>
     </div>
 
     <div class="content-col">
@@ -160,7 +139,7 @@
             <ng-container ngProjectAs="description">
               <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
 
-              <my-alert type="primary" class="alert-signup" *ngIf="signupAlertMessage">{{ signupAlertMessage }}</my-alert>
+              <my-alert type="primary" class="d-block mt-2" *ngIf="signupAlertMessage">{{ signupAlertMessage }}</my-alert>
             </ng-container>
 
             <ng-container ngProjectAs="extra">
@@ -180,17 +159,17 @@
 
               <div [ngClass]="getDisabledSignupClass()">
                 <label i18n for="signupLimit">Signup limit</label>
-                <span i18n class="small muted ms-1">When the total number of users in your instance reaches this limit, registrations are disabled. -1 == unlimited</span>
+                <span i18n class="small muted ms-1">When the total number of users in your platform reaches this limit, registrations are disabled. -1 == unlimited</span>
 
                 <div class="number-with-unit">
                   <input
                     type="number" min="-1" id="signupLimit" class="form-control"
-                    formControlName="limit" [ngClass]="{ 'input-error': formErrors()['signup.limit'] }"
+                    formControlName="limit" [ngClass]="{ 'input-error': formErrors.signup.limit }"
                   >
-                  <span i18n>{form().value['signup']['limit'], plural, =1 {user} other {users}}</span>
+                  <span i18n>{form.value.signup.limit, plural, =1 {user} other {users}}</span>
                 </div>
 
-                <div *ngIf="formErrors().signup.limit" class="form-error" role="alert">{{ formErrors().signup.limit }}</div>
+                <div *ngIf="formErrors.signup.limit" class="form-error" role="alert">{{ formErrors.signup.limit }}</div>
 
                 <small i18n *ngIf="hasUnlimitedSignup()" class="muted small">Signup won't be limited to a fixed number of users.</small>
               </div>
@@ -201,12 +180,12 @@
                 <div class="number-with-unit">
                   <input
                     type="number" min="1" id="signupMinimumAge" class="form-control"
-                    formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors()['signup.minimumAge'] }"
+                    formControlName="minimumAge" [ngClass]="{ 'input-error': formErrors.signup.minimumAge }"
                   >
-                  <span i18n>{form().value['signup']['minimumAge'], plural, =1 {year old} other {years old}}</span>
+                  <span i18n>{form.value.signup.minimumAge, plural, =1 {year old} other {years old}}</span>
                 </div>
 
-                <div *ngIf="formErrors().signup.minimumAge" class="form-error" role="alert">{{ formErrors().signup.minimumAge }}</div>
+                <div *ngIf="formErrors.signup.minimumAge" class="form-error" role="alert">{{ formErrors.signup.minimumAge }}</div>
               </div>
             </ng-container>
           </my-peertube-checkbox>
@@ -215,7 +194,7 @@
 
       <ng-container formGroupName="user">
         <div class="form-group">
-          <label i18n id="userVideoQuotaLabel" for="userVideoQuota">Default video quota per user</label>
+          <label i18n id="userVideoQuotaLabel" for="userVideoQuota">Default video quota for a new user</label>
 
           <my-select-custom-value
             labelId="userVideoQuotaLabel"
@@ -228,11 +207,11 @@
 
           <my-user-real-quota-info class="mt-2 d-block small muted" [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
 
-          <div *ngIf="formErrors().user.videoQuota" class="form-error" role="alert">{{ formErrors().user.videoQuota }}</div>
+          <div *ngIf="formErrors.user.videoQuota" class="form-error" role="alert">{{ formErrors.user.videoQuota }}</div>
         </div>
 
         <div class="form-group">
-          <label i18n id="userVideoQuotaDaily" for="userVideoQuotaDaily">Default daily upload limit per user</label>
+          <label i18n id="userVideoQuotaDaily" for="userVideoQuotaDaily">Default daily upload limit for a new user</label>
 
           <my-select-custom-value
             labelId="userVideoQuotaDailyLabel"
@@ -243,14 +222,14 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div *ngIf="formErrors().user.videoQuotaDaily" class="form-error" role="alert">{{ formErrors().user.videoQuotaDaily }}</div>
+          <div *ngIf="formErrors.user.videoQuotaDaily" class="form-error" role="alert">{{ formErrors.user.videoQuotaDaily }}</div>
         </div>
         <div class="form-group">
           <ng-container formGroupName="history">
             <ng-container formGroupName="videos">
               <my-peertube-checkbox
                 inputName="videosHistoryEnabled" formControlName="enabled"
-                i18n-labelText labelText="Automatically enable video history for new users"
+                i18n-labelText labelText="Automatically enable video history for a new user"
               >
               </my-peertube-checkbox>
             </ng-container>
@@ -261,9 +240,9 @@
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- videos grid -->
+  <div class="pt-two-cols mt-4">
     <div class="title-col">
-      <h2 i18n>VIDEOS</h2>
+      <h2 i18n>VIDEO IMPORTS</h2>
     </div>
 
     <div class="content-col">
@@ -281,7 +260,7 @@
               <span i18n>jobs in parallel</span>
             </div>
 
-            <div *ngIf="formErrors().import.concurrency" class="form-error" role="alert">{{ formErrors().import.concurrency }}</div>
+            <div *ngIf="formErrors.import.videos.concurrency" class="form-error" role="alert">{{ formErrors.import.videos.concurrency }}</div>
           </div>
 
           <div class="form-group" formGroupName="http">
@@ -328,16 +307,25 @@
             <div class="number-with-unit">
               <input
                 type="number" min="1" id="videoChannelSynchronizationMaxPerUser" class="form-control"
-                formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors()['import']['videoChannelSynchronization']['maxPerUser'] }"
+                formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['import']['videoChannelSynchronization']['maxPerUser'] }"
               >
-              <span i18n>{form().value['import']['videoChannelSynchronization']['maxPerUser'], plural, =1 {sync} other {syncs}}</span>
+              <span i18n>{form.value.import.videoChannelSynchronization.maxPerUser, plural, =1 {sync} other {syncs}}</span>
             </div>
 
-            <div *ngIf="formErrors().import.videoChannelSynchronization.maxPerUser" class="form-error" role="alert">{{ formErrors().import.videoChannelSynchronization.maxPerUser }}</div>
+            <div *ngIf="formErrors.import.videoChannelSynchronization.maxPerUser" class="form-error" role="alert">{{ formErrors.import.videoChannelSynchronization.maxPerUser }}</div>
           </div>
         </ng-container>
 
       </ng-container>
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h2 i18n>VIDEOS</h2>
+    </div>
+
+    <div class="content-col">
 
       <ng-container formGroupName="autoBlacklist">
         <ng-container formGroupName="videos">
@@ -414,7 +402,7 @@
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- video channels grid -->
+  <div class="pt-two-cols mt-4">
     <div class="title-col">
       <h2 i18n>VIDEO CHANNELS</h2>
     </div>
@@ -426,17 +414,17 @@
         <div class="number-with-unit">
           <input
             type="number" min="1" id="videoChannelsMaxPerUser" class="form-control"
-            formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors()['videoChannels.maxPerUser'] }"
+            formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors.videoChannels.maxPerUser }"
           >
-          <span i18n>{form().value['videoChannels']['maxPerUser'], plural, =1 {channel} other {channels}}</span>
+          <span i18n>{form.value.videoChannels.maxPerUser, plural, =1 {channel} other {channels}}</span>
         </div>
 
-        <div *ngIf="formErrors().videoChannels.maxPerUser" class="form-error" role="alert">{{ formErrors().videoChannels.maxPerUser }}</div>
+        <div *ngIf="formErrors.videoChannels.maxPerUser" class="form-error" role="alert">{{ formErrors.videoChannels.maxPerUser }}</div>
       </div>
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- search grid -->
+  <div class="pt-two-cols mt-4">
     <div class="title-col">
       <h2 i18n>SEARCH</h2>
     </div>
@@ -452,7 +440,7 @@
               i18n-labelText labelText="Allow users to do remote URI/handle search"
             >
               <ng-container ngProjectAs="description">
-                <span i18n>Allow <strong>your users</strong> to look up remote videos/actors that may not be federated with your instance</span>
+                <span i18n>Allow <strong>your users</strong> to look up remote videos/actors that may not be federated with your platform</span>
               </ng-container>
             </my-peertube-checkbox>
           </div>
@@ -463,7 +451,7 @@
               i18n-labelText labelText="Allow anonymous to do remote URI/handle search"
             >
               <ng-container ngProjectAs="description">
-                <span i18n>Allow <strong>anonymous users</strong> to look up remote videos/actors that may not be federated with your instance</span>
+                <span i18n>Allow <strong>anonymous users</strong> to look up remote videos/actors that may not be federated with your platform</span>
               </ng-container>
             </my-peertube-checkbox>
           </div>
@@ -477,23 +465,23 @@
               i18n-labelText labelText="Enable global search"
             >
               <ng-container ngProjectAs="description">
-                <div i18n>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</div>
+                <div i18n>⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select.</div>
               </ng-container>
 
               <ng-container ngProjectAs="extra">
                 <div [ngClass]="getDisabledSearchIndexClass()">
                   <label i18n for="searchIndexUrl">Search index URL</label>
 
-                  <div i18n class="label-small-info">
+                  <div i18n class="form-group-description">
                     Use your <a class="link-primary" target="_blank" href="https://framagit.org/framasoft/peertube/search-index">your own search index</a> or choose the official one, <a class="link-primary" target="_blank" href="https://sepiasearch.org">https://sepiasearch.org</a>, that is not moderated.
                   </div>
 
                   <input
                     type="text"  id="searchIndexUrl" class="form-control"
-                    formControlName="url" [ngClass]="{ 'input-error': formErrors()['search.searchIndex.url'] }"
+                    formControlName="url" [ngClass]="{ 'input-error': formErrors.search.searchIndex.url }"
                   >
 
-                  <div *ngIf="formErrors().search.searchIndex.url" class="form-error" role="alert">{{ formErrors().search.searchIndex.url }}</div>
+                  <div *ngIf="formErrors.search.searchIndex.url" class="form-error" role="alert">{{ formErrors.search.searchIndex.url }}</div>
                 </div>
 
                 <div class="mt-3">
@@ -509,7 +497,7 @@
                     i18n-labelText labelText="Search bar uses the global search index by default"
                   >
                     <ng-container ngProjectAs="description">
-                      <span i18n>Otherwise the local search stays used by default</span>
+                      <span i18n>Otherwise, the local search will be used by default</span>
                     </ng-container>
                   </my-peertube-checkbox>
                 </div>
@@ -525,7 +513,7 @@
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- import/export grid -->
+  <div class="pt-two-cols mt-4">
     <div class="title-col">
       <h2 i18n>USER IMPORT/EXPORT</h2>
     </div>
@@ -577,7 +565,7 @@
                     [clearable]="false"
                   ></my-select-custom-value>
 
-                  <div *ngIf="formErrors().export.users.maxUserVideoQuota" class="form-error" role="alert">{{ formErrors().export.users.maxUserVideoQuota }}</div>
+                  <div *ngIf="formErrors.export.users.maxUserVideoQuota" class="form-error" role="alert">{{ formErrors.export.users.maxUserVideoQuota }}</div>
                 </div>
 
                 <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
@@ -587,7 +575,7 @@
 
                   <div i18n class="mt-1 small muted">The archive file is deleted after this period.</div>
 
-                  <div *ngIf="formErrors().export.users.exportExpiration" class="form-error" role="alert">{{ formErrors().export.users.exportExpiration }}</div>
+                  <div *ngIf="formErrors.export.users.exportExpiration" class="form-error" role="alert">{{ formErrors.export.users.exportExpiration }}</div>
                 </div>
 
               </ng-container>
@@ -599,11 +587,11 @@
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- federation grid -->
+  <div class="pt-two-cols mt-4">
     <div class="title-col">
       <h2 i18n>FEDERATION</h2>
       <div i18n class="inner-form-description">
-        Manage <a class="link-primary" routerLink="/admin/settings/follows">relations</a> with other instances.
+        Manage <a class="link-primary" routerLink="/admin/settings/follows">relations</a> with other platforms.
       </div>
     </div>
 
@@ -615,14 +603,14 @@
           <div class="form-group">
             <my-peertube-checkbox
               inputName="followersInstanceEnabled" formControlName="enabled"
-              i18n-labelText labelText="Other instances can follow yours"
+              i18n-labelText labelText="Remote actors can follow your platform"
             ></my-peertube-checkbox>
           </div>
 
           <div class="form-group">
             <my-peertube-checkbox
               inputName="followersInstanceManualApproval" formControlName="manualApproval"
-              i18n-labelText labelText="Manually approve new instance followers"
+              i18n-labelText labelText="Manually approve new followers that follow your platform"
             ></my-peertube-checkbox>
           </div>
         </ng-container>
@@ -635,7 +623,7 @@
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
-                i18n-labelText labelText="Automatically follow back instances"
+                i18n-labelText labelText="Automatically follow back followers that follow your platform"
               >
                 <ng-container ngProjectAs="description">
                   <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
@@ -648,7 +636,7 @@
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
-                i18n-labelText labelText="Automatically follow instances of a public index"
+                i18n-labelText labelText="Automatically follow platforms of a public index"
               >
                 <ng-container ngProjectAs="description">
                   <div i18n>⚠️ This functionality requires a lot of attention and extra moderation.</div>
@@ -663,9 +651,9 @@
                     <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
                     <input
                       type="text" id="followingsInstanceAutoFollowIndexUrl" class="form-control"
-                      formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors()['followings.instance.autoFollowIndex.indexUrl'] }"
+                      formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors.followings.instance.autoFollowIndex.indexUrl }"
                     >
-                    <div *ngIf="formErrors().followings.instance.autoFollowIndex.indexUrl" class="form-error" role="alert">{{ formErrors().followings.instance.autoFollowIndex.indexUrl }}</div>
+                    <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error" role="alert">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
                   </div>
                 </ng-container>
               </my-peertube-checkbox>
@@ -678,68 +666,4 @@
     </div>
   </div>
 
-  <div class="pt-two-cols mt-4"> <!-- administrators grid -->
-    <div class="title-col">
-      <h2 i18n>ADMINISTRATORS</h2>
-    </div>
-
-    <div class="content-col">
-
-      <div class="form-group" formGroupName="admin">
-        <label i18n for="adminEmail">Admin email</label>
-
-        <input
-          type="text" id="adminEmail" class="form-control"
-          formControlName="email" [ngClass]="{ 'input-error': formErrors()['admin.email'] }"
-        >
-
-        <div *ngIf="formErrors().admin.email" class="form-error" role="alert">{{ formErrors().admin.email }}</div>
-      </div>
-
-      <div class="form-group" formGroupName="contactForm">
-        <my-peertube-checkbox
-          inputName="enableContactForm" formControlName="enabled"
-          i18n-labelText labelText="Enable contact form"
-        ></my-peertube-checkbox>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="pt-two-cols mt-4"> <!-- Twitter grid -->
-    <div class="title-col">
-      <h2 i18n>TWITTER/X</h2>
-
-      <div i18n class="inner-form-description">
-        Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box.
-      </div>
-    </div>
-
-    <div class="content-col">
-
-      <ng-container formGroupName="services">
-        <ng-container formGroupName="twitter">
-
-          <div class="form-group">
-            <label for="servicesTwitterUsername" i18n>Your Twitter/X username</label>
-
-            <div class="label-small-info">
-              <p i18n class="mb-0">Indicates the Twitter/X account for the website or platform where the content was published.</p>
-
-              <p i18n>This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</p>
-            </div>
-
-            <input
-              type="text" id="servicesTwitterUsername" class="form-control"
-              formControlName="username" [ngClass]="{ 'input-error': formErrors()['services.twitter.username'] }"
-            >
-
-            <div *ngIf="formErrors().services.twitter.username" class="form-error" role="alert">{{ formErrors().services.twitter.username }}</div>
-          </div>
-
-        </ng-container>
-      </ng-container>
-
-    </div>
-  </div>
 </ng-container>

@@ -1,7 +1,7 @@
-@use 'sass:math';
-@use 'sass:color';
-@use '_variables' as *;
-@import '_bootstrap-mixins';
+@use "sass:math";
+@use "sass:color";
+@use "_variables" as *;
+@import "_bootstrap-mixins";
 
 @mixin underline-primary {
   text-decoration: underline !important;
@@ -62,12 +62,12 @@
   }
 }
 
-@mixin fade-text ($fade-after, $background-color) {
+@mixin fade-text($fade-after, $background-color) {
   position: relative;
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     pointer-events: none;
     width: 100%;
     height: 100%;
@@ -78,7 +78,7 @@
   }
 }
 
-@mixin peertube-word-wrap ($with-hyphen: true) {
+@mixin peertube-word-wrap($with-hyphen: true) {
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -88,7 +88,7 @@
   }
 }
 
-@mixin apply-svg-color ($color) {
+@mixin apply-svg-color($color) {
   ::ng-deep .feather,
   ::ng-deep .material,
   ::ng-deep .misc {
@@ -96,7 +96,7 @@
   }
 }
 
-@mixin fill-path-svg-color ($color) {
+@mixin fill-path-svg-color($color) {
   ::ng-deep svg {
     path {
       fill: $color;
@@ -104,17 +104,17 @@
   }
 }
 
-@mixin fill-svg-color ($color) {
+@mixin fill-svg-color($color) {
   ::ng-deep svg {
     fill: $color;
   }
 }
 
-@mixin rounded-line-height-1-5 ($font-size) {
+@mixin rounded-line-height-1-5($font-size) {
   line-height: calc(#{$font-size} + #{math.round(math.div($font-size, 2))});
 }
 
-@mixin icon ($size) {
+@mixin icon($size) {
   display: inline-block;
   background-repeat: no-repeat;
   background-size: contain;
@@ -124,34 +124,34 @@
   cursor: pointer;
 }
 
-@mixin global-icon-size ($size) {
+@mixin global-icon-size($size) {
   display: inline-block;
   width: $size;
   height: $size;
   line-height: $size;
 }
 
-@mixin responsive-width ($width) {
+@mixin responsive-width($width) {
   width: $width;
 
-  @media screen and (max-width: #{$width - 30px}) {
+  @media screen and (max-width: #{$width + 30px}) {
     width: 100%;
   }
 }
 
-@mixin actor-counters ($separator-margin: 10px) {
+@mixin actor-counters($separator-margin: 10px) {
   color: pvar(--fg-300);
   display: flex;
   align-items: center;
 
   > *:not(:last-child)::after {
-    content: '•';
+    content: "•";
     margin: 0 $separator-margin;
     color: pvar(--primary);
   }
 }
 
-@mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
+@mixin row-blocks($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
   min-height: $min-height;
   padding-bottom: 20px;
@@ -179,7 +179,7 @@
 
   my-global-icon {
     width: 22px;
-    opacity: .7;
+    opacity: 0.7;
     position: relative;
     top: -2px;
 
@@ -189,23 +189,23 @@
 
 @mixin divider($color: pvar(--bg-secondary-400), $background: pvar(--bg)) {
   width: 95%;
-  border-top: .05rem solid $color;
-  height: .05rem;
+  border-top: 0.05rem solid $color;
+  height: 0.05rem;
   text-align: center;
   display: block;
   position: relative;
 
   &[data-content] {
-    margin: .8rem 0;
+    margin: 0.8rem 0;
 
     &::after {
       background: $background;
       color: $color;
       content: attr(data-content);
       display: inline-block;
-      font-size: .7rem;
-      padding: 0 .4rem;
-      transform: translateY(-.65rem);
+      font-size: 0.7rem;
+      padding: 0 0.4rem;
+      transform: translateY(-0.65rem);
     }
   }
 }
@@ -213,7 +213,7 @@
 // applies ratio (default to 16:9) to a child element (using $selector) only using
 // an immediate's parent size. This allows to set a ratio without explicit
 // dimensions, as width/height cannot be computed from each other.
-@mixin block-ratio ($selector: 'div', $inverted-ratio: math.div(9, 16)) {
+@mixin block-ratio($selector: "div", $inverted-ratio: math.div(9, 16)) {
   $padding-percent: math.percentage($inverted-ratio);
 
   position: relative;
@@ -231,7 +231,7 @@
   }
 }
 
-@mixin play-icon ($width, $height) {
+@mixin play-icon($width, $height) {
   width: 0;
   height: 0;
 
@@ -246,13 +246,13 @@
   border-left: $width solid #F4F4F5;
 }
 
-@mixin on-small-main-col () {
+@mixin on-small-main-col() {
   @media screen and (max-width: $small-view) {
     @content;
   }
 }
 
-@mixin on-mobile-main-col () {
+@mixin on-mobile-main-col() {
   @media screen and (max-width: $mobile-view) {
     @content;
   }
@@ -260,7 +260,7 @@
 
 // ---------------------------------------------------------------------------
 
-@mixin margin ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
+@mixin margin($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
   @if $arg2 == null and $arg3 == null and $arg4 == null {
     @include margin-original($arg1, $arg1, $arg1, $arg1);
   } @else if $arg3 == null and $arg4 == null {
@@ -272,31 +272,31 @@
   }
 }
 
-@mixin margin-original ($block-start, $inline-end, $block-end, $inline-start) {
+@mixin margin-original($block-start, $inline-end, $block-end, $inline-start) {
   @include margin-left($inline-start);
   @include margin-right($inline-end);
   @include margin-top($block-start);
   @include margin-bottom($block-end);
 }
 
-@mixin margin-left ($value) {
+@mixin margin-left($value) {
   @include rfs($value, margin-inline-start);
 }
 
-@mixin margin-right ($value) {
+@mixin margin-right($value) {
   @include rfs($value, margin-inline-end);
 }
 
 // ---------------------------------------------------------------------------
 
-@mixin padding-original ($block-start, $inline-end, $block-end, $inline-start) {
+@mixin padding-original($block-start, $inline-end, $block-end, $inline-start) {
   @include padding-left($inline-start);
   @include padding-right($inline-end);
   @include padding-top($block-start);
   @include padding-bottom($block-end);
 }
 
-@mixin padding ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
+@mixin padding($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
   @if $arg2 == null and $arg3 == null and $arg4 == null {
     @include padding-original($arg1, $arg1, $arg1, $arg1);
   } @else if $arg3 == null and $arg4 == null {
@@ -308,16 +308,15 @@
   }
 }
 
-@mixin padding-left ($value) {
+@mixin padding-left($value) {
   @include rfs($value, padding-inline-start);
 }
 
-@mixin padding-right ($value) {
+@mixin padding-right($value) {
   @include rfs($value, padding-inline-end);
 }
 
 // ---------------------------------------------------------------------------
-
 
 /**
  *
@@ -325,7 +324,7 @@
  *
  */
 
-@mixin right ($value) {
+@mixin right($value) {
   @supports (inset-inline-end: $value) {
     inset-inline-end: $value;
   }
@@ -335,8 +334,7 @@
   }
 }
 
-
-@mixin left ($value) {
+@mixin left($value) {
   @supports (inset-inline-start: $value) {
     inset-inline-start: $value;
   }
@@ -345,4 +343,3 @@
     left: $value;
   }
 }
-

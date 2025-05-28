@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-validators'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig, VideoCommentPolicyType, VideoConstant } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
@@ -51,7 +51,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   commentPolicies: VideoConstant<VideoCommentPolicyType>[] = []
   serverConfig: HTMLServerConfig

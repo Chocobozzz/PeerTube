@@ -1,47 +1,47 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
-@import './_bootstrap-variables';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/maps';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/utilities';
-@import 'bootstrap/scss/root';
-@import 'bootstrap/scss/reboot';
-@import 'bootstrap/scss/type';
-@import 'bootstrap/scss/grid';
-@import 'bootstrap/scss/forms';
-@import 'bootstrap/scss/buttons';
-@import 'bootstrap/scss/transitions';
-@import 'bootstrap/scss/dropdown';
-@import 'bootstrap/scss/button-group';
-@import 'bootstrap/scss/nav';
-@import 'bootstrap/scss/card';
-@import 'bootstrap/scss/accordion';
-@import 'bootstrap/scss/alert';
-@import 'bootstrap/scss/close';
-@import 'bootstrap/scss/modal';
-@import 'bootstrap/scss/tooltip';
-@import 'bootstrap/scss/popover';
-@import 'bootstrap/scss/spinners';
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
+@import "./_bootstrap-variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/popover";
+@import "bootstrap/scss/spinners";
 
 /* stylelint-disable-next-line at-rule-empty-line-before */
-@import 'bootstrap/scss/helpers/clearfix';
-@import 'bootstrap/scss/helpers/color-bg';
+@import "bootstrap/scss/helpers/clearfix";
+@import "bootstrap/scss/helpers/color-bg";
 // @import 'bootstrap/scss/helpers/colored-links';
-@import 'bootstrap/scss/helpers/focus-ring';
-@import 'bootstrap/scss/helpers/icon-link';
-@import 'bootstrap/scss/helpers/ratio';
-@import 'bootstrap/scss/helpers/position';
-@import 'bootstrap/scss/helpers/stacks';
-@import 'bootstrap/scss/helpers/visually-hidden';
-@import 'bootstrap/scss/helpers/stretched-link';
-@import 'bootstrap/scss/helpers/text-truncation';
-@import 'bootstrap/scss/helpers/vr';
+@import "bootstrap/scss/helpers/focus-ring";
+@import "bootstrap/scss/helpers/icon-link";
+@import "bootstrap/scss/helpers/ratio";
+@import "bootstrap/scss/helpers/position";
+@import "bootstrap/scss/helpers/stacks";
+@import "bootstrap/scss/helpers/visually-hidden";
+@import "bootstrap/scss/helpers/stretched-link";
+@import "bootstrap/scss/helpers/text-truncation";
+@import "bootstrap/scss/helpers/vr";
 
 /* stylelint-disable-next-line at-rule-empty-line-before */
-@import 'bootstrap/scss/utilities/api';
+@import "bootstrap/scss/utilities/api";
 
 body {
   --bs-border-color-translucent: #{pvar(--input-border-color)};
@@ -166,7 +166,7 @@ body {
 @media screen and (min-width: #{breakpoint(md)}) {
   .modal::before {
     vertical-align: middle;
-    content: ' ';
+    content: " ";
     height: 100%;
   }
 
@@ -216,7 +216,6 @@ body {
     }
   }
 }
-
 
 // On desktop browsers, make the content and header horizontally sticked to right not move when modal open and close
 .modal-open {
@@ -299,12 +298,6 @@ body {
   font-size: $button-font-size;
 }
 
-.form-control {
-  color: pvar(--fg);
-  background-color: pvar(--input-bg);
-  outline: none;
-}
-
 .input-group {
   > .btn,
   > .input-group-text {
@@ -342,7 +335,7 @@ body {
 
   .form-control-clear {
     position: absolute;
-    right: .5rem;
+    right: 0.5rem;
     top: 0;
     bottom: 0;
     opacity: 0.4;
@@ -363,12 +356,11 @@ body {
   vertical-align: top;
 }
 
-
 // ---------------------------------------------------------------------------
 // RTL compatibility
 // ---------------------------------------------------------------------------
 
-:root[dir=rtl] .modal .modal-header .modal-title {
+:root[dir="rtl"] .modal .modal-header .modal-title {
   margin-inline-end: auto;
   margin-right: unset;
 }

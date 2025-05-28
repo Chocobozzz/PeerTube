@@ -1,7 +1,5 @@
-import { Observable, of, Subject } from 'rxjs'
-import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable, LOCALE_ID, inject } from '@angular/core'
+import { inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
@@ -14,6 +12,8 @@ import {
   VideoPrivacyType
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { Observable, of, Subject } from 'rxjs'
+import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -36,8 +36,6 @@ export class ServerService {
   private videoPlaylistPrivaciesObservable: Observable<VideoConstant<VideoPlaylistPrivacyType>[]>
   private videoLanguagesObservable: Observable<VideoConstant<string>[]>
   private configObservable: Observable<ServerConfig>
-
-  private configReset = false
 
   private configLoaded = false
   private config: ServerConfig
@@ -68,13 +66,14 @@ export class ServerService {
 
   resetConfig () {
     this.configLoaded = false
-    this.configReset = true
 
     // Notify config update
-    return this.getConfig()
+    return this.getConfig({ isReset: true })
   }
 
-  getConfig () {
+  getConfig (options: {
+    isReset?: boolean
+  } = {}) {
     if (this.configLoaded) return of(this.config)
 
     if (!this.configObservable) {
@@ -86,9 +85,8 @@ export class ServerService {
             this.configLoaded = true
           }),
           tap(config => {
-            if (this.configReset) {
+            if (options.isReset) {
               this.configReloaded.next(config)
-              this.configReset = false
             }
           }),
           share()

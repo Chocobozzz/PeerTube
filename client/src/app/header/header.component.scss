@@ -1,8 +1,8 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
-@use '_bootstrap-variables' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
+@use "_bootstrap-variables" as *;
 
 .mobile-msg {
   display: flex;
@@ -29,7 +29,8 @@
   --co-logo-size: 34px;
   --co-root-padding: 1.5rem;
 
-  background-color: pvar(--bg);
+  color: pvar(--header-fg);
+  background-color: pvar(--header-bg);
 
   padding: var(--co-root-padding);
   width: 100%;
@@ -96,7 +97,7 @@ my-search-typeahead {
 }
 
 .dropdown {
-  z-index: #{z('header') + 1} !important;
+  z-index: #{z("header") + 1} !important;
 }
 
 .dropdown-item {
@@ -119,7 +120,7 @@ my-search-typeahead {
 
 .logged-in-container {
   border-radius: 25px;
-  transition: all .1s ease-in-out;
+  transition: all 0.1s ease-in-out;
   cursor: pointer;
   max-width: 250px;
   height: 100%;
@@ -173,7 +174,7 @@ my-actor-avatar {
     @include margin-right(0.5rem);
   }
 
-  .margin-button[theme=tertiary] {
+  .margin-button[theme="tertiary"] {
     @include margin-right(5px);
   }
 
@@ -238,7 +239,7 @@ my-actor-avatar {
   }
 
   .peertube-title {
-    @include margin-right(5px)
+    @include margin-right(5px);
   }
 
   .instance-name {

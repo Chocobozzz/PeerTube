@@ -56,6 +56,19 @@ export interface CustomConfig {
 
   theme: {
     default: string
+
+    customization: {
+      primaryColor: string
+      foregroundColor: string
+      backgroundColor: string
+      backgroundSecondaryColor: string
+      menuForegroundColor: string
+      menuBackgroundColor: string
+      menuBorderRadius: string
+      headerForegroundColor: string
+      headerBackgroundColor: string
+      inputBorderRadius: string
+    }
   }
 
   services: {

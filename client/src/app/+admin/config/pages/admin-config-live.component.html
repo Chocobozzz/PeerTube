@@ -1,11 +1,13 @@
-<ng-container [formGroup]="form()">
+<my-admin-save-bar i18n-title title="Live configuration" (save)="save()" [form]="form" [formErrors]="formErrors" [inconsistentOptions]="checkTranscodingConsistentOptions()"></my-admin-save-bar>
 
-  <div class="pt-two-cols mt-5">
+<ng-container [formGroup]="form">
+
+  <div class="pt-two-cols">
     <div class="title-col">
       <h2 i18n>LIVE</h2>
 
       <div i18n class="inner-form-description">
-        Enable users of your instance to stream live.
+        Enable users of your platform to stream a live.
       </div>
     </div>
 
@@ -46,16 +48,16 @@
               </div>
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
-                <label i18n for="liveMaxInstanceLives">Max simultaneous lives created on your instance</label>
+                <label i18n for="liveMaxInstanceLives">Max simultaneous lives created on your platform</label>
 
                 <span i18n class="ms-2 small muted">(-1 for "unlimited")</span>
 
                 <div class="number-with-unit">
                   <input type="number" id="liveMaxInstanceLives" formControlName="maxInstanceLives" />
-                  <span i18n>{form().value['live']['maxInstanceLives'], plural, =1 {live} other {lives}}</span>
+                  <span i18n>{form.value.live.maxInstanceLives, plural, =1 {live} other {lives}}</span>
                 </div>
 
-                <div *ngIf="formErrors().live.maxInstanceLives" class="form-error" role="alert">{{ formErrors().live.maxInstanceLives }}</div>
+                <div *ngIf="formErrors.live.maxInstanceLives" class="form-error" role="alert">{{ formErrors.live.maxInstanceLives }}</div>
               </div>
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
@@ -64,10 +66,10 @@
 
                 <div class="number-with-unit">
                   <input type="number" id="liveMaxUserLives" formControlName="maxUserLives" />
-                  <span i18n>{form().value['live']['maxUserLives'], plural, =1 {live} other {lives}}</span>
+                  <span i18n>{form.value.live.maxUserLives, plural, =1 {live} other {lives}}</span>
                 </div>
 
-                <div *ngIf="formErrors().live.maxUserLives" class="form-error" role="alert">{{ formErrors().live.maxUserLives }}</div>
+                <div *ngIf="formErrors.live.maxUserLives" class="form-error" role="alert">{{ formErrors.live.maxUserLives }}</div>
               </div>
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
@@ -75,7 +77,7 @@
 
                 <my-select-options inputId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"></my-select-options>
 
-                <div *ngIf="formErrors().live.maxDuration" class="form-error" role="alert">{{ formErrors().live.maxDuration }}</div>
+                <div *ngIf="formErrors.live.maxDuration" class="form-error" role="alert">{{ formErrors.live.maxDuration }}</div>
               </div>
 
             </ng-container>
@@ -123,7 +125,7 @@
                   <span>FPS</span>
                 </div>
 
-                <div *ngIf="formErrors().live.transcoding.fps.max" class="form-error" role="alert">{{ formErrors().live.transcoding.fps.max }}</div>
+                <div *ngIf="formErrors.live.transcoding.fps.max" class="form-error" role="alert">{{ formErrors.live.transcoding.fps.max }}</div>
               </div>
 
               <div class="ms-2 mt-3">
@@ -193,7 +195,7 @@
               formControlName="threads"
               [clearable]="false"
             ></my-select-custom-value>
-            <div *ngIf="formErrors().live.transcoding.threads" class="form-error" role="alert">{{ formErrors().live.transcoding.threads }}</div>
+            <div *ngIf="formErrors.live.transcoding.threads" class="form-error" role="alert">{{ formErrors.live.transcoding.threads }}</div>
           </div>
 
           <div class="form-group mt-4" [ngClass]="getDisabledLiveLocalTranscodingClass()">
@@ -202,7 +204,7 @@
 
             <my-select-options inputId="liveTranscodingProfile" formControlName="profile" [items]="transcodingProfiles"></my-select-options>
 
-            <div *ngIf="formErrors().live.transcoding.profile" class="form-error" role="alert">{{ formErrors().live.transcoding.profile }}</div>
+            <div *ngIf="formErrors.live.transcoding.profile" class="form-error" role="alert">{{ formErrors.live.transcoding.profile }}</div>
           </div>
 
         </ng-container>

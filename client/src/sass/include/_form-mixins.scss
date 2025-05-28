@@ -12,7 +12,7 @@
   max-width: $width;
   color: pvar(--input-fg);
   background-color: pvar(--input-bg);
-  border: 1px solid pvar(--input-border-color);
+  border: pvar(--input-border-width) solid pvar(--input-border-color);
   border-radius: pvar(--input-border-radius);
 
   @include rounded-line-height-1-5($font-size);
@@ -84,7 +84,7 @@
 
       padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} + 23px) pvar(--input-y-padding) pvar(--input-x-padding);
       position: relative;
-      border: 1px solid var(--input-border-color) !important;
+      border: pvar(--input-border-width) solid var(--input-border-color) !important;
       appearance: none;
       text-overflow: ellipsis;
 

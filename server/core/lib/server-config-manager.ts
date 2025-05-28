@@ -156,7 +156,19 @@ class ServerConfigManager {
       theme: {
         registered: this.getRegisteredThemes(),
         builtIn: this.getBuiltInThemes(),
-        default: defaultTheme
+        default: defaultTheme,
+        customization: {
+          primaryColor: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR,
+          foregroundColor: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR,
+          backgroundColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR,
+          backgroundSecondaryColor: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_SECONDARY_COLOR,
+          menuForegroundColor: CONFIG.THEME.CUSTOMIZATION.MENU_FOREGROUND_COLOR,
+          menuBackgroundColor: CONFIG.THEME.CUSTOMIZATION.MENU_BACKGROUND_COLOR,
+          menuBorderRadius: CONFIG.THEME.CUSTOMIZATION.MENU_BORDER_RADIUS,
+          headerForegroundColor: CONFIG.THEME.CUSTOMIZATION.HEADER_FOREGROUND_COLOR,
+          headerBackgroundColor: CONFIG.THEME.CUSTOMIZATION.HEADER_BACKGROUND_COLOR,
+          inputBorderRadius: CONFIG.THEME.CUSTOMIZATION.INPUT_BORDER_RADIUS
+        }
       },
       email: {
         enabled: isEmailEnabled()

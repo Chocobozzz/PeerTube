@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR } from '@app/shared/form-validators/video-validators'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import debug from 'debug'
 import { DatePickerModule } from 'primeng/datepicker'
@@ -44,7 +44,7 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   videoEdit: VideoEdit
 

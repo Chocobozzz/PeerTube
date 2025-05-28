@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core'
 import { HTMLServerConfig, ServerConfig, ServerConfigTheme } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { capitalizeFirstLetter } from '@root-helpers/string'
-import { ThemeManager } from '@root-helpers/theme-manager'
+import { ColorPaletteThemeConfig, ThemeCustomizationKey, ThemeManager } from '@root-helpers/theme-manager'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
@@ -72,6 +72,14 @@ export class ThemeService {
     ]
   }
 
+  updateColorPalette (config: ColorPaletteThemeConfig = this.serverConfig.theme) {
+    this.themeManager.injectColorPalette({ currentTheme: this.getCurrentThemeName(), config })
+  }
+
+  getCSSConfigValue (configKey: ThemeCustomizationKey) {
+    return this.themeManager.getCSSConfigValue(configKey)
+  }
+
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {
     this.themes = themes
 
@@ -89,7 +97,7 @@ export class ThemeService {
     }
   }
 
-  private getCurrentThemeName () {
+  getCurrentThemeName () {
     if (this.themeFromLocalStorage) return this.themeFromLocalStorage.name
 
     const theme = this.auth.isLoggedIn()
@@ -137,7 +145,7 @@ export class ThemeService {
       this.localStorageService.removeItem(UserLocalStorageKeys.LAST_ACTIVE_THEME, false)
     }
 
-    this.themeManager.injectCoreColorPalette()
+    this.themeManager.injectColorPalette({ currentTheme: currentThemeName, config: this.serverConfig.theme })
 
     this.oldThemeName = currentThemeName
   }

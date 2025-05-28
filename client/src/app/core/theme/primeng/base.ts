@@ -179,7 +179,7 @@ export default {
         overlay: {
           select: {
             background: 'var(--bg)',
-            borderColor: 'var---input-border-color)',
+            borderColor: 'var(--input-border-color)',
             color: 'var(--fg)'
           },
           popover: {

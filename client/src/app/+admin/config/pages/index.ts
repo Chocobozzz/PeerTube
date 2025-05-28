@@ -1,0 +1,6 @@
+export * from './admin-config-advanced.component'
+export * from './admin-config-general.component'
+export * from './admin-config-homepage.component'
+export * from './admin-config-information.component'
+export * from './admin-config-live.component'
+export * from './admin-config-vod.component'

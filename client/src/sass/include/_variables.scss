@@ -1,12 +1,12 @@
-@use 'sass:math';
-@use 'sass:color';
-@use 'sass:map';
+@use "sass:math";
+@use "sass:color";
+@use "sass:map";
 
 $medium-view: 1000px;
 $small-view: 800px;
 $mobile-view: 500px;
 
-$main-fonts: 'Source Sans Pro', sans-serif;
+$main-fonts: "Source Sans Pro", sans-serif;
 $font-regular: 400;
 $font-semibold: 600;
 $font-bold: 700;
@@ -28,6 +28,7 @@ $header-height-mobile-view-without-search: 80px;
 $header-mobile-msg-height: 48px;
 
 $menu-width: 248px;
+$menu-border-radius: 14px;
 $menu-collapsed-width: 50px;
 $menu-margin-left: 2rem;
 $menu-overlay-view: 1200px;
@@ -74,7 +75,7 @@ $player-portrait-bottom-space: 50px;
 $sub-menu-margin-bottom: 30px;
 $sub-menu-margin-bottom-small-view: 10px;
 
-$focus-box-shadow-dimensions: 0 0 0 .2rem;
+$focus-box-shadow-dimensions: 0 0 0 0.2rem;
 
 $form-input-font-size: 16px;
 
@@ -88,46 +89,37 @@ $variables: (
   --x-margin-content: var(--x-margin-content),
   --tmp-header-height: var(--tmp-header-height),
   --header-height: var(--header-height),
-
+  --header-fg: var(--header-fg),
+  --header-bg: var(--header-bg),
   --fg: var(--fg),
   --bg: var(--bg),
-
   --red: var(--red),
   --green: var(--green),
-
   --input-fg: var(--input-fg),
-
   --input-bg: var(--input-bg),
   --input-bg-550: var(--input-bg-550),
   --input-bg-600: var(--input-bg-600),
   --input-bg-in-secondary: var(--input-bg-in-secondary),
-
   --input-danger-fg: var(--input-danger-fg),
   --input-danger-bg: var(--input-danger-bg),
-
   --input-placeholder: var(--input-placeholder),
   --input-border-color: var(--input-border-color),
   --input-border-radius: var(--input-border-radius),
-
+  --input-border-width: var(--input-border-width),
   --input-check-active-fg: var(--input-check-active-fg),
   --input-check-active-bg: var(--input-check-active-bg),
-
   --input-x-padding: var(--input-x-padding),
   --input-y-padding: var(--input-y-padding),
-
   --textarea-x-padding: var(--textarea-x-padding),
   --textarea-y-padding: var(--textarea-y-padding),
   --textarea-fg: var(--textarea-fg),
   --textarea-bg: var(--textarea-bg),
-
   --support-btn-bg: var(--support-btn-bg),
   --support-btn-fg: var(--support-btn-fg),
   --support-btn-heart-bg: var(--support-btn-heart-bg),
-
   --secondary-icon-color: var(--secondary-icon-color),
   --active-icon-color: var(--active-icon-color),
   --active-icon-bg: var(--active-icon-bg),
-
   --fg-500: var(--fg-500),
   --fg-450: var(--fg-450),
   --fg-400: var(--fg-400),
@@ -138,7 +130,6 @@ $variables: (
   --fg-150: var(--fg-150),
   --fg-100: var(--fg-100),
   --fg-50: var(--fg-50),
-
   --bg-secondary-600: var(--bg-secondary-600),
   --bg-secondary-550: var(--bg-secondary-550),
   --bg-secondary-500: var(--bg-secondary-500),
@@ -148,7 +139,6 @@ $variables: (
   --bg-secondary-300: var(--bg-secondary-300),
   --bg-secondary-250: var(--bg-secondary-250),
   --bg-secondary-200: var(--bg-secondary-200),
-
   --menu-fg: var(--menu-fg),
   --menu-fg-600: var(--menu-fg-600),
   --menu-fg-550: var(--menu-fg-550),
@@ -162,7 +152,6 @@ $variables: (
   --menu-fg-150: var(--menu-fg-150),
   --menu-fg-100: var(--menu-fg-100),
   --menu-fg-50: var(--menu-fg-50),
-
   --menu-bg: var(--menu-bg),
   --menu-bg-600: var(--menu-bg-600),
   --menu-bg-550: var(--menu-bg-550),
@@ -173,10 +162,9 @@ $variables: (
   --menu-bg-300: var(--menu-bg-300),
   --menu-bg-250: var(--menu-bg-250),
   --menu-bg-200: var(--menu-bg-200),
-
   --menu-margin-left: var(--menu-margin-left),
   --menu-width: var(--menu-width),
-
+  --menu-border-radius: var(--menu-border-radius),
   --on-primary: var(--on-primary),
   --on-primary-700: var(--on-primary-700),
   --on-primary-650: var(--on-primary-650),
@@ -192,7 +180,6 @@ $variables: (
   --on-primary-150: var(--on-primary-150),
   --on-primary-100: var(--on-primary-100),
   --on-primary-50: var(--on-primary-50),
-
   --primary: var(--primary),
   --primary-700: var(--primary-700),
   --primary-650: var(--primary-650),
@@ -208,16 +195,13 @@ $variables: (
   --primary-150: var(--primary-150),
   --primary-100: var(--primary-100),
   --primary-50: var(--primary-50),
-
   --border-primary: var(--border-primary),
   --border-secondary: var(--border-secondary),
-
   --alert-primary-fg: var(--alert-primary-fg),
   --alert-primary-bg: var(--alert-primary-bg),
   --alert-primary-border-color: var(--alert-primary-border-color),
-
   --embed-fg: var(--embed-fg),
-  --embed-big-play-bg: var(--embed-big-play-bg),
+  --embed-big-play-bg: var(--embed-big-play-bg)
 );
 
 // SASS type check our CSS variables
@@ -225,7 +209,7 @@ $variables: (
   @if map.has-key($variables, $variable) {
     @return map.get($variables, $variable);
   } @else {
-    @error 'ERROR: Variable #{$variable} does not exist';
+    @error "ERROR: Variable #{$variable} does not exist";
   }
 }
 
@@ -233,7 +217,7 @@ $variables: (
   @if map.has-key($variables, $variable) and map.has-key($variables, $fallback) {
     @return var($variable, map.get($variables, $fallback));
   } @else {
-    @error 'ERROR: Variable #{$variable} or #{$fallback} does not exist';
+    @error "ERROR: Variable #{$variable} or #{$fallback} does not exist";
   }
 }
 
@@ -242,20 +226,20 @@ $variables: (
 // ---------------------------------------------------------------------------
 
 $zindex: (
-  miniature       :    10,
-  overlay         : 12550,
-  menu            : 12600,
+  miniature: 10,
+  overlay: 12550,
+  menu: 12600,
   search-typeahead: 12650,
-  popover         : 13000,
-  tooltip         : 14000,
-  loadbar         : 15000,
-  privacymsg      : 17500,
-  root-header     : 17500,
-  help-popover    : 17600,
-  dropdown        : 17600,
-  modal           : 19000,
-  hotkeys         : 19000,
-  notification    : 20000
+  popover: 13000,
+  tooltip: 14000,
+  loadbar: 15000,
+  privacymsg: 17500,
+  root-header: 17500,
+  help-popover: 17600,
+  dropdown: 17600,
+  modal: 19000,
+  hotkeys: 19000,
+  notification: 20000
 );
 
 @function z($label) {

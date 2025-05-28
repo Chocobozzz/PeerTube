@@ -2,7 +2,7 @@ import { NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { NSFWFlag, NSFWFlagType, NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
 import { pick } from 'lodash-es'
 import { Subject, Subscription } from 'rxjs'
@@ -55,7 +55,7 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   nsfwItems: SelectOptionsItem[] = [
     {

@@ -1,19 +1,16 @@
 import { Injectable, inject } from '@angular/core'
 import { AbstractControl, FormGroup, StatusChangeEvent } from '@angular/forms'
 import { filter, firstValueFrom } from 'rxjs'
-import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
+import { BuildFormArgument, FormDefault, FormReactiveErrors, FormReactiveMessages } from '../form-validators/form-validator.model'
 import { FormValidatorService } from './form-validator.service'
 
-export type FormReactiveErrors = { [id: string]: string | FormReactiveErrors | FormReactiveErrors[] }
-export type FormReactiveValidationMessages = {
-  [id: string]: { [name: string]: string } | FormReactiveValidationMessages | FormReactiveValidationMessages[]
-}
+export * from '../form-validators/form-validator.model'
 
 @Injectable()
 export class FormReactiveService {
   private formValidatorService = inject(FormValidatorService)
 
-  buildForm<T = any> (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
+  buildForm<T = any> (obj: BuildFormArgument, defaultValues: FormDefault = {}) {
     const { formErrors, validationMessages, form } = this.formValidatorService.internalBuildForm<T>(obj, defaultValues)
 
     form.events
@@ -44,7 +41,7 @@ export class FormReactiveService {
     }
   }
 
-  forceCheck (form: FormGroup, formErrors: any, validationMessages: FormReactiveValidationMessages) {
+  forceCheck (form: FormGroup, formErrors: any, validationMessages: FormReactiveMessages) {
     this.onStatusChanged({ form, formErrors, validationMessages, onlyDirty: false })
   }
 
@@ -76,7 +73,7 @@ export class FormReactiveService {
   private onStatusChanged (options: {
     form: FormGroup
     formErrors: FormReactiveErrors
-    validationMessages: FormReactiveValidationMessages
+    validationMessages: FormReactiveMessages
     onlyDirty?: boolean // default true
   }) {
     const { form, formErrors, validationMessages, onlyDirty = true } = options
@@ -86,7 +83,7 @@ export class FormReactiveService {
         this.onStatusChanged({
           form: form.controls[field] as FormGroup,
           formErrors: formErrors[field] as FormReactiveErrors,
-          validationMessages: validationMessages[field] as FormReactiveValidationMessages,
+          validationMessages: validationMessages[field] as FormReactiveMessages,
           onlyDirty
         })
 
@@ -99,7 +96,7 @@ export class FormReactiveService {
 
       if (!control || (onlyDirty && !control.dirty) || !control.enabled || !control.errors) continue
 
-      const staticMessages = validationMessages[field] as FormReactiveValidationMessages
+      const staticMessages = validationMessages[field] as FormReactiveMessages
       for (const key of Object.keys(control.errors)) {
         const formErrorValue = control.errors[key]
 

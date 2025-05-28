@@ -1,0 +1,14 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+@import "bootstrap/scss/mixins";
+
+.root {
+  display: flex;
+}
+
+@media screen and (max-width: $medium-view) {
+  .root {
+    margin-bottom: 150px;
+  }
+}

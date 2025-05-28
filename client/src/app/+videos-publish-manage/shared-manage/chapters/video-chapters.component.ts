@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import debug from 'debug'
@@ -52,7 +52,7 @@ export class VideoChaptersComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors & { chapters?: { title: string }[] } = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   videoEdit: VideoEdit
 

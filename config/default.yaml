@@ -1040,6 +1040,25 @@ followings:
 theme:
   default: 'default'
 
+  # Easily redefine the client UI when the user is using your default instance theme
+  # Use null to keep the default values
+  # If you need more advanced customizations, install or develop a dedicated theme: https://docs.joinpeertube.org/contribute/plugins
+  customization:
+    primary_color: null # Hex color. Example: '#FF8F37'
+
+    foreground_color: null # Hex color
+    background_color: null # Hex color
+    background_secondary_color: null # Hex color
+
+    menu_foreground_color: null # Hex color
+    menu_background_color: null # Hex color
+    menu_border_radius: null # Pixels. Example: '5px'
+
+    header_background_color: null # Hex color
+    header_foreground_color: null # Hex color
+
+    input_border_radius: null # Pixels
+
 broadcast_message:
   enabled: false
   message: '' # Support markdown
@@ -1074,6 +1093,7 @@ search:
 
 # PeerTube client/interface configuration
 client:
+
   videos:
     miniature:
       # By default PeerTube client displays author username

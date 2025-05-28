@@ -214,7 +214,6 @@
               "escape-string-regexp",
               "is-plain-object",
               "parse-srcset",
-              "deepmerge",
               "core-js/features/reflect",
               "hammerjs",
               "jschannel"

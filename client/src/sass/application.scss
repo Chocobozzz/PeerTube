@@ -69,7 +69,7 @@ strong {
 
 input[readonly] {
   // Force blank on readonly inputs
-  background-color: pvar(--input-bg) !important;
+  background-color: pvar(--input-bg);
 }
 
 input,

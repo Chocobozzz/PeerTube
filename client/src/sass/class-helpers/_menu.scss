@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .sub-menu-entry {
   border: 0;
@@ -50,14 +50,6 @@
   }
 }
 
-.admin-sub-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
 .pt-breadcrumb {
   display: flex;
   flex-wrap: wrap;
@@ -83,7 +75,7 @@
 
       &::before {
         display: inline-block;
-        content: '/';
+        content: "/";
 
         @include padding-right(0.5rem);
       }

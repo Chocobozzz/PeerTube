@@ -992,6 +992,39 @@ const CONFIG = {
   THEME: {
     get DEFAULT () {
       return config.get<string>('theme.default')
+    },
+
+    CUSTOMIZATION: {
+      get PRIMARY_COLOR () {
+        return config.get<string>('theme.customization.primary_color')
+      },
+      get FOREGROUND_COLOR () {
+        return config.get<string>('theme.customization.foreground_color')
+      },
+      get BACKGROUND_COLOR () {
+        return config.get<string>('theme.customization.background_color')
+      },
+      get BACKGROUND_SECONDARY_COLOR () {
+        return config.get<string>('theme.customization.background_secondary_color')
+      },
+      get MENU_FOREGROUND_COLOR () {
+        return config.get<string>('theme.customization.menu_foreground_color')
+      },
+      get MENU_BACKGROUND_COLOR () {
+        return config.get<string>('theme.customization.menu_background_color')
+      },
+      get MENU_BORDER_RADIUS () {
+        return config.get<string>('theme.customization.menu_border_radius')
+      },
+      get HEADER_BACKGROUND_COLOR () {
+        return config.get<string>('theme.customization.header_background_color')
+      },
+      get HEADER_FOREGROUND_COLOR () {
+        return config.get<string>('theme.customization.header_foreground_color')
+      },
+      get INPUT_BORDER_RADIUS () {
+        return config.get<string>('theme.customization.input_border_radius')
+      }
     }
   },
   BROADCAST_MESSAGE: {

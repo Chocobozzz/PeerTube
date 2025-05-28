@@ -1,10 +1,18 @@
-<ng-container [formGroup]="form()">
+<my-admin-save-bar i18n-title title="VOD configuration" (save)="save()" [form]="form" [formErrors]="formErrors" [inconsistentOptions]="checkTranscodingConsistentOptions()"></my-admin-save-bar>
 
-  <div class="pt-two-cols mt-4">
-    <div class="title-col"></div>
+<ng-container [formGroup]="form">
+
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h2 i18n>TRANSCODING</h2>
+
+      <div i18n class="inner-form-description">
+        Process uploaded videos so that they are streamable on any device. Although this is costly in terms of resources, it is a critical part of PeerTube, so proceed with caution.
+      </div>
+    </div>
+
     <div class="content-col">
-
-      <div class="callout callout-primary">
+      <div class="callout callout-primary mb-4">
         <span i18n>
           Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.
         </span>
@@ -15,20 +23,6 @@
           However, you may want to read <a class="link-primary" target="_blank" rel="noopener noreferrer" href="https://docs.joinpeertube.org/admin/configuration#vod-transcoding">our guidelines</a> before tweaking the following values.
         </span>
       </div>
-    </div>
-  </div>
-
-  <div class="pt-two-cols mt-4">
-    <div class="title-col">
-      <h2 i18n>TRANSCODING</h2>
-
-      <div i18n class="inner-form-description">
-        Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
-        resources, this is a critical part of PeerTube, so tread carefully.
-      </div>
-    </div>
-
-    <div class="content-col">
 
       <ng-container formGroupName="transcoding">
 
@@ -151,7 +145,7 @@
                     <span>FPS</span>
                   </div>
 
-                  <div *ngIf="formErrors().transcoding.fps.max" class="form-error" role="alert">{{ formErrors().transcoding.fps.max }}</div>
+                  <div *ngIf="formErrors.transcoding.fps.max" class="form-error" role="alert">{{ formErrors.transcoding.fps.max }}</div>
                 </div>
 
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
@@ -220,7 +214,7 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div *ngIf="formErrors().transcoding.threads" class="form-error" role="alert">{{ formErrors().transcoding.threads }}</div>
+          <div *ngIf="formErrors.transcoding.threads" class="form-error" role="alert">{{ formErrors.transcoding.threads }}</div>
         </div>
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
@@ -232,7 +226,7 @@
             <span i18n>jobs in parallel</span>
           </div>
 
-          <div *ngIf="formErrors().transcoding.concurrency" class="form-error" role="alert">{{ formErrors().transcoding.concurrency }}</div>
+          <div *ngIf="formErrors.transcoding.concurrency" class="form-error" role="alert">{{ formErrors.transcoding.concurrency }}</div>
         </div>
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
@@ -241,7 +235,7 @@
 
           <my-select-options inputId="transcodingProfile" formControlName="profile" [items]="transcodingProfiles"></my-select-options>
 
-          <div *ngIf="formErrors().transcoding.profile" class="form-error" role="alert">{{ formErrors().transcoding.profile }}</div>
+          <div *ngIf="formErrors.transcoding.profile" class="form-error" role="alert">{{ formErrors.transcoding.profile }}</div>
         </div>
 
       </ng-container>

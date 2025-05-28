@@ -2,6 +2,7 @@ import base from './base'
 import autocomplete from './components/autocomplete'
 import checkbox from './components/checkbox'
 import chip from './components/chip'
+import colorpicker from './components/colorpicker'
 import datatable from './components/datatable'
 import datepicker from './components/datepicker'
 import inputchips from './components/inputchips'
@@ -18,6 +19,7 @@ export const PTPrimeTheme = {
     select,
     inputchips,
     chip,
+    colorpicker,
     datepicker,
     inputtext,
     toast,

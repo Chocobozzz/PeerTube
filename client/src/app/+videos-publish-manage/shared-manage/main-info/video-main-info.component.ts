@@ -18,7 +18,7 @@ import {
   VIDEO_TAGS_ARRAY_VALIDATOR
 } from '@app/shared/form-validators/video-validators'
 import { DynamicFormFieldComponent } from '@app/shared/shared-forms/dynamic-form-field.component'
-import { FormReactiveErrors, FormReactiveService, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
 import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
 import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
 import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
@@ -120,7 +120,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrors = {}
-  validationMessages: FormReactiveValidationMessages = {}
+  validationMessages: FormReactiveMessages = {}
 
   forbidScheduledPublication: boolean
   hideWaitTranscoding: boolean
@@ -337,7 +337,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     const { pluginData } = this.videoEdit.toCommonFormPatch()
 
     const pluginObj: { [id: string]: BuildFormValidator } = {}
-    const pluginValidationMessages: FormReactiveValidationMessages = {}
+    const pluginValidationMessages: FormReactiveMessages = {}
     const pluginFormErrors: FormReactiveErrors = {}
     const pluginDefaults: Record<string, string | boolean> = {}
 
