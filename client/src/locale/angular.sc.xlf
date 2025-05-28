@@ -6595,7 +6595,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
-        <source>Password must be at least 6 characters long.</source>
+        <source>Password must be at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters long.</source>
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context>
@@ -6603,7 +6603,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1099684476181448167" datatype="html">
-        <source>Password cannot be more than 255 characters long.</source>
+        <source>Password cannot be more than <x id="INTERPOLATION" equiv-text="{{ maxLength }}"/> characters long.</source>
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">../app/shared/form-validators/user-validators.ts</context>

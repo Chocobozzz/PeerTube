@@ -178,6 +178,7 @@ export interface ServerConfig {
     requiresEmailVerification: boolean
     requiresApproval: boolean
     minimumAge: number
+    minimum_password_length: number
   }
 
   transcoding: {
