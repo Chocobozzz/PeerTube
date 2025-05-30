@@ -18,6 +18,7 @@ import {
   USER_IMPORT_STATES,
   VIDEO_STATES
 } from '@peertube/peertube-server/core/initializers/constants.js'
+import { readdir } from 'fs/promises'
 
 const videojs = readJsonSync(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
@@ -150,17 +151,21 @@ async function writeAll () {
   await writeJSON(join(localePath, 'player.en-US.json'), playerKeys, { spaces: 4 })
   await writeJSON(join(localePath, 'server.en-US.json'), serverKeys, { spaces: 4 })
 
-  for (const key of Object.keys(I18N_LOCALES)) {
-    const playerJsonPath = join(localePath, `player.${key}.json`)
-    const translatedPlayer = readJsonSync(playerJsonPath)
+  for (const file of await readdir(localePath)) {
+    if (file.match(/^player\.[^.]+\.json$/)) {
+      const playerJsonPath = join(localePath, file)
+      const translatedPlayer = readJsonSync(playerJsonPath)
 
-    const newTranslatedPlayer = Object.assign({}, playerKeys, translatedPlayer)
-    await writeJSON(playerJsonPath, newTranslatedPlayer, { spaces: 4 })
+      const newTranslatedPlayer = Object.assign({}, playerKeys, translatedPlayer)
+      await writeJSON(playerJsonPath, newTranslatedPlayer, { spaces: 4 })
+    }
 
-    const serverJsonPath = join(localePath, `server.${key}.json`)
-    const translatedServer = readJsonSync(serverJsonPath)
+    if (file.match(/^server\.[^.]+\.json$/)) {
+      const serverJsonPath = join(localePath, file)
+      const translatedServer = readJsonSync(serverJsonPath)
 
-    const newTranslatedServer = Object.assign({}, serverKeys, translatedServer)
-    await writeJSON(serverJsonPath, newTranslatedServer, { spaces: 4 })
+      const newTranslatedServer = Object.assign({}, serverKeys, translatedServer)
+      await writeJSON(serverJsonPath, newTranslatedServer, { spaces: 4 })
+    }
   }
 }
