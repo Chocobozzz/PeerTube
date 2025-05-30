@@ -14,6 +14,14 @@ locales=$(find src/locale -type f | grep -e 'angular\.[^.]\+\.xlf' | sed 's#^src
 # Merge new translations in other language files
 node ./node_modules/.bin/xliffmerge -p ./.xliffmerge.json $locales
 
+(
+  cd src/locale
+
+  for file in angular.*.xlf; do
+    xmllint --format $file > "$file.tmp" && mv "$file.tmp" "$file"
+  done
+)
+
 # Add our strings too
 cd ../
 npm run i18n:create-custom-files
