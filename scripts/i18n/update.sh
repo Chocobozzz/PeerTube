@@ -9,7 +9,7 @@ npm run build:embed
 cd client
 npm run ng -- extract-i18n --out-file src/locale/angular.xlf
 
-locales=$(find  client/src/locale -type f | grep -e 'angular\.[^.]\+\.xlf' | sed 's#^client/src/locale/angular.##' | sed 's/\.xlf$//' | sort -u | tr '\n' ' ')
+locales=$(find src/locale -type f | grep -e 'angular\.[^.]\+\.xlf' | sed 's#^src/locale/angular.##' | sed 's/\.xlf$//' | sort -u | tr '\n' ' ')
 
 # Merge new translations in other language files
 node ./node_modules/.bin/xliffmerge -p ./.xliffmerge.json $locales
