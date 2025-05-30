@@ -99,7 +99,7 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     UPDATE
       "videoJobInfo"
     SET
-      "${column}" = "videoJobInfo"."${column}" - 1,
+      "${column}" = GREATEST("videoJobInfo"."${column}" - 1, 0),
       "updatedAt" = NOW()
     FROM "video"
     WHERE
