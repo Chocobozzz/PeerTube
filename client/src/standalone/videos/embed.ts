@@ -104,7 +104,7 @@ export class PeerTubeEmbed {
         .then(res => res.json())
     }
 
-    this.peertubeTheme.loadTheme(this.config)
+    this.peertubeTheme.loadThemeStyle(this.config)
 
     const videoId = this.isPlaylistEmbed()
       ? await this.initPlaylist()
@@ -441,7 +441,14 @@ export class PeerTubeEmbed {
 
     const [ { PeerTubePlayer, videojs } ] = await Promise.all([
       this.PeerTubePlayerManagerModulePromise,
-      this.peertubePlugin.loadPlugins(this.config, await this.translationsPromise)
+
+      this.translationsPromise.then(translations => {
+        this.peertubePlugin.init(translations)
+        this.peertubePlugin.loadPlugins(this.config)
+        this.peertubeTheme.loadThemePlugins(this.config)
+
+        return this.peertubePlugin.ensurePluginsAreLoaded()
+      })
     ])
 
     this.videojs = videojs

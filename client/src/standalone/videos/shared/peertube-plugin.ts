@@ -7,24 +7,27 @@ import { Translations } from './translations'
 import { getBackendUrl } from './url'
 
 export class PeerTubePlugin {
-
   private pluginsManager: PluginsManager
 
   constructor (private readonly http: AuthHTTP) {
-
   }
 
-  loadPlugins (config: HTMLServerConfig, translations?: Translations) {
+  init (translations?: Translations) {
     this.pluginsManager = new PluginsManager({
-      peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers({
-        pluginInfo,
-        translations
-      }),
+      peertubeHelpersFactory: pluginInfo =>
+        this.buildPeerTubeHelpers({
+          pluginInfo,
+          translations
+        }),
       backendUrl: getBackendUrl()
     })
+  }
 
+  loadPlugins (config: HTMLServerConfig) {
     this.pluginsManager.loadPluginsList(config)
+  }
 
+  ensurePluginsAreLoaded () {
     return this.pluginsManager.ensurePluginsAreLoaded('embed')
   }
 

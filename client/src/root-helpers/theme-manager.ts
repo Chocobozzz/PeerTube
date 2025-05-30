@@ -54,7 +54,9 @@ export class ThemeManager {
 
   injectCoreColorPalette (iteration = 0) {
     if (iteration > 100) {
-      logger.error('Cannot inject core color palette: too many iterations')
+      logger.error('Too many iteration when checking color palette injection. The theme may be missing the --is-dark CSS variable')
+
+      this.injectColorPalette()
       return
     }
 
