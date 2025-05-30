@@ -1,12 +1,11 @@
-import { readJsonSync, writeJSON } from 'fs-extra/esm'
-import { join } from 'path'
-import { I18N_LOCALES, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
+import { USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import { root } from '@peertube/peertube-node-utils'
 import {
   ABUSE_STATES,
   buildLanguages,
   RUNNER_JOB_STATES,
   USER_EXPORT_STATES,
+  USER_IMPORT_STATES,
   USER_REGISTRATION_STATES,
   VIDEO_CATEGORIES,
   VIDEO_CHANNEL_SYNC_STATE,
@@ -15,10 +14,11 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
-  USER_IMPORT_STATES,
   VIDEO_STATES
 } from '@peertube/peertube-server/core/initializers/constants.js'
+import { readJsonSync, writeJSON } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
+import { join } from 'path'
 
 const videojs = readJsonSync(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
