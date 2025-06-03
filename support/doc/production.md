@@ -417,9 +417,9 @@ sudo systemctl restart peertube && sudo journalctl -fu peertube
 Change `peertube-latest` destination to the previous version and restore your SQL backup:
 
 ```bash
-OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
+OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-20180119-1018.bak" && \
   cd /var/www/peertube && sudo -u peertube unlink ./peertube-latest && \
   sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
-  sudo -u postgres pg_restore -c -C -d postgres "$SQL_BACKUP_PATH" && \
+  sudo -u postgres pg_restore -c -C -d peertube_prod "$SQL_BACKUP_PATH" && \
   sudo systemctl restart peertube
 ```
