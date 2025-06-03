@@ -2,16 +2,23 @@
 
 ## v7.2.0-rc.1
 
+### IMPORTANT NOTES
+
+ * **Important** You need to manually execute a migration script after your upgrade while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: xxx` in PeerTube startup logs):
+   * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-7.2.js`
+   * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-7.2.js`
+
 ### Configuration
 
   * Prefer to not store lives in object storage by default: `object_storage.streaming_playlists.store_live_streams` is now `false` in the config template
-  * Use `hot` trending algorithm by default:  `trending.videos.default` is now `hot` in the config template
+  * Use `hot` trending algorithm by default: `trending.videos.default` is now `hot` in the config template
   * Add global rate limit to video download that can be changed by `download_generate_video.max_parallel_downloads`
 
 ### Docker
 
   * Add missing docker env options to configure live settings [#6948](https://github.com/Chocobozzz/PeerTube/pull/6948)
   * Expose NGINX logs folder in `docker-compose.yml` [#6963](https://github.com/Chocobozzz/PeerTube/pull/6963)
+  * Add exec to NGINX process to ensure is PID 1 and then ensure a graceful shutdown[#7041](https://github.com/Chocobozzz/PeerTube/pull/7041)
 
 ### NGINX
 
@@ -19,6 +26,7 @@
 
 ### Plugins/Themes/Embed API
 
+  * **Breaking change** Theme CSS must include `--is-dark: 0` or `--is-dark: 1` CSS variable for the `body` so PeerTube understands if it's a dark or a light theme
   * Add server plugin hooks (https://docs.joinpeertube.org/api/plugins):
     * `filter:email.subject.result` & `filter:email.template-path.result` [#6876](https://github.com/Chocobozzz/PeerTube/pull/6876)
 
@@ -67,6 +75,12 @@
   * Fix PeerTube account client redirection
   * Prevent plugins to log exceptions
   * Fix broken replay on live privacy change
+  * Fix iOS/Android deep link with URL that contains query params in watch page
+  * Fix ownership changes count
+  * Always specify object storage content type
+  * Fix broken live title in Chinese
+  * Fix theme crash in embed
+  * Fix broken video state on move on object storage failure
 
 
 ## v7.1.1
