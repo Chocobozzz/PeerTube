@@ -1,9 +1,5 @@
 import { Injectable, inject } from '@angular/core'
-import {
-  getDefaultSanitizedHrefAttributes,
-  getDefaultSanitizedSchemes,
-  getDefaultSanitizedTags
-} from '@peertube/peertube-core-utils'
+import { getDefaultSanitizedHrefAttributes, getDefaultSanitizedSchemes, getDefaultSanitizedTags } from '@peertube/peertube-core-utils'
 import DOMPurify, { DOMPurify as DOMPurifyI } from 'dompurify'
 import { LinkifierService } from './linkifier.service'
 
@@ -72,19 +68,38 @@ export class HtmlRendererService {
     })
   }
 
-  removeClassAttributes (html: string) {
+  removeClassAttributes (html: string, options: {
+    additionalTags?: string[]
+    additionalAttributes?: string[]
+  } = {}) {
+    const { additionalTags = [], additionalAttributes = [] } = options
+
     return DOMPurify().sanitize(html, {
-      ALLOWED_TAGS: getDefaultSanitizedTags(),
-      ALLOWED_ATTR: getDefaultSanitizedHrefAttributes().filter(a => a !== 'class'),
+      ALLOWED_TAGS: [ ...getDefaultSanitizedTags(), ...additionalTags ],
+      ALLOWED_ATTR: [ ...getDefaultSanitizedHrefAttributes(), ...additionalAttributes ].filter(a => a !== 'class'),
       ALLOW_DATA_ATTR: true
     })
   }
 
-  async toSimpleSafeHtml (text: string) {
-    let html = this.removeClassAttributes(text)
+  async toSimpleSafeHtml (text: string, options: {
+    allowImages?: boolean
+  } = {}) {
+    const { allowImages = false } = options
+
+    const additionalTags = allowImages
+      ? [ 'img' ]
+      : []
+    const additionalAttributes = allowImages
+      ? [ 'src', 'alt' ]
+      : []
+
+    let html = this.removeClassAttributes(text, { additionalTags, additionalAttributes })
     html = await this.linkifier.linkify(html)
 
-    return this.sanitize(this.simpleDomPurify, html)
+    return this.sanitize(this.simpleDomPurify, html, {
+      additionalTags,
+      additionalAttributes
+    })
   }
 
   async toCustomPageSafeHtml (text: string, additionalAllowedTags: string[] = []) {
