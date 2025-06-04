@@ -11,7 +11,7 @@
 ### SECURITY
 
  * If you installed PeerTube using the [official documentation](https://docs.joinpeertube.org/install/any-os#installation), we highly recommend setting the default user shell to `nologin`. For example on GNU/Linux: `chsh -s /usr/sbin/nologin peertube`
- * If you installed PeerTube runners using the [official Systemd service documentation]https://docs.joinpeertube.org/maintain/tools#as-a-systemd-service(), we highly recommend setting the default user shell to `nologin`. For example on GNU/Linux: `chsh -s /usr/sbin/nologin prunner`
+ * If you installed PeerTube runners using the [official Systemd service documentation](https://docs.joinpeertube.org/maintain/tools#as-a-systemd-service), we highly recommend setting the default user shell to `nologin`. For example on GNU/Linux: `chsh -s /usr/sbin/nologin prunner`
 
 ### Configuration
 
