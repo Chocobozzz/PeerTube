@@ -173,7 +173,7 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
       { id: 'sensitive', label: $localize`Sensitive`, selected: true },
       { id: 'playlists', label: $localize`Playlists`, selected: true },
       { id: 'insights', label: $localize`Insights`, selected: true },
-      { id: 'comments', label: $localize`Comments`, selected: false },
+      { id: 'comments', label: $localize`Comments`, selected: true },
       { id: 'published', label: $localize`Published`, selected: true },
       { id: 'state', label: $localize`State`, selected: true }
     ]
