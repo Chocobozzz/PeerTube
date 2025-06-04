@@ -1,12 +1,17 @@
 # Changelog
 
-## v7.2.0-rc.1
+## v7.2.0
 
 ### IMPORTANT NOTES
 
  * **Important** You need to manually execute a migration script after your upgrade while PeerTube is running and the database migration is complete (`Migrations finished. New migration version schema: xxx` in PeerTube startup logs):
    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-7.2.js`
    * Docker installation: `cd /var/www/peertube-docker && docker compose exec -u peertube peertube node dist/scripts/migrations/peertube-7.2.js`
+
+### SECURITY
+
+ * If you installed PeerTube using the [official documentation](https://docs.joinpeertube.org/install/any-os#installation), we highly recommend setting the default user shell to `nologin`. For example on GNU/Linux: `chsh -s /usr/sbin/nologin peertube`
+ * If you installed PeerTube runners using the [official Systemd service documentation]https://docs.joinpeertube.org/maintain/tools#as-a-systemd-service(), we highly recommend setting the default user shell to `nologin`. For example on GNU/Linux: `chsh -s /usr/sbin/nologin prunner`
 
 ### Configuration
 
@@ -81,6 +86,8 @@
   * Fix broken live title in Chinese
   * Fix theme crash in embed
   * Fix broken video state on move on object storage failure
+  * Fix CORS issue with object storage providers
+  * Correctly display images in support modal
 
 
 ## v7.1.1
