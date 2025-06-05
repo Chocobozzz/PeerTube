@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, ServerService } from '@app/core'
@@ -23,8 +23,9 @@ import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
-import { AdminConfigService, FormResolutions, ResolutionOption } from '../shared/admin-config.service'
+import { AdminConfigService, FormResolutions, ResolutionOption } from '../../../shared/shared-admin/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
+import { Subscription } from 'rxjs'
 
 type Form = {
   live: FormGroup<{
@@ -73,7 +74,7 @@ type Form = {
     AdminSaveBarComponent
   ]
 })
-export class AdminConfigLiveComponent implements OnInit, CanComponentDeactivate {
+export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private configService = inject(AdminConfigService)
   private server = inject(ServerService)
   private route = inject(ActivatedRoute)
@@ -91,6 +92,7 @@ export class AdminConfigLiveComponent implements OnInit, CanComponentDeactivate 
   liveResolutions: ResolutionOption[] = []
 
   private customConfig: CustomConfig
+  private customConfigSub: Subscription
 
   ngOnInit () {
     this.customConfig = this.route.parent.snapshot.data['customConfig']
@@ -111,6 +113,17 @@ export class AdminConfigLiveComponent implements OnInit, CanComponentDeactivate 
     )
 
     this.buildForm()
+
+    this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
+      .subscribe(customConfig => {
+        this.customConfig = customConfig
+
+        this.form.patchValue(this.customConfig)
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.customConfigSub) this.customConfigSub.unsubscribe()
   }
 
   private buildForm () {

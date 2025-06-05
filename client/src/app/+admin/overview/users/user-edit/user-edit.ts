@@ -1,5 +1,5 @@
 import { Directive, OnInit } from '@angular/core'
-import { AdminConfigService } from '@app/+admin/config/shared/admin-config.service'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { getVideoQuotaDailyOptions, getVideoQuotaOptions } from '@app/+admin/shared/user-quota-options'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'

@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AdminConfigService } from '@app/+admin/config/shared/admin-config.service'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
 import {
   USER_EMAIL_VALIDATOR,

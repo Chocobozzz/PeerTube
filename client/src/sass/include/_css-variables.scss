@@ -27,7 +27,8 @@
   --input-fg: var(--inputForegroundColor, #{pvar(--fg)});
 
   --input-bg: var(--inputBackgroundColor, #{pvar(--bg-secondary-400)});
-  --input-bg-in-secondary: #{pvar(--input-bg-550)};
+  --input-bg-in-modal: #{pvar(--input-bg-550)};
+  --input-bg-in-secondary: #{pvar(--input-bg-600)};
 
   --input-danger-fg: #9C221C;
   --input-danger-bg: #FEBBB2;
@@ -48,6 +49,8 @@
   --textarea-x-padding: 15px;
   --textarea-fg: var(--textareaForegroundColor, #{pvar(--input-fg)});
   --textarea-bg: var(--textareaBackgroundColor, #{pvar(--input-bg)});
+  --textarea-bg-in-modal: #{pvar(--input-bg-in-modal)};
+  --textarea-bg-in-secondary: #{pvar(--input-bg-in-secondary)};
 
   --support-btn-fg: var(--supportButtonColor, #{pvar(--fg-300)});
   --support-btn-bg: var(--supportButtonBackgroundColor, transparent);
@@ -157,4 +160,23 @@
     --active-icon-color: #{pvar(--fg-450)};
     --active-icon-bg: #{pvar(--bg-secondary-600)};
   }
+}
+
+@mixin define-input-css-variables-in-secondary() {
+  --textarea-bg: #{pvar(--textarea-bg-in-secondary)};
+
+  @include define-input-css-variables(pvar(--input-bg-in-secondary));
+}
+
+@mixin define-input-css-variables-in-modal() {
+  --textarea-bg: #{pvar(--textarea-bg-in-modal)};
+
+  @include define-input-css-variables(pvar(--input-bg-in-modal));
+}
+
+@mixin define-input-css-variables($value) {
+  --input-bg: #{$value};
+  --input-border-color: #{$value};
+  --p-multiselect-background: #{$value};
+  --p-select-background: #{$value};
 }

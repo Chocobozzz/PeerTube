@@ -1,4 +1,5 @@
 @use "_variables" as *;
+@use "_css-variables" as *;
 @use "_mixins" as *;
 @use "_button-mixins" as *;
 @import "./_bootstrap-variables";
@@ -117,8 +118,6 @@ body {
   }
 
   .dropdown-item {
-    padding: 3px 15px;
-
     &.active {
       color: pvar(--on-primary) !important;
       background-color: pvar(--primary);
@@ -180,8 +179,9 @@ body {
 }
 
 .modal {
+  @include define-input-css-variables-in-modal;
+
   .modal-content {
-    background-color: pvar(--bg);
     word-break: break-word;
   }
 
@@ -251,7 +251,7 @@ body {
     @include disable-default-a-behaviour;
 
     &.active {
-      background-color: pvar(--bg) !important;
+      background-color: transparent !important;
       border-bottom-color: pvar(--border-primary);
     }
 

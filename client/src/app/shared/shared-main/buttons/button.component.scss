@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_button-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_button-mixins" as *;
 
 @mixin reduced-padding {
   padding: pvar(--input-y-padding) calc(#{pvar(--input-x-padding)} / 2) !important;
@@ -25,7 +25,7 @@
     vertical-align: middle;
     margin-top: -1px;
 
-    @include margin-right(3px);
+    @include margin-right(0.5rem);
   }
 
   &:not(.rounded-icon-button) {

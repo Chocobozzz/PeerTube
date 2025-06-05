@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router'
 import { ScreenService, ServerService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { FormReactiveErrors, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
 
@@ -24,6 +25,7 @@ export class AdminSaveBarComponent implements OnInit, OnDestroy {
   private server = inject(ServerService)
   private headerService = inject(HeaderService)
   private screenService = inject(ScreenService)
+  private peertubeModal = inject(PeertubeModalService)
 
   readonly title = input.required<string>()
   readonly form = input.required<FormGroup>()
@@ -57,6 +59,10 @@ export class AdminSaveBarComponent implements OnInit, OnDestroy {
 
   grabAllErrors () {
     return this.formReactiveService.grabAllErrors(this.formErrors())
+  }
+
+  openConfigWizard () {
+    this.peertubeModal.openAdminConfigWizardSubject.next({ showWelcome: false })
   }
 
   onSave (event: Event) {

@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core'
 import { PeerTubePlugin, PeerTubePluginIndex, PluginType_Type } from '@peertube/peertube-models'
-import { PluginApiService } from './plugin-api.service'
+import { PluginApiService } from '../../../shared/shared-admin/plugin-api.service'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
 @Component({

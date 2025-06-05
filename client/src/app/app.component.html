@@ -55,8 +55,10 @@
 
 @defer (when isUserLoggedIn()) {
   <my-account-setup-warning-modal #accountSetupWarningModal (created)="onModalCreated()"></my-account-setup-warning-modal>
+}
 
-  <my-admin-welcome-modal #adminWelcomeModal (created)="onModalCreated()"></my-admin-welcome-modal>
+@defer (when isUserAdmin()) {
+  <my-admin-config-wizard-modal #adminConfigWizardModal (created)="onModalCreated()"></my-admin-config-wizard-modal>
   <my-instance-config-warning-modal #instanceConfigWarningModal (created)="onModalCreated()"></my-instance-config-warning-modal>
 }
 

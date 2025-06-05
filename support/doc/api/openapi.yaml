@@ -10043,6 +10043,43 @@ components:
                   type: boolean
                 manualApproval:
                   type: boolean
+        storyboard:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+        defaults:
+          type: object
+          properties:
+            publish:
+              type: object
+              properties:
+                downloadEnabled:
+                  type: boolean
+                commentsPolicy:
+                  $ref: '#/components/schemas/VideoCommentsPolicySet'
+                privacy:
+                  $ref: '#/components/schemas/VideoPrivacySet'
+                licence:
+                  $ref: '#/components/schemas/VideoLicenceSet'
+            p2p:
+              type: object
+              properties:
+                webapp:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                embed:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+            player:
+              type: object
+              properties:
+                autoPlay:
+                  type: boolean
 
     CustomHomepage:
       properties:

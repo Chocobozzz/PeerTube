@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { getVideoQuotaDailyOptions, getVideoQuotaOptions } from '@app/+admin/shared/user-quota-options'
@@ -24,15 +24,16 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { BroadcastMessageLevel, CustomConfig } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
-import { AdminConfigService } from '../shared/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
 
 type Form = {
@@ -192,7 +193,7 @@ type Form = {
     AdminSaveBarComponent
   ]
 })
-export class AdminConfigGeneralComponent implements OnInit, CanComponentDeactivate {
+export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private server = inject(ServerService)
   private route = inject(ActivatedRoute)
   private formReactiveService = inject(FormReactiveService)
@@ -209,6 +210,7 @@ export class AdminConfigGeneralComponent implements OnInit, CanComponentDeactiva
   exportMaxUserVideoQuotaOptions: SelectOptionsItem[] = []
 
   private customConfig: CustomConfig
+  private customConfigSub: Subscription
 
   ngOnInit () {
     this.customConfig = this.route.parent.snapshot.data['customConfig']
@@ -222,12 +224,23 @@ export class AdminConfigGeneralComponent implements OnInit, CanComponentDeactiva
       { id: 1000 * 3600 * 24 * 30, label: $localize`30 days` }
     ]
 
-    this.exportMaxUserVideoQuotaOptions = this.getVideoQuotaOptions().filter(o => (o.id as number) >= 1)
+    this.exportMaxUserVideoQuotaOptions = this.getVideoQuotaOptions().filter(o => o.id >= 1)
 
     this.buildForm()
 
     this.subscribeToSignupChanges()
     this.subscribeToImportSyncChanges()
+
+    this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
+      .subscribe(customConfig => {
+        this.customConfig = customConfig
+
+        this.form.patchValue(this.customConfig)
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.customConfigSub) this.customConfigSub.unsubscribe()
   }
 
   private buildForm () {

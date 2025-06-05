@@ -21,11 +21,11 @@ import { WatchedWordsListService } from '@app/shared/standalone-watched-words/wa
 import { AdminModerationComponent } from './admin-moderation.component'
 import { AdminOverviewComponent } from './admin-overview.component'
 import { AdminSettingsComponent } from './admin-settings.component'
-import { AdminConfigService } from './config/shared/admin-config.service'
+import { AdminConfigService } from '../shared/shared-admin/admin-config.service'
 import { followsRoutes } from './follows'
 import { AdminRegistrationService } from './moderation/registration-list'
 import { overviewRoutes, VideoAdminService } from './overview'
-import { PluginApiService } from './plugins/shared/plugin-api.service'
+import { PluginApiService } from '../shared/shared-admin/plugin-api.service'
 
 const commonConfig = {
   path: '',

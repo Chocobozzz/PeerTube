@@ -105,7 +105,7 @@ export type GlobalIconName = keyof typeof icons
 @Component({
   selector: 'my-global-icon',
   template: '',
-  styleUrls: [ './global-icon.component.scss' ],
+  styleUrls: [ './common-icon.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })

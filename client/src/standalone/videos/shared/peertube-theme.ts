@@ -19,7 +19,7 @@ export class PeerTubeTheme {
 
     this.themeManager.loadThemeStyle(themeName)
 
-    this.themeManager.injectCoreColorPalette()
+    this.themeManager.injectColorPalette({ config: config.theme, currentTheme: themeName })
   }
 
   loadThemePlugins (config: HTMLServerConfig) {

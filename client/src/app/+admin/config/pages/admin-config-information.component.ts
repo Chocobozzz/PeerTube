@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -26,14 +26,15 @@ import { ActorImage, CustomConfig, HTMLServerConfig, NSFWPolicyType, VideoConsta
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { ActorAvatarEditComponent } from '../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
 import { ActorBannerEditComponent } from '../../../shared/shared-actor-image-edit/actor-banner-edit.component'
+import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/custom-markup-help.component'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCheckboxComponent } from '../../../shared/shared-forms/select/select-checkbox.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
-import { AdminConfigService } from '../shared/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
+import { Subscription } from 'rxjs'
 
 type Form = {
   admin: FormGroup<{
@@ -97,7 +98,7 @@ type Form = {
     AdminSaveBarComponent
   ]
 })
-export class AdminConfigInformationComponent implements OnInit, CanComponentDeactivate {
+export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private customMarkup = inject(CustomMarkupService)
   private notifier = inject(Notifier)
   private instanceService = inject(InstanceService)
@@ -137,6 +138,7 @@ export class AdminConfigInformationComponent implements OnInit, CanComponentDeac
 
   private serverConfig: HTMLServerConfig
   private customConfig: CustomConfig
+  private customConfigSub: Subscription
 
   get instanceName () {
     return this.server.getHTMLConfig().instance.name
@@ -157,6 +159,17 @@ export class AdminConfigInformationComponent implements OnInit, CanComponentDeac
 
     this.updateActorImages()
     this.buildForm()
+
+    this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
+      .subscribe(customConfig => {
+        this.customConfig = customConfig
+
+        this.form.patchValue(this.customConfig)
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.customConfigSub) this.customConfigSub.unsubscribe()
   }
 
   private buildForm () {

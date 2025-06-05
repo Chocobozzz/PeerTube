@@ -13,7 +13,7 @@ import {
   RegisteredServerSettings,
   ResultList
 } from '@peertube/peertube-models'
-import { environment } from '../../../../environments/environment'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class PluginApiService {

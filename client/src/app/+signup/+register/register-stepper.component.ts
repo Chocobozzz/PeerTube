@@ -4,14 +4,13 @@ import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.compo
 import { NgIf, NgFor, NgClass, NgTemplateOutlet } from '@angular/common'
 
 @Component({
-  selector: 'my-custom-stepper',
-  templateUrl: './custom-stepper.component.html',
-  styleUrls: [ './custom-stepper.component.scss' ],
-  providers: [ { provide: CdkStepper, useExisting: CustomStepperComponent } ],
+  selector: 'my-register-stepper',
+  templateUrl: './register-stepper.component.html',
+  styleUrls: [ './register-stepper.component.scss' ],
+  providers: [ { provide: CdkStepper, useExisting: RegisterStepperComponent } ],
   imports: [ NgIf, NgFor, NgClass, GlobalIconComponent, NgTemplateOutlet ]
 })
-export class CustomStepperComponent extends CdkStepper {
-
+export class RegisterStepperComponent extends CdkStepper {
   onClick (index: number): void {
     this.selectedIndex = index
   }

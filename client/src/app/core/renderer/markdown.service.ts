@@ -149,10 +149,10 @@ export class MarkdownService {
       }
 
       if (name === 'enhancedMarkdownIt' || name === 'enhancedWithHTMLMarkdownIt') {
-        return this.htmlRenderer.toSimpleSafeHtml(html, { allowImages: true })
+        return this.htmlRenderer.toSimpleSafeHtmlWithLinks(html, { allowImages: true })
       }
 
-      return this.htmlRenderer.toSimpleSafeHtml(html)
+      return this.htmlRenderer.toSimpleSafeHtmlWithLinks(html)
     }
 
     return html

@@ -25,8 +25,14 @@
   @include rfs(1.5rem, padding);
 }
 
-.save-button {
+.buttons {
   @include margin-left(auto);
+}
+
+.pre-config {
+  display: inline-block;
+
+  @include margin-right(0.5rem);
 }
 
 h2 {
@@ -48,7 +54,7 @@ h2 {
     padding: 0.5rem;
   }
 
-  .save-button,
+  .buttons,
   h2 {
     @include margin-left(0);
   }

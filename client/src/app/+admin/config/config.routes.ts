@@ -14,7 +14,7 @@ import {
   AdminConfigVODComponent
 } from './pages'
 import { AdminConfigCustomizationComponent } from './pages/admin-config-customization.component'
-import { AdminConfigService } from './shared/admin-config.service'
+import { AdminConfigService } from '../../shared/shared-admin/admin-config.service'
 
 export const customConfigResolver: ResolveFn<CustomConfig> = (_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) => {
   return inject(AdminConfigService).getCustomConfig()

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { ActorImageType, CustomConfig, HttpStatusCode, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -188,7 +188,19 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     theme: {
-      default: 'default'
+      default: 'default',
+      customization: {
+        primaryColor: '#001',
+        foregroundColor: '#002',
+        backgroundColor: '#003',
+        backgroundSecondaryColor: '#004',
+        menuForegroundColor: '#005',
+        menuBackgroundColor: '#006',
+        menuBorderRadius: '1px',
+        headerForegroundColor: '#008',
+        headerBackgroundColor: '#009',
+        inputBorderRadius: '2px'
+      }
     },
     services: {
       twitter: {
@@ -409,6 +421,25 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         enabled: false,
         exportExpiration: 43,
         maxUserVideoQuota: 42
+      }
+    },
+    defaults: {
+      publish: {
+        commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
+        downloadEnabled: false,
+        licence: 2,
+        privacy: VideoPrivacy.INTERNAL
+      },
+      p2p: {
+        embed: {
+          enabled: false
+        },
+        webapp: {
+          enabled: true
+        }
+      },
+      player: {
+        autoPlay: false
       }
     }
   }

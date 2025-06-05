@@ -1,0 +1,53 @@
+<div class="root">
+  <div class="two-columns">
+    <div>
+      <img class="mascot" src="/client/assets/images/mascot/pointing.svg" alt="mascot">
+    </div>
+
+    <div>
+      <div class="steps">
+        <div class="header-steps" i18n>STEP {{ currentStep() }}/{{ totalSteps() }}</div>
+      </div>
+
+      <h4 i18n class="title">General information</h4>
+
+      <div class="text-content">You can edit this information later</div>
+
+      <form [formGroup]="form">
+        <div class="form-group">
+          <label i18n for="platformName">Platform name</label>
+
+          <input type="text" id="platformName" class="form-control" formControlName="platformName" [ngClass]="{ 'input-error': formErrors.platformName }">
+
+          <div *ngIf="formErrors.platformName" class="form-error" role="alert">{{ formErrors.platformName }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="shortDescription">Short description</label>
+
+          <textarea
+            id="shortDescription" formControlName="shortDescription" class="form-control small"
+            [ngClass]="{ 'input-error': formErrors.shortDescription }"
+          ></textarea>
+
+          <div *ngIf="formErrors.shortDescription" class="form-error" role="alert">{{ formErrors.shortDescription }}</div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="primaryColor">Primary color</label>
+
+          <p-colorpicker class="d-block" inputId="primaryColor" formControlName="primaryColor" />
+        </div>
+
+        <div class="buttons">
+          @if (showBack()) {
+            <my-button i18n icon="arrow-left" (click)="back.emit()" theme="secondary">Back</my-button>
+          }
+
+          <my-button i18n theme="primary" (click)="next.emit(form.value)" [disabled]="!form.valid">Next step</my-button>
+          <button i18n (click)="hide.emit()" class="button-as-link">Ignore for now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

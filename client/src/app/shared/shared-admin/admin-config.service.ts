@@ -8,8 +8,8 @@ import { CustomConfig } from '@peertube/peertube-models'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import merge from 'lodash-es/merge'
 import { catchError, map, switchMap } from 'rxjs/operators'
-import { environment } from '../../../../environments/environment'
-import { SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { environment } from '../../../environments/environment'
+import { SelectOptionsItem } from '../../../types/select-options-item.model'
 
 export type FormResolutions = {
   '0p': FormControl<boolean>
@@ -109,6 +109,11 @@ export class AdminConfigService {
         }),
         catchError(res => this.restExtractor.handleError(res))
       )
+  }
+
+  getCustomConfigReloadedObs () {
+    return this.serverService.configReloaded
+      .pipe(switchMap(() => this.getCustomConfig()))
   }
 
   saveAndUpdateCurrent (options: {

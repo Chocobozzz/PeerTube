@@ -132,12 +132,7 @@ export class ThemeManager {
   }, iteration = 0) {
     if (iteration > 100) {
       logger.error('Too many iteration when checking color palette injection. The theme may be missing the --is-dark CSS variable')
-
-      this.injectColorPalette()
-      return
-    }
-
-    if (!this.canInjectCoreColorPalette()) {
+    } else if (!this.canInjectCoreColorPalette()) {
       return setTimeout(() => this.injectColorPalette(options, iteration + 1), Math.floor(iteration / 10))
     }
 

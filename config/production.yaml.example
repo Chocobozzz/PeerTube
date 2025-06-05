@@ -119,39 +119,6 @@ email:
   subject:
     prefix: '[PeerTube]'
 
-# Update default PeerTube values
-# Set by API when the field is not provided and put as default value in client
-defaults:
-  # Change default values when publishing a video (upload/import/go Live)
-  publish:
-    download_enabled: true
-
-    # enabled = 1, disabled = 2, requires_approval = 3
-    comments_policy: 1
-
-    # public = 1, unlisted = 2, private = 3, internal = 4
-    privacy: 1
-
-    # CC-BY = 1, CC-SA = 2, CC-ND = 3, CC-NC = 4, CC-NC-SA = 5, CC-NC-ND = 6, Public Domain = 7
-    # You can also choose a custom licence value added by a plugin
-    # No licence by default
-    licence: null
-
-  p2p:
-    # Enable P2P by default in PeerTube client
-    # Can be enabled/disabled by anonymous users and logged in users
-    webapp:
-      enabled: true
-
-    # Enable P2P by default in PeerTube embed
-    # Can be enabled/disabled by URL option
-    embed:
-      enabled: true
-
-  player:
-    # By default, playback starts automatically when opening a video
-    auto_play: true
-
 # From the project root directory
 storage:
   tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
@@ -664,7 +631,6 @@ transcoding:
 
   # Generate videos in a web compatible format
   # If you also enabled the hls format, it will multiply videos storage by 2
-  # If disabled, breaks federation with PeerTube instances < 2.1
   web_videos:
     enabled: false
 
@@ -890,6 +856,7 @@ import:
     # Max number of videos to import when the user asks for full sync
     full_sync_videos_limit: 1000
 
+  # Add ability for your users to import a PeerTube archive file to automatically create videos, channels, captions, etc
   users:
     # Video quota is checked on import so the user doesn't upload a too big archive file
     # Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import
@@ -1050,6 +1017,25 @@ followings:
 theme:
   default: 'default'
 
+  # Easily redefine the client UI when the user is using your default instance theme
+  # Use null to keep the default values
+  # If you need more advanced customizations, install or develop a dedicated theme: https://docs.joinpeertube.org/contribute/plugins
+  customization:
+    primary_color: null # Hex color. Example: '#FF8F37'
+
+    foreground_color: null # Hex color
+    background_color: null # Hex color
+    background_secondary_color: null # Hex color
+
+    menu_foreground_color: null # Hex color
+    menu_background_color: null # Hex color
+    menu_border_radius: null # Pixels. Example: '5px'
+
+    header_background_color: null # Hex color
+    header_foreground_color: null # Hex color
+
+    input_border_radius: null # Pixels
+
 broadcast_message:
   enabled: false
   message: '' # Support markdown
@@ -1084,6 +1070,7 @@ search:
 
 # PeerTube client/interface configuration
 client:
+
   videos:
     miniature:
       # By default PeerTube client displays author username
@@ -1126,3 +1113,36 @@ client:
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
   enabled: true
+
+# Update default PeerTube values
+# Set by API when the field is not provided and put as default value in client
+defaults:
+  # Change default values when publishing a video (upload/import/go Live)
+  publish:
+    download_enabled: true
+
+    # enabled = 1, disabled = 2, requires_approval = 3
+    comments_policy: 1
+
+    # public = 1, unlisted = 2, private = 3, internal = 4
+    privacy: 1
+
+    # CC-BY = 1, CC-SA = 2, CC-ND = 3, CC-NC = 4, CC-NC-SA = 5, CC-NC-ND = 6, Public Domain = 7
+    # You can also choose a custom licence value added by a plugin
+    # No licence by default
+    licence: null
+
+  p2p:
+    # Enable P2P by default in PeerTube client
+    # Can be enabled/disabled by anonymous users and logged in users
+    webapp:
+      enabled: true
+
+    # Enable P2P by default in PeerTube embed
+    # Can be enabled/disabled by URL option
+    embed:
+      enabled: true
+
+  player:
+    # By default, playback starts automatically when opening a video
+    auto_play: true

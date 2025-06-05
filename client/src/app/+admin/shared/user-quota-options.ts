@@ -1,6 +1,6 @@
 import { SelectOptionsItem } from '../../../types/select-options-item.model'
 
-export function getVideoQuotaOptions (): SelectOptionsItem[] {
+export function getVideoQuotaOptions (): SelectOptionsItem<number>[] {
   return [
     { id: -1, label: $localize`Unlimited` },
     { id: 0, label: $localize`None - no upload possible` },
@@ -16,7 +16,7 @@ export function getVideoQuotaOptions (): SelectOptionsItem[] {
   ]
 }
 
-export function getVideoQuotaDailyOptions (): SelectOptionsItem[] {
+export function getVideoQuotaDailyOptions (): SelectOptionsItem<number>[] {
   return [
     { id: -1, label: $localize`Unlimited` },
     { id: 0, label: $localize`None - no upload possible` },

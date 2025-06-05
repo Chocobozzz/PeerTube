@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValueChangeEvent } from '@angular/forms'
 import { ActivatedRoute, RouterModule } from '@angular/router'
 import { CanComponentDeactivate, ServerService, ThemeService } from '@app/core'
@@ -9,17 +9,15 @@ import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-che
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { CustomConfig } from '@peertube/peertube-models'
-import { logger } from '@root-helpers/logger'
 import { capitalizeFirstLetter } from '@root-helpers/string'
 import { ColorPaletteThemeConfig, ThemeCustomizationKey } from '@root-helpers/theme-manager'
-import { formatHEX, parse } from 'color-bits'
 import debug from 'debug'
 import { ColorPickerModule } from 'primeng/colorpicker'
-import { debounceTime } from 'rxjs'
+import { debounceTime, Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
+import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
-import { AdminConfigService } from '../shared/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
 
 const debugLogger = debug('peertube:config')
@@ -75,7 +73,7 @@ type Form = {
     PeertubeCheckboxComponent
   ]
 })
-export class AdminConfigCustomizationComponent implements OnInit, CanComponentDeactivate {
+export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private formReactiveService = inject(FormReactiveService)
   private adminConfigService = inject(AdminConfigService)
   private serverService = inject(ServerService)
@@ -98,6 +96,8 @@ export class AdminConfigCustomizationComponent implements OnInit, CanComponentDe
 
   private customizationResetFields = new Set<ThemeCustomizationKey>()
   private customConfig: CustomConfig
+
+  private customConfigSub: Subscription
 
   private readonly formFieldsObject: Record<ThemeCustomizationKey, { label: string, description?: string, type: 'color' | 'pixels' }> = {
     primaryColor: { label: $localize`Primary color`, type: 'color' },
@@ -127,6 +127,17 @@ export class AdminConfigCustomizationComponent implements OnInit, CanComponentDe
 
     this.buildForm()
     this.subscribeToCustomizationChanges()
+
+    this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
+      .subscribe(customConfig => {
+        this.customConfig = customConfig
+
+        this.form.patchValue(this.getDefaultFormValues(), { emitEvent: false })
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.customConfigSub) this.customConfigSub.unsubscribe()
   }
 
   canDeactivate () {
@@ -209,20 +220,11 @@ export class AdminConfigCustomizationComponent implements OnInit, CanComponentDe
       }
     }
 
-    const defaultValues: FormDefaultTyped<Form> = {
-      ...this.customConfig,
-
-      theme: {
-        default: this.customConfig.theme.default,
-        customization: this.getDefaultCustomization()
-      }
-    }
-
     const {
       form,
       formErrors,
       validationMessages
-    } = this.formReactiveService.buildForm<Form>(obj, defaultValues)
+    } = this.formReactiveService.buildForm<Form>(obj, this.getDefaultFormValues())
 
     this.form = form
     this.formErrors = formErrors
@@ -281,6 +283,17 @@ export class AdminConfigCustomizationComponent implements OnInit, CanComponentDe
     return this.form.get('theme.customization').get(field)
   }
 
+  private getDefaultFormValues (): FormDefaultTyped<Form> {
+    return {
+      ...this.customConfig,
+
+      theme: {
+        default: this.customConfig.theme.default,
+        customization: this.getDefaultCustomization()
+      }
+    }
+  }
+
   private getDefaultCustomization () {
     const config = this.customConfig.theme.customization
 
@@ -305,37 +318,14 @@ export class AdminConfigCustomizationComponent implements OnInit, CanComponentDe
 
   private formatCustomizationFieldForForm (field: ThemeCustomizationKey, value: string) {
     if (this.formFieldsObject[field].type === 'pixels') {
-      return this.formatPixelsForForm(value)
+      return this.themeService.formatPixelsForForm(value)
     }
 
     if (this.formFieldsObject[field].type === 'color') {
-      return this.formatColorForForm(value)
+      return this.themeService.formatColorForForm(value)
     }
 
     return value
-  }
-
-  private formatPixelsForForm (value: string) {
-    if (typeof value === 'number') return value + ''
-    if (typeof value !== 'string') return null
-
-    const result = parseInt(value.replace(/px$/, ''))
-
-    if (isNaN(result)) return null
-
-    return result + ''
-  }
-
-  private formatColorForForm (value: string) {
-    if (!value) return null
-
-    try {
-      return formatHEX(parse(value))
-    } catch (err) {
-      logger.warn(`Error parsing color value "${value}"`, err)
-
-      return null
-    }
   }
 
   // ---------------------------------------------------------------------------

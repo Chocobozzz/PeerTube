@@ -10,6 +10,7 @@ import { PluginService } from '../plugins/plugin.service'
 import { ServerService } from '../server'
 import { UserService } from '../users/user.service'
 import { LocalStorageService } from '../wrappers/storage.service'
+import { formatHEX, parse } from 'color-bits'
 
 @Injectable()
 export class ThemeService {
@@ -215,5 +216,32 @@ export class ThemeService {
 
   private getTheme (name: string) {
     return this.themes.find(t => t.name === name)
+  }
+
+  // ---------------------------------------------------------------------------
+  // Utils
+  // ---------------------------------------------------------------------------
+
+  formatColorForForm (value: string) {
+    if (!value) return null
+
+    try {
+      return formatHEX(parse(value))
+    } catch (err) {
+      logger.warn(`Error parsing color value "${value}"`, err)
+
+      return null
+    }
+  }
+
+  formatPixelsForForm (value: string) {
+    if (typeof value === 'number') return value + ''
+    if (typeof value !== 'string') return null
+
+    const result = parseInt(value.replace(/px$/, ''))
+
+    if (isNaN(result)) return null
+
+    return result + ''
   }
 }

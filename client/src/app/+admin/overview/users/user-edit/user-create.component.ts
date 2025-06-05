@@ -2,7 +2,7 @@ import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { AdminConfigService } from '@app/+admin/config/shared/admin-config.service'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
 import {
   USER_CHANNEL_NAME_VALIDATOR,

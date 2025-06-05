@@ -1,3 +1,4 @@
+import { VideoCommentPolicyType, VideoPrivacyType } from '../videos/index.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { BroadcastMessageLevel } from './broadcast-message-level.type.js'
 
@@ -319,5 +320,28 @@ export interface CustomConfig {
 
   storyboards: {
     enabled: boolean
+  }
+
+  defaults: {
+    publish: {
+      downloadEnabled: boolean
+      commentsPolicy: VideoCommentPolicyType
+      privacy: VideoPrivacyType
+      licence: number
+    }
+
+    p2p: {
+      webapp: {
+        enabled: boolean
+      }
+
+      embed: {
+        enabled: boolean
+      }
+    }
+
+    player: {
+      autoPlay: boolean
+    }
   }
 }

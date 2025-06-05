@@ -195,13 +195,13 @@ export default {
         },
         list: {
           option: {
-            focusBackground: 'var(--bg-secondary-500)',
-            selectedBackground: '{highlight.background}',
+            focusBackground: 'var(--bg-secondary-450)',
+            selectedBackground: 'var(--bg-secondary-500)',
             selectedFocusBackground: 'var(--bg-secondary-500)',
             color: '{text.color}',
-            focusColor: '{text.hover.color}',
-            selectedColor: '{highlight.color}',
-            selectedFocusColor: '{highlight.focus.color}',
+            focusColor: '{text.color}',
+            selectedColor: '{text.color}',
+            selectedFocusColor: '{text.color}',
             icon: {
               color: '{surface.400}',
               focusColor: '{surface.500}'

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { CanComponentDeactivate } from '@app/core'
@@ -12,7 +12,8 @@ import {
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { CustomConfig } from '@peertube/peertube-models'
-import { AdminConfigService } from '../shared/admin-config.service'
+import { Subscription } from 'rxjs'
+import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
 
 type Form = {
@@ -44,7 +45,7 @@ type Form = {
   styleUrls: [ './admin-config-common.scss' ],
   imports: [ CommonModule, FormsModule, ReactiveFormsModule, AdminSaveBarComponent ]
 })
-export class AdminConfigAdvancedComponent implements OnInit, CanComponentDeactivate {
+export class AdminConfigAdvancedComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private route = inject(ActivatedRoute)
   private formReactiveService = inject(FormReactiveService)
   private adminConfigService = inject(AdminConfigService)
@@ -54,11 +55,23 @@ export class AdminConfigAdvancedComponent implements OnInit, CanComponentDeactiv
   validationMessages: FormReactiveMessagesTyped<Form> = {}
 
   private customConfig: CustomConfig
+  private customConfigSub: Subscription
 
   ngOnInit () {
     this.customConfig = this.route.parent.snapshot.data['customConfig']
 
     this.buildForm()
+
+    this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
+      .subscribe(customConfig => {
+        this.customConfig = customConfig
+
+        this.form.patchValue(this.customConfig)
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.customConfigSub) this.customConfigSub.unsubscribe()
   }
 
   canDeactivate () {

@@ -81,7 +81,11 @@ export class HtmlRendererService {
     })
   }
 
-  async toSimpleSafeHtml (text: string, options: {
+  toSimpleSafeHtml (text: string) {
+    return this.sanitize(this.simpleDomPurify, this.removeClassAttributes(text))
+  }
+
+  async toSimpleSafeHtmlWithLinks (text: string, options: {
     allowImages?: boolean
   } = {}) {
     const { allowImages = false } = options
@@ -89,6 +93,7 @@ export class HtmlRendererService {
     const additionalTags = allowImages
       ? [ 'img' ]
       : []
+
     const additionalAttributes = allowImages
       ? [ 'src', 'alt' ]
       : []

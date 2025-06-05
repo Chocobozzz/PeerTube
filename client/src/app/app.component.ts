@@ -1,9 +1,7 @@
-import { forkJoin } from 'rxjs'
-import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, NgClass, NgIf, PlatformLocation } from '@angular/common'
-import { AfterViewInit, Component, LOCALE_ID, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { AfterViewInit, Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
+import { ActivatedRoute, Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
 import {
   AuthService,
   Hotkey,
@@ -19,7 +17,7 @@ import {
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { AccountSetupWarningModalComponent } from '@app/modal/account-setup-warning-modal.component'
-import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
+import { AdminConfigWizardModalComponent } from '@app/modal/admin-config-wizard/admin-config-wizard-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -30,6 +28,8 @@ import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
+import { forkJoin } from 'rxjs'
+import { filter, first, map } from 'rxjs/operators'
 import { MenuService } from './core/menu/menu.service'
 import { HeaderComponent } from './header/header.component'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
@@ -37,8 +37,8 @@ import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.compon
 import { MenuComponent } from './menu/menu.component'
 import { ConfirmComponent } from './modal/confirm.component'
 import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
-
 import { InstanceService } from './shared/shared-main/instance/instance.service'
+import { PeertubeModalService } from './shared/shared-main/peertube-modal/peertube-modal.service'
 
 @Component({
   selector: 'my-app',
@@ -57,9 +57,9 @@ import { InstanceService } from './shared/shared-main/instance/instance.service'
     ToastModule,
     SharedModule,
     AccountSetupWarningModalComponent,
-    AdminWelcomeModalComponent,
     InstanceConfigWarningModalComponent,
-    CustomModalComponent
+    CustomModalComponent,
+    AdminConfigWizardModalComponent
   ]
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -82,12 +82,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private loadingBar = inject(LoadingBarService)
   private scrollService = inject(ScrollService)
   private userLocalStorage = inject(UserLocalStorageService)
+  private peertubeModal = inject(PeertubeModalService)
+  private route = inject(ActivatedRoute)
+
   menu = inject(MenuService)
 
   private static LS_BROADCAST_MESSAGE = 'app-broadcast-message-dismissed'
 
   readonly accountSetupWarningModal = viewChild<AccountSetupWarningModalComponent>('accountSetupWarningModal')
-  readonly adminWelcomeModal = viewChild<AdminWelcomeModalComponent>('adminWelcomeModal')
+  readonly adminConfigWizardModal = viewChild<AdminConfigWizardModalComponent>('adminConfigWizardModal')
   readonly instanceConfigWarningModal = viewChild<InstanceConfigWarningModalComponent>('instanceConfigWarningModal')
   readonly customModal = viewChild<CustomModalComponent>('customModal')
 
@@ -154,6 +157,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       return Promise.resolve()
     })
+
+    this.peertubeModal.openAdminConfigWizardSubject.subscribe(({ showWelcome }) => {
+      const adminWelcomeModal = this.adminConfigWizardModal()
+      if (!adminWelcomeModal) return
+
+      adminWelcomeModal.show({ showWelcome })
+    })
   }
 
   ngAfterViewInit () {
@@ -169,6 +179,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  isUserAdmin () {
+    return this.isUserLoggedIn() && this.authService.getUser().role.id === UserRole.ADMINISTRATOR
   }
 
   hideBroadcastMessage () {
@@ -301,23 +315,23 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private openAdminModalsIfNeeded (user: User) {
-    const adminWelcomeModal = this.adminWelcomeModal()
+    const adminWelcomeModal = this.adminConfigWizardModal()
     if (!adminWelcomeModal) return
 
-    if (adminWelcomeModal.shouldOpen(user)) {
-      return adminWelcomeModal.show()
+    if (adminWelcomeModal.shouldAutoOpen(user)) {
+      return adminWelcomeModal.show({ showWelcome: true })
     }
 
     const instanceConfigWarningModal = this.instanceConfigWarningModal()
     if (!instanceConfigWarningModal) return
-    if (!instanceConfigWarningModal.shouldOpenByUser(user)) return
+    if (!instanceConfigWarningModal.canBeOpenByUser(user)) return
 
     forkJoin([
       this.serverService.getConfig().pipe(first()),
       this.instanceService.getAbout().pipe(first())
     ]).subscribe(([ config, about ]) => {
       const instanceConfigWarningModalValue = this.instanceConfigWarningModal()
-      if (instanceConfigWarningModalValue.shouldOpen(config, about)) {
+      if (instanceConfigWarningModalValue.shouldAutoOpen(config, about)) {
         instanceConfigWarningModalValue.show(about)
       }
     })
@@ -327,7 +341,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const accountSetupWarningModal = this.accountSetupWarningModal()
     if (!accountSetupWarningModal) return
 
-    if (accountSetupWarningModal.shouldOpen(user)) {
+    if (accountSetupWarningModal.shouldAutoOpen(user)) {
       accountSetupWarningModal.show(user)
     }
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -16,12 +16,13 @@ import {
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { CustomConfig } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { AdminConfigService, FormResolutions, ResolutionOption } from '../../../shared/shared-admin/admin-config.service'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
-import { AdminConfigService, FormResolutions, ResolutionOption } from '../shared/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
 
 type Form = {
@@ -84,7 +85,7 @@ type Form = {
     AdminSaveBarComponent
   ]
 })
-export class AdminConfigVODComponent implements OnInit, CanComponentDeactivate {
+export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private configService = inject(AdminConfigService)
   private notifier = inject(Notifier)
   private server = inject(ServerService)
@@ -103,6 +104,7 @@ export class AdminConfigVODComponent implements OnInit, CanComponentDeactivate {
   additionalVideoExtensions = ''
 
   private customConfig: CustomConfig
+  private customConfigSub: Subscription
 
   ngOnInit () {
     const serverConfig = this.server.getHTMLConfig()
@@ -117,6 +119,17 @@ export class AdminConfigVODComponent implements OnInit, CanComponentDeactivate {
     this.buildForm()
 
     this.subscribeToTranscodingChanges()
+
+    this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
+      .subscribe(customConfig => {
+        this.customConfig = customConfig
+
+        this.form.patchValue(this.customConfig)
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.customConfigSub) this.customConfigSub.unsubscribe()
   }
 
   private buildForm () {

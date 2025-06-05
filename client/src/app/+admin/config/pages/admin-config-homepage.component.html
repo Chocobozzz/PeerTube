@@ -1,6 +1,6 @@
 <my-admin-save-bar i18n-title title="Edit your homepage" (save)="save()" [form]="form" [formErrors]="formErrors"></my-admin-save-bar>
 
-<div class="homepage pt-two-cols" [formGroup]="form">
+<form class="homepage pt-two-cols" [formGroup]="form">
   <div class="title-col">
     <h2 i18n>HOMEPAGE</h2>
   </div>
@@ -25,4 +25,4 @@
       <div *ngIf="formErrors.homepageContent" class="form-error" role="alert">{{ formErrors.homepageContent }}</div>
     </div>
   </div>
-</div>
+</form>

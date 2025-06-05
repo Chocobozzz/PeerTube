@@ -66,6 +66,7 @@ export class ServerService {
 
   resetConfig () {
     this.configLoaded = false
+    this.configObservable = undefined
 
     // Notify config update
     return this.getConfig({ isReset: true })

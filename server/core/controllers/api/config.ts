@@ -508,6 +508,26 @@ function customConfig (): CustomConfig {
     },
     storyboards: {
       enabled: CONFIG.STORYBOARDS.ENABLED
+    },
+    defaults: {
+      publish: {
+        downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+        commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+        privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
+        licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
+      },
+      p2p: {
+        webapp: {
+          enabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED
+        },
+
+        embed: {
+          enabled: CONFIG.DEFAULTS.P2P.EMBED.ENABLED
+        }
+      },
+      player: {
+        autoPlay: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY
+      }
     }
   }
 }

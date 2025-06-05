@@ -1,6 +1,6 @@
 <my-admin-save-bar i18n-title title="Live configuration" (save)="save()" [form]="form" [formErrors]="formErrors" [inconsistentOptions]="checkTranscodingConsistentOptions()"></my-admin-save-bar>
 
-<ng-container [formGroup]="form">
+<form [formGroup]="form">
 
   <div class="pt-two-cols">
     <div class="title-col">
@@ -212,4 +212,4 @@
 
     </div>
   </div>
-</ng-container>
+</form>
