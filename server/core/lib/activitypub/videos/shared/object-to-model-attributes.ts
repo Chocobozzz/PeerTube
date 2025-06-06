@@ -277,7 +277,7 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
 
     nsfw: videoObject.sensitive,
     nsfwSummary: videoObject.sensitive
-      ? videoObject.summary
+      ? (videoObject.summary ?? null)
       : null,
     nsfwFlags: videoObject.sensitive
       ? getNSFWFlags(videoObject.tag)
