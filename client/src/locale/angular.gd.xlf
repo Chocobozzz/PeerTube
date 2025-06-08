@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -535,9 +531,9 @@
           <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="906167214730624194" datatype="html">
+      <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Cha deach coimhead air} =1 {Choimhead 1 air} one {Choimhead <x id="views"/> air} two {Choimhead <x id="views"/> air} few {Choimhead <x id="views"/> air} other {Choimhead <x id="views"/> air} }</target>
+        <target state="translated">{views, plural, =0 {Cha deach coimhead air} one {Choimhead <x id="views"/> air} two {Choimhead <x id="views"/> air} few {Choimhead <x id="views"/> air} other {Choimhead <x id="views"/> air}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -586,8 +582,11 @@
       <trans-unit id="7235777177623270068" datatype="html" xml:space="preserve">
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
         <target state="translated">Tha PeerTube dhen bheachd gu bheil a’ video “<x id="PH" equiv-text="video.name"/>” ’ga thar-chòdachadh mu thràth.</target>
-
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">409</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
+          <context context-type="linenumber">409</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5630101530611188113" datatype="html">
         <source>If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.</source>
         <target state="translated">Ma shaoileas tu gu bheil PeerTube ceàrr (video briste às dèidh tuislidh is msaa.), ’s urrainn dhut tar-chòdachadh a sparradh air a’ video seo.</target>
@@ -604,9 +603,9 @@
           <context context-type="linenumber">414</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4873265433447388314" datatype="html">
+      <trans-unit id="4873265433447388314" datatype="html" xml:space="preserve">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{viewers, plural, =0 {Gun choimhead air} =1 {Tha 1 a’ coimhead air} one {Tha <x id="viewers"/> a’ coimhead air} two {Tha <x id="viewers"/> a’ coimhead air} few {Tha <x id="viewers"/> a’ coimhead air} other {Tha <x id="viewers"/> a’ coimhead air} }</target>
+        <target state="translated">{viewers, plural, =0 {Gun choimhead air} one {Tha <x id="viewers"/> a’ coimhead air} two {Tha <x id="viewers"/> a’ coimhead air} few {Tha <x id="viewers"/> a’ coimhead air} other {Tha <x id="viewers"/> a’ coimhead air}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.ts</context>
           <context context-type="linenumber">19</context>
@@ -896,9 +895,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1080230904501320275" datatype="html">
+      <trans-unit id="1080230904501320275" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {Chaidh 1 chleachdaiche a thoirmeasg.} one {Chaidh <x id="count"/> chleachdaiche a thoirmeasg.} two {Chaidh <x id="count"/> chleachdaiche a thoirmeasg.} few {Chaidh <x id="count"/> cleachdaichean a thoirmeasg.} other {Chaidh <x id="count"/> cleachdaiche a thoirmeasg.} }</target>
+        <target state="translated">Chaidh {count, plural, one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche }} a thoirmeasg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -1020,25 +1019,25 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8562063050145802350" datatype="html">
+      <trans-unit id="8562063050145802350" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eilear a’ coimhead air} =1 {Tha 1 a’ coimhead air} one {Tha <x id="INTERPOLATION"/> a’ coimhead air} two {Tha <x id="INTERPOLATION"/> a’ coimhead air} few {Tha <x id="INTERPOLATION"/> a’ coimhead air} other {Tha <x id="INTERPOLATION"/> a’ coimhead air} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eilear a’ coimhead air} one {Tha <x id="INTERPOLATION"/> a’ coimhead air} two {Tha <x id="INTERPOLATION"/> a’ coimhead air} few {Tha <x id="INTERPOLATION"/> a’ coimhead air} other {Tha <x id="INTERPOLATION"/> a’ coimhead air} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="459680083614731900" datatype="html">
+      <trans-unit id="459680083614731900" datatype="html" xml:space="preserve">
         <source>Total uploaded</source>
-        <target state="new">Total uploaded</target>
+        <target state="translated">Iomlan dhen luchdadh suas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6596108630766268063" datatype="html">
+      <trans-unit id="6596108630766268063" datatype="html" xml:space="preserve">
         <source>File uploaded!</source>
-        <target state="new">File uploaded!</target>
+        <target state="translated">Chaidh am faidhle a luchdadh suas!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -1172,9 +1171,9 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5779580280418408097" datatype="html">
+      <trans-unit id="5779580280418408097" datatype="html" xml:space="preserve">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Chaidh {count, plural, =1 {1 video} one {<x id="count"/> video} two {<x id="count"/> video} few {<x id="count"/> videothan} other {<x id="count"/> video}} a sguabadh às.</target>
+        <target state="translated">Chaidh {count, plural, one {<x id="count"/> video} two {<x id="count"/> video} few {<x id="count"/> videothan} other {<x id="count"/> video}} a sguabadh às.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">341</context>
@@ -1184,9 +1183,9 @@
           <context context-type="linenumber">434</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9164541937317586242" datatype="html">
+      <trans-unit id="9164541937317586242" datatype="html" xml:space="preserve">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Chaidh {count, plural, =1 {1 video} one {<x id="count"/> video} two {<x id="count"/> video} few {<x id="count"/> videothan} other {<x id="count"/> video}} a dhì-bhacadh.</target>
+        <target state="translated">Chaidh {count, plural, one {<x id="count"/> video} two {<x id="count"/> video} few {<x id="count"/> videothan} other {<x id="count"/> video}} a dhì-bhacadh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">359</context>
@@ -1280,9 +1279,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4853472797848575859" datatype="html">
+      <trans-unit id="4853472797848575859" datatype="html" xml:space="preserve">
         <source>Waiting live</source>
-        <target state="new">Waiting live</target>
+        <target state="translated">Sruthadh beò a’ feitheamh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-badge.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -1735,23 +1734,35 @@
       <trans-unit id="6334544592573094529" datatype="html" xml:space="preserve">
         <source>Transcoding job created for "<x id="PH" equiv-text="video.name"/>".</source>
         <target state="translated">Chaidh obair tar-chòdachaidh a chruthachadh airson “<x id="PH" equiv-text="video.name"/>”.</target>
-
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">385</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
+          <context context-type="linenumber">385</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6323039311444223540" datatype="html" xml:space="preserve">
         <source>Transcription job created for "<x id="PH" equiv-text="video.name"/>".</source>
         <target state="translated">Chaidh obair tar-sgrìobhaidh a chruthachadh airson “<x id="PH" equiv-text="video.name"/>”.</target>
-
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">397</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
+          <context context-type="linenumber">397</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8890980168396748709" datatype="html" xml:space="preserve">
         <source>This video is already being transcribed.</source>
         <target state="translated">Tha a’ video seo ’ga thar-sgrìobhadh mu thràth.</target>
-
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">398</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
+          <context context-type="linenumber">398</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6621122803162844810" datatype="html" xml:space="preserve">
         <source>This video already has captions.</source>
         <target state="translated">Tha fo-thiotalan aig a’ video seo mu thràth.</target>
-
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">399</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
+          <context context-type="linenumber">399</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
         <target state="translated">A’ cleachdadh inbhir siondacaididh</target>
@@ -2645,8 +2656,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Thèid post-d le stiùireadh air ath-shuidheachadh an fhacail-fhaire a chur gu <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Falbhaidh an ùine air a’ cheangal am broinn uair a thìde.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -4254,9 +4264,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="518619112264710096" datatype="html">
+      <trans-unit id="518619112264710096" datatype="html" xml:space="preserve">
         <source>Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</source>
-        <target state="new">Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</target>
+        <target state="translated">Deasaich am fo-thiotal “<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4711,9 +4721,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9152096266184328708" datatype="html">
+      <trans-unit id="9152096266184328708" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">Chaidh {count, plural, =1 {an iarrtas leantainn aig <x id="username"/>} one {<x id="count"/> iarrtas leantainn} two {<x id="count"/> iarrtas leantainn} few {<x id="count"/> iarrtasan leantainn} other {<x id="count"/> iarrtas leantainn}} a thoirt air falbh</target>
+        <target state="translated">Chaidh {count, plural, =1 {an iarrtas clàraidh aig <x id="username"/>} one {<x id="count"/> iarrtas clàraidh} two {<x id="count"/> iarrtas clàraidh} few {<x id="count"/> iarrtasan clàraidh} other {<x id="count"/> iarrtas clàraidh}} a thoirt air falbh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">158</context>
@@ -4824,7 +4834,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="4784303436041135088" datatype="html">
-        <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</source>
+        <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</source>
         <target state="new">Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
@@ -4871,9 +4881,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212436567578143551" datatype="html">
+      <trans-unit id="8212436567578143551" datatype="html" xml:space="preserve">
         <source>Add a caption</source>
-        <target state="new">Add a caption</target>
+        <target state="translated">Cuir fo-thiotal ris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">68</context>
@@ -4895,9 +4905,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1929702212782336063" datatype="html">
+      <trans-unit id="1929702212782336063" datatype="html" xml:space="preserve">
         <source>Chapters are not available on a live.</source>
-        <target state="new">Chapters are not available on a live.</target>
+        <target state="translated">Chan eil gleus nan caibideilean ri fhaighinn air sruthadh beò.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.html</context>
           <context context-type="linenumber">8</context>
@@ -4951,33 +4961,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327477703628774598" datatype="html">
+      <trans-unit id="3327477703628774598" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ getVideoName() }}"/> is not a live.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ getVideoName() }}"/> is not a live.</target>
+        <target state="translated">Chan eil <x id="INTERPOLATION" equiv-text="{{ getVideoName() }}"/> ’na shruthadh beò.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1110126021784555841" datatype="html">
+      <trans-unit id="1110126021784555841" datatype="html" xml:space="preserve">
         <source>Your live has ended.</source>
-        <target state="new">Your live has ended.</target>
+        <target state="translated">Thàinig an sruthadh beò agad gu crìch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1760429801169166597" datatype="html">
+      <trans-unit id="1760429801169166597" datatype="html" xml:space="preserve">
         <source>Live configuration is unavailable because you are streaming in this live.</source>
-        <target state="new">Live configuration is unavailable because you are streaming in this live.</target>
+        <target state="translated">Chan eil rèiteachadh an t-sruthaidh bheò ri fhaighinn air sgàth ’s gu bheil thu ri a shruthadh beò-san.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8775708050219693192" datatype="html">
+      <trans-unit id="8775708050219693192" datatype="html" xml:space="preserve">
         <source>Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </target>
+        <target state="translated">Chaidh rèiteachadh air <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> nach fhaod sruthadh beò a bhith nas fhaide na <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. Nuair a ruigeas an sruthadh beò agad a’ chrìoch seo, thèid crìoch a chur air gu fèin-obrachail. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -5796,17 +5806,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3183528558317228851" datatype="html">
+      <trans-unit id="3183528558317228851" datatype="html" xml:space="preserve">
         <source>Your live is waiting in your library. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your live is waiting in your library. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">Tha an sruthadh beò agad a’ feitheamh san leabhar-lann agad. Gidheadh, tha atharraichean gun sàbhaladh ann: a bheil thu cinnteach gu bheil thu airson an duilleag seo fhàgail?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327538490069601336" datatype="html">
+      <trans-unit id="3327538490069601336" datatype="html" xml:space="preserve">
         <source>Cannot create live because this platform has too many created lives</source>
-        <target state="new">Cannot create live because this platform has too many created lives</target>
+        <target state="translated">Cha b’ urrainn dhuinn sruthadh beò a chruthachadh on a tha cus dhiubh air an ùrlar seo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -6612,10 +6622,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6481633820711333116" datatype="html">
+      <trans-unit id="6481633820711333116" datatype="html" xml:space="preserve">
         <source>This live is not currently streaming.</source>
-        <target state="new"> This live is not currently streaming.
-</target>
+        <target state="translated">Chan eil an sruthadh beò seo ’ga shruthadh an-dràsta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">6</context>
@@ -7061,9 +7070,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6339334908260162420" datatype="html">
+      <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="new">Your videos with thumbnail, caption files. Video files can also be included in the archive</target>
+        <target state="translated">Na videothan agad le faidhlichean dealbhaige, fho-thiotalan. ’S urrainn dhut faidhlichean video a ghabhail a-staigh san tasg-lann cuideachd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
@@ -7837,9 +7846,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216288352598663055" datatype="html">
+      <trans-unit id="5216288352598663055" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> mhì-ghnàthachadh} two {<x id="INTERPOLATION"/> mhì-ghnàthachadh} few {<x id="INTERPOLATION"/> mì-ghnàthachaidhean} other {<x id="INTERPOLATION"/> mì-ghnàthachadh}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">67,68</context>
@@ -8325,9 +8334,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5810973984628060415" datatype="html">
+      <trans-unit id="5810973984628060415" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</source>
-        <target state="new">{count, plural, =1 {Comment approved.} other {<x id="count"/> comments approved.}}</target>
+        <target state="translated">Chaidh aontachadh ri {count, plural, =1 {beachd} one {<x id="count"/> bheachd} two {<x id="count"/> bheachd} few {<x id="count"/> beachdan} other {<x id="count"/> beachd}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -8478,11 +8487,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="translated">
           <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =0 {Chan eil gearan ann} =1 {1 ghearan} one {abuse.countReportsForReporter ghearan} two {abuse.countReportsForReporter ghearan} few {abuse.countReportsForReporter gearanan} other {abuse.countReportsForReporter gearan}}"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -8633,9 +8638,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6540177673229220400" datatype="html">
+      <trans-unit id="6540177673229220400" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil gearan ann} =1 {1 ghearan} one {<x id="INTERPOLATION"/> ghearan} two {<x id="INTERPOLATION"/> ghearan} few {<x id="INTERPOLATION"/> gearanan} other {<x id="INTERPOLATION"/> gearan}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil gearan ann} one {<x id="INTERPOLATION"/> ghearan} two {<x id="INTERPOLATION"/> ghearan} few {<x id="INTERPOLATION"/> gearanan} other {<x id="INTERPOLATION"/> gearan}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">20</context>
@@ -9520,8 +9525,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8953934448427251062" datatype="html" xml:space="preserve">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
         <target state="translated">Air adhbhar na dòigh san obraich <x id="START_LINK"/>siostam a’ cho-roinnidh<x id="CLOSE_LINK"/>, dh’fhaoidte gun dèid cuir a dh’fhiosrachadh teicnigeach mun t-siostam agad (can seòladh IP poblach) a chur gu seisean eile ach bheir seo faochadh mòr do dh’eallach an fhrithealaiche.</target>
-
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">72</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
         <source>Help share videos being played</source>
         <target state="translated">Cuidich le co-roinneadh videothan a tha ’gan cluich</target>
@@ -11074,17 +11082,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4693864826145148757" datatype="html">
+      <trans-unit id="4693864826145148757" datatype="html" xml:space="preserve">
         <source>Max live FPS</source>
-        <target state="new">Max live FPS</target>
+        <target state="translated">FPS as motha air sruthadh beò</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">117,119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6315342359958880564" datatype="html">
+      <trans-unit id="6315342359958880564" datatype="html" xml:space="preserve">
         <source>Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</source>
-        <target state="new">Cap transcoded live FPS. Max resolution stream still keeps the original FPS.</target>
+        <target state="translated">Cuingich FPS nan sruthaidhean beòtha air an tar-chòdachadh. Cumaidh an sruth leis an dùmhlachd-bhreacaidh as àirde an FPS tùsail aige fhathast.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,121</context>
@@ -11427,13 +11435,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="127946625874930162" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-<x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-<x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
         <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
   color: red;
 <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
@@ -12552,9 +12554,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1295676134074258121" datatype="html">
+      <trans-unit id="1295676134074258121" datatype="html" xml:space="preserve">
         <source>New video or live from your subscriptions</source>
-        <target state="new">New video or live from your subscriptions</target>
+        <target state="translated">Video no sruthadh beò ùr o na fo-sgrìobhaidhean agad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -12860,11 +12862,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">354</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8536543691393468142" datatype="html">
+      <trans-unit id="8536543691393468142" datatype="html" xml:space="preserve">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
-        <target state="translated">
-          <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/>
-        </target>
+        <target state="translated"><x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">357</context>
@@ -13130,26 +13130,24 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="403587185492002456" datatype="html">
+      <trans-unit id="403587185492002456" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 fho-sgrìobhaiche} one {<x id="INTERPOLATION"/> fho-sgrìobhaiche} two {<x id="INTERPOLATION"/> fho-sgrìobhaiche} few {<x id="INTERPOLATION"/> fo-sgrìobhaichean} other {<x id="INTERPOLATION"/> fo-sgrìobhaiche}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> fho-sgrìobhaiche} two {<x id="INTERPOLATION"/> fho-sgrìobhaiche} few {<x id="INTERPOLATION"/> fo-sgrìobhaichean} other {<x id="INTERPOLATION"/> fo-sgrìobhaiche}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3068011377000255023" datatype="html">
+      <trans-unit id="3068011377000255023" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target>{VAR_PLURAL, plural, =0 {Chan eil video ann} =1 {1 video} one {<x id="INTERPOLATION"/> video} two {<x id="INTERPOLATION"/> video} few {<x id="INTERPOLATION"/> videothan} other {<x id="INTERPOLATION"/> video}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil video ann} one {<x id="INTERPOLATION"/> video} two {<x id="INTERPOLATION"/> video} few {<x id="INTERPOLATION"/> videothan} other {<x id="INTERPOLATION"/> video}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} one {{{ getTotalVideosOf(videoChannel) }} video} two {{{ getTotalVideosOf(videoChannel) }} video} few {{{ getTotalVideosOf(videoChannel) }} videothan} other {{{ getTotalVideosOf(videoChannel) }} video}}"/>
         </target>
@@ -13198,9 +13196,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7766488542631150871" datatype="html">
+      <trans-unit id="7766488542631150871" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil video ann} =1 {1 video} one {<x id="INTERPOLATION"/> video} two {<x id="INTERPOLATION"/> video} few {<x id="INTERPOLATION"/> videothan} other {<x id="INTERPOLATION"/> video} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil video ann} one {<x id="INTERPOLATION"/> video} two {<x id="INTERPOLATION"/> video} few {<x id="INTERPOLATION"/> videothan} other {<x id="INTERPOLATION"/> video}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">29</context>
@@ -14243,11 +14241,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8414659348208189884" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ getColumn('published').label }}"/>
-          <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/>
-          <x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ getColumn('published').label }}"/> <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/> <x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/> </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="{{ getColumn('published').label }}"/>
           <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/>
@@ -14274,25 +14268,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">160,161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2255609929953210118" datatype="html">
+      <trans-unit id="2255609929953210118" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No viewers} =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No viewers} =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Gun choimhead air} =1 {Tha 1 a’ coimhead air} one {Tha <x id="INTERPOLATION"/> a’ coimhead air} two {Tha <x id="INTERPOLATION"/> a’ coimhead air} few {Tha <x id="INTERPOLATION"/> a’ coimhead air} other {Tha <x id="INTERPOLATION"/> a’ coimhead air}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5707577756171682456" datatype="html">
+      <trans-unit id="5707577756171682456" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No comments} =1 {1 comment} other {<x id="INTERPOLATION"/> comments}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No comments} =1 {1 comment} other {<x id="INTERPOLATION"/> comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Chan eil beachd ann} one {<x id="INTERPOLATION"/> bheachd} two {<x id="INTERPOLATION"/> bheachd} few {<x id="INTERPOLATION"/> beachdan} other {<x id="INTERPOLATION"/> beachd}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019185430150596533" datatype="html">
+      <trans-unit id="4019185430150596533" datatype="html" xml:space="preserve">
         <source>Only lives</source>
-        <target state="new">Only lives</target>
+        <target state="translated">Sruthaidhean beòtha a-mhàin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">245</context>
@@ -16758,9 +16752,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738031253894929036" datatype="html">
+      <trans-unit id="738031253894929036" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="translated">Chaidh {count, plural, =1 {1 chleachdaiche} one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche}} a dhì-thoirmeasg.</target>
+        <target state="translated">Chaidh {count, plural, one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche}} a dhì-thoirmeasg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">284</context>
@@ -16794,17 +16788,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">302</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1301767781765127363" datatype="html">
+      <trans-unit id="1301767781765127363" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">Chaidh {count, plural, =1 {1 chleachdaiche} one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche}} a sguabadh às.</target>
+        <target state="translated">Chaidh {count, plural, one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche}} a sguabadh às.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">313</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3104427236147521673" datatype="html">
+      <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">Chaidh comharrachadh gun deach am post-d aig {count, plural, =1 {1 chleachdaiche} one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche}} a dhearbhadh.</target>
+        <target state="translated">Chaidh comharrachadh gun deach am post-d aig {count, plural, one {<x id="count"/> chleachdaiche} two {<x id="count"/> chleachdaiche} few {<x id="count"/> cleachdaichean} other {<x id="count"/> cleachdaiche}} a dhearbhadh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">331</context>
@@ -17031,7 +17025,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8679065902183523301" datatype="html">
-        <source> These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment. </source>
+        <source>These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment.</source>
         <target state="new"> These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
@@ -18196,7 +18190,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html" xml:space="preserve">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="translated">Mar chuimhneachan, seo na saothraichean a thèid a dhèanamh: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">Mar chuimhneachan, seo na saothraichean a thèid a dhèanamh: &lt;ol&gt;�&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">399</context>
@@ -18291,8 +18285,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Cha b’ urrainn dhuinn an teisteas cliant OAuth fhaighinn: <x id="PH" equiv-text="error.text"/>. Dèan cinnteach gun do rèitich thu PeerTube mar bu chòir (sa phasgan config/) ’s gu sònraichte an earrann "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -18660,10 +18653,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {toradh} one {toradh} two {thoradh} few {toraidhean} other {toradh}}"/>
@@ -19045,25 +19035,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977908106285712483" datatype="html">
+      <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
-        <target state="new">Max live duration must be greater or equal to -1.</target>
+        <target state="translated">Feumaidh faide as motha nan sruthaidhean beòtha a bhith nas motha no co-ionnann ri -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6722592581141834318" datatype="html">
+      <trans-unit id="6722592581141834318" datatype="html" xml:space="preserve">
         <source>Max lives is required.</source>
-        <target state="new">Max lives is required.</target>
+        <target state="translated">Tha feum air àireamh as motha de shruthaidhean beòtha.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4718923616998868965" datatype="html">
+      <trans-unit id="4718923616998868965" datatype="html" xml:space="preserve">
         <source>Max lives must be greater or equal to -1.</source>
-        <target state="new">Max lives must be greater or equal to -1.</target>
+        <target state="translated">Feumaidh an àireamh as motha de shruthaidhean beòtha a bhith nas motha no co-ionnann ri -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -19077,9 +19067,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6094685877052448543" datatype="html">
+      <trans-unit id="6094685877052448543" datatype="html" xml:space="preserve">
         <source>Max user lives must be greater or equal to -1.</source>
-        <target state="new">Max user lives must be greater or equal to -1.</target>
+        <target state="translated">Feumaidh an àireamh as motha de shruthaidhean beòtha nan cleachdaichean a bhith nas motha no co-ionnann ri -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
@@ -19546,7 +19536,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="4362414027529971937" datatype="html">
-        <source> As you probably noticed: creating an account is not necessary to watch videos on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
+        <source>As you probably noticed: creating an account is not necessary to watch videos on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
         <target state="new"> As you probably noticed: creating an account is not necessary to watch videos on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
@@ -21100,7 +21090,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html" xml:space="preserve">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="translated">Ma bheir thu air falbh an cleachdaiche seo, chan urrainn dhut cleachdaiche no seanail eile air a bheil an t-ainm &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; a chruthachadh an uairsin!</target>
+        <target state="translated">Ma bheir thu air falbh an cleachdaiche seo, chan urrainn dhut cleachdaiche no seanail eile air a bheil an t-ainm &lt;strong&gt;�&lt;/strong&gt; a chruthachadh an uairsin!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -21546,9 +21536,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2975958100686828466" datatype="html">
+      <trans-unit id="2975958100686828466" datatype="html" xml:space="preserve">
         <source>Captions are not available on a live.</source>
-        <target state="new">Captions are not available on a live.</target>
+        <target state="translated">Chan eil gleus nam fo-thiotalan ri fhaighinn air sruthadh beò.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">8</context>
@@ -22451,9 +22441,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">532</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7977192130714582918" datatype="html">
+      <trans-unit id="7977192130714582918" datatype="html" xml:space="preserve">
         <source>Generate caption</source>
-        <target state="new">Generate caption</target>
+        <target state="translated">Gin fo-thiotal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">172</context>
@@ -22487,25 +22477,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="925076027211452339" datatype="html">
+      <trans-unit id="925076027211452339" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete the original file of this video?</source>
-        <target state="new">Are you sure you want to delete the original file of this video?</target>
+        <target state="translated">A bheil thu cinnteach gu bheil thu airson faidhle tùsail a’ video seo a sguabadh às?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3014914668468316940" datatype="html">
+      <trans-unit id="3014914668468316940" datatype="html" xml:space="preserve">
         <source>Delete original file</source>
-        <target state="new">Delete original file</target>
+        <target state="translated">Sguab às am faidhle tùsail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6647462936549531405" datatype="html">
+      <trans-unit id="6647462936549531405" datatype="html" xml:space="preserve">
         <source>Original file removed.</source>
-        <target state="new">Original file removed.</target>
+        <target state="translated">Chaidh am faidhle tùsail a thoirt air falbh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">266</context>
@@ -22543,25 +22533,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">494</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5571441159247782289" datatype="html">
+      <trans-unit id="5571441159247782289" datatype="html" xml:space="preserve">
         <source>Unmute account</source>
-        <target state="new">Unmute account</target>
+        <target state="translated">Dì-mhùch an cunntas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">554</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6941992199451163843" datatype="html">
+      <trans-unit id="6941992199451163843" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Videothan air <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3942718333651219385" datatype="html">
+      <trans-unit id="3942718333651219385" datatype="html" xml:space="preserve">
         <source>Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</source>
-        <target state="new">Videos on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> other platforms</target>
+        <target state="translated">Videothan air <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ’s <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ùrlar(an) eile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">23</context>
@@ -22583,9 +22573,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7896600179187469316" datatype="html">
+      <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</source>
-        <target state="new">{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</target>
+        <target state="translated">Chaidh {count, plural, =1{an obair} one {<x id="count"/> obair} two {<x id="count"/> obair} few {<x id="count"/> obraichean} other {<x id="count"/> obair}} a thoirt air falbh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">156</context>
@@ -22895,9 +22885,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3403196612855474932" datatype="html">
+      <trans-unit id="3403196612855474932" datatype="html" xml:space="preserve">
         <source>Lives</source>
-        <target state="new">Lives</target>
+        <target state="translated">Sruthaidhean beòtha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">184</context>
@@ -23167,9 +23157,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7659756233411947529" datatype="html">
+      <trans-unit id="7659756233411947529" datatype="html" xml:space="preserve">
         <source>Current lives</source>
-        <target state="new">Current lives</target>
+        <target state="translated">Na tha ’ga shruthadh beò</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">26</context>
@@ -23224,9 +23214,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
