@@ -20,7 +20,9 @@
         @if (filters().scope === 'local' || totalFollowing === 0) {
           <ng-container i18n>Videos on <strong>{{ instanceName }}</strong></ng-container>
         } @else {
-          <ng-container i18n>Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> other platforms</ng-container>
+          <ng-container i18n>
+            Videos on <strong>{{ instanceName }}</strong> and <strong>{{ totalFollowing }}</strong> {totalFollowing, plural, =1 {other platform} other {other platforms}}
+          </ng-container>
         }
       </div>
 
@@ -103,7 +105,7 @@
 
           <div class="with-description">
             <div i18n>
-              {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} other platforms</a>.
+              {{ instanceName }} platform subscribes to content from <a routerLink="/about/follows" target="_blank">{{ totalFollowing }} {totalFollowing, plural, =1 {other platform} other {other platforms}}</a>.
             </div>
 
             <div i18n>Set your display preferences here.</div>
