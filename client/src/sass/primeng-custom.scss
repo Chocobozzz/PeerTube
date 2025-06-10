@@ -1,15 +1,15 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_icons' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_icons" as *;
 
 $hover-bg: pvar(--bg-secondary-400);
 $hover-bg-2: pvar(--bg-secondary-350);
 
 /* stylelint-disable */
-@import 'primeng/resources/primeng.css';
+@import "primeng/resources/primeng.css";
 
 // Override primeng style we don't want
-input[type=button] {
+input[type="button"] {
   border-radius: inherit;
 }
 
@@ -91,10 +91,12 @@ body .p-paginator .p-paginator-current {
   min-width: 2.286em;
   line-height: 2.286em;
 }
-body .p-paginator .p-dropdown .p-dropdown-trigger, body .p-paginator .p-dropdown .p-dropdown-label {
+body .p-paginator .p-dropdown .p-dropdown-trigger,
+body .p-paginator .p-dropdown .p-dropdown-label {
   color: pvar(--fg-300);
 }
-body .p-paginator .p-dropdown:hover .p-dropdown-trigger, body .p-paginator .p-dropdown:hover .p-dropdown-label {
+body .p-paginator .p-dropdown:hover .p-dropdown-trigger,
+body .p-paginator .p-dropdown:hover .p-dropdown-label {
   color: pvar(--fg);
 }
 body .p-paginator .p-paginator-first:before {
@@ -173,7 +175,8 @@ body .p-dropdown .p-dropdown-label {
 body .p-dropdown .p-dropdown-label.p-placeholder {
   color: pvar(--input-placeholder);
 }
-.p-dropdown .p-dropdown-label:focus, .p-dropdown .p-dropdown-label:enabled:focus {
+.p-dropdown .p-dropdown-label:focus,
+.p-dropdown .p-dropdown-label:enabled:focus {
   outline: 0 none;
   box-shadow: none;
 }
@@ -497,7 +500,6 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   background: pvar(--input-bg-550);
   color: pvar(--fg);
   border-radius: 4px;
-  text-transform: uppercase;
 }
 .p-chips .p-chips-multiple-container .p-chips-token.p-focus {
   background: pvar(--input-bg-600);
@@ -750,7 +752,6 @@ p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
   background-color: #f4f4f4;
 }
 
-
 // ---------------------------------------------------------------------------
 // PeerTube customizations
 // ---------------------------------------------------------------------------
@@ -788,7 +789,8 @@ p-table {
     white-space: nowrap;
   }
 
-  td, th {
+  td,
+  th {
     font-family: $main-fonts;
     font-size: 15px;
     color: pvar(--fg) !important;
@@ -810,13 +812,14 @@ p-table {
     &.p-highlight {
       background-color: pvar(--bg-secondary-400) !important;
 
-      td, td > a {
+      td,
+      td > a {
         color: pvar(--fg) !important;
       }
     }
 
     &:focus-visible {
-      border: 1px solid pvar(--fg) !important
+      border: 1px solid pvar(--fg) !important;
     }
   }
 
@@ -871,7 +874,7 @@ p-table {
     }
 
     &.p-sortable-column:focus-visible {
-      border: 1px solid pvar(--fg) !important
+      border: 1px solid pvar(--fg) !important;
     }
 
     &.p-highlight {
@@ -917,7 +920,7 @@ p-table {
       @include margin-left(5px);
 
       &:first-child {
-        @include margin-left(0)
+        @include margin-left(0);
       }
     }
   }
@@ -1020,7 +1023,10 @@ p-table {
           }
 
           &.p-highlight {
-            &, &:hover, &:active, &:focus {
+            &,
+            &:hover,
+            &:active,
+            &:focus {
               color: pvar(--fg) !important;
               background-color: pvar(--bg-secondary-500) !important;
             }
@@ -1104,12 +1110,12 @@ p-table {
 }
 
 p-tablecheckbox:hover div .p-checkbox-box {
-  box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
 }
 
 .p-checkbox {
-
-  &, .p-checkbox-box {
+  &,
+  .p-checkbox-box {
     width: 18px !important;
     height: 18px !important;
   }
@@ -1140,7 +1146,7 @@ p-toast {
       top: 5px;
       width: 18px;
       height: 18px;
-      background: url('../assets/images/feather/x.svg') no-repeat;
+      background: url("../assets/images/feather/x.svg") no-repeat;
       background-size: contain;
     }
   }
@@ -1152,7 +1158,7 @@ p-toast {
     border-radius: 5px;
     box-sizing: border-box;
     border: 1px solid #EBEEF5 !important;
-    box-shadow: 0 2px 12px 0 rgba(0, 0 , 0, .1);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     overflow: hidden;
 
     .notification-block {
@@ -1230,7 +1236,7 @@ p-chips {
 
 .p-dropdown-clear-icon,
 .p-multiselect-clear-icon {
-  margin-top: -.5em;
+  margin-top: -0.5em;
 }
 
 .p-dropdown {
@@ -1310,7 +1316,10 @@ p-chips {
           border-radius: 100% !important;
 
           &.p-highlight {
-            &, &:hover, &:active, &:focus {
+            &,
+            &:hover,
+            &:active,
+            &:focus {
               background-color: pvar(--bg-secondary-450) !important;
               color: pvar(--fg) !important;
               font-weight: $font-bold !important;
