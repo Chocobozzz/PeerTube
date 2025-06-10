@@ -32,6 +32,14 @@
             </a>
 
             <a
+            *ngIf="config.instance.social.xLink"
+            class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the X profile"
+            target="_blank" rel="noopener noreferrer" [href]="config.instance.social.xLink"
+            >
+            <my-global-icon iconName="x"></my-global-icon>
+          </a>
+
+            <a
             *ngIf="config.instance.social.blueskyLink"
             class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Bluesky profile"
             target="_blank" rel="noopener noreferrer" [href]="config.instance.social.blueskyLink"
