@@ -251,6 +251,7 @@ export class VideoEdit {
 
     this.common.name = options.name
     this.common.channelId = options.channelId
+    this.common.support = options.support
     this.metadata.isLive = isLive
 
     this.common.privacy = serverDefaults.publish.privacy
