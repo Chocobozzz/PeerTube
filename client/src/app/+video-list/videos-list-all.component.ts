@@ -84,6 +84,9 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
 
   enabledForReuse () {
     this.disabled = false
+
+    // Rebuild the title
+    this.update()
   }
 
   update () {
