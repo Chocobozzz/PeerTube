@@ -27,8 +27,16 @@
               *ngIf="config.instance.social.mastodonLink"
               class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Mastodon profile"
               target="_blank" rel="noopener noreferrer" [href]="config.instance.social.mastodonLink"
-              >
+            >
               <my-global-icon iconName="mastodon"></my-global-icon>
+            </a>
+
+            <a
+              *ngIf="config.instance.social.xLink"
+              class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the X profile"
+              target="_blank" rel="noopener noreferrer" [href]="config.instance.social.xLink"
+            >
+              <my-global-icon iconName="x-twitter"></my-global-icon>
             </a>
 
             <a
@@ -36,8 +44,8 @@
             class="media peertube-button-link rounded-icon-button mb-3" i18n-title title="Go to the Bluesky profile"
             target="_blank" rel="noopener noreferrer" [href]="config.instance.social.blueskyLink"
             >
-            <my-global-icon iconName="bluesky"></my-global-icon>
-          </a>
+              <my-global-icon iconName="bluesky"></my-global-icon>
+            </a>
 
             <a
               *ngIf="config.instance.social.externalLink"

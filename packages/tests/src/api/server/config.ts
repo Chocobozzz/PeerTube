@@ -36,6 +36,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.social.externalLink).to.be.empty
   expect(data.instance.social.blueskyLink).to.be.empty
   expect(data.instance.social.mastodonLink).to.be.empty
+  expect(data.instance.social.xLink).to.be.empty
 
   expect(data.instance.languages).to.have.lengthOf(0)
   expect(data.instance.categories).to.have.lengthOf(0)
@@ -196,7 +197,8 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       social: {
         externalLink: 'https://joinpeertube.org/',
         mastodonLink: 'https://framapiaf.org/@peertube',
-        blueskyLink: 'https://bsky.app/profile/joinpeertube.org'
+        blueskyLink: 'https://bsky.app/profile/joinpeertube.org',
+        xLink: 'https://x.org/@joinpeertube'
       },
 
       defaultClientRoute: '/videos/recently-added',

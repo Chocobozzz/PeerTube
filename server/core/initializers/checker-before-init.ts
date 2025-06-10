@@ -149,6 +149,7 @@ export function checkMissedConfig () {
     'instance.social.external_link',
     'instance.social.mastodon_link',
     'instance.social.bluesky_link',
+    'instance.social.x_link',
     'services.twitter.username',
     'followers.instance.enabled',
     'followers.instance.manual_approval',

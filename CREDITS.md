@@ -846,6 +846,7 @@
  * `peertube-x` by Solen DP (CC-BY)
  * `flame` by Freepik (Flaticon License)
  * `local` by Larea (CC-BY)
+ * X (Twitter) icon: [Wikimedia Commons](https://fr.m.wikipedia.org/wiki/Fichier:X_logo_2023.svg)
 
 
 # Contributors to our 2020 crowdfunding :heart:

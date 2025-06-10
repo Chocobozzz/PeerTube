@@ -326,6 +326,7 @@ function customConfig (): CustomConfig {
       social: {
         blueskyLink: CONFIG.INSTANCE.SOCIAL.BLUESKY,
         mastodonLink: CONFIG.INSTANCE.SOCIAL.MASTODON_LINK,
+        xLink: CONFIG.INSTANCE.SOCIAL.X_LINK,
         externalLink: CONFIG.INSTANCE.SOCIAL.EXTERNAL_LINK
       },
 

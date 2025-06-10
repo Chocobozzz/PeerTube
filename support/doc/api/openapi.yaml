@@ -9599,6 +9599,8 @@ components:
                   type: string
                 blueskyLink:
                   type: string
+                xLink:
+                  type: string
             customizations:
               type: object
               properties:
@@ -10071,6 +10073,8 @@ components:
                 mastodonLink:
                   type: string
                 blueskyLink:
+                  type: string
+                xLink:
                   type: string
             defaultClientRoute:
               type: string

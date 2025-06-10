@@ -47,6 +47,7 @@ export interface CustomConfig {
       externalLink: string
       mastodonLink: string
       blueskyLink: string
+      xLink: string
     }
 
     defaultClientRoute: string

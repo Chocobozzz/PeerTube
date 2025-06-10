@@ -16,6 +16,7 @@ const icons = {
   'flame': require('../../../assets/images/misc/flame.svg'),
   'fediverse': require('../../../assets/images/misc/fediverse.svg'),
   'mastodon': require('../../../assets/images/misc/mastodon.svg'),
+  'x-twitter': require('../../../assets/images/misc/x-twitter.svg'),
   'bluesky': require('../../../assets/images/misc/bluesky.svg'),
 
   // feather/lucide icons

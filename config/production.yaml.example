@@ -974,6 +974,8 @@ instance:
     mastodon_link: ''
     # Bluesky
     bluesky_link: ''
+    # X
+    x_link: ''
 
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime

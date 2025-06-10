@@ -59,6 +59,7 @@ type Form = {
       externalLink: FormControl<string>
       mastodonLink: FormControl<string>
       blueskyLink: FormControl<string>
+      xLink: FormControl<string>
     }>
 
     isNSFW: FormControl<boolean>
@@ -205,7 +206,8 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
         social: {
           externalLink: URL_VALIDATOR,
           mastodonLink: URL_VALIDATOR,
-          blueskyLink: URL_VALIDATOR
+          blueskyLink: URL_VALIDATOR,
+          xLink: URL_VALIDATOR
         }
       }
     }

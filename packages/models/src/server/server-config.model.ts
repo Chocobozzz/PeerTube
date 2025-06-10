@@ -131,6 +131,7 @@ export interface ServerConfig {
       externalLink: string
       mastodonLink: string
       blueskyLink: string
+      xLink: string
     }
 
     defaultClientRoute: string

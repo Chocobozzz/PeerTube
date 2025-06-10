@@ -959,6 +959,9 @@ const CONFIG = {
       },
       get BLUESKY () {
         return config.get<string>('instance.social.bluesky_link')
+      },
+      get X_LINK () {
+        return config.get<string>('instance.social.x_link')
       }
     },
 
