@@ -40,6 +40,7 @@ import {
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
 import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
+import { BooleanPipe } from "../../../../shared/shared-main/common/boolean.pipe";
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -76,8 +77,9 @@ type UserForList = User & {
     UserBanModalComponent,
     PTDatePipe,
     BytesPipe,
-    ProgressBarComponent
-  ]
+    ProgressBarComponent,
+    BooleanPipe
+]
 })
 export class UserListComponent extends RestTable<User> implements OnInit, OnDestroy {
   protected route = inject(ActivatedRoute)
@@ -182,6 +184,7 @@ export class UserListComponent extends RestTable<User> implements OnInit, OnDest
       { id: 'username', label: $localize`Username` },
       { id: 'role', label: $localize`Role` },
       { id: 'email', label: $localize`Email` },
+      { id: '2FA', label: $localize`2FA` },
       { id: 'quota', label: $localize`Video quota` },
       { id: 'totalVideoFileSize', label: $localize`Total size` },
       { id: 'createdAt', label: $localize`Created` },
@@ -211,7 +214,7 @@ export class UserListComponent extends RestTable<User> implements OnInit, OnDest
     }
 
     // Default behaviour
-    this.selectedColumns = [ 'username', 'role', 'email', 'quota', 'totalVideoFileSize', 'createdAt', 'lastLoginDate' ]
+    this.selectedColumns = [ 'username', 'role', 'email', '2FA', 'quota', 'totalVideoFileSize', 'createdAt', 'lastLoginDate' ]
     return
   }
 
