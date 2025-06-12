@@ -1821,9 +1821,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="227566219157426488" datatype="html">
+      <trans-unit id="227566219157426488" datatype="html" xml:space="preserve">
         <source>Default sensitive content policy</source>
-        <target state="new">Default sensitive content policy</target>
+        <target state="translated">Politique par défaut pour le contenu sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -4769,17 +4769,17 @@
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1922792486639674435" datatype="html">
+      <trans-unit id="1922792486639674435" datatype="html" xml:space="preserve">
         <source>Describe what makes your content sensitive</source>
-        <target state="new">Describe what makes your content sensitive</target>
+        <target state="translated">Décrivez ce qui défini votre contenu comme sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2376776371846413125" datatype="html">
+      <trans-unit id="2376776371846413125" datatype="html" xml:space="preserve">
         <source>Help viewers to identify your sensitive content</source>
-        <target state="new">Help viewers to identify your sensitive content</target>
+        <target state="translated">Aidez les visiteurs à identifier votre contenu sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -5159,9 +5159,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8043791498070371772" datatype="html">
+      <trans-unit id="8043791498070371772" datatype="html" xml:space="preserve">
         <source>Your video contains sensitive content</source>
-        <target state="new">Your video contains sensitive content</target>
+        <target state="translated">Votre vidéo contient du contenu sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">26</context>
@@ -9622,17 +9622,17 @@
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8817920941077743476" datatype="html">
+      <trans-unit id="8817920941077743476" datatype="html" xml:space="preserve">
         <source>This instance is dedicated to sensitive content</source>
-        <target state="new">This instance is dedicated to sensitive content</target>
+        <target state="translated">Cette instance est dédiée au contenu sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7611566203467532051" datatype="html">
+      <trans-unit id="7611566203467532051" datatype="html" xml:space="preserve">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </source>
-        <target state="new"> Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </target>
+        <target state="translated">L'activer permettra aux autres administrateurs de savoir que vous fédérez principalement du contenu sensible.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> De plus, la case à cocher "contenu sensible" lors du téléversement d'une vidéo sera cochée par défaut. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">194,195</context>
@@ -9650,9 +9650,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5509417153332543255" datatype="html">
+      <trans-unit id="5509417153332543255" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</target>
+        <target state="translated">Qui modère l'instance ? Quelle est la politique concernant le contenu sensible ? Des Vidéos politiques ? Etc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">231,233</context>
@@ -11780,9 +11780,9 @@
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5630677130087951545" datatype="html">
+      <trans-unit id="5630677130087951545" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</source>
-        <target state="new">Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</target>
+        <target state="translated">Afficher toutes les vidéos (privées, non-listées, protégées par mot de passe, pas encore publiées ou les vidéos sensibles)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">159</context>
@@ -11996,9 +11996,9 @@
           <context context-type="linenumber">162,164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4258030282828995238" datatype="html">
+      <trans-unit id="4258030282828995238" datatype="html" xml:space="preserve">
         <source>MODERATION &amp; SENSITIVE CONTENT</source>
-        <target state="new">MODERATION &amp; SENSITIVE CONTENT</target>
+        <target state="translated">MODÉRATION &amp; CONTENU SENSIBLE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">179,180</context>
@@ -13714,9 +13714,9 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6517624161149187953" datatype="html">
+      <trans-unit id="6517624161149187953" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> is dedicated to sensitive content.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ config.instance.name }}"/> est dédiée au contenu sensible.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-home.component.html</context>
           <context context-type="linenumber">14,17</context>
@@ -14166,9 +14166,9 @@
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9158483906909080531" datatype="html">
+      <trans-unit id="9158483906909080531" datatype="html" xml:space="preserve">
         <source>Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Mettez à jour votre politique dans <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>vos paramètres<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">95</context>
@@ -14342,41 +14342,41 @@
           <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7216759144314993217" datatype="html">
+      <trans-unit id="7216759144314993217" datatype="html" xml:space="preserve">
         <source>Some videos with a specific sensitive content category have a different policy.</source>
-        <target state="new"> Some videos with a specific sensitive content category have a different policy.</target>
+        <target state="translated">Certaines vidéos avec une catégorie de contenu sensible spécifique peuvent avoir une politique différente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">348</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3343072271931497433" datatype="html">
+      <trans-unit id="3343072271931497433" datatype="html" xml:space="preserve">
         <source>Sensitive content hidden.</source>
-        <target state="new">Sensitive content hidden.</target>
+        <target state="translated">Contenu sensible caché.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4167711622812285080" datatype="html">
+      <trans-unit id="4167711622812285080" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning.</source>
-        <target state="new">Sensitive content has a warning.</target>
+        <target state="translated">Le contenu sensible a un avertissement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2995961823224509765" datatype="html">
+      <trans-unit id="2995961823224509765" datatype="html" xml:space="preserve">
         <source>Sensitive content has a warning and the thumbnail is blurred.</source>
-        <target state="new">Sensitive content has a warning and the thumbnail is blurred.</target>
+        <target state="translated">Le contenu sensible a un avertissement et la miniature est floutée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">357</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6447635594696346395" datatype="html">
+      <trans-unit id="6447635594696346395" datatype="html" xml:space="preserve">
         <source>Sensitive content is displayed.</source>
-        <target state="new">Sensitive content is displayed.</target>
+        <target state="translated">Le contenu sensible est affiché.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">359</context>
@@ -16852,9 +16852,9 @@
           <context context-type="linenumber">331</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5333260366112063495" datatype="html">
+      <trans-unit id="5333260366112063495" datatype="html" xml:space="preserve">
         <source>Sensitive videos</source>
-        <target state="new">Sensitive videos</target>
+        <target state="translated">Vidéos sensibles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">47</context>
@@ -17064,9 +17064,9 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6784127216978878229" datatype="html">
+      <trans-unit id="6784127216978878229" datatype="html" xml:space="preserve">
         <source>Override sensitive content policy for certain videos</source>
-        <target state="new">Override sensitive content policy for certain videos</target>
+        <target state="translated">Écraser la politique de contenu sensible pour certaines vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -23459,17 +23459,17 @@
           <context context-type="linenumber">560</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2249128431249193118" datatype="html">
+      <trans-unit id="2249128431249193118" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content</source>
-        <target state="new">This video contains sensitive content</target>
+        <target state="translated">Cette vidéo contient du contenu sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">564</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189036340433233769" datatype="html">
+      <trans-unit id="4189036340433233769" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></source>
-        <target state="new">This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></target>
+        <target state="translated">Cette vidéo contient du contenu sensible : <x id="PH" equiv-text="flags.join(' - ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">567</context>
@@ -23745,17 +23745,17 @@
           <context context-type="linenumber">479</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="785960720847076177" datatype="html">
+      <trans-unit id="785960720847076177" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content. Are you sure you want to display the video page?</source>
-        <target state="new">This video contains sensitive content. Are you sure you want to display the video page?</target>
+        <target state="translated">Cette vidéo contient du contenu sensible. Êtes-vous sûr·e de vouloir afficher la page de la vidéo ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3000101082394601351" datatype="html">
+      <trans-unit id="3000101082394601351" datatype="html" xml:space="preserve">
         <source>Sensitive video</source>
-        <target state="new">Sensitive video</target>
+        <target state="translated">Vidéo sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">528</context>
