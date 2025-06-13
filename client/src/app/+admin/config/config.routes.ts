@@ -2,7 +2,7 @@ import { inject } from '@angular/core'
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, Routes } from '@angular/router'
 import { CanDeactivateGuard, ServerService, UserRightGuard } from '@app/core'
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
-import { CustomConfig, UserRight, VideoConstant } from '@peertube/peertube-models'
+import { CustomConfig, UserRight, VideoCommentPolicyType, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
 import { map } from 'rxjs'
 import { AdminConfigComponent } from './admin-config.component'
 import {
@@ -31,6 +31,24 @@ export const categoriesResolver: ResolveFn<VideoConstant<number>[]> = (_route: A
 
 export const languagesResolver: ResolveFn<VideoConstant<string>[]> = (_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) => {
   return inject(ServerService).getVideoLanguages()
+}
+
+export const licencesResolver: ResolveFn<VideoConstant<number>[]> = (_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) => {
+  return inject(ServerService).getVideoLicences()
+}
+
+export const privaciesResolver: ResolveFn<VideoConstant<VideoPrivacyType>[]> = (
+  _route: ActivatedRouteSnapshot,
+  _state: RouterStateSnapshot
+) => {
+  return inject(ServerService).getVideoPrivacies()
+}
+
+export const commentPoliciesResolver: ResolveFn<VideoConstant<VideoCommentPolicyType>[]> = (
+  _route: ActivatedRouteSnapshot,
+  _state: RouterStateSnapshot
+) => {
+  return inject(ServerService).getCommentPolicies()
 }
 
 export const configRoutes: Routes = [
@@ -97,6 +115,11 @@ export const configRoutes: Routes = [
         path: 'general',
         component: AdminConfigGeneralComponent,
         canDeactivate: [ CanDeactivateGuard ],
+        resolve: {
+          privacies: privaciesResolver,
+          licences: licencesResolver,
+          commentPolicies: commentPoliciesResolver
+        },
         data: {
           meta: {
             title: $localize`General configuration`

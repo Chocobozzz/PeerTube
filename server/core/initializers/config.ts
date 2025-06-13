@@ -138,17 +138,29 @@ const CONFIG = {
 
   DEFAULTS: {
     PUBLISH: {
-      DOWNLOAD_ENABLED: config.get<boolean>('defaults.publish.download_enabled'),
-      COMMENTS_POLICY: config.get<VideoCommentPolicyType>('defaults.publish.comments_policy'),
-      PRIVACY: config.get<VideoPrivacyType>('defaults.publish.privacy'),
-      LICENCE: config.get<number>('defaults.publish.licence')
+      get DOWNLOAD_ENABLED () {
+        return config.get<boolean>('defaults.publish.download_enabled')
+      },
+      get COMMENTS_POLICY () {
+        return config.get<VideoCommentPolicyType>('defaults.publish.comments_policy')
+      },
+      get PRIVACY () {
+        return config.get<VideoPrivacyType>('defaults.publish.privacy')
+      },
+      get LICENCE () {
+        return config.get<number>('defaults.publish.licence')
+      }
     },
     P2P: {
       WEBAPP: {
-        ENABLED: config.get<boolean>('defaults.p2p.webapp.enabled')
+        get ENABLED () {
+          return config.get<boolean>('defaults.p2p.webapp.enabled')
+        }
       },
       EMBED: {
-        ENABLED: config.get<boolean>('defaults.p2p.embed.enabled')
+        get ENABLED () {
+          return config.get<boolean>('defaults.p2p.embed.enabled')
+        }
       }
     },
     PLAYER: {

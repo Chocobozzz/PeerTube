@@ -146,6 +146,14 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.export.users.enabled).to.be.true
   expect(data.export.users.exportExpiration).to.equal(1000 * 3600 * 48)
   expect(data.export.users.maxUserVideoQuota).to.equal(10737418240)
+
+  expect(data.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.ENABLED)
+  expect(data.defaults.publish.downloadEnabled).to.be.true
+  expect(data.defaults.publish.licence).to.be.null
+  expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
+  expect(data.defaults.p2p.embed.enabled).to.be.true
+  expect(data.defaults.p2p.webapp.enabled).to.be.true
+  expect(data.defaults.player.autoPlay).to.be.true
 }
 
 function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {

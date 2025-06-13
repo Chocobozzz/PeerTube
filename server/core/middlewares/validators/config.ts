@@ -8,6 +8,7 @@ import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaVali
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
 import { areValidationErrors } from './shared/index.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
+import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists(),
@@ -134,6 +135,13 @@ const customConfigUpdateValidator = [
   body('search.searchIndex.url').exists(),
   body('search.searchIndex.disableLocalSearch').isBoolean(),
   body('search.searchIndex.isDefaultSearch').isBoolean(),
+
+  body('defaults.publish.commentsPolicy').custom(isVideoCommentsPolicyValid),
+  body('defaults.publish.privacy').custom(isVideoPrivacyValid),
+  body('defaults.publish.licence').custom(isVideoLicenceValid),
+  body('defaults.p2p.webapp.enabled').isBoolean(),
+  body('defaults.p2p.embed.enabled').isBoolean(),
+  body('defaults.player.autoPlay').isBoolean(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -537,12 +537,13 @@ function convertCustomConfigBody (body: CustomConfig) {
     // Transcoding resolutions exception
     if (/^\d{3,4}p$/.exec(k)) return k
     if (k === '0p') return k
+    if (k === 'p2p') return k
 
     return snakeCase(k)
   }
 
   function valueConverter (v: any) {
-    if (validator.default.isNumeric(v + '')) return parseInt('' + v, 10)
+    if (validator.isNumeric(v + '')) return parseInt('' + v, 10)
 
     return v
   }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import merge from 'lodash-es/merge.js'
 import { omit } from '@peertube/peertube-core-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -12,7 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import merge from 'lodash-es/merge.js'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -91,13 +91,29 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a bad default NSFW policy', async function () {
-      const newUpdateParams = {
-        ...updateParams,
-
+      const newUpdateParams = merge({}, updateParams, {
         instance: {
           defaultNSFWPolicy: 'hello'
         }
-      }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with a bad default comment policy', async function () {
+      const newUpdateParams = merge({}, updateParams, {
+        defaults: {
+          publish: {
+            commentsPolicy: 11
+          }
+        }
+      })
 
       await makePutBodyRequest({
         url: server.url,
@@ -110,16 +126,14 @@ describe('Test config API validators', function () {
 
     it('Should fail if email disabled and signup requires email verification', async function () {
       // opposite scenario - success when enable enabled - covered via tests/api/users/user-verification.ts
-      const newUpdateParams = {
-        ...updateParams,
-
+      const newUpdateParams = merge({}, updateParams, {
         signup: {
           enabled: true,
           limit: 5,
           requiresApproval: true,
           requiresEmailVerification: true
         }
-      }
+      })
 
       await makePutBodyRequest({
         url: server.url,
@@ -131,18 +145,17 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a disabled web videos & hls transcoding', async function () {
-      const newUpdateParams = {
-        ...updateParams,
-
+      const newUpdateParams = merge({}, updateParams, {
         transcoding: {
+          enabled: true,
           hls: {
             enabled: false
           },
-          web_videos: {
+          webVideos: {
             enabled: false
           }
         }
-      }
+      })
 
       await makePutBodyRequest({
         url: server.url,
@@ -154,7 +167,7 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a disabled http upload & enabled sync', async function () {
-      const newUpdateParams: CustomConfig = merge({}, updateParams, {
+      const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
         import: {
           videos: {
             http: { enabled: false }
@@ -184,7 +197,6 @@ describe('Test config API validators', function () {
   })
 
   describe('When deleting the configuration', function () {
-
     it('Should fail without token', async function () {
       await makeDeleteRequest({
         url: server.url,

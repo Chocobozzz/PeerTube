@@ -23,7 +23,8 @@ import {
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import { BroadcastMessageLevel, CustomConfig } from '@peertube/peertube-models'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { BroadcastMessageLevel, CustomConfig, VideoCommentPolicyType, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
@@ -172,6 +173,28 @@ type Form = {
   storyboards: FormGroup<{
     enabled: FormControl<boolean>
   }>
+
+  defaults: FormGroup<{
+    publish: FormGroup<{
+      commentsPolicy: FormControl<VideoCommentPolicyType>
+      privacy: FormControl<VideoPrivacyType>
+      licence: FormControl<number>
+    }>
+
+    p2p: FormGroup<{
+      webapp: FormGroup<{
+        enabled: FormControl<boolean>
+      }>
+
+      embed: FormGroup<{
+        enabled: FormControl<boolean>
+      }>
+    }>
+
+    player: FormGroup<{
+      autoPlay: FormControl<boolean>
+    }>
+  }>
 }
 
 @Component({
@@ -198,6 +221,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
   private route = inject(ActivatedRoute)
   private formReactiveService = inject(FormReactiveService)
   private adminConfigService = inject(AdminConfigService)
+  private videoService = inject(VideoService)
 
   form: FormGroup<Form>
   formErrors: FormReactiveErrorsTyped<Form> = {}
@@ -209,11 +233,25 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
   exportExpirationOptions: SelectOptionsItem[] = []
   exportMaxUserVideoQuotaOptions: SelectOptionsItem[] = []
 
+  privacyOptions: SelectOptionsItem[] = []
+  commentPoliciesOptions: SelectOptionsItem[] = []
+  licenceOptions: SelectOptionsItem[] = []
+
   private customConfig: CustomConfig
   private customConfigSub: Subscription
 
   ngOnInit () {
     this.customConfig = this.route.parent.snapshot.data['customConfig']
+
+    const data = this.route.snapshot.data as {
+      licences: VideoConstant<number>[]
+      privacies: VideoConstant<VideoPrivacyType>[]
+      commentPolicies: VideoConstant<VideoCommentPolicyType>[]
+    }
+
+    this.privacyOptions = this.videoService.explainedPrivacyLabels(data.privacies).videoPrivacies
+    this.licenceOptions = data.licences
+    this.commentPoliciesOptions = data.commentPolicies
 
     this.buildLandingPageOptions()
 
@@ -360,9 +398,26 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
           isDefaultSearch: null
         }
       },
-
       storyboards: {
         enabled: null
+      },
+      defaults: {
+        publish: {
+          commentsPolicy: null,
+          privacy: null,
+          licence: null
+        },
+        p2p: {
+          webapp: {
+            enabled: null
+          },
+          embed: {
+            enabled: null
+          }
+        },
+        player: {
+          autoPlay: null
+        }
       }
     }
 

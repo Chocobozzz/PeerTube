@@ -1,5 +1,5 @@
 import { exists } from '@peertube/peertube-core-utils'
-import { CustomConfig, VideoPrivacy } from '@peertube/peertube-models'
+import { CustomConfig, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getBytes } from '@root-helpers/bytes'
 import merge from 'lodash-es/merge'
@@ -16,6 +16,7 @@ export class UsageType {
   live: EnabledDisabled
   globalSearch: EnabledDisabled
   defaultPrivacy: typeof VideoPrivacy.INTERNAL | typeof VideoPrivacy.PUBLIC
+  defaultCommentPolicy: typeof VideoCommentPolicy.REQUIRES_APPROVAL
   p2p: EnabledDisabled
   federation: EnabledDisabled
   keepOriginalVideo: EnabledDisabled
@@ -46,7 +47,7 @@ export class UsageType {
     usageType.keepOriginalVideo = 'disabled'
     usageType.allowReplaceFile = 'disabled'
 
-    // Use current config for: authType, preferDisplayName and transcription
+    // Use current config for: defaultCommentPolicy, authType, preferDisplayName and transcription
 
     usageType.compute()
 
@@ -69,7 +70,7 @@ export class UsageType {
     usageType.allowReplaceFile = 'enabled'
     usageType.preferDisplayName = 'enabled'
 
-    // Use current config for: authType and transcription
+    // Use current config for: defaultCommentPolicy, authType and transcription
 
     usageType.compute()
 
@@ -94,6 +95,8 @@ export class UsageType {
     usageType.authType = 'local'
     usageType.transcription = 'enabled'
 
+    usageType.defaultCommentPolicy = VideoCommentPolicy.REQUIRES_APPROVAL
+
     // Use current config for: federation
 
     usageType.compute()
@@ -107,7 +110,7 @@ export class UsageType {
     this.config = {}
 
     this.computeRegistration()
-    this.computeVideoPrivacy()
+    this.computeDefaultVideoPrivacy()
     this.computeVideoQuota()
     this.computeKeepOriginalVideo()
     this.computeReplaceVideoFile()
@@ -115,6 +118,7 @@ export class UsageType {
     this.computeStreamLives()
     this.computeP2P()
     this.computeGlobalSearch()
+    this.computeDefaultVideoCommentPolicy()
     this.computeFederation()
     this.computeMiniatureSettings()
     this.computeTranscription()
@@ -256,7 +260,7 @@ export class UsageType {
     }
   }
 
-  private computeVideoPrivacy () {
+  private computeDefaultVideoPrivacy () {
     if (!exists(this.defaultPrivacy)) return
 
     this.addConfig({
@@ -272,6 +276,20 @@ export class UsageType {
     } else if (this.defaultPrivacy === VideoPrivacy.PUBLIC) {
       this.addExplanation($localize`Set the <strong>default video privacy</strong> to <strong>Public</strong>`)
     }
+  }
+
+  private computeDefaultVideoCommentPolicy () {
+    if (!exists(this.defaultCommentPolicy)) return
+
+    this.addConfig({
+      defaults: {
+        publish: {
+          commentsPolicy: this.defaultCommentPolicy
+        }
+      }
+    })
+
+    this.addExplanation($localize`<strong>Require approval</strong> by default of new video comment`)
   }
 
   private computeP2P () {
