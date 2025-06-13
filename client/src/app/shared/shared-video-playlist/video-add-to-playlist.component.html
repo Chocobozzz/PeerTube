@@ -68,11 +68,11 @@
     <span i18n>Create a private playlist</span>
   </button>
 
-  <form class="new-playlist-block dropdown-item" *ngIf="isNewPlaylistBlockOpened" (ngSubmit)="createPlaylist()" [formGroup]="form">
+  <form class="new-playlist-block" *ngIf="isNewPlaylistBlockOpened" (ngSubmit)="createPlaylist()" [formGroup]="form">
     <div class="form-group">
       <label i18n for="displayName">Display name</label>
       <input
-        type="text" id="displayName"
+        type="text" id="displayName" class="form-control"
         formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
       >
       <div *ngIf="formErrors['displayName']" class="form-error" role="alert">
