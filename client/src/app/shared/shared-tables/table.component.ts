@@ -171,7 +171,7 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
       start: 0
     }
 
-    this.loadSort()
+    this.loadTableSettings()
     this.loadSelectedColumns()
     this.subscribeToQueryChanges()
   }
@@ -281,24 +281,29 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   }
   // ---------------------------------------------------------------------------
 
-  loadSort () {
-    const result = peertubeLocalStorage.getItem(this.getSortLocalStorageKey())
+  private loadTableSettings () {
+    try {
+      const sort = peertubeLocalStorage.getItem(this.getSortLocalStorageKey())
+      if (sort) this.sort = JSON.parse(sort)
 
-    if (result) {
-      try {
-        this.sort = JSON.parse(result)
-      } catch (err) {
-        logger.error('Cannot load sort of local storage key ' + this.getSortLocalStorageKey(), err)
-      }
+      const count = peertubeLocalStorage.getItem(this.getCountLocalStorageKey())
+      if (count) this.pagination.count = JSON.parse(count)
+    } catch (err) {
+      logger.error('Cannot load sort of local storage key ' + this.getSortLocalStorageKey(), err)
     }
   }
 
-  saveSort () {
+  private saveTableSettings () {
     peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
+    peertubeLocalStorage.setItem(this.getCountLocalStorageKey(), JSON.stringify(this.pagination.count))
   }
 
   private getSortLocalStorageKey () {
     return 'rest-table-sort-' + this.key()
+  }
+
+  private getCountLocalStorageKey () {
+    return 'rest-table-count-' + this.key()
   }
 
   // ---------------------------------------------------------------------------
@@ -307,7 +312,7 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     if (this.parseLazy(event)) {
       debugLogger('Load lazy', event)
 
-      this.saveSort()
+      this.saveTableSettings()
 
       this.updateUrl()
     }
