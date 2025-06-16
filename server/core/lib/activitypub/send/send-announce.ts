@@ -3,7 +3,7 @@ import { ActivityAnnounce, ActivityAudience } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { MActorLight, MVideo } from '../../../types/models/index.js'
 import { MVideoShare } from '../../../types/models/video/index.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPublicAudience } from '../audience.js'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf } from './shared/index.js'
 import { broadcastToFollowers } from './shared/send-utils.js'
 
@@ -39,7 +39,7 @@ async function sendVideoAnnounce (byActor: MActorLight, videoShare: MVideoShare,
 }
 
 function buildAnnounceActivity (url: string, byActor: MActorLight, object: string, audience?: ActivityAudience): ActivityAnnounce {
-  if (!audience) audience = getAudience(byActor)
+  if (!audience) audience = getPublicAudience(byActor)
 
   return audiencify({
     type: 'Announce' as 'Announce',

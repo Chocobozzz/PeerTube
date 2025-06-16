@@ -4,8 +4,7 @@ import {
   ActivityCreateObject,
   ContextType,
   VideoCommentObject,
-  VideoPlaylistPrivacy,
-  VideoPrivacy
+  VideoPlaylistPrivacy
 } from '@peertube/peertube-models'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -17,11 +16,12 @@ import {
   MActorLight,
   MCommentOwnerVideoReply,
   MLocalVideoViewerWithWatchSections,
-  MVideoAP, MVideoAccountLight,
+  MVideoAP,
+  MVideoAccountLight,
   MVideoPlaylistFull,
   MVideoRedundancyStreamingPlaylistVideo
 } from '../../../types/models/index.js'
-import { audiencify, getAudience } from '../audience.js'
+import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } from '../audience.js'
 import { canVideoBeFederated } from '../videos/federate.js'
 import {
   broadcastToActors,
@@ -44,7 +44,7 @@ export async function sendCreateVideo (video: MVideoAP, transaction: Transaction
   const byActor = video.VideoChannel.Account.Actor
   const videoObject = await video.toActivityPubObject()
 
-  const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
+  const audience = getVideoAudience(byActor, video.privacy)
   const createActivity = buildCreateActivity(video.url, byActor, videoObject, audience)
 
   return broadcastToFollowers({
@@ -90,7 +90,7 @@ export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, tra
   logger.info('Creating job to send create video playlist of %s.', playlist.url, lTags(playlist.uuid))
 
   const byActor = playlist.OwnerAccount.Actor
-  const audience = getAudience(byActor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
+  const audience = getPlaylistAudience(byActor, playlist.privacy)
 
   const object = await playlist.toActivityPubObject(null, transaction)
   const createActivity = buildCreateActivity(playlist.url, byActor, object, audience)
@@ -139,7 +139,7 @@ export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVide
   actorsInvolvedInComment.push(byActor)
 
   const parentsCommentActors = threadParentComments.filter(c => !c.isDeleted() && !c.heldForReview)
-                                                   .map(c => c.Account.Actor)
+    .map(c => c.Account.Actor)
 
   let audience: ActivityAudience
   if (isOrigin) {
@@ -193,13 +193,13 @@ export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVide
   })
 }
 
-export function buildCreateActivity <T extends ActivityCreateObject> (
+export function buildCreateActivity<T extends ActivityCreateObject> (
   url: string,
   byActor: MActorLight,
   object: T,
   audience?: ActivityAudience
 ): ActivityCreate<T> {
-  if (!audience) audience = getAudience(byActor)
+  if (!audience) audience = getPublicAudience(byActor)
 
   return audiencify(
     {

@@ -2,7 +2,7 @@ import { pick } from '@peertube/peertube-core-utils'
 import { ActivityCreate, FileStorage, VideoCommentPolicy, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
-import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
+import { audiencify, getVideoAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 import {
@@ -266,7 +266,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   ): Promise<ActivityCreate<VideoObject>> {
     const icon = video.getPreview()
 
-    const audience = getAudience(video.VideoChannel.Account.Actor, video.privacy === VideoPrivacy.PUBLIC)
+    const audience = getVideoAudience(video.VideoChannel.Account.Actor, video.privacy, { skipPrivacyCheck: true })
     const videoObject = {
       ...audiencify(await video.toActivityPubObject(), audience),
 

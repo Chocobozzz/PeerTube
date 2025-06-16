@@ -54,10 +54,10 @@ export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Publ
   return 'https://www.w3.org/ns/activitystreams#Public'
 }
 
-export function hasAPPublic (toOrCC: string[] | string) {
+export function hasAPPublic (collection: string[] | string) {
   const publicValue = getAPPublicValue()
 
-  return arrayify(toOrCC).some(f => f === 'as:Public' || publicValue)
+  return arrayify(collection).some(f => f === 'as:Public' || publicValue)
 }
 
 // ---------------------------------------------------------------------------
