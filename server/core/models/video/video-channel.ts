@@ -876,10 +876,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       support: this.support,
       postingRestrictedToMods: true,
       attributedTo: [
-        {
-          type: 'Person' as 'Person',
-          id: this.Account.Actor.url
-        }
+        this.Account.Actor.url
       ]
     }
   }

@@ -121,14 +121,8 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     hasParts: getLocalVideoChaptersActivityPubUrl(video),
 
     attributedTo: [
-      {
-        type: 'Person',
-        id: video.VideoChannel.Account.Actor.url
-      },
-      {
-        type: 'Group',
-        id: video.VideoChannel.Actor.url
-      }
+      video.VideoChannel.Account.Actor.url,
+      video.VideoChannel.Actor.url
     ],
 
     ...buildLiveAPAttributes(video)
