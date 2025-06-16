@@ -259,9 +259,14 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
     }
 
     if (queryParams.start !== undefined) this.pagination.start = +queryParams.start
-    if (queryParams.count !== undefined) this.pagination.count = +queryParams.count
+
+    if (queryParams.count !== undefined) {
+      this.pagination.count = this.rowsPerPage = +queryParams.count
+    }
+
     if (queryParams.sortOrder !== undefined) this.sort.order = +queryParams.sortOrder
     if (queryParams.sortField !== undefined) this.sort.field = queryParams.sortField
+
     if (queryParams.search !== undefined) this.search = queryParams.search
 
     this.reloadData()
