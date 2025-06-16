@@ -13586,9 +13586,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8674693181203168033" datatype="html">
+      <trans-unit id="8674693181203168033" datatype="html" xml:space="preserve">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">Découvrez comment configurer votre compte, ce qu’est une chaîne, comment créer une liste de lecture et plus encore !</target>
+        <target state="translated">Découvrez comment configurer votre compte, ce qu’est une chaîne, comment créer une liste de lecture et plus encore !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">32</context>
@@ -13602,9 +13602,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7916664392219781729" datatype="html">
+      <trans-unit id="7916664392219781729" datatype="html" xml:space="preserve">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target state="translated">Découvrez des applications Android non-officielles ou des extensions de navigateur !</target>
+        <target state="translated">Découvrez des applications Android non-officielles ou des extensions de navigateur !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">44</context>
@@ -13618,9 +13618,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6886584917624458638" datatype="html">
+      <trans-unit id="6886584917624458638" datatype="html" xml:space="preserve">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
-        <target state="translated">Vous voulez aider à améliorer PeerTube ? Vous pouvez traduire l’interface web, donner votre avis ou contribuer directement au code !</target>
+        <target state="translated">Vous voulez aider à améliorer PeerTube ? Vous pouvez traduire l’interface web, donner votre avis ou contribuer directement au code !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">56</context>
