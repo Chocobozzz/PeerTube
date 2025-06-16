@@ -3039,6 +3039,11 @@ paths:
             schema:
               type: object
               properties:
+                channelId:
+                  type: integer
+                  description:
+                    New channel of the video. The channel must be owned by the same account as the previous one.
+                    Use the "change ownership" endpoints to give a video to a channel owned by another account on the local PeerTube instance.
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
@@ -5120,7 +5125,7 @@ paths:
                     type: array
                     maxItems: 100
                     items:
-                    
+
                       type: object
                       properties:
                         id:
