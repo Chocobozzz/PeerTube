@@ -3481,7 +3481,7 @@
       </trans-unit>
       <trans-unit id="5491172370003945798" datatype="html" xml:space="preserve">
         <source>Browse videos</source>
-        <target state="translated">Afficher les videos</target>
+        <target state="translated">Afficher les vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.html</context>
           <context context-type="linenumber">1</context>
