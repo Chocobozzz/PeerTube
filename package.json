@@ -187,7 +187,6 @@
     "sql-formatter": "^15.2.0",
     "srt-to-vtt": "^1.1.2",
     "tslib": "^2.0.0",
-    "useragent": "^2.3.0",
     "uuid": "^11.0.5",
     "validator": "^13.0.0",
     "webfinger.js": "^2.6.6",

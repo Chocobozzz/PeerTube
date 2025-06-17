@@ -64,7 +64,6 @@ import morgan, { token } from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { frameguard } from 'helmet'
-import { parse } from 'useragent'
 import anonymize from 'ip-anonymize'
 import { program as cli } from 'commander'
 
@@ -176,14 +175,6 @@ if (CONFIG.LOG.LOG_HTTP_REQUESTS) {
     }
 
     return req.ip
-  })
-
-  token('user-agent', (req: express.Request) => {
-    if (req.get('DNT') === '1') {
-      return parse(req.get('user-agent')).family
-    }
-
-    return req.get('user-agent')
   })
 
   app.use(morgan('combined', {
