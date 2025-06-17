@@ -292,6 +292,10 @@ export interface CustomConfig {
       enabled: boolean
       manualApproval: boolean
     }
+
+    channels: {
+      enabled: boolean
+    }
   }
 
   followings: {

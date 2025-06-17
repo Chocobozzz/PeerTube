@@ -136,6 +136,9 @@ type Form = {
       enabled: FormControl<boolean>
       manualApproval: FormControl<boolean>
     }>
+    channels: FormGroup<{
+      enabled: FormControl<boolean>
+    }>
   }>
 
   followings: FormGroup<{
@@ -367,6 +370,9 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         instance: {
           enabled: null,
           manualApproval: null
+        },
+        channels: {
+          enabled: null
         }
       },
       followings: {

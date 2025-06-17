@@ -474,6 +474,9 @@ function customConfig (): CustomConfig {
       instance: {
         enabled: CONFIG.FOLLOWERS.INSTANCE.ENABLED,
         manualApproval: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
+      },
+      channels: {
+        enabled: CONFIG.FOLLOWERS.CHANNELS.ENABLED
       }
     },
     followings: {

@@ -146,6 +146,7 @@ export function checkMissedConfig () {
     'services.twitter.username',
     'followers.instance.enabled',
     'followers.instance.manual_approval',
+    'followers.channels.enabled',
     'tracker.enabled',
     'tracker.private',
     'tracker.reject_too_many_announces',

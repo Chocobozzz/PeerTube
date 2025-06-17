@@ -455,6 +455,102 @@
 
   <div class="pt-two-cols mt-4">
     <div class="title-col">
+      <h2 i18n>FEDERATION</h2>
+      <div i18n class="inner-form-description">
+        Manage <a class="link-primary" routerLink="/admin/settings/follows">relations</a> with other platforms.
+      </div>
+    </div>
+
+    <div class="content-col">
+
+      <ng-container formGroupName="followers">
+        <ng-container formGroupName="channels">
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="followersChannelsEnabled" formControlName="enabled"
+              i18n-labelText labelText="Remote actors can follow channels of your platform"
+            >
+              <ng-container ngProjectAs="description">
+                <span i18n>This setting is not retroactive: current followers of channels of your platform will not be affected</span>
+              </ng-container>
+          </my-peertube-checkbox>
+          </div>
+        </ng-container>
+
+        <ng-container formGroupName="instance">
+
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="followersInstanceEnabled" formControlName="enabled"
+              i18n-labelText labelText="Remote actors can follow your platform"
+            >
+              <ng-container ngProjectAs="description">
+                <span i18n>This setting is not retroactive: current followers of your platform will not be affected</span>
+              </ng-container>
+            </my-peertube-checkbox>
+          </div>
+
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="followersInstanceManualApproval" formControlName="manualApproval"
+              i18n-labelText labelText="Manually approve new followers that follow your platform"
+            ></my-peertube-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container formGroupName="followings">
+        <ng-container formGroupName="instance">
+
+          <ng-container formGroupName="autoFollowBack">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
+                i18n-labelText labelText="Automatically follow back followers that follow your platform"
+              >
+                <ng-container ngProjectAs="description">
+                  <span i18n>⚠️ This functionality requires a lot of attention and extra moderation</span>
+                </ng-container>
+              </my-peertube-checkbox>
+            </div>
+          </ng-container>
+
+          <ng-container formGroupName="autoFollowIndex">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
+                i18n-labelText labelText="Automatically follow platforms of a public index"
+              >
+                <ng-container ngProjectAs="description">
+                  <div i18n>⚠️ This functionality requires a lot of attention and extra moderation.</div>
+
+                  <span i18n>
+                    See <a class="link-primary" href="https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
+                  </span>
+                </ng-container>
+
+                <ng-container ngProjectAs="extra">
+                  <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
+                    <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
+                    <input
+                      type="text" id="followingsInstanceAutoFollowIndexUrl" class="form-control"
+                      formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors.followings.instance.autoFollowIndex.indexUrl }"
+                    >
+                    <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error" role="alert">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+                  </div>
+                </ng-container>
+              </my-peertube-checkbox>
+            </div>
+
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
       <h2 i18n>PLAYER</h2>
     </div>
 
@@ -648,85 +744,6 @@
 
         </ng-container>
       </ng-container>
-    </div>
-  </div>
-
-  <div class="pt-two-cols mt-4">
-    <div class="title-col">
-      <h2 i18n>FEDERATION</h2>
-      <div i18n class="inner-form-description">
-        Manage <a class="link-primary" routerLink="/admin/settings/follows">relations</a> with other platforms.
-      </div>
-    </div>
-
-    <div class="content-col">
-
-      <ng-container formGroupName="followers">
-        <ng-container formGroupName="instance">
-
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="followersInstanceEnabled" formControlName="enabled"
-              i18n-labelText labelText="Remote actors can follow your platform"
-            ></my-peertube-checkbox>
-          </div>
-
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="followersInstanceManualApproval" formControlName="manualApproval"
-              i18n-labelText labelText="Manually approve new followers that follow your platform"
-            ></my-peertube-checkbox>
-          </div>
-        </ng-container>
-      </ng-container>
-
-      <ng-container formGroupName="followings">
-        <ng-container formGroupName="instance">
-
-          <ng-container formGroupName="autoFollowBack">
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
-                i18n-labelText labelText="Automatically follow back followers that follow your platform"
-              >
-                <ng-container ngProjectAs="description">
-                  <span i18n>⚠️ This functionality requires a lot of attention and extra moderation</span>
-                </ng-container>
-              </my-peertube-checkbox>
-            </div>
-          </ng-container>
-
-          <ng-container formGroupName="autoFollowIndex">
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
-                i18n-labelText labelText="Automatically follow platforms of a public index"
-              >
-                <ng-container ngProjectAs="description">
-                  <div i18n>⚠️ This functionality requires a lot of attention and extra moderation.</div>
-
-                  <span i18n>
-                    See <a class="link-primary" href="https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
-                  </span>
-                </ng-container>
-
-                <ng-container ngProjectAs="extra">
-                  <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
-                    <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
-                    <input
-                      type="text" id="followingsInstanceAutoFollowIndexUrl" class="form-control"
-                      formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors.followings.instance.autoFollowIndex.indexUrl }"
-                    >
-                    <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error" role="alert">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
-                  </div>
-                </ng-container>
-              </my-peertube-checkbox>
-            </div>
-
-          </ng-container>
-        </ng-container>
-      </ng-container>
-
     </div>
   </div>
 

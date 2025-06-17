@@ -977,10 +977,15 @@ services:
 
 followers:
   instance:
-    # Allow or not other instances to follow yours
+    # Allow remote actors to follow your instance
+    # This setting is not retroactive: current followers of your instance will not be affected
     enabled: true
     # Whether or not an administrator must manually validate a new follower
     manual_approval: false
+  channels:
+    # Allow remote actors to follow channels/accounts of your instance
+    # This setting is not retroactive: current followers of local channels/accounts will not be affected
+    enabled: true
 
 followings:
   instance:

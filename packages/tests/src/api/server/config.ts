@@ -131,6 +131,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.followers.instance.enabled).to.be.true
   expect(data.followers.instance.manualApproval).to.be.false
+  expect(data.followers.channels.enabled).to.be.true
 
   expect(data.followings.instance.autoFollowBack.enabled).to.be.false
   expect(data.followings.instance.autoFollowIndex.enabled).to.be.false
@@ -393,6 +394,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       instance: {
         enabled: false,
         manualApproval: true
+      },
+      channels: {
+        enabled: false
       }
     },
     followings: {

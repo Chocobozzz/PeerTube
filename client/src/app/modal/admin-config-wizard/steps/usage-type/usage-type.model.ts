@@ -3,7 +3,7 @@ import { CustomConfig, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertu
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getBytes } from '@root-helpers/bytes'
 import merge from 'lodash-es/merge'
-import { PartialDeep } from 'type-fest'
+import { Jsonify, PartialDeep } from 'type-fest'
 
 export type RegistrationType = 'open' | 'closed' | 'approval'
 export type EnabledDisabled = 'disabled' | 'enabled'
@@ -29,25 +29,32 @@ export class UsageType {
   private config: PartialDeep<CustomConfig> = {}
   private plugins: string[] = []
 
-  private constructor () {
+  private constructor (options: Required<Jsonify<UsageType>>) {
+    for (const [ key, value ] of Object.entries(options)) {
+      ;(this as any)[key] = value
+    }
   }
 
   static initForCommunity () {
-    const usageType = new UsageType()
+    const usageType = new UsageType({
+      registration: 'approval',
+      remoteImport: 'disabled',
+      live: 'enabled',
+      videoQuota: 5 * 1024 * 1024 * 1024, // Default to 5GB,
+      globalSearch: 'enabled',
 
-    usageType.registration = 'approval'
-    usageType.remoteImport = 'disabled'
-    usageType.live = 'enabled'
-    usageType.videoQuota = 5 * 1024 * 1024 * 1024 // Default to 5GB
-    usageType.globalSearch = 'enabled'
+      defaultPrivacy: VideoPrivacy.PUBLIC,
+      p2p: 'enabled',
+      federation: 'enabled',
+      keepOriginalVideo: 'disabled',
+      allowReplaceFile: 'disabled',
 
-    usageType.defaultPrivacy = VideoPrivacy.PUBLIC
-    usageType.p2p = 'enabled'
-    usageType.federation = 'enabled'
-    usageType.keepOriginalVideo = 'disabled'
-    usageType.allowReplaceFile = 'disabled'
-
-    // Use current config for: defaultCommentPolicy, authType, preferDisplayName and transcription
+      // Use current config
+      defaultCommentPolicy: undefined,
+      authType: undefined,
+      preferDisplayName: undefined,
+      transcription: undefined
+    })
 
     usageType.compute()
 
@@ -55,22 +62,25 @@ export class UsageType {
   }
 
   static initForPrivateInstance () {
-    const usageType = new UsageType()
+    const usageType = new UsageType({
+      registration: 'closed',
+      remoteImport: 'enabled',
+      live: 'enabled',
+      videoQuota: -1,
+      globalSearch: 'disabled',
 
-    usageType.registration = 'closed'
-    usageType.remoteImport = 'enabled'
-    usageType.live = 'enabled'
-    usageType.videoQuota = -1
-    usageType.globalSearch = 'disabled'
+      defaultPrivacy: VideoPrivacy.INTERNAL,
+      p2p: 'disabled',
+      federation: 'disabled',
+      keepOriginalVideo: 'enabled',
+      allowReplaceFile: 'enabled',
+      preferDisplayName: 'enabled',
 
-    usageType.defaultPrivacy = VideoPrivacy.INTERNAL
-    usageType.p2p = 'disabled'
-    usageType.federation = 'disabled'
-    usageType.keepOriginalVideo = 'enabled'
-    usageType.allowReplaceFile = 'enabled'
-    usageType.preferDisplayName = 'enabled'
-
-    // Use current config for: defaultCommentPolicy, authType and transcription
+      // Use current config
+      defaultCommentPolicy: undefined,
+      authType: undefined,
+      transcription: undefined
+    })
 
     usageType.compute()
 
@@ -78,26 +88,27 @@ export class UsageType {
   }
 
   static initForInstitution () {
-    const usageType = new UsageType()
+    const usageType = new UsageType({
+      registration: 'closed',
+      remoteImport: 'enabled',
+      live: 'enabled',
+      videoQuota: -1,
+      globalSearch: 'disabled',
 
-    usageType.registration = 'closed'
-    usageType.remoteImport = 'enabled'
-    usageType.live = 'enabled'
-    usageType.videoQuota = -1
-    usageType.globalSearch = 'disabled'
+      defaultPrivacy: VideoPrivacy.PUBLIC,
+      p2p: 'disabled',
+      keepOriginalVideo: 'enabled',
+      allowReplaceFile: 'enabled',
+      preferDisplayName: 'enabled',
 
-    usageType.defaultPrivacy = VideoPrivacy.PUBLIC
-    usageType.p2p = 'disabled'
-    usageType.keepOriginalVideo = 'enabled'
-    usageType.allowReplaceFile = 'enabled'
-    usageType.preferDisplayName = 'enabled'
+      authType: 'local',
+      transcription: 'enabled',
 
-    usageType.authType = 'local'
-    usageType.transcription = 'enabled'
+      defaultCommentPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
 
-    usageType.defaultCommentPolicy = VideoCommentPolicy.REQUIRES_APPROVAL
-
-    // Use current config for: federation
+      // Use current config
+      federation: undefined
+    })
 
     usageType.compute()
 
@@ -321,6 +332,9 @@ export class UsageType {
     this.addConfig({
       followers: {
         instance: {
+          enabled: this.federation === 'enabled'
+        },
+        channels: {
           enabled: this.federation === 'enabled'
         }
       }

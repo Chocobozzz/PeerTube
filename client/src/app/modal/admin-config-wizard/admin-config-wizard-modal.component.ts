@@ -39,8 +39,10 @@ export class AdminConfigWizardModalComponent implements OnInit {
   readonly created = output()
 
   usageType: UsageType
-  showWelcome: boolean
   instanceInfo: FormInfo
+
+  showWelcome: boolean
+  dryRun: boolean
 
   ngOnInit () {
     this.created.emit()
@@ -49,6 +51,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
   shouldAutoOpen (user: User) {
     if (this.modalService.hasOpenModals()) return false
     if (this.route.snapshot.fragment === 'admin-welcome-wizard') return true
+    if (this.route.snapshot.fragment === 'admin-welcome-wizard-test') return true
     if (user.noWelcomeModal === true) return false
     if (peertubeLocalStorage.getItem(getNoWelcomeModalLocalStorageKey()) === 'true') return false
 
@@ -57,6 +60,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
 
   show ({ showWelcome }: { showWelcome: boolean }) {
     this.showWelcome = showWelcome
+    this.dryRun = this.route.snapshot.fragment === 'admin-welcome-wizard-test'
 
     this.modalService.open(this.modal(), {
       centered: true,

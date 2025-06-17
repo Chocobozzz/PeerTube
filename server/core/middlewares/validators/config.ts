@@ -102,6 +102,7 @@ const customConfigUpdateValidator = [
 
   body('followers.instance.enabled').isBoolean(),
   body('followers.instance.manualApproval').isBoolean(),
+  body('followers.channels.enabled').isBoolean(),
 
   body('theme.default').custom(v => isThemeNameValid(v) && isThemeRegistered(v)),
 

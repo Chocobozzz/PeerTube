@@ -24,7 +24,7 @@
 
       <cdk-step i18n-label label="Configuration preview">
         <my-admin-config-wizard-preview
-          [usageType]="usageType" [instanceInfo]="instanceInfo"
+          [usageType]="usageType" [instanceInfo]="instanceInfo" [dryRun]="dryRun"
           [currentStep]="currentStep()" totalSteps="3"
           (back)="stepper.previous()" (next)="showWelcome ? stepper.next() : hide()" (hide)="hide()"
           ></my-admin-config-wizard-preview>

@@ -974,6 +974,11 @@ const CONFIG = {
       get MANUAL_APPROVAL () {
         return config.get<boolean>('followers.instance.manual_approval')
       }
+    },
+    CHANNELS: {
+      get ENABLED () {
+        return config.get<boolean>('followers.channels.enabled')
+      }
     }
   },
   FOLLOWINGS: {

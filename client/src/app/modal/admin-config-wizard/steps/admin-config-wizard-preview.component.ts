@@ -1,6 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { CommonModule } from '@angular/common'
-import { Component, inject, input, numberAttribute, OnChanges, output } from '@angular/core'
+import { booleanAttribute, Component, inject, input, numberAttribute, OnChanges, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HtmlRendererService, Notifier, ServerService } from '@app/core'
 import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
@@ -39,6 +39,7 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
   readonly totalSteps = input.required({ transform: numberAttribute })
   readonly usageType = input.required<UsageType>()
   readonly instanceInfo = input.required<FormInfo>()
+  readonly dryRun = input.required({ transform: booleanAttribute })
 
   readonly back = output()
   readonly next = output()
@@ -76,6 +77,10 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
   }
 
   confirm () {
+    if (this.dryRun()) {
+      return this.next.emit()
+    }
+
     this.updating = true
 
     this.adminConfig.updateCustomConfig(this.config)
