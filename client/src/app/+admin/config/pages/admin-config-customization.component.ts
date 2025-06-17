@@ -38,6 +38,16 @@ type Form = {
     }>
   }>
 
+  email: FormGroup<{
+    subject: FormGroup<{
+      prefix: FormControl<string>
+    }>
+
+    body: FormGroup<{
+      signature: FormControl<string>
+    }>
+  }>
+
   theme: FormGroup<{
     default: FormControl<string>
 
@@ -195,6 +205,14 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
           miniature: {
             preferAuthorDisplayName: null
           }
+        }
+      },
+      email: {
+        subject: {
+          prefix: null
+        },
+        body: {
+          signature: null
         }
       },
       instance: {

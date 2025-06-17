@@ -111,11 +111,44 @@
     </div>
   </div>
 
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h2 i18n>EMAIL</h2>
+    </div>
+
+    <ng-container formGroupName="email">
+      <div class="content-col">
+        <div class="form-group" formGroupName="subject">
+          <label i18n for="emailSubjectPrefix">Subject prefix</label>
+          <div class="form-group-description" i18n>Support <pre class="d-inline">{{ '{{instanceName}}' }}</pre> template variable</div>
+
+          <input
+            type="text" id="emailSubjectPrefix" class="form-control"
+            formControlName="prefix" [ngClass]="{ 'input-error': formErrors.email.subject.prefix }"
+          >
+
+          <div *ngIf="formErrors.email.subject.prefix" class="form-error" role="alert">{{ formErrors.email.subject.prefix }}</div>
+        </div>
+
+        <div class="form-group" formGroupName="body">
+          <label i18n for="emailBodySignature">Body signature</label>
+          <div class="form-group-description" i18n>Support <pre class="d-inline">{{ '{{instanceName}}' }}</pre> template variable</div>
+
+          <input
+            type="text" id="emailBodySignature" class="form-control"
+            formControlName="signature" [ngClass]="{ 'input-error': formErrors.email.body.signature }"
+          >
+
+          <div *ngIf="formErrors.email.body.signature" class="form-error" role="alert">{{ formErrors.email.body.signature }}</div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
   <div class="pt-two-cols mt-4">
     <div class="title-col">
       <div class="anchor" id="customizations"></div>
-      <!-- customizations anchor -->
-      <h2 i18n>Advanced</h2>
+      <h2 i18n>ADVANCED</h2>
       <div i18n class="inner-form-description">
         Advanced modifications to your PeerTube platform if creating a plugin or a theme is overkill.
       </div>

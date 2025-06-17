@@ -528,6 +528,15 @@ function customConfig (): CustomConfig {
       player: {
         autoPlay: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY
       }
+    },
+
+    email: {
+      body: {
+        signature: CONFIG.EMAIL.BODY.SIGNATURE
+      },
+      subject: {
+        prefix: CONFIG.EMAIL.SUBJECT.PREFIX
+      }
     }
   }
 }

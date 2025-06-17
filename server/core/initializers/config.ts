@@ -65,14 +65,6 @@ const CONFIG = {
     CA_FILE: config.get<string>('smtp.ca_file'),
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
-  EMAIL: {
-    BODY: {
-      SIGNATURE: config.get<string>('email.body.signature')
-    },
-    SUBJECT: {
-      PREFIX: config.get<string>('email.subject.prefix') + ' '
-    }
-  },
 
   NSFW_FLAGS_SETTINGS: {
     ENABLED: config.get<boolean>('nsfw_flags_settings.enabled')
@@ -1080,6 +1072,18 @@ const CONFIG = {
   STORYBOARDS: {
     get ENABLED () {
       return config.get<boolean>('storyboards.enabled')
+    }
+  },
+  EMAIL: {
+    BODY: {
+      get SIGNATURE () {
+        return config.get<string>('email.body.signature')
+      }
+    },
+    SUBJECT: {
+      get PREFIX () {
+        return config.get<string>('email.subject.prefix')
+      }
     }
   }
 }

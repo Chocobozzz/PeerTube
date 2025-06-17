@@ -3,8 +3,6 @@
   1. body tag: for most email clients
   2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
   3. mso conditional: For Windows 10 Mail
-- var backgroundColor = "#fff";
-- var mainColor = "#f2690d";
 doctype html
 head
   // This template is heavily adapted from the Cerberus Fluid template. Kudos to them!
@@ -74,15 +72,15 @@ head
     img {
       -ms-interpolation-mode:bicubic;
     }
-    /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
     a {
-      text-decoration: none;
+      color: #{fg};
     }
-    a:not(.nocolor) {
-      color: #{mainColor};
-    }
-    a.nocolor {
-      color: inherit !important;
+    a:not(.no-color) {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: #{primary};
+      text-underline-offset: 0.25em;
+      text-decoration-thickness: 0.15em;
     }
     /* What it does: A work-around for email clients meddling in triggered links. */
     a[x-apple-data-detectors],  /* iOS */
@@ -135,33 +133,13 @@ head
   style.
     blockquote {
       margin-left: 0;
-      padding-left: 20px;
-      border-left: 2px solid #f2690d;
+      padding-left: 10px;
+      border-left: 2px solid #{primary};
     }
   //- CSS for PeerTube : END
-  //- Progressive Enhancements : BEGIN
-  style.
-    /* What it does: Hover styles for buttons */
-    .button-td,
-    .button-a {
-      transition: all 100ms ease-in;
-    }
-    .button-td-primary:hover,
-    .button-a-primary:hover {
-      background: #555555 !important;
-      border-color: #555555 !important;
-    }
-    /* Media Queries */
-    @media screen and (max-width: 600px) {
-      /* What it does: Adjust typography on small screens to improve readability */
-      .email-container p {
-        font-size: 17px !important;
-      }
-    }
-  //- Progressive Enhancements : END
 
-body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #{backgroundColor};")
-  center(role='article' aria-roledescription='email' lang='en' style='width: 100%; background-color: #{backgroundColor};')
+body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; color: #{fg}; background-color: #{bg};")
+  center(role='article' aria-roledescription='email' lang='en' style='width: 100%; background-color: #{bg};')
     //if mso | IE
       table(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='background-color: #fff;')
         tr
@@ -190,16 +168,16 @@ body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule:
       table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;')
         //- 1 Column Text + Button : BEGIN
         tr
-          td(style='background-color: #ffffff;')
+          td
             table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%')
               tr
-                td(style='padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;')
+                td(style='padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 1.5')
                   table(role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%")
                     tr
                       td(width="40px")
-                        img(src=`${WEBSERVER.URL}/client/assets/images/icons/icon-192x192.png` width="auto" height="30px" alt="" border="0" style="height: 30px; background: #ffffff; font-family: sans-serif; font-size: 15px; line-height: 15px; color: #555555;")
+                        img(src=`${WEBSERVER.URL}/client/assets/images/icons/icon-192x192.png` width="auto" height="30px" alt="" border="0" style="height: 30px; font-family: sans-serif; font-size: 15px; line-height: 15px;")
                       td
-                        h1(style='margin: 10px 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;')
+                        h1(style='margin: 10px 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; font-weight: normal;')
                           block title
                             if title
                               | #{title}
@@ -213,8 +191,8 @@ body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule:
                     //- Button : BEGIN
                     table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' style='margin: auto;')
                       tr
-                        td.button-td.button-td-primary(style='border-radius: 4px; background: #222222;')
-                          a.button-a.button-a-primary(href=action.url style='background: #222222; border: 1px solid #000000; font-family: sans-serif; font-size: 15px; line-height: 15px; text-decoration: none; padding: 13px 17px; color: #ffffff; display: block; border-radius: 4px;') #{action.text}
+                        td(style=`border-radius: 4px; background: ${primary};`)
+                          a.no-color(href=action.url style=`background: ${primary}; font-family: sans-serif; font-size: 15px; line-height: 15px; text-decoration: none; padding: 13px 17px; display: block; border-radius: 4px; font-weight: bold;`) #{action.text}
                     //- Button : END
         //- 1 Column Text + Button : END
         //- Clear Spacer : BEGIN
@@ -227,32 +205,15 @@ body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule:
       unless hideNotificationPreferencesLink
         table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;')
           tr
-            td(style='padding: 20px; padding-bottom: 0px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
+            td(style='padding: 20px; padding-bottom: 0px; font-family: sans-serif; font-size: 12px; text-align: center;')
               webversion
-                a.nocolor(href=`${WEBSERVER.URL}/my-account/notifications` style='color: #cccccc; font-weight: bold;') View in your notifications
+                a.no-color(href=`${WEBSERVER.URL}/my-account/notifications` style='font-weight: bold;') View in your notifications
               br
           tr
-            td(style='padding: 20px; padding-top: 10px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
+            td(style='padding: 20px; padding-top: 10px; font-family: sans-serif; font-size: 12px; text-align: center;')
               unsubscribe
-                a.nocolor(href=`${WEBSERVER.URL}/my-account/settings#notifications` style='color: #888888;') Manage your notification preferences in your profile
+                a.no-color(href=`${WEBSERVER.URL}/my-account/settings#notifications`) Manage your notification preferences in your profile
               br
       //- Email Footer : END
       //if mso
-    //- Full Bleed Background Section : BEGIN
-    table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style=`background-color: ${mainColor};`)
-      tr
-        td
-          .email-container(align='center' style='max-width: 600px; margin: auto;')
-            //if mso
-              table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='600' align='center')
-                tr
-                  td
-            table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%')
-              tr
-                td(style='padding: 20px; text-align: left; font-family: sans-serif; font-size: 12px; line-height: 20px; color: #ffffff;')
-                  table(role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%")
-                    tr
-                      td(valign="top") #[a(href="https://github.com/Chocobozzz/PeerTube" style="color: white !important") PeerTube © 2015-#{new Date().getFullYear()}] #[a(href="https://github.com/Chocobozzz/PeerTube/blob/master/CREDITS.md" style="color: white !important") PeerTube Contributors]
-            //if mso
-    //- Full Bleed Background Section : END
     //if mso | IE

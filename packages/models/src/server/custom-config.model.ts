@@ -122,6 +122,16 @@ export interface CustomConfig {
     email: string
   }
 
+  email: {
+    body: {
+      signature: string
+    }
+
+    subject: {
+      prefix: string
+    }
+  }
+
   contactForm: {
     enabled: boolean
   }

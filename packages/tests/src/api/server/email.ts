@@ -9,6 +9,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expectStartWith } from '@tests/shared/checks.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
@@ -79,7 +80,6 @@ describe('Test emails', function () {
   })
 
   describe('When resetting user password', function () {
-
     it('Should ask to reset the password', async function () {
       await server.users.askResetPassword({ email: 'user_1@example.com' })
 
@@ -140,7 +140,6 @@ describe('Test emails', function () {
   })
 
   describe('When creating a user without password', function () {
-
     it('Should send a create password email', async function () {
       await server.users.create({ username: 'create_password', password: '' })
 
@@ -193,7 +192,6 @@ describe('Test emails', function () {
   })
 
   describe('When creating an abuse', function () {
-
     it('Should send the notification email', async function () {
       const reason = 'my super bad reason'
       await server.abuses.report({ token: userAccessToken, videoId, reason })
@@ -212,7 +210,6 @@ describe('Test emails', function () {
   })
 
   describe('When blocking/unblocking user', function () {
-
     it('Should send the notification email when blocking a user', async function () {
       const reason = 'my super bad reason'
       await server.users.banUser({ userId, reason })
@@ -286,7 +283,6 @@ describe('Test emails', function () {
   })
 
   describe('When verifying a user email', function () {
-
     it('Should fail with wrong capitalization when multiple users with similar email exists', async function () {
       await server.users.askSendVerifyEmail({
         email: similarUsers[0].username.toUpperCase(),
@@ -385,6 +381,34 @@ describe('Test emails', function () {
 
     it('Should verify the email', async function () {
       await server.registrations.verifyEmail({ registrationId: registrationIdEmail, verificationString })
+    })
+  })
+
+  describe('Email config', function () {
+    it('Should configure email subject prefix and body signature', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            name: 'My tube'
+          },
+          email: {
+            subject: {
+              prefix: 'My custom prefix {{instanceName}}'
+            },
+            body: {
+              signature: 'My custom signature {{instanceName}}'
+            }
+          }
+        }
+      })
+
+      await server.users.banUser({ userId })
+      await waitJobs(server)
+
+      const email = emails[emails.length - 1]
+
+      expectStartWith(email['subject'], 'My custom prefix My tube')
+      expect(email['text']).to.contain('My custom signature My tube')
     })
   })
 

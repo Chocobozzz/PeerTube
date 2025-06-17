@@ -143,6 +143,9 @@ const customConfigUpdateValidator = [
   body('defaults.p2p.embed.enabled').isBoolean(),
   body('defaults.player.autoPlay').isBoolean(),
 
+  body('email.body.signature').exists(),
+  body('email.subject.prefix').exists(),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return

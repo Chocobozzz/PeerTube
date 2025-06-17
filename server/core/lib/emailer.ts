@@ -14,7 +14,7 @@ import { MRegistration, MUser, MUserExport, MUserImport } from '../types/models/
 import { JobQueue } from './job-queue/index.js'
 import { Hooks } from './plugins/hooks.js'
 
-class Emailer {
+export class Emailer {
   private static instance: Emailer
   private initialized = false
   private transporter: Transporter
@@ -299,7 +299,7 @@ class Emailer {
         from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`
       },
       transport: this.transporter,
-      subjectPrefix: CONFIG.EMAIL.SUBJECT.PREFIX
+      subjectPrefix: this.buildSubjectPrefix()
     })
     const subject = await Hooks.wrapObject(
       options.subject,
@@ -322,10 +322,13 @@ class Emailer {
         },
         locals: { // default variables available in all templates
           WEBSERVER,
-          EMAIL: CONFIG.EMAIL,
           instanceName: CONFIG.INSTANCE.NAME,
           text: options.text,
-          subject
+          subject,
+          signature: this.buildSignature(),
+          fg: CONFIG.THEME.CUSTOMIZATION.FOREGROUND_COLOR || '#000',
+          bg: CONFIG.THEME.CUSTOMIZATION.BACKGROUND_COLOR || '#fff',
+          primary: CONFIG.THEME.CUSTOMIZATION.PRIMARY_COLOR || '#FF8F37'
         }
       }
 
@@ -396,13 +399,24 @@ class Emailer {
     })
   }
 
+  private buildSubjectPrefix () {
+    let prefix = CONFIG.EMAIL.SUBJECT.PREFIX
+    if (!prefix) return prefix
+
+    prefix = prefix.replace(/{{instanceName}}/g, CONFIG.INSTANCE.NAME)
+    if (prefix.endsWith(' ')) return prefix
+
+    return prefix + ' '
+  }
+
+  private buildSignature () {
+    const signature = CONFIG.EMAIL.BODY.SIGNATURE
+    if (!signature) return signature
+
+    return signature.replace(/{{instanceName}}/g, CONFIG.INSTANCE.NAME)
+  }
+
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  Emailer
 }

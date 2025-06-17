@@ -26,6 +26,10 @@ interface SendEmailDefaultLocalsOptions {
   instanceName: string
   text: string
   subject: string
+
+  fg: string
+  bg: string
+  primary: string
 }
 
 interface SendEmailDefaultMessageOptions {
@@ -42,7 +46,7 @@ export type SendEmailDefaultOptions = {
 
   locals: SendEmailDefaultLocalsOptions & {
     WEBSERVER: any
-    EMAIL: any
+    signature: string
   }
 }
 

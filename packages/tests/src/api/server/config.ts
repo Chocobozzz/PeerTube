@@ -154,6 +154,9 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.defaults.p2p.embed.enabled).to.be.true
   expect(data.defaults.p2p.webapp.enabled).to.be.true
   expect(data.defaults.player.autoPlay).to.be.true
+
+  expect(data.email.body.signature).to.equal('')
+  expect(data.email.subject.prefix).to.equal('[{{instanceName}}] ')
 }
 
 function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
@@ -448,6 +451,14 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       player: {
         autoPlay: false
+      }
+    },
+    email: {
+      body: {
+        signature: 'my signature'
+      },
+      subject: {
+        prefix: 'my prefix'
       }
     }
   }
