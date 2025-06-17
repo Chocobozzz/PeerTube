@@ -159,6 +159,17 @@
           </div>
 
           <div class="form-group">
+            <label i18n for="instanceSocialXLink">X link</label>
+
+            <input
+              type="text" id="instanceSocialXLink" class="form-control"
+              formControlName="xLink" [ngClass]="{ 'input-error': formErrors().instance.social.xLink }"
+            >
+
+            <div *ngIf="formErrors().instance.social.xLink" class="form-error" role="alert">{{ formErrors().instance.social.xLink }}</div>
+          </div>
+
+          <div class="form-group">
             <label i18n for="instanceSocialBlueskyLink">Bluesky link</label>
 
             <input

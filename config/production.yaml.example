@@ -998,6 +998,8 @@ instance:
     external_link: ''
     # Mastodon
     mastodon_link: ''
+    # X
+    x_link: ''
     # Bluesky
     bluesky_link: ''
 
