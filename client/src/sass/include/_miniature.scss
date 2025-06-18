@@ -87,7 +87,8 @@
     height: inherit;
 
     &.blur-filter {
-      filter: blur(20px);
+      --thumbnailBlur: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><filter id="thumbnailBlur" primitiveUnits="objectBoundingBox"><feGaussianBlur stdDeviation="0.0703 0.125"></feGaussianBlur><feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 9 0"></feColorMatrix><feComposite in2="SourceGraphic" operator="in"></feComposite></filter></svg>#thumbnailBlur');
+      filter: var(--thumbnailBlur);
     }
   }
 }
