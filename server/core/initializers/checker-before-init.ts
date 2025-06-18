@@ -251,7 +251,8 @@ export function checkMissedConfig () {
     'storyboards.enabled',
     'webrtc.stun_servers',
     'nsfw_flags_settings.enabled',
-    'download_generate_video.max_parallel_downloads'
+    'download_generate_video.max_parallel_downloads',
+    'video_comments.accept_remote_comments'
   ]
 
   const requiredAlternatives = [

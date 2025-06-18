@@ -198,6 +198,10 @@ type Form = {
       autoPlay: FormControl<boolean>
     }>
   }>
+
+  videoComments: FormGroup<{
+    acceptRemoteComments: FormControl<boolean>
+  }>
 }
 
 @Component({
@@ -424,6 +428,9 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         player: {
           autoPlay: null
         }
+      },
+      videoComments: {
+        acceptRemoteComments: null
       }
     }
 

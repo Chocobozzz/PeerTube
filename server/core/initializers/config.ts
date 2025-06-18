@@ -1,7 +1,3 @@
-import bytes from 'bytes'
-import { IConfig } from 'config'
-import { createRequire } from 'module'
-import { dirname, join } from 'path'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
@@ -10,10 +6,14 @@ import {
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
 } from '@peertube/peertube-models'
-import { decacheModule } from '@server/helpers/decache.js'
 import { buildPath, root } from '@peertube/peertube-node-utils'
-import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
+import { decacheModule } from '@server/helpers/decache.js'
+import bytes from 'bytes'
+import { IConfig } from 'config'
+import { createRequire } from 'module'
+import { dirname, join } from 'path'
+import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
 
 const require = createRequire(import.meta.url)
 let config: IConfig = require('config')
@@ -1090,6 +1090,11 @@ const CONFIG = {
         return config.get<string>('email.subject.prefix')
       }
     }
+  },
+  VIDEO_COMMENTS: {
+    get ACCEPT_REMOTE_COMMENTS () {
+      return config.get<boolean>('video_comments.accept_remote_comments')
+    }
   }
 }
 
@@ -1125,8 +1130,8 @@ export {
   CONFIG,
   getConfigModule,
   getLocalConfigFilePath,
-  registerConfigChangedHandler,
-  isEmailEnabled
+  isEmailEnabled,
+  registerConfigChangedHandler
 }
 
 // ---------------------------------------------------------------------------

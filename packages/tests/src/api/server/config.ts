@@ -158,6 +158,8 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.email.body.signature).to.equal('')
   expect(data.email.subject.prefix).to.equal('[{{instanceName}}] ')
+
+  expect(data.videoComments.acceptRemoteComments).to.be.true
 }
 
 function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
@@ -464,6 +466,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       subject: {
         prefix: 'my prefix'
       }
+    },
+    videoComments: {
+      acceptRemoteComments: false
     }
   }
 }

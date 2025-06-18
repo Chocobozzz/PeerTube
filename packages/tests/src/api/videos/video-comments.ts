@@ -5,12 +5,15 @@ import {
   PeerTubeServer,
   cleanupTests,
   createSingleServer,
+  doubleFollow,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
-  setDefaultChannelAvatar
+  setDefaultChannelAvatar,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { dateIsValid, testImage } from '@tests/shared/checks.js'
 import { expect } from 'chai'
+import { VideoCreateResult } from '../../../../models/src/videos/video-create-result.model.js'
 
 describe('Test video comments', function () {
   let server: PeerTubeServer
@@ -428,6 +431,95 @@ describe('Test video comments', function () {
 
       const video = await server.videos.get({ id: testVideoUUID })
       expect(video.comments).to.equal(0)
+    })
+  })
+
+  describe('Disabling remote comments', function () {
+    let server2: PeerTubeServer
+    let server3: PeerTubeServer
+
+    let video1: VideoCreateResult
+    let video2: VideoCreateResult
+
+    before(async function () {
+      this.timeout(120000)
+
+      server2 = await createSingleServer(2)
+      server3 = await createSingleServer(3)
+
+      await setAccessTokensToServers([ server2, server3 ])
+      await doubleFollow(server, server2)
+    })
+
+    it('Should federate comments', async function () {
+      video1 = await server.videos.quickUpload({ name: 'video on server 1' })
+      video2 = await server2.videos.quickUpload({ name: 'video on server 2' })
+
+      await server2.comments.createThread({ videoId: video1.uuid, text: 'comment on server 2' })
+      await server2.comments.createThread({ videoId: video2.uuid, text: 'comment on server 2' })
+
+      await waitJobs([ server, server2 ])
+
+      for (const s of [ server, server2 ]) {
+        const threads = await s.comments.listThreads({ videoId: video1.uuid })
+        expect(threads.total).to.equal(1)
+        expect(threads.data[0].text).to.equal('comment on server 2')
+
+        const threads2 = await s.comments.listThreads({ videoId: video2.uuid })
+        expect(threads2.total).to.equal(1)
+        expect(threads2.data[0].text).to.equal('comment on server 2')
+      }
+    })
+
+    it('Should not accept remote comments anymore', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          videoComments: {
+            acceptRemoteComments: false
+          }
+        }
+      })
+
+      await server2.comments.createThread({ videoId: video1.uuid, text: 'comment on server 2 - 2' })
+      await server2.comments.createThread({ videoId: video2.uuid, text: 'comment on server 2 - 2' })
+
+      await waitJobs([ server, server2 ])
+
+      // Server 1
+      {
+        const threads = await server.comments.listThreads({ videoId: video1.uuid })
+        expect(threads.total).to.equal(1)
+
+        const threads2 = await server.comments.listThreads({ videoId: video2.uuid })
+        expect(threads2.total).to.equal(1)
+      }
+
+      // Server 2
+      {
+        const threads = await server2.comments.listThreads({ videoId: video1.uuid })
+        expect(threads.total).to.equal(2)
+
+        const threads2 = await server2.comments.listThreads({ videoId: video2.uuid })
+        expect(threads2.total).to.equal(2)
+      }
+    })
+
+    it('Should not fetch remote comments on new follow', async function () {
+      const video3 = await server3.videos.quickUpload({ name: 'video on server 2' })
+      await server3.comments.createThread({ videoId: video3.uuid, text: 'comment on server 3' })
+
+      await waitJobs([ server3 ])
+      await doubleFollow(server, server3)
+
+      {
+        const threads = await server3.comments.listThreads({ videoId: video3.uuid })
+        expect(threads.total).to.equal(1)
+      }
+
+      {
+        const threads = await server.comments.listThreads({ videoId: video3.uuid })
+        expect(threads.total).to.equal(0)
+      }
     })
   })
 

@@ -358,4 +358,8 @@ export interface CustomConfig {
       autoPlay: boolean
     }
   }
+
+  videoComments: {
+    acceptRemoteComments: boolean
+  }
 }

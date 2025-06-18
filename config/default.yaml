@@ -546,7 +546,7 @@ signup:
 user:
   history:
     videos:
-      # Enable or disable video history by default for new users.
+      # Enable or disable video history by default for new users
       enabled: true
 
   # Default value of maximum video bytes the user can upload
@@ -797,7 +797,7 @@ import:
         #   * https://yt-dl.org/downloads/latest/youtube-dl
         #
         # You can also use a youtube-dl standalone binary (requires python_path: null)
-        # GNU/Linux binaries with support for impersonating browser requests (required by some platforms such as Vimeo) examples:
+        # GNU/Linux binaries with support for impersonating browser requests (required by some i such as Vimeo) examples:
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux (x64)
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv7)
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv8/AArch64/ARM64)
@@ -1143,3 +1143,8 @@ email:
   subject:
     # Support {{instanceName}} template variable
     prefix: '[{{instanceName}}] '
+
+video_comments:
+  # Accept or not comments from remote instances
+  # This setting is not retroactive: current remote comments of your instance will not be affected
+  accept_remote_comments: true

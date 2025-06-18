@@ -463,6 +463,19 @@
 
     <div class="content-col">
 
+      <ng-container formGroupName="videoComments">
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="videoCommentsAcceptRemoteComments" formControlName="acceptRemoteComments"
+            i18n-labelText labelText="Accept comments made on remote platforms"
+          >
+            <ng-container ngProjectAs="description">
+              <span i18n>This setting is not retroactive: current remote comments platform will not be deleted</span>
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
+      </ng-container>
+
       <ng-container formGroupName="followers">
         <ng-container formGroupName="channels">
           <div class="form-group">

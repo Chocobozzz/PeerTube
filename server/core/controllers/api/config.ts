@@ -540,6 +540,10 @@ function customConfig (): CustomConfig {
       subject: {
         prefix: CONFIG.EMAIL.SUBJECT.PREFIX
       }
+    },
+
+    videoComments: {
+      acceptRemoteComments: CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS
     }
   }
 }
