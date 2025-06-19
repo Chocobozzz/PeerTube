@@ -27,6 +27,11 @@ export class AdminConfigComponent implements OnInit {
         },
         {
           type: 'link',
+          label: $localize`Logo`,
+          routerLink: 'logo'
+        },
+        {
+          type: 'link',
           label: $localize`General`,
           routerLink: 'general'
         },

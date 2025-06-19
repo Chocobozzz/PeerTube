@@ -1,4 +1,4 @@
-import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
+import { findAppropriateImage, forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { ActivityIconObject, ActorImageType, ActorImageType_Type, type ActivityPubActorType } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
@@ -47,6 +47,7 @@ import {
 } from '../../types/models/index.js'
 import { AccountModel } from '../account/account.js'
 import { getServerActor } from '../application/application.js'
+import { UploadImageModel } from '../application/upload-image.js'
 import { ServerModel } from '../server/server.js'
 import { SequelizeModel, buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel } from '../video/video-channel.js'
@@ -249,6 +250,16 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     }
   })
   Banners: Awaited<ActorImageModel>[]
+
+  @HasMany(() => UploadImageModel, {
+    as: 'UploadImages',
+    onDelete: 'cascade',
+    hooks: true,
+    foreignKey: {
+      allowNull: false
+    }
+  })
+  UploadImages: Awaited<UploadImageModel>[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -684,6 +695,16 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       : this.Banners
 
     return maxBy(images, 'height')
+  }
+
+  getAppropriateQualityImage (type: ActorImageType_Type, width: number) {
+    if (!this.hasImage(type)) return undefined
+
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
+
+    return findAppropriateImage(images, width)
   }
 
   isOutdated () {

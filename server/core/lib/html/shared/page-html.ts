@@ -6,10 +6,9 @@ import {
   is18nLocale,
   POSSIBLE_LOCALES
 } from '@peertube/peertube-core-utils'
-import { ActorImageType, HTMLServerConfig } from '@peertube/peertube-models'
+import { HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
 import { CONFIG } from '@server/initializers/config.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { pathExists } from 'fs-extra/esm'
@@ -32,7 +31,8 @@ export class PageHtml {
   static async getDefaultHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const html = await this.getIndexHTML(req, res, paramLang)
     const serverActor = await getServerActor()
-    const avatar = serverActor.getMaxQualityImage(ActorImageType.AVATAR)
+
+    const openGraphImage = ServerConfigManager.Instance.getDefaultOpenGraph(serverActor)
 
     let customHTML = TagsHtml.addTitleTag(html)
     customHTML = TagsHtml.addDescriptionTag(customHTML)
@@ -52,8 +52,8 @@ export class PageHtml {
         ? TagsHtml.findRelMe(CONFIG.INSTANCE.DESCRIPTION)
         : undefined,
 
-      image: avatar
-        ? { url: ActorImageModel.getImageUrl(avatar), width: avatar.width, height: avatar.height }
+      image: openGraphImage
+        ? { url: openGraphImage.fileUrl, width: openGraphImage.width, height: openGraphImage.height }
         : undefined,
 
       ogType: 'website',
@@ -99,8 +99,6 @@ export class PageHtml {
     let html = buffer.toString()
 
     html = this.addManifestContentHash(html)
-    html = this.addFaviconContentHash(html)
-    html = this.addLogoContentHash(html)
 
     html = this.addCustomCSS(html)
     html = this.addServerConfig(html, serverConfig)
@@ -188,13 +186,5 @@ export class PageHtml {
 
   private static addManifestContentHash (htmlStringPage: string) {
     return htmlStringPage.replace('[manifestContentHash]', FILES_CONTENT_HASH.MANIFEST)
-  }
-
-  private static addFaviconContentHash (htmlStringPage: string) {
-    return htmlStringPage.replace('[faviconContentHash]', FILES_CONTENT_HASH.FAVICON)
-  }
-
-  private static addLogoContentHash (htmlStringPage: string) {
-    return htmlStringPage.replace('[logoContentHash]', FILES_CONTENT_HASH.LOGO)
   }
 }

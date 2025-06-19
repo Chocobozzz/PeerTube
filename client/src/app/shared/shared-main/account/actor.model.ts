@@ -22,7 +22,7 @@ export abstract class Actor implements ServerActor {
 
     const avatar = size && avatarsAscWidth.length > 1
       ? avatarsAscWidth.find(a => a.width >= size)
-      : avatarsAscWidth[avatarsAscWidth.length - 1] // Bigger one
+      : avatarsAscWidth[avatarsAscWidth.length - 1] // Biggest one
 
     if (!avatar) return ''
     if (avatar.fileUrl) return avatar.fileUrl

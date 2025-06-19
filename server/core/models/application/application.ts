@@ -4,6 +4,7 @@ import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Table } from '
 import { AccountModel } from '../account/account.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { SequelizeModel } from '../shared/index.js'
+import { UploadImageModel } from './upload-image.js'
 
 export const getServerActor = memoizee(async function () {
   const application = await ApplicationModel.load()
@@ -15,6 +16,9 @@ export const getServerActor = memoizee(async function () {
   const { avatars, banners } = await ActorImageModel.listActorImages(actor)
   actor.Avatars = avatars
   actor.Banners = banners
+
+  const uploadImages = await UploadImageModel.listByActor(actor)
+  actor.UploadImages = uploadImages
 
   return actor
 }, { promise: true })
@@ -32,7 +36,6 @@ export const getServerActor = memoizee(async function () {
   timestamps: false
 })
 export class ApplicationModel extends SequelizeModel<ApplicationModel> {
-
   @AllowNull(false)
   @Default(0)
   @IsInt

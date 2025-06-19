@@ -11,3 +11,5 @@ npm run resolve-tspaths:server
 
 cp -r "./server/core/static" "./server/core/assets" ./dist/core
 cp "./server/scripts/upgrade.sh" "./dist/scripts"
+
+mkdir -p ./client/dist && cp -r ./client/src/assets ./client/dist

@@ -39,34 +39,6 @@
 
       <div class="content-col">
         <div class="form-group">
-          <label i18n for="avatarfile">Square icon</label>
-
-          <div class="form-group-description">
-            <p i18n class="mb-0">Square icon can be used on your custom homepage.</p>
-          </div>
-
-          <my-actor-avatar-edit
-            class="d-block mb-4"
-            actorType="account" previewImage="false" [username]="instanceName" displayUsername="false"
-            [avatars]="instanceAvatars" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
-          ></my-actor-avatar-edit>
-        </div>
-
-        <div class="form-group">
-          <label i18n for="bannerfile">Banner</label>
-
-          <div class="form-group-description">
-            <p i18n class="mb-0">Banner is displayed in the about, login and registration pages and be used on your custom homepage.</p>
-            <p i18n>It can also be displayed on external websites to promote your instance, such as <a target="_blank"  href="https://joinpeertube.org/instances">JoinPeerTube.org</a>.</p>
-          </div>
-
-          <my-actor-banner-edit
-            [previewImage]="false" class="d-block mb-4"
-            [bannerUrl]="instanceBannerUrl" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
-          ></my-actor-banner-edit>
-        </div>
-
-        <div class="form-group">
           <label i18n for="instanceName">Name</label>
 
           <input

@@ -95,7 +95,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     'filter:feed.podcast.rss.create-custom-xmlns.result'
   )
 
-  const feed = initFeed({
+  const feed = await initFeed({
     name,
     description,
     link,

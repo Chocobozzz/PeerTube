@@ -77,7 +77,6 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
     mv "./dist/$defaultLanguage/assets" "./dist"
 
     rm -r "dist/build"
-    cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 else
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then

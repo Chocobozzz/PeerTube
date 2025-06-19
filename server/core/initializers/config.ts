@@ -75,6 +75,11 @@ const CONFIG = {
   },
 
   CLIENT: {
+    HEADER: {
+      get HIDE_INSTANCE_NAME () {
+        return config.get<boolean>('client.header.hide_instance_name')
+      }
+    },
     VIDEOS: {
       MINIATURE: {
         get PREFER_AUTHOR_DISPLAY_NAME () {
@@ -180,7 +185,8 @@ const CONFIG = {
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides')),
-    WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known'))
+    WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known')),
+    UPLOADS_DIR: buildPath(config.get<string>('storage.uploads'))
   },
   STATIC_FILES: {
     PRIVATE_FILES_REQUIRE_AUTH: config.get<boolean>('static_files.private_files_require_auth')

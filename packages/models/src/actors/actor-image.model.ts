@@ -1,4 +1,5 @@
 export interface ActorImage {
+  height: number
   width: number
 
   // TODO: remove, deprecated in 7.1

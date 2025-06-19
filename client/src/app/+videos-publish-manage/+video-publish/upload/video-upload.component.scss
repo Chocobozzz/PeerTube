@@ -1,5 +1,5 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
 .first-step-block {
   .form-group-channel {
@@ -13,5 +13,10 @@
 
   .audio-preview {
     margin: 30px 0;
+
+    my-preview-upload {
+      width: 360px;
+      height: 200px;
+    }
   }
 }

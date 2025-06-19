@@ -79,6 +79,10 @@ export interface CustomConfig {
   }
 
   client: {
+    header: {
+      hideInstanceName: boolean
+    }
+
     videos: {
       miniature: {
         preferAuthorDisplayName: boolean

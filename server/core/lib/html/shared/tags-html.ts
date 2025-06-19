@@ -1,5 +1,7 @@
-import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
+import { escapeAttribute, escapeHTML, findAppropriateImage } from '@peertube/peertube-core-utils'
 import { mdToPlainText } from '@server/helpers/markdown.js'
+import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { getServerActor } from '@server/models/application/application.js'
 import truncate from 'lodash-es/truncate.js'
 import { parse } from 'node-html-parser'
 import { CONFIG } from '../../../initializers/config.js'
@@ -87,26 +89,17 @@ export class TagsHtml {
   // ---------------------------------------------------------------------------
 
   static async addTags (htmlStringPage: string, tagsValues: TagsOptions, context: HookContext) {
+    const { url, escapedTitle, oembedUrl, forbidIndexation, embedIndexation, relMe, rssFeeds } = tagsValues
+    const serverActor = await getServerActor()
+
+    let tagsStr = ''
+
+    // Global meta tags
     const metaTags = {
       ...this.generateOpenGraphMetaTagsOptions(tagsValues),
       ...this.generateStandardMetaTagsOptions(tagsValues),
       ...this.generateTwitterCardMetaTagsOptions(tagsValues)
     }
-    const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
-
-    const { url, escapedTitle, oembedUrl, forbidIndexation, embedIndexation, relMe, rssFeeds } = tagsValues
-
-    const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
-
-    if (oembedUrl) {
-      oembedLinkTags.push({
-        type: 'application/json+oembed',
-        href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(oembedUrl),
-        escapedTitle
-      })
-    }
-
-    let tagsStr = ''
 
     for (const tagName of Object.keys(metaTags)) {
       const tagValue = metaTags[tagName]
@@ -116,23 +109,27 @@ export class TagsHtml {
     }
 
     // OEmbed
-    for (const oembedLinkTag of oembedLinkTags) {
-      tagsStr += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${
-        escapeAttribute(oembedLinkTag.escapedTitle)
-      }" />`
+    if (oembedUrl) {
+      const href = WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(oembedUrl)
+
+      tagsStr += `<link rel="alternate" type="application/json+oembed" href="${href}" title="${escapeAttribute(escapedTitle)}" />`
     }
 
     // Schema.org
+    const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
+
     if (schemaTags) {
       tagsStr += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
     }
 
+    // Rel Me
     if (Array.isArray(relMe)) {
       for (const relMeLink of relMe) {
         tagsStr += `<link href="${escapeAttribute(relMeLink)}" rel="me">`
       }
     }
 
+    // SEO
     if (forbidIndexation === true) {
       tagsStr += `<meta name="robots" content="noindex" />`
     } else if (embedIndexation) {
@@ -141,9 +138,22 @@ export class TagsHtml {
       tagsStr += `<link rel="canonical" href="${url}" />`
     }
 
+    // RSS
     for (const rssLink of (rssFeeds || [])) {
       tagsStr += `<link rel="alternate" type="application/rss+xml" title="${escapeAttribute(rssLink.title)}" href="${rssLink.url}" />`
     }
+
+    // Favicon
+    const favicon = ServerConfigManager.Instance.getFavicon(serverActor)
+    tagsStr += `<link rel="icon" type="image/png" href="${escapeAttribute(favicon.fileUrl)}" />`
+
+    // Apple Touch Icon
+    const appleTouchIcon = findAppropriateImage(serverActor.Avatars, 192)
+    const iconHref = appleTouchIcon
+      ? WEBSERVER.URL + appleTouchIcon.getStaticPath()
+      : '/client/assets/images/icons/icon-192x192.png'
+
+    tagsStr += `<link rel="apple-touch-icon" href="${iconHref}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsStr)
   }

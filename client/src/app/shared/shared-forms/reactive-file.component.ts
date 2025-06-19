@@ -1,10 +1,10 @@
-import { Component, forwardRef, OnChanges, OnInit, inject, input, output } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
+import { CommonModule } from '@angular/common'
+import { Component, forwardRef, inject, input, OnChanges, OnInit, output } from '@angular/core'
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { NgClass, NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-reactive-file',
@@ -17,7 +17,7 @@ import { NgClass, NgIf } from '@angular/common'
       multi: true
     }
   ],
-  imports: [ NgClass, NgbTooltip, NgIf, GlobalIconComponent, FormsModule ]
+  imports: [ CommonModule, NgbTooltipModule, GlobalIconComponent, FormsModule ]
 })
 export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {
   private notifier = inject(Notifier)
@@ -39,8 +39,7 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
   classes: { [id: string]: boolean } = {}
   allowedExtensionsMessage = ''
   fileInputValue: any
-
-  private file: File
+  file: File
 
   get filename () {
     if (!this.file) return ''
@@ -62,7 +61,8 @@ export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAcc
     this.classes = {
       'with-icon': !!this.icon(),
       'primary-button': this.theme() === 'primary',
-      'secondary-button': this.theme() === 'secondary'
+      'secondary-button': this.theme() === 'secondary',
+      'icon-only': !this.inputLabel()
     }
   }
 

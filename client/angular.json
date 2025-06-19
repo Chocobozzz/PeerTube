@@ -189,8 +189,7 @@
               }
             },
             "assets": [
-              "src/assets/images",
-              "src/manifest.webmanifest"
+              "src/assets/images"
             ],
             "styles": [
               "src/sass/application.scss"

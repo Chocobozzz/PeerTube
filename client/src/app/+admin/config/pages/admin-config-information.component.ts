@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { HttpErrorResponse } from '@angular/common/http'
-import { Component, OnInit, OnDestroy, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
-import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
-import { genericUploadErrorHandler } from '@app/helpers'
+import { CanComponentDeactivate, ServerService } from '@app/core'
 import { URL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
   ADMIN_EMAIL_VALIDATOR,
@@ -20,12 +18,9 @@ import {
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { SelectRadioComponent } from '@app/shared/shared-forms/select/select-radio.component'
-import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
-import { maxBy } from '@peertube/peertube-core-utils'
-import { ActorImage, CustomConfig, HTMLServerConfig, NSFWPolicyType, VideoConstant } from '@peertube/peertube-models'
+import { ActorImage, CustomConfig, NSFWPolicyType, VideoConstant } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
-import { ActorAvatarEditComponent } from '../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
-import { ActorBannerEditComponent } from '../../../shared/shared-actor-image-edit/actor-banner-edit.component'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/custom-markup-help.component'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
@@ -34,7 +29,6 @@ import { SelectCheckboxComponent } from '../../../shared/shared-forms/select/sel
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
-import { Subscription } from 'rxjs'
 
 type Form = {
   admin: FormGroup<{
@@ -84,8 +78,6 @@ type Form = {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    ActorAvatarEditComponent,
-    ActorBannerEditComponent,
     SelectRadioComponent,
     CommonModule,
     CustomMarkupHelpComponent,
@@ -100,8 +92,6 @@ type Form = {
 })
 export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private customMarkup = inject(CustomMarkupService)
-  private notifier = inject(Notifier)
-  private instanceService = inject(InstanceService)
   private server = inject(ServerService)
   private route = inject(ActivatedRoute)
   private formReactiveService = inject(FormReactiveService)
@@ -136,7 +126,6 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
     }
   ]
 
-  private serverConfig: HTMLServerConfig
   private customConfig: CustomConfig
   private customConfigSub: Subscription
 
@@ -155,9 +144,6 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
     this.languageItems = data.languages.map(l => ({ label: l.label, id: l.id }))
     this.categoryItems = data.categories.map(l => ({ label: l.label, id: l.id }))
 
-    this.serverConfig = this.server.getHTMLConfig()
-
-    this.updateActorImages()
     this.buildForm()
 
     this.customConfigSub = this.adminConfigService.getCustomConfigReloadedObs()
@@ -233,72 +219,6 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
 
   getCustomMarkdownRenderer () {
     return this.customMarkup.getCustomMarkdownRenderer()
-  }
-
-  onBannerChange (formData: FormData) {
-    this.instanceService.updateInstanceBanner(formData)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Banner changed.`)
-
-          this.resetActorImages()
-        },
-
-        error: (err: HttpErrorResponse) => genericUploadErrorHandler({ err, name: $localize`banner`, notifier: this.notifier })
-      })
-  }
-
-  onBannerDelete () {
-    this.instanceService.deleteInstanceBanner()
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Banner deleted.`)
-
-          this.resetActorImages()
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
-  }
-
-  onAvatarChange (formData: FormData) {
-    this.instanceService.updateInstanceAvatar(formData)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Avatar changed.`)
-
-          this.resetActorImages()
-        },
-
-        error: (err: HttpErrorResponse) => genericUploadErrorHandler({ err, name: $localize`avatar`, notifier: this.notifier })
-      })
-  }
-
-  onAvatarDelete () {
-    this.instanceService.deleteInstanceAvatar()
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Avatar deleted.`)
-
-          this.resetActorImages()
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
-  }
-
-  private updateActorImages () {
-    this.instanceBannerUrl = maxBy(this.serverConfig.instance.banners, 'width')?.path
-    this.instanceAvatars = this.serverConfig.instance.avatars
-  }
-
-  private resetActorImages () {
-    this.server.resetConfig()
-      .subscribe(config => {
-        this.serverConfig = config
-
-        this.updateActorImages()
-      })
   }
 
   save () {

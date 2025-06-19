@@ -1076,6 +1076,55 @@ paths:
         '204':
           description: successful operation
 
+  '/api/v1/config/instance-logo/:logoType/pick':
+    post:
+      summary: Update instance logo
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      parameters:
+        - $ref: '#/components/parameters/logoTypeParam'
+      responses:
+        '204':
+          description: successful operation
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the banner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                logofile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              logofile:
+                contentType: image/png, image/jpeg
+
+  '/api/v1/config/instance-logo/:logoType':
+    delete:
+      summary: Delete instance logo
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      parameters:
+        - $ref: '#/components/parameters/logoTypeParam'
+      responses:
+        '204':
+          description: successful operation
+
   /api/v1/custom-pages/homepage/instance:
     get:
       summary: Get instance custom homepage
@@ -8022,7 +8071,17 @@ components:
         not valid anymore and you need to initialize a new upload.
       schema:
         type: string
-
+    logoTypeParam:
+      name: logoType
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - 'favicon'
+          - 'header-wide'
+          - 'header-square'
+          - 'opengraph'
 
   securitySchemes:
     OAuth2:
@@ -9156,10 +9215,10 @@ components:
           type: number
           description: "**PeerTube >= 6.1** Frames per second of the video file"
         width:
-          type: number
+          type: integer
           description: "**PeerTube >= 6.1** Video stream width"
         height:
-          type: number
+          type: integer
           description: "**PeerTube >= 6.1** Video stream height"
         createdAt:
           type: string
@@ -9170,6 +9229,9 @@ components:
           type: string
         width:
           type: integer
+        height:
+          type: integer
+          description: "**PeerTube >= 7.3** ImportVideosInChannelCreate:mage height"
         createdAt:
           type: string
           format: date-time

@@ -1,5 +1,8 @@
+import { findAppropriateImage, maxBy } from '@peertube/peertube-core-utils'
 import {
+  ActorImageType,
   HTMLServerConfig,
+  LogoType,
   RegisteredExternalAuthConfig,
   RegisteredIdAndPassAuthConfig,
   ServerConfig,
@@ -8,15 +11,19 @@ import {
 } from '@peertube/peertube-models'
 import { getServerCommit } from '@server/helpers/version.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
-import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { PluginModel } from '@server/models/server/plugin.js'
+import { MActorImage, MActorUploadImages, MUploadImage } from '@server/types/models/index.js'
 import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
 import { getThemeOrDefault } from './plugins/theme-utils.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
+import { logoTypeToUploadImageEnum } from './upload-image.js'
 
 /**
  * Used to send the server config to clients (using REST/API or plugins API)
@@ -51,6 +58,9 @@ class ServerConfigManager {
 
     return {
       client: {
+        header: {
+          hideInstanceName: CONFIG.CLIENT.HEADER.HIDE_INSTANCE_NAME
+        },
         videos: {
           miniature: {
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
@@ -133,8 +143,16 @@ class ServerConfigManager {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
         },
+
         avatars: serverActor.Avatars.map(a => a.toFormattedJSON()),
-        banners: serverActor.Banners.map(b => b.toFormattedJSON())
+        banners: serverActor.Banners.map(b => b.toFormattedJSON()),
+
+        logo: [
+          ...this.getFaviconLogos(serverActor),
+          ...this.getMobileHeaderLogos(serverActor),
+          ...this.getDesktopHeaderLogos(serverActor),
+          ...this.getOpenGraphLogos(serverActor)
+        ]
       },
       search: {
         remoteUri: {
@@ -480,6 +498,117 @@ class ServerConfigManager {
     }
 
     return result
+  }
+
+  // ---------------------------------------------------------------------------
+  // Logo
+  // ---------------------------------------------------------------------------
+
+  getFavicon (serverActor: MActorUploadImages) {
+    return findAppropriateImage(this.getFaviconLogos(serverActor), 32)
+  }
+
+  getDefaultOpenGraph (serverActor: MActorUploadImages) {
+    return maxBy(this.getOpenGraphLogos(serverActor), 'width')
+  }
+
+  private getFaviconLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'favicon',
+
+      defaultLogo: {
+        fileUrl: WEBSERVER.URL + '/client/assets/images/favicon.png',
+        width: 32,
+        height: 32
+      }
+    })
+  }
+
+  private getMobileHeaderLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'header-square',
+
+      defaultLogo: {
+        fileUrl: WEBSERVER.URL + '/client/assets/images/logo.svg',
+        width: 34,
+        height: 34
+      }
+    })
+  }
+
+  private getDesktopHeaderLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'header-wide',
+
+      defaultLogo: {
+        fileUrl: WEBSERVER.URL + '/client/assets/images/logo.svg',
+        width: 34,
+        height: 34
+      }
+    })
+  }
+
+  private getOpenGraphLogos (serverActor: MActorUploadImages) {
+    return this.getLogoWithFallbacks({
+      serverActor,
+      logoType: 'opengraph',
+
+      defaultLogo: undefined
+    })
+  }
+
+  private getLogoWithFallbacks (options: {
+    serverActor: MActorUploadImages
+    logoType: LogoType
+
+    defaultLogo: {
+      fileUrl: string
+      width: number
+      height: number
+    }
+  }) {
+    const { serverActor, logoType, defaultLogo } = options
+
+    const uploadImageType = logoTypeToUploadImageEnum(logoType)
+
+    const uploaded = serverActor.UploadImages
+      .filter(i => i.type === uploadImageType)
+      .map(i => this.formatUploadImageForLogo(i, logoType, false))
+
+    if (uploaded.length !== 0) return uploaded
+
+    // Avatar fallback?
+    if (serverActor.hasImage(ActorImageType.AVATAR)) {
+      return serverActor.Avatars.map(a => this.formatActorImageForLogo(a, logoType, true))
+    }
+
+    // Default mobile header logo?
+    if (!defaultLogo) return []
+
+    return [ { ...defaultLogo, type: logoType, isFallback: true } ]
+  }
+
+  private formatUploadImageForLogo (logo: MUploadImage, type: LogoType, isFallback: boolean) {
+    return {
+      height: logo.height,
+      width: logo.width,
+      type,
+      fileUrl: UploadImageModel.getImageUrl(logo),
+      isFallback
+    }
+  }
+
+  private formatActorImageForLogo (logo: MActorImage, type: LogoType, isFallback: boolean) {
+    return {
+      height: logo.height,
+      width: logo.width,
+      type,
+      fileUrl: ActorImageModel.getImageUrl(logo),
+      isFallback
+    }
   }
 
   static get Instance () {

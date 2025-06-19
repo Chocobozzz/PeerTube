@@ -61,15 +61,10 @@
   @include margin-left(10px);
 }
 
-.icon-logo {
+.logo {
   display: inline-block;
-  width: var(--co-logo-size);
-  height: var(--co-logo-size);
   min-width: var(--co-logo-size);
-  max-width: var(--co-logo-size);
-
-  background-repeat: no-repeat;
-  background-size: contain;
+  height: var(--co-logo-size);
 }
 
 my-search-typeahead {

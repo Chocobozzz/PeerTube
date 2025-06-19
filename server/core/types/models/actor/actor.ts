@@ -1,6 +1,7 @@
 import { FunctionProperties, PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from '../account/index.js'
+import { MUploadImage } from '../application/upload-image.js'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server/index.js'
 import { MChannel, MChannelAccountActor, MChannelAccountDefault, MChannelId, MChannelIdActor } from '../video/index.js'
 import { MActorImage, MActorImageFormattable } from './actor-image.js'
@@ -10,7 +11,10 @@ type UseOpt<K extends keyof ActorModel, M> = PickWithOpt<ActorModel, K, M>
 
 // ############################################################################
 
-export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'ActorFollowers' | 'Server' | 'Banners'>
+export type MActor = Omit<
+  ActorModel,
+  'Account' | 'VideoChannel' | 'ActorFollowing' | 'ActorFollowers' | 'Server' | 'Banners' | 'Avatars' | 'UploadImages'
+>
 
 // ############################################################################
 
@@ -60,6 +64,8 @@ export type MActorChannelIdActor =
 
 export type MActorAccountChannelId = MActorAccountId & MActorChannelId
 export type MActorAccountChannelIdActor = MActorAccountIdActor & MActorChannelIdActor
+
+export type MActorUploadImages = MActorImages & Use<'UploadImages', MUploadImage[]>
 
 // ############################################################################
 

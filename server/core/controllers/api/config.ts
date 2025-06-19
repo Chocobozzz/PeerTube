@@ -1,8 +1,9 @@
-import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, UserRight } from '@peertube/peertube-models'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { deleteUploadImages, logoTypeToUploadImageEnum, replaceUploadImage } from '@server/lib/upload-image.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
@@ -23,7 +24,12 @@ import {
   updateAvatarValidator,
   updateBannerValidator
 } from '../../middlewares/index.js'
-import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
+import {
+  customConfigUpdateValidator,
+  ensureConfigIsEditable,
+  updateInstanceLogoValidator,
+  updateOrDeleteLogoValidator
+} from '../../middlewares/validators/config.js'
 
 const configRouter = express.Router()
 
@@ -96,6 +102,26 @@ configRouter.delete(
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+// ---------------------------------------------------------------------------
+
+configRouter.post(
+  '/instance-logo/:logoType/pick',
+  authenticate,
+  createReqFiles([ 'logofile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateOrDeleteLogoValidator,
+  updateInstanceLogoValidator,
+  asyncMiddleware(updateInstanceLogo)
+)
+
+configRouter.delete(
+  '/instance-logo/:logoType',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateOrDeleteLogoValidator,
+  asyncMiddleware(deleteInstanceLogo)
 )
 
 // ---------------------------------------------------------------------------
@@ -187,12 +213,16 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
 
     const imagePhysicalFile = req.files[field][0]
 
+    const serverActor = await getServerActor()
+
     await updateLocalActorImageFiles({
-      accountOrChannel: (await getServerActorWithUpdatedImages(imageType)).Account,
+      accountOrChannel: serverActor.Account,
       imagePhysicalFile,
       type: imageType,
       sendActorUpdate: false
     })
+
+    await updateServerActorImages(imageType)
 
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
@@ -203,7 +233,11 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
 
 function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
   return async (req: express.Request, res: express.Response) => {
-    await deleteLocalActorImageFile((await getServerActorWithUpdatedImages(imageType)).Account, imageType)
+    const serverActor = await getServerActor()
+
+    await deleteLocalActorImageFile(serverActor.Account, imageType)
+
+    await updateServerActorImages(imageType)
 
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
@@ -212,7 +246,7 @@ function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
   }
 }
 
-async function getServerActorWithUpdatedImages (imageType: ActorImageType_Type) {
+async function updateServerActorImages (imageType: ActorImageType_Type) {
   const serverActor = await getServerActor()
   const updatedImages = await ActorImageModel.listByActor(serverActor, imageType) // Reload images from DB
 
@@ -220,6 +254,35 @@ async function getServerActorWithUpdatedImages (imageType: ActorImageType_Type) 
   else serverActor.Avatars = updatedImages
 
   return serverActor
+}
+
+// ---------------------------------------------------------------------------
+
+async function updateInstanceLogo (req: express.Request, res: express.Response) {
+  const imagePhysicalFile = req.files['logofile'][0]
+
+  await replaceUploadImage({
+    actor: await getServerActor(),
+    imagePhysicalFile,
+    type: logoTypeToUploadImageEnum(req.params.logoType as LogoType)
+  })
+
+  ClientHtml.invalidateCache()
+  ModelCache.Instance.clearCache('server-account')
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function deleteInstanceLogo (req: express.Request, res: express.Response) {
+  await deleteUploadImages({
+    actor: await getServerActor(),
+    type: logoTypeToUploadImageEnum(req.params.logoType as LogoType)
+  })
+
+  ClientHtml.invalidateCache()
+  ModelCache.Instance.clearCache('server-account')
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 // ---------------------------------------------------------------------------
@@ -293,6 +356,9 @@ function customConfig (): CustomConfig {
       }
     },
     client: {
+      header: {
+        hideInstanceName: CONFIG.CLIENT.HEADER.HIDE_INSTANCE_NAME
+      },
       videos: {
         miniature: {
           preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME

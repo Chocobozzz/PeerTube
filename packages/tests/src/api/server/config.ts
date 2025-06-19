@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ActorImageType, CustomConfig, HttpStatusCode, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import { ActorImageType, CustomConfig, HttpStatusCode, LogoType, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -47,6 +47,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
 
+  expect(data.client.header.hideInstanceName).to.be.false
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
@@ -222,6 +223,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     client: {
+      header: {
+        hideInstanceName: true
+      },
       videos: {
         miniature: {
           preferAuthorDisplayName: true
@@ -691,7 +695,7 @@ describe('Test config', function () {
         expect(banners).to.have.lengthOf(2)
 
         for (const banner of banners) {
-          await testImage(server.url, `banner-resized-${banner.width}`, banner.path)
+          await testImage({ url: banner.fileUrl, name: `banner-resized-${banner.width}.jpg` })
           await testFileExistsOnFSOrNot(server, 'avatars', basename(banner.path), true)
 
           bannerPaths.push(banner.path)
@@ -762,6 +766,242 @@ describe('Test config', function () {
 
         expect(object.icon).to.not.exist
       })
+    })
+
+    describe('Logos', function () {
+      describe('Favicon', function () {
+        const logoPaths: string[] = []
+
+        it('Should update instance favicon', async function () {
+          for (const extension of [ '.png', '.gif' ]) {
+            const fixture = 'avatar' + extension
+
+            await server.config.updateInstanceLogo({ type: 'favicon', fixture })
+
+            const htmlConfig = await server.config.getConfig()
+
+            const favicons = htmlConfig.instance.logo.filter(l => l.type === 'favicon')
+            expect(favicons).to.have.lengthOf(1)
+            expect(favicons[0].width).to.equal(32)
+            expect(favicons[0].height).to.equal(32)
+            expect(favicons[0].isFallback).to.be.false
+            expect(favicons[0].type).to.equal('favicon')
+
+            logoPaths.push(favicons[0].fileUrl)
+
+            await makeRawRequest({ url: favicons[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(favicons[0].fileUrl), true)
+          }
+        })
+
+        it('Should remove instance favicon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'favicon' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const favicons = htmlConfig.instance.logo.filter(l => l.type === 'favicon')
+          expect(favicons).to.have.lengthOf(1)
+          expect(favicons[0].width).to.equal(32)
+          expect(favicons[0].height).to.equal(32)
+          expect(favicons[0].isFallback).to.be.true
+          expect(favicons[0].type).to.equal('favicon')
+
+          await makeRawRequest({ url: favicons[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          for (const logoPath of logoPaths) {
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
+          }
+        })
+      })
+
+      describe('Header square icons', function () {
+        const logoPaths: string[] = []
+
+        it('Should update instance header square icon', async function () {
+          for (const extension of [ '.png', '.gif' ]) {
+            const fixture = 'avatar' + extension
+
+            await server.config.updateInstanceLogo({ type: 'header-square', fixture })
+
+            const htmlConfig = await server.config.getConfig()
+
+            const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-square')
+            expect(logos).to.have.lengthOf(1)
+            expect(logos[0].width).to.equal(48)
+            expect(logos[0].height).to.equal(48)
+            expect(logos[0].isFallback).to.be.false
+            expect(logos[0].type).to.equal('header-square')
+
+            logoPaths.push(logos[0].fileUrl)
+
+            await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+          }
+        })
+
+        it('Should remove instance header square icon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'header-square' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-square')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(34)
+          expect(logos[0].height).to.equal(34)
+          expect(logos[0].isFallback).to.be.true
+          expect(logos[0].type).to.equal('header-square')
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          for (const logoPath of logoPaths) {
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
+          }
+        })
+      })
+
+      describe('Header wide icons', function () {
+        const logoPaths: string[] = []
+
+        it('Should update instance header wide icon', async function () {
+          const fixture = 'banner.jpg'
+
+          await server.config.updateInstanceLogo({ type: 'header-wide', fixture })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-wide')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(258)
+          expect(logos[0].height).to.equal(48)
+          expect(logos[0].isFallback).to.be.false
+          expect(logos[0].type).to.equal('header-wide')
+
+          logoPaths.push(logos[0].fileUrl)
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+        })
+
+        it('Should remove instance header wide icon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'header-wide' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'header-wide')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(34)
+          expect(logos[0].height).to.equal(34)
+          expect(logos[0].isFallback).to.be.true
+          expect(logos[0].type).to.equal('header-wide')
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          for (const logoPath of logoPaths) {
+            await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logoPath), false)
+          }
+        })
+      })
+
+      describe('Opengraph icons', function () {
+        it('Should update instance opengraph icon', async function () {
+          const fixture = 'banner.jpg'
+
+          await server.config.updateInstanceLogo({ type: 'opengraph', fixture })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'opengraph')
+          expect(logos).to.have.lengthOf(1)
+          expect(logos[0].width).to.equal(1200)
+          expect(logos[0].height).to.equal(650)
+          expect(logos[0].isFallback).to.be.false
+          expect(logos[0].type).to.equal('opengraph')
+
+          await makeRawRequest({ url: logos[0].fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await testFileExistsOnFSOrNot(server, 'uploads/images', basename(logos[0].fileUrl), true)
+        })
+
+        it('Should remove instance opengraph icon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'opengraph' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const logos = htmlConfig.instance.logo.filter(l => l.type === 'opengraph')
+          expect(logos).to.have.lengthOf(0)
+        })
+      })
+
+      describe('Default logo', function () {
+        before(async function () {
+          await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })
+        })
+
+        it('Should default to the avatar logo for the favicon, header icons and opengraph', async function () {
+          const htmlConfig = await server.config.getConfig()
+
+          const types: LogoType[] = [ 'favicon', 'header-square', 'header-wide', 'opengraph' ]
+
+          for (const type of types) {
+            const logos = htmlConfig.instance.logo.filter(l => l.type === type)
+
+            expect(logos).to.have.lengthOf(4)
+            expect(logos[0].width).to.equal(48)
+            expect(logos[0].height).to.equal(48)
+            expect(logos[0].isFallback).to.be.true
+            expect(logos[0].type).to.equal(type)
+
+            await testImage({ url: logos[0].fileUrl, name: `avatar-resized-48x48.png` })
+          }
+        })
+
+        after(async function () {
+          await server.config.deleteInstanceImage({ type: ActorImageType.AVATAR })
+        })
+      })
+    })
+  })
+
+  describe('Manifest', function () {
+    before(async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            name: 'PeerTube manifest',
+            shortDescription: 'description manifest'
+          }
+        }
+      })
+    })
+
+    it('Should generate the manifest file without avatar', async function () {
+      const { body } = await makeGetRequest({
+        url: server.url,
+        path: '/manifest.webmanifest',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(body.name).to.equal('PeerTube manifest')
+      expect(body.short_name).to.equal(body.name)
+      expect(body.description).to.equal('description manifest')
+
+      const icon = body.icons.find(f => f.sizes === '36x36')
+      expect(icon).to.exist
+      expect(icon.src).to.equal('/client/assets/images/icons/icon-36x36.png')
+    })
+
+    it('Should generate the manifest with avatar', async function () {
+      await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })
+
+      const { body } = await makeGetRequest({
+        url: server.url,
+        path: '/manifest.webmanifest',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      const icon = body.icons.find(f => f.sizes === '48x48')
+      expect(icon).to.exist
+
+      await testImage({ url: server.url + icon.src, name: `avatar-resized-48x48.png` })
     })
   })
 

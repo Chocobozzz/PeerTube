@@ -15,6 +15,8 @@ import {
 } from './pages'
 import { AdminConfigCustomizationComponent } from './pages/admin-config-customization.component'
 import { AdminConfigService } from '../../shared/shared-admin/admin-config.service'
+import { AdminConfigLogoComponent } from './pages/admin-config-logo.component'
+import { InstanceLogoService } from './shared/instance-logo.service'
 
 export const customConfigResolver: ResolveFn<CustomConfig> = (_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) => {
   return inject(AdminConfigService).getCustomConfig()
@@ -51,6 +53,13 @@ export const commentPoliciesResolver: ResolveFn<VideoConstant<VideoCommentPolicy
   return inject(ServerService).getCommentPolicies()
 }
 
+export const logosResolver: ResolveFn<ReturnType<InstanceLogoService['getAllLogos']>> = (
+  _route: ActivatedRouteSnapshot,
+  _state: RouterStateSnapshot
+) => {
+  return inject(InstanceLogoService).getAllLogos()
+}
+
 export const configRoutes: Routes = [
   {
     path: 'config',
@@ -61,6 +70,9 @@ export const configRoutes: Routes = [
     resolve: {
       customConfig: customConfigResolver
     },
+    providers: [
+      InstanceLogoService
+    ],
     component: AdminConfigComponent,
     children: [
       {
@@ -108,6 +120,19 @@ export const configRoutes: Routes = [
         data: {
           meta: {
             title: $localize`Platform information`
+          }
+        }
+      },
+      {
+        path: 'logo',
+        component: AdminConfigLogoComponent,
+        canDeactivate: [ CanDeactivateGuard ],
+        resolve: {
+          logos: logosResolver
+        },
+        data: {
+          meta: {
+            title: $localize`Platform logos`
           }
         }
       },

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { omit } from '@peertube/peertube-core-utils'
-import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { ActorImageType, CustomConfig, HttpStatusCode, LogoType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -215,10 +215,14 @@ describe('Test config API validators', function () {
     })
   })
 
-  describe('Updating instance image', function () {
+  describe('Updating instance image/logo', function () {
     const toTest = [
       { path: '/api/v1/config/instance-banner/pick', attachName: 'bannerfile' },
-      { path: '/api/v1/config/instance-avatar/pick', attachName: 'avatarfile' }
+      { path: '/api/v1/config/instance-avatar/pick', attachName: 'avatarfile' },
+      { path: '/api/v1/config/instance-logo/favicon/pick', attachName: 'logofile' },
+      { path: '/api/v1/config/instance-logo/header-square/pick', attachName: 'logofile' },
+      { path: '/api/v1/config/instance-logo/header-wide/pick', attachName: 'logofile' },
+      { path: '/api/v1/config/instance-logo/opengraph/pick', attachName: 'logofile' }
     ]
 
     it('Should fail with an incorrect input file', async function () {
@@ -307,6 +311,28 @@ describe('Test config API validators', function () {
     it('Should succeed with the correct params', async function () {
       for (const type of types) {
         await server.config.deleteInstanceImage({ type })
+      }
+    })
+  })
+
+  describe('Deleting instance logos', function () {
+    const types: LogoType[] = [ 'favicon', 'header-square', 'header-wide', 'opengraph' ]
+
+    it('Should fail without token', async function () {
+      for (const type of types) {
+        await server.config.deleteInstanceLogo({ type, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      }
+    })
+
+    it('Should fail without the appropriate rights', async function () {
+      for (const type of types) {
+        await server.config.deleteInstanceLogo({ type, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      }
+    })
+
+    it('Should succeed with the correct params', async function () {
+      for (const type of types) {
+        await server.config.deleteInstanceLogo({ type })
       }
     })
   })

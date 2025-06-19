@@ -92,7 +92,7 @@ describe('Test video comments', function () {
       expect(comment.account.host).to.equal(server.host)
 
       for (const avatar of comment.account.avatars) {
-        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+        await testImage({ url: server.url + avatar.path, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
       }
 
       expect(comment.totalReplies).to.equal(0)

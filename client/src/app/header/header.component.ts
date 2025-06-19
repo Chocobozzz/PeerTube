@@ -19,6 +19,7 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
 import { SearchTypeaheadComponent } from './search-typeahead.component'
 import { HeaderService } from './header.service'
+import { findAppropriateImage } from '@peertube/peertube-core-utils'
 
 @Component({
   selector: 'my-header',
@@ -92,6 +93,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.serverService.getHTMLConfig().instance.name
   }
 
+  isInstanceNameDisplayed () {
+    return this.serverService.getHTMLConfig().client.header.hideInstanceName !== true
+  }
+
   isLoaded () {
     return this.config && (!this.loggedIn || !!this.user?.account)
   }
@@ -102,6 +107,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isInSmallView () {
     return this.screenService.isInSmallView()
+  }
+
+  getLogoUrl () {
+    const logos = this.serverService.getHTMLConfig().instance.logo
+
+    if (this.isInMobileView()) {
+      return findAppropriateImage(logos.filter(l => l.type === 'header-square'), 36)?.fileUrl
+    }
+
+    return findAppropriateImage(logos.filter(l => l.type === 'header-wide'), 36)?.fileUrl
   }
 
   ngOnInit () {

@@ -23,7 +23,8 @@ const { middleware: cacheRouteMiddleware } = cacheRouteFactory({
 
 // ---------------------------------------------------------------------------
 
-commentFeedsRouter.get('/video-comments.:format',
+commentFeedsRouter.get(
+  '/video-comments.:format',
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
@@ -56,7 +57,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   const { name, description, imageUrl, link } = await buildFeedMetadata({ video, account, videoChannel })
 
-  const feed = initFeed({
+  const feed = await initFeed({
     name,
     description,
     imageUrl,

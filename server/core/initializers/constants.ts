@@ -10,6 +10,8 @@ import {
   NSFWPolicyType,
   RunnerJobState,
   RunnerJobStateType,
+  UploadImageType,
+  UploadImageType_Type,
   UserExportState,
   UserExportStateType,
   UserImportState,
@@ -46,7 +48,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 895
+export const LAST_MIGRATION_VERSION = 890
 
 // ---------------------------------------------------------------------------
 
@@ -865,7 +867,9 @@ export const STATIC_PATHS = {
   STREAMING_PLAYLISTS: {
     HLS: '/static/streaming-playlists/hls',
     PRIVATE_HLS: '/static/streaming-playlists/hls/private/'
-  }
+  },
+
+  UPLOAD_IMAGES: '/static/uploads/images/'
 }
 export const DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
@@ -942,6 +946,32 @@ export const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number,
     }
   ]
 }
+export const UPLOAD_IMAGES_SIZE: { [key in UploadImageType_Type]: { width: number, height: number }[] } = {
+  [UploadImageType.INSTANCE_FAVICON]: [
+    {
+      width: 32,
+      height: 32
+    }
+  ],
+  [UploadImageType.INSTANCE_HEADER_SQUARE]: [
+    {
+      width: 48,
+      height: 48
+    }
+  ],
+  [UploadImageType.INSTANCE_HEADER_WIDE]: [
+    {
+      width: null, // Auto
+      height: 48
+    }
+  ],
+  [UploadImageType.INSTANCE_OPENGRAPH]: [
+    {
+      width: 1200,
+      height: 650
+    }
+  ]
+}
 
 export const STORYBOARD = {
   SPRITE_MAX_SIZE: 192,
@@ -1014,7 +1044,9 @@ export const DIRECTORIES = {
 
   HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls'),
 
-  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip')
+  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip'),
+
+  UPLOAD_IMAGES: join(CONFIG.STORAGE.UPLOADS_DIR, 'images')
 }
 
 export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
@@ -1236,9 +1268,7 @@ export async function loadLanguages () {
 // ---------------------------------------------------------------------------
 
 export const FILES_CONTENT_HASH = {
-  MANIFEST: generateContentHash(),
-  FAVICON: generateContentHash(),
-  LOGO: generateContentHash()
+  MANIFEST: generateContentHash()
 }
 
 // ---------------------------------------------------------------------------

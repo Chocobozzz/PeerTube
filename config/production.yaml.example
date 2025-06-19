@@ -132,14 +132,15 @@ storage:
   cache: '/var/www/peertube/storage/cache/'
   plugins: '/var/www/peertube/storage/plugins/'
   well_known: '/var/www/peertube/storage/well-known/'
+  # Various admin/user uploads that are not suitable for the folders above
+  uploads: '/var/www/peertube/storage/uploads/'
   # Overridable client files in client/dist/assets/images:
-  # - logo.svg
-  # - favicon.png
-  # - default-playlist.jpg
+  # - default-avatar-account-48x48.png
   # - default-avatar-account.png
+  # - default-avatar-video-channel-48x48.png
   # - default-avatar-video-channel.png
-  # - and icons/*.png (PWA)
-  # Could contain for example assets/images/favicon.png
+  # - default-playlist.jpg
+  # Could contain for example "assets/images/default-playlist.jpg"
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default file
   client_overrides: '/var/www/peertube/storage/client-overrides/'
@@ -1070,6 +1071,11 @@ search:
 # PeerTube client/interface configuration
 client:
 
+  header:
+    # Hide the instance name in the header on desktop
+    # Useful if your logo already contains the instance name
+    hide_instance_name: false
+
   videos:
     miniature:
       # By default PeerTube client displays author username
@@ -1153,3 +1159,8 @@ email:
   subject:
     # Support {{instanceName}} template variable
     prefix: '[{{instanceName}}] '
+
+video_comments:
+  # Accept or not comments from remote instances
+  # This setting is not retroactive: current remote comments of your instance will not be affected
+  accept_remote_comments: true

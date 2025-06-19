@@ -73,7 +73,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
 
   const { name, description, imageUrl, ownerImageUrl, link, ownerLink } = await buildFeedMetadata({ videoChannel, account })
 
-  const feed = initFeed({
+  const feed = await initFeed({
     name,
     description,
     link,
@@ -114,7 +114,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const account = res.locals.account
   const { name, description, imageUrl, link } = await buildFeedMetadata({ account })
 
-  const feed = initFeed({
+  const feed = await initFeed({
     name,
     description,
     link,

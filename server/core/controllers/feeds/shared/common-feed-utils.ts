@@ -5,11 +5,13 @@ import { ActorImageType } from '@peertube/peertube-models'
 import { mdToPlainText } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { getServerActor } from '@server/models/application/application.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight } from '@server/types/models/index.js'
 import express from 'express'
 
-export function initFeed (parameters: {
+export async function initFeed (parameters: {
   name: string
   description: string
   imageUrl: string
@@ -46,10 +48,10 @@ export function initFeed (parameters: {
 
     image: imageUrl,
 
-    favicon: webserverUrl + '/client/assets/images/favicon.png',
+    favicon: ServerConfigManager.Instance.getFavicon(await getServerActor()).fileUrl,
 
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
-    ` and potential licenses granted by each content's rightholder.`,
+      ` and potential licenses granted by each content's rightholder.`,
 
     generator: `PeerTube - ${webserverUrl}`,
 

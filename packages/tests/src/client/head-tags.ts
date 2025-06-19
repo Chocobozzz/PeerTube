@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { config, expect } from 'chai'
+import { findAppropriateImage } from '@peertube/peertube-core-utils'
 import { Account, HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, makeGetRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests } from '@tests/shared/client.js'
+import { config, expect } from 'chai'
 
 config.truncateThreshold = 0
 
@@ -45,6 +46,32 @@ describe('Test <head> HTML tags', function () {
       playlistDescription,
       channelDescription
     } = await prepareClientTests())
+  })
+
+  describe('Icons', function () {
+    async function indexPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      const config = await servers[0].config.getConfig()
+
+      {
+        const favicon = config.instance.logo.find(l => l.type === 'favicon')
+        expect(text).to.contain(`<link rel="icon" type="image/png" href="${favicon.fileUrl}" />`)
+      }
+
+      {
+        const appleTouchIcon = findAppropriateImage(config.instance.avatars, 192)
+        expect(text).to.contain(`<link rel="apple-touch-icon" href="${appleTouchIcon.fileUrl}" />`)
+      }
+    }
+
+    it('Should have valid favicon/ Graph tags on the common page', async function () {
+      await indexPageTest('/about/peertube')
+      await indexPageTest('/videos')
+      await indexPageTest('/homepage')
+      await indexPageTest('/')
+    })
   })
 
   describe('Open Graph', function () {
@@ -160,6 +187,15 @@ describe('Test <head> HTML tags', function () {
       await servers[0].config.updateCustomConfig({ newCustomConfig: config })
     })
 
+    async function indexPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      expect(text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
+      expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+      expect(text).to.contain(`<meta property="twitter:image:url" content="${servers[0].url}`)
+    }
+
     async function accountPageTest (path: string) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
@@ -195,6 +231,13 @@ describe('Test <head> HTML tags', function () {
       expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
       expect(text).to.contain(`<meta property="twitter:image:url" content="${servers[0].url}`)
     }
+
+    it('Should have valid Open Graph tags on the common page', async function () {
+      await indexPageTest('/about/peertube')
+      await indexPageTest('/videos')
+      await indexPageTest('/homepage')
+      await indexPageTest('/')
+    })
 
     it('Should have valid twitter card on the watch video page', async function () {
       for (const path of getWatchVideoBasePaths()) {

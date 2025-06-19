@@ -1,16 +1,17 @@
-import express from 'express'
-import { body } from 'express-validator'
 import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { isConfigLogoTypeValid } from '@server/helpers/custom-validators/config.js'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
+import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
+import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
+import express from 'express'
+import { body, param } from 'express-validator'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
-import { areValidationErrors } from './shared/index.js'
-import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
-import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
+import { areValidationErrors, updateActorImageValidatorFactory } from './shared/index.js'
 
-const customConfigUpdateValidator = [
+export const customConfigUpdateValidator = [
   body('instance.name').exists(),
   body('instance.shortDescription').exists(),
   body('instance.description').exists(),
@@ -161,7 +162,7 @@ const customConfigUpdateValidator = [
   }
 ]
 
-function ensureConfigIsEditable (req: express.Request, res: express.Response, next: express.NextFunction) {
+export function ensureConfigIsEditable (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!CONFIG.WEBADMIN.CONFIGURATION.EDITION.ALLOWED) {
     return res.fail({
       status: HttpStatusCode.METHOD_NOT_ALLOWED_405,
@@ -172,12 +173,22 @@ function ensureConfigIsEditable (req: express.Request, res: express.Response, ne
   return next()
 }
 
-// ---------------------------------------------------------------------------
+export const updateOrDeleteLogoValidator = [
+  param('logoType')
+    .custom(isConfigLogoTypeValid),
 
-export {
-  customConfigUpdateValidator,
-  ensureConfigIsEditable
-}
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+export const updateInstanceLogoValidator = updateActorImageValidatorFactory('logofile')
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
 function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: express.Response) {
   if (isEmailEnabled()) return true

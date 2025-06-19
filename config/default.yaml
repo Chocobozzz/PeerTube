@@ -134,14 +134,15 @@ storage:
   cache: 'storage/cache/'
   plugins: 'storage/plugins/'
   well_known: 'storage/well-known/'
+  # Various admin/user uploads that are not suitable for the folders above
+  uploads: 'storage/uploads/'
   # Overridable client files in client/dist/assets/images:
-  # - logo.svg
-  # - favicon.png
-  # - default-playlist.jpg
+  # - default-avatar-account-48x48.png
   # - default-avatar-account.png
+  # - default-avatar-video-channel-48x48.png
   # - default-avatar-video-channel.png
-  # - and icons/*.png (PWA)
-  # Could contain for example assets/images/favicon.png
+  # - default-playlist.jpg
+  # Could contain for example "assets/images/default-playlist.jpg"
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default file
   client_overrides: 'storage/client-overrides/'
@@ -797,7 +798,7 @@ import:
         #   * https://yt-dl.org/downloads/latest/youtube-dl
         #
         # You can also use a youtube-dl standalone binary (requires python_path: null)
-        # GNU/Linux binaries with support for impersonating browser requests (required by some i such as Vimeo) examples:
+        # GNU/Linux binaries with support for impersonating browser requests (required by some platforms such as Vimeo) examples:
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux (x64)
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv7)
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv8/AArch64/ARM64)
@@ -1059,6 +1060,11 @@ search:
 
 # PeerTube client/interface configuration
 client:
+
+  header:
+    # Hide the instance name in the header on desktop
+    # Useful if your logo already contains the instance name
+    hide_instance_name: false
 
   videos:
     miniature:

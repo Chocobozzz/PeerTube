@@ -198,11 +198,11 @@ function runTest (withObjectStorage: boolean) {
       expect(importedSecond.support).to.equal('noah support')
 
       for (const banner of importedSecond.banners) {
-        await testImage(remoteServer.url, `banner-user-import-resized-${banner.width}`, banner.path)
+        await testImage({ url: banner.fileUrl, name: `banner-user-import-resized-${banner.width}.jpg` })
       }
 
       for (const avatar of importedSecond.avatars) {
-        await testImage(remoteServer.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+        await testImage({ url: remoteServer.url + avatar.path, name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
       }
 
       {

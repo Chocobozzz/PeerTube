@@ -35,8 +35,8 @@ describe('Test video channels', function () {
   let accountName: string
   let secondUserChannelName: string
 
-  const avatarPaths: { [ port: number ]: string } = {}
-  const bannerPaths: { [ port: number ]: string } = {}
+  const avatarPaths: { [port: number]: string } = {}
+  const bannerPaths: { [port: number]: string } = {}
 
   before(async function () {
     this.timeout(60000)
@@ -293,7 +293,7 @@ describe('Test video channels', function () {
 
       for (const avatar of videoChannel.avatars) {
         avatarPaths[server.port] = avatar.path
-        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatarPaths[server.port], '.png')
+        await testImage({ url: server.url + avatarPaths[server.port], name: `avatar-resized-${avatar.width}x${avatar.width}.png` })
         await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
 
         const row = await sqlCommands[i].getActorImage(basename(avatarPaths[server.port]))
@@ -326,7 +326,7 @@ describe('Test video channels', function () {
 
       for (const banner of videoChannel.banners) {
         bannerPaths[server.port] = banner.path
-        await testImage(server.url, `banner-resized-${banner.width}`, bannerPaths[server.port])
+        await testImage({ url: server.url + bannerPaths[server.port], name: `banner-resized-${banner.width}.jpg` })
         await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
 
         const row = await sqlCommands[i].getActorImage(basename(bannerPaths[server.port]))

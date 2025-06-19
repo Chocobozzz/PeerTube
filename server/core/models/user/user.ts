@@ -385,7 +385,7 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Default(UserAdminFlag.NONE)
   @Is('UserAdminFlags', value => throwIfNotValid(value, isUserAdminFlagsValid, 'user admin flags'))
   @Column
-  adminFlags?: UserAdminFlagType
+  adminFlags: UserAdminFlagType
 
   @AllowNull(false)
   @Default(false)

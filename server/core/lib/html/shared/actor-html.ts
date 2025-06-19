@@ -4,7 +4,7 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { MAccountHost, MChannelHost } from '@server/types/models/index.js'
+import { MAccountDefault, MChannelDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { CONFIG } from '../../../initializers/config.js'
 import { PageHtml } from './page-html.js'
@@ -55,8 +55,8 @@ export class ActorHtml {
   // ---------------------------------------------------------------------------
 
   private static async getAccountOrChannelHTMLPage (options: {
-    loader: () => Promise<MAccountHost | MChannelHost>
-    getRSSFeeds: (entity: MAccountHost | MChannelHost) => TagsOptions['rssFeeds']
+    loader: () => Promise<MAccountDefault | MChannelDefault>
+    getRSSFeeds: (entity: MAccountDefault | MChannelDefault) => TagsOptions['rssFeeds']
     req: express.Request
     res: express.Response
   }) {

@@ -4,16 +4,7 @@ import { MActorId, MActorImage, MActorImageFormattable, MActorImagePath } from '
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Op } from 'sequelize'
-import {
-  AfterDestroy,
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  Default,
-  ForeignKey, Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
@@ -34,7 +25,6 @@ import { ActorModel } from './actor.js'
   ]
 })
 export class ActorImageModel extends SequelizeModel<ActorImageModel> {
-
   @AllowNull(false)
   @Column
   filename: string
@@ -159,6 +149,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
 
   toFormattedJSON (this: MActorImageFormattable): ActorImage {
     return {
+      height: this.height,
       width: this.width,
       path: this.getStaticPath(),
       fileUrl: ActorImageModel.getImageUrl(this),
@@ -168,11 +159,9 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
   }
 
   toActivityPubObject (): ActivityIconObject {
-    const extension = getLowercaseExtension(this.filename)
-
     return {
       type: 'Image',
-      mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+      mediaType: this.getMimeType(),
       height: this.height,
       width: this.width,
       url: ActorImageModel.getImageUrl(this)
@@ -203,5 +192,9 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
 
   isOwned () {
     return !this.fileUrl
+  }
+
+  getMimeType () {
+    return MIMETYPES.IMAGE.EXT_MIMETYPE[getLowercaseExtension(this.filename)]
   }
 }
