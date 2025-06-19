@@ -89,7 +89,7 @@ export default {
     }
   },
   dropPoint: {
-    color: '{primary.color}'
+    color: 'var(--border-primary)'
   },
   columnResizer: {
     width: '0.5rem'

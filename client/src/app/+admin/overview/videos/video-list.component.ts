@@ -11,6 +11,7 @@ import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
 import { getAllFiles } from '@peertube/peertube-core-utils'
 import { FileStorage, NSFWFlag, UserRight, VideoFile, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '@root-helpers/video'
@@ -29,7 +30,6 @@ import {
   VideoActionsDropdownComponent
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
 import { VideoNSFWBadgeComponent } from '../../../shared/shared-video/video-nsfw-badge.component'
-import { VideoPrivacyBadgeComponent } from '../../../shared/shared-video/video-privacy-badge.component'
 import { VideoAdminService } from './video-admin.service'
 
 type ColumnName =
@@ -54,7 +54,7 @@ type ColumnName =
     PTDatePipe,
     RouterLink,
     BytesPipe,
-    VideoPrivacyBadgeComponent,
+    PrivacyBadgeComponent,
     VideoNSFWBadgeComponent,
     TableComponent,
     NumberFormatterPipe

@@ -19,6 +19,7 @@
   [expandedRowKeys]="expandedRows"
   (onRowExpand)="rowExpand.emit($event)"
   [ngClass]="{ loading: loading, 'sticky-table': actionCell }"
+  (onRowReorder)="rowReorder.emit($event)"
 >
   <ng-template #caption>
     <div class="caption">
@@ -62,6 +63,10 @@
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
 
+      @if (reorderableRows()) {
+        <th scope="col" width="25px"></th>
+      }
+
       <th *ngIf="expandedRow">
         <div class="visually-hidden">{{ expandedIconTooltip() }}</div>
       </th>
@@ -69,9 +74,7 @@
       @for (column of columns; track column.id) {
         @if (isColumnDisplayed(column.id)) {
           @if (column.sortable) {
-            <th
-              scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="getUntypedColumnId(column)" [ngClass]="column.class"
-            >
+            <th scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="getUntypedColumnId(column)" [ngClass]="column.class">
               {{ column.label }}
               <small *ngIf="column.labelSmall">{{ column.labelSmall }}</small>
 
@@ -126,14 +129,39 @@
     </tr>
   </ng-template>
 
-  <ng-template #body let-item let-expanded="expanded">
-    <tr [pSelectableRow]="item">
+  <ng-template #body let-item let-expanded="expanded" let-index="rowIndex">
+    <tr [pSelectableRow]="item" [pReorderableRow]="index" [pSelectableRowDisabled]="!reorderableRows()">
+      @if (reorderableRows()) {
+        <td>
+          @if (inInTouchScreen()) {
+            @let position = index + pagination.start;
+
+            @if (index !== 0) {
+              <my-button theme="tertiary" icon="arrow-down" class="rotate-180" i18n-title title="Move up" (click)="rowReorder.emit({ dragIndex: position, dropIndex: position - 1 })"></my-button>
+            }
+
+            @if (index !== totalRecords - 1) {
+              <my-button theme="tertiary" icon="arrow-down" i18n-title title="Move down" (click)="rowReorder.emit({ dragIndex: position, dropIndex: position + 1 })"></my-button>
+            }
+          } @else {
+            <button class="button-unstyle" [title]="dragHandleTitle()" pReorderableRowHandle>
+              <my-global-icon iconName="grip-horizontal"></my-global-icon>
+            </button>
+          }
+        </td>
+      }
+
       <td *ngIf="hasBulkActions()" class="checkbox-cell">
         <p-tableCheckbox [value]="item" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
       <td *ngIf="expandedRow" class="expand-cell">
-        <my-table-expander-icon *ngIf="hasExpandedRow()(item)" [pRowToggler]="item" [tooltip]="expandedIconTooltip()" [expanded]="expanded"></my-table-expander-icon>
+        <my-table-expander-icon
+          *ngIf="hasExpandedRow()(item)"
+          [pRowToggler]="item"
+          [tooltip]="expandedIconTooltip()"
+          [expanded]="expanded"
+        ></my-table-expander-icon>
       </td>
 
       <ng-template *ngTemplateOutlet="tableCells; context: { $implicit: item }"></ng-template>

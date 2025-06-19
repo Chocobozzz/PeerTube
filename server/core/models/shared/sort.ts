@@ -38,7 +38,7 @@ export function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'A
   const { direction, field } = buildSortDirectionAndField(value)
 
   if (field.toLowerCase() === 'name') {
-    return [ [ 'displayName', direction ], lastSort ]
+    return [ [ 'name', direction ], lastSort ]
   }
 
   return getSort(value, lastSort)

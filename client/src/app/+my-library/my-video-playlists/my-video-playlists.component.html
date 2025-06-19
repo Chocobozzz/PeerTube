@@ -1,25 +1,92 @@
-<div class="video-playlists-header d-flex align-items-end gap-2 flex-wrap">
-  <span class="total-items" *ngIf="pagination.totalItems"> {{ getTotalTitle() }}</span>
+@if (user.videoChannels.length > 1) {
+  <div class="form-group">
+    <div class="label" i18n>Filter by a channel</div>
+    <div class="form-group-description" i18n>This allows you to reorder playlists assigned to it</div>
 
-  <my-advanced-input-filter class="d-block ms-auto" (search)="onSearch($event)" emitOnInit="true"></my-advanced-input-filter>
+    <div class="channel-filters">
+      @for (channel of channels; track channel.id) {
+        <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="onChannelFilter(channel)"></my-channel-toggle>
+      }
+    </div>
+  </div>
+}
 
-  <a class="peertube-create-button" routerLink="create">
-    <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
-    <ng-container i18n>Create playlist</ng-container>
-  </a>
-</div>
+<my-table
+  #table
+  key="MyVideoPlaylistsComponent"
+  [defaultColumns]="columns"
+  defaultSort="updatedAt"
+  i18n-paginatorText
+  paginatorText="playlists per page"
+  defaultRowsPerPage="10"
+  [dataLoader]="dataLoader"
+  [customParseQueryParams]="customParseQueryParams"
+  [customUpdateUrl]="customUpdateUrl"
+  [hasExpandedRow]="hasExpandedRow"
+  columnConfig="false"
+  [reorderableRows]="hasReorderableRows()"
+  (rowReorder)="onRowReorder($event)"
+  dragHandleTitle="Drag and drop this row to reorder playlists in your channel"
+  i18n-dragHandleTitle
+>
+  <ng-template #totalTitle let-totalRecords>
+    @if (getFilteredChannel()) {
+      <ng-container i18n>{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}} in {{ getFilteredChannel().displayName }} channel</ng-container>
+    } @else {
+      <ng-container i18n>{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}</ng-container>
+    }
+  </ng-template>
 
-<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
-  <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
-    <my-video-playlist-miniature
-      [playlist]="playlist" [toManage]="true" [displayChannel]="true"
-      [displayDescription]="true" [displayPrivacy]="true" [displayAsRow]="true"
-    ></my-video-playlist-miniature>
+  <ng-template #captionRight>
+    <my-advanced-input-filter
+      inputId="table-search" icon="true" emitOnInit="false" i18n-placeholder placeholder="Search your playlists"
+      (search)="table.onSearch($event)"
+    ></my-advanced-input-filter>
 
-    <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">
+    <a class="peertube-create-button" routerLink="create">
+      <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Create playlist</ng-container>
+    </a>
+  </ng-template>
+
+  <ng-template #tableCells let-playlist>
+
+    <td *ngIf="table.isColumnDisplayed('videoChannelPosition')" style="width: 10px;">
+      {{ playlist.videoChannelPosition }}
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('videos')">
+      <my-video-playlist-miniature [playlist]="playlist" thumbnailOnly="true"></my-video-playlist-miniature>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('name')">
+      <a [routerLink]="[ '/my-library/video-playlists', playlist.shortUUID ]" class="name">
+        {{ playlist.displayName }}
+      </a>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('privacy')">
+      <my-privacy-badge [playlist]="playlist"></my-privacy-badge>
+    </td>
+
+    <td *ngIf="table.isColumnDisplayed('updated')">
+      {{ playlist.updatedAt | ptDate: 'short' }}
+    </td>
+  </ng-template>
+
+  <ng-template #actionCell let-playlist>
+    @if(isRegularPlaylist(playlist)) {
       <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
 
       <my-edit-button label [ptRouterLink]="[ 'update', playlist.shortUUID ]"></my-edit-button>
-    </div>
-  </div>
-</div>
+    }
+  </ng-template>
+
+  <ng-template #expandedRow let-playlist>
+    {{ playlist.description }}
+  </ng-template>
+
+  <ng-template #noResults let-search>
+    {{ getNoResults(search) }}
+  </ng-template>
+</my-table>

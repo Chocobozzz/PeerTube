@@ -4767,6 +4767,42 @@ paths:
                     items:
                       $ref: '#/components/schemas/VideoPlaylist'
 
+  '/api/v1/video-channels/{channelHandle}/video-playlists/reorder':
+    post:
+      summary: Reorder channel playlists
+      operationId: reorderVideoPlaylistsOfChannel
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startPosition:
+                  type: integer
+                  description: 'Start position of the element to reorder'
+                  minimum: 1
+                insertAfterPosition:
+                  type: integer
+                  description: 'New position for the block to reorder, to add the block before the first element'
+                  minimum: 0
+                reorderLength:
+                  type: integer
+                  description: 'How many element from `startPosition` to reorder'
+                  minimum: 1
+              required:
+                - startPosition
+                - insertAfterPosition
+
   '/api/v1/video-channels/{channelHandle}/followers':
     get:
       tags:
@@ -5244,7 +5280,7 @@ paths:
 
   /api/v1/video-playlists/{playlistId}/videos/reorder:
     post:
-      summary: 'Reorder a playlist'
+      summary: Reorder playlist elements
       operationId: reorderVideoPlaylist
       security:
         - OAuth2: []
@@ -9084,6 +9120,10 @@ components:
           $ref: '#/components/schemas/AccountSummary'
         videoChannel:
           $ref: '#/components/schemas/VideoChannelSummary'
+        videoChannelPosition:
+          type: integer
+          minimum: 1
+          description: Position of the playlist in the channel
     VideoComment:
       properties:
         id:

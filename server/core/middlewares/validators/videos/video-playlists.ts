@@ -8,6 +8,7 @@ import {
   VideoPlaylistType,
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId } from '@server/types/models/index.js'
 import express from 'express'
@@ -44,7 +45,7 @@ import {
   VideoPlaylistFetchType
 } from '../shared/index.js'
 
-const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
+export const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
     .custom(isVideoPlaylistNameValid),
 
@@ -69,7 +70,7 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   }
 ])
 
-const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
+export const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
   isValidPlaylistIdParam('playlistId'),
 
   body('displayName')
@@ -116,7 +117,7 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
   }
 ])
 
-const videoPlaylistsDeleteValidator = [
+export const videoPlaylistsDeleteValidator = [
   isValidPlaylistIdParam('playlistId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -137,7 +138,7 @@ const videoPlaylistsDeleteValidator = [
   }
 ]
 
-const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
+export const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
   return [
     isValidPlaylistIdParam('playlistId'),
 
@@ -181,7 +182,7 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
   ]
 }
 
-const videoPlaylistsSearchValidator = [
+export const videoPlaylistsSearchValidator = [
   query('search')
     .optional()
     .not().isEmpty(),
@@ -193,7 +194,7 @@ const videoPlaylistsSearchValidator = [
   }
 ]
 
-const videoPlaylistsAddVideoValidator = [
+export const videoPlaylistsAddVideoValidator = [
   isValidPlaylistIdParam('playlistId'),
 
   body('videoId')
@@ -222,7 +223,7 @@ const videoPlaylistsAddVideoValidator = [
   }
 ]
 
-const videoPlaylistsUpdateOrRemoveVideoValidator = [
+export const videoPlaylistsUpdateOrRemoveVideoValidator = [
   isValidPlaylistIdParam('playlistId'),
   param('playlistElementId')
     .customSanitizer(toCompleteUUID)
@@ -257,7 +258,7 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
   }
 ]
 
-const videoPlaylistElementAPGetValidator = [
+export const videoPlaylistElementAPGetValidator = [
   isValidPlaylistIdParam('playlistId'),
   param('playlistElementId')
     .custom(isIdValid),
@@ -290,7 +291,38 @@ const videoPlaylistElementAPGetValidator = [
   }
 ]
 
-const videoPlaylistsReorderVideosValidator = [
+export const videoPlaylistsReorderInChannelValidator = [
+  body('startPosition')
+    .isInt({ min: 1 }),
+  body('insertAfterPosition')
+    .isInt({ min: 0 }),
+  body('reorderLength')
+    .optional()
+    .isInt({ min: 1 }),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    const nextPosition = await VideoPlaylistModel.getNextPositionOf({ videoChannelId: res.locals.videoChannel.id })
+    const startPosition: number = req.body.startPosition
+    const insertAfterPosition: number = req.body.insertAfterPosition
+    const reorderLength: number = req.body.reorderLength
+
+    if (startPosition >= nextPosition || insertAfterPosition >= nextPosition) {
+      res.fail({ message: `Start position or insert after position exceed the channel limits (max: ${nextPosition - 1})` })
+      return
+    }
+
+    if (reorderLength && reorderLength + startPosition > nextPosition) {
+      res.fail({ message: `Reorder length with this start position exceeds the channel limits (max: ${nextPosition - startPosition})` })
+      return
+    }
+
+    return next()
+  }
+]
+
+export const videoPlaylistsReorderVideosValidator = [
   isValidPlaylistIdParam('playlistId'),
 
   body('startPosition')
@@ -328,7 +360,7 @@ const videoPlaylistsReorderVideosValidator = [
   }
 ]
 
-const commonVideoPlaylistFiltersValidator = [
+export const commonVideoPlaylistFiltersValidator = [
   query('playlistType')
     .optional()
     .custom(isVideoPlaylistTypeValid),
@@ -340,7 +372,7 @@ const commonVideoPlaylistFiltersValidator = [
   }
 ]
 
-const doVideosInPlaylistExistValidator = [
+export const doVideosInPlaylistExistValidator = [
   query('videoIds')
     .customSanitizer(toIntArray)
     .custom(v => isArrayOf(v, isIdValid)).withMessage('Should have a valid video ids array'),
@@ -351,22 +383,6 @@ const doVideosInPlaylistExistValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  commonVideoPlaylistFiltersValidator,
-  doVideosInPlaylistExistValidator,
-  videoPlaylistElementAPGetValidator,
-  videoPlaylistsAddValidator,
-  videoPlaylistsAddVideoValidator,
-  videoPlaylistsDeleteValidator,
-  videoPlaylistsGetValidator,
-  videoPlaylistsReorderVideosValidator,
-  videoPlaylistsSearchValidator,
-  videoPlaylistsUpdateOrRemoveVideoValidator,
-  videoPlaylistsUpdateValidator
-}
 
 // ---------------------------------------------------------------------------
 

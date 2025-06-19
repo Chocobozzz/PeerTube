@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
 
-@mixin actor-row ($avatar-margin-right: 10px, $min-height: 130px, $separator: true) {
+@mixin actor-row($avatar-margin-right: 10px, $min-height: 130px, $separator: true) {
   @include row-blocks($min-height: $min-height, $separator: $separator);
 
   > my-actor-avatar {
@@ -61,4 +61,24 @@
       }
     }
   }
+}
+
+@mixin channel-filters {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $separator-border-color;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  overflow: hidden;
+
+  &:hover {
+    overflow: auto;
+  }
+}
+
+@mixin channel-label {
+  color: pvar(--fg-200);
+  font-weight: $font-bold;
+  white-space: nowrap;
 }

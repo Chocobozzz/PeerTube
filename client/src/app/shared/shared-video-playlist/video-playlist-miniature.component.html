@@ -14,28 +14,30 @@
     </div>
   </my-link>
 
-  <div class="miniature-info">
-    <my-link
-      [internalLink]="playlistRouterLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
-      [title]="playlist().description" class="miniature-name" className="ellipsis-multiline-2"
-    >
-      {{ playlist().displayName }}
-    </my-link>
+  @if (!thumbnailOnly()) {
+    <div class="miniature-info">
+      <my-link
+        [internalLink]="playlistRouterLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
+        [title]="playlist().description" class="miniature-name" className="ellipsis-multiline-2"
+      >
+        {{ playlist().displayName }}
+      </my-link>
 
-    <my-link
-      *ngIf="displayChannel() && playlist().videoChannelBy"
-      class="by"
-      [internalLink]="ownerRouterLink" [href]="ownerHref" [target]="ownerTarget" inheritParentStyle="true"
-    >
-      {{ playlist().videoChannelBy }}
-    </my-link>
+      <my-link
+        *ngIf="displayChannel() && playlist().videoChannelBy"
+        class="by"
+        [internalLink]="ownerRouterLink" [href]="ownerHref" [target]="ownerTarget" inheritParentStyle="true"
+      >
+        {{ playlist().videoChannelBy }}
+      </my-link>
 
-    <div class="privacy-date">
-      <span class="privacy" *ngIf="displayPrivacy()">{{ playlist().privacy.label }}</span>
+      <div class="privacy-date">
+        <span class="privacy" *ngIf="displayPrivacy()">{{ playlist().privacy.label }}</span>
 
-      <span i18n class="updated-at">Updated {{ playlist().updatedAt | myFromNow }}</span>
+        <span i18n class="updated-at">Updated {{ playlist().updatedAt | myFromNow }}</span>
+      </div>
+
+      <div *ngIf="displayDescription()" class="description" [innerHTML]="playlistDescription"></div>
     </div>
-
-    <div *ngIf="displayDescription()" class="description" [innerHTML]="playlistDescription"></div>
-  </div>
+  }
 </div>

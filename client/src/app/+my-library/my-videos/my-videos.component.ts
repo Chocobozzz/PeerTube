@@ -28,8 +28,8 @@ import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
 } from '../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
 import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-badge.component'
-import { VideoPrivacyBadgeComponent } from '../../shared/shared-video/video-privacy-badge.component'
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
@@ -40,7 +40,6 @@ type VideoType = 'live' | 'vod'
 type QueryParams = TableQueryParams & {
   channelNameOneOf?: string[]
   privacyOneOf?: string[]
-  search?: string
   videoType?: VideoType
 }
 
@@ -59,13 +58,13 @@ type QueryParams = TableQueryParams & {
     RouterLink,
     NumberFormatterPipe,
     VideoChangeOwnershipComponent,
-    VideoPrivacyBadgeComponent,
     VideoStateBadgeComponent,
     ChannelToggleComponent,
     SelectCheckboxComponent,
     PTDatePipe,
     VideoNSFWBadgeComponent,
-    TableComponent
+    TableComponent,
+    PrivacyBadgeComponent
   ]
 })
 export class MyVideosComponent implements OnInit, OnDestroy {

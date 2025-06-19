@@ -97,6 +97,7 @@ const icons = {
   'user-add': require('../../../assets/images/feather/user-plus.svg'),
   'user-x': require('../../../assets/images/feather/user-x.svg'),
   'user': require('../../../assets/images/feather/user.svg'),
+  'grip-horizontal': require('../../../assets/images/feather/grip-horizontal.svg'),
   'users': require('../../../assets/images/feather/users.svg')
 }
 

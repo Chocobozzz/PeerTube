@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -26,6 +25,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkPlaylistFilesWereRemoved } from '@tests/shared/video-playlists.js'
+import { expect } from 'chai'
 
 async function checkPlaylistElementType (
   servers: PeerTubeServer[],
@@ -1195,6 +1195,322 @@ describe('Test video playlists', function () {
           expect(finder(body.data)).to.be.undefined
         }
       }
+    })
+  })
+
+  describe('Playlist position', function () {
+    const playlists: VideoPlaylistCreateResult[] = []
+    let channelId1: number
+    let channelId2: number
+    let lastCheck: () => Promise<any>
+
+    async function createPlaylists (channelId: number) {
+      playlists[0] = await commands[0].create({
+        attributes: {
+          displayName: 'playlist 0',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: channelId
+        }
+      })
+      playlists[1] = await commands[0].create({
+        attributes: {
+          displayName: 'playlist 1',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: channelId
+        }
+      })
+      playlists[2] = await commands[0].create({
+        attributes: {
+          displayName: 'playlist 2',
+          privacy: VideoPlaylistPrivacy.UNLISTED,
+          videoChannelId: channelId
+        }
+      })
+
+      playlists[3] = await commands[0].create({
+        attributes: {
+          displayName: 'playlist 3',
+          privacy: VideoPlaylistPrivacy.PRIVATE
+        }
+      })
+
+      playlists[4] = await commands[0].create({
+        attributes: {
+          displayName: 'playlist 4',
+          privacy: VideoPlaylistPrivacy.PRIVATE,
+          videoChannelId: channelId
+        }
+      })
+
+      playlists[5] = await commands[0].create({
+        attributes: {
+          displayName: 'playlist 5',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: channelId
+        }
+      })
+    }
+
+    async function getPosition (server: PeerTubeServer, options: { uuid: string }) {
+      const playlist = await server.playlists.get({ playlistId: options.uuid, token: server.accessToken })
+
+      return playlist.videoChannelPosition
+    }
+
+    async function getPlaylistNames (server: PeerTubeServer) {
+      const { data } = await server.playlists.listByChannel({
+        start: 0,
+        count: 10,
+        token: server.accessToken,
+        handle: 'channel_2@' + servers[0].host,
+        sort: 'videoChannelPosition'
+      })
+
+      return data.map(p => p.displayName)
+    }
+
+    before(async function () {
+      {
+        const channel = await servers[0].channels.create({ attributes: { name: 'channel_1', displayName: 'Channel 1' } })
+        channelId1 = channel.id
+      }
+
+      {
+        const channel = await servers[0].channels.create({ attributes: { name: 'channel_2', displayName: 'Channel 2' } })
+        channelId2 = channel.id
+      }
+    })
+
+    it('Should create playlist with default positions', async function () {
+      await createPlaylists(channelId1)
+      await waitJobs(servers)
+
+      expect(await getPosition(servers[0], playlists[0])).to.equal(1)
+      expect(await getPosition(servers[0], playlists[1])).to.equal(2)
+      expect(await getPosition(servers[0], playlists[2])).to.equal(3)
+      expect(await getPosition(servers[0], playlists[3])).to.not.exist
+      expect(await getPosition(servers[0], playlists[4])).to.equal(4)
+      expect(await getPosition(servers[0], playlists[5])).to.equal(5)
+
+      expect(await getPosition(servers[1], playlists[0])).to.equal(1)
+      expect(await getPosition(servers[1], playlists[1])).to.equal(2)
+      expect(await getPosition(servers[1], playlists[2])).to.equal(3)
+      await servers[1].playlists.get({ playlistId: playlists[3].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[1].playlists.get({ playlistId: playlists[4].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      expect(await getPosition(servers[1], playlists[5])).to.equal(5)
+    })
+
+    it('Should sort playlists by position', async function () {
+      // Public view
+      {
+        const { data } = await servers[0].playlists.listByChannel({
+          handle: 'channel_1',
+          start: 0,
+          count: 10,
+          sort: 'videoChannelPosition'
+        })
+
+        expect(data).to.have.lengthOf(3)
+        expect(data[0].id).to.equal(playlists[0].id)
+        expect(data[0].videoChannelPosition).to.equal(1)
+        expect(data[1].id).to.equal(playlists[1].id)
+        expect(data[1].videoChannelPosition).to.equal(2)
+        expect(data[2].id).to.equal(playlists[5].id)
+        expect(data[2].videoChannelPosition).to.equal(5)
+      }
+
+      // Channel with token
+      {
+        const { data } = await servers[0].playlists.listByChannel({
+          handle: 'channel_1',
+          start: 0,
+          count: 10,
+          sort: 'videoChannelPosition',
+          token: servers[0].accessToken
+        })
+
+        expect(data).to.have.lengthOf(5)
+        expect(data[0].id).to.equal(playlists[0].id)
+        expect(data[0].videoChannelPosition).to.equal(1)
+        expect(data[1].id).to.equal(playlists[1].id)
+        expect(data[1].videoChannelPosition).to.equal(2)
+        expect(data[2].id).to.equal(playlists[2].id)
+        expect(data[2].videoChannelPosition).to.equal(3)
+        expect(data[3].id).to.equal(playlists[4].id)
+        expect(data[3].videoChannelPosition).to.equal(4)
+        expect(data[4].id).to.equal(playlists[5].id)
+        expect(data[4].videoChannelPosition).to.equal(5)
+      }
+    })
+
+    it('Should delete a playlist and update positions', async function () {
+      this.timeout(30000)
+
+      await commands[0].delete({ playlistId: playlists[1].id })
+      await waitJobs(servers)
+
+      lastCheck = async () => {
+        expect(await getPosition(servers[0], playlists[0])).to.equal(1)
+        await servers[0].playlists.get({ playlistId: playlists[1].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        expect(await getPosition(servers[0], playlists[2])).to.equal(2)
+        expect(await getPosition(servers[0], playlists[3])).to.not.exist
+        expect(await getPosition(servers[0], playlists[4])).to.equal(3)
+        expect(await getPosition(servers[0], playlists[5])).to.equal(4)
+
+        expect(await getPosition(servers[1], playlists[0])).to.equal(1)
+        await servers[1].playlists.get({ playlistId: playlists[1].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        expect(await getPosition(servers[1], playlists[2])).to.equal(2)
+        await servers[1].playlists.get({ playlistId: playlists[3].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await servers[1].playlists.get({ playlistId: playlists[4].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        expect(await getPosition(servers[1], playlists[5])).to.equal(4)
+      }
+
+      await lastCheck()
+    })
+
+    it('Should update a playlist and not change position', async function () {
+      this.timeout(30000)
+
+      await commands[0].update({
+        playlistId: playlists[0].id,
+        attributes: {
+          displayName: 'playlist 0 updated',
+          description: 'description updated',
+          privacy: VideoPlaylistPrivacy.UNLISTED,
+          thumbnailfile: 'custom-thumbnail.jpg',
+          videoChannelId: channelId1
+        }
+      })
+      await waitJobs(servers)
+
+      await lastCheck()
+    })
+
+    it('Should change the playlist channel and update position', async function () {
+      this.timeout(30000)
+
+      await servers[0].playlists.update({
+        playlistId: playlists[2].id,
+        attributes: {
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
+      await waitJobs(servers)
+
+      expect(await getPosition(servers[0], playlists[0])).to.equal(1)
+      expect(await getPosition(servers[0], playlists[4])).to.equal(2)
+      expect(await getPosition(servers[0], playlists[5])).to.equal(3)
+
+      expect(await getPosition(servers[1], playlists[0])).to.equal(1)
+      expect(await getPosition(servers[1], playlists[5])).to.equal(3)
+
+      // New position after channel change
+      expect(await getPosition(servers[0], playlists[2])).to.equal(4)
+      expect(await getPosition(servers[1], playlists[2])).to.equal(4)
+    })
+
+    it('Should reorder the playlists', async function () {
+      this.timeout(30000)
+
+      await createPlaylists(channelId2)
+      await waitJobs(servers)
+
+      // Initial state
+      expect(await getPlaylistNames(servers[0])).to.deep.equal([
+        'playlist 0',
+        'playlist 1',
+        'playlist 2',
+        'playlist 4',
+        'playlist 5'
+      ])
+
+      expect(await getPlaylistNames(servers[1])).to.deep.equal([
+        'playlist 0',
+        'playlist 1',
+        'playlist 5'
+      ])
+
+      await commands[0].reorderPlaylistsOfChannel({
+        channelName: 'channel_2',
+        attributes: {
+          startPosition: 3,
+          insertAfterPosition: 4
+        }
+      })
+      await waitJobs(servers)
+
+      expect(await getPlaylistNames(servers[0])).to.deep.equal([
+        'playlist 0',
+        'playlist 1',
+        'playlist 4',
+        'playlist 2',
+        'playlist 5'
+      ])
+
+      expect(await getPlaylistNames(servers[1])).to.deep.equal([
+        'playlist 0',
+        'playlist 1',
+        'playlist 5'
+      ])
+
+      await commands[0].reorderPlaylistsOfChannel({
+        channelName: 'channel_2',
+        attributes: {
+          startPosition: 1,
+          insertAfterPosition: 3,
+          reorderLength: 2
+        }
+      })
+      await waitJobs(servers)
+
+      expect(await getPlaylistNames(servers[0])).to.deep.equal([
+        'playlist 4',
+        'playlist 0',
+        'playlist 1',
+        'playlist 2',
+        'playlist 5'
+      ])
+
+      expect(await getPlaylistNames(servers[1])).to.deep.equal([
+        'playlist 0',
+        'playlist 1',
+        'playlist 5'
+      ])
+
+      await commands[0].reorderPlaylistsOfChannel({
+        channelName: 'channel_2',
+        attributes: {
+          startPosition: 3,
+          insertAfterPosition: 0,
+          reorderLength: 1
+        }
+      })
+      await waitJobs(servers)
+
+      expect(await getPlaylistNames(servers[0])).to.deep.equal([
+        'playlist 1',
+        'playlist 4',
+        'playlist 0',
+        'playlist 2',
+        'playlist 5'
+      ])
+
+      expect(await getPlaylistNames(servers[1])).to.deep.equal([
+        'playlist 1',
+        'playlist 0',
+        'playlist 5'
+      ])
+    })
+
+    it('Should delete a channel and delete playlists', async function () {
+      await servers[0].channels.delete({ channelName: 'channel_2' })
+      await waitJobs(servers)
+
+      const playlist = await servers[0].playlists.get({ playlistId: playlists[0].uuid, token: servers[0].accessToken })
+      expect(playlist.videoChannel).to.not.exist
+      expect(playlist.videoChannelPosition).to.not.exist
+
+      await servers[1].playlists.get({ playlistId: playlists[0].uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 

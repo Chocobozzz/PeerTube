@@ -1,5 +1,5 @@
 <div class="channel-filters">
-  <div class="channels-label" i18n>Per channel:</div>
+  <div class="channel-label" i18n>Per channel:</div>
 
   @for (channel of channels; track channel.id) {
     <my-channel-toggle [channel]="channel" [(ngModel)]="channel.selected" (ngModelChange)="table.onFilter()"></my-channel-toggle>
@@ -64,7 +64,7 @@
 
     <td *ngIf="table.isColumnDisplayed('privacy')">
       <div class="d-flex flex-wrap gap-1">
-        <my-video-privacy-badge [video]="video"></my-video-privacy-badge>
+        <my-privacy-badge [video]="video"></my-privacy-badge>
 
         <span *ngIf="video.blacklisted" class="pt-badge badge-red" i18n [ngbTooltip]="video.blacklistedReason">Blocked</span>
       </div>

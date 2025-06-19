@@ -48,7 +48,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 900
+export const LAST_MIGRATION_VERSION = 905
 
 // ---------------------------------------------------------------------------
 
@@ -143,7 +143,7 @@ export const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
-  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt' ],
+  VIDEO_PLAYLISTS: [ 'name', 'displayName', 'createdAt', 'updatedAt', 'videoChannelPosition' ],
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 

@@ -19,6 +19,8 @@ export interface PlaylistObject {
   published: string
   updated: string
 
+  videoChannelPosition: number
+
   orderedItems?: string[]
 
   partOf?: string

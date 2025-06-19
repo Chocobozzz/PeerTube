@@ -191,6 +191,10 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@type': 'sc:Number',
       '@id': 'pt:position'
     },
+    videoChannelPosition: {
+      '@type': 'sc:Number',
+      '@id': 'pt:position'
+    },
     startTimestamp: {
       '@type': 'sc:Number',
       '@id': 'pt:startTimestamp'

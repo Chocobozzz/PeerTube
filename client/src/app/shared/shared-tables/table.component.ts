@@ -14,16 +14,17 @@ import {
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { LocalStorageService, Notifier, PeerTubeRouterService, RestPagination } from '@app/core'
+import { LocalStorageService, Notifier, PeerTubeRouterService, RestPagination, ScreenService } from '@app/core'
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { ResultList } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import debug from 'debug'
 import { SharedModule, SortMeta } from 'primeng/api'
-import { TableLazyLoadEvent, TableModule, TableRowExpandEvent } from 'primeng/table'
+import { TableLazyLoadEvent, TableModule, TableRowExpandEvent, TableRowReorderEvent } from 'primeng/table'
 import { finalize, Observable, Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { AutoColspanDirective } from '../shared-main/common/auto-colspan.directive'
@@ -77,7 +78,8 @@ type BulkActions<Data> = DropdownAction<Data[]>[][] | DropdownAction<Data[]>[]
     NgbDropdownModule,
     PeertubeCheckboxComponent,
     AutoColspanDirective,
-    TableExpanderIconComponent
+    TableExpanderIconComponent,
+    GlobalIconComponent
   ]
 })
 export class TableComponent<Data, ColumnName = string, QueryParams extends TableQueryParams = TableQueryParams>
@@ -87,11 +89,15 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   private route = inject(ActivatedRoute)
   private peertubeRouter = inject(PeerTubeRouterService)
   private notifier = inject(Notifier)
+  private screenService = inject(ScreenService)
 
   readonly key = input.required<string>()
   readonly dataKey = input<string>('id')
   readonly defaultColumns = input.required<TableColumnInfo<ColumnName>[]>()
   readonly dataLoader = input.required<DataLoader<Data>>()
+
+  readonly reorderableRows = input(false, { transform: booleanAttribute })
+  readonly dragHandleTitle = input<string>(undefined)
 
   readonly defaultSort = input<string>('createdAt')
   readonly defaultSortOrder = input<'asc' | 'desc'>('desc')
@@ -132,6 +138,7 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   expandedRow: TemplateRef<any>
 
   readonly rowExpand = output<TableRowExpandEvent>()
+  readonly rowReorder = output<TableRowReorderEvent>()
 
   selectedRows: Data[] = []
   expandedRows = {}
@@ -256,28 +263,30 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   // ---------------------------------------------------------------------------
 
   saveSelectedColumns () {
-    const enabled = this.columns.filter(c => c.selected !== false).map(c => c.id)
+    const enabled = this.columns.filter(c => c.selected === false).map(c => c.id)
 
-    this.peertubeLocalStorage.setItem(this.getColumnLocalStorageKey(), JSON.stringify(enabled))
+    this.peertubeLocalStorage.setItem(this.getColumnDisabledLocalStorageKey(), JSON.stringify(enabled))
   }
 
   private loadSelectedColumns () {
-    const enabledString = this.peertubeLocalStorage.getItem(this.getColumnLocalStorageKey())
+    const disabledString = this.peertubeLocalStorage.getItem(this.getColumnDisabledLocalStorageKey())
+    if (!disabledString) return
 
-    if (!enabledString) return
     try {
-      const enabled = JSON.parse(enabledString)
+      const disabled = JSON.parse(disabledString)
 
       for (const column of this.columns) {
-        column.selected = enabled.includes(column.id)
+        if (!disabled.includes(column.id)) continue
+
+        column.selected = false
       }
     } catch (err) {
       logger.error('Cannot load selected columns.', err)
     }
   }
 
-  private getColumnLocalStorageKey () {
-    return 'rest-table-columns-' + this.key()
+  private getColumnDisabledLocalStorageKey () {
+    return 'rest-table-columns-disabled-' + this.key()
   }
   // ---------------------------------------------------------------------------
 
@@ -393,6 +402,10 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     return this.selectedRows.length !== 0
   }
 
+  inInTouchScreen () {
+    return this.screenService.isInTouchScreen()
+  }
+
   getPaginationTemplate () {
     return $localize`Showing {first} to {last} of {totalRecords} elements`
   }
@@ -433,8 +446,12 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
     return this.getRandomBadge(type, value)
   }
 
-  loadData () {
-    this.loading = true
+  loadData (options: {
+    skipLoader?: boolean // default false
+  } = {}) {
+    const { skipLoader = false } = options
+
+    if (!skipLoader) this.loading = true
 
     return new Promise<void>((res, rej) => {
       this.dataLoader()({
