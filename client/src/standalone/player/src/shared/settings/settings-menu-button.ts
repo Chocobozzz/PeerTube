@@ -58,8 +58,21 @@ class SettingsButton extends Button {
     ;(this as any).player().one('play', () => this.hideDialog())
   }
 
-  onDocumentClick (event: MouseEvent) {
+  onDocumentClick (event: MouseEvent | TouchEvent) {
     const element = event.target as HTMLElement
+
+    if (this.isMobileDevice() && event.type === 'touchstart') {
+      if (this.isWithinSettingsArea(element)) {
+        return
+      }
+
+      setTimeout(() => {
+        if (!(this.dialog as any).hasClass('vjs-hidden')) {
+          this.hideDialog()
+        }
+      }, 100)
+      return
+    }
 
     if (element?.classList?.contains('vjs-settings') || element?.parentElement?.classList?.contains('vjs-settings')) {
       return
@@ -99,6 +112,10 @@ class SettingsButton extends Button {
   dispose () {
     document.removeEventListener('click', this.documentClickHandler)
 
+    if (this.isMobileDevice()) {
+      document.removeEventListener('touchstart', this.documentClickHandler)
+    }
+
     if (this.isInIframe()) {
       window.removeEventListener('blur', this.documentClickHandler)
     }
@@ -114,6 +131,10 @@ class SettingsButton extends Button {
   }
 
   onUserInactive () {
+    if (this.isMobileDevice() && !(this.dialog as any).hasClass('vjs-hidden')) {
+      return
+    }
+
     if (!(this.dialog as any).hasClass('vjs-hidden')) {
       this.hideDialog()
     }
@@ -121,6 +142,10 @@ class SettingsButton extends Button {
 
   bindEvents () {
     document.addEventListener('click', this.documentClickHandler)
+
+    if (this.isMobileDevice()) {
+      document.addEventListener('touchstart', this.documentClickHandler, { passive: true })
+    }
 
     if (this.isInIframe()) {
       window.addEventListener('blur', this.documentClickHandler)
@@ -273,6 +298,35 @@ class SettingsButton extends Button {
     return window.self !== window.top
   }
 
+  isMobileDevice () {
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      ('ontouchstart' in window) ||
+      (navigator.maxTouchPoints > 0) ||
+      window.innerWidth <= 768
+    )
+  }
+
+  isWithinSettingsArea (element: HTMLElement) {
+    if (!element) return false
+
+    let currentElement = element
+    while (currentElement && currentElement !== document.body) {
+      if (
+        currentElement.classList?.contains('vjs-settings-dialog') ||
+        currentElement.classList?.contains('vjs-settings') ||
+        currentElement.classList?.contains('vjs-menu') ||
+        currentElement.classList?.contains('vjs-menu-item') ||
+        currentElement.classList?.contains('vjs-settings-panel') ||
+        currentElement.classList?.contains('vjs-icon-settings')
+      ) {
+        return true
+      }
+      currentElement = currentElement.parentElement
+    }
+
+    return false
+  }
 
 }
 
