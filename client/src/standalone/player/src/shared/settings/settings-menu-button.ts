@@ -35,15 +35,15 @@ class SettingsButton extends Button {
 
     this.settingsButtonOptions = options
 
-    this.controlText('Settings')
+    ;(this as any).controlText('Settings')
 
-    this.dialog = this.player().addChild('settingsDialog')
-    this.dialogEl = this.dialog.el() as HTMLElement
+    this.dialog = (this as any).player().addChild('settingsDialog')
+    this.dialogEl = (this.dialog as any).el() as HTMLElement
     this.menu = null
-    this.panel = this.dialog.addChild('settingsPanel')
-    this.panelChild = this.panel.addChild('settingsPanelChild')
+    this.panel = (this.dialog as any).addChild('settingsPanel')
+    this.panelChild = (this.panel as any).addChild('settingsPanelChild')
 
-    this.addClass('vjs-settings')
+    ;(this as any).addClass('vjs-settings')
 
     // Event handlers
     this.addSettingsItemHandler = this.onAddSettingsItem.bind(this)
@@ -55,7 +55,7 @@ class SettingsButton extends Button {
     this.bindEvents()
 
     // Prepare the dialog
-    this.player().one('play', () => this.hideDialog())
+    ;(this as any).player().one('play', () => this.hideDialog())
   }
 
   onDocumentClick (event: MouseEvent) {
@@ -65,34 +65,34 @@ class SettingsButton extends Button {
       return
     }
 
-    if (!this.dialog.hasClass('vjs-hidden')) {
+    if (!(this.dialog as any).hasClass('vjs-hidden')) {
       this.hideDialog()
     }
   }
 
   onDisposeSettingsItem (_event: any, name: string) {
     if (name === undefined) {
-      const children = this.menu.children()
+      const children = (this.menu as any).children()
 
       while (children.length > 0) {
         children[0].dispose()
-        this.menu.removeChild(children[0])
+        ;(this.menu as any).removeChild(children[0])
       }
 
-      this.addClass('vjs-hidden')
+      ;(this as any).addClass('vjs-hidden')
     } else {
-      const item = this.menu.getChild(name)
+      const item = (this.menu as any).getChild(name)
 
       if (item) {
         item.dispose()
-        this.menu.removeChild(item)
+        ;(this.menu as any).removeChild(item)
       }
     }
 
     this.hideDialog()
 
     if (this.settingsButtonOptions.entries.length === 0) {
-      this.addClass('vjs-hidden')
+      ;(this as any).addClass('vjs-hidden')
     }
   }
 
@@ -106,15 +106,15 @@ class SettingsButton extends Button {
     super.dispose()
   }
 
-  onAddSettingsItem (event: any, data: any) {
+  onAddSettingsItem (_event: any, data: any) {
     const [ entry, options ] = data
 
     this.addMenuItem(entry, options)
-    this.removeClass('vjs-hidden')
+    ;(this as any).removeClass('vjs-hidden')
   }
 
   onUserInactive () {
-    if (!this.dialog.hasClass('vjs-hidden')) {
+    if (!(this.dialog as any).hasClass('vjs-hidden')) {
       this.hideDialog()
     }
   }
@@ -126,9 +126,9 @@ class SettingsButton extends Button {
       window.addEventListener('blur', this.documentClickHandler)
     }
 
-    this.player().on('addsettingsitem', this.addSettingsItemHandler)
-    this.player().on('disposesettingsitem', this.disposeSettingsItemHandler)
-    this.player().on('userinactive', this.userInactiveHandler)
+    ;(this as any).player().on('addsettingsitem', this.addSettingsItemHandler)
+    ;(this as any).player().on('disposesettingsitem', this.disposeSettingsItemHandler)
+    ;(this as any).player().on('userinactive', this.userInactiveHandler)
   }
 
   buildCSSClass () {
@@ -136,7 +136,7 @@ class SettingsButton extends Button {
   }
 
   handleClick () {
-    if (this.dialog.hasClass('vjs-hidden')) {
+    if ((this.dialog as any).hasClass('vjs-hidden')) {
       this.showDialog()
     } else {
       this.hideDialog()
@@ -144,26 +144,26 @@ class SettingsButton extends Button {
   }
 
   showDialog () {
-    this.player().peertube().onMenuOpened()
+    ;(this as any).player().peertube().onMenuOpened()
 
-    ;(this.menu.el() as HTMLElement).style.opacity = '1'
+    ;((this.menu as any).el() as HTMLElement).style.opacity = '1'
 
-    this.dialog.show()
-    this.el().setAttribute('aria-expanded', 'true')
+    ;(this.dialog as any).show()
+    ;(this as any).el().setAttribute('aria-expanded', 'true')
 
     this.setDialogSize(this.getComponentSize(this.menu))
 
-    this.menu.focus()
+    ;(this.menu as any).focus()
   }
 
   hideDialog () {
-    this.player_.peertube().onMenuClosed()
+    ;(this as any).player().peertube().onMenuClosed()
 
-    this.dialog.hide()
-    this.el().setAttribute('aria-expanded', 'false')
+    ;(this.dialog as any).hide()
+    ;(this as any).el().setAttribute('aria-expanded', 'false')
 
     this.setDialogSize(this.getComponentSize(this.menu))
-    ;(this.menu.el() as HTMLElement).style.opacity = '1'
+    ;((this.menu as any).el() as HTMLElement).style.opacity = '1'
     this.resetChildren()
   }
 
@@ -173,7 +173,7 @@ class SettingsButton extends Button {
 
     // Could be component or just DOM element
     if (element instanceof Component) {
-      const el = element.el() as HTMLElement
+      const el = (element as any).el() as HTMLElement
 
       width = el.offsetWidth
       height = el.offsetHeight
@@ -191,9 +191,9 @@ class SettingsButton extends Button {
     }
 
     const offset = this.settingsButtonOptions.setup.maxHeightOffset
-    const maxHeight = (this.player().el() as HTMLElement).offsetHeight - offset
+    const maxHeight = ((this as any).player().el() as HTMLElement).offsetHeight - offset
 
-    const panelEl = this.panel.el() as HTMLElement
+    const panelEl = (this.panel as any).el() as HTMLElement
 
     if (height > maxHeight) {
       height = maxHeight
@@ -208,18 +208,18 @@ class SettingsButton extends Button {
   }
 
   buildMenu () {
-    this.menu = new MenuFocusFixed(this.player())
-    this.menu.on('escaped-key', () => {
+    this.menu = new (MenuFocusFixed as any)((this as any).player())
+    ;(this.menu as any).on('escaped-key', () => {
       this.hideDialog()
-      this.focus()
+      ;(this as any).focus()
     })
 
-    this.menu.addClass('vjs-main-menu')
+    ;(this.menu as any).addClass('vjs-main-menu')
     const entries = this.settingsButtonOptions.entries
 
     if (entries.length === 0) {
-      this.addClass('vjs-hidden')
-      this.panelChild.addChild(this.menu)
+      ;(this as any).addClass('vjs-hidden')
+      ;(this.panelChild as any).addChild(this.menu)
       return
     }
 
@@ -227,7 +227,7 @@ class SettingsButton extends Button {
       this.addMenuItem(entry, this.settingsButtonOptions)
     }
 
-    this.panelChild.addChild(this.menu)
+    ;(this.panelChild as any).addChild(this.menu)
   }
 
   addMenuItem (entry: any, options: any) {
@@ -242,21 +242,21 @@ class SettingsButton extends Button {
     options.name = toTitleCase(entry)
 
     const newOptions = Object.assign({}, options, { entry, menuButton: this })
-    const settingsMenuItem = new SettingsMenuItem(this.player(), newOptions)
+    const settingsMenuItem = new SettingsMenuItem((this as any).player(), newOptions)
 
-    this.menu.addChild(settingsMenuItem)
+    ;(this.menu as any).addChild(settingsMenuItem)
 
     // Hide children to avoid sub menus stacking on top of each other
     // or having multiple menus open
-    settingsMenuItem.on('click', videojs.bind(this, this.hideChildren))
+    ;(settingsMenuItem as any).on('click', videojs.bind(this, this.hideChildren))
 
     // Whether to add or remove selected class on the settings sub menu element
-    settingsMenuItem.on('click', openSubMenu)
+    ;(settingsMenuItem as any).on('click', openSubMenu)
   }
 
   resetChildren () {
-    for (const menuChild of this.menu.children() as SettingsMenuItem[]) {
-      menuChild.reset()
+    for (const menuChild of (this.menu as any).children() as SettingsMenuItem[]) {
+      ;(menuChild as any).reset()
     }
   }
 
@@ -264,14 +264,16 @@ class SettingsButton extends Button {
    * Hide all the sub menus
    */
   hideChildren () {
-    for (const menuChild of this.menu.children() as SettingsMenuItem[]) {
-      menuChild.hideSubMenu()
+    for (const menuChild of (this.menu as any).children() as SettingsMenuItem[]) {
+      ;(menuChild as any).hideSubMenu()
     }
   }
 
   isInIframe () {
     return window.self !== window.top
   }
+
+
 }
 
 Component.registerComponent('SettingsButton', SettingsButton)
