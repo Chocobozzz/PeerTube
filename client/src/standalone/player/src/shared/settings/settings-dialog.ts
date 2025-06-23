@@ -57,7 +57,7 @@ class SettingsDialog extends Component {
     document.addEventListener('keydown', this.keydownHandler)
 
     setTimeout(() => {
-      this.el().focus()
+      (this.el() as HTMLElement).focus()
     }, 0)
   }
 
