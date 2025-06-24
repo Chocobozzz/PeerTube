@@ -12,7 +12,7 @@ const validPrivacySet = new Set<VideoPrivacyType>([
   VideoPrivacy.PASSWORD_PROTECTED
 ])
 
-function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacyType) {
+export function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacyType) {
   if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
     video.publishedAt = new Date()
   }
@@ -20,15 +20,15 @@ function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacyType) {
   video.privacy = newPrivacy
 }
 
-function isVideoInPrivateDirectory (privacy: VideoPrivacyType) {
+export function isVideoInPrivateDirectory (privacy: VideoPrivacyType) {
   return validPrivacySet.has(privacy)
 }
 
-function isVideoInPublicDirectory (privacy: VideoPrivacyType) {
+export function isVideoInPublicDirectory (privacy: VideoPrivacyType) {
   return !isVideoInPrivateDirectory(privacy)
 }
 
-async function moveFilesIfPrivacyChanged (video: MVideoFullLight, oldPrivacy: VideoPrivacyType) {
+export async function moveFilesIfPrivacyChanged (video: MVideoFullLight, oldPrivacy: VideoPrivacyType) {
   // Now public, previously private
   if (isVideoInPublicDirectory(video.privacy) && isVideoInPrivateDirectory(oldPrivacy)) {
     await moveFiles({ type: 'private-to-public', video })
@@ -46,15 +46,8 @@ async function moveFilesIfPrivacyChanged (video: MVideoFullLight, oldPrivacy: Vi
   return false
 }
 
-export {
-  setVideoPrivacy,
-
-  isVideoInPrivateDirectory,
-  isVideoInPublicDirectory,
-
-  moveFilesIfPrivacyChanged
-}
-
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 type MoveType = 'private-to-public' | 'public-to-private'
