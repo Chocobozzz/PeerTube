@@ -1,10 +1,12 @@
-import { move } from 'fs-extra/esm'
-import { join } from 'path'
-import { VideoPrivacy, VideoPrivacyType, FileStorage } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { FileStorage, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { move } from 'fs-extra/esm'
+import { join } from 'path'
 import { updateHLSFilesACL, updateWebVideoFileACL } from './object-storage/index.js'
+
+const lTags = loggerTagsFactory('video-privacy')
 
 const validPrivacySet = new Set<VideoPrivacyType>([
   VideoPrivacy.PRIVATE,
@@ -58,11 +60,20 @@ async function moveFiles (options: {
 }) {
   const { type, video } = options
 
+  // Catch ACL error because it doesn't break the video
+  // Do not catch FS error, that should not happen, because it can break the video
+  const objectStorageErrorMsg = 'Cannot update ACL of video file after privacy change. ' +
+    'Ensure your provider supports ACL or set object_storage.upload_acl.public and object_storage.upload_acl.public to null'
+
   for (const file of video.VideoFiles) {
     if (file.storage === FileStorage.FILE_SYSTEM) {
       await moveWebVideoFileOnFS(type, video, file)
     } else {
-      await updateWebVideoFileACL(video, file)
+      try {
+        await updateWebVideoFileACL(video, file)
+      } catch (err) {
+        logger.error(objectStorageErrorMsg, { err, ...lTags('object-storage', video.uuid) })
+      }
     }
   }
 
@@ -72,7 +83,11 @@ async function moveFiles (options: {
     if (hls.storage === FileStorage.FILE_SYSTEM) {
       await moveHLSFilesOnFS(type, video)
     } else {
-      await updateHLSFilesACL(hls)
+      try {
+        await updateHLSFilesACL(hls)
+      } catch (err) {
+        logger.error(objectStorageErrorMsg, { err, ...lTags('object-storage', video.uuid) })
+      }
     }
   }
 }

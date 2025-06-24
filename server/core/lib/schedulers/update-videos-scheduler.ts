@@ -34,6 +34,8 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
     for (const schedule of schedules) {
       const videoOnly = await VideoModel.load(schedule.videoId)
+      if (!videoOnly) continue
+
       const mutexReleaser = await VideoPathManager.Instance.lockFiles(videoOnly.uuid)
 
       try {
@@ -41,7 +43,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
         if (published) Notifier.Instance.notifyOnVideoPublishedAfterScheduledUpdate(video)
       } catch (err) {
-        logger.error('Cannot update video', { err, ...lTags(videoOnly.uuid) })
+        logger.error('Cannot update video ' + videoOnly.uuid, { err, ...lTags(videoOnly.uuid) })
       }
 
       mutexReleaser()
