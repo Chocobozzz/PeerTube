@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use './_player-variables' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
 
 $context-menu-width: 350px;
 
@@ -8,7 +8,7 @@ $context-menu-width: 350px;
 
 .video-js .vjs-contextmenu-ui-menu {
   position: absolute;
-  background-color: $primary-background-color;
+  background-color: var(--embed-background-color);
   padding: 8px 0;
   border-radius: 4px;
   width: $context-menu-width;
@@ -32,7 +32,7 @@ $context-menu-width: 350px;
       background-color: rgba(255, 255, 255, 0.2);
     }
 
-    [class^='vjs-icon-'] {
+    [class^="vjs-icon-"] {
       display: inline-flex;
       position: relative;
       top: 2px;
@@ -46,16 +46,16 @@ $context-menu-width: 350px;
 
       @include margin-right(0.8rem !important);
 
-      $icons: 'link-2', 'repeat', 'code', 'tick-white', 'info';
+      $icons: "link-2", "repeat", "code", "tick-white", "info";
 
       @each $icon in $icons {
         &[class$="-#{$icon}"] {
-          mask-image: url('./svg/#{$icon}.svg');
-          -webkit-mask-image: url('./svg/#{$icon}.svg');
+          mask-image: url("./svg/#{$icon}.svg");
+          -webkit-mask-image: url("./svg/#{$icon}.svg");
         }
       }
 
-      &[class$='-tick-white'] {
+      &[class$="-tick-white"] {
         float: right;
         margin: 0 !important;
       }
