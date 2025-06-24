@@ -468,7 +468,6 @@ export class MyVideosComponent extends RestTable<Video> implements OnInit, OnDes
         {
           label: $localize`Delete`,
           handler: videos => this.removeVideos(videos),
-          isDisplayed: () => this.user.hasRight(UserRight.REMOVE_ANY_VIDEO),
           iconName: 'delete'
         }
       ]
