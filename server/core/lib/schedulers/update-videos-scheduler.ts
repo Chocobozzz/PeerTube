@@ -1,7 +1,7 @@
 import { VideoPrivacy, VideoPrivacyType, VideoState } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
 import { MScheduleVideoUpdate } from '@server/types/models/index.js'
-import { logger } from '../../helpers/logger.js'
+import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update.js'
@@ -12,8 +12,9 @@ import { VideoPathManager } from '../video-path-manager.js'
 import { setVideoPrivacy } from '../video-privacy.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-export class UpdateVideosScheduler extends AbstractScheduler {
+const lTags = loggerTagsFactory('update-videos-scheduler')
 
+export class UpdateVideosScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS
@@ -33,6 +34,8 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
     for (const schedule of schedules) {
       const videoOnly = await VideoModel.load(schedule.videoId)
+      if (!videoOnly) continue
+
       const mutexReleaser = await VideoPathManager.Instance.lockFiles(videoOnly.uuid)
 
       try {
@@ -40,7 +43,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
         if (published) Notifier.Instance.notifyOnVideoPublishedAfterScheduledUpdate(video)
       } catch (err) {
-        logger.error('Cannot update video', { err })
+        logger.error('Cannot update video ' + videoOnly.uuid, { err, ...lTags(videoOnly.uuid) })
       }
 
       mutexReleaser()

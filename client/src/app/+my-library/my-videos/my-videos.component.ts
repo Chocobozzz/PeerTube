@@ -12,14 +12,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
 import { ChannelToggleComponent } from '@app/shared/standalone-channels/channel-toggle.component'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { arrayify, pick } from '@peertube/peertube-core-utils'
-import {
-  UserRight,
-  VideoChannel,
-  VideoExistInPlaylist,
-  VideoPrivacy,
-  VideoPrivacyType,
-  VideosExistInPlaylists
-} from '@peertube/peertube-models'
+import { VideoChannel, VideoExistInPlaylist, VideoPrivacy, VideoPrivacyType, VideosExistInPlaylists } from '@peertube/peertube-models'
 import uniqBy from 'lodash-es/uniqBy'
 import { SortMeta } from 'primeng/api'
 import { tap } from 'rxjs/operators'
@@ -350,7 +343,6 @@ export class MyVideosComponent implements OnInit, OnDestroy {
         {
           label: $localize`Delete`,
           handler: videos => this.removeVideos(videos),
-          isDisplayed: () => this.user.hasRight(UserRight.REMOVE_ANY_VIDEO),
           iconName: 'delete'
         }
       ]

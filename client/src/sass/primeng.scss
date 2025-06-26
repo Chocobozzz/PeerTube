@@ -246,7 +246,7 @@ p-table {
     }
   }
 
-  .pt-badge {
+  .pt-badge:not(.pt-badge-keep-case) {
     text-transform: uppercase;
   }
 

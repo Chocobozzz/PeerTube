@@ -76,7 +76,7 @@
 
     <td *ngIf="table.isColumnDisplayed('playlists')">
       <div class="badges playlists">
-        <a *ngFor="let playlist of (videosContainedInPlaylists[video.id] || [])" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+        <a *ngFor="let playlist of (videosContainedInPlaylists[video.id] || [])" class="pt-badge badge-secondary pt-badge-keep-case" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
           {{ playlist.playlistDisplayName }}
         </a>
       </div>
