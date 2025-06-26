@@ -22,14 +22,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
 import { ChannelToggleComponent } from '@app/shared/standalone-channels/channel-toggle.component'
 import { NgbDropdownModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { arrayify, pick } from '@peertube/peertube-core-utils'
-import {
-  UserRight,
-  VideoChannel,
-  VideoExistInPlaylist,
-  VideoPrivacy,
-  VideoPrivacyType,
-  VideosExistInPlaylists
-} from '@peertube/peertube-models'
+import { VideoChannel, VideoExistInPlaylist, VideoPrivacy, VideoPrivacyType, VideosExistInPlaylists } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import uniqBy from 'lodash-es/uniqBy'

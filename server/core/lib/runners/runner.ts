@@ -23,7 +23,7 @@ export function updateLastRunnerContact (req: express.Request, runner: MRunner) 
 
   logger.debug('Updating last runner contact for %s', runner.name, lTags(runner.name))
 
-  return runInReadCommittedTransaction(async transaction => {
+  runInReadCommittedTransaction(async transaction => {
     return runner.save({ transaction })
   }).catch(err => logger.error('Cannot update last runner contact for %s', runner.name, { err, ...lTags(runner.name) }))
     .finally(() => updatingRunner.delete(runner.id))

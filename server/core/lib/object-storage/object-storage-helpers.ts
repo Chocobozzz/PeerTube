@@ -431,5 +431,5 @@ function parseS3Error (err: any) {
     }
   }
 
-  return err
+  return err as Error
 }
