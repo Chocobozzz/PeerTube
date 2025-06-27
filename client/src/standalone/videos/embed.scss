@@ -1,7 +1,7 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_css-variables' as *;
-@use '../player/build/peertube-player';
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_css-variables" as *;
+@use "../player/build/peertube-player";
 
 [hidden] {
   display: none !important;
@@ -66,11 +66,11 @@ body {
 }
 
 #error-details {
-  margin-top: 30px
+  margin-top: 30px;
 }
 
 #error-details-content {
-  margin-top: 10px
+  margin-top: 10px;
 }
 
 #placeholder-preview {
@@ -105,7 +105,7 @@ body {
   margin: 1rem 0.5rem;
   border: 0;
   font-weight: 600;
-  border-radius: 3px!important;
+  border-radius: 3px !important;
   font-size: 18px;
   display: inline-block;
 }
@@ -141,4 +141,3 @@ body {
     font-size: 14px;
   }
 }
-
