@@ -170,7 +170,7 @@ export class TagsHtml {
     }
 
     if (tags.image?.url) {
-      metaTags['og:image:url'] = tags.image.url
+      metaTags['og:image'] = tags.image.url
     }
 
     if (tags.image?.width && tags.image?.height) {
