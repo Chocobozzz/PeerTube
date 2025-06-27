@@ -55,8 +55,6 @@ export function videoRequiresFileToken (video: Video) {
 
 export function isVideoNSFWWarnedForUser (video: Video, config: HTMLServerConfig, user: User) {
   if (video.nsfw === false) return false
-  // Don't display NSFW warning for the owner of the video
-  if (user?.account?.id === video.account.id) return false
 
   if (!user) {
     return config.instance.defaultNSFWPolicy === 'warn' || config.instance.defaultNSFWPolicy === 'blur'
@@ -72,8 +70,6 @@ export function isVideoNSFWWarnedForUser (video: Video, config: HTMLServerConfig
 
 export function isVideoNSFWBlurForUser (video: Video, config: HTMLServerConfig, user: User) {
   if (video.nsfw === false) return false
-  // Don't display NSFW warning for the owner of the video
-  if (user?.account?.id === video.account.id) return false
 
   if (!user) return config.instance.defaultNSFWPolicy === 'blur'
 
@@ -87,8 +83,6 @@ export function isVideoNSFWBlurForUser (video: Video, config: HTMLServerConfig, 
 
 export function isVideoNSFWHiddenForUser (video: Video, config: HTMLServerConfig, user: User) {
   if (video.nsfw === false) return false
-  // Video is not hidden for the owner of the video
-  if (user?.account?.id === video.account.id) return false
 
   if (!user) return config.instance.defaultNSFWPolicy === 'do_not_list'
 
