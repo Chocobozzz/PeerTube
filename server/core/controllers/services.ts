@@ -137,7 +137,7 @@ function buildOEmbed (options: {
   }
 
   const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ` +
-    `title="${embedTitle}" src="${embedUrl}" style="border:none" allow="fullscreen"></iframe>`
+    `title="${embedTitle}" src="${embedUrl}" style="border: none" allow="fullscreen"></iframe>`
 
   const json: any = {
     type: 'video',
