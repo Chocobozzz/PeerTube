@@ -147,6 +147,8 @@ export class VideoFilters {
   load (obj: Partial<AttributesOnly<VideoFilters>>, customizedByUser?: boolean) {
     debugLogger('Loading object in video filters', { obj, customizedByUser })
 
+    this.reset({ triggerChange: false })
+
     if (customizedByUser) this.customizedByUser = customizedByUser
 
     if (obj.sort !== undefined) this.sort = obj.sort
