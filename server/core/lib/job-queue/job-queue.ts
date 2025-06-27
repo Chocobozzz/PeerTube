@@ -253,8 +253,8 @@ class JobQueue {
 
       logger.log(logLevel, 'Cannot execute job %s in queue %s.', job.id, handlerName, { payload: job.data, err })
 
-      if (errorHandlers[job.name]) {
-        errorHandlers[job.name](job, err)
+      if (errorHandlers[handlerName]) {
+        errorHandlers[handlerName](job, err)
           .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
       }
     })

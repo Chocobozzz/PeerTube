@@ -1,3 +1,4 @@
+import { createCommand } from '@commander-js/extra-typings'
 import { FileStorage, VideoState } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -9,29 +10,29 @@ import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylist, MVideoCaption, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import { program } from 'commander'
 
-program
+const program = createCommand()
   .description('Move videos to another storage.')
+  .option('-v, --video <videoUUID>', 'Move a specific video')
+  .option('-a, --all-videos', 'Migrate all videos')
   .option('-o, --to-object-storage', 'Move videos in object storage')
   .option('-f, --to-file-system', 'Move videos to file system')
-  .option('-v, --video [videoUUID]', 'Move a specific video')
-  .option('-a, --all-videos', 'Migrate all videos')
+  .option('--force', 'Force the migration even if the video is already in a "Moving" state')
   .parse(process.argv)
 
 const options = program.opts()
 
-if (!options['toObjectStorage'] && !options['toFileSystem']) {
+if (!options.toObjectStorage && !options.toFileSystem) {
   console.error('You need to choose where to send video files using --to-object-storage or --to-file-system.')
   process.exit(-1)
 }
 
-if (!options['video'] && !options['allVideos']) {
+if (!options.video && !options.allVideos) {
   console.error('You need to choose which videos to move.')
   process.exit(-1)
 }
 
-if (options['toObjectStorage'] && !CONFIG.OBJECT_STORAGE.ENABLED) {
+if (options.toObjectStorage && !CONFIG.OBJECT_STORAGE.ENABLED) {
   console.error('Object storage is not enabled on this instance.')
   process.exit(-1)
 }
@@ -50,11 +51,11 @@ async function run () {
 
   let ids: number[] = []
 
-  if (options['video']) {
-    const video = await VideoModel.load(toCompleteUUID(options['video']))
+  if (options.video) {
+    const video = await VideoModel.load(toCompleteUUID(options.video))
 
     if (!video) {
-      console.error('Unknown video ' + options['video'])
+      console.error('Unknown video ' + options.video)
       process.exit(-1)
     }
 
@@ -68,7 +69,10 @@ async function run () {
       process.exit(-1)
     }
 
-    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE || video.state === VideoState.TO_MOVE_TO_FILE_SYSTEM) {
+    if (
+      options.force !== true &&
+      (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE || video.state === VideoState.TO_MOVE_TO_FILE_SYSTEM)
+    ) {
       console.error('This video is already being moved to external storage/file system')
       process.exit(-1)
     }
@@ -82,11 +86,11 @@ async function run () {
     const videoFull = await VideoModel.loadFull(id)
     if (videoFull.isLive) continue
 
-    if (options['toObjectStorage']) {
+    if (options.toObjectStorage) {
       await createMoveJobIfNeeded({
         video: videoFull,
         type: 'to object storage',
-        canProcessVideo: (options) => {
+        canProcessVideo: options => {
           const { files, hls, source, captions } = options
 
           return files.some(f => f.storage === FileStorage.FILE_SYSTEM) ||
@@ -100,7 +104,7 @@ async function run () {
       continue
     }
 
-    if (options['toFileSystem']) {
+    if (options.toFileSystem) {
       await createMoveJobIfNeeded({
         video: videoFull,
         type: 'to file system',
