@@ -74,6 +74,8 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
   ngOnInit () {
     this.uploadEventsSubscription = this.manageController.getUploadEventsObs()
       .subscribe(state => {
+        this.updateTitle()
+
         if (state.status === 'cancelled') {
           debugLogger('Upload cancelled', state)
 
@@ -94,8 +96,6 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
           this.manageController.silentRedirectOnManage(shortUUID, this.route)
           return
         }
-
-        this.updateTitle()
       })
 
     this.firstStepChannelId = this.userChannels()[0].id
