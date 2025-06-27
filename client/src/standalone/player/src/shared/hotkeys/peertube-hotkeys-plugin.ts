@@ -50,7 +50,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
     const handlers: KeyHandler[] = [
       // Play
       {
-        accept: e => (e.key === ' ' || e.key === 'MediaPlayPause'),
+        accept: e => (e.key === ' ' || e.key === 'MediaPlayPause' || this.isNaked(e, 'k')),
         cb: e => {
           e.preventDefault()
           e.stopPropagation()
