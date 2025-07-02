@@ -1975,9 +1975,9 @@
           <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8221855044244620896" datatype="html">
+      <trans-unit id="8221855044244620896" datatype="html" xml:space="preserve">
         <source>Your video is being imported. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your video is being imported. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">Il tuo video sta venendo importato. Ma ci sono modifiche non salvate: vuoi veramente lasciare questa pagina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-torrent.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -1987,9 +1987,9 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5365292350251865320" datatype="html">
+      <trans-unit id="5365292350251865320" datatype="html" xml:space="preserve">
         <source>Changes saved.</source>
-        <target state="new">Changes saved.</target>
+        <target state="translated">Modifiche salvate.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-torrent.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -2327,41 +2327,41 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5646229632737908639" datatype="html">
+      <trans-unit id="5646229632737908639" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</target>
+        <target state="translated">Il formato del tuo file <x id="PH" equiv-text="name"/> non è supportato dalla piattaforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4591025453509397472" datatype="html">
+      <trans-unit id="4591025453509397472" datatype="html" xml:space="preserve">
         <source>The server encountered an error.</source>
-        <target state="new">The server encountered an error.</target>
+        <target state="translated">Il server ha riscontrato un errore.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3083362298006411773" datatype="html">
+      <trans-unit id="3083362298006411773" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</target>
+        <target state="translated">Il tuo file <x id="PH" equiv-text="name"/> non ha potuto essere trasferito prima del timeout del proxy del server.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5514835993053540551" datatype="html">
+      <trans-unit id="5514835993053540551" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large.</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large.</target>
+        <target state="translated">Il tuo file <x id="PH" equiv-text="name"/> è troppo grande.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8456000313168556766" datatype="html">
+      <trans-unit id="8456000313168556766" datatype="html" xml:space="preserve">
         <source>Max size is <x id="PH" equiv-text="maxFileSize"/>.</source>
-        <target state="new"> Max size is <x id="PH" equiv-text="maxFileSize"/>.</target>
+        <target state="translated">La dimensione massima è <x id="PH" equiv-text="maxFileSize"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">70</context>
@@ -2797,9 +2797,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3772536059362630823" datatype="html">
+      <trans-unit id="3772536059362630823" datatype="html" xml:space="preserve">
         <source>Create a channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Create a channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Crea un canale per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pubblicare i video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">24,26</context>
@@ -4812,17 +4812,17 @@
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3717862857627538007" datatype="html">
+      <trans-unit id="3717862857627538007" datatype="html" xml:space="preserve">
         <source>Delete your video</source>
-        <target state="new">Delete your video</target>
+        <target state="translated">Elimina il tuo video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2364932147716378858" datatype="html">
+      <trans-unit id="2364932147716378858" datatype="html" xml:space="preserve">
         <source>Warning: this is a definitive action!</source>
-        <target state="new">Warning: this is a definitive action!</target>
+        <target state="translated">Attenzione: questa azione è definitiva!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">175</context>
@@ -4836,9 +4836,9 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4784303436041135088" datatype="html">
+      <trans-unit id="4784303436041135088" datatype="html" xml:space="preserve">
         <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</source>
-        <target state="new">Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</target>
+        <target state="translated">Pubblicato il <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">53,55</context>
@@ -4908,9 +4908,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1929702212782336063" datatype="html">
+      <trans-unit id="1929702212782336063" datatype="html" xml:space="preserve">
         <source>Chapters are not available on a live.</source>
-        <target state="new">Chapters are not available on a live.</target>
+        <target state="translated">I capitoli non sono disponibili nelle dirette.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.html</context>
           <context context-type="linenumber">8</context>
@@ -4940,9 +4940,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4768953288635735928" datatype="html">
+      <trans-unit id="4768953288635735928" datatype="html" xml:space="preserve">
         <source>Some chapters are invalid</source>
-        <target state="new">Some chapters are invalid</target>
+        <target state="translated">Alcuni capitoli non sono validi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -4964,17 +4964,17 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327477703628774598" datatype="html">
+      <trans-unit id="3327477703628774598" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ getVideoName() }}"/> is not a live.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ getVideoName() }}"/> is not a live.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ getVideoName() }}"/> non è una diretta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1110126021784555841" datatype="html">
+      <trans-unit id="1110126021784555841" datatype="html" xml:space="preserve">
         <source>Your live has ended.</source>
-        <target state="new">Your live has ended.</target>
+        <target state="translated">La tua diretta è terminata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">10</context>
