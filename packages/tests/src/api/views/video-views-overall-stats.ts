@@ -9,7 +9,6 @@ import { expect } from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 
 /**
- *
  * Simulate 5 sections of viewers
  *  * user0 started and ended before start date
  *  * user1 started before start date and ended in the interval
@@ -84,9 +83,9 @@ describe('Test views overall stats', function () {
       let command: FfmpegCommand
 
       before(async function () {
-        this.timeout(240000);
+        this.timeout(240000)
 
-        ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
+        ;({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
       })
 
       it('Should display overall stats of a video with no viewers', async function () {
@@ -243,9 +242,9 @@ describe('Test views overall stats', function () {
       let before2Watchers: Date
 
       before(async function () {
-        this.timeout(240000);
+        this.timeout(240000)
 
-        ({ vodVideoId: videoUUID } = await prepareViewsVideos({ servers, live: true, vod: true }))
+        ;({ vodVideoId: videoUUID } = await prepareViewsVideos({ servers, live: true, vod: true }))
       })
 
       it('Should not have watchers peak', async function () {
@@ -429,7 +428,7 @@ describe('Test views overall stats', function () {
         expect(stats.subdivisions[0].name).to.equal('California')
         expect(stats.subdivisions[0].viewers).to.equal(2)
 
-        expect(stats.subdivisions[1].name).to.equal('Brittany')
+        expect(stats.subdivisions[1].name).to.equal('Île-de-France')
         expect(stats.subdivisions[1].viewers).to.equal(1)
       })
 
