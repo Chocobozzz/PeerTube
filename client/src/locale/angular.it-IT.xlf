@@ -4020,9 +4020,9 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="48442969542452939" datatype="html">
+      <trans-unit id="48442969542452939" datatype="html" xml:space="preserve">
         <source>Insights</source>
-        <target state="new">Insights</target>
+        <target state="translated">Approfondimenti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -4740,49 +4740,49 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5762774516857408346" datatype="html">
+      <trans-unit id="5762774516857408346" datatype="html" xml:space="preserve">
         <source>Publish video after transcoding</source>
-        <target state="new">Publish video after transcoding</target>
+        <target state="translated">Pubblica il video dopo la transcodifica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4901749932442786689" datatype="html">
+      <trans-unit id="4901749932442786689" datatype="html" xml:space="preserve">
         <source>Some images may be violent</source>
-        <target state="new">Some images may be violent</target>
+        <target state="translated">Alcune immagini possono essere violente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="993434970851951481" datatype="html">
+      <trans-unit id="993434970851951481" datatype="html" xml:space="preserve">
         <source>Content may be perceived as sexually explicit material</source>
-        <target state="new">Content may be perceived as sexually explicit material</target>
+        <target state="translated">Il contenuto può essere percepito come sessualmente esplicito</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1922792486639674435" datatype="html">
+      <trans-unit id="1922792486639674435" datatype="html" xml:space="preserve">
         <source>Describe what makes your content sensitive</source>
-        <target state="new">Describe what makes your content sensitive</target>
+        <target state="translated">Descrivi cosa rende il tuo contenuto sensibile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2376776371846413125" datatype="html">
+      <trans-unit id="2376776371846413125" datatype="html" xml:space="preserve">
         <source>Help viewers to identify your sensitive content</source>
-        <target state="new">Help viewers to identify your sensitive content</target>
+        <target state="translated">Aiuta gli spettatori ad identificare i tuoi contenuti sensibili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2849879057149700533" datatype="html">
+      <trans-unit id="2849879057149700533" datatype="html" xml:space="preserve">
         <source>Replace file</source>
-        <target state="new">Replace file</target>
+        <target state="translated">Sostituisci il file</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">4</context>
@@ -4796,9 +4796,9 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6220453864421244663" datatype="html">
+      <trans-unit id="6220453864421244663" datatype="html" xml:space="preserve">
         <source>Current uploaded file:</source>
-        <target state="new">Current uploaded file:</target>
+        <target state="translated">File pubblicati attualmente:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -4980,17 +4980,17 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1760429801169166597" datatype="html">
+      <trans-unit id="1760429801169166597" datatype="html" xml:space="preserve">
         <source>Live configuration is unavailable because you are streaming in this live.</source>
-        <target state="new">Live configuration is unavailable because you are streaming in this live.</target>
+        <target state="translated">La configurazione della diretta non è disponibile perchè il tuo streaming è in live.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8775708050219693192" datatype="html">
+      <trans-unit id="8775708050219693192" datatype="html" xml:space="preserve">
         <source>Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </target>
+        <target state="translated">La durata massima della diretta configurata su <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> è <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. Se la tua diretta supera questo limite verrà automaticamente conclusa. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -5112,9 +5112,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1582661564914737553" datatype="html">
+      <trans-unit id="1582661564914737553" datatype="html" xml:space="preserve">
         <source>Name of the uploaded file.</source>
-        <target state="new"> Name of the uploaded file. </target>
+        <target state="translated">Nome del file caricato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -5152,9 +5152,9 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8043791498070371772" datatype="html">
+      <trans-unit id="8043791498070371772" datatype="html" xml:space="preserve">
         <source>Your video contains sensitive content</source>
-        <target state="new">Your video contains sensitive content</target>
+        <target state="translated">Il tuo video contiene contenuti sensibili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">26</context>
@@ -5220,9 +5220,9 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8072551128947614417" datatype="html">
+      <trans-unit id="8072551128947614417" datatype="html" xml:space="preserve">
         <source>Main information</source>
-        <target state="new">Main information</target>
+        <target state="translated">Informazioni principali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5240,73 +5240,73 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6585268061238979045" datatype="html">
+      <trans-unit id="6585268061238979045" datatype="html" xml:space="preserve">
         <source>Video title</source>
-        <target state="new">Video title</target>
+        <target state="translated">Titolo del video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4094023877159391225" datatype="html">
+      <trans-unit id="4094023877159391225" datatype="html" xml:space="preserve">
         <source>You can format your description using the <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </source>
-        <target state="new"> You can format your description using the <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </target>
+        <target state="translated">Puoi formattare la tua descrizione con il <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Linguaggio Markdown<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">28,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3603659973330861834" datatype="html">
+      <trans-unit id="3603659973330861834" datatype="html" xml:space="preserve">
         <source>For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</source>
-        <target state="new">For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</target>
+        <target state="translated">Per esempio, per scrivere <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>testo in grassetto<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**testo in grassetto**) o <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>testo in corsivo<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*testo in corsivo*)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">32,33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="566903689838278643" datatype="html">
+      <trans-unit id="566903689838278643" datatype="html" xml:space="preserve">
         <source>You can also create a link to a specific timecode of the video (e.g. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> by simply writing 00:05) or <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>a classic link<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([title of my link](https://example.com))</source>
-        <target state="new">You can also create a link to a specific timecode of the video (e.g. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> by simply writing 00:05) or <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>a classic link<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([title of my link](https://example.com))</target>
+        <target state="translated">Si possono creare link a specifici punti del video (es. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> scrivendo 00:05) o <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>un collegamento classico<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([titolo del mio link](https://esempio.com))</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7799871320184598340" datatype="html">
+      <trans-unit id="7799871320184598340" datatype="html" xml:space="preserve">
         <source>Maximum of 5 tags to suggest relevant recommendations.</source>
-        <target state="new">Maximum of 5 tags to suggest relevant recommendations.</target>
+        <target state="translated">5 tags al massimo per suggerire raccomandazioni pertinenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1089762823481395967" datatype="html">
+      <trans-unit id="1089762823481395967" datatype="html" xml:space="preserve">
         <source>Support button</source>
-        <target state="new">Support button</target>
+        <target state="translated">Pulsante di supporto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2190068095391152848" datatype="html">
+      <trans-unit id="2190068095391152848" datatype="html" xml:space="preserve">
         <source>This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Questo è il testo che aiuta le persone a vedere il tuo video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>capire come supportarti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Si può usare il <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Linguaggio Markdown<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, compresi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>i collegamento ai tuoi strumenti di fundraising<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">58,61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2993337224487346050" datatype="html">
+      <trans-unit id="2993337224487346050" datatype="html" xml:space="preserve">
         <source>Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Vuoi usare lo stesso testo per tutti i tuoi video? Puoi impostare <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>un testo predefinito e il pulsante di supporto<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> nelle <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>impostazioni del tuo canale<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3434410278501759813" datatype="html">
+      <trans-unit id="3434410278501759813" datatype="html" xml:space="preserve">
         <source>Thumbnail</source>
-        <target state="new">Thumbnail</target>
+        <target state="translated">Minitura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">89,91</context>
@@ -5352,9 +5352,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7949715708714367297" datatype="html">
+      <trans-unit id="7949715708714367297" datatype="html" xml:space="preserve">
         <source>Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> is being imported! You can already add information about this video. </source>
-        <target state="new"> Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> is being imported! You can already add information about this video. </target>
+        <target state="translated">Congratulazioni, il video <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> è stato importato! Puoi già aggiungere informazioni su questo video. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/import/video-import-url.component.html</context>
           <context context-type="linenumber">38,40</context>
@@ -5392,17 +5392,17 @@
           <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1061834486939635373" datatype="html">
+      <trans-unit id="1061834486939635373" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete your video "<x id="PH" equiv-text="video.name"/>?</source>
-        <target state="new">Are you sure you want to delete your video "<x id="PH" equiv-text="video.name"/>?</target>
+        <target state="translated">Sei sicuro di voler eliminare il tuo video "<x id="PH" equiv-text="video.name"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
           <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2321566121166630784" datatype="html">
+      <trans-unit id="2321566121166630784" datatype="html" xml:space="preserve">
         <source>"<x id="PH" equiv-text="video.name"/>" deleted</source>
-        <target state="new">"<x id="PH" equiv-text="video.name"/>" deleted</target>
+        <target state="translated">"<x id="PH" equiv-text="video.name"/>" eliminato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
           <context context-type="linenumber">486</context>
@@ -5424,9 +5424,9 @@
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5326147529562345662" datatype="html">
+      <trans-unit id="5326147529562345662" datatype="html" xml:space="preserve">
         <source>Close modal window</source>
-        <target state="new">Close modal window</target>
+        <target state="translated">Scegli la modalità della finestra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">117</context>
@@ -5464,9 +5464,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3319838915969302847" datatype="html">
+      <trans-unit id="3319838915969302847" datatype="html" xml:space="preserve">
         <source>File uploaded! Your video is now available in your private library.</source>
-        <target state="new">File uploaded! Your video is now available in your private library.</target>
+        <target state="translated">File caricato! Il tuo video è disponibile nella tua libreria privata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/upload/video-upload.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -5497,9 +5497,9 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="159182233259245277" datatype="html">
+      <trans-unit id="159182233259245277" datatype="html" xml:space="preserve">
         <source>Sorry, but something went wrong.</source>
-        <target state="new">Sorry, but something went wrong.</target>
+        <target state="translated">Mi spiace, qualcosa è andato storto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -5689,9 +5689,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1069523139277190436" datatype="html">
+      <trans-unit id="1069523139277190436" datatype="html" xml:space="preserve">
         <source>Statistics</source>
-        <target state="new">Statistics</target>
+        <target state="translated">Statistiche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5809,17 +5809,17 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3183528558317228851" datatype="html">
+      <trans-unit id="3183528558317228851" datatype="html" xml:space="preserve">
         <source>Your live is waiting in your library. But there are unsaved changes: are you sure you want to leave this page?</source>
-        <target state="new">Your live is waiting in your library. But there are unsaved changes: are you sure you want to leave this page?</target>
+        <target state="translated">La tua diretta è pronta nella tua libreria. Ci sono delle modifiche non salvate: sei sicuro di voler lasciare questa pagina?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3327538490069601336" datatype="html">
+      <trans-unit id="3327538490069601336" datatype="html" xml:space="preserve">
         <source>Cannot create live because this platform has too many created lives</source>
-        <target state="new">Cannot create live because this platform has too many created lives</target>
+        <target state="translated">Non è possibile creare la diretta perchè in questa piattaforma sono state create troppe dirette</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/live/video-go-live.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -5845,9 +5845,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1588042004294678369" datatype="html">
+      <trans-unit id="1588042004294678369" datatype="html" xml:space="preserve">
         <source>UNAVAILABLE</source>
-        <target state="new">UNAVAILABLE</target>
+        <target state="translated">NON DISPONIBILE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -5865,9 +5865,9 @@
           <context context-type="linenumber">10,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5007027170771093295" datatype="html">
+      <trans-unit id="5007027170771093295" datatype="html" xml:space="preserve">
         <source>Feature unavailable</source>
-        <target state="new">Feature unavailable</target>
+        <target state="translated">Funzione non disponibile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">83</context>
@@ -6141,9 +6141,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4278992604323819883" datatype="html">
+      <trans-unit id="4278992604323819883" datatype="html" xml:space="preserve">
         <source>on <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </source>
-        <target state="new"> on <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </target>
+        <target state="translated">su <x id="INTERPOLATION" equiv-text="{{ video().channel?.host }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/video-cell.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -6373,17 +6373,17 @@
           <context context-type="linenumber">16,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6995933519629969124" datatype="html">
+      <trans-unit id="6995933519629969124" datatype="html" xml:space="preserve">
         <source>Unsubscribe from all channels</source>
-        <target state="new">Unsubscribe from all channels</target>
+        <target state="translated">Disiscriviti da tutti i canali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1698114086921246480" datatype="html">
+      <trans-unit id="1698114086921246480" datatype="html" xml:space="preserve">
         <source>Unsubscribe</source>
-        <target state="new">Unsubscribe</target>
+        <target state="translated">Disiscriviti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">28</context>
@@ -6589,9 +6589,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8906065447450776604" datatype="html">
+      <trans-unit id="8906065447450776604" datatype="html" xml:space="preserve">
         <source>Auto block</source>
-        <target state="new">Auto block</target>
+        <target state="translated">Blocco automatico</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">52</context>
@@ -7009,17 +7009,17 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3245220240937722814" datatype="html">
+      <trans-unit id="3245220240937722814" datatype="html" xml:space="preserve">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">I miei canali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="913810105049472842" datatype="html">
+      <trans-unit id="913810105049472842" datatype="html" xml:space="preserve">
         <source>Manage my channels</source>
-        <target state="new">Manage my channels</target>
+        <target state="translated">Gestisci i miei canali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -7761,9 +7761,9 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910947217931634219" datatype="html">
+      <trans-unit id="5910947217931634219" datatype="html" xml:space="preserve">
         <source>Warn</source>
-        <target state="new">Warn</target>
+        <target state="translated">Avviso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -7777,9 +7777,9 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5416471102816014001" datatype="html">
+      <trans-unit id="5416471102816014001" datatype="html" xml:space="preserve">
         <source>Blur</source>
-        <target state="new">Blur</target>
+        <target state="translated">Sfocatura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -7873,25 +7873,25 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6410388482930606788" datatype="html">
+      <trans-unit id="6410388482930606788" datatype="html" xml:space="preserve">
         <source>This video has been reported multiple times</source>
-        <target state="new">This video has been reported multiple times</target>
+        <target state="translated">Questo video è stato segnalato molte volte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5216288352598663055" datatype="html">
+      <trans-unit id="5216288352598663055" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 abuse} other {<x id="INTERPOLATION"/> abuses}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 abuse} altri {<x id="INTERPOLATION"/> abuses}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4984728317230462494" datatype="html">
+      <trans-unit id="4984728317230462494" datatype="html" xml:space="preserve">
         <source>The video is blocked</source>
-        <target state="new">The video is blocked</target>
+        <target state="translated">Il video è bloccato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">70</context>
@@ -8585,9 +8585,9 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2655875876987395619" datatype="html">
+      <trans-unit id="2655875876987395619" datatype="html" xml:space="preserve">
         <source>Deleted video</source>
-        <target state="new">Deleted video</target>
+        <target state="translated">Video eliminato</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81,82</context>
@@ -9625,9 +9625,9 @@
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8817920941077743476" datatype="html">
+      <trans-unit id="8817920941077743476" datatype="html" xml:space="preserve">
         <source>This instance is dedicated to sensitive content</source>
-        <target state="new">This instance is dedicated to sensitive content</target>
+        <target state="translated">Questa istanza è dedicata a contenuto sensibile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">189</context>
