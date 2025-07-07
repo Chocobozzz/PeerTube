@@ -223,6 +223,58 @@ describe('Test live', function () {
     })
   })
 
+  describe('Scheduled live', function () {
+    let liveVideoUUID: string
+
+    it('Should create a live with the appropriate parameters', async function () {
+      this.timeout(20000)
+
+      const scheduledForDate = (new Date(Date.now() + 3600)).toISOString();
+
+      const live = await commands[0].create({
+        fields: {
+          name: 'live scheduled',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          originallyPublishedAt: scheduledForDate,
+        }
+      })
+      liveVideoUUID = live.uuid
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: liveVideoUUID })
+
+        expect(video.originallyPublishedAt).to.equal(scheduledForDate)
+      }
+    })
+
+    it('Should not have the live listed globally since nobody streams into', async function () {
+      for (const server of servers) {
+        const { total, data } = await server.videos.list()
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should have the live listed on the channel since it is scheduled', async function () {
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+      for (const server of servers) {
+        const { total, data } = await server.videos.listByChannel({ handle })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+    })
+
+    it('Delete the live', async function () {
+      await servers[0].videos.remove({ id: liveVideoUUID })
+      await waitJobs(servers)
+    })
+  })
+
   describe('Live filters', function () {
     let ffmpegCommand: any
     let liveVideoId: string
