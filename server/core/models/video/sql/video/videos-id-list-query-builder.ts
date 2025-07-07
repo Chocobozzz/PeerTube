@@ -352,6 +352,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereStateAvailable () {
     this.and.push(
       `("video"."state" = ${VideoState.PUBLISHED} OR ` +
+        `("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "video"."originallyPublishedAt" IS NOT NULL) OR` +
         `("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false))`
     )
   }

@@ -7,6 +7,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { Video } from '../shared-main/video/video.model'
+import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 
 export type VideoThumbnailInput = Pick<
   VideoServerModel,
@@ -21,13 +22,14 @@ export type VideoThumbnailInput = Pick<
   | 'thumbnailPath'
   | 'thumbnailUrl'
   | 'userHistory'
+  | 'originallyPublishedAt'
 >
 
 @Component({
   selector: 'my-video-thumbnail',
   styleUrls: [ './video-thumbnail.component.scss' ],
   templateUrl: './video-thumbnail.component.html',
-  imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent ]
+  imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent, FromNowPipe ]
 })
 export class VideoThumbnailComponent implements OnChanges {
   private screenService = inject(ScreenService)
@@ -84,6 +86,14 @@ export class VideoThumbnailComponent implements OnChanges {
 
   isEndedLive () {
     return this.video().state?.id === VideoState.LIVE_ENDED
+  }
+
+  isScheduledLive () {
+    return this.video().state?.id === VideoState.WAITING_FOR_LIVE && this.video().originallyPublishedAt !== null
+  }
+
+  scheduledLiveDate () {
+    return new Date(this.video().originallyPublishedAt)
   }
 
   getImageUrl () {
