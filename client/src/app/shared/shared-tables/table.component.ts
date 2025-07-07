@@ -407,7 +407,10 @@ export class TableComponent<Data, ColumnName = string, QueryParams extends Table
   }
 
   getPaginationTemplate () {
-    return $localize`Showing {first} to {last} of {totalRecords} elements`
+    const start = this.pagination.start + 1
+    const end = Math.min(this.pagination.start + this.pagination.count, this.totalRecords)
+
+    return $localize`Showing ${start} to ${end} of ${this.totalRecords} elements`
   }
 
   hasBulkActions () {
