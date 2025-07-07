@@ -1,7 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
 import { User } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -31,7 +30,6 @@ import { UsageType } from './steps/usage-type/usage-type.model'
 })
 export class AdminConfigWizardModalComponent implements OnInit {
   private modalService = inject(NgbModal)
-  private route = inject(ActivatedRoute)
 
   readonly modal = viewChild<ElementRef>('modal')
   readonly stepper = viewChild<AdminConfigWizardStepperComponent>('stepper')
@@ -50,8 +48,8 @@ export class AdminConfigWizardModalComponent implements OnInit {
 
   shouldAutoOpen (user: User) {
     if (this.modalService.hasOpenModals()) return false
-    if (this.route.snapshot.fragment === 'admin-welcome-wizard') return true
-    if (this.route.snapshot.fragment === 'admin-welcome-wizard-test') return true
+    if (this.getFragment() === '#admin-welcome-wizard') return true
+    if (this.getFragment() === '#admin-welcome-wizard-test') return true
     if (user.noWelcomeModal === true) return false
     if (peertubeLocalStorage.getItem(getNoWelcomeModalLocalStorageKey()) === 'true') return false
 
@@ -60,7 +58,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
 
   show ({ showWelcome }: { showWelcome: boolean }) {
     this.showWelcome = showWelcome
-    this.dryRun = this.route.snapshot.fragment === 'admin-welcome-wizard-test'
+    this.dryRun = this.getFragment() === '#admin-welcome-wizard-test'
 
     this.modalService.open(this.modal(), {
       centered: true,
@@ -90,5 +88,9 @@ export class AdminConfigWizardModalComponent implements OnInit {
     if (this.showWelcome) return totalSteps - 1
 
     return totalSteps
+  }
+
+  private getFragment () {
+    return window.location.hash
   }
 }
