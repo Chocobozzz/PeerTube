@@ -470,7 +470,8 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     displayOnlyForFollower,
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
-    countVideos
+    countVideos,
+    includeScheduledLive: true,
   }, 'filter:api.video-channels.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
