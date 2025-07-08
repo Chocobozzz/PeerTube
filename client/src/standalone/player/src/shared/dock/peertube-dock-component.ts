@@ -23,7 +23,7 @@ class PeerTubeDockComponent extends Component {
       const avatar = videojs.dom.createEl('img', {
         className: 'peertube-dock-avatar',
         src: this.options_.avatarUrl
-      })
+      }, { alt: '' })
 
       el.appendChild(avatar)
     }
@@ -33,7 +33,7 @@ class PeerTubeDockComponent extends Component {
     })
 
     if (this.options_.title) {
-      const title = videojs.dom.createEl('div', {
+      const title = videojs.dom.createEl('h2', {
         className: 'peertube-dock-title',
         title: this.options_.title,
         innerText: this.options_.title
