@@ -31,13 +31,14 @@
           <span class="fg-100 fs-7 mx-2">·</span>
           <span i18n class="fg-100 fs-7">{{ object.type }}</span>
         </h1>
-
-        <my-button class="ms-2 d-none-mw" theme="primary" [routerLink]="object.routerLink" [queryParams]="object.queryParams">{{ object.buttonLabel }}</my-button>
       </div>
 
       <div class="video-wrapper" *ngFor="let video of object.videos">
         <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true"></my-video-miniature>
       </div>
+
+      <my-button class="ms-2 d-none-mw" theme="secondary" [routerLink]="object.routerLink" [queryParams]="object.queryParams">{{ object.buttonLabel }}</my-button>
+
     </div>
   </div>
 }
