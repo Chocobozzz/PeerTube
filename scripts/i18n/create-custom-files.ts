@@ -91,7 +91,9 @@ const playerKeys = {
   'Content warning': 'Content warning',
   'Violence': 'Violence',
   'Shocking Content': 'Shocking Content',
-  'Explicit Sex': 'Explicit Sex'
+  'Explicit Sex': 'Explicit Sex',
+  'Upload speed:': 'Upload speed:',
+  'Download speed:': 'Download speed:'
 }
 Object.assign(playerKeys, videojs)
 
