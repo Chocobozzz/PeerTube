@@ -47,6 +47,7 @@ class SettingsButton extends Button {
     this.panelChild = this.panel.addChild('settingsPanelChild')
 
     this.addClass('vjs-settings')
+    this.setAttribute('aria-controls', 'vjs-settings-dialog-' + this.player().id())
 
     // Event handlers
     this.addSettingsItemHandler = this.onAddSettingsItem.bind(this)
