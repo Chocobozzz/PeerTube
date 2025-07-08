@@ -1,13 +1,14 @@
+import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@peertube/peertube-core-utils'
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { currentDir, root } from '@peertube/peertube-node-utils'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
+import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import express from 'express'
 import { constants, promises as fs } from 'fs'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@peertube/peertube-core-utils'
-import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
-import { currentDir, root } from '@peertube/peertube-node-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants.js'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/html/client-html.js'
 import { asyncMiddleware, buildRateLimiter, embedCSP } from '../middlewares/index.js'
@@ -129,6 +130,8 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
 }
 
 async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Response) {
+  req.params.id = toCompleteUUID(req.params.id)
+
   const allowParameters = { req }
 
   const allowedResult = await Hooks.wrapFun(
@@ -149,6 +152,8 @@ async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Re
 }
 
 async function generateVideoPlaylistEmbedHtmlPage (req: express.Request, res: express.Response) {
+  req.params.id = toCompleteUUID(req.params.id)
+
   const allowParameters = { req }
 
   const allowedResult = await Hooks.wrapFun(
@@ -176,12 +181,16 @@ async function generateWatchHtmlPage (req: express.Request, res: express.Respons
   const threadIdIndex = videoId.indexOf(';threadId')
   if (threadIdIndex !== -1) videoId = videoId.substring(0, threadIdIndex)
 
+  videoId = toCompleteUUID(videoId)
+
   const html = await ClientHtml.getWatchHTMLPage(videoId, req, res)
 
   return sendHTML(html, res, true)
 }
 
 async function generateWatchPlaylistHtmlPage (req: express.Request, res: express.Response) {
+  req.params.id = toCompleteUUID(req.params.id)
+
   const html = await ClientHtml.getWatchPlaylistHTMLPage(req.params.id + '', req, res)
 
   return sendHTML(html, res, true)

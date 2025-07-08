@@ -1,8 +1,8 @@
-import 'multer'
+import { isShortUUID, shortToUUID } from '@peertube/peertube-node-utils'
 import { UploadFilesForCheck } from 'express'
+import 'multer'
 import { sep } from 'path'
 import validator from 'validator'
-import { isShortUUID, shortToUUID } from '@peertube/peertube-node-utils'
 
 export function exists (value: any) {
   return value !== undefined && value !== null

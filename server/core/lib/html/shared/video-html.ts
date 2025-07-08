@@ -1,6 +1,5 @@
 import { addQueryParams, escapeHTML, getVideoWatchRSSFeeds } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
-import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { Memoize } from '@server/helpers/memoize.js'
 import express from 'express'
 import validator from 'validator'
@@ -15,9 +14,7 @@ import { PageHtml } from './page-html.js'
 import { TagsHtml } from './tags-html.js'
 
 export class VideoHtml {
-  static async getWatchVideoHTML (videoIdArg: string, req: express.Request, res: express.Response) {
-    const videoId = toCompleteUUID(videoIdArg)
-
+  static async getWatchVideoHTML (videoId: string, req: express.Request, res: express.Response) {
     // Let Angular application handle errors
     if (!validator.default.isInt(videoId) && !validator.default.isUUID(videoId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -47,9 +44,7 @@ export class VideoHtml {
   }
 
   @Memoize({ maxAge: MEMOIZE_TTL.EMBED_HTML })
-  static async getEmbedVideoHTML (videoIdArg: string) {
-    const videoId = toCompleteUUID(videoIdArg)
-
+  static async getEmbedVideoHTML (videoId: string) {
     const videoPromise: Promise<MVideoThumbnailBlacklist> = validator.default.isInt(videoId) || validator.default.isUUID(videoId, 4)
       ? VideoModel.loadWithBlacklist(videoId)
       : Promise.resolve(undefined)

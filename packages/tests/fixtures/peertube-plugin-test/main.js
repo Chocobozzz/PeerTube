@@ -382,7 +382,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     handler: (result, params) => {
       return {
         allowed: false,
-        html: 'Lu Bu'
+        html: 'Lu Bu ' + params.req.params.id
       }
     }
   })
@@ -392,7 +392,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     handler: (result, params) => {
       return {
         allowed: false,
-        html: 'Diao Chan'
+        html: 'Diao Chan ' + params.req.params.id
       }
     }
   })
