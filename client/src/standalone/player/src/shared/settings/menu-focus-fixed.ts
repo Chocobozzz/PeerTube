@@ -26,7 +26,17 @@ class MenuFocusFixed extends Menu {
     this.focus(stepChild)
   }
 
-  focus (item = 0): void {
+  focus (item?: number): void {
+    // Reset focus
+    if (item === undefined) {
+      this.focusedChild_ = -1
+      item = 0
+    }
+
+    this._focus(item)
+  }
+
+  private _focus (item: number) {
     const children = this.children().slice()
     const haveTitle = children.length && children[0].hasClass('vjs-menu-title')
 
