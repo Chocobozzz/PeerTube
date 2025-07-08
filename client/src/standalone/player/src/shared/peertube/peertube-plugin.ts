@@ -667,6 +667,20 @@ class PeerTubePlugin extends Plugin {
         return
       }
 
+      if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        event.stopPropagation()
+        this.trigger('arrow-right', event.target)
+        return
+      }
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault()
+        event.stopPropagation()
+        this.trigger('arrow-left')
+        return
+      }
+
       fn.call(this, event)
     }
   }

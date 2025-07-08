@@ -1,10 +1,13 @@
+import debug from 'debug'
 import videojs from 'video.js'
 import { toTitleCase } from '../common'
+import { MenuFocusFixed } from './menu-focus-fixed'
 import { SettingsDialog } from './settings-dialog'
 import { SettingsMenuItem } from './settings-menu-item'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
-import { MenuFocusFixed } from './menu-focus-fixed'
+
+const debugLogger = debug('peertube:player:settings')
 
 const Button = videojs.getComponent('Button')
 const Component = videojs.getComponent('Component')
@@ -211,6 +214,12 @@ class SettingsButton extends Button {
     this.menu.on('escaped-key', () => {
       this.hideDialog()
       this.focus()
+    })
+
+    this.menu.on('arrow-right', (_, el) => {
+      debugLogger('Detected arrow right on menu item', el)
+
+      el.click()
     })
 
     this.menu.addClass('vjs-main-menu')

@@ -81,6 +81,10 @@ class SettingsMenuItem extends MenuItem {
         // Update on rate change
         if (subMenuName === 'PlaybackRateMenuButton') {
           player.on('ratechange', this.submenuClickHandler)
+
+          player.on('playbackrateschange', () => {
+            setTimeout(() => this.rebuildAfterMenuChange())
+          })
         }
 
         if (subMenuName === 'CaptionsButton') {
@@ -262,6 +266,7 @@ class SettingsMenuItem extends MenuItem {
     this.createBackButton()
     this.setSize()
     this.bindClickEvents()
+    this.bindKeyEvents()
 
     this.settingsSubMenuEl_.addEventListener('transitionend', this.transitionEndHandler, false)
   }
@@ -306,11 +311,22 @@ class SettingsMenuItem extends MenuItem {
 
   bindClickEvents () {
     for (const item of this.subMenu.menu.children()) {
-      if (!(item instanceof Component)) {
-        continue
-      }
+      if (!(item instanceof Component)) continue
+
       item.on([ 'tap', 'click' ], this.submenuClickHandler)
     }
+  }
+
+  bindKeyEvents () {
+    this.subMenu.menu.on('escaped-key', () => {
+      this.trigger('escaped-key')
+    })
+
+    this.subMenu.menu.on('arrow-left', () => {
+      debugLogger('Detected arrow left on sub menu ' + this.subMenu.name())
+
+      this.loadMainMenu()
+    })
   }
 
   // save size of submenus on first init
@@ -350,16 +366,13 @@ class SettingsMenuItem extends MenuItem {
   private rebuildAfterMenuChange () {
     debugLogger('Rebuilding menu ' + this.subMenu.name() + ' after change')
 
-    this.subMenu.menu.on('escaped-key', () => {
-      this.trigger('escaped-key')
-    })
-
     this.settingsSubMenuEl_.innerHTML = ''
     this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el())
     this.update()
     this.createBackButton()
     this.setSize()
     this.bindClickEvents()
+    this.bindKeyEvents()
   }
 }
 
