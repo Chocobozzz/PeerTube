@@ -254,6 +254,7 @@ class PeerTubePlugin extends Plugin {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
 
     this.initSmoothProgressBar()
+    this.patchMenuEscapeKey()
 
     this.player.ready(() => {
       this.listenControlBarMouse()
@@ -651,6 +652,22 @@ class PeerTubePlugin extends Plugin {
       }
       this.player_.currentTime(newTime)
       this.update()
+    }
+  }
+
+  private patchMenuEscapeKey () {
+    const Menu = videojs.getComponent('Menu') as any
+
+    const fn = Menu.prototype.handleKeyDown
+    Menu.prototype.handleKeyDown = function handleKeyDown (event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        event.stopPropagation()
+        this.trigger('escaped-key')
+        return
+      }
+
+      fn.call(this, event)
     }
   }
 

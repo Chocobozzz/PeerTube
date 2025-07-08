@@ -145,7 +145,6 @@ class SettingsButton extends Button {
 
   showDialog () {
     this.player().peertube().onMenuOpened()
-
     ;(this.menu.el() as HTMLElement).style.opacity = '1'
 
     this.dialog.show()
@@ -252,6 +251,11 @@ class SettingsButton extends Button {
 
     // Whether to add or remove selected class on the settings sub menu element
     settingsMenuItem.on('click', openSubMenu)
+
+    settingsMenuItem.on('escaped-key', () => {
+      this.hideDialog()
+      this.focus()
+    })
   }
 
   resetChildren () {

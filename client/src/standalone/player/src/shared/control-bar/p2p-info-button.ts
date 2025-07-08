@@ -11,8 +11,7 @@ class P2PInfoButton extends Button {
     }) as HTMLDivElement
     div.appendChild(subDivP2P)
 
-    const downloadIcon = videojs.dom.createEl('span', {
-      className: 'icon icon-download',
+    const downloadIcon = videojs.dom.createEl('span', { className: 'icon icon-download' }, {
       role: 'img',
       ariaLabel: this.player().localize('Download speed:')
     })
@@ -25,10 +24,9 @@ class P2PInfoButton extends Button {
     downloadSpeedText.appendChild(downloadSpeedUnit)
     subDivP2P.appendChild(downloadSpeedText)
 
-    const uploadIcon = videojs.dom.createEl('span', {
+    const uploadIcon = videojs.dom.createEl('span', { className: 'icon icon-upload' }, {
       role: 'img',
-      ariaLabel: this.player().localize('Upload speed:'),
-      className: 'icon icon-upload'
+      ariaLabel: this.player().localize('Upload speed:')
     })
     subDivP2P.appendChild(uploadIcon)
 
