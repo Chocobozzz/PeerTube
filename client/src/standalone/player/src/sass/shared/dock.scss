@@ -1,10 +1,9 @@
-@use 'sass:math';
-@use '_variables' as *;
-@use '_mixins' as *;
-@use './_player-variables' as *;
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
 
 .video-js.vjs-peertube-skin {
-
   .peertube-dock {
     --dock-avatar-size: 48px;
 
@@ -18,9 +17,8 @@
     left: 0;
     width: 100%;
 
-    font-size: 23px;
     padding: $dock-padding;
-    background: linear-gradient(to bottom, rgba(20, 20, 20, .7) 0, rgba(20, 20, 20, 0));
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0, rgba(20, 20, 20, 0));
 
     @include padding-right(60px);
   }
@@ -44,11 +42,13 @@
     letter-spacing: 1px;
     line-height: normal;
     min-width: 0;
+    margin: 0;
+    font-size: 23px;
   }
 
   .peertube-dock-title,
   .peertube-dock-description {
-    text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 
     @include ellipsis;
   }
@@ -73,7 +73,7 @@
     --dock-avatar-size: 40px;
   }
 
-  .peertube-dock {
+  .peertube-dock-title {
     font-size: 16px;
   }
 
@@ -82,13 +82,12 @@
   }
 }
 
-
 .video-js.vjs-peertube-skin.vjs-size-570 {
   .peertube-dock-avatar {
     --dock-avatar-size: 35px;
   }
 
-  .peertube-dock {
+  .peertube-dock-title {
     font-size: 14px;
   }
 }
@@ -98,7 +97,7 @@
     --dock-avatar-size: 30px;
   }
 
-  .peertube-dock {
+  .peertube-dock-title {
     font-size: 13px;
   }
 }

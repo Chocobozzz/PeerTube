@@ -3,7 +3,6 @@ import videojs from 'video.js'
 const Component = videojs.getComponent('Component')
 
 class SettingsDialog extends Component {
-
   constructor (player: videojs.Player) {
     super(player)
 
@@ -12,15 +11,15 @@ class SettingsDialog extends Component {
 
   /**
    * Create the component's DOM element
-   *
    */
   createEl () {
-    const uniqueId = this.id()
+    const uniqueId = this.player().id()
     const dialogLabelId = 'TTsettingsDialogLabel-' + uniqueId
     const dialogDescriptionId = 'TTsettingsDialogDescription-' + uniqueId
 
     return super.createEl('div', {
       className: 'vjs-settings-dialog vjs-modal-overlay',
+      id: 'vjs-settings-dialog-' + uniqueId,
       tabIndex: -1
     }, {
       'role': 'dialog',

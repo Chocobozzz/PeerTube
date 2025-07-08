@@ -1,10 +1,13 @@
+import debug from 'debug'
 import videojs from 'video.js'
 import { toTitleCase } from '../common'
+import { MenuFocusFixed } from './menu-focus-fixed'
 import { SettingsDialog } from './settings-dialog'
 import { SettingsMenuItem } from './settings-menu-item'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
-import { MenuFocusFixed } from './menu-focus-fixed'
+
+const debugLogger = debug('peertube:player:settings')
 
 const Button = videojs.getComponent('Button')
 const Component = videojs.getComponent('Component')
@@ -44,6 +47,7 @@ class SettingsButton extends Button {
     this.panelChild = this.panel.addChild('settingsPanelChild')
 
     this.addClass('vjs-settings')
+    this.setAttribute('aria-controls', 'vjs-settings-dialog-' + this.player().id())
 
     // Event handlers
     this.addSettingsItemHandler = this.onAddSettingsItem.bind(this)
@@ -145,7 +149,6 @@ class SettingsButton extends Button {
 
   showDialog () {
     this.player().peertube().onMenuOpened()
-
     ;(this.menu.el() as HTMLElement).style.opacity = '1'
 
     this.dialog.show()
@@ -214,6 +217,12 @@ class SettingsButton extends Button {
       this.focus()
     })
 
+    this.menu.on('arrow-right', (_, el) => {
+      debugLogger('Detected arrow right on menu item', el)
+
+      el.click()
+    })
+
     this.menu.addClass('vjs-main-menu')
     const entries = this.settingsButtonOptions.entries
 
@@ -252,6 +261,11 @@ class SettingsButton extends Button {
 
     // Whether to add or remove selected class on the settings sub menu element
     settingsMenuItem.on('click', openSubMenu)
+
+    settingsMenuItem.on('escaped-key', () => {
+      this.hideDialog()
+      this.focus()
+    })
   }
 
   resetChildren () {

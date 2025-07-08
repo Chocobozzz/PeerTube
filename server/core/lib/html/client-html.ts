@@ -18,22 +18,22 @@ class ClientHtml {
 
   // ---------------------------------------------------------------------------
 
-  static getWatchHTMLPage (videoIdArg: string, req: express.Request, res: express.Response) {
-    return VideoHtml.getWatchVideoHTML(videoIdArg, req, res)
+  static getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
+    return VideoHtml.getWatchVideoHTML(videoId, req, res)
   }
 
-  static getVideoEmbedHTML (videoIdArg: string) {
-    return VideoHtml.getEmbedVideoHTML(videoIdArg)
+  static getVideoEmbedHTML (videoId: string) {
+    return VideoHtml.getEmbedVideoHTML(videoId)
   }
 
   // ---------------------------------------------------------------------------
 
-  static getWatchPlaylistHTMLPage (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
-    return PlaylistHtml.getWatchPlaylistHTML(videoPlaylistIdArg, req, res)
+  static getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
+    return PlaylistHtml.getWatchPlaylistHTML(videoPlaylistId, req, res)
   }
 
-  static getVideoPlaylistEmbedHTML (playlistIdArg: string) {
-    return PlaylistHtml.getEmbedPlaylistHTML(playlistIdArg)
+  static getVideoPlaylistEmbedHTML (playlistId: string) {
+    return PlaylistHtml.getEmbedPlaylistHTML(playlistId)
   }
 
   // ---------------------------------------------------------------------------
