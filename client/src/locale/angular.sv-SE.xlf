@@ -6651,161 +6651,161 @@
           <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6750683208657917557" datatype="html">
+      <trans-unit id="6750683208657917557" datatype="html" xml:space="preserve">
         <source>Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</source>
-        <target state="new">Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</target>
+        <target state="translated">Sätt &lt;strong&gt;video-utrymme till <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; för nya användare (kan ändras av moderatorerna)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5663976721315204489" datatype="html">
+      <trans-unit id="5663976721315204489" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</target>
+        <target state="translated">&lt;strong&gt;Tillåt&lt;/strong&gt; användare &lt;strong&gt;att importera och synkronisera&lt;/strong&gt; videor från andra plattformar (YouTube, Vimeo ...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4936759942517379026" datatype="html">
+      <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</target>
+        <target state="translated">&lt;strong&gt;Tillåt inte&lt;/strong&gt; användare &lt;strong&gt;att importera videor&lt;/strong&gt; från andra plattformar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7110073515390971316" datatype="html">
+      <trans-unit id="7110073515390971316" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</target>
+        <target state="translated">&lt;strong&gt;Tillåt&lt;/strong&gt; användare &lt;strong&gt;att strömma direktsändningar&lt;/strong&gt; och att chatta med tittarna genom &lt;strong&gt;Livechat&lt;/strong&gt;-tillägget</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3769529336397241157" datatype="html">
+      <trans-unit id="3769529336397241157" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Tillåt inte&lt;/strong&gt; användarna att &lt;strong&gt;direktsända&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3112814596265051794" datatype="html">
+      <trans-unit id="3112814596265051794" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</source>
-        <target state="new">Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</target>
+        <target state="translated">Sätt &lt;strong&gt;video-synlighet&lt;/strong&gt; till &lt;strong&gt;Intern&lt;/strong&gt; som standard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">286</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4274451041982561878" datatype="html">
+      <trans-unit id="4274451041982561878" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</source>
-        <target state="new">Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</target>
+        <target state="translated">Sätt &lt;strong&gt;video-synlighet&lt;/strong&gt; till &lt;strong&gt;Öppet tillgänglig&lt;/strong&gt; som standard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8003967585929454038" datatype="html">
+      <trans-unit id="8003967585929454038" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</source>
-        <target state="new">&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</target>
+        <target state="translated">&lt;strong&gt;Kräv godkännande&lt;/strong&gt; för nya kommentarer på videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">303</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4418462159149044975" datatype="html">
+      <trans-unit id="4418462159149044975" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">&lt;strong&gt;Slå på P2P-strömning&lt;/strong&gt; som standard för anonyma och nya användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="168249800849144901" datatype="html">
+      <trans-unit id="168249800849144901" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">&lt;strong&gt;Slå av P2P-strömning&lt;/strong&gt; som standard för anonyma och nya användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3562838477245844067" datatype="html">
+      <trans-unit id="3562838477245844067" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe&lt;/strong&gt; to your content</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe&lt;/strong&gt; to your content</target>
+        <target state="translated">&lt;strong&gt;Tillåt&lt;/strong&gt; användare på externa plattformar att &lt;strong&gt;prenumerera&lt;/strong&gt; på innehåll från den här plattformen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">344</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3834301287198491897" datatype="html">
+      <trans-unit id="3834301287198491897" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe to your content&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe to your content&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Tillåt inte&lt;/strong&gt; användare på externa plattformar att &lt;strong&gt;prenumerera på den här plattformens innehåll&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">346</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1313522759692257983" datatype="html">
+      <trans-unit id="1313522759692257983" datatype="html" xml:space="preserve">
         <source>Will &lt;strong&gt;save a copy&lt;/strong&gt; of the uploaded video file</source>
-        <target state="new">Will &lt;strong&gt;save a copy&lt;/strong&gt; of the uploaded video file</target>
+        <target state="translated">Vid uppladdning eller import så &lt;strong&gt;sparas en kopia&lt;/strong&gt; av den uppladdade videons originalfil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">362</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7099542537897540953" datatype="html">
+      <trans-unit id="7099542537897540953" datatype="html" xml:space="preserve">
         <source>Will &lt;strong&gt;allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</source>
-        <target state="new">Will &lt;strong&gt;allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</target>
+        <target state="translated">Detta &lt;strong&gt;tillåter&lt;/strong&gt; användare &lt;strong&gt;att ersätta en video&lt;/strong&gt; som redan har publicerats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1216660260185422329" datatype="html">
+      <trans-unit id="1216660260185422329" datatype="html" xml:space="preserve">
         <source>Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</source>
-        <target state="new">Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</target>
+        <target state="translated">Sätt &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; som &lt;strong&gt;standardsökmotor&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7258464719094694611" datatype="html">
+      <trans-unit id="7258464719094694611" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</source>
-        <target state="new">&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</target>
+        <target state="translated">&lt;strong&gt;Slå på automatisk transkribering&lt;/strong&gt; av videor för att skapa undertexter och öka tillgängligheten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8115142822298621193" datatype="html">
+      <trans-unit id="8115142822298621193" datatype="html" xml:space="preserve">
         <source>The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</source>
-        <target state="new"> The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</target>
+        <target state="translated">Tillägget &lt;strong&gt;behöver konfigureras&lt;/strong&gt; efter att den här grundläggande konfigurationen av hälpredan är klar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">437</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7555586666437103751" datatype="html">
+      <trans-unit id="7555586666437103751" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Installera tillägget för &lt;strong&gt;LDAP&lt;/strong&gt; -autentisering.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6740504336459164358" datatype="html">
+      <trans-unit id="6740504336459164358" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Installera tillägget för &lt;strong&gt;SAML 2.0&lt;/strong&gt;-autentisering.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">444</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5853661417734866559" datatype="html">
+      <trans-unit id="5853661417734866559" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Installera tillägget för &lt;strong&gt;OpenID Connect&lt;/strong&gt;-autentisering.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">448</context>
@@ -7879,9 +7879,9 @@
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7227590042704998799" datatype="html">
+      <trans-unit id="7227590042704998799" datatype="html" xml:space="preserve">
         <source>Reliability</source>
-        <target state="new">Reliability</target>
+        <target state="translated">Pålitlighet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -8003,9 +8003,9 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="960484622248716258" datatype="html">
+      <trans-unit id="960484622248716258" datatype="html" xml:space="preserve">
         <source>Redundancy allowed</source>
-        <target state="new">Redundancy allowed</target>
+        <target state="translated">Tillåt redundans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -8315,12 +8315,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7134156816820861655" datatype="html">
+      <trans-unit id="7134156816820861655" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/> <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/> </source>
-        <target state="new">
-          <x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/>
-          <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/>
-        </target>
+        <target state="translated"><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/> <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
           <context context-type="linenumber">31,34</context>
@@ -8374,9 +8371,9 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8507166195543036644" datatype="html">
+      <trans-unit id="8507166195543036644" datatype="html" xml:space="preserve">
         <source>Account deleted</source>
-        <target state="new">Account deleted</target>
+        <target state="translated">Konto raderat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81,82</context>
@@ -8390,9 +8387,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4101442988100757762" datatype="html">
+      <trans-unit id="4101442988100757762" datatype="html" xml:space="preserve">
         <source>never</source>
-        <target state="new">never</target>
+        <target state="translated">aldrig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">85,86</context>
@@ -8634,9 +8631,9 @@
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8692634109890521682" datatype="html">
+      <trans-unit id="8692634109890521682" datatype="html" xml:space="preserve">
         <source>No results found.</source>
-        <target state="new">No results found.</target>
+        <target state="translated">Inga resultat hittades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
           <context context-type="linenumber">186</context>
@@ -9032,33 +9029,33 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3445066188319016030" datatype="html">
+      <trans-unit id="3445066188319016030" datatype="html" xml:space="preserve">
         <source>No playlists found matching your search.</source>
-        <target state="new">No playlists found matching your search.</target>
+        <target state="translated">Ingen spellista hittades utifrån din sökning.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4716659591966501716" datatype="html">
+      <trans-unit id="4716659591966501716" datatype="html" xml:space="preserve">
         <source>No playlists found in selected channels.</source>
-        <target state="new">No playlists found in selected channels.</target>
+        <target state="translated">Inga spellistor hittades i de valda kanalerna.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1626580694556116973" datatype="html">
+      <trans-unit id="1626580694556116973" datatype="html" xml:space="preserve">
         <source>You don't have any playlists published yet.</source>
-        <target state="new">You don't have any playlists published yet.</target>
+        <target state="translated">Du har inte publicerat några spellistor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5271592370839377640" datatype="html">
+      <trans-unit id="5271592370839377640" datatype="html" xml:space="preserve">
         <source>Playlists reordered</source>
-        <target state="new">Playlists reordered</target>
+        <target state="translated">Spellistorna är omsorterade</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">197</context>
@@ -9100,9 +9097,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2188854519574316630" datatype="html">
+      <trans-unit id="2188854519574316630" datatype="html" xml:space="preserve">
         <source>Server</source>
-        <target state="new">Server</target>
+        <target state="translated">Server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -9160,17 +9157,17 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5320464639563693648" datatype="html">
+      <trans-unit id="5320464639563693648" datatype="html" xml:space="preserve">
         <source>subscriptions per page</source>
-        <target state="new">subscriptions per page</target>
+        <target state="translated">prenumerationer per sida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9645096038052385" datatype="html">
+      <trans-unit id="9645096038052385" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ingen prenumeration} =1 {1 prenumeration} other {<x id="INTERPOLATION"/> prenumerationer}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">12</context>
@@ -9220,9 +9217,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4899677138075497134" datatype="html">
+      <trans-unit id="4899677138075497134" datatype="html" xml:space="preserve">
         <source>Muted at</source>
-        <target state="new">Muted at</target>
+        <target state="translated">Tystad vid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-account-blocklist.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -9588,9 +9585,9 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2734022681675842051" datatype="html">
+      <trans-unit id="2734022681675842051" datatype="html" xml:space="preserve">
         <source>Priority</source>
-        <target state="new">Priority</target>
+        <target state="translated">Prioritet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -9600,9 +9597,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="769258115649723950" datatype="html">
+      <trans-unit id="769258115649723950" datatype="html" xml:space="preserve">
         <source>(1 = highest priority)</source>
-        <target state="new">(1 = highest priority)</target>
+        <target state="translated">(1 = högsta prioritet)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -9792,9 +9789,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2989122020331473189" datatype="html">
+      <trans-unit id="2989122020331473189" datatype="html" xml:space="preserve">
         <source>Square icon is used in the mobile application and can be used on your custom homepage.</source>
-        <target state="new">Square icon is used in the mobile application and can be used on your custom homepage.</target>
+        <target state="translated">Kvadratisk ikon används i mobilappen, men kan också användas på en anpassad startsida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -9816,33 +9813,33 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6978211014802048979" datatype="html">
+      <trans-unit id="6978211014802048979" datatype="html" xml:space="preserve">
         <source>It can also be displayed on external websites to promote your instance, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://joinpeertube.org/instances&quot;             &gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> It can also be displayed on external websites to promote your instance, such as <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://joinpeertube.org/instances&quot;             &gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Den kan också visas på externa webbplatser för att blänka för din plattform, till exempel <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot;  href=&quot;https://joinpeertube.org/instances&quot;&gt;"/>JoinPeerTube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">26,28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6889832108716754007" datatype="html">
+      <trans-unit id="6889832108716754007" datatype="html" xml:space="preserve">
         <source>Favicon</source>
-        <target state="new">Favicon</target>
+        <target state="translated">Favicon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">35,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4682728657268109999" datatype="html">
+      <trans-unit id="4682728657268109999" datatype="html" xml:space="preserve">
         <source>Favicon is the icon displayed in web browser tab.</source>
-        <target state="new">Favicon is the icon displayed in web browser tab.</target>
+        <target state="translated">Favicon är ikonen som visas i webbläsarens tabb.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5274450200795156583" datatype="html">
+      <trans-unit id="5274450200795156583" datatype="html" xml:space="preserve">
         <source>If not set, the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Square icon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be used.</source>
-        <target state="new">If not set, the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Square icon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be used.</target>
+        <target state="translated">Om inte påslaget så används <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Kvadratisk ikon<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">40,41</context>
@@ -9860,113 +9857,113 @@
           <context context-type="linenumber">119,120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7437195070960902544" datatype="html">
+      <trans-unit id="7437195070960902544" datatype="html" xml:space="preserve">
         <source>It will be resized to 32x32 pixels and converted to .png format.</source>
-        <target state="new">It will be resized to 32x32 pixels and converted to .png format.</target>
+        <target state="translated">Den skalas om till 32x32 pixlar och sparas i png-formatet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">43,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3348948062503298975" datatype="html">
+      <trans-unit id="3348948062503298975" datatype="html" xml:space="preserve">
         <source>Desktop header logo</source>
-        <target state="new">Desktop header logo</target>
+        <target state="translated">Topplogga för sidhuvud på skrivbordsdator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">57,59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4723850245868320242" datatype="html">
+      <trans-unit id="4723850245868320242" datatype="html" xml:space="preserve">
         <source>Logo displayed in the header on large screens such as desktop computers</source>
-        <target state="new">Logo displayed in the header on large screens such as desktop computers</target>
+        <target state="translated">Topploggan visas längst upp på stora skärmar som till exempel används av skrivbordsdatorer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2589534276502100138" datatype="html">
+      <trans-unit id="2589534276502100138" datatype="html" xml:space="preserve">
         <source>Its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</source>
-        <target state="new">Its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</target>
+        <target state="translated">Höjden är reducerad till 48 pixlar och bredden anpassas utifrån ursprunglig bredd-höjd-ratio.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">65,66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3768411859162816126" datatype="html">
+      <trans-unit id="3768411859162816126" datatype="html" xml:space="preserve">
         <source>Hide the name of your platform in the header on desktop (wide screens)</source>
-        <target state="new">Hide the name of your platform in the header on desktop (wide screens)</target>
+        <target state="translated">Dölj plattformsnamnet i sidhuvudet på skrivbordsdatorer (med bredbildsskärm)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">83,84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3324015640819511842" datatype="html">
+      <trans-unit id="3324015640819511842" datatype="html" xml:space="preserve">
         <source>Useful for example if your "Desktop header logo" already includes your platform name</source>
-        <target state="new">Useful for example if your "Desktop header logo" already includes your platform name</target>
+        <target state="translated">Är användbart om Topploggan (Topplogga för sidhuvud på skrivbordsdator) redan innehåller plattformsnamnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">86,87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5125203413999764563" datatype="html">
+      <trans-unit id="5125203413999764563" datatype="html" xml:space="preserve">
         <source>Mobile header logo</source>
-        <target state="new">Mobile header logo</target>
+        <target state="translated">Logga för sidhuvud på mobil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">92,94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3127827011051783042" datatype="html">
+      <trans-unit id="3127827011051783042" datatype="html" xml:space="preserve">
         <source>Logo displayed in the header on small screens such as mobile devices</source>
-        <target state="new">Logo displayed in the header on small screens such as mobile devices</target>
+        <target state="translated">Loggan visas i sidhuvudet på små skärmar som till exempel på mobila enheter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5056137165350591880" datatype="html">
+      <trans-unit id="5056137165350591880" datatype="html" xml:space="preserve">
         <source>It will be resized to 48x48 pixels.</source>
-        <target state="new">It will be resized to 48x48 pixels.</target>
+        <target state="translated">Den skalas om till 48x48 pixlar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">100,101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1557050723140613812" datatype="html">
+      <trans-unit id="1557050723140613812" datatype="html" xml:space="preserve">
         <source>Social media logo</source>
-        <target state="new">Social media logo</target>
+        <target state="translated">Sociala medier-logga</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">114,116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1155642469786314151" datatype="html">
+      <trans-unit id="1155642469786314151" datatype="html" xml:space="preserve">
         <source>Default logo displayed on social media.</source>
-        <target state="new">Default logo displayed on social media.</target>
+        <target state="translated">Logga som visas i social medier-inlägg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8756577993740241555" datatype="html">
+      <trans-unit id="8756577993740241555" datatype="html" xml:space="preserve">
         <source>It will be resized to 1200x650 pixels.</source>
-        <target state="new">It will be resized to 1200x650 pixels.</target>
+        <target state="translated">Den skalas om till 1200x650 pixlar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">122,123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2910903458139645161" datatype="html">
+      <trans-unit id="2910903458139645161" datatype="html" xml:space="preserve">
         <source>Logos updated</source>
-        <target state="new">Logos updated</target>
+        <target state="translated">Loggorna är uppdaterade</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.ts</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8447390787456867619" datatype="html">
+      <trans-unit id="8447390787456867619" datatype="html" xml:space="preserve">
         <source>Process uploaded videos so that they are streamable on any device. Although this is costly in terms of resources, it is a critical part of PeerTube, so proceed with caution.</source>
-        <target state="new"> Process uploaded videos so that they are streamable on any device. Although this is costly in terms of resources, it is a critical part of PeerTube, so proceed with caution. </target>
+        <target state="translated">Bearbeta uppladdade videor så de kan strömmas till alla typer av enheter. Det är resurskrävande men en väsentlig del av PeerTube. Fortsätt därför med försiktighet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -10148,9 +10145,9 @@
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969113117715295994" datatype="html">
+      <trans-unit id="1969113117715295994" datatype="html" xml:space="preserve">
         <source>YOU AND YOUR PLATFORM</source>
-        <target state="new">YOU AND YOUR PLATFORM</target>
+        <target state="translated">OM TILLHANDAHÅLLAREN OCH PLATTFORMEN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">246,247</context>
@@ -10176,9 +10173,9 @@
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6377618413283681806" datatype="html">
+      <trans-unit id="6377618413283681806" datatype="html" xml:space="preserve">
         <source>Information updated.</source>
-        <target state="new">Information updated.</target>
+        <target state="translated">Informationen är uppdaterad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -10392,57 +10389,57 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6869761334286813295" datatype="html">
+      <trans-unit id="6869761334286813295" datatype="html" xml:space="preserve">
         <source>CUSTOMIZATION</source>
-        <target state="new">CUSTOMIZATION</target>
+        <target state="translated">ANPASSNINGAR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="246592664950440386" datatype="html">
+      <trans-unit id="246592664950440386" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes </target>
+        <target state="translated">Använd <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>tillägg &amp; teman<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för mer djupgående förändringar </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">40,42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6283491362360619064" datatype="html">
+      <trans-unit id="6283491362360619064" datatype="html" xml:space="preserve">
         <source>UI customization only applies if the user is using the default platform theme.</source>
-        <target state="new">UI customization only applies if the user is using the default platform theme.</target>
+        <target state="translated">UI-anpassningar tillämpas endast om användaren använder plattformens standardtema.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3907392983067010584" datatype="html">
+      <trans-unit id="3907392983067010584" datatype="html" xml:space="preserve">
         <source>You can't preview the changes because you aren't using your platform's default theme.</source>
-        <target state="new">You can't preview the changes because you aren't using your platform's default theme.</target>
+        <target state="translated">Du kan inte förhandsgranska ändringarna eftersom du inte använder plattformens standardtema.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8175005229347122523" datatype="html">
+      <trans-unit id="8175005229347122523" datatype="html" xml:space="preserve">
         <source>Current theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getCurrentThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Current theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getCurrentThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Aktuellt tema: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getCurrentThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">54,55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3909063823582797870" datatype="html">
+      <trans-unit id="3909063823582797870" datatype="html" xml:space="preserve">
         <source>Platform theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">Platform theme: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Plattformstema: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">55,56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2281003783374799495" datatype="html">
+      <trans-unit id="2281003783374799495" datatype="html" xml:space="preserve">
         <source>You can preview your UI customization but <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>don't forget to save your changes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> once you are happy with the results.</source>
-        <target state="new">You can preview your UI customization but <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>don't forget to save your changes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> once you are happy with the results.</target>
+        <target state="translated">Du kan förhandsgranska dina UI-anpassningar, men <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>glöm inte att spara ändringarna<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> när du är nöjd med resultatet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">61,62</context>
@@ -10456,17 +10453,17 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2040129064263999708" datatype="html">
+      <trans-unit id="2040129064263999708" datatype="html" xml:space="preserve">
         <source>⚠️ You don't have any external auth plugin enabled</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled</target>
+        <target state="translated">⚠️ Du har inget externt tillägg för autentisering påslaget</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2678071949007349214" datatype="html">
+      <trans-unit id="2678071949007349214" datatype="html" xml:space="preserve">
         <source>⚠️ You have multiple external auth plugins enabled</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled</target>
+        <target state="translated">⚠️ Du har flera tillägg för extern autentisering påslagna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">58,59</context>
@@ -10480,9 +10477,9 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8147283395759737895" datatype="html">
+      <trans-unit id="8147283395759737895" datatype="html" xml:space="preserve">
         <source>Display a message on your platform</source>
-        <target state="new"> Display a message on your platform </target>
+        <target state="translated">Visa ett meddelande på plattformen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">74,75</context>
@@ -10544,9 +10541,9 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3119016832984727691" datatype="html">
+      <trans-unit id="3119016832984727691" datatype="html" xml:space="preserve">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 == unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 == unlimited</target>
+        <target state="translated">När det totala antalet användare på plattformen når den här nivån slås nyregistreringar av. -1 == obegränsat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">162,164</context>
@@ -10560,9 +10557,9 @@
           <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8766972676494797493" datatype="html">
+      <trans-unit id="8766972676494797493" datatype="html" xml:space="preserve">
         <source>Signup won't be limited to a fixed number of users</source>
-        <target state="new">Signup won't be limited to a fixed number of users</target>
+        <target state="translated">Nyregistrering begränsas inte till ett visst antal användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">174,175</context>
@@ -10584,9 +10581,9 @@
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1980878931796709542" datatype="html">
+      <trans-unit id="1980878931796709542" datatype="html" xml:space="preserve">
         <source>Default video quota for a new user</source>
-        <target state="new">Default video quota for a new user</target>
+        <target state="translated">Videokvot för nya användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">197,199</context>
