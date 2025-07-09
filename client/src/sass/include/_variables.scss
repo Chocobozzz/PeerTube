@@ -204,7 +204,9 @@ $variables: (
   --alert-primary-bg: var(--alert-primary-bg),
   --alert-primary-border-color: var(--alert-primary-border-color),
   --embed-fg: var(--embed-fg),
-  --embed-big-play-bg: var(--embed-big-play-bg)
+  --embed-big-play-bg: var(--embed-big-play-bg),
+  --player-overlay-fg: var(--player-overlay-fg),
+  --player-overlay-bg: var(--player-overlay-bg)
 );
 
 // SASS type check our CSS variables

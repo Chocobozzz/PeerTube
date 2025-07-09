@@ -13,6 +13,7 @@ my-select-checkbox {
 .playlists {
   .pt-badge {
     max-width: 200px;
+    vertical-align: bottom;
 
     @include ellipsis;
   }

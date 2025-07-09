@@ -87,13 +87,16 @@ const playerKeys = {
   'Audio only': 'Audio only',
   'Sensitive content': 'Sensitive content',
   'This video contains sensitive content.': 'This video contains sensitive content.',
+  'This video contains sensitive content, including:': 'This video contains sensitive content, including:',
   'Learn more': 'Learn more',
   'Content warning': 'Content warning',
   'Violence': 'Violence',
   'Shocking Content': 'Shocking Content',
   'Explicit Sex': 'Explicit Sex',
   'Upload speed:': 'Upload speed:',
-  'Download speed:': 'Download speed:'
+  'Download speed:': 'Download speed:',
+  'Uploader note:': 'Uploader note:',
+  'Close': 'Close'
 }
 Object.assign(playerKeys, videojs)
 
