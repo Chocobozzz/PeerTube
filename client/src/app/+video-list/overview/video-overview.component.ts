@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { DisableForReuseHook, Notifier, User, UserService } from '@app/core'
+import { DisableForReuseHook, Notifier, ServerService, User, UserService } from '@app/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { InfiniteScrollerDirective } from '@app/shared/shared-main/common/infinite-scroller.directive'
@@ -28,6 +28,7 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
   private userService = inject(UserService)
   private overviewService = inject(OverviewService)
   private cd = inject(ChangeDetectorRef)
+  private server = inject(ServerService)
 
   readonly quickAccessContent = viewChild<ElementRef>('quickAccessContent')
 
@@ -155,9 +156,13 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
           }
 
           for (const value of overview.channels) {
+            const channelName = this.server.getHTMLConfig().client.videos.miniature.preferAuthorDisplayName
+              ? value.videos[0].channel.displayName
+              : value.videos[0].byVideoChannel
+
             this.objects.push({
-              buttonLabel: $localize`View the channel`,
-              label: value.videos[0].byVideoChannel,
+              buttonLabel: $localize`Browse ${channelName} channel`,
+              label: channelName,
               routerLink: [ '/c', value.videos[0].byVideoChannel ],
               queryParams: {},
               videos: value.videos,

@@ -1,8 +1,9 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
-.section-header {
+.section-header,
+my-button {
   // make the element span a full grid row within .videos grid
   grid-column: 1 / -1;
 }
@@ -10,7 +11,7 @@
 .section-title,
 .section-header {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .section-title {
@@ -30,7 +31,6 @@
 }
 
 .quick-access-links {
-
   a {
     color: pvar(--fg-300);
     text-decoration: underline;
