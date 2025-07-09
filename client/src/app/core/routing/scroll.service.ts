@@ -1,5 +1,6 @@
 import { ViewportScroller } from '@angular/common'
-import { ApplicationRef, Injectable, inject } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
+import { Scroll } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { pairwise } from 'rxjs'
@@ -12,7 +13,6 @@ const debugLogger = debug('peertube:main:ScrollService')
 export class ScrollService {
   private viewportScroller = inject(ViewportScroller)
   private peertubeRouter = inject(PeerTubeRouterService)
-  private appRef = inject(ApplicationRef)
 
   private resetScroll = true
 
@@ -68,8 +68,12 @@ export class ScrollService {
   }
 
   private consumeScroll () {
+    let unhandledScrollEvent: Scroll | undefined
+
     // Handle anchors/restore position
     this.peertubeRouter.getScrollEvents().subscribe(e => {
+      unhandledScrollEvent = undefined
+
       // scrollToAnchor first to preserve anchor position when using history navigation
       if (e.anchor) {
         debugLogger('Scroll to anchor.', { e, resetScroll: this.resetScroll })
@@ -80,7 +84,15 @@ export class ScrollService {
       }
 
       if (e.position) {
-        setTimeout(() => this.viewportScroller.scrollToPosition(e.position))
+        debugLogger('Scroll to position.', { e, resetScroll: this.resetScroll })
+
+        setTimeout(() => {
+          this.viewportScroller.scrollToPosition(e.position)
+          if (e.position[1] > document.documentElement.scrollHeight) {
+            debugLogger('Could not scroll to position, marking scroll event as unhandled')
+            unhandledScrollEvent = e
+          }
+        })
 
         return
       }
@@ -91,5 +103,15 @@ export class ScrollService {
         return this.viewportScroller.scrollToPosition([ 0, 0 ])
       }
     })
+
+    new ResizeObserver(() => {
+      if (!unhandledScrollEvent) return
+      if (unhandledScrollEvent.position[1] > document.documentElement.scrollHeight) return
+
+      debugLogger('Can now scroll to position, handling previous scroll event')
+
+      this.viewportScroller.scrollToPosition(unhandledScrollEvent.position)
+      unhandledScrollEvent = undefined
+    }).observe(document.documentElement)
   }
 }
