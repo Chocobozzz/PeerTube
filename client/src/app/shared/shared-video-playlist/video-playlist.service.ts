@@ -112,7 +112,11 @@ export class VideoPlaylistService {
 
     let params = new HttpParams()
 
-    const restPagination = options.restPagination ?? this.restService.componentToRestPagination(options.componentPagination)
+    let restPagination = options.restPagination
+    if (!restPagination && options.componentPagination) {
+      restPagination = this.restService.componentToRestPagination(options.componentPagination)
+    }
+
     params = this.restService.addRestGetParams(params, restPagination, sort)
 
     if (search) params = this.restService.addObjectParams(params, { search })
