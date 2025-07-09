@@ -433,6 +433,7 @@ export class PeerTubePlayer {
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
       poster: this.currentLoadOptions.poster,
+      preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,
       playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
