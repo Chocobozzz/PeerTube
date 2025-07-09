@@ -103,6 +103,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return this.serverConfig.email.enabled === false
   }
 
+  canUploadByDefault () {
+    return this.serverConfig.user.videoQuota !== 0 && this.serverConfig.user.videoQuotaDaily !== 0
+  }
+
   ngOnInit () {
     const snapshot = this.route.snapshot
 
