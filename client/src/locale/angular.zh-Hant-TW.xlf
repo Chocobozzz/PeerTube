@@ -6635,97 +6635,97 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5342918468732313132" datatype="html">
+      <trans-unit id="5342918468732313132" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</target>
+        <target state="translated">&lt;strong&gt;防止&lt;/strong&gt;新使用者&lt;strong&gt;上傳影片&lt;/strong&gt;（可被管理員變更）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019771625870459687" datatype="html">
+      <trans-unit id="4019771625870459687" datatype="html" xml:space="preserve">
         <source>Will &lt;strong&gt;not limit the amount of videos&lt;/strong&gt; new users can upload</source>
-        <target state="new">Will &lt;strong&gt;not limit the amount of videos&lt;/strong&gt; new users can upload</target>
+        <target state="translated">&lt;strong&gt;不會限制&lt;/strong&gt;新使用者可以上傳的影片數量</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6750683208657917557" datatype="html">
+      <trans-unit id="6750683208657917557" datatype="html" xml:space="preserve">
         <source>Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</source>
-        <target state="new">Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</target>
+        <target state="translated">設定新使用者的&lt;strong&gt;影片配額<x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt;（可被管理員變更）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5663976721315204489" datatype="html">
+      <trans-unit id="5663976721315204489" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</target>
+        <target state="translated">&lt;strong&gt;允許&lt;/strong&gt;您的使用者從遠端平台（YouTube、Vimeo 等）&lt;strong&gt;匯入與同步&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4936759942517379026" datatype="html">
+      <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</target>
+        <target state="translated">&lt;strong&gt;防止&lt;/strong&gt;您的使用者從遠端平台&lt;strong&gt;匯入影片&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7110073515390971316" datatype="html">
+      <trans-unit id="7110073515390971316" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</target>
+        <target state="translated">&lt;strong&gt;允許&lt;/strong&gt;您的使用者使用 &lt;strong&gt;Livechat&lt;/strong&gt; 外掛程式&lt;strong&gt;串流直播&lt;/strong&gt;並與觀眾聊天</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3769529336397241157" datatype="html">
+      <trans-unit id="3769529336397241157" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;防止&lt;/strong&gt;您的使用者執行&lt;strong&gt;直播串流&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3112814596265051794" datatype="html">
+      <trans-unit id="3112814596265051794" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</source>
-        <target state="new">Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</target>
+        <target state="translated">設定&lt;strong&gt;預設影片隱私&lt;/strong&gt;為&lt;strong&gt;內部&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">286</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4274451041982561878" datatype="html">
+      <trans-unit id="4274451041982561878" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</source>
-        <target state="new">Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</target>
+        <target state="translated">設定&lt;strong&gt;預設影片隱私&lt;/strong&gt;為&lt;strong&gt;公開&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8003967585929454038" datatype="html">
+      <trans-unit id="8003967585929454038" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</source>
-        <target state="new">&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</target>
+        <target state="translated">預設要求新影片留言&lt;strong&gt;必須獲得核准&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">303</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4418462159149044975" datatype="html">
+      <trans-unit id="4418462159149044975" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">預設為匿名與新使用者&lt;strong&gt;啟用 P2P 串流&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="168249800849144901" datatype="html">
+      <trans-unit id="168249800849144901" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">預設為匿名與新使用者&lt;strong&gt;停用 P2P 串流&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">325</context>
