@@ -1749,9 +1749,9 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3372646000533908418" datatype="html">
+      <trans-unit id="3372646000533908418" datatype="html" xml:space="preserve">
         <source>Subscribe with a remote account:</source>
-        <target state="translated">Dùng tài khoản ở một máy chủ khác:</target>
+        <target state="translated">Dùng tài khoản ở máy chủ khác:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">57</context>
@@ -3454,7 +3454,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html" xml:space="preserve">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="translated">Thiết lập chỉ có hiệu lực áp dụng trên máy chủ này.</target>
+        <target state="translated">Thiết lập chỉ có hiệu lực trên máy chủ này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -4301,9 +4301,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5146398958364876914">
+      <trans-unit id="5146398958364876914" xml:space="preserve">
         <source>Sort</source>
-        <target>Xếp</target>
+        <target state="translated">Xếp theo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">7</context>
@@ -12600,7 +12600,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2939244215860150958" datatype="html" xml:space="preserve">
         <source>Update your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>default settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Cập nhật <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>thiết lập mặc định<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Hãy <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-languages-subtitles&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>đặt mặc định<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">76</context>
@@ -12624,7 +12624,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2128860191118589382" datatype="html" xml:space="preserve">
         <source>Only videos from this platform</source>
-        <target state="translated">Chỉ video từ nền tảng này</target>
+        <target state="translated">Từ máy chủ này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -12632,7 +12632,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2237691602500209129" datatype="html" xml:space="preserve">
         <source>Videos from all platforms</source>
-        <target state="translated">Video từ nền tảng khác</target>
+        <target state="translated">Từ mọi máy chủ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -15042,7 +15042,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1753457183754409152" datatype="html" xml:space="preserve">
         <source>Displayed videos</source>
-        <target state="translated">Video hiển thị</target>
+        <target state="translated">Hiển thị video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">116</context>
@@ -15050,7 +15050,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3029609593829675670" datatype="html" xml:space="preserve">
         <source>Content type</source>
-        <target state="translated">Loại nội dung</target>
+        <target state="translated">Nội dung video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">123</context>
@@ -15066,7 +15066,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1840036002282013872" datatype="html" xml:space="preserve">
         <source>All platforms</source>
-        <target state="translated">Toàn bộ nền tảng</target>
+        <target state="translated">Toàn bộ máy chủ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">211</context>
@@ -23488,7 +23488,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="358453340357015692" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</source>
-        <target state="translated"><x id="ICU" xid="3031081109030852848" equiv-text="{ totalRecords, plural, =0 {Chưa có danh sách  phát} =1 {1 danh sách phát} other {{{ totalRecords | myNumberFormatter }} playlists}}"/> trong <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> kênh</target>
+        <target state="translated"><x id="ICU" xid="3031081109030852848" equiv-text="{ totalRecords, plural, =0 {Chưa có danh sách phát} =1 {1 danh sách phát} other {{{ totalRecords | myNumberFormatter }} danh sách phát}}"/> trong <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> kênh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">34,35</context>
