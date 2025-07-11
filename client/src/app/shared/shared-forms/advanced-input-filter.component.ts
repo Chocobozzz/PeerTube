@@ -163,6 +163,8 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
 
   private addFilterToSearch (search: string, newFilter: AdvancedInputFilterChild) {
     const filterTokens = this.restService.tokenizeString(newFilter.value)
+
+    const tokensToAdd: string[] = []
     let searchTokens = this.restService.tokenizeString(search)
 
     for (const filterToken of filterTokens) {
@@ -170,10 +172,10 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
 
       // Tokenize search and remove a potential existing filter
       searchTokens = searchTokens.filter(t => !t.startsWith(prefix))
-      searchTokens.push(filterToken)
+      tokensToAdd.push(filterToken)
     }
 
-    return searchTokens.join(' ')
+    return searchTokens.concat(tokensToAdd).join(' ')
   }
 
   private parseFilters (search: string) {
