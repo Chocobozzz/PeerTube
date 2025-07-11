@@ -6773,7 +6773,7 @@
       </trans-unit>
       <trans-unit id="7258464719094694611" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</source>
-        <target state="translated">&lt;strong&gt;啟用自動轉錄&lt;/strong&gt;以製作影片的字幕並改善無障礙程度。</target>
+        <target state="translated">&lt;strong&gt;啟用自動轉錄&lt;/strong&gt;以製作影片的字幕並改善無障礙程度</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">429</context>
@@ -16379,9 +16379,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1217286919775405184" datatype="html">
+      <trans-unit id="1217286919775405184" datatype="html" xml:space="preserve">
         <source>Deleted account</source>
-        <target state="new">Deleted account</target>
+        <target state="translated">已刪除的帳號</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">31,32</context>
@@ -16880,9 +16880,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9215315749822099607" datatype="html">
+      <trans-unit id="9215315749822099607" datatype="html" xml:space="preserve">
         <source>jobs per page</source>
-        <target state="new">jobs per page</target>
+        <target state="translated">每頁任務數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -16892,9 +16892,9 @@
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5118360887574741206" datatype="html">
+      <trans-unit id="5118360887574741206" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No jobs} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No jobs} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有任務} =1 {1 個任務} other {<x id="INTERPOLATION"/> 個任務}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">14</context>
@@ -16992,9 +16992,9 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4116911651502837995" datatype="html">
+      <trans-unit id="4116911651502837995" datatype="html" xml:space="preserve">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">檔案</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -17160,9 +17160,9 @@
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5182966734308933786" datatype="html">
+      <trans-unit id="5182966734308933786" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No job} =1 {1 job} other {<x id="INTERPOLATION"/> jobs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有任務} =1 {1 個任務} other {<x id="INTERPOLATION"/> 個任務}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">13</context>
@@ -17476,17 +17476,17 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="176106920593910856" datatype="html">
+      <trans-unit id="176106920593910856" datatype="html" xml:space="preserve">
         <source>registrations per page</source>
-        <target state="new">registrations per page</target>
+        <target state="translated">每頁註冊數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7051393941308395687" datatype="html">
+      <trans-unit id="7051393941308395687" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No registration} =1 {1 registration} other {<x id="INTERPOLATION"/> registrations}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No registration} =1 {1 registration} other {<x id="INTERPOLATION"/> registrations}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有註冊} =1 {1 個註冊} other {<x id="INTERPOLATION"/> 個註冊}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">12</context>
@@ -17540,17 +17540,17 @@
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8537094305418766438" datatype="html">
+      <trans-unit id="8537094305418766438" datatype="html" xml:space="preserve">
         <source>users per page</source>
-        <target state="new">users per page</target>
+        <target state="translated">每頁使用者數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4878174417621522676" datatype="html">
+      <trans-unit id="4878174417621522676" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No users} =1 {1 user} other {<x id="INTERPOLATION"/> users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No users} =1 {1 user} other {<x id="INTERPOLATION"/> users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有使用者} =1 {1 位使用者} other {<x id="INTERPOLATION"/> 位使用者}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -17752,9 +17752,9 @@
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2159390007131356275" datatype="html">
+      <trans-unit id="2159390007131356275" datatype="html" xml:space="preserve">
         <source>Set email as verified</source>
-        <target state="new">Set email as verified</target>
+        <target state="translated">將電子郵件設定為已驗證</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">147</context>
@@ -17936,17 +17936,17 @@
           <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9193233340511272717" datatype="html">
+      <trans-unit id="9193233340511272717" datatype="html" xml:space="preserve">
         <source>servers per page</source>
-        <target state="new">servers per page</target>
+        <target state="translated">每頁伺服器數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2868988866941935812" datatype="html">
+      <trans-unit id="2868988866941935812" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No server} =1 {1 server} other {<x id="INTERPOLATION"/> servers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No server} =1 {1 server} other {<x id="INTERPOLATION"/> servers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有伺服器} =1 {1 臺伺服器} other {<x id="INTERPOLATION"/> 臺伺服器}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.html</context>
           <context context-type="linenumber">11</context>
@@ -17984,17 +17984,17 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3944604937816174486" datatype="html">
+      <trans-unit id="3944604937816174486" datatype="html" xml:space="preserve">
         <source>entries per page</source>
-        <target state="new">entries per page</target>
+        <target state="translated">每頁條目數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7643080703382863606" datatype="html">
+      <trans-unit id="7643080703382863606" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有條目} =1 {1 個條目} other {<x id="INTERPOLATION"/> 個條目}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context>
           <context context-type="linenumber">11</context>
@@ -18168,9 +18168,9 @@
           <context context-type="linenumber">31,32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9105013661444128554" datatype="html">
+      <trans-unit id="9105013661444128554" datatype="html" xml:space="preserve">
         <source>Sexually explicit content</source>
-        <target state="new">Sexually explicit content</target>
+        <target state="translated">露骨的性內容</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">43,44</context>
@@ -22776,9 +22776,9 @@
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3577095634541271860" datatype="html">
+      <trans-unit id="3577095634541271860" datatype="html" xml:space="preserve">
         <source>comments per page</source>
-        <target state="new">comments per page</target>
+        <target state="translated">每頁留言數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -23496,41 +23496,41 @@
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6426647253249467388" datatype="html">
+      <trans-unit id="6426647253249467388" datatype="html" xml:space="preserve">
         <source>Filter by a channel</source>
-        <target state="new">Filter by a channel</target>
+        <target state="translated">按頻道篩選</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5434235221870482011" datatype="html">
+      <trans-unit id="5434235221870482011" datatype="html" xml:space="preserve">
         <source>This allows you to reorder playlists assigned to it</source>
-        <target state="new">This allows you to reorder playlists assigned to it</target>
+        <target state="translated">這可以讓您重新排列指定給它的播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3371925892115176358" datatype="html">
+      <trans-unit id="3371925892115176358" datatype="html" xml:space="preserve">
         <source>playlists per page</source>
-        <target state="new">playlists per page</target>
+        <target state="translated">每頁播放清單數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3108012194945806606" datatype="html">
+      <trans-unit id="3108012194945806606" datatype="html" xml:space="preserve">
         <source>Drag and drop this row to reorder playlists in your channel</source>
-        <target state="new">Drag and drop this row to reorder playlists in your channel</target>
+        <target state="translated">拖放此列可重新排序頻道中的播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">29,30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7319525983375433281" datatype="html">
+      <trans-unit id="7319525983375433281" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有播放清單} =1 {1 個播放清單} other {<x id="INTERPOLATION"/> 個播放清單}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">34</context>
@@ -23540,17 +23540,17 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="358453340357015692" datatype="html">
+      <trans-unit id="358453340357015692" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</source>
-        <target state="new"><x id="ICU" equiv-text="{ totalRecords, plural, =0 {No playlist} =1 {1 playlist} other {{{ totalRecords | myNumberFormatter }} playlists}}" xid="3031081109030852848"/> in <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> channel</target>
+        <target state="translated"><x id="ICU" xid="3031081109030852848" equiv-text="{ totalRecords, plural, =0 {沒有播放清單} =1 {1 個播放清單} other {{{ totalRecords | myNumberFormatter }} 個播放清單}}"/>在 <x id="INTERPOLATION_1" equiv-text="{{ getFilteredChannel().displayName }}"/> 頻道中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4311110442674793732" datatype="html">
+      <trans-unit id="4311110442674793732" datatype="html" xml:space="preserve">
         <source>Search your playlists</source>
-        <target state="new">Search your playlists</target>
+        <target state="translated">搜尋您的播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -23772,17 +23772,17 @@
           <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4798270796894950278" datatype="html">
+      <trans-unit id="4798270796894950278" datatype="html" xml:space="preserve">
         <source>runners per page</source>
-        <target state="new">runners per page</target>
+        <target state="translated">每頁執行器數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1870557085021370018" datatype="html">
+      <trans-unit id="1870557085021370018" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No runner} =1 {1 runner} other {<x id="INTERPOLATION"/> runners}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No runner} =1 {1 runner} other {<x id="INTERPOLATION"/> runners}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有執行器} =1 {1 個執行器} other {<x id="INTERPOLATION"/> 個執行器}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -23812,17 +23812,17 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6730106167108982068" datatype="html">
+      <trans-unit id="6730106167108982068" datatype="html" xml:space="preserve">
         <source>tokens per page</source>
-        <target state="new">tokens per page</target>
+        <target state="translated">每頁權杖數</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6150953528522677928" datatype="html">
+      <trans-unit id="6150953528522677928" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No token} =1 {1 token} other {<x id="INTERPOLATION"/> tokens}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No token} =1 {1 token} other {<x id="INTERPOLATION"/> tokens}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有權杖} =1 {1 個權杖} other {<x id="INTERPOLATION"/> 個權杖}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -24160,17 +24160,17 @@
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4655201341187940011" datatype="html">
+      <trans-unit id="4655201341187940011" datatype="html" xml:space="preserve">
         <source>No videos found matching your filters.</source>
-        <target state="new">No videos found matching your filters.</target>
+        <target state="translated">沒有找到符合您篩選條件的影片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4762602763077950998" datatype="html">
+      <trans-unit id="4762602763077950998" datatype="html" xml:space="preserve">
         <source>No videos found in selected channels.</source>
-        <target state="new">No videos found in selected channels.</target>
+        <target state="translated">在選取的頻道中找不到影片。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">220</context>
