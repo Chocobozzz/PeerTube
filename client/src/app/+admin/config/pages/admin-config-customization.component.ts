@@ -6,6 +6,7 @@ import { CanComponentDeactivate, ServerService, ThemeService } from '@app/core'
 import { BuildFormArgumentTyped, FormDefaultTyped, FormReactiveMessagesTyped } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveErrorsTyped, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
+import { SelectCustomValueComponent } from '@app/shared/shared-forms/select/select-custom-value.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { CustomConfig } from '@peertube/peertube-models'
@@ -66,6 +67,8 @@ type Form = {
   }>
 }
 
+type FieldType = 'color' | 'radius'
+
 @Component({
   selector: 'my-admin-config-customization',
   templateUrl: './admin-config-customization.component.html',
@@ -80,7 +83,8 @@ type Form = {
     AlertComponent,
     SelectOptionsComponent,
     HelpComponent,
-    PeertubeCheckboxComponent
+    PeertubeCheckboxComponent,
+    SelectCustomValueComponent
   ]
 })
 export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -99,7 +103,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     inputId: string
     name: ThemeCustomizationKey
     description?: string
-    type: 'color' | 'pixels'
+    type: FieldType
+    items?: SelectOptionsItem[]
   }[] = []
 
   availableThemes: SelectOptionsItem[]
@@ -109,7 +114,10 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
 
   private customConfigSub: Subscription
 
-  private readonly formFieldsObject: Record<ThemeCustomizationKey, { label: string, description?: string, type: 'color' | 'pixels' }> = {
+  private readonly formFieldsObject: Record<
+    ThemeCustomizationKey,
+    { label: string, description?: string, type: FieldType, items?: SelectOptionsItem[] }
+  > = {
     primaryColor: { label: $localize`Primary color`, type: 'color' },
     foregroundColor: { label: $localize`Foreground color`, type: 'color' },
     backgroundColor: { label: $localize`Background color`, type: 'color' },
@@ -120,10 +128,31 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     },
     menuForegroundColor: { label: $localize`Menu foreground color`, type: 'color' },
     menuBackgroundColor: { label: $localize`Menu background color`, type: 'color' },
-    menuBorderRadius: { label: $localize`Menu border radius`, type: 'pixels' },
+
+    menuBorderRadius: {
+      label: $localize`Menu rounding`,
+      type: 'radius',
+      items: [
+        { id: '0', label: $localize`Not rounded` },
+        { id: '6px', label: $localize`Slightly rounded` },
+        { id: '14px', label: $localize`Moderately rounded (default)` },
+        { id: '60px', label: $localize`Rounded` }
+      ]
+    },
+
     headerForegroundColor: { label: $localize`Header foreground color`, type: 'color' },
     headerBackgroundColor: { label: $localize`Header background color`, type: 'color' },
-    inputBorderRadius: { label: $localize`Input border radius`, type: 'pixels' }
+
+    inputBorderRadius: {
+      label: $localize`Input rounding`,
+      type: 'radius',
+      items: [
+        { id: '0', label: $localize`Not rounded` },
+        { id: '4px', label: $localize`Slightly rounded (default)` },
+        { id: '10px', label: $localize`Moderately rounded` },
+        { id: '20px', label: $localize`Rounded` }
+      ]
+    }
   }
 
   ngOnInit () {
@@ -191,7 +220,8 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
         label: info.label,
         type: info.type,
         inputId: `themeCustomization${capitalizeFirstLetter(name)}`,
-        name
+        name,
+        items: info.items
       })
 
       if (!this.customConfig.theme.customization[name]) {
@@ -324,21 +354,9 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
     }, {} as Record<ThemeCustomizationKey, string>)
   }
 
-  isCustomizationFieldNumber (field: ThemeCustomizationKey) {
-    return this.isNumber(this.getCustomizationControl(field).value)
-  }
-
-  private isNumber (value: string | number) {
-    return typeof value === 'number' || /^\d+$/.test(value)
-  }
-
   // ---------------------------------------------------------------------------
 
   private formatCustomizationFieldForForm (field: ThemeCustomizationKey, value: string) {
-    if (this.formFieldsObject[field].type === 'pixels') {
-      return this.themeService.formatPixelsForForm(value)
-    }
-
     if (this.formFieldsObject[field].type === 'color') {
       return this.themeService.formatColorForForm(value)
     }
@@ -361,10 +379,6 @@ export class AdminConfigCustomizationComponent implements OnInit, OnDestroy, Can
 
   private formatCustomizationFieldForTheme (field: ThemeCustomizationKey, value: string) {
     if (this.customizationResetFields.has(field)) return null
-
-    if (this.formFieldsObject[field].type === 'pixels' && this.isNumber(value)) {
-      value = value + 'px'
-    }
 
     return value
   }

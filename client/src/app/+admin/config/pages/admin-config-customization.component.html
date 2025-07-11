@@ -82,18 +82,15 @@
 
               @if (field.type === 'color') {
                 <p-colorpicker class="d-block" [inputId]="field.inputId" [formControlName]="field.name" />
-              } @else if (field.type === 'pixels' && isCustomizationFieldNumber(field.name)) {
-                <div class="number-with-unit">
-                  <input
-                    type="number"
-                    [id]="field.inputId"
-                    [name]="field.inputId"
-                    class="form-control"
-                    [formControlName]="field.name"
-                    [ngClass]="{ 'input-error': formErrors.theme.customization[field.name]}"
-                  />
-                  <span>pixels</span>
-                </div>
+              } @else if (field.type === 'radius') {
+                <my-select-custom-value
+                  [labelId]="field.inputId"
+                  [inputId]="field.inputId"
+                  [items]="field.items"
+                  [formControlName]="field.name"
+                  inputType="text"
+                  [clearable]="false"
+                ></my-select-custom-value>
               } @else {
                 <input
                   type="text"
