@@ -8,4 +8,5 @@ export interface LiveVideoCreate extends VideoCreate {
 
   saveReplay?: boolean
   replaySettings?: { privacy: VideoPrivacyType }
+  scheduledAt?: Date | string
 }

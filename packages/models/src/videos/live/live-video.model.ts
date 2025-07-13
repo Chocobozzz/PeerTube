@@ -11,4 +11,5 @@ export interface LiveVideo {
   replaySettings?: { privacy: VideoPrivacyType }
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
+  scheduledAt?: Date | string
 }

@@ -34,6 +34,7 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   aspectRatio: number | null
 
   isLive: boolean
+  scheduledAt?: Date | string
 
   thumbnailPath: string
   thumbnailUrl?: string

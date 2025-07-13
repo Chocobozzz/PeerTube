@@ -11525,6 +11525,11 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+        scheduledAt:
+          description: Date when the stream is scheduled to air at
+          type: string
+          format: date-time
+          nullable: true
 
     LiveVideoResponse:
       properties:

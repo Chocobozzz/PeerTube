@@ -203,6 +203,7 @@ export function getLiveAttributesFromObject (video: MVideoId, videoObject: Video
     saveReplay: videoObject.liveSaveReplay,
     permanentLive: videoObject.permanentLive,
     latencyMode: videoObject.latencyMode,
+    scheduledAt: videoObject.liveScheduledAt ? new Date(videoObject.liveScheduledAt) : null,
     videoId: video.id
   }
 }

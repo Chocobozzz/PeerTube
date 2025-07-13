@@ -44,7 +44,7 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   inputFilename: string
 }
 
-type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings'> & {
+type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'scheduledAt'> & {
   streamKey?: string
 }
 
@@ -189,7 +189,8 @@ export class LocalVideoCreator {
             saveReplay: this.liveAttributes.saveReplay || false,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
-            streamKey: this.liveAttributes.streamKey || buildUUID()
+            streamKey: this.liveAttributes.streamKey || buildUUID(),
+            scheduledAt: this.liveAttributes.scheduledAt ? new Date(this.liveAttributes.scheduledAt) : null,
           })
 
           if (videoLive.saveReplay) {

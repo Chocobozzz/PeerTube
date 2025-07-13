@@ -106,6 +106,11 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
   if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
+  if (body.scheduledAt !== undefined) {
+    videoLive.scheduledAt = body.scheduledAt
+      ? new Date(body.scheduledAt)
+      : null
+  }
 
   video.VideoLive = await videoLive.save()
 
@@ -164,7 +169,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings' ]),
+    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'scheduledAt']),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

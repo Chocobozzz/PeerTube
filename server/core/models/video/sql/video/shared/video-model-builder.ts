@@ -75,6 +75,7 @@ export class VideoModelBuilder {
 
       this.setUserHistory(row, videoModel)
       this.addThumbnail(row, videoModel)
+      this.setLive(row, videoModel)
 
       const channelActor = videoModel.VideoChannel?.Actor
       if (channelActor) {
@@ -100,7 +101,6 @@ export class VideoModelBuilder {
         this.addTracker(row, videoModel)
         this.setBlacklisted(row, videoModel)
         this.setScheduleVideoUpdate(row, videoModel)
-        this.setLive(row, videoModel)
       } else {
         if (include & VideoInclude.BLACKLISTED) {
           this.setBlacklisted(row, videoModel)

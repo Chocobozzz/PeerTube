@@ -236,7 +236,7 @@ describe('Test live', function () {
           name: 'live scheduled',
           channelId: servers[0].store.channel.id,
           privacy: VideoPrivacy.PUBLIC,
-          originallyPublishedAt: scheduledForDate,
+          scheduledAt: scheduledForDate,
         }
       })
       liveVideoUUID = live.uuid
@@ -246,7 +246,7 @@ describe('Test live', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: liveVideoUUID })
 
-        expect(video.originallyPublishedAt).to.equal(scheduledForDate)
+        expect(video.scheduledAt).to.equal(scheduledForDate)
       }
     })
 

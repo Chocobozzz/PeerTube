@@ -94,6 +94,10 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       ? video.originallyPublishedAt.toISOString()
       : null,
 
+    liveScheduledAt: video.VideoLive?.scheduledAt
+      ? video.VideoLive.scheduledAt.toISOString()
+      : null,
+
     updated: video.updatedAt.toISOString(),
 
     uploadDate: video.inputFileUpdatedAt?.toISOString(),

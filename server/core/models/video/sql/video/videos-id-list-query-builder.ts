@@ -159,6 +159,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     // Only list published videos
     if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE)) {
+      if (options.includeScheduledLive) {
+        this.joinLive()
+      }
       this.whereStateAvailable(options.includeScheduledLive ?? false)
     }
 
@@ -350,12 +353,18 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.videoPlaylistId = playlistId
   }
 
+  private joinLive () {
+    this.joins.push(
+      'LEFT OUTER JOIN "videoLive" ON "video"."id" = "videoLive"."videoId"'
+    )
+  }
+
   private whereStateAvailable (includeScheduledLive: boolean) {
     let or = [];
     or.push(`"video"."state" = ${VideoState.PUBLISHED}`)
     or.push(`("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false)`)
     if (includeScheduledLive) {
-      or.push(`("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "video"."originallyPublishedAt" IS NOT NULL)`)
+      or.push(`("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "videoLive"."scheduledAt" IS NOT NULL)`)
     }
     this.and.push(`(${or.join(' OR ')})`)
   }
