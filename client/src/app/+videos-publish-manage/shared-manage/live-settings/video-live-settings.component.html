@@ -92,6 +92,31 @@
             {{ formErrors.latencyMode }}
           </div>
         </div>
+
+        <div class="form-group">
+          <div class="label-container">
+            <label i18n for="scheduledAt">Live scheduled date</label>
+
+            <button i18n class="reset-button reset-button-small" (click)="resetField('scheduledAt')" *ngIf="hasScheduledDate()">
+              Reset
+            </button>
+          </div>
+
+          <div class="form-group-description" i18n>
+            This date is used for displaying the live in your channel when it's not currently streaming. Scheduling a live does not prevent you from starting the live at a different time.
+          </div>
+
+          <p-datepicker
+            inputId="scheduledAt" formControlName="scheduledAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
+            [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+            baseZIndex="20000"
+          >
+          </p-datepicker>
+
+          <div *ngIf="formErrors.scheduledAt" class="form-error" role="alert">
+            {{ formErrors.scheduledAt }}
+          </div>
+        </div>
       </div>
     </div>
   </div>

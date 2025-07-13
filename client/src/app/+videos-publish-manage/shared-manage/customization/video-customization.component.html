@@ -19,11 +19,7 @@
 
       <div class="form-group originally-published-at">
         <div class="label-container">
-          @if (!videoEdit.getLive()) {
-            <label i18n for="originallyPublishedAt">Original publication date</label>
-          } @else {
-            <label i18n for="originallyPublishedAt">Live scheduled date</label>
-          }
+          <label i18n for="originallyPublishedAt">Original publication date</label>
 
           <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')" *ngIf="hasPublicationDate()">
             Reset

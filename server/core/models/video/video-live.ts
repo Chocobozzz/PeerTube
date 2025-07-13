@@ -68,6 +68,10 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
   @Column
   latencyMode: LiveVideoLatencyModeType
 
+  @AllowNull(true)
+  @Column
+  scheduledAt: Date
+
   @CreatedAt
   createdAt: Date
 
@@ -189,6 +193,7 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     return {
       ...privateInformation,
 
+      scheduledAt: this.scheduledAt,
       permanentLive: this.permanentLive,
       saveReplay: this.saveReplay,
       replaySettings,

@@ -244,6 +244,7 @@ export type MVideoFormattable =
   & PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>>
   & PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
   & PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
+  & PickWithOpt<VideoModel, 'VideoLive', Pick<MVideoLive, 'scheduledAt'>>
 
 export type MVideoFormattableDetails =
   & MVideoFormattable

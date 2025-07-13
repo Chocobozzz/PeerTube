@@ -23,6 +23,7 @@ export type VideoThumbnailInput = Pick<
   | 'thumbnailUrl'
   | 'userHistory'
   | 'originallyPublishedAt'
+  | 'scheduledAt'
 >
 
 @Component({
@@ -89,11 +90,11 @@ export class VideoThumbnailComponent implements OnChanges {
   }
 
   isScheduledLive () {
-    return this.video().state?.id === VideoState.WAITING_FOR_LIVE && this.video().originallyPublishedAt !== null
+    return this.video().state?.id === VideoState.WAITING_FOR_LIVE && this.video().scheduledAt !== null
   }
 
   scheduledLiveDate () {
-    return new Date(this.video().originallyPublishedAt)
+    return new Date(this.video().scheduledAt)
   }
 
   getImageUrl () {
