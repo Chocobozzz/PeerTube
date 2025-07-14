@@ -21400,33 +21400,33 @@
           <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7556792076818503558" datatype="html">
+      <trans-unit id="7556792076818503558" datatype="html" xml:space="preserve">
         <source>violence</source>
-        <target state="new">violence</target>
+        <target state="translated">nasilje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">556</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8977658296907974818" datatype="html">
+      <trans-unit id="8977658296907974818" datatype="html" xml:space="preserve">
         <source>explicit sex</source>
-        <target state="new">explicit sex</target>
+        <target state="translated">eksplicitni seks</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">560</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2249128431249193118" datatype="html">
+      <trans-unit id="2249128431249193118" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content</source>
-        <target state="new">This video contains sensitive content</target>
+        <target state="translated">Ovaj video sadrži osjetljiv sadržaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">564</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189036340433233769" datatype="html">
+      <trans-unit id="4189036340433233769" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></source>
-        <target state="new">This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></target>
+        <target state="translated">Ovaj video sadrži osjetljiv sadržaj: <x id="PH" equiv-text="flags.join(' - ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">567</context>
