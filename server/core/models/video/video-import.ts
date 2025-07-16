@@ -12,7 +12,8 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  Is, Table,
+  Is,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports.js'
@@ -47,7 +48,6 @@ const defaultVideoScope = () => {
     }
   ]
 }))
-
 @Table({
   tableName: 'videoImport',
   indexes: [
@@ -214,17 +214,9 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
         targetUrl,
         state: {
           [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
-        }
-      },
-      include: [
-        {
-          model: VideoModel,
-          required: true,
-          where: {
-            channelId
-          }
-        }
-      ]
+        },
+        videoChannelSyncId: channelId
+      }
     })
 
     return !!element
