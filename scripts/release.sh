@@ -141,10 +141,12 @@ find dist/ packages/core-utils/dist/ \
 
       # Rebuild properly the server, with the declaration files
       npm run build:server
+
       # Release types package
-      npm run generate-types-package "$version"
-      cd packages/types-generator/dist
-      npm publish --access public
+      (
+        npm run generate-types-package "$version"
+        cd packages/types-generator/dist && npm publish --access public
+      )
 
       scp "$tar_name" "$tar_name.asc" framasoft_builds_joinpeertube@builds.joinpeertube.org:/var/www/clients/client1/web30/web/release
   fi
