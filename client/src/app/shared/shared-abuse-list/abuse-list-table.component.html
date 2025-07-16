@@ -106,7 +106,7 @@
       </button>
     </td>
 
-    <td *ngIf="isAdminView()" class="internal-note max-width-300px" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
+    <td *ngIf="isAdminView()" class="internal-note max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">
       {{ abuse.moderationComment }}
     </td>
   </ng-template>

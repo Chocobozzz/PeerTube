@@ -16,7 +16,7 @@
   </ng-template>
 
   <ng-template #tableCells let-videoImport>
-    <td class="max-width-300px">
+    <td class="max-width-300px ellipsis">
       @if (videoImport.targetUrl) {
         <a [href]="videoImport.targetUrl" target="_blank" rel="noopener noreferrer" [title]="videoImport.targetUrl">{{ videoImport.targetUrl }}</a>
       } @else {

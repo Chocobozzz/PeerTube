@@ -39,7 +39,7 @@
       </div>
     </td>
 
-    <td *ngIf="table.isColumnDisplayed('registrationReason')" class="max-width-300px" container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
+    <td *ngIf="table.isColumnDisplayed('registrationReason')" class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
       {{ registration.registrationReason }}
     </td>
 
@@ -55,7 +55,7 @@
       }
     </td>
 
-    <td *ngIf="table.isColumnDisplayed('moderationResponse')" class="max-width-300px" container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
+    <td *ngIf="table.isColumnDisplayed('moderationResponse')" class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
       {{ registration.moderationResponse }}
     </td>
 

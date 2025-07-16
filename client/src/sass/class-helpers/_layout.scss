@@ -48,6 +48,10 @@
   min-width: 0;
 }
 
+.max-width-300px {
+  max-width: 300px;
+}
+
 .d-none-mw {
   @include on-mobile-main-col {
     display: none !important;
