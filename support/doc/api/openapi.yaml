@@ -9385,6 +9385,8 @@ components:
           type: number
         viewersPeak:
           type: number
+        totalViewers:
+          type: number
         viewersPeakDate:
           type: string
           format: date-time
@@ -9394,6 +9396,15 @@ components:
             type: object
             properties:
               isoCode:
+                type: string
+              viewers:
+                type: number
+        subdivisions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
                 type: string
               viewers:
                 type: number
