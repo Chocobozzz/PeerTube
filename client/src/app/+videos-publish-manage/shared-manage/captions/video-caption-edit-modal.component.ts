@@ -1,12 +1,12 @@
 import { NgClass, NgIf } from '@angular/common'
 import { ChangeDetectorRef, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '@app/shared/shared-forms/timestamp-input.component'
-import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { EmbedComponent } from '@app/shared/shared-main/video/embed.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
@@ -107,6 +107,10 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
     this.videoEdit = options.videoEdit
     this.captionEdited = options.captionEdited
 
+    this.rawEdit = false
+    this.segments = []
+    this.segmentToUpdate = undefined
+
     this.openedModal = this.modalService.open(this.modal(), {
       centered: true,
       size: 'xl',
@@ -180,6 +184,7 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
 
   onRawEditSwitch () {
     if (this.rawEdit === true) {
+      this.segmentToUpdate = undefined
       this.form.patchValue({ captionFileContent: this.formatSegments() })
       this.resetTextarea()
     } else {
@@ -336,6 +341,7 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
 
   updateCaption () {
     if (this.segmentToUpdate) {
+      console.log(this.segmentToUpdate)
       this.notifier.error($localize`A segment is being edited. Save or cancel your edits first.`)
       return
     }
