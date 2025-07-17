@@ -414,7 +414,7 @@
           <div class="form-group">
             <label i18n for="defaultsPublishLicence">Default video licence</label>
 
-            <my-select-options inputId="defaultsPublishLicence" [items]="licenceOptions" formControlName="licence"></my-select-options>
+            <my-select-options inputId="defaultsPublishLicence" [items]="licenceOptions" formControlName="licence" clearable="true"></my-select-options>
 
             <div *ngIf="formErrors.defaults.publish.licence" class="form-error" role="alert">{{ formErrors.defaults.publish.licence }}</div>
           </div>

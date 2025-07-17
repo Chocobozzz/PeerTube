@@ -140,7 +140,7 @@ export const customConfigUpdateValidator = [
 
   body('defaults.publish.commentsPolicy').custom(isVideoCommentsPolicyValid),
   body('defaults.publish.privacy').custom(isVideoPrivacyValid),
-  body('defaults.publish.licence').custom(isVideoLicenceValid),
+  body('defaults.publish.licence').optional().custom(isVideoLicenceValid),
   body('defaults.p2p.webapp.enabled').isBoolean(),
   body('defaults.p2p.embed.enabled').isBoolean(),
   body('defaults.player.autoPlay').isBoolean(),

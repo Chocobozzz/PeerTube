@@ -258,6 +258,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
 
     this.privacyOptions = this.videoService.explainedPrivacyLabels(data.privacies).videoPrivacies
     this.licenceOptions = data.licences
+
     this.commentPoliciesOptions = data.commentPolicies
 
     this.buildLandingPageOptions()
@@ -592,7 +593,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       currentConfig: this.customConfig,
       form: this.form,
       formConfig: this.form.value,
-      success: $localize`Live configuration updated.`
+      success: $localize`General configuration updated.`
     })
   }
 }
