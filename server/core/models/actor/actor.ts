@@ -339,11 +339,11 @@ export class ActorModel extends SequelizeModel<ActorModel> {
 
   // ---------------------------------------------------------------------------
 
-  static async load (id: number): Promise<MActor> {
+  static async load (id: number, transaction?: Transaction): Promise<MActor> {
     const actorServer = await getServerActor()
     if (id === actorServer.id) return actorServer
 
-    return ActorModel.unscoped().findByPk(id)
+    return ActorModel.unscoped().findByPk(id, { transaction })
   }
 
   static loadFull (id: number): Promise<MActorFull> {
@@ -489,11 +489,20 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
+  // ---------------------------------------------------------------------------
+
+  static async recalculateFollowsCount (options: {
+    ofId: number
+    type: 'followers' | 'following'
+    by: number
+    transaction?: Transaction
+  }) {
+    const { transaction, ofId, type, by } = options
+
     const sanitizedOfId = forceNumber(ofId)
     const where = { id: sanitizedOfId }
 
-    let columnToUpdate: string
+    let columnToUpdate: 'followersCount' | 'followingCount'
     let columnOfCount: string
 
     if (type === 'followers') {
@@ -504,10 +513,26 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       columnOfCount = 'actorId'
     }
 
+    const actor = await this.load(ofId, transaction)
+
+    // Remote actor where we don't store all the actor follows
+    // So we just increment the counter
+    if (actor.serverId) {
+      if (!by) return
+
+      return ActorModel.increment(columnToUpdate, {
+        by,
+        where,
+        transaction
+      })
+    }
+
     return ActorModel.update({
       [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId} AND "state" = 'accepted')`)
     }, { where, transaction })
   }
+
+  // ---------------------------------------------------------------------------
 
   static loadAccountActorByVideoId (videoId: number, transaction: Transaction): Promise<MActor> {
     const query = {
