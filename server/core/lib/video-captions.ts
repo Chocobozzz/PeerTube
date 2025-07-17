@@ -23,6 +23,7 @@ import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
+import { promises as fs } from 'fs'
 
 const lTags = loggerTagsFactory('video-caption')
 
@@ -213,6 +214,18 @@ export async function onTranscriptionEnded (options: {
   lTags?: (string | number)[]
 }) {
   const { video, language, vttPath, lTags: customLTags = [] } = options
+  var limitValideTranscriptionSize = CONFIG.VIDEO_TRANSCRIPTION.LIMIT_VALID_TRANSCRIPTION_SIZE || 100
+  
+  try {
+    const stats = await fs.stat(vttPath)
+    if (stats.size < limitValideTranscriptionSize) {
+      logger.info(`Transcription file ${vttPath} is too small, do not create caption for video ${video.uuid}`)
+      return
+    }
+  } catch (err) {
+    logger.error(`Error while checking transcription file ${vttPath} for video ${video.uuid}`, { err })
+    return
+  }
 
   if (!isVideoCaptionLanguageValid(language)) {
     logger.warn(`Invalid transcription language for video ${video.uuid}`, lTags(video.uuid))

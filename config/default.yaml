@@ -806,6 +806,11 @@ video_transcription:
   # At least 1 remote runner must be configured to transcribe your videos
   remote_runners:
     enabled: false
+  
+  # Size of transcription files to keep on your server
+  # If the transcription file is smaller than this size, PeerTube will delete it after transcription
+  # With this setting, you can limit the hallucinations of the transcription engine
+  limit_valid_transcription_size: 100
 
 video_file:
   update:
