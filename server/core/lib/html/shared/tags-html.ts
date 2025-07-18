@@ -1,4 +1,4 @@
-import { escapeAttribute, escapeHTML, findAppropriateImage } from '@peertube/peertube-core-utils'
+import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
 import { mdToPlainText } from '@server/helpers/markdown.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -148,10 +148,7 @@ export class TagsHtml {
     tagsStr += `<link rel="icon" type="image/png" href="${escapeAttribute(favicon.fileUrl)}" />`
 
     // Apple Touch Icon
-    const appleTouchIcon = findAppropriateImage(serverActor.Avatars, 192)
-    const iconHref = appleTouchIcon
-      ? WEBSERVER.URL + appleTouchIcon.getStaticPath()
-      : '/client/assets/images/icons/icon-192x192.png'
+    const iconHref = ServerConfigManager.Instance.getLogoUrl(serverActor, 192)
 
     tagsStr += `<link rel="apple-touch-icon" href="${iconHref}" />`
 

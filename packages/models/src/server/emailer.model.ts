@@ -1,7 +1,12 @@
+export type To = { email: string, language: string }
 type From = string | { name?: string, address: string }
 
-interface Base extends Partial<SendEmailDefaultMessageOptions> {
-  to: string[] | string
+interface Base {
+  to: To[] | To
+
+  from?: From
+  subject?: string
+  replyTo?: string
 }
 
 interface MailTemplate extends Base {
@@ -30,6 +35,8 @@ interface SendEmailDefaultLocalsOptions {
   fg: string
   bg: string
   primary: string
+  language: string
+  logoUrl: string
 }
 
 interface SendEmailDefaultMessageOptions {

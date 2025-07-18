@@ -1,11 +1,14 @@
-import { logger } from '@server/helpers/logger.js'
-import { UserModel } from '@server/models/user/user.js'
-import { UserNotificationModel } from '@server/models/user/user-notification.js'
-import { MRegistration, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { UserNotificationType, UserRight } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
+import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { adminRegistrationsListUrl } from '@server/lib/client-urls.js'
+import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
+import { MRegistration, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class RegistrationRequestForModerators extends AbstractNotification <MRegistration> {
+export class RegistrationRequestForModerators extends AbstractNotification<MRegistration> {
   private moderators: MUserDefault[]
 
   async prepare () {
@@ -35,13 +38,21 @@ export class RegistrationRequestForModerators extends AbstractNotification <MReg
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+    const language = user.getLanguage()
+
     return {
       template: 'user-registration-request',
       to,
-      subject: `A new user wants to register: ${this.payload.username}`,
+      subject: t('A new user wants to register: {username}', to.language, { username: this.payload.username }),
       locals: {
-        registration: this.payload
+        registration: this.payload,
+        instanceName: CONFIG.INSTANCE.NAME,
+        action: {
+          url: adminRegistrationsListUrl,
+          text: t('View registration request', language)
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, ServerService } from '@app/core'
@@ -17,8 +17,11 @@ import {
 } from '@app/shared/form-validators/form-validator.model'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { SelectRadioComponent } from '@app/shared/shared-forms/select/select-radio.component'
+import { getCompleteLocale, I18N_LOCALES } from '@peertube/peertube-core-utils'
 import { ActorImage, CustomConfig, NSFWPolicyType, VideoConstant } from '@peertube/peertube-models'
+import merge from 'lodash-es/merge'
 import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
@@ -44,6 +47,7 @@ type Form = {
     shortDescription: FormControl<string>
     description: FormControl<string>
     categories: FormControl<number[]>
+    defaultLanguage: FormControl<string>
     languages: FormControl<string[]>
     serverCountry: FormControl<string>
 
@@ -87,7 +91,8 @@ type Form = {
     PeertubeCheckboxComponent,
     PeerTubeTemplateDirective,
     HelpComponent,
-    AdminSaveBarComponent
+    AdminSaveBarComponent,
+    SelectOptionsComponent
   ]
 })
 export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -126,6 +131,8 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
     }
   ]
 
+  defaultLanguageItems: SelectOptionsItem[] = []
+
   private customConfig: CustomConfig
   private customConfigSub: Subscription
 
@@ -143,6 +150,7 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
 
     this.languageItems = data.languages.map(l => ({ label: l.label, id: l.id }))
     this.categoryItems = data.categories.map(l => ({ label: l.label, id: l.id }))
+    this.defaultLanguageItems = Object.entries(I18N_LOCALES).map(([ id, label ]) => ({ label, id }))
 
     this.buildForm()
 
@@ -185,6 +193,8 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
 
         hardwareInformation: null,
 
+        defaultLanguage: null,
+
         categories: null,
         languages: null,
 
@@ -200,7 +210,14 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
       }
     }
 
-    const defaultValues: FormDefaultTyped<Form> = this.customConfig
+    const defaultValues: FormDefaultTyped<Form> = merge(
+      this.customConfig,
+      {
+        instance: {
+          defaultLanguage: getCompleteLocale(this.customConfig.instance.defaultLanguage)
+        }
+      } satisfies FormDefaultTyped<Form>
+    )
 
     const {
       form,

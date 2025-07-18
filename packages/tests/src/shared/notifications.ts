@@ -77,11 +77,13 @@ async function waitUntilNotification (options: {
   await waitJobs([ server ])
 }
 
-async function checkNewVideoFromSubscription (options: CheckerBaseParams & {
-  videoName: string
-  shortUUID: string
-  checkType: CheckerType
-}) {
+async function checkNewVideoFromSubscription (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
   const { videoName, shortUUID } = options
   const notificationType = UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION
 
@@ -107,11 +109,13 @@ async function checkNewVideoFromSubscription (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewLiveFromSubscription (options: CheckerBaseParams & {
-  videoName: string
-  shortUUID: string
-  checkType: CheckerType
-}) {
+async function checkNewLiveFromSubscription (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
   const { videoName, shortUUID } = options
   const notificationType = UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION
 
@@ -137,11 +141,13 @@ async function checkNewLiveFromSubscription (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkMyVideoIsPublished (options: CheckerBaseParams & {
-  videoName: string
-  shortUUID: string
-  checkType: CheckerType
-}) {
+async function checkMyVideoIsPublished (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
   const { videoName, shortUUID } = options
   const notificationType = UserNotificationType.MY_VIDEO_PUBLISHED
 
@@ -165,11 +171,13 @@ async function checkMyVideoIsPublished (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkVideoStudioEditionIsFinished (options: CheckerBaseParams & {
-  videoName: string
-  shortUUID: string
-  checkType: CheckerType
-}) {
+async function checkVideoStudioEditionIsFinished (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
   const { videoName, shortUUID } = options
   const notificationType = UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED
 
@@ -193,13 +201,15 @@ async function checkVideoStudioEditionIsFinished (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkMyVideoImportIsFinished (options: CheckerBaseParams & {
-  videoName: string
-  shortUUID: string
-  url: string
-  success: boolean
-  checkType: CheckerType
-}) {
+async function checkMyVideoImportIsFinished (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    url: string
+    success: boolean
+    checkType: CheckerType
+  }
+) {
   const { videoName, shortUUID, url, success } = options
 
   const notificationType = success ? UserNotificationType.MY_VIDEO_IMPORT_SUCCESS : UserNotificationType.MY_VIDEO_IMPORT_ERROR
@@ -219,9 +229,11 @@ async function checkMyVideoImportIsFinished (options: CheckerBaseParams & {
 
   function emailNotificationFinder (email: object) {
     const text: string = email['text']
-    const toFind = success ? ' finished' : ' error'
+    const toFind = success
+      ? /\bfinished\b/
+      : /\berror\b/
 
-    return text.includes(url) && text.includes(toFind)
+    return text.includes(url) && !!text.match(toFind)
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
@@ -229,10 +241,12 @@ async function checkMyVideoImportIsFinished (options: CheckerBaseParams & {
 
 // ---------------------------------------------------------------------------
 
-async function checkUserRegistered (options: CheckerBaseParams & {
-  username: string
-  checkType: CheckerType
-}) {
+async function checkUserRegistered (
+  options: CheckerBaseParams & {
+    username: string
+    checkType: CheckerType
+  }
+) {
   const { username } = options
   const notificationType = UserNotificationType.NEW_USER_REGISTRATION
 
@@ -257,11 +271,13 @@ async function checkUserRegistered (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkRegistrationRequest (options: CheckerBaseParams & {
-  username: string
-  registrationReason: string
-  checkType: CheckerType
-}) {
+async function checkRegistrationRequest (
+  options: CheckerBaseParams & {
+    username: string
+    registrationReason: string
+    checkType: CheckerType
+  }
+) {
   const { username, registrationReason } = options
   const notificationType = UserNotificationType.NEW_USER_REGISTRATION_REQUEST
 
@@ -287,13 +303,15 @@ async function checkRegistrationRequest (options: CheckerBaseParams & {
 
 // ---------------------------------------------------------------------------
 
-async function checkNewActorFollow (options: CheckerBaseParams & {
-  followType: 'channel' | 'account'
-  followerName: string
-  followerDisplayName: string
-  followingDisplayName: string
-  checkType: CheckerType
-}) {
+async function checkNewActorFollow (
+  options: CheckerBaseParams & {
+    followType: 'channel' | 'account'
+    followerName: string
+    followerDisplayName: string
+    followingDisplayName: string
+    checkType: CheckerType
+  }
+) {
   const { followType, followerName, followerDisplayName, followingDisplayName } = options
   const notificationType = UserNotificationType.NEW_FOLLOW
 
@@ -327,10 +345,12 @@ async function checkNewActorFollow (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewInstanceFollower (options: CheckerBaseParams & {
-  followerHost: string
-  checkType: CheckerType
-}) {
+async function checkNewInstanceFollower (
+  options: CheckerBaseParams & {
+    followerHost: string
+    checkType: CheckerType
+  }
+) {
   const { followerHost } = options
   const notificationType = UserNotificationType.NEW_INSTANCE_FOLLOWER
 
@@ -354,17 +374,19 @@ async function checkNewInstanceFollower (options: CheckerBaseParams & {
   function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
-    return text.includes('instance has a new follower') && text.includes(followerHost)
+    return text.includes('PeerTube has a new follower') && text.includes(followerHost)
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkAutoInstanceFollowing (options: CheckerBaseParams & {
-  followerHost: string
-  followingHost: string
-  checkType: CheckerType
-}) {
+async function checkAutoInstanceFollowing (
+  options: CheckerBaseParams & {
+    followerHost: string
+    followingHost: string
+    checkType: CheckerType
+  }
+) {
   const { followerHost, followingHost } = options
   const notificationType = UserNotificationType.AUTO_INSTANCE_FOLLOWING
 
@@ -391,19 +413,21 @@ async function checkAutoInstanceFollowing (options: CheckerBaseParams & {
   function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
-    return text.includes(' automatically followed a new instance') && text.includes(followingHost)
+    return text.match(/\bautomatically followed\b/) && text.includes(followingHost)
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkCommentMention (options: CheckerBaseParams & {
-  shortUUID: string
-  commentId: number
-  threadId: number
-  byAccountDisplayName: string
-  checkType: CheckerType
-}) {
+async function checkCommentMention (
+  options: CheckerBaseParams & {
+    shortUUID: string
+    commentId: number
+    threadId: number
+    byAccountDisplayName: string
+    checkType: CheckerType
+  }
+) {
   const { shortUUID, commentId, threadId, byAccountDisplayName } = options
   const notificationType = UserNotificationType.COMMENT_MENTION
 
@@ -425,7 +449,7 @@ async function checkCommentMention (options: CheckerBaseParams & {
   function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
-    return text.includes(' mentioned ') && text.includes(shortUUID) && text.includes(byAccountDisplayName)
+    return text.match(/\bmentioned\b/) && text.includes(shortUUID) && text.includes(byAccountDisplayName)
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
@@ -433,13 +457,15 @@ async function checkCommentMention (options: CheckerBaseParams & {
 
 let lastEmailCount = 0
 
-async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
-  shortUUID: string
-  commentId: number
-  threadId: number
-  checkType: CheckerType
-  approval?: boolean // default false
-}) {
+async function checkNewCommentOnMyVideo (
+  options: CheckerBaseParams & {
+    shortUUID: string
+    commentId: number
+    threadId: number
+    checkType: CheckerType
+    approval?: boolean // default false
+  }
+) {
   const { server, shortUUID, commentId, threadId, checkType, emails, approval = false } = options
   const notificationType = UserNotificationType.NEW_COMMENT_ON_MY_VIDEO
 
@@ -468,7 +494,7 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
     const text = email['text']
 
     return text.includes(commentUrl) &&
-      (approval && text.includes('requires approval')) ||
+        (approval && text.includes('requires approval')) ||
       (!approval && !text.includes('requires approval'))
   }
 
@@ -481,11 +507,13 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
   }
 }
 
-async function checkNewVideoAbuseForModerators (options: CheckerBaseParams & {
-  shortUUID: string
-  videoName: string
-  checkType: CheckerType
-}) {
+async function checkNewVideoAbuseForModerators (
+  options: CheckerBaseParams & {
+    shortUUID: string
+    videoName: string
+    checkType: CheckerType
+  }
+) {
   const { shortUUID, videoName } = options
   const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
 
@@ -511,12 +539,14 @@ async function checkNewVideoAbuseForModerators (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewAbuseMessage (options: CheckerBaseParams & {
-  abuseId: number
-  message: string
-  toEmail: string
-  checkType: CheckerType
-}) {
+async function checkNewAbuseMessage (
+  options: CheckerBaseParams & {
+    abuseId: number
+    message: string
+    toEmail: string
+    checkType: CheckerType
+  }
+) {
   const { abuseId, message, toEmail } = options
   const notificationType = UserNotificationType.ABUSE_NEW_MESSAGE
 
@@ -543,11 +573,13 @@ async function checkNewAbuseMessage (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkAbuseStateChange (options: CheckerBaseParams & {
-  abuseId: number
-  state: AbuseStateType
-  checkType: CheckerType
-}) {
+async function checkAbuseStateChange (
+  options: CheckerBaseParams & {
+    abuseId: number
+    state: AbuseStateType
+    checkType: CheckerType
+  }
+) {
   const { abuseId, state } = options
   const notificationType = UserNotificationType.ABUSE_STATE_CHANGE
 
@@ -578,11 +610,13 @@ async function checkAbuseStateChange (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewCommentAbuseForModerators (options: CheckerBaseParams & {
-  shortUUID: string
-  videoName: string
-  checkType: CheckerType
-}) {
+async function checkNewCommentAbuseForModerators (
+  options: CheckerBaseParams & {
+    shortUUID: string
+    videoName: string
+    checkType: CheckerType
+  }
+) {
   const { shortUUID, videoName } = options
   const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
 
@@ -608,10 +642,12 @@ async function checkNewCommentAbuseForModerators (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewAccountAbuseForModerators (options: CheckerBaseParams & {
-  displayName: string
-  checkType: CheckerType
-}) {
+async function checkNewAccountAbuseForModerators (
+  options: CheckerBaseParams & {
+    displayName: string
+    checkType: CheckerType
+  }
+) {
   const { displayName } = options
   const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
 
@@ -637,11 +673,13 @@ async function checkNewAccountAbuseForModerators (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkVideoAutoBlacklistForModerators (options: CheckerBaseParams & {
-  shortUUID: string
-  videoName: string
-  checkType: CheckerType
-}) {
+async function checkVideoAutoBlacklistForModerators (
+  options: CheckerBaseParams & {
+    shortUUID: string
+    videoName: string
+    checkType: CheckerType
+  }
+) {
   const { shortUUID, videoName } = options
   const notificationType = UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
 
@@ -667,11 +705,13 @@ async function checkVideoAutoBlacklistForModerators (options: CheckerBaseParams 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewBlacklistOnMyVideo (options: CheckerBaseParams & {
-  shortUUID: string
-  videoName: string
-  blacklistType: 'blacklist' | 'unblacklist'
-}) {
+async function checkNewBlacklistOnMyVideo (
+  options: CheckerBaseParams & {
+    shortUUID: string
+    videoName: string
+    blacklistType: 'blacklist' | 'unblacklist'
+  }
+) {
   const { videoName, shortUUID, blacklistType } = options
   const notificationType = blacklistType === 'blacklist'
     ? UserNotificationType.BLACKLIST_ON_MY_VIDEO
@@ -687,21 +727,24 @@ async function checkNewBlacklistOnMyVideo (options: CheckerBaseParams & {
   }
 
   function emailNotificationFinder (email: object) {
-    const text = email['text']
-    const blacklistText = blacklistType === 'blacklist'
-      ? 'blacklisted'
-      : 'unblacklisted'
+    const text: string = email['text']
 
-    return text.includes(shortUUID) && text.includes(blacklistText)
+    const blacklistReg = blacklistType === 'blacklist'
+      ? /\bblocked\b/
+      : /\bunblocked\b/
+
+    return text.includes(shortUUID) && !!text.match(blacklistReg)
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder, checkType: 'presence' })
 }
 
-async function checkNewPeerTubeVersion (options: CheckerBaseParams & {
-  latestVersion: string
-  checkType: CheckerType
-}) {
+async function checkNewPeerTubeVersion (
+  options: CheckerBaseParams & {
+    latestVersion: string
+    checkType: CheckerType
+  }
+) {
   const { latestVersion } = options
   const notificationType = UserNotificationType.NEW_PEERTUBE_VERSION
 
@@ -728,11 +771,13 @@ async function checkNewPeerTubeVersion (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkNewPluginVersion (options: CheckerBaseParams & {
-  pluginType: PluginType_Type
-  pluginName: string
-  checkType: CheckerType
-}) {
+async function checkNewPluginVersion (
+  options: CheckerBaseParams & {
+    pluginType: PluginType_Type
+    pluginName: string
+    checkType: CheckerType
+  }
+) {
   const { pluginName, pluginType } = options
   const notificationType = UserNotificationType.NEW_PLUGIN_VERSION
 
@@ -759,15 +804,17 @@ async function checkNewPluginVersion (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkMyVideoTranscriptionGenerated (options: CheckerBaseParams & {
-  videoName: string
-  shortUUID: string
-  language: {
-    id: string
-    label: string
+async function checkMyVideoTranscriptionGenerated (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    language: {
+      id: string
+      label: string
+    }
+    checkType: CheckerType
   }
-  checkType: CheckerType
-}) {
+) {
   const { videoName, shortUUID, language } = options
   const notificationType = UserNotificationType.MY_VIDEO_TRANSCRIPTION_GENERATED
 
@@ -872,11 +919,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
 export {
   type CheckerType,
   type CheckerBaseParams,
-
   getAllNotificationsSettings,
-
   waitUntilNotification,
-
   checkMyVideoImportIsFinished,
   checkUserRegistered,
   checkAutoInstanceFollowing,
@@ -904,11 +948,13 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function checkNotification (options: CheckerBaseParams & {
-  notificationChecker: (notification: UserNotification, checkType: CheckerType) => void
-  emailNotificationFinder: (email: object) => boolean
-  checkType: CheckerType
-}) {
+async function checkNotification (
+  options: CheckerBaseParams & {
+    notificationChecker: (notification: UserNotification, checkType: CheckerType) => void
+    emailNotificationFinder: (email: object) => boolean
+    checkType: CheckerType
+  }
+) {
   const { server, token, checkType, notificationChecker, emailNotificationFinder, socketNotifications, emails } = options
 
   const check = options.check || { web: true, mail: true }

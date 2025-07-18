@@ -1,0 +1,21 @@
+{{#> base title=(t "A comment is pending moderation")}}
+  <p>
+    {{#if isLocal}}
+      {{{t "{instanceName} received an abuse report for <a href=\"{commentUrl}\">the comment on video {videoName}</a>." instanceName=instanceName commentUrl=commentUrl videoName=videoName}}}
+    {{else}}
+      {{{t "{instanceName} received an abuse report for <a href=\"{commentUrl}\">the remote comment on video {videoName}</a>." instanceName=instanceName commentUrl=commentUrl videoName=videoName}}}
+    {{/if}}
+  </p>
+
+  <p>
+    {{t "The comment was posted on {commentCreatedAt} by {flaggedAccount} ." commentCreatedAt=commentCreatedAt flaggedAccount=flaggedAccount}}
+  </p>
+
+  <p>
+    {{t "The reporter, {reporter}, cited the following reason(s):" reporter=reporter}}
+  </p>
+
+  <blockquote>{{reason}}</blockquote>
+
+  <br style="display: none;">
+{{/base}}

@@ -25,3 +25,7 @@ node ./node_modules/.bin/xliffmerge -p ./.xliffmerge.json $locales
 # Add our strings too
 cd ../
 npm run i18n:create-custom-files
+
+# Generate server translations
+node ./node_modules/.bin/i18next -c server/.i18next-parser.config.ts server/core/**/*.{ts,hbs}
+

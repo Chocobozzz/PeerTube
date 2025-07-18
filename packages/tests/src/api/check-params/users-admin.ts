@@ -479,7 +479,7 @@ describe('Test users admin API validators', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

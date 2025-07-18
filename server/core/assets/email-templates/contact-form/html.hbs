@@ -1,0 +1,11 @@
+{{#> base title=(t "Someone just used the contact form")}}
+  <p>
+    {{{t "{fromName} sent you a message via the contact form on <a href=\"{webserverUrl}\">{instanceName}</a>: " fromName=fromName webserverUrl=WEBSERVER.URL instanceName=instanceName}}}
+  </p>
+
+  <blockquote style="white-space: pre-wrap">{{body}}</blockquote>
+
+  <p>
+    {{{t "You can contact them at <a href=\"mailto:{fromEmail}\">{fromEmail}</a>, or simply reply to this email to get in touch." fromEmail=fromEmail}}}
+  </p>
+{{/base}}

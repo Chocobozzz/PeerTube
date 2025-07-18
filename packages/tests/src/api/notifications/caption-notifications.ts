@@ -3,11 +3,7 @@
 import { UserNotification } from '@peertube/peertube-models'
 import { PeerTubeServer, cleanupTests, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import {
-  CheckerBaseParams,
-  checkMyVideoTranscriptionGenerated,
-  prepareNotificationsTest
-} from '@tests/shared/notifications.js'
+import { CheckerBaseParams, checkMyVideoTranscriptionGenerated, prepareNotificationsTest } from '@tests/shared/notifications.js'
 import { join } from 'path'
 
 describe('Test caption notifications', function () {
@@ -74,7 +70,7 @@ describe('Test caption notifications', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests(servers)
   })

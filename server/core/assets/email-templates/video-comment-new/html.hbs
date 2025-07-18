@@ -1,0 +1,13 @@
+{{#> base title=(t "Someone commented your video")}}
+  <p>
+    {{{t "<a href=\"{accountUrl}\" title=\"{handle}\">{accountName}</a> added a comment on your video <a href=\"{videoUrl}\">{videoName}</a>:" accountUrl=accountUrl handle=handle accountName=accountName videoUrl=videoUrl videoName=video.name}}}
+  </p>
+
+  <blockquote>{{{commentHtml}}}</blockquote>
+
+  {{#if requiresApproval}}
+    <p>{{t "This comment requires approval."}}</p>
+  {{/if}}
+
+  <br style="display: none;">
+{{/base}}

@@ -7,6 +7,7 @@ import { accountsRouter } from './accounts.js'
 import { automaticTagRouter } from './automatic-tags.js'
 import { blocklistRouter } from './blocklist.js'
 import { bulkRouter } from './bulk.js'
+import { clientConfigRouter } from './client-config.js'
 import { configRouter } from './config.js'
 import { customPageRouter } from './custom-page.js'
 import { jobsRouter } from './jobs.js'
@@ -53,6 +54,7 @@ apiRouter.use('/blocklist', blocklistRouter)
 apiRouter.use('/runners', runnersRouter)
 apiRouter.use('/watched-words', watchedWordsRouter)
 apiRouter.use('/automatic-tags', automaticTagRouter)
+apiRouter.use('/client-config', clientConfigRouter)
 
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)

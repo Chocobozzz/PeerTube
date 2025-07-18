@@ -1,6 +1,7 @@
 import { arrayify, forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRole, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
+import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/user/user.js'
 import express from 'express'
@@ -15,6 +16,7 @@ import {
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserEmailPublicValid,
+  isUserLanguage,
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
@@ -42,7 +44,6 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
-import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
 
 export const usersListValidator = [
   query('blocked')
@@ -259,6 +260,9 @@ export const usersUpdateMeValidator = [
   body('videoLanguages')
     .optional()
     .custom(isUserVideoLanguages),
+  body('language')
+    .optional()
+    .custom(isUserLanguage),
   body('videosHistoryEnabled')
     .optional()
     .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled boolean'),

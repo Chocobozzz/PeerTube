@@ -29,6 +29,8 @@ export interface CustomConfig {
     businessModel: string
     hardwareInformation: string
 
+    defaultLanguage: string
+
     languages: string[]
     categories: number[]
 

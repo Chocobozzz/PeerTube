@@ -1,4 +1,21 @@
 <form (ngSubmit)="updateInterfaceSettings()" [formGroup]="form">
+  <div class="form-group">
+    <label i18n for="language">Language</label>
+    <div class="form-group-description">
+      <div i18n>Preferred language for the web interface and for emails</div>
+
+      <div i18n>
+        You can help us to translate the platform by consulting <a
+          class="link-primary"
+          target="_blank"
+          rel="noreferrer noopener"
+          href="https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to"
+        >this guide</a>
+      </div>
+    </div>
+
+    <my-select-options inputId="language" formControlName="language" [items]="availableLanguages"></my-select-options>
+  </div>
 
   <div class="form-group">
     <label i18n for="theme">Theme</label>
@@ -6,5 +23,5 @@
     <my-select-options inputId="theme" formControlName="theme" [items]="availableThemes"></my-select-options>
   </div>
 
-  <input *ngIf="!reactiveUpdate()" type="submit" class="peertube-button primary-button" i18n-value value="Save interface settings" [disabled]="!form.valid">
+  <input *ngIf="!reactiveUpdate()" type="submit" class="peertube-button primary-button" [value]="getSubmitValue()" [disabled]="!form.valid">
 </form>

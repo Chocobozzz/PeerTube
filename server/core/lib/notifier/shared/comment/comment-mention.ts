@@ -1,3 +1,5 @@
+import { UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
+import { tu } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { toSafeHtml } from '@server/helpers/markdown.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
@@ -13,16 +15,15 @@ import {
   MUserWithNotificationSetting,
   UserNotificationModelForApi
 } from '@server/types/models/index.js'
-import { UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/index.js'
 
-export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MUserNotifSettingAccount> {
+export class CommentMention extends AbstractNotification<MCommentOwnerVideo, MUserNotifSettingAccount> {
   private users: MUserDefault[]
 
   private serverAccountId: number
 
-  private accountMutedHash: { [ id: number ]: boolean }
-  private instanceMutedHash: { [ id: number ]: boolean }
+  private accountMutedHash: { [id: number]: boolean }
+  private instanceMutedHash: { [id: number]: boolean }
 
   isDisabled () {
     return this.payload.heldForReview === true
@@ -31,7 +32,9 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
   async prepare () {
     const extractedUsernames = this.payload.extractMentions()
     logger.debug(
-      'Extracted %d username from comment %s.', extractedUsernames.length, this.payload.url,
+      'Extracted %d username from comment %s.',
+      extractedUsernames.length,
+      this.payload.url,
       { usernames: extractedUsernames, text: this.payload.text }
     )
 
@@ -86,7 +89,9 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     const comment = this.payload
 
     const accountName = comment.Account.getDisplayName()
@@ -98,15 +103,16 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
     return {
       template: 'video-comment-mention',
       to,
-      subject: 'Mention on video ' + video.name,
+      subject: tu('Mention on video {videoName}', user, { videoName: video.name }),
       locals: {
         comment,
         commentHtml,
         video,
         videoUrl,
         accountName,
+        accountUrl: comment.Account.getClientUrl(),
         action: {
-          text: 'View comment',
+          text: tu('View comment', user),
           url: commentUrl
         }
       }

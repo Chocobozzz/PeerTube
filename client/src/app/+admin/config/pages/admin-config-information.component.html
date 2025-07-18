@@ -74,6 +74,18 @@
         </div>
 
         <div class="form-group">
+          <label i18n for="instanceDefaultLanguage">Default language</label>
+          <div class="form-group-description">
+            <div i18n>Default language used for users, in emails for example.</div>
+            <div i18n>The web interface still uses the web browser preferred language if not overridden by user preference</div>
+          </div>
+
+          <div>
+            <my-select-options inputId="instanceDefaultLanguage" formControlName="defaultLanguage" [items]="defaultLanguageItems"></my-select-options>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label i18n for="instanceCategories">Main instance categories</label>
 
           <div>

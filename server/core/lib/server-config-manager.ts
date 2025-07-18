@@ -144,6 +144,8 @@ class ServerConfigManager {
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
         },
 
+        defaultLanguage: CONFIG.INSTANCE.DEFAULT_LANGUAGE,
+
         avatars: serverActor.Avatars.map(a => a.toFormattedJSON()),
         banners: serverActor.Banners.map(b => b.toFormattedJSON()),
 
@@ -510,6 +512,24 @@ class ServerConfigManager {
 
   getDefaultOpenGraph (serverActor: MActorUploadImages) {
     return maxBy(this.getOpenGraphLogos(serverActor), 'width')
+  }
+
+  getLogoUrl (serverActor: MActorUploadImages, width: 192 | 512) {
+    const customLogo = this.getLogo(serverActor, width)
+
+    if (customLogo) {
+      return WEBSERVER.URL + customLogo.getStaticPath()
+    }
+
+    return `${WEBSERVER.URL}/client/assets/images/icons/icon-${width}x${width}.png`
+  }
+
+  getLogo (serverActor: MActorUploadImages, width: 192 | 512) {
+    if (serverActor.Avatars.length > 0) {
+      return findAppropriateImage(serverActor.Avatars, width)
+    }
+
+    return undefined
   }
 
   private getFaviconLogos (serverActor: MActorUploadImages) {

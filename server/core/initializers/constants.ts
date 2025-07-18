@@ -48,7 +48,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 905
+export const LAST_MIGRATION_VERSION = 910
 
 // ---------------------------------------------------------------------------
 
@@ -1119,6 +1119,9 @@ export const REDUNDANCY = {
 }
 
 export const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
+export const LANGUAGE_COOKIE_NAME = 'clientLanguage'
+export const LANGUAGE_HEADER = 'x-peertube-language'
+
 export const OTP = {
   HEADER_NAME: 'x-peertube-otp',
   HEADER_REQUIRED_VALUE: 'required; app'
@@ -1128,6 +1131,8 @@ export const ASSETS_PATH = {
   DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-audio-background.jpg'),
   DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-live-background.jpg')
 }
+
+export const SERVER_INTERNAL_LOCALES_BASE_PATH = join(root(), 'dist', 'locales')
 
 // ---------------------------------------------------------------------------
 

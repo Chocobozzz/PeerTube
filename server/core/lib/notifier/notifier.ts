@@ -1,5 +1,5 @@
 import { UserNotificationSettingValue, UserNotificationSettingValueType } from '@peertube/peertube-models'
-import { MRegistration, MUser, MUserDefault } from '@server/types/models/user/index.js'
+import { MRegistration, MUser, MUserDefault, MUserWithNotificationSetting } from '@server/types/models/user/index.js'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -49,7 +49,6 @@ import {
 const lTags = loggerTagsFactory('notifier')
 
 class Notifier {
-
   private readonly notificationModels = {
     newVideoOrLive: [ NewVideoOrLiveForSubscribers ],
     publicationAfterTranscoding: [ OwnedPublicationAfterTranscoding ],
@@ -169,7 +168,7 @@ class Notifier {
     logger.debug('Notify on video unblacklist', { video: video.url, ...lTags() })
 
     this.sendNotifications(models, video)
-        .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
+      .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
   }
 
   notifyOnFinishedVideoImport (payload: ImportFinishedForOwnerPayload): void {
@@ -178,9 +177,9 @@ class Notifier {
     logger.debug('Notify on finished video import', { import: payload.videoImport.getTargetIdentifier(), ...lTags() })
 
     this.sendNotifications(models, payload)
-        .catch(err => {
-          logger.error('Cannot notify owner that its video import %s is finished.', payload.videoImport.getTargetIdentifier(), { err })
-        })
+      .catch(err => {
+        logger.error('Cannot notify owner that its video import %s is finished.', payload.videoImport.getTargetIdentifier(), { err })
+      })
   }
 
   notifyOnNewDirectRegistration (user: MUserDefault): void {
@@ -288,7 +287,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify on generated video transcription %s of video %s.', caption.language, video.url, { err }))
   }
 
-  private async notify <T> (object: AbstractNotification<T>) {
+  private async notify<T> (object: AbstractNotification<T>) {
     await object.prepare()
 
     const users = object.getTargetUsers()
@@ -298,7 +297,7 @@ class Notifier {
 
     object.log()
 
-    const toEmails: string[] = []
+    const toUsers: MUserWithNotificationSetting[] = []
 
     for (const user of users) {
       const setting = object.getSetting(user)
@@ -314,13 +313,13 @@ class Notifier {
       }
 
       if (emailNotificationEnabled) {
-        toEmails.push(user.email)
+        toUsers.push(user)
       }
 
       Hooks.runAction('action:notifier.notification.created', { webNotificationEnabled, emailNotificationEnabled, user, notification })
     }
 
-    for (const to of toEmails) {
+    for (const to of toUsers) {
       const payload = await object.createEmail(to)
       JobQueue.Instance.createJobAsync({ type: 'email', payload })
     }
@@ -336,7 +335,7 @@ class Notifier {
     return (value & UserNotificationSettingValue.WEB) === UserNotificationSettingValue.WEB
   }
 
-  private async sendNotifications <T> (models: (new (payload: T) => AbstractNotification<T>)[], payload: T) {
+  private async sendNotifications<T> (models: (new(payload: T) => AbstractNotification<T>)[], payload: T) {
     for (const model of models) {
       // eslint-disable-next-line new-cap
       await this.notify(new model(payload))

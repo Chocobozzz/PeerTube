@@ -86,7 +86,6 @@ function runTest (withObjectStorage: boolean) {
     objectStorage = withObjectStorage
       ? new ObjectStorageCommand()
       : undefined
-
     ;({
       rootId,
       noahId,
@@ -906,7 +905,7 @@ function runTest (withObjectStorage: boolean) {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server, remoteServer ])
   })

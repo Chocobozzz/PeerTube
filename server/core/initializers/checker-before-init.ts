@@ -133,6 +133,7 @@ export function checkMissedConfig () {
     'defaults.player.auto_play',
     'instance.name',
     'instance.short_description',
+    'instance.default_language',
     'instance.description',
     'instance.terms',
     'instance.default_client_route',

@@ -910,6 +910,9 @@ const CONFIG = {
       return config.get<string>('instance.hardware_information')
     },
 
+    get DEFAULT_LANGUAGE () {
+      return config.get<string>('instance.default_language')
+    },
     get LANGUAGES () {
       return config.get<string[]>('instance.languages') || []
     },

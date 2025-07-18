@@ -1,13 +1,14 @@
 import {
+  AVAILABLE_LOCALES,
   buildFileLocale,
   escapeHTML,
   getDefaultLocale,
   getDefaultRSSFeeds,
-  is18nLocale,
-  POSSIBLE_LOCALES
+  is18nLocale
 } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
+import { setClientLanguageCookie } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
@@ -125,15 +126,11 @@ export class PageHtml {
       lang = paramLang
 
       // Save locale in cookies
-      res.cookie('clientLanguage', lang, {
-        secure: true,
-        sameSite: 'none',
-        maxAge: 1000 * 3600 * 24 * 90 // 3 months
-      })
+      setClientLanguageCookie(res, lang)
     } else if (req.cookies.clientLanguage && is18nLocale(req.cookies.clientLanguage)) {
       lang = req.cookies.clientLanguage
     } else {
-      lang = req.acceptsLanguages(POSSIBLE_LOCALES) || getDefaultLocale()
+      lang = req.acceptsLanguages(AVAILABLE_LOCALES) || getDefaultLocale()
     }
 
     logger.debug(

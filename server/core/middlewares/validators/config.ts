@@ -29,6 +29,7 @@ export const customConfigUpdateValidator = [
   body('instance.social.externalLink').exists(),
   body('instance.social.mastodonLink').exists(),
   body('instance.social.blueskyLink').exists(),
+  body('instance.defaultLanguage').exists(),
 
   body('instance.isNSFW').isBoolean(),
   body('instance.languages').custom(isStringArray),

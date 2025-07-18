@@ -32,6 +32,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.hardwareInformation).to.be.empty
   expect(data.instance.serverCountry).to.be.empty
   expect(data.instance.support.text).to.be.empty
+  expect(data.instance.defaultLanguage).to.equal('en')
   expect(data.instance.social.externalLink).to.be.empty
   expect(data.instance.social.blueskyLink).to.be.empty
   expect(data.instance.social.mastodonLink).to.be.empty
@@ -189,6 +190,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       support: {
         text: 'My support text'
       },
+      defaultLanguage: 'fr',
       social: {
         externalLink: 'https://joinpeertube.org/',
         mastodonLink: 'https://framapiaf.org/@peertube',
@@ -984,9 +986,9 @@ describe('Test config', function () {
       expect(body.short_name).to.equal(body.name)
       expect(body.description).to.equal('description manifest')
 
-      const icon = body.icons.find(f => f.sizes === '36x36')
+      const icon = body.icons.find(f => f.sizes === '192x192')
       expect(icon).to.exist
-      expect(icon.src).to.equal('/client/assets/images/icons/icon-36x36.png')
+      expect(icon.src).to.equal('/client/assets/images/icons/icon-192x192.png')
     })
 
     it('Should generate the manifest with avatar', async function () {

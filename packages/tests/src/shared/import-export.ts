@@ -262,7 +262,7 @@ export async function prepareImportExportTests (options: {
   })
 
   // My settings
-  await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false })
+  await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false, language: 'fr' })
 
   // My notification settings
   await server.notifications.updateMySettings({

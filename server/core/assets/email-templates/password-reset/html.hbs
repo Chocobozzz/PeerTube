@@ -1,0 +1,15 @@
+{{#> base title=(t "Password reset for your account")}}
+  <p>
+    {{t "A reset password procedure for your account has been requested on {instanceName}." username=username instanceName=instanceName}}
+  </p>
+
+  <p>
+    {{t "Please click on the link below to reset it (the link will expire within 1 hour):"}}
+  </p>
+
+  {{> button actionUrl=resetPasswordUrl actionText=(t "Reset my password")}}
+
+  <p>
+    {{t "If you are not the person who initiated this request, please let us know by replying to this email."}}
+  </p>
+{{/base}}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -12,7 +12,9 @@ import {
 import { expectStartWith } from '@tests/shared/checks.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
-import { expect } from 'chai'
+import { config, expect } from 'chai'
+
+config.truncateThreshold = 0
 
 describe('Test emails', function () {
   let server: PeerTubeServer
@@ -256,7 +258,7 @@ describe('Test emails', function () {
       expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
-      expect(email['subject']).contains(' blacklisted')
+      expect(email['subject']).contains(' blocked')
       expect(email['text']).contains('my super user video')
       expect(email['text']).contains('my super reason')
     })
@@ -272,7 +274,7 @@ describe('Test emails', function () {
       expect(email['from'][0]['name']).equal('PeerTube')
       expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
-      expect(email['subject']).contains(' unblacklisted')
+      expect(email['subject']).contains(' unblocked')
       expect(email['text']).contains('my super user video')
     })
 
@@ -412,8 +414,71 @@ describe('Test emails', function () {
     })
   })
 
+  describe('Email translations', function () {
+    let video: VideoCreateResult
+
+    before(async function () {
+      video = await server.videos.quickUpload({ name: 'video' })
+
+      await server.config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            defaultLanguage: 'fr'
+          }
+        }
+      })
+    })
+
+    it('Should translate emails according to the instance language', async function () {
+      await server.contactForm.send({
+        fromEmail: 'toto@example.com',
+        body: 'my super message',
+        subject: 'my subject',
+        fromName: 'Super toto'
+      })
+
+      await waitJobs(server)
+
+      const email = emails[emails.length - 1]
+
+      expect(email['subject']).to.contain('Formulaire de contact')
+      expect(email['text']).to.contain('Super toto vous a envoyé un message')
+    })
+
+    it('Should translate emails according to the instance language if not provided by the user', async function () {
+      await server.blacklist.add({ videoId: video.uuid })
+      await waitJobs(server)
+
+      const email = emails[emails.length - 1]
+      expect(email['subject']).to.contain('été bloquée')
+      expect(email['text']).to.contain('été bloquée')
+    })
+
+    it('Should translate emails according to the user language if provided', async function () {
+      await server.users.updateMe({ language: 'en' })
+
+      await server.blacklist.remove({ videoId: video.uuid })
+      await waitJobs(server)
+
+      const email = emails[emails.length - 1]
+      expect(email['subject']).to.contain('has been unblocked')
+      expect(email['text']).to.contain('has been unblocked')
+    })
+
+    it('Should update user language and translate emails accordingly', async function () {
+      await server.users.updateMe({ language: 'fr' })
+
+      await server.blacklist.add({ videoId: video.uuid })
+      await waitJobs(server)
+
+      const email = emails[emails.length - 1]
+      expect(email['subject']).to.contain('été bloquée')
+      expect(email['text']).to.contain('été bloquée')
+    })
+  })
+
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

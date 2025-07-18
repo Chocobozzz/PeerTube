@@ -1,5 +1,5 @@
 import { Routes, UrlMatchResult, UrlSegment } from '@angular/router'
-import { POSSIBLE_LOCALES } from '@peertube/peertube-core-utils'
+import { AVAILABLE_LOCALES } from '@peertube/peertube-core-utils'
 import { MetaGuard } from './core'
 import { EmptyComponent } from './empty.component'
 import { HomepageRedirectComponent } from './homepage-redirect.component'
@@ -241,7 +241,7 @@ const routes: Routes = [
 ]
 
 // Avoid 404 when changing language
-for (const locale of POSSIBLE_LOCALES) {
+for (const locale of AVAILABLE_LOCALES) {
   routes.push({
     path: locale,
     component: HomepageRedirectComponent

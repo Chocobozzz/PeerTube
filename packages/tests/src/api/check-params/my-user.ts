@@ -253,6 +253,12 @@ describe('Test my user API validators', function () {
       }
     })
 
+    it('Should fail with an invalid language attribute', async function () {
+      const fields = { language: 'toto' }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
+    })
+
     it('Should fail with an invalid theme', async function () {
       const fields = { theme: 'invalid' }
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
@@ -293,7 +299,8 @@ describe('Test my user API validators', function () {
         theme: 'default',
         noInstanceConfigWarningModal: true,
         noWelcomeModal: true,
-        noAccountSetupWarningModal: true
+        noAccountSetupWarningModal: true,
+        language: 'fr'
       }
 
       await makePutBodyRequest({
@@ -545,6 +552,22 @@ describe('Test my user API validators', function () {
     })
   })
 
+  describe('Client config', function () {
+    it('Should fail with an invalid language', async function () {
+      await server.users.updateInterfaceLanguage({
+        language: 'hello',
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed to update language with the correct params', async function () {
+      await server.users.updateInterfaceLanguage({
+        language: 'fr',
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+  })
+
   describe('When deleting our account', function () {
     it('Should fail with with the root account', async function () {
       await server.users.deleteMe({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
@@ -552,7 +575,7 @@ describe('Test my user API validators', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

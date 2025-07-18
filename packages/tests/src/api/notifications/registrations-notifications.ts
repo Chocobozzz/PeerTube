@@ -35,7 +35,6 @@ describe('Test registrations notifications', function () {
   })
 
   describe('New direct registration for moderators', function () {
-
     before(async function () {
       await server.config.enableSignup(false)
     })
@@ -55,7 +54,6 @@ describe('Test registrations notifications', function () {
   })
 
   describe('New registration request for moderators', function () {
-
     before(async function () {
       await server.config.enableSignup(true)
     })
@@ -76,7 +74,7 @@ describe('Test registrations notifications', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

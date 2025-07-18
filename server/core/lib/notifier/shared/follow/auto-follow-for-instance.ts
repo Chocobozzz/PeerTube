@@ -1,11 +1,13 @@
-import { logger } from '@server/helpers/logger.js'
-import { UserModel } from '@server/models/user/user.js'
-import { UserNotificationModel } from '@server/models/user/user-notification.js'
-import { MActorFollowFull, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { UserNotificationType, UserRight } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
+import { logger } from '@server/helpers/logger.js'
+import { instanceFollowingUrl } from '@server/lib/client-urls.js'
+import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
+import { MActorFollowFull, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class AutoFollowForInstance extends AbstractNotification <MActorFollowFull> {
+export class AutoFollowForInstance extends AbstractNotification<MActorFollowFull> {
   private admins: MUserDefault[]
 
   async prepare () {
@@ -35,13 +37,21 @@ export class AutoFollowForInstance extends AbstractNotification <MActorFollowFul
     return notification
   }
 
-  createEmail (to: string) {
-    const instanceUrl = this.actorFollow.ActorFollowing.url
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
+    const subscription = this.actorFollow.ActorFollowing
 
     return {
       to,
-      subject: 'Auto instance following',
-      text: `Your instance automatically followed a new instance: <a href="${instanceUrl}">${instanceUrl}</a>.`
+      subject: t('Auto platform follow', to.language),
+      text: `Your platform automatically followed ${subscription.getIdentifier()}`,
+      locals: {
+        action: {
+          text: t('View subscription', to.language),
+          url: instanceFollowingUrl
+        }
+      }
     }
   }
 

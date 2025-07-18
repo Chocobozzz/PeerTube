@@ -76,6 +76,8 @@ export class User implements UserServerModel {
 
   twoFactorEnabled: boolean
 
+  language: string
+
   createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {

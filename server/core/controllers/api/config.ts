@@ -309,6 +309,8 @@ function customConfig (): CustomConfig {
       businessModel: CONFIG.INSTANCE.BUSINESS_MODEL,
       hardwareInformation: CONFIG.INSTANCE.HARDWARE_INFORMATION,
 
+      defaultLanguage: CONFIG.INSTANCE.DEFAULT_LANGUAGE,
+
       languages: CONFIG.INSTANCE.LANGUAGES,
       categories: CONFIG.INSTANCE.CATEGORIES,
 

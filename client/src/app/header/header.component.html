@@ -65,23 +65,20 @@
 
           <div class="dropdown-divider"></div>
 
-          <a
-            *ngIf="user.account" ngbDropdownItem class="dropdown-item" routerLink="/my-account"
-            #manageAccount
-          >
+          <a *ngIf="user.account" ngbDropdownItem class="dropdown-item" routerLink="/my-account">
             <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon> <ng-container i18n>Manage my account</ng-container>
           </a>
 
           <div class="dropdown-divider"></div>
 
-          <button
+          <a
             myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
-            ngbDropdownItem class="dropdown-item" (click)="openLanguageChooser()"
+            ngbDropdownItem class="dropdown-item" routerLink="/my-account/settings" fragment="interface-settings"
           >
             <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
             <span i18n>Interface:</span>
             <span class="ms-auto ps-2 muted">{{ currentInterfaceLanguage }}</span>
-          </button>
+          </a>
 
           <button *ngIf="!isInMobileView" ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
             <my-global-icon iconName="keyboard" aria-hidden="true"></my-global-icon>
@@ -100,5 +97,4 @@
   <my-button theme="tertiary" rounded="true" class="menu-button margin-button" icon="menu" (click)="toggleMenu()"></my-button>
 </div>
 
-<my-language-chooser #languageChooserModal></my-language-chooser>
-<my-quick-settings #quickSettingsModal (openLanguageModal)="languageChooserModal.show()"></my-quick-settings>
+<my-quick-settings #quickSettingsModal></my-quick-settings>

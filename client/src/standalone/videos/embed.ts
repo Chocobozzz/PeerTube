@@ -62,7 +62,7 @@ export class PeerTubeEmbed {
   constructor (videoWrapperId: string) {
     logger.registerServerSending(getBackendUrl())
 
-    this.http = new AuthHTTP(getBackendUrl())
+    this.http = new AuthHTTP(getBackendUrl(), navigator.language)
 
     this.videoFetcher = new VideoFetcher(this.http)
     this.playlistFetcher = new PlaylistFetcher(this.http)

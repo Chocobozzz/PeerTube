@@ -117,7 +117,7 @@ export async function buildFeedMetadata (options: {
 }) {
   const { video, videoChannel, account } = options
 
-  let imageUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png'
+  let imageUrl = ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 512)
   let ownerImageUrl: string
   let name: string
   let description: string

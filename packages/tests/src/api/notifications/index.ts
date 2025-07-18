@@ -1,5 +1,5 @@
 import './admin-notifications.js'
-import './captions-notifications.js'
+import './caption-notifications.js'
 import './comments-notifications.js'
 import './moderation-notifications.js'
 import './notifications-api.js'

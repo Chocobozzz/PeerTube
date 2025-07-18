@@ -170,6 +170,7 @@ function runTest (withObjectStorage: boolean) {
         const me = await remoteServer.users.getMyInfo({ token: remoteNoahToken })
 
         expect(me.p2pEnabled).to.be.false
+        expect(me.language).to.equal('fr')
 
         const settings = me.notificationSettings
 
@@ -593,11 +594,11 @@ function runTest (withObjectStorage: boolean) {
     it('Should have received an email on finished import', async function () {
       const email = emails.reverse().find(e => {
         return e['to'][0]['address'] === 'noah_remote@example.com' &&
-          e['subject'].includes('archive import has finished')
+          e['subject'].includes('importation de votre archive est terminée')
       })
 
       expect(email).to.exist
-      expect(email['text']).to.contain('as considered duplicate: 5') // 5 videos are considered as duplicates
+      expect(email['text']).to.contain('considéré comme doublon : 5') // 5 videos are considered as duplicates
     })
 
     it('Should auto blacklist imported videos if enabled by the administrator', async function () {
@@ -715,7 +716,7 @@ function runTest (withObjectStorage: boolean) {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server, remoteServer, blockedServer ])
   })

@@ -893,6 +893,10 @@ instance:
   # Example: '2 vCore, 2GB RAM...'
   hardware_information: '' # Supports Markdown
 
+  # Default language of your instance, used in emails for example
+  # The web interface still uses the web browser preferred language
+  default_language: 'en'
+
   # Describe the languages spoken on your instance, to interact with your users for example
   # Uncomment or add the languages you want
   # List of supported languages: https://peertube.cpy.re/api/v1/videos/languages

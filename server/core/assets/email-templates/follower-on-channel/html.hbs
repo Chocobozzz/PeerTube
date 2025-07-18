@@ -1,0 +1,9 @@
+{{#> base title=(t "New follower on your channel")}}
+  <p>
+    {{#if accountFollowType}}
+      {{{t "Your account <a href=\"{followingUrl}\">{followingName}</a> has a new subscriber: <a href=\"{followerUrl}\">{followerName}</a>." followingUrl=followingUrl followingName=followingName followerUrl=followerUrl followerName=followerName}}}
+    {{else}}
+      {{{t "Your channel <a href=\"{followingUrl}\">{followingName}</a> has a new subscriber: <a href=\"{followerUrl}\">{followerName}</a>." followingUrl=followingUrl followingName=followingName followerUrl=followerUrl followerName=followerName}}}
+    {{/if}}
+  </p>
+{{/base}}

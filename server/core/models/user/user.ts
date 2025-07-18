@@ -376,6 +376,10 @@ export class UserModel extends SequelizeModel<UserModel> {
   autoPlayNextVideoPlaylist: boolean
 
   @AllowNull(true)
+  @Column(DataType.STRING)
+  language: string
+
+  @AllowNull(true)
   @Default(null)
   @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
   @Column(DataType.ARRAY(DataType.STRING))
@@ -872,6 +876,16 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.unscoped().findOne(query)
   }
 
+  static async loadForEmail (id: number) {
+    const user = await UserModel.unscoped().findByPk(id)
+
+    if (!user) return undefined
+
+    return { email: user.email, language: user.getLanguage() }
+  }
+
+  // ---------------------------------------------------------------------------
+
   static generateUserQuotaBaseSQL (options: {
     daily: boolean
     whereUserId: '$userId' | '"UserModel"."id"'
@@ -981,6 +995,10 @@ export class UserModel extends SequelizeModel<UserModel> {
     return comparePassword(password, this.password)
   }
 
+  getLanguage () {
+    return this.language || CONFIG.INSTANCE.DEFAULT_LANGUAGE
+  }
+
   toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
@@ -1025,6 +1043,8 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideo: this.autoPlayNextVideo,
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
+
+      language: this.getLanguage(),
 
       role: {
         id: this.role,

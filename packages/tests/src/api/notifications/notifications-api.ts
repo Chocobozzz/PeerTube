@@ -36,7 +36,6 @@ describe('Test notifications API', function () {
   })
 
   describe('Notification list & count', function () {
-
     it('Should correctly list notifications', async function () {
       const { data, total } = await server.notifications.list({ token: userToken, start: 0, count: 2 })
 
@@ -74,7 +73,6 @@ describe('Test notifications API', function () {
   })
 
   describe('Mark as read', function () {
-
     it('Should mark as read some notifications', async function () {
       const { data } = await server.notifications.list({ token: userToken, start: 2, count: 3 })
       const ids = data.map(n => n.id)
@@ -227,7 +225,7 @@ describe('Test notifications API', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

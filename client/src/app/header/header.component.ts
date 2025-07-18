@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
-import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/menu/quick-settings-modal.component'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
@@ -11,15 +10,16 @@ import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-
 import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
 import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
+import { findAppropriateImage, getCompleteLocale, I18N_LOCALES } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, ServerConfig } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
 import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
-import { SearchTypeaheadComponent } from './search-typeahead.component'
 import { HeaderService } from './header.service'
-import { findAppropriateImage } from '@peertube/peertube-core-utils'
+import { SearchTypeaheadComponent } from './search-typeahead.component'
+import { getDevLocale, isOnDevLocale } from '@app/helpers'
 
 @Component({
   selector: 'my-header',
@@ -32,7 +32,6 @@ import { findAppropriateImage } from '@peertube/peertube-core-utils'
     PluginSelectorDirective,
     SignupLabelComponent,
     LoginLinkComponent,
-    LanguageChooserComponent,
     QuickSettingsModalComponent,
     GlobalIconComponent,
     RouterLink,
@@ -53,10 +52,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private router = inject(Router)
   private menu = inject(MenuService)
   private headerService = inject(HeaderService)
+  private localeId = inject(LOCALE_ID)
 
   private static LS_HIDE_MOBILE_MSG = 'hide-mobile-msg'
 
-  readonly languageChooserModal = viewChild<LanguageChooserComponent>('languageChooserModal')
   readonly quickSettingsModal = viewChild<QuickSettingsModalComponent>('quickSettingsModal')
   readonly dropdown = viewChild<NgbDropdown>('dropdown')
 
@@ -64,8 +63,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loggedIn: boolean
 
   hotkeysHelpVisible = false
-
-  currentInterfaceLanguage: string
 
   mobileMsg = false
   androidAppUrl = ''
@@ -81,8 +78,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private hotkeysSub: Subscription
   private authSub: Subscription
 
-  get language () {
-    return this.languageChooserModal().getCurrentLanguage()
+  get currentInterfaceLanguage () {
+    const english = 'English'
+    const locale = isOnDevLocale()
+      ? getDevLocale()
+      : getCompleteLocale(this.localeId)
+
+    if (locale) return I18N_LOCALES[locale as keyof typeof I18N_LOCALES] || english
+
+    return english
   }
 
   get requiresApproval () {
@@ -121,7 +125,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.htmlConfig = this.serverService.getHTMLConfig()
-    this.currentInterfaceLanguage = this.languageChooserModal().getCurrentLanguage()
 
     this.loggedIn = this.authService.isLoggedIn()
     this.updateUserState()
@@ -271,10 +274,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout()
     // Redirect to home page
     this.redirectService.redirectToHomepage()
-  }
-
-  openLanguageChooser () {
-    this.languageChooserModal().show()
   }
 
   openQuickSettings () {

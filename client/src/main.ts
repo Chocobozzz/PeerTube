@@ -1,5 +1,5 @@
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
-import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClient, withInterceptors } from '@angular/common/http'
 import {
   ApplicationRef,
   enableProdMode,
@@ -15,6 +15,7 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 import { PTPrimeTheme } from '@app/core/theme/primeng/primeng-theme'
 import localeOc from '@app/helpers/locales/oc'
 import { getFormProviders } from '@app/shared/shared-forms/shared-form-providers'
+import { languageInterceptor } from '@app/shared/shared-main/http/language-interceptor.service'
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
@@ -76,7 +77,9 @@ const bootstrap = () =>
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
       ),
 
-      provideHttpClient(),
+      provideHttpClient(
+        withInterceptors([ languageInterceptor ])
+      ),
 
       importProvidersFrom(
         LoadingBarHttpClientModule,

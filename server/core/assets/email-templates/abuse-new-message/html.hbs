@@ -1,0 +1,10 @@
+{{! New message on abuse report }}
+{{#> base title=(t "New message on abuse report")}}
+  <p>
+    {{{t "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>" messageAccountName=messageAccountName abuseUrl=abuseUrl abuseId=abuseId}}}
+  </p>
+
+  <blockquote>{{messageText}}</blockquote>
+
+  <br style="display: none;">
+{{/base}}

@@ -1,0 +1,27 @@
+{{#> base title=(t "A video is pending moderation")}}
+  <p>
+    {{#if isLocal}}
+      {{{t "{instanceName} received an abuse report for the video <a href=\"{videoUrl}\">{videoName}</a>." instanceName=instanceName videoUrl=videoUrl videoName=videoName}}}
+    {{else}}
+      {{{t "{instanceName} received an abuse report for the remote video <a href=\"{videoUrl}\">{videoName}</a>." instanceName=instanceName videoUrl=videoUrl videoName=videoName}}}
+    {{/if}}
+  </p>
+
+  <p>
+    {{{t "The video was uploaded by <a href=\"{channelUrl}\">{channelDisplayName}</a> channel." channelUrl=channelUrl channelDisplayName=channelDisplayName}}}
+  </p>
+
+  <p>
+    {{#if videoPublishedAt}}
+      {{t "It was published on {videoPublishedAt}." videoPublishedAt=videoPublishedAt}}
+    {{else}}
+      {{t "It was uploaded on {videoCreatedAt} but not yet published." videoCreatedAt=videoCreatedAt}}
+    {{/if}}
+  </p>
+
+  <p>{{t "The reporter, {reporter}, cited the following reason(s):" reporter=reporter}}</p>
+
+  <blockquote>{{reason}}</blockquote>
+
+  <br style="display: none;">
+{{/base}}

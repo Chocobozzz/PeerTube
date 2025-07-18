@@ -208,10 +208,10 @@ async function generateActorHtmlPage (req: express.Request, res: express.Respons
 async function generateManifest (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
 
-  const defaultIcons = [ 36, 48, 72, 96, 144, 192, 512 ].map(size => {
+  const defaultIcons = [ 192, 512 ].map(size => {
     return {
       src: `/client/assets/images/icons/icon-${size}x${size}.png`,
-      sizes: `36x36`,
+      sizes: `${size}x${size}`,
       type: 'image/png'
     }
   })

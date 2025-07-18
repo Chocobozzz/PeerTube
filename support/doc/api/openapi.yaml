@@ -309,6 +309,8 @@ tags:
       Manage runner registration token
   - name: Video Passwords
     description: Operation on video passwords
+  - name: Client Config
+    description: Configuration of the web client
 
 x-tagGroups:
   - name: Static endpoints
@@ -367,6 +369,7 @@ x-tagGroups:
   - name: Instance
     tags:
       - Config
+      - Client Config
       - Homepage
       - Instance Follows
       - Instance Redundancy
@@ -7321,6 +7324,28 @@ paths:
       responses:
         '204':
           description: successful operation
+  /api/v1/client-config/update-language:
+    post:
+      tags:
+        - Client Config
+      summary: Update client language
+      description: Set a cookie so that, the next time the client refreshes the HTML of the web interface, PeerTube will use the next language
+      operationId: updateClientLanguage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                  description: Language code to set
+                  example: 'en-US'
+              required:
+                - language
+      responses:
+        '204':
+          description: successful operation
 
 servers:
   - url: 'https://peertube2.cpy.re'
@@ -9491,6 +9516,8 @@ components:
               type: string
             serverCountry:
               type: string
+            defaultLanguage:
+              type: string
             support:
               type: object
               properties:
@@ -10674,6 +10701,9 @@ components:
           items:
             type: string
           description: list of languages to filter videos down to
+        language:
+          type: string
+          description: default language for this user
         theme:
           type: string
         noInstanceConfigWarningModal:

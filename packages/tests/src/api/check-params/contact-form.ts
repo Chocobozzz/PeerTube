@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -10,6 +9,7 @@ import {
   killallServers,
   PeerTubeServer
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 
 describe('Test contact form API validators', function () {
   let server: PeerTubeServer
@@ -79,7 +79,7 @@ describe('Test contact form API validators', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
+    await MockSmtpServer.Instance.kill()
 
     await cleanupTests([ server ])
   })

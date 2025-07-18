@@ -1,12 +1,13 @@
+import { UserNotificationType } from '@peertube/peertube-models'
+import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
-import { UserModel } from '@server/models/user/user.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MActorFollowFull, MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/types/models/index.js'
-import { UserNotificationType } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class FollowForUser extends AbstractNotification <MActorFollowFull> {
+export class FollowForUser extends AbstractNotification<MActorFollowFull> {
   private followType: 'account' | 'channel'
   private user: MUserDefault
 
@@ -56,22 +57,30 @@ export class FollowForUser extends AbstractNotification <MActorFollowFull> {
     return notification
   }
 
-  createEmail (to: string) {
+  createEmail (user: MUserWithNotificationSetting) {
+    const to = { email: user.email, language: user.getLanguage() }
+
     const following = this.actorFollow.ActorFollowing
     const follower = this.actorFollow.ActorFollower
 
-    const followingName = (following.VideoChannel || following.Account).getDisplayName()
+    const followingAccountOrChannel = Object.assign(following.VideoChannel || following.Account, { Actor: following })
+    const followerAccountOrChannel = Object.assign(follower.VideoChannel || follower.Account, { Actor: follower })
+    const followingName = followingAccountOrChannel.getDisplayName()
 
     return {
       template: 'follower-on-channel',
       to,
-      subject: `New follower on your channel ${followingName}`,
+
+      subject: this.followType === 'account'
+        ? t('New follower on your account {followingName}', to.language, { followingName })
+        : t('New follower on your channel {followingName}', to.language, { followingName }),
+
       locals: {
         followerName: follower.Account.getDisplayName(),
-        followerUrl: follower.url,
+        followerUrl: followerAccountOrChannel.getClientUrl(),
+        followingUrl: followingAccountOrChannel.getClientUrl(),
         followingName,
-        followingUrl: following.url,
-        followType: this.followType
+        accountFollowType: this.followType === 'account'
       }
     }
   }

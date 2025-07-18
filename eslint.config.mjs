@@ -13,7 +13,8 @@ export default defineConfig([
     'packages/types-generator',
     '*.js',
     'client',
-    'dist'
+    'dist',
+    'server/.i18next-parser.config.ts'
   ]),
 
   {

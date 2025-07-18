@@ -137,6 +137,8 @@ export interface ServerConfig {
     avatars: ActorImage[]
     banners: ActorImage[]
 
+    defaultLanguage: string
+
     logo: {
       type: LogoType
       width: number

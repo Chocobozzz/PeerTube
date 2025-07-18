@@ -42,6 +42,16 @@ export function getDefaultSanitizeOptions () {
   }
 }
 
+export function getMailHtmlSanitizeOptions () {
+  return {
+    allowedTags: [ 'a', 'strong' ],
+    allowedSchemes: getDefaultSanitizedSchemes(),
+    allowedAttributes: {
+      a: [ 'href', 'title' ]
+    }
+  }
+}
+
 export function getTextOnlySanitizeOptions () {
   return {
     allowedTags: [] as string[]
@@ -56,7 +66,7 @@ export function getTextOnlySanitizeOptions () {
 export function escapeHTML (stringParam: string) {
   if (!stringParam) return ''
 
-  const entityMap: { [id: string ]: string } = {
+  const entityMap: { [id: string]: string } = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',

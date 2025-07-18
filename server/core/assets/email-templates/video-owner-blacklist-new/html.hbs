@@ -1,0 +1,15 @@
+{{#> base title=(t "Your video has been blocked")}}
+  <p>
+    {{#if reason}}
+      {{{t "Your video <strong>{videoName}</strong> has been blocked by {instanceName} moderators for the following reason:" videoName=videoName instanceName=instanceName}}}
+    {{else}}
+      {{{t "Your video <strong>{videoName}</strong> has been blocked by {instanceName} moderators." videoName=videoName instanceName=instanceName}}}
+    {{/if}}
+  </p>
+
+  {{#if reason}}
+    <blockquote>{{reason}}</blockquote>
+  {{/if}}
+
+  <br style="display: none;">
+{{/base}}

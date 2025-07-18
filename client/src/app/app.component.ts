@@ -1,7 +1,7 @@
 import { DOCUMENT, getLocaleDirection, NgClass, NgIf, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { ActivatedRoute, Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
+import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
 import {
   AuthService,
   Hotkey,
@@ -83,7 +83,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private scrollService = inject(ScrollService)
   private userLocalStorage = inject(UserLocalStorageService)
   private peertubeModal = inject(PeertubeModalService)
-  private route = inject(ActivatedRoute)
 
   menu = inject(MenuService)
 

@@ -56,6 +56,8 @@ declare module 'express' {
     query: any
     method: HttpMethodType
     rawBody: Buffer // Allow plugin routes to access the raw body
+
+    t: (key: string, context?: Record<string, string | number>) => string
   }
 
   // ---------------------------------------------------------------------------
