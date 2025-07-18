@@ -12337,7 +12337,7 @@
       </trans-unit>
       <trans-unit id="8530055725227539871" datatype="html" xml:space="preserve">
         <source>Moderately rounded</source>
-        <target state="translated">适度原型</target>
+        <target state="translated">适度圆形</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">152</context>
