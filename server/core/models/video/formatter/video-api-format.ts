@@ -43,12 +43,12 @@ export type VideoFormattingJSONOptions = {
   }
 }
 
-export function guessAdditionalAttributesFromQuery (query: Pick<VideosCommonQueryAfterSanitize, 'include'>): VideoFormattingJSONOptions {
-  if (!query?.include) return {}
+export function guessAdditionalAttributesFromQuery (query: Pick<VideosCommonQueryAfterSanitize, 'include' | 'isLive'>): VideoFormattingJSONOptions {
+  if (!query?.include) return {additionalAttributes: {state: query.isLive}}
 
   return {
     additionalAttributes: {
-      state: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      state: query.isLive || !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
       waitTranscoding: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
       scheduledUpdate: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
       blacklistInfo: !!(query.include & VideoInclude.BLACKLISTED),
@@ -122,6 +122,7 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     originallyPublishedAt: video.originallyPublishedAt,
 
     isLive: video.isLive,
+    scheduledAt: video.VideoLive?.scheduledAt,
 
     account: video.VideoChannel.Account.toFormattedSummaryJSON(),
     channel: video.VideoChannel.toFormattedSummaryJSON(),

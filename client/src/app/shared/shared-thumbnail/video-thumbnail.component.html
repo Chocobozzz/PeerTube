@@ -34,6 +34,9 @@
         <ng-container i18n>LIVE</ng-container>
       } @else if (isEndedLive()) {
         <ng-container i18n>LIVE ENDED</ng-container>
+      } @else if (isScheduledLive()) {
+        <ng-container i18n>SCHEDULED LIVE</ng-container>
+        <span [title]="scheduledLiveDate().toLocaleString()"> {{ scheduledLiveDate() | myFromNow | uppercase }}</span>
       } @else {
         <ng-container i18n>WAIT LIVE</ng-container>
       }

@@ -27,6 +27,7 @@ export interface VideoObject {
   summary: string
 
   isLiveBroadcast: boolean
+  liveScheduledAt: string
   liveSaveReplay: boolean
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType

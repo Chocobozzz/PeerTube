@@ -55,6 +55,7 @@ export class Video implements VideoServerModel {
   aspectRatio: number
 
   isLive: boolean
+  scheduledAt: Date | string
 
   previewPath: string
   previewUrl: string
@@ -148,6 +149,7 @@ export class Video implements VideoServerModel {
     this.description = hash.description
 
     this.isLive = hash.isLive
+    this.scheduledAt = hash.scheduledAt ? new Date(hash.scheduledAt.toString()) : null
 
     this.duration = hash.duration
     this.durationLabel = Video.buildDurationLabel(this)
