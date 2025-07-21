@@ -357,11 +357,18 @@ cd /var/www/peertube && \
 
 ### Update PeerTube configuration
 
-Check for configuration changes, and report them in your `config/production.yaml` file:
+If your system has `git` installed, the auto upgrade script should have created a `config/production.yaml.new` file that merges your current configuration file with the new configuration keys introduced by the new PeerTube version.
+
+Review the file, check and fix any potential conflicts:
 
 ```bash
-cd /var/www/peertube/versions
-diff -u "$(ls -t | head -2 | tail -1)/config/production.yaml.example" "$(ls -t | head -1)/config/production.yaml.example"
+cd /var/www/peertube && sudo -u peertube vimdiff config/production.yaml config/production.yaml.new
+```
+
+Then replace your current configuration file by the new one:
+
+```bash
+cd /var/www/peertube && sudo -u peertube cp config/production.yaml.new config/production.yaml
 ```
 
 ### Update nginx configuration
