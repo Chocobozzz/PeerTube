@@ -442,7 +442,8 @@ const CONFIG = {
   REMOTE_RUNNERS: {
     STALLED_JOBS: {
       LIVE: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.live')),
-      VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod'))
+      VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod')),
+      TRANSCRIPTION: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.transcription'))
     }
   },
   THUMBNAILS: {
