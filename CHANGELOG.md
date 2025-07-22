@@ -1,5 +1,16 @@
 # Changelog
 
+## v7.2.3
+
+### SECURITY
+
+ * Upgrade `multer` dependency to prevent Denial of Service with a malformed request
+
+### Bug fixes
+
+ * Fix channel synchronization that duplicates video imports
+
+
 ## v7.2.2
 
 ### SECURITY
