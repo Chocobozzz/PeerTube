@@ -28,7 +28,12 @@ export class RunnerJobWatchDogScheduler extends AbstractScheduler {
       types: [ 'live-rtmp-hls-transcoding' ]
     })
 
-    for (const stalled of [ ...vodStalledJobs, ...liveStalledJobs ]) {
+    const transcriptionStalledJobs = await RunnerJobModel.listStalledJobs({
+      staleTimeMS: CONFIG.REMOTE_RUNNERS.STALLED_JOBS.TRANSCRIPTION,
+      types: [ 'video-transcription' ]
+    })
+
+    for (const stalled of [ ...vodStalledJobs, ...liveStalledJobs, ...transcriptionStalledJobs ]) {
       logger.info('Abort stalled runner job %s (%s)', stalled.uuid, stalled.type, lTags(stalled.uuid, stalled.type))
 
       const Handler = getRunnerJobHandlerClass(stalled)
