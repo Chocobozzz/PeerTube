@@ -493,6 +493,7 @@ remote_runners:
   stalled_jobs:
     live: '30 seconds'
     vod: '2 minutes'
+    transcription: '2 minutes'
 
 thumbnails:
   # When automatically generating a thumbnail from the video
