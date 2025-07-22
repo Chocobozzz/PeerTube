@@ -208,18 +208,44 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static async urlAlreadyImported (channelId: number, targetUrl: string): Promise<boolean> {
-    const element = await VideoImportModel.unscoped().findOne({
-      where: {
-        targetUrl,
-        state: {
-          [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
-        },
-        videoChannelSyncId: channelId
+  static async urlAlreadyImported (options: {
+    targetUrl: string
+    channelId: number
+    channelSyncId?: number
+  }): Promise<boolean> {
+    const { channelSyncId, channelId, targetUrl } = options
+
+    const baseWhere = {
+      targetUrl,
+      state: {
+        [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
       }
+    }
+
+    const bySyncId = channelSyncId
+      ? VideoImportModel.unscoped().findOne({
+        where: {
+          ...baseWhere,
+
+          videoChannelSyncId: channelSyncId
+        }
+      })
+      : Promise.resolve(undefined)
+
+    const byChannelId = VideoImportModel.unscoped().findOne({
+      where: baseWhere,
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          where: {
+            channelId
+          }
+        }
+      ]
     })
 
-    return !!element
+    return (await Promise.all([ bySyncId, byChannelId ])).some(e => !!e)
   }
 
   getTargetIdentifier () {
