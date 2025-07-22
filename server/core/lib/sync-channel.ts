@@ -1,11 +1,11 @@
+import { VideoChannelSyncState, VideoPrivacy } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildYoutubeDLImport } from '@server/lib/video-pre-import.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
-import { MChannel, MChannelAccountDefault, MChannelSync } from '@server/types/models/index.js'
-import { VideoChannelSyncState, VideoPrivacy } from '@peertube/peertube-models'
+import { MChannelAccountDefault, MChannelSync } from '@server/types/models/index.js'
 import { CreateJobArgument, JobQueue } from './job-queue/index.js'
 import { ServerConfigManager } from './server-config-manager.js'
 
@@ -38,7 +38,9 @@ export async function synchronizeChannel (options: {
 
     logger.info(
       'Fetched %d candidate URLs for sync channel %s.',
-      targetUrls.length, channel.Actor.preferredUsername, { targetUrls, ...lTags() }
+      targetUrls.length,
+      channel.Actor.preferredUsername,
+      { targetUrls, ...lTags() }
     )
 
     if (targetUrls.length === 0) {
@@ -56,7 +58,7 @@ export async function synchronizeChannel (options: {
       logger.debug(`Import candidate: ${targetUrl}`, lTags())
 
       try {
-        if (await skipImport(channel, targetUrl, onlyAfter)) continue
+        if (await skipImport({ channel, channelSync, targetUrl, onlyAfter })) continue
 
         const { job } = await buildYoutubeDLImport({
           user,
@@ -92,9 +94,19 @@ export async function synchronizeChannel (options: {
 
 // ---------------------------------------------------------------------------
 
-async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Date) {
-  if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
-    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', targetUrl, channel.name, lTags())
+async function skipImport (options: {
+  channel: MChannelAccountDefault
+  channelSync: MChannelSync
+  targetUrl: string
+  onlyAfter?: Date
+}) {
+  const { channel, channelSync, targetUrl, onlyAfter } = options
+
+  if (await VideoImportModel.urlAlreadyImported({ channelId: channel.id, channelSyncId: channelSync?.id, targetUrl })) {
+    logger.debug(
+      `${targetUrl} is already imported for channel ${channel.name}, skipping video channel synchronization.`,
+      { channelSync, ...lTags() }
+    )
     return true
   }
 
