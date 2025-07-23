@@ -7129,9 +7129,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2935783216050341269" datatype="html">
+      <trans-unit id="2935783216050341269" datatype="html" xml:space="preserve">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">il sistema di condivisione utilizzato per questo video implica che alcune informazioni tecniche sul tuo sistema (come un indirizzo IP pubblico) possano essere inviate ad altri peer.</target>
+        <target state="translated">il sistema di condivisione utilizzato per questo video implica che alcune informazioni tecniche sul tuo sistema (come un indirizzo IP pubblico) possano essere inviate ad altri utenti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">6</context>
@@ -7323,7 +7323,7 @@
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html" xml:space="preserve">
         <source>Friendly Reminder:</source>
-        <target state="translated">Promemoria amichevole:</target>
+        <target state="translated">Promemoria di cortesia:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
