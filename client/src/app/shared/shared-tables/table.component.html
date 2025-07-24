@@ -74,11 +74,11 @@
       @for (column of columns; track column.id) {
         @if (isColumnDisplayed(column.id)) {
           @if (column.sortable) {
-            <th scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="getUntypedColumnId(column)" [ngClass]="column.class">
+            <th scope="col" [ngbTooltip]="sortTooltip" container="body" [pSortableColumn]="column.sortKey" [ngClass]="column.class">
               {{ column.label }}
               <small *ngIf="column.labelSmall">{{ column.labelSmall }}</small>
 
-              <p-sortIcon [field]="getUntypedColumnId(column)"></p-sortIcon>
+              <p-sortIcon [field]="column.sortKey"></p-sortIcon>
             </th>
           } @else {
             <th scope="col" [ngClass]="column.class">
