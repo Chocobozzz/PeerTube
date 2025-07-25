@@ -158,72 +158,72 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
 export class ActorModel extends SequelizeModel<ActorModel> {
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))
-  type: ActivityPubActorType
+  declare type: ActivityPubActorType
 
   @AllowNull(false)
   @Is('ActorPreferredUsername', value => throwIfNotValid(value, isActorPreferredUsernameValid, 'actor preferred username'))
   @Column
-  preferredUsername: string
+  declare preferredUsername: string
 
   @AllowNull(false)
   @Is('ActorUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(true)
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPublicKeyValid, 'public key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY.max))
-  publicKey: string
+  declare publicKey: string
 
   @AllowNull(true)
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'private key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY.max))
-  privateKey: string
+  declare privateKey: string
 
   @AllowNull(false)
   @Is('ActorFollowersCount', value => throwIfNotValid(value, isActorFollowersCountValid, 'followers count'))
   @Column
-  followersCount: number
+  declare followersCount: number
 
   @AllowNull(false)
   @Is('ActorFollowersCount', value => throwIfNotValid(value, isActorFollowingCountValid, 'following count'))
   @Column
-  followingCount: number
+  declare followingCount: number
 
   @AllowNull(false)
   @Is('ActorInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'inbox url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  inboxUrl: string
+  declare inboxUrl: string
 
   @AllowNull(true)
   @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  outboxUrl: string
+  declare outboxUrl: string
 
   @AllowNull(true)
   @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  sharedInboxUrl: string
+  declare sharedInboxUrl: string
 
   @AllowNull(true)
   @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  followersUrl: string
+  declare followersUrl: string
 
   @AllowNull(true)
   @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
-  followingUrl: string
+  declare followingUrl: string
 
   @AllowNull(true)
   @Column
-  remoteCreatedAt: Date
+  declare remoteCreatedAt: Date
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @HasMany(() => ActorImageModel, {
     as: 'Avatars',
@@ -236,7 +236,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       type: ActorImageType.AVATAR
     }
   })
-  Avatars: Awaited<ActorImageModel>[]
+  declare Avatars: Awaited<ActorImageModel>[]
 
   @HasMany(() => ActorImageModel, {
     as: 'Banners',
@@ -249,7 +249,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       type: ActorImageType.BANNER
     }
   })
-  Banners: Awaited<ActorImageModel>[]
+  declare Banners: Awaited<ActorImageModel>[]
 
   @HasMany(() => UploadImageModel, {
     as: 'UploadImages',
@@ -259,7 +259,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       allowNull: false
     }
   })
-  UploadImages: Awaited<UploadImageModel>[]
+  declare UploadImages: Awaited<UploadImageModel>[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -269,7 +269,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     as: 'ActorFollowings',
     onDelete: 'cascade'
   })
-  ActorFollowing: Awaited<ActorFollowModel>[]
+  declare ActorFollowing: Awaited<ActorFollowModel>[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -279,11 +279,11 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     as: 'ActorFollowers',
     onDelete: 'cascade'
   })
-  ActorFollowers: Awaited<ActorFollowModel>[]
+  declare ActorFollowers: Awaited<ActorFollowModel>[]
 
   @ForeignKey(() => ServerModel)
   @Column
-  serverId: number
+  declare serverId: number
 
   @BelongsTo(() => ServerModel, {
     foreignKey: {
@@ -291,7 +291,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     },
     onDelete: 'cascade'
   })
-  Server: Awaited<ServerModel>
+  declare Server: Awaited<ServerModel>
 
   @HasOne(() => AccountModel, {
     foreignKey: {
@@ -300,7 +300,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @HasOne(() => VideoChannelModel, {
     foreignKey: {
@@ -309,7 +309,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     onDelete: 'cascade',
     hooks: true
   })
-  VideoChannel: Awaited<VideoChannelModel>
+  declare VideoChannel: Awaited<VideoChannelModel>
 
   // ---------------------------------------------------------------------------
 

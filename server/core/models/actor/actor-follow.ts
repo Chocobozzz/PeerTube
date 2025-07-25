@@ -73,30 +73,30 @@ import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/i
 export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(FOLLOW_STATES)))
-  state: FollowState
+  declare state: FollowState
 
   @AllowNull(false)
   @Default(ACTOR_FOLLOW_SCORE.BASE)
   @IsInt
   @Max(ACTOR_FOLLOW_SCORE.MAX)
   @Column
-  score: number
+  declare score: number
 
   // Allow null because we added this column in PeerTube v3, and don't want to generate fake URLs of remote follows
   @AllowNull(true)
   @Is('ActorFollowUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
-  url: string
+  declare url: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -106,11 +106,11 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     as: 'ActorFollower',
     onDelete: 'CASCADE'
   })
-  ActorFollower: Awaited<ActorModel>
+  declare ActorFollower: Awaited<ActorModel>
 
   @ForeignKey(() => ActorModel)
   @Column
-  targetActorId: number
+  declare targetActorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -120,7 +120,7 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     as: 'ActorFollowing',
     onDelete: 'CASCADE'
   })
-  ActorFollowing: Awaited<ActorModel>
+  declare ActorFollowing: Awaited<ActorModel>
 
   @AfterCreate
   static incrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {

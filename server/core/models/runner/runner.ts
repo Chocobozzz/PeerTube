@@ -23,37 +23,36 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
   ]
 })
 export class RunnerModel extends SequelizeModel<RunnerModel> {
-
   // Used to identify the appropriate runner when it uses the runner REST API
   @AllowNull(false)
   @Column
-  runnerToken: string
+  declare runnerToken: string
 
   @AllowNull(false)
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.RUNNERS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(false)
   @Column
-  lastContact: Date
+  declare lastContact: Date
 
   @AllowNull(false)
   @Column
-  ip: string
+  declare ip: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => RunnerRegistrationTokenModel)
   @Column
-  runnerRegistrationTokenId: number
+  declare runnerRegistrationTokenId: number
 
   @BelongsTo(() => RunnerRegistrationTokenModel, {
     foreignKey: {
@@ -61,7 +60,7 @@ export class RunnerModel extends SequelizeModel<RunnerModel> {
     },
     onDelete: 'cascade'
   })
-  RunnerRegistrationToken: Awaited<RunnerRegistrationTokenModel>
+  declare RunnerRegistrationToken: Awaited<RunnerRegistrationTokenModel>
 
   // ---------------------------------------------------------------------------
 

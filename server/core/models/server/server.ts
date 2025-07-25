@@ -16,22 +16,21 @@ import { ServerBlocklistModel } from './server-blocklist.js'
   ]
 })
 export class ServerModel extends SequelizeModel<ServerModel> {
-
   @AllowNull(false)
   @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))
   @Column
-  host: string
+  declare host: string
 
   @AllowNull(false)
   @Default(false)
   @Column
-  redundancyAllowed: boolean
+  declare redundancyAllowed: boolean
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @HasMany(() => ActorModel, {
     foreignKey: {
@@ -41,7 +40,7 @@ export class ServerModel extends SequelizeModel<ServerModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  Actors: Awaited<ActorModel>[]
+  declare Actors: Awaited<ActorModel>[]
 
   @HasMany(() => ServerBlocklistModel, {
     foreignKey: {
@@ -49,7 +48,7 @@ export class ServerModel extends SequelizeModel<ServerModel> {
     },
     onDelete: 'CASCADE'
   })
-  BlockedBy: Awaited<ServerBlocklistModel>[]
+  declare BlockedBy: Awaited<ServerBlocklistModel>[]
 
   // ---------------------------------------------------------------------------
 

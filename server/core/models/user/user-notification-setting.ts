@@ -10,7 +10,8 @@ import {
   CreatedAt,
   Default,
   ForeignKey,
-  Is, Table,
+  Is,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications.js'
@@ -27,7 +28,6 @@ import { UserModel } from './user.js'
   ]
 })
 export class UserNotificationSettingModel extends SequelizeModel<UserNotificationSettingModel> {
-
   @AllowNull(false)
   @Default(null)
   @Is(
@@ -35,7 +35,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newVideoFromSubscription')
   )
   @Column
-  newVideoFromSubscription: UserNotificationSettingValueType
+  declare newVideoFromSubscription: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -44,7 +44,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newCommentOnMyVideo')
   )
   @Column
-  newCommentOnMyVideo: UserNotificationSettingValueType
+  declare newCommentOnMyVideo: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -53,7 +53,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'abuseAsModerator')
   )
   @Column
-  abuseAsModerator: UserNotificationSettingValueType
+  declare abuseAsModerator: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -62,7 +62,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'videoAutoBlacklistAsModerator')
   )
   @Column
-  videoAutoBlacklistAsModerator: UserNotificationSettingValueType
+  declare videoAutoBlacklistAsModerator: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -71,7 +71,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'blacklistOnMyVideo')
   )
   @Column
-  blacklistOnMyVideo: UserNotificationSettingValueType
+  declare blacklistOnMyVideo: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -80,7 +80,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoPublished')
   )
   @Column
-  myVideoPublished: UserNotificationSettingValueType
+  declare myVideoPublished: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -89,7 +89,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoImportFinished')
   )
   @Column
-  myVideoImportFinished: UserNotificationSettingValueType
+  declare myVideoImportFinished: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -98,7 +98,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newUserRegistration')
   )
   @Column
-  newUserRegistration: UserNotificationSettingValueType
+  declare newUserRegistration: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -107,7 +107,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newInstanceFollower')
   )
   @Column
-  newInstanceFollower: UserNotificationSettingValueType
+  declare newInstanceFollower: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -116,7 +116,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'autoInstanceFollowing')
   )
   @Column
-  autoInstanceFollowing: UserNotificationSettingValueType
+  declare autoInstanceFollowing: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -125,7 +125,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newFollow')
   )
   @Column
-  newFollow: UserNotificationSettingValueType
+  declare newFollow: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -134,7 +134,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'commentMention')
   )
   @Column
-  commentMention: UserNotificationSettingValueType
+  declare commentMention: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -143,7 +143,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'abuseStateChange')
   )
   @Column
-  abuseStateChange: UserNotificationSettingValueType
+  declare abuseStateChange: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -152,7 +152,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'abuseNewMessage')
   )
   @Column
-  abuseNewMessage: UserNotificationSettingValueType
+  declare abuseNewMessage: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -161,7 +161,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newPeerTubeVersion')
   )
   @Column
-  newPeerTubeVersion: UserNotificationSettingValueType
+  declare newPeerTubeVersion: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -170,7 +170,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newPluginVersion')
   )
   @Column
-  newPluginVersion: UserNotificationSettingValueType
+  declare newPluginVersion: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -179,7 +179,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoStudioEditionFinished')
   )
   @Column
-  myVideoStudioEditionFinished: UserNotificationSettingValueType
+  declare myVideoStudioEditionFinished: UserNotificationSettingValueType
 
   @AllowNull(false)
   @Default(null)
@@ -188,11 +188,11 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoTranscriptionGenerated')
   )
   @Column
-  myVideoTranscriptionGenerated: UserNotificationSettingValueType
+  declare myVideoTranscriptionGenerated: UserNotificationSettingValueType
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -200,13 +200,13 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
     },
     onDelete: 'cascade'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AfterUpdate
   @AfterDestroy

@@ -20,30 +20,30 @@ import { USER_IMPORT_STATES } from '@server/initializers/constants.js'
 })
 export class UserImportModel extends SequelizeModel<UserImportModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(false)
   @Column
-  state: UserImportStateType
+  declare state: UserImportStateType
 
   @AllowNull(true)
   @Column(DataType.TEXT)
-  error: string
+  declare error: string
 
   @AllowNull(true)
   @Column(DataType.JSONB)
-  resultSummary: UserImportResultSummary
+  declare resultSummary: UserImportResultSummary
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -51,7 +51,7 @@ export class UserImportModel extends SequelizeModel<UserImportModel> {
     },
     onDelete: 'CASCADE'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   static load (id: number | string) {
     return UserImportModel.findByPk<MUserImport>(id)

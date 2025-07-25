@@ -4,10 +4,8 @@ import { VideoModel } from '../video/video.js'
 import { SequelizeModel } from '../shared/index.js'
 
 /**
- *
  * Aggregate views of all videos federated with our instance
  * Mainly used by the trending/hot algorithms
- *
  */
 
 @Table({
@@ -24,23 +22,23 @@ import { SequelizeModel } from '../shared/index.js'
 })
 export class VideoViewModel extends SequelizeModel<VideoViewModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  startDate: Date
+  declare startDate: Date
 
   @AllowNull(false)
   @Column(DataType.DATE)
-  endDate: Date
+  declare endDate: Date
 
   @AllowNull(false)
   @Column
-  views: number
+  declare views: number
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -48,7 +46,7 @@ export class VideoViewModel extends SequelizeModel<VideoViewModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static removeOldRemoteViewsHistory (beforeDate: string) {
     const query = {

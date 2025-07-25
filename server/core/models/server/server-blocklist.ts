@@ -29,7 +29,6 @@ enum ScopeNames {
     ]
   }
 }))
-
 @Table({
   tableName: 'serverBlocklist',
   indexes: [
@@ -43,16 +42,15 @@ enum ScopeNames {
   ]
 })
 export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
-
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -61,11 +59,11 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     },
     onDelete: 'CASCADE'
   })
-  ByAccount: Awaited<AccountModel>
+  declare ByAccount: Awaited<AccountModel>
 
   @ForeignKey(() => ServerModel)
   @Column
-  targetServerId: number
+  declare targetServerId: number
 
   @BelongsTo(() => ServerModel, {
     foreignKey: {
@@ -73,7 +71,7 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     },
     onDelete: 'CASCADE'
   })
-  BlockedServer: Awaited<ServerModel>
+  declare BlockedServer: Awaited<ServerModel>
 
   static isServerMutedByAccounts (accountIds: number[], targetServerId: number) {
     const query = {
@@ -88,16 +86,16 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     }
 
     return ServerBlocklistModel.unscoped()
-                                .findAll(query)
-                                .then(rows => {
-                                  const result: { [accountId: number]: boolean } = {}
+      .findAll(query)
+      .then(rows => {
+        const result: { [accountId: number]: boolean } = {}
 
-                                  for (const accountId of accountIds) {
-                                    result[accountId] = !!rows.find(r => r.accountId === accountId)
-                                  }
+        for (const accountId of accountIds) {
+          result[accountId] = !!rows.find(r => r.accountId === accountId)
+        }
 
-                                  return result
-                                })
+        return result
+      })
   }
 
   static loadByAccountAndHost (accountId: number, host: string): Promise<MServerBlocklist> {
@@ -121,7 +119,7 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
 
   static listHostsBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
-      attributes: [ ],
+      attributes: [],
       where: {
         accountId: {
           [Op.in]: accountIds

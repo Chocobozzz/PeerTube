@@ -22,16 +22,15 @@ import { WEBSERVER } from '@server/initializers/constants.js'
   ]
 })
 export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel> {
-
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -41,11 +40,11 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     as: 'ByAccount',
     onDelete: 'CASCADE'
   })
-  ByAccount: Awaited<AccountModel>
+  declare ByAccount: Awaited<AccountModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  targetAccountId: number
+  declare targetAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -55,7 +54,7 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     as: 'BlockedAccount',
     onDelete: 'CASCADE'
   })
-  BlockedAccount: Awaited<AccountModel>
+  declare BlockedAccount: Awaited<AccountModel>
 
   static isAccountMutedByAccounts (accountIds: number[], targetAccountId: number) {
     const query = {
@@ -70,16 +69,16 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     }
 
     return AccountBlocklistModel.unscoped()
-                                .findAll(query)
-                                .then(rows => {
-                                  const result: { [accountId: number]: boolean } = {}
+      .findAll(query)
+      .then(rows => {
+        const result: { [accountId: number]: boolean } = {}
 
-                                  for (const accountId of accountIds) {
-                                    result[accountId] = !!rows.find(r => r.accountId === accountId)
-                                  }
+        for (const accountId of accountIds) {
+          result[accountId] = !!rows.find(r => r.accountId === accountId)
+        }
 
-                                  return result
-                                })
+        return result
+      })
   }
 
   static loadByAccountAndTarget (accountId: number, targetAccountId: number): Promise<MAccountBlocklist> {
@@ -203,10 +202,10 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     const sanitizedHandles = handlesToNameAndHost(handles)
 
     const localHandles = sanitizedHandles.filter(h => !h.host)
-                                         .map(h => h.name)
+      .map(h => h.name)
 
     const remoteHandles = sanitizedHandles.filter(h => !!h.host)
-                                          .map(h => ([ h.name, h.host ]))
+      .map(h => [ h.name, h.host ])
 
     const handlesWhere: string[] = []
 

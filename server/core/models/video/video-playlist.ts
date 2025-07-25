@@ -291,49 +291,49 @@ function getVideoLengthSelect () {
 })
 export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Is('VideoPlaylistName', value => throwIfNotValid(value, isVideoPlaylistNameValid, 'name'))
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(false)
   @Is('VideoPlaylistPrivacy', value => throwIfNotValid(value, isVideoPlaylistPrivacyValid, 'privacy'))
   @Column
-  privacy: VideoPlaylistPrivacyType
+  declare privacy: VideoPlaylistPrivacyType
 
   @AllowNull(false)
   @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
   @Column(DataType.UUID)
-  uuid: string
+  declare uuid: string
 
   @AllowNull(false)
   @Default(VideoPlaylistType.REGULAR)
   @Column
-  type: VideoPlaylistType_Type
+  declare type: VideoPlaylistType_Type
 
   @AllowNull(true)
   @Column
-  videoChannelPosition: number
+  declare videoChannelPosition: number
 
   @ForeignKey(() => AccountModel)
   @Column
-  ownerAccountId: number
+  declare ownerAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -341,11 +341,11 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  OwnerAccount: Awaited<AccountModel>
+  declare OwnerAccount: Awaited<AccountModel>
 
   @ForeignKey(() => VideoChannelModel)
   @Column
-  videoChannelId: number
+  declare videoChannelId: number
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
@@ -353,7 +353,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoChannel: Awaited<VideoChannelModel>
+  declare VideoChannel: Awaited<VideoChannelModel>
 
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
@@ -362,7 +362,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
+  declare VideoPlaylistElements: Awaited<VideoPlaylistElementModel>[]
 
   @HasOne(() => ThumbnailModel, {
     foreignKey: {
@@ -372,7 +372,7 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  Thumbnail: Awaited<ThumbnailModel>
+  declare Thumbnail: Awaited<ThumbnailModel>
 
   static listForApi (
     options: AvailableForListOptions & {

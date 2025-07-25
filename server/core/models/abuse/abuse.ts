@@ -200,38 +200,38 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
   @Default(null)
   @Is('AbuseReason', value => throwIfNotValid(value, isAbuseReasonValid, 'reason'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ABUSES.REASON.max))
-  reason: string
+  declare reason: string
 
   @AllowNull(false)
   @Default(null)
   @Is('AbuseState', value => throwIfNotValid(value, isAbuseStateValid, 'state'))
   @Column
-  state: AbuseStateType
+  declare state: AbuseStateType
 
   @AllowNull(true)
   @Default(null)
   @Is('AbuseModerationComment', value => throwIfNotValid(value, isAbuseModerationCommentValid, 'moderationComment', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ABUSES.MODERATION_COMMENT.max))
-  moderationComment: string
+  declare moderationComment: string
 
   @AllowNull(true)
   @Default(null)
   @Column(DataType.ARRAY(DataType.INTEGER))
-  predefinedReasons: AbusePredefinedReasonsType[]
+  declare predefinedReasons: AbusePredefinedReasonsType[]
 
   @AllowNull(true)
   @Column
-  processedAt: Date
+  declare processedAt: Date
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => AccountModel)
   @Column
-  reporterAccountId: number
+  declare reporterAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -241,11 +241,11 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
     as: 'ReporterAccount',
     onDelete: 'set null'
   })
-  ReporterAccount: Awaited<AccountModel>
+  declare ReporterAccount: Awaited<AccountModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  flaggedAccountId: number
+  declare flaggedAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -255,7 +255,7 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
     as: 'FlaggedAccount',
     onDelete: 'set null'
   })
-  FlaggedAccount: Awaited<AccountModel>
+  declare FlaggedAccount: Awaited<AccountModel>
 
   @HasOne(() => VideoCommentAbuseModel, {
     foreignKey: {
@@ -264,7 +264,7 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
     },
     onDelete: 'cascade'
   })
-  VideoCommentAbuse: Awaited<VideoCommentAbuseModel>
+  declare VideoCommentAbuse: Awaited<VideoCommentAbuseModel>
 
   @HasOne(() => VideoAbuseModel, {
     foreignKey: {
@@ -273,7 +273,7 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
     },
     onDelete: 'cascade'
   })
-  VideoAbuse: Awaited<VideoAbuseModel>
+  declare VideoAbuse: Awaited<VideoAbuseModel>
 
   static loadByIdWithReporter (id: number): Promise<MAbuseReporter> {
     const query = {

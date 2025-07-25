@@ -11,7 +11,8 @@ import {
   CreatedAt,
   DataType,
   DefaultScope,
-  ForeignKey, Table,
+  ForeignKey,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { VideoBlacklistModel } from './video-blacklist.js'
@@ -51,32 +52,31 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
-
   @AllowNull(true)
   @Column(DataType.STRING)
-  streamKey: string
+  declare streamKey: string
 
   @AllowNull(false)
   @Column
-  saveReplay: boolean
+  declare saveReplay: boolean
 
   @AllowNull(false)
   @Column
-  permanentLive: boolean
+  declare permanentLive: boolean
 
   @AllowNull(false)
   @Column
-  latencyMode: LiveVideoLatencyModeType
+  declare latencyMode: LiveVideoLatencyModeType
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -84,11 +84,11 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoLiveReplaySettingModel)
   @Column
-  replaySettingId: number
+  declare replaySettingId: number
 
   @BelongsTo(() => VideoLiveReplaySettingModel, {
     foreignKey: {
@@ -96,7 +96,7 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     },
     onDelete: 'set null'
   })
-  ReplaySetting: Awaited<VideoLiveReplaySettingModel>
+  declare ReplaySetting: Awaited<VideoLiveReplaySettingModel>
 
   @BeforeDestroy
   static deleteReplaySetting (instance: VideoLiveModel, options: { transaction: Transaction }) {

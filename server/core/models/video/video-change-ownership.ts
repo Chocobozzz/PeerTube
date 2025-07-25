@@ -55,18 +55,18 @@ enum ScopeNames {
 }))
 export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnershipModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Column
-  status: VideoChangeOwnershipStatusType
+  declare status: VideoChangeOwnershipStatusType
 
   @ForeignKey(() => AccountModel)
   @Column
-  initiatorAccountId: number
+  declare initiatorAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -75,11 +75,11 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
     },
     onDelete: 'cascade'
   })
-  Initiator: Awaited<AccountModel>
+  declare Initiator: Awaited<AccountModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  nextOwnerAccountId: number
+  declare nextOwnerAccountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -88,11 +88,11 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
     },
     onDelete: 'cascade'
   })
-  NextOwner: Awaited<AccountModel>
+  declare NextOwner: Awaited<AccountModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -100,7 +100,7 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static listForApi (nextOwnerId: number, start: number, count: number, sort: string) {
     const query = {
@@ -120,7 +120,7 @@ export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnersh
 
   static load (id: number): Promise<MVideoChangeOwnershipFull> {
     return VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ])
-                                    .findByPk(id)
+      .findByPk(id)
   }
 
   toFormattedJSON (this: MVideoChangeOwnershipFormattable): VideoChangeOwnership {

@@ -138,35 +138,35 @@ export enum ScopeNames {
 })
 export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Column(DataType.DATE)
-  deletedAt: Date
+  declare deletedAt: Date
 
   @AllowNull(false)
   @Is('VideoCommentUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(false)
   @Column(DataType.TEXT)
-  text: string
+  declare text: string
 
   @AllowNull(false)
   @Column
-  heldForReview: boolean
+  declare heldForReview: boolean
 
   @AllowNull(true)
   @Column
-  replyApproval: string
+  declare replyApproval: string
 
   @ForeignKey(() => VideoCommentModel)
   @Column
-  originCommentId: number
+  declare originCommentId: number
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
@@ -176,11 +176,11 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     as: 'OriginVideoComment',
     onDelete: 'CASCADE'
   })
-  OriginVideoComment: Awaited<VideoCommentModel>
+  declare OriginVideoComment: Awaited<VideoCommentModel>
 
   @ForeignKey(() => VideoCommentModel)
   @Column
-  inReplyToCommentId: number
+  declare inReplyToCommentId: number
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
@@ -190,11 +190,11 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     as: 'InReplyToVideoComment',
     onDelete: 'CASCADE'
   })
-  InReplyToVideoComment: Awaited<VideoCommentModel> | null
+  declare InReplyToVideoComment: Awaited<VideoCommentModel> | null
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -202,11 +202,11 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -214,7 +214,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     },
     onDelete: 'CASCADE'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @HasMany(() => VideoCommentAbuseModel, {
     foreignKey: {
@@ -223,13 +223,13 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     },
     onDelete: 'set null'
   })
-  CommentAbuses: Awaited<VideoCommentAbuseModel>[]
+  declare CommentAbuses: Awaited<VideoCommentAbuseModel>[]
 
   @HasMany(() => CommentAutomaticTagModel, {
     foreignKey: 'commentId',
     onDelete: 'CASCADE'
   })
-  CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
+  declare CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
 
   @AfterCreate
   @AfterDestroy

@@ -35,42 +35,42 @@ import { UserModel } from './user.js'
 })
 export class UserExportModel extends SequelizeModel<UserExportModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(false)
   @Column
-  withVideoFiles: boolean
+  declare withVideoFiles: boolean
 
   @AllowNull(false)
   @Column
-  state: UserExportStateType
+  declare state: UserExportStateType
 
   @AllowNull(true)
   @Column(DataType.TEXT)
-  error: string
+  declare error: string
 
   @AllowNull(true)
   @Column(DataType.BIGINT)
-  size: number
+  declare size: number
 
   @AllowNull(false)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @AllowNull(true)
   @Column
-  fileUrl: string
+  declare fileUrl: string
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -78,7 +78,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
     },
     onDelete: 'CASCADE'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @BeforeDestroy
   static removeFile (instance: UserExportModel) {
@@ -225,5 +225,4 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
       expiresOn: new Date(this.createdAt.getTime() + CONFIG.EXPORT.USERS.EXPORT_EXPIRATION).toISOString()
     }
   }
-
 }

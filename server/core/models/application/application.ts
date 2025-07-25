@@ -40,19 +40,19 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   @Default(0)
   @IsInt
   @Column
-  migrationVersion: number
+  declare migrationVersion: number
 
   @AllowNull(true)
   @Column
-  latestPeerTubeVersion: string
+  declare latestPeerTubeVersion: string
 
   @AllowNull(false)
   @Column
-  nodeVersion: string
+  declare nodeVersion: string
 
   @AllowNull(false)
   @Column
-  nodeABIVersion: number
+  declare nodeABIVersion: number
 
   @HasOne(() => AccountModel, {
     foreignKey: {
@@ -60,7 +60,7 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     },
     onDelete: 'cascade'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   static countTotal () {
     return ApplicationModel.count()

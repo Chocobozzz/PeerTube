@@ -21,33 +21,33 @@ export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode' | 'pendi
 })
 export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
-  pendingMove: number
+  declare pendingMove: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
-  pendingTranscode: number
+  declare pendingTranscode: number
 
   @AllowNull(false)
   @Default(0)
   @IsInt
   @Column
-  pendingTranscription: number
+  declare pendingTranscription: number
 
   @ForeignKey(() => VideoModel)
   @Unique
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -55,7 +55,7 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static load (videoId: number, transaction?: Transaction) {
     const where = {

@@ -27,39 +27,39 @@ import { ActorModel } from './actor.js'
 export class ActorImageModel extends SequelizeModel<ActorImageModel> {
   @AllowNull(false)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(true)
   @Default(null)
   @Column
-  height: number
+  declare height: number
 
   @AllowNull(true)
   @Default(null)
   @Column
-  width: number
+  declare width: number
 
   @AllowNull(true)
   @Column
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(false)
   @Column
-  onDisk: boolean
+  declare onDisk: boolean
 
   @AllowNull(false)
   @Column
-  type: ActorImageType_Type
+  declare type: ActorImageType_Type
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -67,7 +67,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     },
     onDelete: 'CASCADE'
   })
-  Actor: Awaited<ActorModel> // TODO: Remove awaited: https://github.com/sequelize/sequelize-typescript/issues/825
+  declare Actor: Awaited<ActorModel> // TODO: Remove awaited: https://github.com/sequelize/sequelize-typescript/issues/825
 
   @AfterDestroy
   static removeFile (instance: ActorImageModel) {

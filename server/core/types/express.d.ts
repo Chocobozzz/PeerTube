@@ -1,4 +1,11 @@
-import { HttpMethodType, PeerTubeProblemDocumentData, ServerErrorCodeType, ServerLogLevel, VideoCreate } from '@peertube/peertube-models'
+import {
+  HttpMethodType,
+  HttpStatusCodeType,
+  PeerTubeProblemDocumentData,
+  ServerErrorCodeType,
+  ServerLogLevel,
+  VideoCreate
+} from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -107,7 +114,7 @@ declare module 'express' {
       message: string
 
       title?: string
-      status?: number
+      status?: HttpStatusCodeType
       type?: ServerErrorCodeType
       instance?: string
 

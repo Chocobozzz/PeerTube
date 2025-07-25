@@ -55,38 +55,38 @@ import { ForAPIOptions, VideoModel, ScopeNames as VideoScopeNames } from './vide
 })
 export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistElementModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(true)
   @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.URL.max))
-  url: string
+  declare url: string
 
   @AllowNull(false)
   @Default(1)
   @IsInt
   @Min(1)
   @Column
-  position: number
+  declare position: number
 
   @AllowNull(true)
   @IsInt
   @Min(0)
   @Column
-  startTimestamp: number
+  declare startTimestamp: number
 
   @AllowNull(true)
   @IsInt
   @Min(0)
   @Column
-  stopTimestamp: number
+  declare stopTimestamp: number
 
   @ForeignKey(() => VideoPlaylistModel)
   @Column
-  videoPlaylistId: number
+  declare videoPlaylistId: number
 
   @BelongsTo(() => VideoPlaylistModel, {
     foreignKey: {
@@ -94,11 +94,11 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
     },
     onDelete: 'CASCADE'
   })
-  VideoPlaylist: Awaited<VideoPlaylistModel>
+  declare VideoPlaylist: Awaited<VideoPlaylistModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -106,7 +106,7 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
     },
     onDelete: 'set null'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static deleteAllOf (videoPlaylistId: number, transaction?: Transaction) {
     const query = {

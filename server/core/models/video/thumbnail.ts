@@ -13,7 +13,8 @@ import {
   CreatedAt,
   DataType,
   Default,
-  ForeignKey, Table,
+  ForeignKey,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
@@ -40,40 +41,39 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
   ]
 })
 export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
-
   @AllowNull(false)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(true)
   @Default(null)
   @Column
-  height: number
+  declare height: number
 
   @AllowNull(true)
   @Default(null)
   @Column
-  width: number
+  declare width: number
 
   @AllowNull(false)
   @Column
-  type: ThumbnailType_Type
+  declare type: ThumbnailType_Type
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(true)
   @Column
-  automaticallyGenerated: boolean
+  declare automaticallyGenerated: boolean
 
   @AllowNull(false)
   @Column
-  onDisk: boolean
+  declare onDisk: boolean
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -81,11 +81,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoPlaylistModel)
   @Column
-  videoPlaylistId: number
+  declare videoPlaylistId: number
 
   @BelongsTo(() => VideoPlaylistModel, {
     foreignKey: {
@@ -93,18 +93,18 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     },
     onDelete: 'CASCADE'
   })
-  VideoPlaylist: Awaited<VideoPlaylistModel>
+  declare VideoPlaylist: Awaited<VideoPlaylistModel>
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   // If this thumbnail replaced existing one, track the old name
   previousThumbnailFilename: string
 
-  private static readonly types: { [ id in ThumbnailType_Type ]: { label: string, directory: string, staticPath: string } } = {
+  private static readonly types: { [id in ThumbnailType_Type]: { label: string, directory: string, staticPath: string } } = {
     [ThumbnailType.MINIATURE]: {
       label: 'miniature',
       directory: CONFIG.STORAGE.THUMBNAILS_DIR,
@@ -129,7 +129,7 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
 
     // Don't block the transaction
     instance.removeThumbnail()
-            .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
+      .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
   }
 
   static loadByFilename (filename: string, thumbnailType: ThumbnailType_Type): Promise<MThumbnail> {

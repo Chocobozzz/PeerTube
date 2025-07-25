@@ -22,18 +22,17 @@ import { VideoModel } from './video.js'
   ]
 })
 export class TagModel extends SequelizeModel<TagModel> {
-
   @AllowNull(false)
   @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))
   @Column
-  name: string
+  declare name: string
 
   @BelongsToMany(() => VideoModel, {
     foreignKey: 'tagId',
     through: () => VideoTagModel,
     onDelete: 'CASCADE'
   })
-  Videos: Awaited<VideoModel>[]
+  declare Videos: Awaited<VideoModel>[]
 
   // threshold corresponds to how many video the field should have to be returned
   static getRandomSamples (threshold: number, count: number): Promise<string[]> {
@@ -51,7 +50,7 @@ export class TagModel extends SequelizeModel<TagModel> {
     }
 
     return TagModel.sequelize.query<{ name: string }>(query, options)
-                    .then(data => data.map(d => d.name))
+      .then(data => data.map(d => d.name))
   }
 
   static findOrCreateMultiple (options: {

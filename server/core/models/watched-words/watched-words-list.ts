@@ -4,14 +4,7 @@ import { wordsToRegExp } from '@server/helpers/regexp.js'
 import { MAccountId, MWatchedWordsList } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
 import { Transaction } from 'sequelize'
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType, ForeignKey, Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { LRU_CACHE, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
 import { SequelizeModel, getSort } from '../shared/index.js'
@@ -30,22 +23,22 @@ import { SequelizeModel, getSort } from '../shared/index.js'
 })
 export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Column
-  listName: string
+  declare listName: string
 
   @AllowNull(false)
   @Column(DataType.ARRAY(DataType.STRING))
-  words: string[]
+  declare words: string[]
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -53,7 +46,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     },
     onDelete: 'CASCADE'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   // accountId => reg expressions
   private static readonly regexCache = new LRUCache<number, { listName: string, regex: RegExp }[]>({

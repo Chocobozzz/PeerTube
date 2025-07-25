@@ -28,35 +28,35 @@ import { SequelizeModel } from '../shared/index.js'
 export class UploadImageModel extends SequelizeModel<UploadImageModel> {
   @AllowNull(false)
   @Column
-  filename: string
+  declare filename: string
 
   @AllowNull(true)
   @Default(null)
   @Column
-  height: number
+  declare height: number
 
   @AllowNull(true)
   @Default(null)
   @Column
-  width: number
+  declare width: number
 
   @AllowNull(true)
   @Column
-  fileUrl: string
+  declare fileUrl: string
 
   @AllowNull(false)
   @Column
-  type: UploadImageType_Type
+  declare type: UploadImageType_Type
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -64,7 +64,7 @@ export class UploadImageModel extends SequelizeModel<UploadImageModel> {
     },
     onDelete: 'CASCADE'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   @AfterDestroy
   static removeFile (instance: UploadImageModel) {

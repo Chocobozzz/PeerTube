@@ -16,18 +16,17 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
   ]
 })
 export class VideoChapterModel extends SequelizeModel<VideoChapterModel> {
+  @AllowNull(false)
+  @Column
+  declare timecode: number
 
   @AllowNull(false)
   @Column
-  timecode: number
-
-  @AllowNull(false)
-  @Column
-  title: string
+  declare title: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -35,13 +34,13 @@ export class VideoChapterModel extends SequelizeModel<VideoChapterModel> {
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   static deleteChapters (videoId: number, transaction: Transaction) {
     const query = {

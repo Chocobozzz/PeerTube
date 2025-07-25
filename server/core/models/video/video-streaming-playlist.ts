@@ -56,48 +56,48 @@ import { VideoModel } from './video.js'
 })
 export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPlaylistModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Column
-  type: VideoStreamingPlaylistType_Type
+  declare type: VideoStreamingPlaylistType_Type
 
   @AllowNull(false)
   @Column
-  playlistFilename: string
+  declare playlistFilename: string
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
-  playlistUrl: string
+  declare playlistUrl: string
 
   @AllowNull(false)
   @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
   @Column(DataType.ARRAY(DataType.STRING))
-  p2pMediaLoaderInfohashes: string[]
+  declare p2pMediaLoaderInfohashes: string[]
 
   @AllowNull(false)
   @Column
-  p2pMediaLoaderPeerVersion: number
+  declare p2pMediaLoaderPeerVersion: number
 
   @AllowNull(true)
   @Column
-  segmentsSha256Filename: string
+  declare segmentsSha256Filename: string
 
   @AllowNull(true)
   @Column
-  segmentsSha256Url: string
+  declare segmentsSha256Url: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @AllowNull(false)
   @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -105,7 +105,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     },
     onDelete: 'CASCADE'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @HasMany(() => VideoFileModel, {
     foreignKey: {
@@ -113,7 +113,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     },
     onDelete: 'CASCADE'
   })
-  VideoFiles: Awaited<VideoFileModel>[]
+  declare VideoFiles: Awaited<VideoFileModel>[]
 
   @HasMany(() => VideoRedundancyModel, {
     foreignKey: {
@@ -122,7 +122,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     onDelete: 'CASCADE',
     hooks: true
   })
-  RedundancyVideos: Awaited<VideoRedundancyModel>[]
+  declare RedundancyVideos: Awaited<VideoRedundancyModel>[]
 
   static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist.bind(VideoStreamingPlaylistModel), {
     promise: true,

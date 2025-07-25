@@ -29,7 +29,11 @@ export function getUploadXRetryConfig () {
 }
 
 export function buildHTTPErrorResponse (state: UploadState): HttpErrorResponse {
-  const error = state.response?.error?.message || state.response?.error || 'Unknown error'
+  const response = state.response
+
+  console.log(response)
+
+  const error = response?.detail || $localize`Unknown error`
 
   return {
     error: new Error(error),

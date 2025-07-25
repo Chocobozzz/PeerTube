@@ -116,23 +116,23 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
   @Default(null)
   @Is('UserNotificationType', value => throwIfNotValid(value, isUserNotificationTypeValid, 'type'))
   @Column
-  type: UserNotificationType_Type
+  declare type: UserNotificationType_Type
 
   @AllowNull(false)
   @Default(false)
   @Is('UserNotificationRead', value => throwIfNotValid(value, isBooleanValid, 'read'))
   @Column
-  read: boolean
+  declare read: boolean
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -140,11 +140,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -152,11 +152,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   @ForeignKey(() => VideoCommentModel)
   @Column
-  commentId: number
+  declare commentId: number
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
@@ -164,11 +164,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoComment: Awaited<VideoCommentModel>
+  declare VideoComment: Awaited<VideoCommentModel>
 
   @ForeignKey(() => AbuseModel)
   @Column
-  abuseId: number
+  declare abuseId: number
 
   @BelongsTo(() => AbuseModel, {
     foreignKey: {
@@ -176,11 +176,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Abuse: Awaited<AbuseModel>
+  declare Abuse: Awaited<AbuseModel>
 
   @ForeignKey(() => VideoBlacklistModel)
   @Column
-  videoBlacklistId: number
+  declare videoBlacklistId: number
 
   @BelongsTo(() => VideoBlacklistModel, {
     foreignKey: {
@@ -188,11 +188,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoBlacklist: Awaited<VideoBlacklistModel>
+  declare VideoBlacklist: Awaited<VideoBlacklistModel>
 
   @ForeignKey(() => VideoImportModel)
   @Column
-  videoImportId: number
+  declare videoImportId: number
 
   @BelongsTo(() => VideoImportModel, {
     foreignKey: {
@@ -200,11 +200,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoImport: Awaited<VideoImportModel>
+  declare VideoImport: Awaited<VideoImportModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
@@ -212,11 +212,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @ForeignKey(() => ActorFollowModel)
   @Column
-  actorFollowId: number
+  declare actorFollowId: number
 
   @BelongsTo(() => ActorFollowModel, {
     foreignKey: {
@@ -224,11 +224,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  ActorFollow: Awaited<ActorFollowModel>
+  declare ActorFollow: Awaited<ActorFollowModel>
 
   @ForeignKey(() => PluginModel)
   @Column
-  pluginId: number
+  declare pluginId: number
 
   @BelongsTo(() => PluginModel, {
     foreignKey: {
@@ -236,11 +236,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Plugin: Awaited<PluginModel>
+  declare Plugin: Awaited<PluginModel>
 
   @ForeignKey(() => ApplicationModel)
   @Column
-  applicationId: number
+  declare applicationId: number
 
   @BelongsTo(() => ApplicationModel, {
     foreignKey: {
@@ -248,11 +248,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  Application: Awaited<ApplicationModel>
+  declare Application: Awaited<ApplicationModel>
 
   @ForeignKey(() => UserRegistrationModel)
   @Column
-  userRegistrationId: number
+  declare userRegistrationId: number
 
   @BelongsTo(() => UserRegistrationModel, {
     foreignKey: {
@@ -260,11 +260,11 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  UserRegistration: Awaited<UserRegistrationModel>
+  declare UserRegistration: Awaited<UserRegistrationModel>
 
   @ForeignKey(() => VideoCaptionModel)
   @Column
-  videoCaptionId: number
+  declare videoCaptionId: number
 
   @BelongsTo(() => VideoCaptionModel, {
     foreignKey: {
@@ -272,7 +272,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     },
     onDelete: 'cascade'
   })
-  VideoCaption: Awaited<VideoCaptionModel>
+  declare VideoCaption: Awaited<VideoCaptionModel>
 
   static listForApi (options: {
     userId: number

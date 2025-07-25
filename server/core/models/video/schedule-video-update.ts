@@ -18,26 +18,25 @@ import { SequelizeModel } from '../shared/index.js'
   ]
 })
 export class ScheduleVideoUpdateModel extends SequelizeModel<ScheduleVideoUpdateModel> {
-
   @AllowNull(false)
   @Default(null)
   @Column
-  updateAt: Date
+  declare updateAt: Date
 
   @AllowNull(true)
   @Default(null)
   @Column(DataType.INTEGER)
-  privacy: typeof VideoPrivacy.PUBLIC | typeof VideoPrivacy.UNLISTED | typeof VideoPrivacy.INTERNAL
+  declare privacy: typeof VideoPrivacy.PUBLIC | typeof VideoPrivacy.UNLISTED | typeof VideoPrivacy.INTERNAL
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -45,7 +44,7 @@ export class ScheduleVideoUpdateModel extends SequelizeModel<ScheduleVideoUpdate
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static areVideosToUpdate () {
     const query = {

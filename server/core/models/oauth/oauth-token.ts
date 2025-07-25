@@ -6,7 +6,8 @@ import {
   BelongsTo,
   Column,
   CreatedAt,
-  ForeignKey, Scopes,
+  ForeignKey,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -79,35 +80,34 @@ enum ScopeNames {
   ]
 })
 export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
+  @AllowNull(false)
+  @Column
+  declare accessToken: string
 
   @AllowNull(false)
   @Column
-  accessToken: string
+  declare accessTokenExpiresAt: Date
 
   @AllowNull(false)
   @Column
-  accessTokenExpiresAt: Date
+  declare refreshToken: string
 
   @AllowNull(false)
   @Column
-  refreshToken: string
-
-  @AllowNull(false)
-  @Column
-  refreshTokenExpiresAt: Date
+  declare refreshTokenExpiresAt: Date
 
   @Column
-  authName: string
+  declare authName: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => UserModel)
   @Column
-  userId: number
+  declare userId: number
 
   @BelongsTo(() => UserModel, {
     foreignKey: {
@@ -115,11 +115,11 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
     },
     onDelete: 'cascade'
   })
-  User: Awaited<UserModel>
+  declare User: Awaited<UserModel>
 
   @ForeignKey(() => OAuthClientModel)
   @Column
-  oAuthClientId: number
+  declare oAuthClientId: number
 
   @BelongsTo(() => OAuthClientModel, {
     foreignKey: {
@@ -127,7 +127,7 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
     },
     onDelete: 'cascade'
   })
-  OAuthClients: Awaited<OAuthClientModel>[]
+  declare OAuthClients: Awaited<OAuthClientModel>[]
 
   @AfterUpdate
   @AfterDestroy
@@ -152,25 +152,25 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
     }
 
     return OAuthTokenModel.scope(ScopeNames.WITH_USER)
-                          .findOne(query)
-                          .then(token => {
-                            if (!token) return null
+      .findOne(query)
+      .then(token => {
+        if (!token) return null
 
-                            return {
-                              refreshToken: token.refreshToken,
-                              refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-                              client: {
-                                id: token.oAuthClientId,
-                                grants: []
-                              },
-                              user: token.User,
-                              token
-                            } as OAuthTokenInfo
-                          })
-                          .catch(err => {
-                            logger.error('getRefreshToken error.', { err })
-                            throw err
-                          })
+        return {
+          refreshToken: token.refreshToken,
+          refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+          client: {
+            id: token.oAuthClientId,
+            grants: []
+          },
+          user: token.User,
+          token
+        } as OAuthTokenInfo
+      })
+      .catch(err => {
+        logger.error('getRefreshToken error.', { err })
+        throw err
+      })
   }
 
   static getByTokenAndPopulateUser (bearerToken: string): Promise<MOAuthTokenUser> {
@@ -181,12 +181,12 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
     }
 
     return OAuthTokenModel.scope(ScopeNames.WITH_USER)
-                          .findOne(query)
-                          .then(token => {
-                            if (!token) return null
+      .findOne(query)
+      .then(token => {
+        if (!token) return null
 
-                            return Object.assign(token, { user: token.User })
-                          })
+        return Object.assign(token, { user: token.User })
+      })
   }
 
   static getByRefreshTokenAndPopulateUser (refreshToken: string): Promise<MOAuthTokenUser> {

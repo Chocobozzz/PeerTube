@@ -26,54 +26,54 @@ import { VideoModel } from './video.js'
 })
 export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @AllowNull(false)
   @Column
-  inputFilename: string
+  declare inputFilename: string
 
   @AllowNull(true)
   @Column
-  keptOriginalFilename: string
+  declare keptOriginalFilename: string
 
   @AllowNull(true)
   @Column
-  resolution: number
+  declare resolution: number
 
   @AllowNull(true)
   @Column
-  width: number
+  declare width: number
 
   @AllowNull(true)
   @Column
-  height: number
+  declare height: number
 
   @AllowNull(true)
   @Column
-  fps: number
+  declare fps: number
 
   @AllowNull(true)
   @Column(DataType.BIGINT)
-  size: number
+  declare size: number
 
   @AllowNull(true)
   @Column(DataType.JSONB)
-  metadata: any
+  declare metadata: any
 
   @AllowNull(true)
   @Column
-  storage: FileStorageType
+  declare storage: FileStorageType
 
   @AllowNull(true)
   @Column
-  fileUrl: string
+  declare fileUrl: string
 
   @ForeignKey(() => VideoModel)
   @Column
-  videoId: number
+  declare videoId: number
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -81,7 +81,7 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
     },
     onDelete: 'cascade'
   })
-  Video: Awaited<VideoModel>
+  declare Video: Awaited<VideoModel>
 
   static loadLatest (videoId: number, transaction?: Transaction) {
     return VideoSourceModel.findOne<MVideoSource>({

@@ -19,7 +19,8 @@ import {
   DataType,
   Default,
   ForeignKey,
-  IsUUID, Scopes,
+  IsUUID,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -66,68 +67,67 @@ enum ScopeNames {
   ]
 })
 export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
-
   @AllowNull(false)
   @IsUUID(4)
   @Column(DataType.UUID)
-  uuid: string
+  declare uuid: string
 
   @AllowNull(false)
   @Column
-  type: RunnerJobType
+  declare type: RunnerJobType
 
   @AllowNull(false)
   @Column(DataType.JSONB)
-  payload: RunnerJobPayload
+  declare payload: RunnerJobPayload
 
   @AllowNull(false)
   @Column(DataType.JSONB)
-  privatePayload: RunnerJobPrivatePayload
+  declare privatePayload: RunnerJobPrivatePayload
 
   @AllowNull(false)
   @Column
-  state: RunnerJobStateType
+  declare state: RunnerJobStateType
 
   @AllowNull(false)
   @Default(0)
   @Column
-  failures: number
+  declare failures: number
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.RUNNER_JOBS.ERROR_MESSAGE.max))
-  error: string
+  declare error: string
 
   // Less has priority
   @AllowNull(false)
   @Column
-  priority: number
+  declare priority: number
 
   // Used to fetch the appropriate job when the runner wants to post the result
   @AllowNull(true)
   @Column
-  processingJobToken: string
+  declare processingJobToken: string
 
   @AllowNull(true)
   @Column
-  progress: number
+  declare progress: number
 
   @AllowNull(true)
   @Column
-  startedAt: Date
+  declare startedAt: Date
 
   @AllowNull(true)
   @Column
-  finishedAt: Date
+  declare finishedAt: Date
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => RunnerJobModel)
   @Column
-  dependsOnRunnerJobId: number
+  declare dependsOnRunnerJobId: number
 
   @BelongsTo(() => RunnerJobModel, {
     foreignKey: {
@@ -136,11 +136,11 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     },
     onDelete: 'cascade'
   })
-  DependsOnRunnerJob: Awaited<RunnerJobModel>
+  declare DependsOnRunnerJob: Awaited<RunnerJobModel>
 
   @ForeignKey(() => RunnerModel)
   @Column
-  runnerId: number
+  declare runnerId: number
 
   @BelongsTo(() => RunnerModel, {
     foreignKey: {
@@ -149,7 +149,7 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     },
     onDelete: 'SET NULL'
   })
-  Runner: Awaited<RunnerModel>
+  declare Runner: Awaited<RunnerModel>
 
   // ---------------------------------------------------------------------------
 
@@ -309,7 +309,11 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
 
   setToErrorOrCancel (
     // eslint-disable-next-line max-len
-    state: typeof RunnerJobState.PARENT_ERRORED | typeof RunnerJobState.ERRORED | typeof RunnerJobState.CANCELLED | typeof RunnerJobState.PARENT_CANCELLED
+    state:
+      | typeof RunnerJobState.PARENT_ERRORED
+      | typeof RunnerJobState.ERRORED
+      | typeof RunnerJobState.CANCELLED
+      | typeof RunnerJobState.PARENT_CANCELLED
   ) {
     this.state = state
     this.processingJobToken = null

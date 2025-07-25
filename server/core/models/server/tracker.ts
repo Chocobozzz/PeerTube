@@ -15,23 +15,22 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
   ]
 })
 export class TrackerModel extends SequelizeModel<TrackerModel> {
-
   @AllowNull(false)
   @Column
-  url: string
+  declare url: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @BelongsToMany(() => VideoModel, {
     foreignKey: 'trackerId',
     through: () => VideoTrackerModel,
     onDelete: 'CASCADE'
   })
-  Videos: Awaited<VideoModel>[]
+  declare Videos: Awaited<VideoModel>[]
 
   static listUrlsByVideoId (videoId: number) {
     const query = {

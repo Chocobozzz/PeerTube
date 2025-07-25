@@ -357,29 +357,29 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'name'))
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.DESCRIPTION.max))
-  description: string
+  declare description: string
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
-  support: string
+  declare support: string
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column
-  actorId: number
+  declare actorId: number
 
   @BelongsTo(() => ActorModel, {
     foreignKey: {
@@ -387,18 +387,18 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     },
     onDelete: 'cascade'
   })
-  Actor: Awaited<ActorModel>
+  declare Actor: Awaited<ActorModel>
 
   @ForeignKey(() => AccountModel)
   @Column
-  accountId: number
+  declare accountId: number
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
       allowNull: false
     }
   })
-  Account: Awaited<AccountModel>
+  declare Account: Awaited<AccountModel>
 
   @HasMany(() => VideoModel, {
     foreignKey: {
@@ -408,7 +408,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  Videos: Awaited<VideoModel>[]
+  declare Videos: Awaited<VideoModel>[]
 
   @HasMany(() => VideoPlaylistModel, {
     foreignKey: {
@@ -417,7 +417,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     onDelete: 'CASCADE',
     hooks: true
   })
-  VideoPlaylists: Awaited<VideoPlaylistModel>[]
+  declare VideoPlaylists: Awaited<VideoPlaylistModel>[]
 
   @AfterCreate
   static notifyCreate (channel: MChannel) {

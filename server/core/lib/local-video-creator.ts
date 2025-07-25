@@ -3,6 +3,7 @@ import {
   LiveVideoCreate,
   LiveVideoLatencyMode,
   NSFWFlag,
+  PeerTubeError,
   ThumbnailType,
   ThumbnailType_Type,
   VideoCreate,
@@ -258,6 +259,9 @@ export class LocalVideoCreator {
           type,
           automaticallyGenerated: thumbnail.automaticallyGenerated || false,
           keepOriginal: thumbnail.keepOriginal
+        }).catch(err => {
+          // eslint-disable-next-line @typescript-eslint/only-throw-error
+          throw PeerTubeError.fromError(err, 'INVALID_IMAGE_FILE')
         })
       )
 

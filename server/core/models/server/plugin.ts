@@ -24,7 +24,6 @@ import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
     exclude: [ 'storage' ]
   }
 }))
-
 @Table({
   tableName: 'plugin',
   indexes: [
@@ -35,62 +34,61 @@ import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
   ]
 })
 export class PluginModel extends SequelizeModel<PluginModel> {
-
   @AllowNull(false)
   @Is('PluginName', value => throwIfNotValid(value, isPluginNameValid, 'name'))
   @Column
-  name: string
+  declare name: string
 
   @AllowNull(false)
   @Is('PluginType', value => throwIfNotValid(value, isPluginTypeValid, 'type'))
   @Column
-  type: PluginType_Type
+  declare type: PluginType_Type
 
   @AllowNull(false)
   @Is('PluginVersion', value => throwIfNotValid(value, isPluginStableOrUnstableVersionValid, 'version'))
   @Column
-  version: string
+  declare version: string
 
   @AllowNull(true)
   @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginStableVersionValid, 'version'))
   @Column
-  latestVersion: string
+  declare latestVersion: string
 
   @AllowNull(false)
   @Column
-  enabled: boolean
+  declare enabled: boolean
 
   @AllowNull(false)
   @Column
-  uninstalled: boolean
+  declare uninstalled: boolean
 
   @AllowNull(false)
   @Column
-  peertubeEngine: string
+  declare peertubeEngine: string
 
   @AllowNull(true)
   @Is('PluginDescription', value => throwIfNotValid(value, isPluginDescriptionValid, 'description'))
   @Column
-  description: string
+  declare description: string
 
   @AllowNull(false)
   @Is('PluginHomepage', value => throwIfNotValid(value, isPluginHomepage, 'homepage'))
   @Column
-  homepage: string
+  declare homepage: string
 
   @AllowNull(true)
   @Column(DataType.JSONB)
-  settings: any
+  declare settings: any
 
   @AllowNull(true)
   @Column(DataType.JSONB)
-  storage: any
+  declare storage: any
 
   @CreatedAt
-  createdAt: Date
+  declare createdAt: Date
 
   @UpdatedAt
-  updatedAt: Date
+  declare updatedAt: Date
 
   static listEnabledPluginsAndThemes (): Promise<MPlugin[]> {
     const query = {
@@ -219,7 +217,7 @@ export class PluginModel extends SequelizeModel<PluginModel> {
 
   static storeData (pluginName: string, pluginType: PluginType_Type, key: string, data: any) {
     const query = 'UPDATE "plugin" SET "storage" = jsonb_set(coalesce("storage", \'{}\'), :key, :data::jsonb) ' +
-    'WHERE "name" = :pluginName AND "type" = :pluginType'
+      'WHERE "name" = :pluginName AND "type" = :pluginType'
 
     const jsonPath = '{' + key + '}'
 
@@ -229,7 +227,7 @@ export class PluginModel extends SequelizeModel<PluginModel> {
     }
 
     return PluginModel.sequelize.query(query, options)
-                      .then(() => undefined)
+      .then(() => undefined)
   }
 
   static listForApi (options: {
@@ -312,5 +310,4 @@ export class PluginModel extends SequelizeModel<PluginModel> {
       updatedAt: this.updatedAt
     }
   }
-
 }
