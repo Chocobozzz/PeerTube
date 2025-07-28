@@ -72,6 +72,10 @@
       {{ user.totalVideoFileSize | bytes }}
     </td>
 
+    <td *ngIf="table.isColumnDisplayed('twoFactorEnabled')">
+      <span *ngIf="user.twoFactorEnabled" i18n i18n-ngbTooltip ngbTooltip="Two factor authentication is enabled" class="pt-badge badge-green">2FA</span>
+    </td>
+
     <td *ngIf="table.isColumnDisplayed('pluginAuth')">
       <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth.replace('peertube-plugin-', '') }}</span>
     </td>

@@ -38,6 +38,7 @@ type ColumnName =
   | 'totalVideoFileSize'
   | 'createdAt'
   | 'lastLoginDate'
+  | 'twoFactorEnabled'
   | 'pluginAuth'
 
 @Component({
@@ -102,6 +103,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     { id: 'videoQuotaUsed', label: $localize`Video quota`, sortable: true },
     { id: 'videoQuotaDailyUsed', label: $localize`Daily quota`, sortable: false },
     { id: 'totalVideoFileSize', label: $localize`Total size`, sortable: false },
+    { id: 'twoFactorEnabled', label: $localize`2FA`, sortable: false },
     { id: 'pluginAuth', label: $localize`Auth plugin`, sortable: false },
     { id: 'createdAt', label: $localize`Created`, sortable: true },
     { id: 'lastLoginDate', label: $localize`Last login`, sortable: true }
