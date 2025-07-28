@@ -14,7 +14,7 @@
     "New follower on your channel": "你频道的新关注者",
     "Your account <a href=\"{followingUrl}\">{followingName}</a> has a new subscriber: <a href=\"{followerUrl}\">{followerName}</a>.": "你的账户 <a href=\"{followingUrl}\">{followingName}</a> 有新订阅者： <a href=\"{followerUrl}\">{followerName}</a>。",
     "Your channel <a href=\"{followingUrl}\">{followingName}</a> has a new subscriber: <a href=\"{followerUrl}\">{followerName}</a>.": "你的频道 <a href=\"{followingUrl}\">{followingName}</a> 有新订阅者： <a href=\"{followerUrl}\">{followerName}</a>。",
-    "Your account has been blocked": "你的账户已经被封锁",
+    "Your account has been blocked": "你的账户已被封锁",
     "Your account <strong>{username}</strong> has been blocked by {instanceName} moderators for the following reason:": "{instanceName} 的 moderators 出于下列原因封锁了你的账户 <strong>{username}</strong>：",
     "Your account <strong>{username}</strong> has been blocked by {instanceName} moderators.": "{instanceName} 的 moderators 封锁了你的账户<strong>{username}</strong>。",
     "Your account has been unblocked": "你的账户已解封",
