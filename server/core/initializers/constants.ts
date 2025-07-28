@@ -1353,6 +1353,10 @@ export async function buildLanguages () {
   // Catalan languages
   languages['ca-valencia'] = 'Valencian'
 
+  // Creole French languages
+  languages['rcf'] = 'Réunion Creole French'
+  languages['gcr'] = 'Guianese Creole French'
+
   return languages
 }
 
