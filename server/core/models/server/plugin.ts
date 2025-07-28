@@ -84,6 +84,10 @@ export class PluginModel extends SequelizeModel<PluginModel> {
   @Column(DataType.JSONB)
   declare storage: any
 
+  @AllowNull(true)
+  @Column
+  declarative: boolean
+
   @CreatedAt
   declare createdAt: Date
 
@@ -94,6 +98,17 @@ export class PluginModel extends SequelizeModel<PluginModel> {
     const query = {
       where: {
         enabled: true,
+        uninstalled: false
+      }
+    }
+
+    return PluginModel.findAll(query)
+  }
+
+  static listDeclarativePluginsAndThemes (): Promise<MPlugin[]> {
+    const query = {
+      where: {
+        declarative: true,
         uninstalled: false
       }
     }
