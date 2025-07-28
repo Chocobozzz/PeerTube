@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getHLS, removeFragmentedMP4Ext, uuidRegex } from '@peertube/peertube-core-utils'
+import { getHLS, removeFragmentedMP4Ext, uuidRegex, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   HttpStatusCode,
@@ -61,14 +61,28 @@ export async function checkLiveSegmentHash (options: {
   segmentName: string
   hlsPlaylist: VideoStreamingPlaylist
   withRetry?: boolean
+  currentRetry?: number
 }) {
-  const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist, withRetry = false } = options
+  const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist, withRetry = false, currentRetry = 1 } = options
   const command = server.streamingPlaylists
 
-  const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}`, withRetry })
-  const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry })
+  try {
+    const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}`, withRetry: false })
+    const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: false })
 
-  expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
+    expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
+  } catch (err) {
+    if (!withRetry || currentRetry > 10) throw err
+
+    await wait(250)
+
+    return this.checkLiveSegmentHash({
+      ...options,
+
+      withRetry,
+      currentRetry: currentRetry + 1
+    })
+  }
 }
 
 export async function checkPlaylistInfohash (options: {
