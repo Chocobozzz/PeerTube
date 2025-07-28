@@ -7,7 +7,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { AdminConfigWizardStepperComponent } from './admin-config-wizard-stepper.component'
 import { getNoWelcomeModalLocalStorageKey } from './shared/admin-config-wizard-modal-utils'
 import { AdminConfigWizardDocumentationComponent } from './steps/admin-config-wizard-documentation.component'
-import { AdminConfigWizardEditInfoComponent, FormInfo } from './steps/admin-config-wizard-edit-info.component'
+import { AdminConfigWizardEditInfoComponent, FormEditInfo } from './steps/admin-config-wizard-edit-info.component'
 import { AdminConfigWizardFormComponent } from './steps/admin-config-wizard-form.component'
 import { AdminConfigWizardPreviewComponent } from './steps/admin-config-wizard-preview.component'
 import { AdminConfigWizardWelcomeComponent } from './steps/admin-config-wizard-welcome.component'
@@ -37,7 +37,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
   readonly created = output()
 
   usageType: UsageType
-  instanceInfo: FormInfo
+  instanceInfo: FormEditInfo
 
   showWelcome: boolean
   dryRun: boolean

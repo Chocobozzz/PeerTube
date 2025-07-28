@@ -34,6 +34,13 @@
         </div>
 
         <div class="form-group">
+          <label i18n for="avatarfile">Platform icon</label>
+          <div class="form-group-description" i18n>Used in various places such as on the website, mobile application and social media</div>
+
+          <my-preview-upload class="avatar-preview" formControlName="avatar" inputName="avatar" displayDelete="true"></my-preview-upload>
+        </div>
+
+        <div class="form-group">
           <label i18n for="primaryColor">Primary color</label>
 
           <p-colorpicker class="d-block" inputId="primaryColor" formControlName="primaryColor" />

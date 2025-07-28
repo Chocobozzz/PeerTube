@@ -16,7 +16,7 @@ import {
 import { AdminConfigCustomizationComponent } from './pages/admin-config-customization.component'
 import { AdminConfigService } from '../../shared/shared-admin/admin-config.service'
 import { AdminConfigLogoComponent } from './pages/admin-config-logo.component'
-import { InstanceLogoService } from './shared/instance-logo.service'
+import { InstanceLogoService } from '../../shared/shared-instance/instance-logo.service'
 
 export const customConfigResolver: ResolveFn<CustomConfig> = (_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot) => {
   return inject(AdminConfigService).getCustomConfig()

@@ -1,5 +1,4 @@
 import { AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
-import { PartialDeep } from 'type-fest'
 
 export type BuildFormValidator = {
   VALIDATORS: ValidatorFn[]
@@ -19,7 +18,7 @@ export type BuildFormArgumentTyped<Form> = ReplaceForm<Form, BuildFormValidator>
 export type FormDefault = {
   [name: string]: Blob | Date | boolean | number | number[] | string | string[] | FormDefault
 }
-export type FormDefaultTyped<Form> = PartialDeep<UnwrapForm<Form>>
+export type FormDefaultTyped<Form> = Partial<UnwrapForm<Form>>
 
 // ---------------------------------------------------------------------------
 
@@ -42,8 +41,9 @@ export type UnwrapForm<Form> = {
   [K in keyof Form]: _UnwrapForm<Form[K]>
 }
 
-type _UnwrapForm<T> = T extends FormGroup<infer U> ? UnwrapForm<U> :
+type _UnwrapForm<T> = T extends FormGroup<infer U> ? Partial<UnwrapForm<U>> :
   T extends FormArray<infer U> ? _UnwrapForm<U>[] :
+  T extends FormControl<Blob> ? Blob :
   T extends FormControl<infer U> ? U
   : never
 

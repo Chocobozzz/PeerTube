@@ -11,8 +11,9 @@ import { ColorPickerModule } from 'primeng/colorpicker'
 import { concatMap, from, switchMap, toArray } from 'rxjs'
 import { PartialDeep } from 'type-fest'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { FormInfo } from './admin-config-wizard-edit-info.component'
+import { FormEditInfo } from './admin-config-wizard-edit-info.component'
 import { UsageType } from './usage-type/usage-type.model'
+import { InstanceLogoService } from '@app/shared/shared-instance/instance-logo.service'
 
 @Component({
   selector: 'my-admin-config-wizard-preview',
@@ -26,7 +27,7 @@ import { UsageType } from './usage-type/usage-type.model'
     CdkStepperModule,
     ButtonComponent
   ],
-  providers: [ AdminConfigService, PluginApiService ]
+  providers: [ AdminConfigService, PluginApiService, InstanceLogoService ]
 })
 export class AdminConfigWizardPreviewComponent implements OnChanges {
   private adminConfig = inject(AdminConfigService)
@@ -34,11 +35,12 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
   private notifier = inject(Notifier)
   private html = inject(HtmlRendererService)
   private server = inject(ServerService)
+  private instanceLogo = inject(InstanceLogoService)
 
   readonly currentStep = input.required({ transform: numberAttribute })
   readonly totalSteps = input.required({ transform: numberAttribute })
   readonly usageType = input.required<UsageType>()
-  readonly instanceInfo = input.required<FormInfo>()
+  readonly instanceInfo = input.required<FormEditInfo>()
   readonly dryRun = input.required({ transform: booleanAttribute })
 
   readonly back = output()
@@ -84,6 +86,12 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
     this.updating = true
 
     this.adminConfig.updateCustomConfig(this.config)
+      .pipe(() => {
+        const avatar = this.instanceInfo().avatar
+        if (avatar) return this.instanceLogo.updateAvatar(avatar)
+
+        return this.instanceLogo.deleteAvatar()
+      })
       .pipe(
         switchMap(() => this.server.resetConfig()),
         switchMap(() => {

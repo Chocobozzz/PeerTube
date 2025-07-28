@@ -11,22 +11,26 @@ import {
   FormReactiveMessagesTyped
 } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { PreviewUploadComponent } from '@app/shared/shared-forms/preview-upload.component'
 import { ColorPickerModule } from 'primeng/colorpicker'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { findAppropriateImage } from '@peertube/peertube-core-utils'
+import { logger } from '@root-helpers/logger'
 
 type Form = {
   platformName: FormControl<string>
   shortDescription: FormControl<string>
+  avatar: FormControl<Blob>
   primaryColor: FormControl<string>
 }
 
-export type FormInfo = FormDefaultTyped<Form>
+export type FormEditInfo = FormDefaultTyped<Form>
 
 @Component({
   selector: 'my-admin-config-wizard-edit-info',
   templateUrl: './admin-config-wizard-edit-info.component.html',
   styleUrls: [ './admin-config-wizard-edit-info.component.scss', '../shared/admin-config-wizard-modal-common.scss' ],
-  imports: [ CommonModule, FormsModule, ReactiveFormsModule, ColorPickerModule, CdkStepperModule, ButtonComponent ]
+  imports: [ CommonModule, FormsModule, ReactiveFormsModule, ColorPickerModule, CdkStepperModule, ButtonComponent, PreviewUploadComponent ]
 })
 export class AdminConfigWizardEditInfoComponent implements OnInit {
   private server = inject(ServerService)
@@ -38,7 +42,7 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
   readonly showBack = input.required({ transform: booleanAttribute })
 
   readonly back = output()
-  readonly next = output<FormInfo>()
+  readonly next = output<FormEditInfo>()
   readonly hide = output()
 
   form: FormGroup<Form>
@@ -47,12 +51,23 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
 
   ngOnInit () {
     this.buildForm()
+
+    const avatar = findAppropriateImage(this.server.getHTMLConfig().instance.avatars, 128)
+    if (avatar) {
+      fetch(avatar.fileUrl)
+        .then(response => response.blob())
+        .then(blob => this.form.patchValue({ avatar: blob }))
+        .catch(() => {
+          logger.error('Could not fetch instance avatar')
+        })
+    }
   }
 
   private buildForm () {
     const obj: BuildFormArgumentTyped<Form> = {
       platformName: INSTANCE_NAME_VALIDATOR,
       shortDescription: INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
+      avatar: null,
       primaryColor: null
     }
 
@@ -67,7 +82,7 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
     this.validationMessages = validationMessages
   }
 
-  private getDefaultValues (): FormDefaultTyped<Form> {
+  private getDefaultValues (): FormEditInfo {
     const config = this.server.getHTMLConfig()
     const primaryColorConfig = config.theme.customization.primaryColor
 
@@ -78,6 +93,7 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
     return {
       platformName: config.instance.name,
       shortDescription: config.instance.shortDescription,
+      avatar: undefined as Blob,
       primaryColor
     }
   }

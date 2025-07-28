@@ -15,7 +15,7 @@ import { of, Subscription, switchMap, tap } from 'rxjs'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
-import { InstanceLogoService } from '../shared/instance-logo.service'
+import { InstanceLogoService } from '../../../shared/shared-instance/instance-logo.service'
 
 type Form = {
   hideInstanceName: FormControl<boolean>

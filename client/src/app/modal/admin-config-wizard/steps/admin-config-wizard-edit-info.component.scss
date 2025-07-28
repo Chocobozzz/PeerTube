@@ -11,6 +11,11 @@ form {
   height: 190px;
 }
 
+.avatar-preview {
+  width: 128px;
+  height: 128px;
+}
+
 @media screen and (max-width: $small-view) {
   .mascot {
     display: none;
