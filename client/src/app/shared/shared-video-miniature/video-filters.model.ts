@@ -50,10 +50,10 @@ export class VideoFilters {
   private nsfwFlagsBlurred: number
 
   private defaultValues = new Map<keyof VideoFilters, any>([
-    [ 'sort', '-publishedAt' ],
+    [ 'sort', undefined ],
     [ 'languageOneOf', undefined ],
     [ 'categoryOneOf', undefined ],
-    [ 'scope', 'federated' ],
+    [ 'scope', undefined ],
     [ 'allVideos', false ],
     [ 'live', 'both' ],
     [ 'search', '' ]
@@ -94,6 +94,9 @@ export class VideoFilters {
     debugLogger('Checking if we need to trigger change', { changes: !noChanges })
 
     if (noChanges) return
+
+    console.log(currentFormObjectString)
+    console.log(this.oldFormObjectString)
 
     this.oldFormObjectString = currentFormObjectString
 
