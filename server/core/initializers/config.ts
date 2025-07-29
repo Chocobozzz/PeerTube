@@ -443,6 +443,7 @@ const CONFIG = {
     STALLED_JOBS: {
       LIVE: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.live')),
       VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod')),
+      STUDIO: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.studio')),
       TRANSCRIPTION: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.transcription'))
     }
   },
