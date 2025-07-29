@@ -48,7 +48,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 910
+export const LAST_MIGRATION_VERSION = 915
 
 // ---------------------------------------------------------------------------
 

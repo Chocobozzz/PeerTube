@@ -6,6 +6,7 @@ import {
   SettingValue,
   type PluginType_Type
 } from '@peertube/peertube-models'
+import { isStableOrUnstableVersionValid, isStableVersionValid } from '@server/helpers/custom-validators/misc.js'
 import { MPlugin, MPluginFormattable } from '@server/types/models/index.js'
 import { FindAndCountOptions, QueryTypes, json } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Table, UpdatedAt } from 'sequelize-typescript'
@@ -13,8 +14,6 @@ import {
   isPluginDescriptionValid,
   isPluginHomepage,
   isPluginNameValid,
-  isPluginStableOrUnstableVersionValid,
-  isPluginStableVersionValid,
   isPluginTypeValid
 } from '../../helpers/custom-validators/plugins.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
@@ -45,12 +44,12 @@ export class PluginModel extends SequelizeModel<PluginModel> {
   declare type: PluginType_Type
 
   @AllowNull(false)
-  @Is('PluginVersion', value => throwIfNotValid(value, isPluginStableOrUnstableVersionValid, 'version'))
+  @Is('PluginVersion', value => throwIfNotValid(value, isStableOrUnstableVersionValid, 'version'))
   @Column
   declare version: string
 
   @AllowNull(true)
-  @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginStableVersionValid, 'version'))
+  @Is('PluginLatestVersion', value => throwIfNotValid(value, isStableVersionValid, 'latestVersion'))
   @Column
   declare latestVersion: string
 

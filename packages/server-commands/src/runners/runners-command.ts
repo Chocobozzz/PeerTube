@@ -12,7 +12,6 @@ import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class RunnersCommand extends AbstractCommand {
-
   list (options: OverrideCommandOptions & {
     start?: number
     count?: number
@@ -37,7 +36,7 @@ export class RunnersCommand extends AbstractCommand {
       ...options,
 
       path,
-      fields: pick(options, [ 'name', 'registrationToken', 'description' ]),
+      fields: pick(options, [ 'name', 'registrationToken', 'description', 'version' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
@@ -56,9 +55,11 @@ export class RunnersCommand extends AbstractCommand {
     })
   }
 
-  delete (options: OverrideCommandOptions & {
-    id: number
-  }) {
+  delete (
+    options: OverrideCommandOptions & {
+      id: number
+    }
+  ) {
     const path = '/api/v1/runners/' + options.id
 
     return this.deleteRequest({

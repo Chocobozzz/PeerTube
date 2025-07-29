@@ -1,4 +1,3 @@
-import express from 'express'
 import { HttpStatusCode, ListRunnersQuery, RegisterRunnerBody, UserRight } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { generateRunnerToken } from '@server/helpers/token-generator.js'
@@ -18,23 +17,28 @@ import {
   registerRunnerValidator
 } from '@server/middlewares/validators/runners/index.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
+import express from 'express'
 
 const lTags = loggerTagsFactory('api', 'runner')
 
 const manageRunnersRouter = express.Router()
 
-manageRunnersRouter.post('/register',
+manageRunnersRouter.post(
+  '/register',
   apiRateLimiter,
   asyncMiddleware(registerRunnerValidator),
   asyncMiddleware(registerRunner)
 )
-manageRunnersRouter.post('/unregister',
+
+manageRunnersRouter.post(
+  '/unregister',
   apiRateLimiter,
   asyncMiddleware(getRunnerFromTokenValidator),
   asyncMiddleware(unregisterRunner)
 )
 
-manageRunnersRouter.delete('/:runnerId',
+manageRunnersRouter.delete(
+  '/:runnerId',
   apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
@@ -42,7 +46,8 @@ manageRunnersRouter.delete('/:runnerId',
   asyncMiddleware(deleteRunner)
 )
 
-manageRunnersRouter.get('/',
+manageRunnersRouter.get(
+  '/',
   apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
@@ -72,6 +77,7 @@ async function registerRunner (req: express.Request, res: express.Response) {
     description: body.description,
     lastContact: new Date(),
     ip: req.ip,
+    version: body.version,
     runnerRegistrationTokenId: res.locals.runnerRegistrationToken.id
   })
 

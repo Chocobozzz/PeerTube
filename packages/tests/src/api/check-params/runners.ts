@@ -96,9 +96,7 @@ describe('Test managing runners', function () {
   })
 
   describe('Managing runner registration tokens', function () {
-
     describe('Common', function () {
-
       it('Should fail to generate, list or delete runner registration token without oauth token', async function () {
         const expectedStatus = HttpStatusCode.UNAUTHORIZED_401
 
@@ -117,7 +115,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Delete', function () {
-
       it('Should fail to delete with a bad id', async function () {
         await server.runnerRegistrationTokens.delete({ id: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       })
@@ -175,6 +172,13 @@ describe('Test managing runners', function () {
         await server.runners.register({ name, description: 'a'.repeat(5000), registrationToken, expectedStatus })
       })
 
+      it('Should fail with an invalid version', async function () {
+        const expectedStatus = HttpStatusCode.BAD_REQUEST_400
+
+        await server.runners.register({ name, version: '', registrationToken, expectedStatus })
+        await server.runners.register({ name, version: 'a'.repeat(5000), registrationToken, expectedStatus })
+      })
+
       it('Should succeed with the correct params', async function () {
         const { id } = await server.runners.register({ name, description: 'super description', registrationToken })
 
@@ -192,7 +196,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Delete', function () {
-
       it('Should fail without oauth token', async function () {
         await server.runners.delete({ token: null, id: toDeleteId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       })
@@ -245,11 +248,9 @@ describe('Test managing runners', function () {
         await server.runners.list({ start: 0, count: 5, sort: '-createdAt' })
       })
     })
-
   })
 
   describe('Runner jobs by admin', function () {
-
     describe('Cancel', function () {
       let jobUUID: string
 
@@ -356,7 +357,6 @@ describe('Test managing runners', function () {
         await server.runnerJobs.deleteByAdmin({ jobUUID })
       })
     })
-
   })
 
   describe('Runner jobs by runners', function () {
@@ -490,7 +490,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Common runner tokens validations', function () {
-
       async function testEndpoints (options: {
         jobUUID: string
         runnerToken: string
@@ -597,7 +596,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Unregister', function () {
-
       it('Should fail without a runner token', async function () {
         await server.runners.unregister({ runnerToken: null, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
@@ -612,7 +610,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Request', function () {
-
       it('Should fail without a runner token', async function () {
         await server.runnerJobs.request({ runnerToken: null, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
@@ -629,13 +626,16 @@ describe('Test managing runners', function () {
         await server.runnerJobs.request({ runnerToken, jobTypes: 'toto' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
 
+      it('Should fail with an invalid runner version', async function () {
+        await server.runnerJobs.request({ runnerToken, jobTypes: [], version: 'invalid', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      })
+
       it('Should succeed with the correct params', async function () {
         await server.runnerJobs.request({ runnerToken, jobTypes: [] })
       })
     })
 
     describe('Accept', function () {
-
       it('Should fail with a bad a job uuid', async function () {
         await server.runnerJobs.accept({ jobUUID: '', runnerToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
@@ -663,7 +663,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Abort', function () {
-
       it('Should fail without a reason', async function () {
         await server.runnerJobs.abort({ jobUUID, jobToken, runnerToken, reason: null, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
@@ -685,9 +684,7 @@ describe('Test managing runners', function () {
     })
 
     describe('Update', function () {
-
       describe('Common', function () {
-
         it('Should fail with an invalid progress', async function () {
           await server.runnerJobs.update({ jobUUID, jobToken, runnerToken, progress: 101, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
         })
@@ -742,7 +739,6 @@ describe('Test managing runners', function () {
     })
 
     describe('Error', function () {
-
       it('Should fail with a missing error message', async function () {
         await server.runnerJobs.error({ jobUUID, jobToken, runnerToken, message: null, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       })
@@ -768,7 +764,6 @@ describe('Test managing runners', function () {
       let vodJobToken: string
 
       describe('Common', function () {
-
         it('Should fail with a job not in processing state', async function () {
           await server.runnerJobs.success({
             jobUUID: completedJobUUID,
@@ -781,7 +776,6 @@ describe('Test managing runners', function () {
       })
 
       describe('VOD', function () {
-
         it('Should fail with an invalid vod web video payload', async function () {
           const { job } = await server.runnerJobs.autoAccept({ runnerToken, type: 'vod-web-video-transcoding' })
 
@@ -834,7 +828,6 @@ describe('Test managing runners', function () {
       })
 
       describe('Video studio', function () {
-
         it('Should fail with an invalid video studio transcoding payload', async function () {
           await server.runnerJobs.success({
             jobUUID: studioAcceptedJob.uuid,
@@ -848,9 +841,7 @@ describe('Test managing runners', function () {
     })
 
     describe('Job files', function () {
-
       describe('Check video param for common job file routes', function () {
-
         async function fetchFiles (options: {
           videoUUID?: string
           expectedStatus: HttpStatusCodeType
@@ -898,7 +889,6 @@ describe('Test managing runners', function () {
       })
 
       describe('Video studio tasks file routes', function () {
-
         it('Should fail with an invalid studio filename', async function () {
           await fetchStudioFiles({
             videoUUID: videoStudioUUID,

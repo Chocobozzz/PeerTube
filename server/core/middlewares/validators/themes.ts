@@ -1,16 +1,16 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
 import express from 'express'
 import { param } from 'express-validator'
-import { HttpStatusCode } from '@peertube/peertube-models'
-import { isSafePath } from '../../helpers/custom-validators/misc.js'
-import { isPluginNameValid, isPluginStableOrUnstableVersionValid } from '../../helpers/custom-validators/plugins.js'
+import { isSafePath, isStableOrUnstableVersionValid } from '../../helpers/custom-validators/misc.js'
+import { isPluginNameValid } from '../../helpers/custom-validators/plugins.js'
 import { PluginManager } from '../../lib/plugins/plugin-manager.js'
 import { areValidationErrors } from './shared/index.js'
 
-const serveThemeCSSValidator = [
+export const serveThemeCSSValidator = [
   param('themeName')
     .custom(isPluginNameValid),
   param('themeVersion')
-    .custom(isPluginStableOrUnstableVersionValid),
+    .custom(isStableOrUnstableVersionValid),
   param('staticEndpoint')
     .custom(isSafePath),
 
@@ -38,9 +38,3 @@ const serveThemeCSSValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  serveThemeCSSValidator
-}

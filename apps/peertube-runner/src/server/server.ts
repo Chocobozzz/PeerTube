@@ -1,10 +1,10 @@
+import { pick, shuffle, wait } from '@peertube/peertube-core-utils'
+import { PeerTubeProblemDocument, RunnerJobType, ServerErrorCode } from '@peertube/peertube-models'
+import { PeerTubeServer as PeerTubeServerCommand } from '@peertube/peertube-server-commands'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { io, Socket } from 'socket.io-client'
-import { pick, shuffle, wait } from '@peertube/peertube-core-utils'
-import { PeerTubeProblemDocument, RunnerJobType, ServerErrorCode } from '@peertube/peertube-models'
-import { PeerTubeServer as PeerTubeServerCommand } from '@peertube/peertube-server-commands'
 import { ConfigManager } from '../shared/index.js'
 import { IPCServer } from '../shared/ipc/index.js'
 import { logger } from '../shared/logger.js'
@@ -95,7 +95,12 @@ export class RunnerServer {
     logger.info(`Registering runner ${runnerName} on ${url}...`)
 
     const serverCommand = new PeerTubeServerCommand({ url })
-    const { runnerToken } = await serverCommand.runners.register({ name: runnerName, description: runnerDescription, registrationToken })
+    const { runnerToken } = await serverCommand.runners.register({
+      name: runnerName,
+      description: runnerDescription,
+      registrationToken,
+      version: process.env.PACKAGE_VERSION
+    })
 
     const server: PeerTubeServer = Object.assign(serverCommand, {
       runnerToken,
@@ -268,7 +273,9 @@ export class RunnerServer {
 
       jobTypes: this.enabledJobsArray.length !== getSupportedJobsList().length
         ? this.enabledJobsArray
-        : undefined
+        : undefined,
+
+      version: process.env.PACKAGE_VERSION
     })
 
     // FIXME: remove in PeerTube v8: jobTypes has been introduced in PeerTube v7, so do the filter here too

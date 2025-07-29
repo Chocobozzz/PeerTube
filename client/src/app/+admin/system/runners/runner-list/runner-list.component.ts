@@ -32,6 +32,7 @@ export class RunnerListComponent implements OnInit {
     { id: 'name', label: $localize`Name`, sortable: false },
     { id: 'description', label: $localize`Description`, sortable: false },
     { id: 'ip', label: $localize`IP`, sortable: false },
+    { id: 'version', label: $localize`Version`, sortable: false },
     { id: 'lastContact', label: $localize`Last contact`, sortable: false },
     { id: 'createdAt', label: $localize`Created`, sortable: true }
   ]

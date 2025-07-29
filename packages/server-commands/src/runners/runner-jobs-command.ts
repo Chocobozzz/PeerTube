@@ -82,7 +82,7 @@ export class RunnerJobsCommand extends AbstractCommand {
       ...options,
 
       path,
-      fields: pick(options, [ 'runnerToken', 'jobTypes' ]),
+      fields: pick(options, [ 'runnerToken', 'jobTypes', 'version' ]),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
