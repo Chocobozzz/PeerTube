@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.0
+
+ * Add runner version in request and register payloads
+ * Update dependencies to fix vulnerabilities
+
 ## v0.1.3
 
  * Disable log coloring when TTY does not support it
