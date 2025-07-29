@@ -358,6 +358,8 @@ export class RunnerServer {
 
     try {
       for (const { server, job } of this.processingJobs) {
+        logger.info(`Aborting job ${job.uuid} on ${server.url} as the runner is stopping`)
+
         await server.runnerJobs.abort({
           jobToken: job.jobToken,
           jobUUID: job.uuid,
