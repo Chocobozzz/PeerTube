@@ -357,7 +357,7 @@
       </trans-unit>
       <trans-unit id="6129869020765971890" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Your abuse <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been accepted </source>
-        <target state="needs-translation"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Votre signalement <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été accepté. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Votre signalement <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a été accepté. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">68,69</context>
@@ -1183,7 +1183,7 @@
       </trans-unit>
       <trans-unit id="6083161764743152765" datatype="html" xml:space="preserve">
         <source>No videos found matching current filters.</source>
-        <target state="needs-translation">Aucune vidéo ne correspond aux filtres actuels.</target>
+        <target state="translated">Aucune vidéo ne correspond aux filtres actuels.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -1191,7 +1191,7 @@
       </trans-unit>
       <trans-unit id="8613376202616911579" datatype="html" xml:space="preserve">
         <source>Your platform doesn't have videos.</source>
-        <target state="needs-translation">Votre plateforme ne propose pas de vidéos.</target>
+        <target state="translated">Votre plateforme ne propose pas de vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">143</context>
@@ -1375,7 +1375,7 @@
       </trans-unit>
       <trans-unit id="4744048847996177791" datatype="html" xml:space="preserve">
         <source>Updating platform configuration from the web interface is disabled by the system administrator.</source>
-        <target state="needs-translation">La mise à jour de la configuration de la plateforme depuis l'interface web est désactivée par l'administrateur système.</target>
+        <target state="translated">La mise à jour de la configuration de la plateforme depuis l'interface web est désactivée par l'administrateur système.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/admin-save-bar.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -1383,7 +1383,7 @@
       </trans-unit>
       <trans-unit id="5141290027775290309" datatype="html" xml:space="preserve">
         <source>There are errors in the configuration:</source>
-        <target state="needs-translation">Il y a des erreurs dans la configuration :</target>
+        <target state="translated">Il y a des erreurs dans la configuration :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/admin-save-bar.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1391,7 +1391,7 @@
       </trans-unit>
       <trans-unit id="8498446960371639827" datatype="html" xml:space="preserve">
         <source>followers per page</source>
-        <target state="needs-translation">abonné·e·s par page</target>
+        <target state="translated">abonné·e·s par page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -1399,7 +1399,7 @@
       </trans-unit>
       <trans-unit id="4661730871956076914" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No follower} =1 {1 follower} other {<x id="INTERPOLATION"/> followers}}</source>
-        <target state="needs-translation">{VAR_PLURAL, pluriel, =0 {Aucun abonné} =1 {1 abonné} autre {<x id="INTERPOLATION"/> s d'abonnés}}</target>
+        <target state="translated">{VAR_PLURAL, pluriel, =0 {Aucun abonné} =1 {1 abonné} other {<x id="INTERPOLATION"/> abonnés}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1503,7 +1503,7 @@
       </trans-unit>
       <trans-unit id="7116189699742808060" datatype="html" xml:space="preserve">
         <source>Browse <x id="PH" equiv-text="channelName"/> channel</source>
-        <target state="needs-translation">Parcourir la chaîne <x id="PH" equiv-text="channelName"/></target>
+        <target state="translated">Parcourir la chaîne <x id="PH" equiv-text="channelName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">164</context>
@@ -1595,7 +1595,7 @@
       </trans-unit>
       <trans-unit id="4399848502465507221" datatype="html" xml:space="preserve">
         <source>Delete the image</source>
-        <target state="needs-translation">Supprimer l'image</target>
+        <target state="translated">Supprimer l'image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2231,7 +2231,7 @@
       </trans-unit>
       <trans-unit id="4700057689494115926" datatype="html" xml:space="preserve">
         <source>Our moderator will validate it within a <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</source>
-        <target state="needs-translation">Notre modérateur le validera dans un délai d'<x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
+        <target state="translated">Notre modérateur le validera dans un délai de <x id="INTERPOLATION" equiv-text="{{ stats.averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">89,90</context>
@@ -2295,7 +2295,7 @@
       </trans-unit>
       <trans-unit id="7471320952405612533" datatype="html" xml:space="preserve">
         <source>You can also stream lives.</source>
-        <target state="needs-translation">Vous pouvez également diffuser des lives en streaming.</target>
+        <target state="translated">Vous pouvez également diffuser des lives.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">134</context>
@@ -2335,7 +2335,7 @@
       </trans-unit>
       <trans-unit id="4301908502265861759" datatype="html" xml:space="preserve">
         <source>This platform is powered by PeerTube</source>
-        <target state="needs-translation">Cette plateforme est alimentée par PeerTube.</target>
+        <target state="translated">Cette plateforme est alimentée par PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -2603,7 +2603,7 @@
       </trans-unit>
       <trans-unit id="4835824509322081159" datatype="html" xml:space="preserve">
         <source>Logging into an account lets you publish content</source>
-        <target state="needs-translation">La connexion à un compte vous permet de publier du contenu.</target>
+        <target state="translated">La connexion à un compte vous permet de publier du contenu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2611,7 +2611,7 @@
       </trans-unit>
       <trans-unit id="2579089419201321197" datatype="html" xml:space="preserve">
         <source>Logging into an account lets you subscribe to your favorite content</source>
-        <target state="needs-translation">En vous connectant à votre compte, vous pouvez vous abonner à vos contenus préférés.</target>
+        <target state="translated">En vous connectant à votre compte, vous pouvez vous abonner à vos contenus préférés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2619,7 +2619,7 @@
       </trans-unit>
       <trans-unit id="132000401491362683" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another PeerTube platform to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> autorise l'inscription. Cependant, veillez à vérifier les conditions d'utilisation de l'<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/> Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> avant de créer un compte. Vous pouvez également rechercher une autre plateforme PeerTube qui correspond exactement à vos besoins à l'adresse suivante : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> autorise l'inscription. Cependant, veillez à vérifier les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/> Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> avant de créer un compte. Vous pouvez également rechercher une autre plateforme PeerTube qui correspond exactement à vos besoins à l'adresse suivante : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">17,20</context>
@@ -2627,7 +2627,7 @@
       </trans-unit>
       <trans-unit id="7036955472108988787" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> doesn't allow for user registration. You may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple platforms at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> n'autorise pas l'inscription des utilisateurs·ices. Vous pouvez consulter les conditions d'utilisation de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/> Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour plus de détails ou trouver une plateforme PeerTube qui vous offre la possibilité de créer un compte et d'y télécharger vos vidéos. Trouvez celle qui vous convient parmi plusieurs plateformes sur : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> n'autorise pas l'inscription des utilisateurs·ices. Vous pouvez consulter <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>les conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour plus de détails ou trouver une plateforme PeerTube qui vous offre la possibilité de créer un compte et d'y publier vos vidéos. Trouvez celle qui vous convient parmi plusieurs plateformes sur : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">22,25</context>
