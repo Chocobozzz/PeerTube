@@ -1672,6 +1672,7 @@ paths:
     get:
       summary: List token sessions
       parameters:
+        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/tokenSessionId'
       tags:
         - Session
