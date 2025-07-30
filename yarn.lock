@@ -11830,12 +11830,10 @@ web-streams-polyfill@^3.0.3:
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz#2073b91a2fdb1fbfbd401e7de0ac9f8214cecb4b"
   integrity sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==
 
-webfinger.js@2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/webfinger.js/-/webfinger.js-2.7.1.tgz#6a96ce1c4c36222f3664fe81b2641ceef771c4ea"
-  integrity sha512-H4RokaE4RC39N3uiRTcjKMmy6yYg06lUPORQHvv8DjowZ6I5SalxUeoqHbtTN3EVBmYP/XHQ8Ow6BLEIpe2DtA==
-  dependencies:
-    xhr2 "0.2.1"
+webfinger.js@2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/webfinger.js/-/webfinger.js-2.8.1.tgz#4cec56f8561694b25c1309126588fadcf7bccabf"
+  integrity sha512-mAVXZBuNWb4EtKWciKA59B8dBX8AS7ClZIJPZ0/SLY8PYEgq8pLgGFixSuzKWUJ0cNY7JDtVF5/BKlRM2FlCcw==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
@@ -12144,11 +12142,6 @@ ws@~8.17.1:
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.17.1.tgz#9293da530bb548febc95371d90f9c878727d919b"
   integrity sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==
-
-xhr2@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.2.1.tgz#4e73adc4f9cfec9cbd2157f73efdce3a5f108a93"
-  integrity sha512-sID0rrVCqkVNUn8t6xuv9+6FViXjUVXq8H5rWOH2rz9fDNQEd4g0EA2XlcEdJXRz5BMEn4O1pJFdT+z4YHhoWw==
 
 xhr@^2.0.1:
   version "2.6.0"

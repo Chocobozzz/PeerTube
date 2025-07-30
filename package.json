@@ -192,7 +192,7 @@
     "tslib": "^2.0.0",
     "uuid": "^11.0.5",
     "validator": "^13.0.0",
-    "webfinger.js": "2.7.1",
+    "webfinger.js": "2.8.1",
     "winston": "3.17.0",
     "ws": "^8.0.0",
     "yauzl": "^3.1.0"
