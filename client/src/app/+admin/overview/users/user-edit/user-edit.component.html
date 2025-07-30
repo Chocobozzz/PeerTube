@@ -123,11 +123,11 @@
         <div class="form-group" *ngIf="isCreation()">
           <label i18n for="password">Password</label>
 
-          <my-help *ngIf="isPasswordOptional()">
-            <ng-container i18n>
+          @if (isPasswordOptional()) {
+            <div class="form-group-description" i18n>
               If you leave the password empty, an email will be sent to the user.
-            </ng-container>
-          </my-help>
+            </div>
+          }
 
           <my-input-text formControlName="password" inputId="password" [formError]="formErrors['password']" autocomplete="new-password"></my-input-text>
         </div>
@@ -215,16 +215,27 @@
   </div>
 </div>
 
+@if (displayTokenSessions()) {
+  <div class="pt-two-cols mt-5">
+    <div class="title-col">
+      <div class="anchor" id="token-sessions"></div>
+      <h2 i18n>TOKEN SESSIONS</h2>
+    </div>
 
-<div *ngIf="displayDangerZone()" class="pt-two-cols mt-5"> <!-- danger zone grid -->
-  <div class="title-col">
-    <div class="anchor" id="danger"></div> <!-- danger zone anchor -->
-    <h2 i18n class="pt-title-danger">DANGER ZONE</h2>
+    <div class="content-col">
+      <my-account-token-sessions [user]="user"></my-account-token-sessions>
+    </div>
   </div>
+}
 
-  <div class="content-col">
+@if (displayPasswordZone()) {
+  <div class="pt-two-cols mt-5">
+    <div class="title-col">
+      <div class="anchor" id="danger"></div>
+      <h2 i18n class="pt-title-danger">DANGER ZONE</h2>
+    </div>
 
-    <div class="danger-zone">
+    <div class="content-col">
       <div class="form-group">
         <div class="mb-1 fw-bold" i18n>Send a link to reset the password by email to the user</div>
         <button class="peertube-button danger-button" (click)="resetPassword()" i18n>Ask for new password</button>
@@ -240,6 +251,5 @@
         <button class="peertube-button danger-button" (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
       </div>
     </div>
-
   </div>
-</div>
+}

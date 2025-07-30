@@ -48,7 +48,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 915
+export const LAST_MIGRATION_VERSION = 920
 
 // ---------------------------------------------------------------------------
 
@@ -108,6 +108,8 @@ export const SORTABLE_COLUMNS = {
   CHANNEL_FOLLOWERS: [ 'createdAt' ],
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
+
+  TOKEN_SESSIONS: [ 'createdAt' ],
 
   RUNNERS: [ 'createdAt' ],
   RUNNER_REGISTRATION_TOKENS: [ 'createdAt' ],
@@ -339,6 +341,7 @@ export const SCHEDULER_INTERVALS_MS = {
   ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
+  UPDATE_TOKEN_SESSION: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
   GEO_IP_UPDATE: 60000 * 60 * 24, // 1 day
   VIDEO_VIEWS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
@@ -1208,6 +1211,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
+    SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
 
     REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
 

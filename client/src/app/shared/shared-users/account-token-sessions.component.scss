@@ -1,0 +1,13 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+td,
+th {
+  padding-bottom: 0.5rem;
+
+  @include padding-right(1rem);
+}
+
+td {
+  @include font-size(14px);
+}

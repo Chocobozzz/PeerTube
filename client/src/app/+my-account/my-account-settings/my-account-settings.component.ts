@@ -1,40 +1,42 @@
-import { ViewportScroller, NgIf } from '@angular/common'
+import { CommonModule, ViewportScroller } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewChecked, Component, OnInit, inject } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { shallowCopy } from '@peertube/peertube-core-utils'
-import { MyAccountDangerZoneComponent } from './my-account-danger-zone/my-account-danger-zone.component'
+import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { UserQuotaComponent } from '../../shared/shared-main/users/user-quota.component'
+import { UserInterfaceSettingsComponent } from '../../shared/shared-user-settings/user-interface-settings.component'
+import { UserVideoSettingsComponent } from '../../shared/shared-user-settings/user-video-settings.component'
+import { AccountTokenSessionsComponent } from '../../shared/shared-users/account-token-sessions.component'
 import { MyAccountChangeEmailComponent } from './my-account-change-email/my-account-change-email.component'
-import { MyAccountEmailPreferencesComponent } from './my-account-email-preferences/my-account-email-preferences.component'
-import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-account-two-factor-button.component'
 import { MyAccountChangePasswordComponent } from './my-account-change-password/my-account-change-password.component'
+import { MyAccountDangerZoneComponent } from './my-account-danger-zone/my-account-danger-zone.component'
+import { MyAccountEmailPreferencesComponent } from './my-account-email-preferences/my-account-email-preferences.component'
 import {
   MyAccountNotificationPreferencesComponent
 } from './my-account-notification-preferences/my-account-notification-preferences.component'
-import { UserVideoSettingsComponent } from '../../shared/shared-user-settings/user-video-settings.component'
-import { UserInterfaceSettingsComponent } from '../../shared/shared-user-settings/user-interface-settings.component'
 import { MyAccountProfileComponent } from './my-account-profile/my-account-profile.component'
-import { UserQuotaComponent } from '../../shared/shared-main/users/user-quota.component'
-import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-account-two-factor-button.component'
 
 @Component({
   selector: 'my-account-settings',
   templateUrl: './my-account-settings.component.html',
   styleUrls: [ './my-account-settings.component.scss' ],
   imports: [
+    CommonModule,
     ActorAvatarEditComponent,
     UserQuotaComponent,
     MyAccountProfileComponent,
     UserInterfaceSettingsComponent,
     UserVideoSettingsComponent,
     MyAccountNotificationPreferencesComponent,
-    NgIf,
     MyAccountChangePasswordComponent,
     MyAccountTwoFactorButtonComponent,
     MyAccountEmailPreferencesComponent,
     MyAccountChangeEmailComponent,
-    MyAccountDangerZoneComponent
+    MyAccountDangerZoneComponent,
+    AccountTokenSessionsComponent
   ]
 })
 export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {

@@ -146,7 +146,7 @@ describe('Test video playlists API validator', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: globalPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
       await makeGetRequest({ url: server.url, path: accountPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
       await makeGetRequest({
@@ -169,7 +169,7 @@ describe('Test video playlists API validator', function () {
       await checkBadCountPagination(server.url, path + playlist.shortUUID + '/videos', server.accessToken)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: path + playlist.shortUUID + '/videos', expectedStatus: HttpStatusCode.OK_200 })
     })
   })

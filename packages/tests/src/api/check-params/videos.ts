@@ -76,7 +76,7 @@ describe('Test videos API validator', function () {
       await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200, query: { skipCount: 'toto' } })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200, query: { skipCount: false } })
     })
   })
@@ -96,7 +96,7 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, undefined, { search: 'test' })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, query: { search: 'test' }, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
@@ -165,7 +165,7 @@ describe('Test videos API validator', function () {
       }
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, token: server.accessToken, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
@@ -189,7 +189,7 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
@@ -213,7 +213,7 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
     })
   })

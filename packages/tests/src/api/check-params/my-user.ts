@@ -406,7 +406,7 @@ describe('Test my user API validators', function () {
       await server.users.getMyInfo({ token: 'fake_token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await server.users.getMyInfo({ token: userToken })
     })
   })

@@ -1,7 +1,7 @@
 import { Directive, OnInit } from '@angular/core'
-import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { getVideoQuotaDailyOptions, getVideoQuotaOptions } from '@app/+admin/shared/user-quota-options'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { peertubeTranslate, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, UserAdminFlag, UserRole } from '@peertube/peertube-models'
@@ -63,11 +63,18 @@ export abstract class UserEdit extends FormReactive implements OnInit {
       })
   }
 
-  displayDangerZone () {
+  displayPasswordZone () {
     if (this.isCreation()) return false
     if (!this.user) return false
     if (this.user.pluginAuth) return false
     if (this.auth.getUser().id === this.user.id) return false
+
+    return true
+  }
+
+  displayTokenSessions () {
+    if (this.isCreation()) return false
+    if (!this.user) return false
 
     return true
   }

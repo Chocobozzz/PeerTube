@@ -31,7 +31,7 @@ import {
   MVideoThumbnailBlacklist,
   MWatchedWordsList
 } from '@server/types/models/index.js'
-import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
+import { MOAuthToken, MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.js'
 import { MVideoImportDefault } from '@server/types/models/video/video-import.js'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element.js'
@@ -246,6 +246,8 @@ declare module 'express' {
       userExport?: MUserExport
 
       watchedWordsList?: MWatchedWordsList
+
+      tokenSession?: MOAuthToken
     }
   }
 }

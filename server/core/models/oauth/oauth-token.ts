@@ -1,4 +1,8 @@
-import { Transaction } from 'sequelize'
+import { TokenSession } from '@peertube/peertube-models'
+import { TokensCache } from '@server/lib/auth/tokens-cache.js'
+import { MUserAccountId } from '@server/types/models/index.js'
+import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
+import { Op, Transaction } from 'sequelize'
 import {
   AfterDestroy,
   AfterUpdate,
@@ -11,15 +15,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { TokensCache } from '@server/lib/auth/tokens-cache.js'
-import { MUserAccountId } from '@server/types/models/index.js'
-import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { logger } from '../../helpers/logger.js'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
+import { getSort, SequelizeModel } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { OAuthClientModel } from './oauth-client.js'
-import { SequelizeModel } from '../shared/index.js'
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -99,6 +100,24 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
   @Column
   declare authName: string
 
+  @Column
+  declare loginDevice: string
+
+  @Column
+  declare loginIP: string
+
+  @Column
+  declare loginDate: Date
+
+  @Column
+  declare lastActivityDevice: string
+
+  @Column
+  declare lastActivityIP: string
+
+  @Column
+  declare lastActivityDate: Date
+
   @CreatedAt
   declare createdAt: Date
 
@@ -142,6 +161,8 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
 
     return OAuthTokenModel.findOne(query)
   }
+
+  // ---------------------------------------------------------------------------
 
   static getByRefreshTokenAndPopulateClient (refreshToken: string) {
     const query = {
@@ -205,6 +226,59 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
       })
   }
 
+  // ---------------------------------------------------------------------------
+
+  static loadSessionOf (options: {
+    id: number
+    userId: number
+  }) {
+    const now = new Date()
+
+    return OAuthTokenModel.findOne({
+      where: {
+        id: options.id,
+        userId: options.userId,
+        accessTokenExpiresAt: {
+          [Op.gt]: now
+        },
+        refreshTokenExpiresAt: {
+          [Op.gt]: now
+        }
+      }
+    })
+  }
+
+  static async listSessionsOf (options: {
+    start: number
+    count: number
+    sort: string
+    userId: number
+  }) {
+    const now = new Date()
+
+    const { count, rows } = await OAuthTokenModel.findAndCountAll({
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where: {
+        userId: options.userId,
+        accessTokenExpiresAt: {
+          [Op.gt]: now
+        },
+        refreshTokenExpiresAt: {
+          [Op.gt]: now
+        }
+      }
+    })
+
+    return {
+      total: count,
+      data: rows
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   static deleteUserToken (userId: number, t?: Transaction) {
     TokensCache.Instance.deleteUserToken(userId)
 
@@ -216,5 +290,23 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
     }
 
     return OAuthTokenModel.destroy(query)
+  }
+
+  toSessionFormattedJSON (activeToken: string): TokenSession {
+    return {
+      id: this.id,
+
+      loginIP: this.loginIP,
+      loginDevice: this.loginDevice,
+      loginDate: this.loginDate,
+
+      lastActivityIP: this.lastActivityIP,
+      lastActivityDevice: this.lastActivityDevice,
+      lastActivityDate: this.lastActivityDate,
+
+      currentSession: this.accessToken === activeToken,
+
+      createdAt: this.createdAt
+    }
   }
 }

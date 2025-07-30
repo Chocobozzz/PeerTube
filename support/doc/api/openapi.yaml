@@ -1643,6 +1643,44 @@ paths:
         '200':
           description: successful operation
 
+  /api/v1/users/{id}/token-sessions:
+    get:
+      summary: List token sessions
+      parameters:
+        - $ref: '#/components/parameters/id'
+      tags:
+        - Session
+      security:
+        - OAuth2: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TokenSession'
+
+  /api/v1/users/{id}/token-sessions/{tokenSessionId}/revoke:
+    get:
+      summary: List token sessions
+      parameters:
+        - $ref: '#/components/parameters/tokenSessionId'
+      tags:
+        - Session
+      security:
+        - OAuth2: []
+      responses:
+        '200':
+          description: successful operation
+
   /api/v1/users/ask-send-verify-email:
     post:
       summary: Resend user verification link
@@ -7586,6 +7624,13 @@ components:
       description: Entity id
       schema:
         $ref: '#/components/schemas/id'
+    tokenSessionId:
+      name: tokenSessionId
+      in: path
+      required: true
+      description: Token session Id
+      schema:
+        $ref: '#/components/schemas/id'
     userId:
       name: userId
       in: path
@@ -11501,6 +11546,36 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+
+    TokenSession:
+      properties:
+        id:
+          type: integer
+        currentSession:
+          type: boolean
+          description: Is this session the current one?
+        loginDevice:
+          type: string
+          description: Device used to login
+        loginIP:
+          type: string
+          format: ipv4
+          description: IP address used to login
+        loginDate:
+          type: string
+          format: date-time
+          description: Date of the login
+        lastActivityDevice:
+          type: string
+        lastActivityIP:
+          type: string
+          format: ipv4
+        lastActivityDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
 
     RequestTwoFactorResponse:
       properties:

@@ -37,6 +37,8 @@ export const videoChannelsFollowersSortValidator = checkSortFactory(SORTABLE_COL
 
 export const userRegistrationsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_REGISTRATIONS)
 
+export const tokenSessionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.TOKEN_SESSIONS)
+
 export const runnersSortValidator = checkSortFactory(SORTABLE_COLUMNS.RUNNERS)
 export const runnerRegistrationTokensSortValidator = checkSortFactory(SORTABLE_COLUMNS.RUNNER_REGISTRATION_TOKENS)
 export const runnerJobsSortValidator = checkSortFactory(SORTABLE_COLUMNS.RUNNER_JOBS)

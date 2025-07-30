@@ -152,6 +152,7 @@ import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
+import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 
 // ----------- Command line -----------
 
@@ -325,6 +326,7 @@ async function startApplication () {
   GeoIPUpdateScheduler.Instance.enable()
   RunnerJobWatchDogScheduler.Instance.enable()
   RemoveExpiredUserExportsScheduler.Instance.enable()
+  UpdateTokenSessionScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 

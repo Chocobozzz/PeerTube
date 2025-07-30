@@ -232,13 +232,22 @@ export class UsersCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getMyInfo (options: OverrideCommandOptions = {}) {
+  getMyInfo (options: OverrideCommandOptions & {
+    userAgent?: string
+    xForwardedFor?: string
+  } = {}) {
     const path = '/api/v1/users/me'
+
+    const headers = options.userAgent
+      ? { 'user-agent': options.userAgent }
+      : {}
 
     return this.getRequestBody<MyUser>({
       ...options,
 
       path,
+      headers,
+      xForwardedFor: options.xForwardedFor,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

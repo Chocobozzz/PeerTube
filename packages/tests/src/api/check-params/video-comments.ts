@@ -154,7 +154,7 @@ describe('Test video comments API validator', function () {
       })
     })
 
-    it('Should success with the correct params', async function () {
+    it('Should succeed with the correct params', async function () {
       await makeGetRequest({
         url: server.url,
         token: server.accessToken,
@@ -171,7 +171,6 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When adding a video thread', function () {
-
     it('Should fail with a non authenticated user', async function () {
       const fields = {
         text: 'text'
@@ -243,7 +242,6 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When adding a comment to a thread', function () {
-
     it('Should fail with a non authenticated user', async function () {
       const fields = {
         text: 'text'
@@ -399,7 +397,6 @@ describe('Test video comments API validator', function () {
   })
 
   describe('When a video has comments disabled', function () {
-
     before(async function () {
       video = await server.videos.upload({ attributes: { commentsPolicy: VideoCommentPolicy.DISABLED } })
       pathThread = `/api/v1/videos/${video.uuid}/comment-threads`

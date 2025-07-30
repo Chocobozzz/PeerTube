@@ -72,6 +72,18 @@
   </div>
 </div>
 
+<div class="pt-two-cols mt-5">
+  <div class="title-col">
+    <h2 i18n>ACCOUNT SESSIONS</h2>
+  </div>
+
+  <div class="content-col">
+    <p i18n>These are the devices currently logged in to your account.</p>
+
+    <my-account-token-sessions [user]="user"></my-account-token-sessions>
+  </div>
+</div>
+
 <div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
   <div class="title-col">
     <h2 i18n>EMAIL</h2>
