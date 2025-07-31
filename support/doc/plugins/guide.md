@@ -378,7 +378,7 @@ function register (...) {
     // Will be displayed in a button next to the login form
     authDisplayName: () => 'Auth method'
 
-    // If the user click on the auth button, PeerTube will forward the request in this function
+    // If the user click on the auth button, PeerTube will forward the request to this function
     onAuthRequest: (req, res) => {
       res.redirect('https://external-auth.example.com/auth')
     },
