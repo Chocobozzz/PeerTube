@@ -51,7 +51,7 @@
     "Not imported due to error: {errors}": "由于错误未导入： {errors}",
     "Your archive import has finished. Here is the summary of imported objects:": "你的存档导入已完成。这是已导入项目的概况：",
     "User settings:": "用户设置：",
-    "Account (name, description, avatar...):": "帐户（名称，描述，头像...）：",
+    "Account (name, description, avatar...):": "账户（名称，描述，头像...）：",
     "Blocklist:": "黑名单：",
     "Channels:": "频道：",
     "Likes:": "赞：",
