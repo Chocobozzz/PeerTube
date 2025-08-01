@@ -6,7 +6,7 @@ import { ActorModel } from '@server/models/actor/actor.js'
 import { MActorFull } from '@server/types/models/index.js'
 import WebFinger from 'webfinger.js'
 
-// eslint-disable-next-line new-cap
+// eslint-disable-next-line @typescript-eslint/no-deprecated
 const webfinger = new WebFinger({
   tls_only: isProdInstance(),
   uri_fallback: false,

@@ -157,12 +157,20 @@ export class VideoTableAttributes {
     return [
       'id',
       'streamKey',
-      'scheduledAt',
       'saveReplay',
       'permanentLive',
       'latencyMode',
       'videoId',
       'replaySettingId',
+      'createdAt',
+      'updatedAt'
+    ]
+  }
+
+  getLiveScheduleAttributes () {
+    return [
+      'id',
+      'startAt',
       'createdAt',
       'updatedAt'
     ]

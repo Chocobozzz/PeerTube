@@ -1,10 +1,14 @@
-import express from 'express'
+import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideoCreate, LiveVideoUpdate, ThumbnailType, UserRight, VideoState } from '@peertube/peertube-models'
-import { exists } from '@server/helpers/custom-validators/misc.js'
+import { uuidToShort } from '@peertube/peertube-node-utils'
+import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import {
   videoLiveAddValidator,
@@ -14,13 +18,13 @@ import {
   videoLiveUpdateValidator
 } from '@server/middlewares/validators/videos/video-live.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { MVideoLive } from '@server/types/models/index.js'
-import { uuidToShort } from '@peertube/peertube-node-utils'
+import express from 'express'
+import { Transaction } from 'sequelize'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
-import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
-import { pick } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('api', 'live')
 
@@ -100,17 +104,26 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
 
-  const newReplaySettingModel = await updateReplaySettings(videoLive, body)
-  if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id
-  else videoLive.replaySettingId = null
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async t => {
+      const newReplaySettingModel = await updateReplaySettings(videoLive, body, t)
 
-  if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
-  if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
-  if (body.scheduledAt !== undefined) {
-    videoLive.scheduledAt = body.scheduledAt
-      ? new Date(body.scheduledAt)
-      : null
-  }
+      if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id
+      else videoLive.replaySettingId = null
+
+      if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
+      if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
+
+      if (body.schedules !== undefined) {
+        await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
+        videoLive.LiveSchedules = []
+
+        if (isArray(body.schedules)) {
+          videoLive.LiveSchedules = await VideoLiveScheduleModel.addToLiveId(videoLive.id, body.schedules.map(s => s.startAt), t)
+        }
+      }
+    })
+  })
 
   video.VideoLive = await videoLive.save()
 
@@ -119,25 +132,25 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdate) {
+async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdate, t: Transaction) {
   if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
 
   // The live replay is not saved anymore, destroy the old model if it existed
   if (!videoLive.saveReplay) {
     if (videoLive.replaySettingId) {
-      await VideoLiveReplaySettingModel.removeSettings(videoLive.replaySettingId)
+      await VideoLiveReplaySettingModel.removeSettings(videoLive.replaySettingId, t)
     }
 
     return undefined
   }
 
   const settingModel = videoLive.replaySettingId
-    ? await VideoLiveReplaySettingModel.load(videoLive.replaySettingId)
+    ? await VideoLiveReplaySettingModel.load(videoLive.replaySettingId, t)
     : new VideoLiveReplaySettingModel()
 
   if (exists(body.replaySettings.privacy)) settingModel.privacy = body.replaySettings.privacy
 
-  return settingModel.save()
+  return settingModel.save({ transaction: t })
 }
 
 async function addLiveVideo (req: express.Request, res: express.Response) {
@@ -169,7 +182,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       fromDescription: false,
       finalFallback: undefined
     },
-    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'scheduledAt']),
+    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings', 'schedules' ]),
     videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
     lTags,
     videoAttributes: {

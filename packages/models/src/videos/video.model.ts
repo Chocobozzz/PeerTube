@@ -2,6 +2,7 @@ import { Account, AccountSummary } from '../actors/index.js'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model.js'
 import { VideoFile } from './file/index.js'
 import { VideoCommentPolicyType } from './index.js'
+import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
 import { VideoConstant } from './video-constant.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
@@ -34,7 +35,7 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   aspectRatio: number | null
 
   isLive: boolean
-  scheduledAt?: Date | string
+  liveSchedules?: LiveVideoScheduleEdit[]
 
   thumbnailPath: string
   thumbnailUrl?: string
@@ -86,6 +87,8 @@ export interface VideoAdditionalAttributes {
   videoSource: VideoSource
 
   automaticTags: string[]
+
+  liveSchedules: LiveVideoScheduleEdit[]
 }
 
 export interface VideoDetails extends Video {

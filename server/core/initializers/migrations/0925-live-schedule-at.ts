@@ -7,13 +7,11 @@ async function up (utils: {
 }): Promise<void> {
   const { transaction } = utils
 
-  {
-    await utils.queryInterface.addColumn('videoLive', 'scheduledAt', {
-      type: Sequelize.DATE,
-      defaultValue: null,
-      allowNull: true
-    }, { transaction })
-  }
+  const query =
+    // eslint-disable-next-line max-len
+    `CREATE TABLE IF NOT EXISTS "videoLiveSchedule" ("id"   SERIAL , "startAt" TIMESTAMP WITH TIME ZONE NOT NULL, "liveVideoId" INTEGER REFERENCES "videoLive" ("id") ON DELETE CASCADE ON UPDATE CASCADE, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY ("id"));`
+
+  await utils.sequelize.query(query, { transaction })
 }
 
 function down (options) {

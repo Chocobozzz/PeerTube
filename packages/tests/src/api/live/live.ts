@@ -225,29 +225,32 @@ describe('Test live', function () {
 
   describe('Scheduled live', function () {
     let liveVideoUUID: string
+    const scheduledForDate = (new Date(Date.now() + 3600000)).toISOString()
 
     it('Should create a live with the appropriate parameters', async function () {
       this.timeout(20000)
 
-      const scheduledForDate = (new Date(Date.now() + 3600)).toISOString();
-
-      const live = await commands[0].create({
+      const { uuid } = await commands[0].create({
         fields: {
           name: 'live scheduled',
           channelId: servers[0].store.channel.id,
           privacy: VideoPrivacy.PUBLIC,
-          scheduledAt: scheduledForDate,
+          schedules: [ { startAt: scheduledForDate } ]
         }
       })
-      liveVideoUUID = live.uuid
+      liveVideoUUID = uuid
 
       await waitJobs(servers)
 
       for (const server of servers) {
         const video = await server.videos.get({ id: liveVideoUUID })
 
-        expect(video.scheduledAt).to.equal(scheduledForDate)
+        expect(video.liveSchedules).to.have.lengthOf(1)
+        expect(video.liveSchedules[0].startAt).to.equal(scheduledForDate)
       }
+
+      const live = await servers[0].live.get({ videoId: liveVideoUUID })
+      expect(live.schedules[0].startAt).to.equal(scheduledForDate)
     })
 
     it('Should not have the live listed globally since nobody streams into', async function () {
@@ -261,12 +264,100 @@ describe('Test live', function () {
 
     it('Should have the live listed on the channel since it is scheduled', async function () {
       const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+
       for (const server of servers) {
-        const { total, data } = await server.videos.listByChannel({ handle })
+        const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].liveSchedules[0].startAt).to.equal(scheduledForDate)
+      }
+    })
+
+    it('Should not list lives according to includeScheduledLive query param', async function () {
+      for (const server of servers) {
+        const { total, data } = await server.videos.list({ includeScheduledLive: false })
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.list({ includeScheduledLive: true })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       }
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.list({ includeScheduledLive: true, isLive: false })
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should update the live schedule', async function () {
+      const newSchedule = new Date(Date.now() + 7200000).toISOString()
+
+      await servers[0].live.update({
+        videoId: liveVideoUUID,
+        fields: {
+          schedules: [ { startAt: newSchedule } ]
+        }
+      })
+
+      await waitJobs(servers)
+
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+      for (const server of servers) {
+        const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].liveSchedules[0].startAt).to.equal(newSchedule)
+      }
+    })
+
+    it('Should not list scheduled lives of the past', async function () {
+      const newSchedule = new Date(Date.now() - 1).toISOString()
+
+      await servers[0].live.update({
+        videoId: liveVideoUUID,
+        fields: {
+          schedules: [ { startAt: newSchedule } ]
+        }
+      })
+
+      await waitJobs(servers)
+
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+      for (const server of servers) {
+        const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should delete the live schedule', async function () {
+      await servers[0].live.update({
+        videoId: liveVideoUUID,
+        fields: {
+          schedules: null
+        }
+      })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: liveVideoUUID })
+
+        expect(video.liveSchedules).to.have.lengthOf(0)
+      }
+
+      const live = await servers[0].live.get({ videoId: liveVideoUUID })
+      expect(live.schedules).to.have.lengthOf(0)
     })
 
     it('Delete the live', async function () {

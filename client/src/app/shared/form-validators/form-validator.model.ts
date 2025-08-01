@@ -16,7 +16,7 @@ export type BuildFormArgumentTyped<Form> = ReplaceForm<Form, BuildFormValidator>
 // ---------------------------------------------------------------------------
 
 export type FormDefault = {
-  [name: string]: Blob | Date | boolean | number | number[] | string | string[] | FormDefault
+  [name: string]: Blob | Date | boolean | number | number[] | string | string[] | FormDefault | FormDefault[]
 }
 export type FormDefaultTyped<Form> = Partial<UnwrapForm<Form>>
 

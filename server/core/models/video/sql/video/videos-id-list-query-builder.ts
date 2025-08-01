@@ -159,10 +159,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     // Only list published videos
     if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE)) {
-      if (options.includeScheduledLive) {
-        this.joinLive()
-      }
-      this.whereStateAvailable(options.includeScheduledLive ?? false)
+      if (options.includeScheduledLive) this.joinLiveSchedules()
+
+      this.whereStateAvailable({ includeScheduledLive: options.includeScheduledLive ?? false })
     }
 
     if (options.videoPlaylistId) {
@@ -353,19 +352,25 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.videoPlaylistId = playlistId
   }
 
-  private joinLive () {
+  private joinLiveSchedules () {
     this.joins.push(
-      'LEFT OUTER JOIN "videoLive" ON "video"."id" = "videoLive"."videoId"'
+      'LEFT JOIN "videoLive" ON "video"."id" = "videoLive"."videoId"',
+      'LEFT JOIN "videoLiveSchedule" ON "videoLiveSchedule"."liveVideoId" = "videoLive"."id"'
     )
   }
 
-  private whereStateAvailable (includeScheduledLive: boolean) {
-    let or = [];
+  private whereStateAvailable (options: {
+    includeScheduledLive: boolean
+  }) {
+    const or: string[] = []
+
     or.push(`"video"."state" = ${VideoState.PUBLISHED}`)
     or.push(`("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false)`)
-    if (includeScheduledLive) {
-      or.push(`("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "videoLive"."scheduledAt" IS NOT NULL)`)
+
+    if (options.includeScheduledLive) {
+      or.push(`("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "videoLiveSchedule"."startAt" > NOW())`)
     }
+
     this.and.push(`(${or.join(' OR ')})`)
   }
 

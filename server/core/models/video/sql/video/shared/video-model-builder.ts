@@ -10,6 +10,7 @@ import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { ScheduleVideoUpdateModel } from '../../../schedule-video-update.js'
 import { TagModel } from '../../../tag.js'
@@ -41,6 +42,7 @@ export class VideoModelBuilder {
   private serverBlocklistDone: Set<any>
   private liveDone: Set<any>
   private sourceDone: Set<any>
+  private liveScheduleDone: Set<any>
   private redundancyDone: Set<any>
   private scheduleVideoUpdateDone: Set<any>
 
@@ -76,6 +78,7 @@ export class VideoModelBuilder {
       this.setUserHistory(row, videoModel)
       this.addThumbnail(row, videoModel)
       this.setLive(row, videoModel)
+      this.addLiveSchedule(row, videoModel)
 
       const channelActor = videoModel.VideoChannel?.Actor
       if (channelActor) {
@@ -148,6 +151,7 @@ export class VideoModelBuilder {
     this.sourceDone = new Set()
     this.redundancyDone = new Set()
     this.scheduleVideoUpdateDone = new Set()
+    this.liveScheduleDone = new Set()
 
     this.accountBlocklistDone = new Set()
     this.serverBlocklistDone = new Set()
@@ -426,6 +430,24 @@ export class VideoModelBuilder {
     videoModel.VideoLive = new VideoLiveModel(attributes, this.buildOpts)
 
     this.liveDone.add(id)
+  }
+
+  private addLiveSchedule (row: SQLRow, videoModel: VideoModel) {
+    const id = row['VideoLive.VideoLiveSchedules.id']
+    if (!id) return
+    if (this.liveScheduleDone.has(id)) return
+
+    const videoLiveScheduleAttributes = this.grab(row, this.tables.getLiveScheduleAttributes(), 'VideoLive.VideoLiveSchedules')
+
+    const liveScheduleModel = new VideoLiveScheduleModel(videoLiveScheduleAttributes, this.buildOpts)
+
+    if (!videoModel.VideoLive.LiveSchedules) {
+      videoModel.VideoLive.LiveSchedules = []
+    }
+
+    videoModel.VideoLive.LiveSchedules.push(liveScheduleModel)
+
+    this.liveScheduleDone.add(id)
   }
 
   private setSource (row: SQLRow, videoModel: VideoModel) {

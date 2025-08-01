@@ -492,6 +492,7 @@ function runTest (withObjectStorage: boolean) {
         expect(live.permanentLive).to.be.true
         expect(live.streamKey).to.exist
         expect(live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
+        expect(live.schedules[0].startAt).to.exist
 
         expect(video.channel.name).to.equal('noah_second_channel')
         expect(video.privacy.id).to.equal(VideoPrivacy.PASSWORD_PROTECTED)

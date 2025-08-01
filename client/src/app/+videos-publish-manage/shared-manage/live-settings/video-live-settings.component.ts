@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
@@ -39,7 +39,12 @@ type Form = {
   latencyMode: FormControl<LiveVideoLatencyModeType>
   saveReplay: FormControl<boolean>
   replayPrivacy: FormControl<VideoPrivacyType>
-  scheduledAt: FormControl<Date>
+
+  schedules: FormArray<
+    FormGroup<{
+      startAt: FormControl<Date>
+    }>
+  >
 }
 
 @Component({
@@ -137,8 +142,7 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
       permanentLive: null,
       latencyMode: null,
       saveReplay: null,
-      replayPrivacy: null,
-      scheduledAt: null,
+      replayPrivacy: null
     }
 
     const {
@@ -150,6 +154,15 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
     this.form = form
     this.formErrors = formErrors
     this.validationMessages = validationMessages
+
+    this.form.addControl(
+      'schedules',
+      new FormArray([
+        new FormGroup({
+          startAt: new FormControl<Date>(defaultValues.schedules?.[0]?.startAt, null)
+        })
+      ])
+    )
 
     this.form.valueChanges.subscribe(() => {
       this.manageController.setFormError($localize`Live settings`, 'live-settings', this.formErrors)
@@ -212,10 +225,16 @@ export class VideoLiveSettingsComponent implements OnInit, OnDestroy {
   }
 
   hasScheduledDate () {
-    return !!this.form.value.scheduledAt
+    return !!this.form.value.schedules?.length && this.form.value.schedules[0].startAt
   }
 
-  resetField (name: string) {
-    this.form.patchValue({ [name]: null })
+  resetSchedule () {
+    this.form.patchValue({
+      schedules: [
+        {
+          startAt: null
+        }
+      ]
+    })
   }
 }

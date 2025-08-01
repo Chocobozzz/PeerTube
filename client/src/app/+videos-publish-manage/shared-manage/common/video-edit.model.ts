@@ -46,10 +46,12 @@ type CommonUpdateForm =
     nsfwFlagSex?: boolean
   }
 
-type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'scheduledAt'> & {
+type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'schedules'> & {
   replayPrivacy?: VideoPrivacyType
   liveStreamKey?: string
-  scheduledAt?: Date
+  schedules?: {
+    startAt?: Date
+  }[]
 }
 
 type ReplaceFileForm = {
@@ -73,7 +75,7 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'scheduledAt'>>
+  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'>>
 
 type UpdateFromAPIOptions = {
   video?: Pick<
@@ -107,7 +109,6 @@ type UpdateFromAPIOptions = {
     | 'previewPath'
     | 'state'
     | 'isLive'
-    | 'scheduledAt'
   >
   live?: LiveVideo
   chapters?: VideoChapter[]
@@ -126,8 +127,10 @@ type CommonUpdate = Omit<VideoUpdate, 'thumbnailfile' | 'originallyPublishedAt' 
   }
 }
 
-type LiveUpdate = Omit<LiveVideoUpdate, 'scheduledAt'> & {
-  scheduledAt?: string
+type LiveUpdate = Omit<LiveVideoUpdate, 'schedules'> & {
+  schedules?: {
+    startAt: string
+  }[]
 }
 
 export class VideoEdit {
@@ -242,10 +245,14 @@ export class VideoEdit {
       permanentLive: options.permanentLive,
 
       saveReplay: options.saveReplay,
+
       replaySettings: options.replaySettings
         ? { privacy: options.replaySettings.privacy }
         : undefined,
-      scheduledAt: options.scheduledAt ? new Date(options.scheduledAt).toISOString() : null
+
+      schedules: options.schedules
+        ? options.schedules.map(s => ({ startAt: new Date(s.startAt).toISOString() }))
+        : undefined
     }
 
     this.updateAfterChange()
@@ -415,10 +422,13 @@ export class VideoEdit {
         permanentLive: live.permanentLive,
         latencyMode: live.latencyMode,
         saveReplay: live.saveReplay,
-        scheduledAt: live.scheduledAt ? new Date(live.scheduledAt).toISOString() : null,
 
         replaySettings: live.replaySettings
           ? { privacy: live.replaySettings.privacy }
+          : undefined,
+
+        schedules: live.schedules
+          ? live.schedules.map(s => ({ startAt: new Date(s.startAt).toISOString() }))
           : undefined
       }
     }
@@ -627,10 +637,15 @@ export class VideoEdit {
         ? { privacy: values.replayPrivacy }
         : undefined
     }
-    if (values.scheduledAt !== undefined) {
-      this.live.scheduledAt = values.scheduledAt
-        ? new Date(values.scheduledAt).toISOString()
-        : null
+
+    if (values.schedules !== undefined) {
+      if (values.schedules === null || values.schedules.length === 0 || !values.schedules[0].startAt) {
+        this.live.schedules = []
+      } else {
+        this.live.schedules = values.schedules.map(s => ({
+          startAt: new Date(s.startAt).toISOString()
+        }))
+      }
     }
 
     this.updateAfterChange()
@@ -642,11 +657,14 @@ export class VideoEdit {
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
       saveReplay: this.live.saveReplay,
-      scheduledAt: this.live.scheduledAt ? new Date(this.live.scheduledAt) : null,
 
       replayPrivacy: this.live.replaySettings
         ? this.live.replaySettings.privacy
-        : VideoPrivacy.PRIVATE
+        : VideoPrivacy.PRIVATE,
+
+      schedules: this.live.schedules?.map(s => ({
+        startAt: new Date(s.startAt)
+      }))
     }
   }
 
@@ -658,7 +676,8 @@ export class VideoEdit {
         ? this.live.replaySettings
         : undefined,
       latencyMode: this.live.latencyMode,
-      scheduledAt: this.live.scheduledAt ? new Date(this.live.scheduledAt) : null,
+
+      schedules: this.live.schedules
     }
   }
 
@@ -670,7 +689,7 @@ export class VideoEdit {
       latencyMode: this.live.latencyMode,
       saveReplay: this.live.saveReplay,
       replaySettings: this.live.replaySettings,
-      scheduledAt: this.live.scheduledAt,
+      schedules: this.live.schedules
     }
   }
 

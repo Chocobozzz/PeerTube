@@ -17,6 +17,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -44,7 +45,7 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   inputFilename: string
 }
 
-type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'scheduledAt'> & {
+type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'> & {
   streamKey?: string
 }
 
@@ -189,8 +190,7 @@ export class LocalVideoCreator {
             saveReplay: this.liveAttributes.saveReplay || false,
             permanentLive: this.liveAttributes.permanentLive || false,
             latencyMode: this.liveAttributes.latencyMode || LiveVideoLatencyMode.DEFAULT,
-            streamKey: this.liveAttributes.streamKey || buildUUID(),
-            scheduledAt: this.liveAttributes.scheduledAt ? new Date(this.liveAttributes.scheduledAt) : null,
+            streamKey: this.liveAttributes.streamKey || buildUUID()
           })
 
           if (videoLive.saveReplay) {
@@ -204,6 +204,14 @@ export class LocalVideoCreator {
 
           videoLive.videoId = this.video.id
           this.video.VideoLive = await videoLive.save({ transaction })
+
+          if (this.liveAttributes.schedules) {
+            this.video.VideoLive.LiveSchedules = await VideoLiveScheduleModel.addToLiveId(
+              this.video.VideoLive.id,
+              this.liveAttributes.schedules.map(s => s.startAt),
+              transaction
+            )
+          }
         }
 
         if (this.videoFile) {

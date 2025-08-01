@@ -21,6 +21,7 @@ import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.j
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
+import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
@@ -187,7 +188,8 @@ export async function initDatabaseModels (silent: boolean) {
     AutomaticTagModel,
     WatchedWordsListModel,
     AccountAutomaticTagPolicyModel,
-    UploadImageModel
+    UploadImageModel,
+    VideoLiveScheduleModel
   ])
 
   // Check extensions exist in the database

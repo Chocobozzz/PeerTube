@@ -30,7 +30,7 @@ import {
   MVideoChapter,
   MVideoFile,
   MVideoFullLight,
-  MVideoLiveWithSetting,
+  MVideoLiveWithSettingSchedules,
   MVideoPassword
 } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
@@ -92,7 +92,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       : []
 
     const live = video.isLive
-      ? await VideoLiveModel.loadByVideoIdWithSettings(videoId)
+      ? await VideoLiveModel.loadByVideoIdFull(videoId)
       : undefined // We already have captions, so we can set it to the video object
     ;(video as any).VideoCaptions = captions
     // Then fetch more attributes for AP serialization
@@ -113,7 +113,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   private exportVideoJSON (options: {
     video: MVideoFullLight
     captions: MVideoCaption[]
-    live: MVideoLiveWithSetting
+    live: MVideoLiveWithSettingSchedules
     passwords: MVideoPassword[]
     source: MVideoSource
     chapters: MVideoChapter[]
@@ -186,7 +186,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     }
   }
 
-  private exportLiveJSON (video: MVideo, live: MVideoLiveWithSetting) {
+  private exportLiveJSON (video: MVideo, live: MVideoLiveWithSettingSchedules) {
     if (!video.isLive) return undefined
 
     return {
@@ -197,7 +197,11 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
 
       replaySettings: live.ReplaySetting
         ? { privacy: live.ReplaySetting.privacy }
-        : undefined
+        : undefined,
+
+      schedules: live.LiveSchedules?.map(s => ({
+        startAt: s.startAt.toISOString()
+      }))
     }
   }
 

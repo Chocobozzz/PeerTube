@@ -90,7 +90,7 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
       latencyMode: LiveVideoLatencyMode.DEFAULT,
       saveReplay: this.isReplayAllowed(),
       replaySettings: { privacy: this.highestPrivacy() },
-      scheduledAt: undefined,
+      schedules: []
     })
     this.manageController.setConfig({ manageType: 'go-live', serverConfig: this.serverService.getHTMLConfig() })
     this.manageController.setVideoEdit(videoEdit)

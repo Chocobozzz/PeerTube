@@ -24,7 +24,7 @@ import {
   MVideoFormattableDetails,
   MVideoId,
   MVideoImmutable,
-  MVideoLiveFormattable,
+  MVideoLiveSessionReplay,
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
@@ -148,8 +148,8 @@ declare module 'express' {
       onlyVideo?: MVideoThumbnailBlacklist
       videoId?: MVideoId
 
-      videoLive?: MVideoLiveFormattable
-      videoLiveSession?: MVideoLiveSession
+      videoLive?: MVideoLiveWithSettingSchedules
+      videoLiveSession?: MVideoLiveSessionReplay
 
       videoShare?: MVideoShareActor
 

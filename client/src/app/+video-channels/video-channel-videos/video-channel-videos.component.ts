@@ -57,15 +57,14 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getVideosObservable (pagination: ComponentPaginationLight, filters: VideoFilters) {
-    const params = {
+    return this.videoService.listChannelVideos({
       ...filters.toVideosAPIObject(),
 
       videoPagination: pagination,
       videoChannel: this.videoChannel,
+      includeScheduledLive: true,
       skipCount: true
-    }
-
-    return this.videoService.listChannelVideos(params)
+    })
   }
 
   getSyndicationItems () {

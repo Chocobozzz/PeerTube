@@ -27,7 +27,6 @@ export interface VideoObject {
   summary: string
 
   isLiveBroadcast: boolean
-  liveScheduledAt: string
   liveSaveReplay: boolean
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
@@ -44,6 +43,10 @@ export interface VideoObject {
   originallyPublishedAt: string
   updated: string
   uploadDate: string
+
+  schedules?: {
+    startDate: Date
+  }[]
 
   mediaType: 'text/markdown'
   content: string
