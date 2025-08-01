@@ -1,0 +1,24 @@
+<div class="premiere-widget">
+  <div class="premiere-info">
+    <div class="premiere-title">
+      <h2 i18n>This video will be available soon!</h2>
+    </div>
+
+    <div class="premiere-countdown">
+      <p i18n>This video will be published on {{ video.scheduledUpdate.updateAt | ptDate: 'full' }}.</p>
+    </div>
+
+    <div class="premiere-actions">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onRemindMe()"
+        [disabled]="notificationAdded"
+      >
+        <my-global-icon iconName="bell" aria-hidden="true"></my-global-icon>
+        <span *ngIf="!notificationAdded" i18n>Remind me</span>
+        <span *ngIf="notificationAdded" i18n>Notified</span>
+      </button>
+    </div>
+  </div>
+</div>

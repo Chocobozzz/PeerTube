@@ -1,0 +1,57 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_bootstrap-variables';
+
+$video-default-height: 66vh;
+$video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-space});
+
+.premiere-widget {
+  padding: 20px;
+  text-align: center;
+  background-color: pvar(--mainBackground);
+  height: $video-default-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+
+  &.theater-enabled {
+    height: $video-max-height;
+  }
+
+  .premiere-info {
+    max-width: 500px;
+
+    .premiere-title {
+      margin-bottom: 20px;
+
+      h2 {
+        font-size: 1.8em;
+        font-weight: 600;
+        color: pvar(--mainForegroundColor);
+        margin: 0;
+      }
+    }
+
+    .premiere-countdown {
+      margin-bottom: 30px;
+
+      p {
+        font-size: 1.1em;
+        color: pvar(--greyForegroundColor);
+        margin: 0;
+      }
+    }
+
+    .premiere-actions {
+      .btn {
+        padding: 10px 20px;
+        font-size: 1em;
+        
+        my-global-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}

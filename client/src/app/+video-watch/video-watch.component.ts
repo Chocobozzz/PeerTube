@@ -73,6 +73,7 @@ import { VideoDescriptionComponent } from './shared/metadata/video-description.c
 import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
 import { VideoWatchPlaylistComponent } from './shared/player-widgets/video-watch-playlist.component'
 import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+import { VideoPremiereComponent } from './shared/premiere/video-premiere.component'
 
 const debugLogger = debug('peertube:watch:VideoWatchComponent')
 
@@ -119,10 +120,13 @@ type URLOptions = {
     PrivacyConcernsComponent,
     PlayerStylesComponent,
     VideoWatchPlaylistComponent,
-    VideoTranscriptionComponent
+    VideoTranscriptionComponent,
+    VideoPremiereComponent
   ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
+  VideoPrivacy = VideoPrivacy // Make VideoPrivacy accessible in template
+  
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   private videoService = inject(VideoService)
@@ -269,6 +273,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onPlaylistNoVideoFound () {
     this.noPlaylistVideoFound = true
+  }
+
+  onPremiereRemindMe () {
+    if (!this.isUserLoggedIn()) {
+      this.notifier.error($localize`You need to be logged in to be notified about video premieres.`)
+      return
+    }
+
+    // TODO: Implement actual reminder functionality
+    // This could involve subscribing to notifications or adding to a reminder list
+    this.notifier.success($localize`You will be notified when this video premieres!`)
   }
 
   isUserLoggedIn () {

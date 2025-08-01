@@ -10,9 +10,17 @@
         <ng-container i18n>Please try refreshing the page, or try again later.</ng-container>
       </div>
 
-      <div id="videojs-wrapper">
-        <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
-      </div>
+      @if (video && video.privacy.id === VideoPrivacy.PREMIERE) {
+        <my-video-premiere
+          [video]="video"
+          [theaterEnabled]="theaterEnabled"
+          (remindMeClick)="onPremiereRemindMe()"
+        ></my-video-premiere>
+      } @else {
+        <div id="videojs-wrapper">
+          <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
+        </div>
+      }
 
       <div class="player-widget-component">
         <my-video-watch-playlist
