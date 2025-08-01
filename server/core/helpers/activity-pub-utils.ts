@@ -5,6 +5,7 @@ import { isArray } from './custom-validators/misc.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
+import { logger } from './logger.js'
 
 export type ContextFilter = <T>(arg: T) => Promise<T>
 
@@ -36,7 +37,13 @@ export async function signAndContextify<T> (options: {
     ? await activityPubContextify(data, contextType, contextFilter)
     : data
 
-  return signerFunction({ byActor, data: activity })
+  try {
+    return await signerFunction({ byActor, data: activity })
+  } catch (err) {
+    logger.debug('Cannot sign activity', { activity, err })
+
+    throw err
+  }
 }
 
 export async function getApplicationActorOfHost (host: string) {
@@ -117,6 +124,8 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
     },
 
     originallyPublishedAt: 'sc:datePublished',
+    schedules: 'sc:eventSchedule',
+    startDate: 'sc:startDate',
 
     uploadDate: 'sc:uploadDate',
 

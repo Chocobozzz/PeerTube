@@ -10,7 +10,6 @@
   <my-alert type="primary" i18n>Your live has ended.</my-alert>
 } @else {
   <div [formGroup]="form">
-
     <my-alert class="d-block mb-4" type="primary">
       @if (isStreaming()) {
         <ng-container i18n>Live configuration is unavailable because you are streaming in this live.</ng-container>
@@ -18,8 +17,8 @@
         <my-live-documentation-link></my-live-documentation-link>
 
         <div class="mt-3" i18n *ngIf="getMaxLiveDuration() >= 0">
-          Max live duration configured on {{ getInstanceName() }} is {{ getMaxLiveDuration() | myTimeDurationFormatter }}.
-          If your live reaches this limit, it will be automatically terminated.
+          Max live duration configured on {{ getInstanceName() }} is {{ getMaxLiveDuration() | myTimeDurationFormatter }}. If your live reaches this limit, it
+          will be automatically terminated.
         </div>
       }
     </my-alert>
@@ -28,12 +27,26 @@
       <div>
         <div *ngIf="getLive().rtmpUrl" class="form-group">
           <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-          <my-input-text inputId="liveVideoRTMPUrl" [value]="getLive().rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+          <my-input-text
+            inputId="liveVideoRTMPUrl"
+            [value]="getLive().rtmpUrl"
+            [withToggle]="false"
+            [withCopy]="true"
+            [show]="true"
+            [readonly]="true"
+          ></my-input-text>
         </div>
 
         <div *ngIf="getLive().rtmpsUrl" class="form-group">
           <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
-          <my-input-text inputId="liveVideoRTMPSUrl" [value]="getLive().rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+          <my-input-text
+            inputId="liveVideoRTMPSUrl"
+            [value]="getLive().rtmpsUrl"
+            [withToggle]="false"
+            [withCopy]="true"
+            [show]="true"
+            [readonly]="true"
+          ></my-input-text>
         </div>
 
         <div class="form-group">
@@ -79,7 +92,7 @@
           </my-peertube-checkbox>
         </div>
 
-        <div class="form-group mx-4" *ngIf="isSaveReplayEnabled()">
+        <div class="form-group ms-4" *ngIf="isSaveReplayEnabled()">
           <label i18n for="replayPrivacy">Privacy of the new replay</label>
           <my-select-options inputId="replayPrivacy" [items]="replayPrivacies" formControlName="replayPrivacy"></my-select-options>
         </div>
@@ -91,6 +104,37 @@
           <div *ngIf="formErrors.latencyMode" class="form-error" role="alert">
             {{ formErrors.latencyMode }}
           </div>
+        </div>
+
+        <div class="form-group" formArrayName="schedules">
+          <ng-container formGroupName="0">
+            <div class="label-container">
+              <label i18n for="startAt">Live scheduled date</label>
+
+              <button i18n class="reset-button reset-button-small" (click)="resetSchedule()" *ngIf="hasScheduledDate()">
+                Reset
+              </button>
+            </div>
+
+            <div class="form-group-description" i18n>
+              This date is used for displaying the live in your channel when it's not currently streaming. Scheduling a live does not prevent you from starting
+              the live at a different time.
+            </div>
+
+            <p-datepicker
+              inputId="startAt"
+              formControlName="startAt"
+              [dateFormat]="calendarDateFormat"
+              [firstDayOfWeek]="0"
+              [showTime]="true"
+              [hideOnDateTimeSelect]="true"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [yearRange]="myYearRange"
+              baseZIndex="20000"
+            >
+            </p-datepicker>
+          </ng-container>
         </div>
       </div>
     </div>

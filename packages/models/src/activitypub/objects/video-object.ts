@@ -44,6 +44,10 @@ export interface VideoObject {
   updated: string
   uploadDate: string
 
+  schedules?: {
+    startDate: Date
+  }[]
+
   mediaType: 'text/markdown'
   content: string
 

@@ -1,15 +1,13 @@
+import { ActorImageType } from '@peertube/peertube-models'
+import { MUserAccountId } from '@server/types/models/index.js'
 import { Sequelize } from 'sequelize'
 import validator from 'validator'
-import { MUserAccountId } from '@server/types/models/index.js'
-import { ActorImageType } from '@peertube/peertube-models'
 import { AbstractRunQuery } from '../../../../shared/abstract-run-query.js'
 import { createSafeIn } from '../../../../shared/index.js'
 import { VideoTableAttributes } from './video-table-attributes.js'
 
 /**
- *
  * Abstract builder to create SQL query and fetch video models
- *
  */
 
 export class AbstractVideoQueryBuilder extends AbstractRunQuery {
@@ -173,8 +171,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     this.addJoin(
       'LEFT OUTER JOIN (' +
         '"videoTag" AS "Tags->VideoTagModel" INNER JOIN "tag" AS "Tags" ON "Tags"."id" = "Tags->VideoTagModel"."tagId"' +
-      ') ' +
-      'ON "video"."id" = "Tags->VideoTagModel"."videoId"'
+        ') ' +
+        'ON "video"."id" = "Tags->VideoTagModel"."videoId"'
     )
 
     this.attributes = {
@@ -247,6 +245,19 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeLiveSchedules () {
+    this.addJoin(
+      'LEFT OUTER JOIN "videoLiveSchedule" AS "VideoLive->VideoLiveSchedules" ' +
+        'ON "VideoLive->VideoLiveSchedules"."liveVideoId" = "VideoLive"."id"'
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoLive->VideoLiveSchedules', this.tables.getLiveScheduleAttributes())
+    }
+  }
+
   protected includeVideoSource () {
     this.addJoin(
       'LEFT OUTER JOIN "videoSource" AS "VideoSource" ON "video"."id" = "VideoSource"."videoId"'
@@ -263,8 +274,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     this.addJoin(
       'LEFT JOIN (' +
         '"videoAutomaticTag" AS "VideoAutomaticTags" INNER JOIN "automaticTag" AS "VideoAutomaticTags->AutomaticTag" ' +
-          'ON "VideoAutomaticTags->AutomaticTag"."id" = "VideoAutomaticTags"."automaticTagId" ' +
-      ') ON "video"."id" = "VideoAutomaticTags"."videoId" AND "VideoAutomaticTags"."accountId" = :autoTagOfAccountId'
+        'ON "VideoAutomaticTags->AutomaticTag"."id" = "VideoAutomaticTags"."automaticTagId" ' +
+        ') ON "video"."id" = "VideoAutomaticTags"."videoId" AND "VideoAutomaticTags"."accountId" = :autoTagOfAccountId'
     )
 
     this.replacements.autoTagOfAccountId = autoTagOfAccountId
@@ -281,8 +292,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     this.addJoin(
       'LEFT OUTER JOIN (' +
         '"videoTracker" AS "Trackers->VideoTrackerModel" ' +
-          'INNER JOIN "tracker" AS "Trackers" ON "Trackers"."id" = "Trackers->VideoTrackerModel"."trackerId"' +
-      ') ON "video"."id" = "Trackers->VideoTrackerModel"."videoId"'
+        'INNER JOIN "tracker" AS "Trackers" ON "Trackers"."id" = "Trackers->VideoTrackerModel"."trackerId"' +
+        ') ON "video"."id" = "Trackers->VideoTrackerModel"."videoId"'
     )
 
     this.attributes = {

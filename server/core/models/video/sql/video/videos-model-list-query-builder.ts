@@ -89,6 +89,14 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
       this.includePlaylist(options.videoPlaylistId)
     }
 
+    if (options.isLive || options.includeScheduledLive) {
+      this.includeLive()
+    }
+
+    if (options.includeScheduledLive) {
+      this.includeLiveSchedules()
+    }
+
     if (options.include & VideoInclude.BLACKLISTED) {
       this.includeBlacklisted()
     }

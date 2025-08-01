@@ -792,6 +792,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -2324,6 +2325,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -2429,6 +2431,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -3007,6 +3010,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -3776,6 +3780,10 @@ paths:
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
+                schedules:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LiveSchedule'
               required:
                 - channelId
                 - name
@@ -4753,6 +4761,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -5831,6 +5840,7 @@ paths:
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
         - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
@@ -7735,6 +7745,13 @@ components:
       description: whether or not the video is a live
       schema:
         type: boolean
+    includeScheduledLive:
+      name: includeScheduledLive
+      in: query
+      required: false
+      description: whether or not include live that are scheduled for later
+      schema:
+        type: boolean
     categoryOneOf:
       name: categoryOneOf
       in: query
@@ -8693,6 +8710,10 @@ components:
             - $ref: '#/components/schemas/shortUUID'
         isLive:
           type: boolean
+        liveSchedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LiveSchedule'
         createdAt:
           type: string
           format: date-time
@@ -11525,6 +11546,10 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LiveSchedule'
 
     LiveVideoResponse:
       properties:
@@ -11547,6 +11572,17 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LiveSchedule'
+
+    LiveSchedule:
+      properties:
+        startAt:
+          type: string
+          format: date-time
+          description: Date when the stream is scheduled to air at
 
     TokenSession:
       properties:

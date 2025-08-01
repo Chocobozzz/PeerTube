@@ -95,7 +95,12 @@ describe('Test video lives API validator', function () {
         saveReplay: false,
         replaySettings: undefined,
         permanentLive: true,
-        latencyMode: LiveVideoLatencyMode.DEFAULT
+        latencyMode: LiveVideoLatencyMode.DEFAULT,
+        schedules: [
+          {
+            startAt: new Date(Date.now() + 1000 * 60 * 60) // 1 hour later
+          }
+        ]
       }
     })
 
@@ -270,6 +275,22 @@ describe('Test video lives API validator', function () {
       const fields = { ...baseCorrectParams, latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with an invalid schedules', async function () {
+      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' } ]
+
+      for (const schedules of toTests) {
+        const fields = { ...baseCorrectParams, schedules }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -525,6 +546,20 @@ describe('Test video lives API validator', function () {
       const fields = { latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
 
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with an invalid schedules', async function () {
+      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' } ]
+
+      for (const schedules of toTests) {
+        const fields = { schedules } as any
+
+        await command.update({
+          videoId: video.id,
+          fields,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should succeed with the correct params', async function () {

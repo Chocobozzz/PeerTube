@@ -155,6 +155,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
 
     if (VideosModelGetQuerySubBuilder.liveInclude.has(options.type)) {
       this.includeLive()
+      this.includeLiveSchedules()
     }
 
     if (options.userId && VideosModelGetQuerySubBuilder.userHistoryInclude.has(options.type)) {

@@ -46,9 +46,12 @@ type CommonUpdateForm =
     nsfwFlagSex?: boolean
   }
 
-type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings'> & {
+type LiveUpdateForm = Omit<LiveVideoUpdate, 'replaySettings' | 'schedules'> & {
   replayPrivacy?: VideoPrivacyType
   liveStreamKey?: string
+  schedules?: {
+    startAt?: Date
+  }[]
 }
 
 type ReplaceFileForm = {
@@ -72,7 +75,7 @@ type CreateFromImportOptions = LoadFromPublishOptions & Pick<VideoImportCreate, 
 
 type CreateFromLiveOptions =
   & CreateFromUploadOptions
-  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings'>>
+  & Required<Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings' | 'schedules'>>
 
 type UpdateFromAPIOptions = {
   video?: Pick<
@@ -124,6 +127,12 @@ type CommonUpdate = Omit<VideoUpdate, 'thumbnailfile' | 'originallyPublishedAt' 
   }
 }
 
+type LiveUpdate = Omit<LiveVideoUpdate, 'schedules'> & {
+  schedules?: {
+    startAt: string
+  }[]
+}
+
 export class VideoEdit {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
 
@@ -131,7 +140,7 @@ export class VideoEdit {
   private common: CommonUpdate = {}
   private captions: VideoCaptionWithPathEdit[] = []
   private chapters: VideoChaptersEdit = new VideoChaptersEdit()
-  private live: LiveVideoUpdate
+  private live: LiveUpdate
   private replaceFile: File
   private studioTasks: VideoStudioTask[] = []
 
@@ -175,7 +184,7 @@ export class VideoEdit {
     common?: Omit<CommonUpdate, 'pluginData' | 'previewfile'>
     previewfile?: { size: number }
 
-    live?: LiveVideoUpdate
+    live?: LiveUpdate
 
     pluginData?: any
     pluginDefaults?: Record<string, string | boolean>
@@ -236,8 +245,13 @@ export class VideoEdit {
       permanentLive: options.permanentLive,
 
       saveReplay: options.saveReplay,
+
       replaySettings: options.replaySettings
         ? { privacy: options.replaySettings.privacy }
+        : undefined,
+
+      schedules: options.schedules
+        ? options.schedules.map(s => ({ startAt: new Date(s.startAt).toISOString() }))
         : undefined
     }
 
@@ -411,6 +425,10 @@ export class VideoEdit {
 
         replaySettings: live.replaySettings
           ? { privacy: live.replaySettings.privacy }
+          : undefined,
+
+        schedules: live.schedules
+          ? live.schedules.map(s => ({ startAt: new Date(s.startAt).toISOString() }))
           : undefined
       }
     }
@@ -620,6 +638,16 @@ export class VideoEdit {
         : undefined
     }
 
+    if (values.schedules !== undefined) {
+      if (values.schedules === null || values.schedules.length === 0 || !values.schedules[0].startAt) {
+        this.live.schedules = []
+      } else {
+        this.live.schedules = values.schedules.map(s => ({
+          startAt: new Date(s.startAt).toISOString()
+        }))
+      }
+    }
+
     this.updateAfterChange()
   }
 
@@ -632,7 +660,11 @@ export class VideoEdit {
 
       replayPrivacy: this.live.replaySettings
         ? this.live.replaySettings.privacy
-        : VideoPrivacy.PRIVATE
+        : VideoPrivacy.PRIVATE,
+
+      schedules: this.live.schedules?.map(s => ({
+        startAt: new Date(s.startAt)
+      }))
     }
   }
 
@@ -643,7 +675,9 @@ export class VideoEdit {
       replaySettings: this.live.saveReplay
         ? this.live.replaySettings
         : undefined,
-      latencyMode: this.live.latencyMode
+      latencyMode: this.live.latencyMode,
+
+      schedules: this.live.schedules
     }
   }
 
@@ -654,7 +688,8 @@ export class VideoEdit {
       permanentLive: this.live.permanentLive,
       latencyMode: this.live.latencyMode,
       saveReplay: this.live.saveReplay,
-      replaySettings: this.live.replaySettings
+      replaySettings: this.live.replaySettings,
+      schedules: this.live.schedules
     }
   }
 

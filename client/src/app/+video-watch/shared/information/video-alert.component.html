@@ -2,8 +2,14 @@
   This video will be published on {{ video().scheduledUpdate.updateAt | ptDate: 'full' }}.
 </my-alert>
 
-<my-alert rounded="false" type="primary" i18n *ngIf="isWaitingForLive()">
-  This live is not currently streaming.
+<my-alert rounded="false" type="primary" *ngIf="isWaitingForLive()">
+  <ng-container i18n>This live is not currently streaming.</ng-container>
+
+  @if (scheduledLiveDate()) {
+    <ng-container i18n>
+      It will start on {{ scheduledLiveDate() | ptDate: 'short' }}.
+    </ng-container>
+  }
 </my-alert>
 
 <my-alert rounded="false" type="primary" i18n *ngIf="isLiveEnded()">

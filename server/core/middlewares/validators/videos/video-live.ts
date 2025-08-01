@@ -1,12 +1,3 @@
-import express from 'express'
-import { body } from 'express-validator'
-import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
-import { VideoModel } from '@server/models/video/video.js'
-import { VideoLiveModel } from '@server/models/video/video-live.js'
-import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -16,6 +7,15 @@ import {
   UserRight,
   VideoState
 } from '@peertube/peertube-models'
+import { isLiveLatencyModeValid, areLiveSchedulesValid } from '@server/helpers/custom-validators/video-lives.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
+import { VideoLiveModel } from '@server/models/video/video-live.js'
+import { VideoModel } from '@server/models/video/video.js'
+import express from 'express'
+import { body } from 'express-validator'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isValidPasswordProtectedPrivacy, isVideoNameValid, isVideoReplayPrivacyValid } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
@@ -37,7 +37,7 @@ const videoLiveGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 
-    const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
+    const videoLive = await VideoLiveModel.loadByVideoIdFull(res.locals.videoAll.id)
     if (!videoLive) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
@@ -85,6 +85,10 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .isArray()
     .withMessage('Video passwords should be an array.'),
+
+  body('schedules')
+    .optional()
+    .custom(areLiveSchedulesValid).withMessage('Should have a valid schedules array'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -176,6 +180,10 @@ const videoLiveUpdateValidator = [
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
 
+  body('schedules')
+    .optional()
+    .custom(areLiveSchedulesValid).withMessage('Should have a valid schedules array'),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
@@ -244,10 +252,10 @@ const videoLiveFindReplaySessionValidator = [
 
 export {
   videoLiveAddValidator,
-  videoLiveUpdateValidator,
-  videoLiveListSessionsValidator,
   videoLiveFindReplaySessionValidator,
-  videoLiveGetValidator
+  videoLiveGetValidator,
+  videoLiveListSessionsValidator,
+  videoLiveUpdateValidator
 }
 
 // ---------------------------------------------------------------------------

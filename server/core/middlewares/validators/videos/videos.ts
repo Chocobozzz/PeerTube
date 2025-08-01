@@ -492,6 +492,10 @@ export const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
+  query('includeScheduledLive')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid includeScheduledLive boolean'),
   query('include')
     .optional()
     .custom(isVideoIncludeValid),

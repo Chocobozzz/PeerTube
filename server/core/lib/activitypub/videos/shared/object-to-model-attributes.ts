@@ -31,7 +31,15 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { isStreamingPlaylist, MChannelId, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoId } from '@server/types/models/index.js'
+import {
+  isStreamingPlaylist,
+  MChannelId,
+  MStreamingPlaylistVideo,
+  MVideo,
+  MVideoFile,
+  MVideoId,
+  MVideoLive
+} from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
@@ -205,6 +213,14 @@ export function getLiveAttributesFromObject (video: MVideoId, videoObject: Video
     latencyMode: videoObject.latencyMode,
     videoId: video.id
   }
+}
+export function getLiveSchedulesAttributesFromObject (live: MVideoLive, videoObject: VideoObject) {
+  const schedules = videoObject.schedules || []
+
+  return schedules.map(s => ({
+    liveVideoId: live.id,
+    startAt: s.startDate
+  }))
 }
 
 export function getCaptionAttributesFromObject (video: MVideoId, videoObject: VideoObject) {

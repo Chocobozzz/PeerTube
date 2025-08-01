@@ -28,9 +28,10 @@ export class VideoLiveReplaySettingModel extends SequelizeModel<VideoLiveReplayS
     })
   }
 
-  static removeSettings (id: number) {
+  static removeSettings (id: number, transaction?: Transaction) {
     return VideoLiveReplaySettingModel.destroy({
-      where: { id }
+      where: { id },
+      transaction
     })
   }
 

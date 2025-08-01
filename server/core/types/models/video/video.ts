@@ -19,7 +19,7 @@ import {
   MChannelUserId
 } from './video-channel.js'
 import { MVideoFile } from './video-file.js'
-import { MVideoLive } from './video-live.js'
+import { MVideoLiveWithSchedules } from './video-live.js'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistRedundancies,
@@ -189,7 +189,7 @@ export type MVideoFullLight =
   & Use<'VideoFiles', MVideoFile[]>
   & Use<'ScheduleVideoUpdate', MScheduleVideoUpdate>
   & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
-  & Use<'VideoLive', MVideoLive>
+  & Use<'VideoLive', MVideoLiveWithSchedules>
 
 // ############################################################################
 
@@ -204,7 +204,7 @@ export type MVideoAP =
   & Use<'VideoBlacklist', MVideoBlacklistUnfederated>
   & Use<'VideoFiles', MVideoFile[]>
   & Use<'Thumbnails', MThumbnail[]>
-  & Use<'VideoLive', MVideoLive>
+  & Use<'VideoLive', MVideoLiveWithSchedules>
   & Use<'Storyboard', MStoryboard>
 
 export type MVideoAPLight = Omit<MVideoAP, 'VideoCaptions' | 'Storyboard'>
@@ -244,6 +244,7 @@ export type MVideoFormattable =
   & PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>>
   & PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
   & PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
+  & PickWithOpt<VideoModel, 'VideoLive', MVideoLiveWithSchedules>
 
 export type MVideoFormattableDetails =
   & MVideoFormattable
