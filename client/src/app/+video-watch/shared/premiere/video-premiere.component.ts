@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core'
-import { NgIf, NgClass } from '@angular/common'
+import { NgIf } from '@angular/common'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
-import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
 
 interface CountdownTime {
@@ -19,8 +18,6 @@ interface CountdownTime {
   standalone: true,
   imports: [
     NgIf,
-    NgClass,
-    PTDatePipe,
     SubscribeButtonComponent
   ]
 })

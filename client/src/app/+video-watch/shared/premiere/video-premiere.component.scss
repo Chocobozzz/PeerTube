@@ -2,9 +2,6 @@
 @use '_mixins' as *;
 @use '_bootstrap-variables';
 
-$video-default-height: 66vh;
-$video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-space});
-
 .premiere-widget {
   position: absolute;
   top: 0;
@@ -20,8 +17,6 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
   justify-content: center;
   border-radius: 3px;
   pointer-events: auto;
-
-
 
   .premiere-info {
     max-width: 500px;
@@ -85,13 +80,6 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
         margin-bottom: 15px;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
-
-      .premiere-date {
-        font-size: 1.1em;
-        color: rgba(255, 255, 255, 0.85);
-        margin: 0;
-        font-weight: 400;
-      }
     }
 
     .premiere-actions {
@@ -145,10 +133,6 @@ $video-max-height: calc(100vh - #{pvar(--header-height)} - #{$theater-bottom-spa
               font-size: 0.75em;
             }
           }
-        }
-
-        .premiere-date {
-          font-size: 1em;
         }
       }
     }
