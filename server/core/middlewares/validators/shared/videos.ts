@@ -120,7 +120,7 @@ export async function checkCanSeeVideo (options: {
     return checkCanSeePasswordProtectedVideo({ req, res, video })
   }
 
-  if (video.privacy === VideoPrivacy.UNLISTED || video.privacy === VideoPrivacy.PUBLIC) {
+  if (video.privacy === VideoPrivacy.UNLISTED || video.privacy === VideoPrivacy.PUBLIC || video.privacy === VideoPrivacy.PREMIERE) {
     return true
   }
 

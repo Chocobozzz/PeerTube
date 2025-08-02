@@ -275,17 +275,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.noPlaylistVideoFound = true
   }
 
-  onPremiereRemindMe () {
-    if (!this.isUserLoggedIn()) {
-      this.notifier.error($localize`You need to be logged in to be notified about video premieres.`)
-      return
-    }
-
-    // TODO: Implement actual reminder functionality
-    // This could involve subscribing to notifications or adding to a reminder list
-    this.notifier.success($localize`You will be notified when this video premieres!`)
-  }
-
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }

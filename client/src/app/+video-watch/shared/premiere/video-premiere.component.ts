@@ -1,8 +1,16 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { NgIf, NgClass } from '@angular/common'
-import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
+import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
+
+interface CountdownTime {
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
+  isExpired: boolean
+}
 
 @Component({
   selector: 'my-video-premiere',
@@ -12,22 +20,63 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
   imports: [
     NgIf,
     NgClass,
-    GlobalIconComponent,
-    PTDatePipe
+    PTDatePipe,
+    SubscribeButtonComponent
   ]
 })
-export class VideoPremiereComponent {
+export class VideoPremiereComponent implements OnInit, OnDestroy {
   @Input() video: VideoDetails
   @Input() theaterEnabled = false
 
-  @Output() remindMeClick = new EventEmitter<void>()
+  countdown: CountdownTime = {
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isExpired: false
+  }
 
-  notificationAdded = false
+  private countdownInterval: any
 
-  onRemindMe () {
-    if (this.notificationAdded) return
+  ngOnInit() {
+    this.startCountdown()
+  }
 
-    this.notificationAdded = true
-    this.remindMeClick.emit()
+  ngOnDestroy() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval)
+    }
+  }
+
+  private startCountdown() {
+    this.updateCountdown()
+    this.countdownInterval = setInterval(() => {
+      this.updateCountdown()
+    }, 1000)
+  }
+
+  private updateCountdown() {
+    if (!this.video?.scheduledUpdate?.updateAt) {
+      this.countdown.isExpired = true
+      return
+    }
+
+    const premiereTime = new Date(this.video.scheduledUpdate.updateAt).getTime()
+    const now = new Date().getTime()
+    const timeDiff = premiereTime - now
+
+    if (timeDiff <= 0) {
+      this.countdown.isExpired = true
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval)
+      }
+      return
+    }
+
+    this.countdown.days = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
+    this.countdown.hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    this.countdown.minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))
+    this.countdown.seconds = Math.floor((timeDiff % (1000 * 60)) / 1000)
+    this.countdown.isExpired = false
   }
 }

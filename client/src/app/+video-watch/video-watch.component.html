@@ -11,11 +11,17 @@
       </div>
 
       @if (video && video.privacy.id === VideoPrivacy.PREMIERE) {
-        <my-video-premiere
-          [video]="video"
-          [theaterEnabled]="theaterEnabled"
-          (remindMeClick)="onPremiereRemindMe()"
-        ></my-video-premiere>
+        <div id="premiere-thumbnail-wrapper">
+          <img 
+            [src]="video.previewUrl || video.thumbnailUrl" 
+            [alt]="video.name"
+            class="premiere-thumbnail"
+          />
+          <my-video-premiere
+            [video]="video"
+            [theaterEnabled]="theaterEnabled">
+          </my-video-premiere>
+        </div>
       } @else {
         <div id="videojs-wrapper">
           <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
