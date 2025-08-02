@@ -1,7 +1,7 @@
 import { VideoDetails, VideoPrivacy, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 
 export function getAllPrivacies () {
-  return [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.PASSWORD_PROTECTED ]
+  return [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.PASSWORD_PROTECTED, VideoPrivacy.PREMIERE ]
 }
 
 export function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlaylists'>>) {
