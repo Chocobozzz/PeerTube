@@ -33,6 +33,8 @@ export interface RegisterServerAuthenticatedResult {
 export interface RegisterServerExternalAuthenticatedResult extends RegisterServerAuthenticatedResult {
   req: express.Request
   res: express.Response
+  // Redirect the user to this external URL after the external auth has been verified.
+  externalRedirectUrl: [string]
 }
 
 interface RegisterServerAuthBase {

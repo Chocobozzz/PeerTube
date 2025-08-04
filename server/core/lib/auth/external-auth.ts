@@ -45,7 +45,7 @@ async function onExternalUserAuthenticated (options: {
     return
   }
 
-  const { res } = authResult
+  const { res, externalRedirectUrl } = authResult
 
   if (!isAuthResultValid(npmName, authName, authResult)) {
     res.redirect('/login?externalAuthError=true')
@@ -76,7 +76,8 @@ async function onExternalUserAuthenticated (options: {
     }
   }
 
-  res.redirect(`/login?externalAuthToken=${bypassToken}&username=${user.username}`)
+  const base = externalRedirectUrl || '/login'
+  res.redirect(`${base}?externalAuthToken=${bypassToken}&username=${user.username}`)
 }
 
 async function getAuthNameFromRefreshGrant (refreshToken?: string) {
