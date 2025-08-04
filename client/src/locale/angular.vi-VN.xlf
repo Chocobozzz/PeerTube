@@ -252,9 +252,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2736,7 +2734,8 @@
       <trans-unit id="1190256911880544559" datatype="html" xml:space="preserve">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
 The link will expire within 1 hour.</source>
-        <target state="translated">Một email có link đặt lại mật khẩu sẽ được gửi đến <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Link hết hạn sau 1 giờ.</target>
+        <target state="translated">Một email có link đặt lại mật khẩu sẽ được gửi đến <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
+Link hết hạn sau 1 giờ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">181</context>
@@ -3649,8 +3648,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3266907599760910102" datatype="html" xml:space="preserve">
         <source>Manage my account</source>
         <target state="translated">Quản lý tài khoản</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/header/header.component.html</context><context context-type="linenumber">69</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/header.component.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7773271640656013365" datatype="html">
         <source>Interface:</source>
         <target state="translated">Ngôn ngữ:</target>
@@ -3790,13 +3792,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6699890091238112345" datatype="html" xml:space="preserve">
         <source>Browse all videos</source>
         <target state="translated">Tìm tất cả video</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">539</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">539</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5174743927852553765" datatype="html" xml:space="preserve">
         <source>Browse local videos</source>
         <target state="translated">Tìm video máy chủ này</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">540</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">540</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5491172370003945798" datatype="html" xml:space="preserve">
         <source>Browse videos</source>
         <target state="translated">Duyệt video</target>
@@ -4667,23 +4675,35 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
         <target state="translated">Thời điểm bắt đầu phải trước thời điểm kết thúc</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context><context context-type="linenumber">209</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
         <target state="translated">Phân cảnh phải có nội dung văn bản</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context><context context-type="linenumber">214</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7846454630805382470" datatype="html" xml:space="preserve">
         <source>Cannot parse subtitles</source>
         <target state="translated">Không thể phân tích phụ đề</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context><context context-type="linenumber">318</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
+          <context context-type="linenumber">318</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4777421441933211511" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel your edits first.</source>
         <target state="translated">Một phân cảnh đang được chỉnh sửa. Trước tiên hãy lưu hoặc hủy chỉnh sửa của bạn.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context><context context-type="linenumber">345</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
+          <context context-type="linenumber">345</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7886570921510760899">
         <source>Tags</source>
         <target>Thẻ</target>
@@ -5735,13 +5755,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7968397949464882917" datatype="html" xml:space="preserve">
         <source>Are you sure you want to close this modal without saving your changes?</source>
         <target state="translated">Bạn có chắc muốn đóng cửa sổ này mà không lưu thay đổi?</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context><context context-type="linenumber">120</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5326147529562345662" datatype="html" xml:space="preserve">
         <source>Close modal window</source>
         <target state="translated">Đóng cửa sổ</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context><context context-type="linenumber">121</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1087181129481039628" datatype="html" xml:space="preserve">
         <source>Normal live</source>
         <target state="translated">Phát trực tiếp thường</target>
@@ -8218,17 +8244,35 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5910947217931634219" datatype="html" xml:space="preserve">
         <source>Warn</source>
         <target state="translated">Cảnh báo</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">71</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">94</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5416471102816014001" datatype="html" xml:space="preserve">
         <source>Blur</source>
         <target state="translated">Che mờ</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context><context context-type="linenumber">126</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">90</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7049348886126005391" datatype="html">
         <source>Batch actions</source>
         <target state="translated">Hành động hàng loạt</target>
@@ -8239,7 +8283,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7134156816820861655" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/><x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/></source>
-        <target state="translated"><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/> <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/> </target>
+        <target state="translated"><x id="START_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;ng-template *ngTemplateOutlet=&quot;totalTitle; context: { $implicit: totalRecords }&quot;&gt;"/> <x id="CLOSE_TAG_NG_TEMPLATE" ctype="x-ng_template" equiv-text="&lt;/ng-template&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
           <context context-type="linenumber">31,34</context>
@@ -8814,11 +8858,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/>
-          <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
-          <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/>
-        </source>
+        <source><x id="ICU" equiv-text="{abuse().countReportsForReporter, plural, =1 {1 report} other {{{ abuse().countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/> <x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> </source>
         <target state="translated">
           <x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/>
           <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/>
@@ -9941,25 +9981,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4014604069358445532" datatype="html">
+      <trans-unit id="4014604069358445532" datatype="html" xml:space="preserve">
         <source>Default language</source>
-        <target state="new">Default language</target>
+        <target state="translated">Ngôn ngữ mặc định</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977381557718671058" datatype="html">
+      <trans-unit id="977381557718671058" datatype="html" xml:space="preserve">
         <source>Default language used for users, in emails for example.</source>
-        <target state="new">Default language used for users, in emails for example.</target>
+        <target state="translated">Ngôn ngữ mặc định cho người dùng, trong email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">79,80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7971232255104545985" datatype="html">
+      <trans-unit id="7971232255104545985" datatype="html" xml:space="preserve">
         <source>The web interface still uses the web browser preferred language if not overridden by user preference</source>
-        <target state="new">The web interface still uses the web browser preferred language if not overridden by user preference</target>
+        <target state="translated">Giao diện web vẫn sử dụng ngôn ngữ ưa thích của trình duyệt web nếu không bị ghi đè bởi tùy chọn của người dùng</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">80,81</context>
@@ -10060,13 +10100,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8817920941077743476" datatype="html" xml:space="preserve">
         <source>This instance is dedicated to sensitive content</source>
         <target state="translated">Máy chủ này dành riêng cho nội dung nhạy cảm</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">203</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7611566203467532051" datatype="html" xml:space="preserve">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the "sensitive content" checkbox on video upload will be automatically checked by default. </source>
         <target state="translated">Bật tính năng này sẽ cho phép những quản trị viên khác biết rằng bạn chủ yếu đang liên hợp nội dung nhạy cảm.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Ngoài ra, hộp kiểm "nội dung nhạy cảm" khi tải video lên sẽ được tự động chọn theo mặc định. </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">208</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7497677457560701935" datatype="html">
         <source>Policy on videos containing sensitive content</source>
         <target state="translated">Đối với video nhạy cảm</target>
@@ -10082,13 +10128,19 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5509417153332543255" datatype="html" xml:space="preserve">
         <source>Who moderates the instance? What is the policy regarding sensitive content? Political videos? etc</source>
         <target state="translated">Ai là người kiểm duyệt máy chủ này? Chính sách về nội dung nhạy cảm là gì? Video chính trị? v.v.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">245</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">245</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1969113117715295994" datatype="html" xml:space="preserve">
         <source>YOU AND YOUR PLATFORM</source>
         <target state="translated">BẠN VÀ MÁY CHỦ CỦA BẠN</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">258</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">258</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6812930637022637485" datatype="html">
         <source>Display</source>
         <target state="translated">Hiển thị</target>
@@ -10112,8 +10164,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6377618413283681806" datatype="html" xml:space="preserve">
         <source>Information updated.</source>
         <target state="translated">Thông tin đã được cập nhật.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context><context context-type="linenumber">246</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1617785425462022303" datatype="html">
         <source>Strategy</source>
         <target state="translated">Chiến thuật</target>
@@ -11309,24 +11364,39 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4776429682428363094" datatype="html" xml:space="preserve">
         <source>1 day</source>
         <target state="translated">1 ngày</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">267</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context><context context-type="linenumber">12</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">267</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5730801210509951539" datatype="html" xml:space="preserve">
         <source>2 days</source>
         <target state="translated">2 ngày</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">268</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">268</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8542568275115626925" datatype="html" xml:space="preserve">
         <source>7 days</source>
         <target state="translated">7 ngày</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">269</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7152095234138763013" datatype="html" xml:space="preserve">
         <source>30 days</source>
         <target state="translated">30 ngày</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">270</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">270</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
         <target state="translated">LIVE</target>
@@ -12127,7 +12197,13 @@ The link will expire within 1 hour.</source>
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
   <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Soạn mã CSS trực tiếp. Ví dụ:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Thêm vào trước với <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> để ghi đè kiểu. Ví dụ:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Viết mã CSS trực tiếp. Ví dụ:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Thêm vào trước <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> để ghi đè các kiểu. Ví dụ:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">182</context>
@@ -12300,8 +12376,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5439158575454281141" datatype="html" xml:space="preserve">
         <source>VIDEO SETTINGS</source>
         <target state="translated">VIDEO</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">36</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="507542497458686905" datatype="html">
         <source>NOTIFICATIONS</source>
         <target state="translated">THÔNG BÁO</target>
@@ -12333,8 +12412,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4543888618160534551" datatype="html" xml:space="preserve">
         <source>TWO-FACTOR AUTHENTICATION</source>
         <target state="translated">XÁC MINH 2 BƯỚC</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">67</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9012586956848595996" datatype="html">
         <source>EMAIL</source>
         <target state="translated">EMAIL</target>
@@ -12750,58 +12832,91 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4349815973140201821" datatype="html" xml:space="preserve">
         <source>Server country</source>
         <target state="translated">Quốc gia máy chủ</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">117</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8534731544752464794" datatype="html" xml:space="preserve">
         <source>PeerTube uses this setting to explain to your users which law they must follow in the "About" pages</source>
         <target state="translated">PeerTube sử dụng cài đặt này để giải thích cho thành viên của bạn về luật mà họ phải tuân theo trong trang "Giới thiệu"</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">118</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4956359062784445953" datatype="html" xml:space="preserve">
         <source>SOCIAL</source>
         <target state="translated">MẠNG XÃ HỘI</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">133</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4364641327642273311" datatype="html" xml:space="preserve">
         <source>Social links and support information displayed in the <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>About<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pages </source>
         <target state="translated">Liên kết xã hội và thông tin hỗ trợ được hiển thị trong trang <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>Giới thiệu<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">135</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3612093728661654722" datatype="html" xml:space="preserve">
         <source>Support text</source>
         <target state="translated">Văn bản hỗ trợ</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">142</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3532587780731641584" datatype="html" xml:space="preserve">
         <source>Explain to your users how to support your platform. If set, PeerTube will display a "Support" button in "About" instance pages</source>
         <target state="translated">Giải thích cho người dùng cách hỗ trợ nền tảng của bạn. Nếu được thiết lập, PeerTube sẽ hiển thị nút "Hỗ trợ" trong trang "Giới thiệu" máy chủ</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">143</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4183792958965659941" datatype="html" xml:space="preserve">
         <source>External link</source>
         <target state="translated">Liên kết ngoài</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">153</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">153</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8355387577210576572" datatype="html" xml:space="preserve">
         <source>Link to your main website</source>
         <target state="translated">Website chính của bạn</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">154</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1456146786867743695" datatype="html" xml:space="preserve">
         <source>Mastodon link</source>
         <target state="translated">Trang Mastodon</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">165</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">165</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3938009584903861509" datatype="html" xml:space="preserve">
         <source>Bluesky link</source>
         <target state="translated">Trang Bluesky</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">176</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">176</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4258030282828995238" datatype="html" xml:space="preserve">
         <source>MODERATION &amp; SENSITIVE CONTENT</source>
         <target state="translated">KIỂM DUYỆT &amp; NỘI DUNG NHẠY CẢM</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context><context context-type="linenumber">193</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
+          <context context-type="linenumber">193</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="264068562357780835" datatype="html">
         <source>New email</source>
         <target state="translated">Email mới</target>
@@ -13995,9 +14110,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} video}}"/>
         </target>
@@ -15570,9 +15683,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">574</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5566531034799611502" datatype="html">
+      <trans-unit id="5566531034799611502" datatype="html" xml:space="preserve">
         <source>General configuration updated.</source>
-        <target state="new">General configuration updated.</target>
+        <target state="translated">Đã cập nhật cấu hình chung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
           <context context-type="linenumber">596</context>
@@ -15581,9 +15694,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6266228793864841619" datatype="html" xml:space="preserve">
         <source>Live configuration updated.</source>
         <target state="translated">Đã cập nhật cấu hình phát trực tiếp.</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.ts</context><context context-type="linenumber">224</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.ts</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="931264342164481222" datatype="html" xml:space="preserve">
         <source>Edit your homepage</source>
         <target state="translated">Sửa trang chủ</target>
@@ -16796,41 +16911,41 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6786637141307824568" datatype="html">
+      <trans-unit id="6786637141307824568" datatype="html" xml:space="preserve">
         <source>Emails</source>
-        <target state="new">Emails</target>
+        <target state="translated">Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6697903271806267937" datatype="html">
+      <trans-unit id="6697903271806267937" datatype="html" xml:space="preserve">
         <source>Send test emails to this address</source>
-        <target state="new">Send test emails to this address</target>
+        <target state="translated">Gửi email test tới địa chỉ này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2832468016851878635" datatype="html">
+      <trans-unit id="2832468016851878635" datatype="html" xml:space="preserve">
         <source>PeerTube can send all available email templates to the following email address</source>
-        <target state="new">PeerTube can send all available email templates to the following email address</target>
+        <target state="translated">PeerTube có thể gửi tất cả các mẫu email có sẵn đến địa chỉ email sau</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6987725468508696319" datatype="html">
+      <trans-unit id="6987725468508696319" datatype="html" xml:space="preserve">
         <source>Send test emails</source>
-        <target state="new">Send test emails</target>
+        <target state="translated">Gửi email test</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="535402460996429351" datatype="html">
+      <trans-unit id="535402460996429351" datatype="html" xml:space="preserve">
         <source>Emails will be sent!</source>
-        <target state="new">Emails will be sent!</target>
+        <target state="translated">Email sẽ được gửi!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -19271,18 +19386,27 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4482153685775394919" datatype="html" xml:space="preserve">
         <source>Go to the "Discover videos" page</source>
         <target state="translated">Đến trang "Khám phá video"</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">365</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">365</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6123131701694052862" datatype="html" xml:space="preserve">
         <source>Go to the "Browse videos" page</source>
         <target state="translated">Đến trang "Duyệt video"</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">370</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">370</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5260039955239962053" datatype="html" xml:space="preserve">
         <source>Go to the "Publish video" page</source>
         <target state="translated">Đến trang "Đăng video"</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">375</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">375</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3578349972886631879" datatype="html" xml:space="preserve">
         <source>Manage your video</source>
         <target state="translated">Quản lý video</target>
@@ -19332,8 +19456,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Không thể truy xuất thông tin đăng nhập ứng dụng khách OAuth: <x id="PH" equiv-text="err.text"/>. Hãy chắc rằng bạn đã cấu hình đúng PeerTube (config/ directory), đặc biệt là phần "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -19371,10 +19494,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="2821179408673282599" datatype="html" xml:space="preserve">
         <source>Home</source>
         <target state="translated">Trang chủ</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">534</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/home-menu.component.ts</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">127</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
+          <context context-type="linenumber">534</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/home-menu.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
         <target state="translated">Thành công</target>
@@ -19696,10 +19828,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {kết quả} other {kết quả}}"/>
@@ -24393,9 +24522,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -24472,17 +24599,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8657461348142878243" datatype="html">
+      <trans-unit id="8657461348142878243" datatype="html" xml:space="preserve">
         <source>Preferred language for the web interface and for emails</source>
-        <target state="new">Preferred language for the web interface and for emails</target>
+        <target state="translated">Ngôn ngữ ưu tiên cho giao diện web và email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">5,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8736159932649611942" datatype="html">
-        <source> You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+      <trans-unit id="8736159932649611942" datatype="html" xml:space="preserve">
+        <source>You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated">Bạn có thể giúp chúng tôi dịch nền tảng bằng cách tham khảo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>hướng dẫn này<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8,15</context>
@@ -24491,13 +24618,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
         <target state="translated">Lưu cài đặt giao diện</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">166</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7570883748440392027" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.instanceName"/> theme</source>
         <target state="translated">Chủ đề <x id="PH" equiv-text="this.instanceName"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context><context context-type="linenumber">64</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html" xml:space="preserve">
         <source>LIVE ENDED</source>
         <target state="translated">KẾT THÚC TRỰC TIẾP</target>
