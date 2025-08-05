@@ -45,7 +45,7 @@ async function onExternalUserAuthenticated (options: {
     return
   }
 
-  const { res, externalRedirectUrl } = authResult
+  const { res, externalRedirectUri } = authResult
 
   if (!isAuthResultValid(npmName, authName, authResult)) {
     res.redirect('/login?externalAuthError=true')
@@ -76,7 +76,7 @@ async function onExternalUserAuthenticated (options: {
     }
   }
 
-  const base = externalRedirectUrl || '/login'
+  const base = externalRedirectUri || '/login'
   res.redirect(`${base}?externalAuthToken=${bypassToken}&username=${user.username}`)
 }
 
