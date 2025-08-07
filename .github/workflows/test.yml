@@ -38,6 +38,14 @@ jobs:
         ports:
           - 9444:9000
 
+      keycloak:
+        image: chocobozzz/peertube-tests-keycloak
+        ports:
+          - 8082:8080
+        env:
+          KC_BOOTSTRAP_ADMIN_USERNAME: admin
+          KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+
     strategy:
       fail-fast: false
       matrix:
