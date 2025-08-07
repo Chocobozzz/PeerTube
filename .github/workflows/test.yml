@@ -38,6 +38,14 @@ jobs:
         ports:
           - 9444:9000
 
+      keycloak:
+        image: chocobozzz/peertube-tests-keycloak
+        ports:
+          - 8082:8080
+        env:
+          KC_BOOTSTRAP_ADMIN_USERNAME: admin
+          KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+
     strategy:
       fail-fast: false
       matrix:
@@ -96,8 +104,6 @@ jobs:
           echo "DISABLE_HTTP_IMPORT_TESTS=true" >> $GITHUB_ENV
 
       - name: Run Test
-        # external-plugins tests only run on schedule
-        if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
         env:
           AKISMET_KEY: ${{ secrets.AKISMET_KEY }}
         run: npm run ci -- ${{ matrix.test_suite }}
