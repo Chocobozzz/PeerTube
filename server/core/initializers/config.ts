@@ -1106,6 +1106,13 @@ const CONFIG = {
     get ACCEPT_REMOTE_COMMENTS () {
       return config.get<boolean>('video_comments.accept_remote_comments')
     }
+  },
+  BROWSE: {
+    VIDEOS: {
+      get DEFAULT_SORT () {
+        return config.get<string>('browse.videos.default_sort')
+      }
+    }
   }
 }
 

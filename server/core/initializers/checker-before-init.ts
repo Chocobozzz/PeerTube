@@ -255,7 +255,8 @@ export function checkMissedConfig () {
     'webrtc.stun_servers',
     'nsfw_flags_settings.enabled',
     'download_generate_video.max_parallel_downloads',
-    'video_comments.accept_remote_comments'
+    'video_comments.accept_remote_comments',
+    'browse.videos.default_sort'
   ]
 
   const requiredAlternatives = [

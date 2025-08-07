@@ -368,4 +368,10 @@ export interface CustomConfig {
   videoComments: {
     acceptRemoteComments: boolean
   }
+
+  browse: {
+    videos: {
+      defaultSort: string
+    }
+  }
 }

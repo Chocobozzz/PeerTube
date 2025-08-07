@@ -151,6 +151,8 @@ export const customConfigUpdateValidator = [
 
   body('videoComments.acceptRemoteComments').isBoolean(),
 
+  body('browse.videos.defaultSort').exists(),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return

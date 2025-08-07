@@ -612,6 +612,12 @@ function customConfig (): CustomConfig {
 
     videoComments: {
       acceptRemoteComments: CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS
+    },
+
+    browse: {
+      videos: {
+        defaultSort: CONFIG.BROWSE.VIDEOS.DEFAULT_SORT
+      }
     }
   }
 }

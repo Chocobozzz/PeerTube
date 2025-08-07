@@ -1170,3 +1170,9 @@ video_comments:
   # Accept or not comments from remote instances
   # This setting is not retroactive: current remote comments of your instance will not be affected
   accept_remote_comments: true
+
+browse:
+  videos:
+    # Default sort option
+    # Supported options: '-publishedAt', '-originallyPublishedAt', 'name', '-trending', '-hot', '-likes' or '-views'
+    default_sort: '-publishedAt'
