@@ -202,6 +202,12 @@ type Form = {
   videoComments: FormGroup<{
     acceptRemoteComments: FormControl<boolean>
   }>
+
+  browse: FormGroup<{
+    videos: FormGroup<{
+      defaultSort: FormControl<string>
+    }>
+  }>
 }
 
 @Component({
@@ -244,6 +250,8 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
   commentPoliciesOptions: SelectOptionsItem[] = []
   licenceOptions: SelectOptionsItem[] = []
 
+  browseVideosDefaultSortOptions: SelectOptionsItem[] = []
+  
   private customConfig: CustomConfig
   private customConfigSub: Subscription
 
@@ -262,6 +270,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
     this.commentPoliciesOptions = data.commentPolicies
 
     this.buildLandingPageOptions()
+    this.buildBrowseVideosDefaultSortOptions()
 
     this.exportExpirationOptions = [
       { id: 1000 * 3600 * 24, label: $localize`1 day` },
@@ -432,6 +441,11 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       },
       videoComments: {
         acceptRemoteComments: null
+      },
+      browse: {
+        videos: {
+          defaultSort: null
+        }
       }
     }
 
@@ -545,6 +559,29 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       label: o.label,
       description: o.path
     }))
+  }
+
+  // TODO: consider refactoring to avoid code duplication with buildSortItems (video-filters-header.component.ts)
+  private buildBrowseVideosDefaultSortOptions () {
+    this.browseVideosDefaultSortOptions = [
+      { id: '-publishedAt', label: $localize`Recently Added` },
+      { id: '-originallyPublishedAt', label: $localize`Original Publication Date` },
+      { id: 'name', label: $localize`Name` }
+    ]
+
+    if (this.customConfig.trending.videos.algorithms.enabled.includes('most-viewed')) {
+      this.browseVideosDefaultSortOptions.push({ id: '-trending', label: $localize`Recent Views` })
+    }
+
+    if (this.customConfig.trending.videos.algorithms.enabled.includes('hot')) {
+      this.browseVideosDefaultSortOptions.push({ id: '-hot', label: $localize`Hot` })
+    }
+
+    if (this.customConfig.trending.videos.algorithms.enabled.includes('most-liked')) {
+      this.browseVideosDefaultSortOptions.push({ id: '-likes', label: $localize`Likes` })
+    }
+
+    this.browseVideosDefaultSortOptions.push({ id: '-views', label: $localize`Global Views` })
   }
 
   private subscribeToImportSyncChanges () {

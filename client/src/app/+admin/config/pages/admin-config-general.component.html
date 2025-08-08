@@ -455,6 +455,24 @@
 
   <div class="pt-two-cols mt-4">
     <div class="title-col">
+      <h2 i18n>BROWSE VIDEOS</h2>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group" formGroupName="browse">
+        <ng-container formGroupName="videos">
+          <label i18n for="browseVideosDefaultSort">Default sort</label>
+
+          <my-select-options inputId="browseVideosDefaultSort" [items]="browseVideosDefaultSortOptions" formControlName="defaultSort"></my-select-options>
+
+          <div *ngIf="formErrors.browse.videos.defaultSort" class="form-error" role="alert">{{ formErrors.browse.videos.defaultSort }}</div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
       <h2 i18n>FEDERATION</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-primary" routerLink="/admin/settings/follows">relations</a> with other platforms.
