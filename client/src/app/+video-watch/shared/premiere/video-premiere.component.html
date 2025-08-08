@@ -1,0 +1,40 @@
+<div class="premiere-widget">
+  <div class="premiere-info">
+    <div class="premiere-title">
+      <h2 i18n>This video will be available soon!</h2>
+    </div>
+
+    <div class="premiere-countdown">
+      @if (!countdown.isExpired) {
+        <div class="countdown-timer">
+          <div class="countdown-unit" *ngIf="countdown.days > 0">
+            <span class="countdown-number">{{ countdown.days }}</span>
+            <span class="countdown-label" i18n>{{ countdown.days === 1 ? 'day' : 'days' }}</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-number">{{ countdown.hours.toString().padStart(2, '0') }}</span>
+            <span class="countdown-label" i18n>hours</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-number">{{ countdown.minutes.toString().padStart(2, '0') }}</span>
+            <span class="countdown-label" i18n>minutes</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-number">{{ countdown.seconds.toString().padStart(2, '0') }}</span>
+            <span class="countdown-label" i18n>seconds</span>
+          </div>
+        </div>
+      } @else {
+        <p class="countdown-expired" i18n>Premiere has started!</p>
+      }
+    </div>
+
+    <div class="premiere-actions">
+      <my-subscribe-button 
+        [videoChannels]="[video.channel]" 
+        size="normal"
+        class="premiere-subscribe-button">
+      </my-subscribe-button>
+    </div>
+  </div>
+</div>
