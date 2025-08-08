@@ -1,5 +1,6 @@
 import './akismet'
 import './auth-ldap'
+import './auth-openid-connect'
 import './auto-block-videos'
 import './auto-mute'
 import './privacy-remover'

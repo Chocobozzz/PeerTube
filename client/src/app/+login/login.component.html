@@ -1,6 +1,10 @@
 <div class="margin-content">
   <h1 class="title-page" i18n>Login on {{ instanceName }}</h1>
 
+  <my-alert type="danger" i18n *ngIf="externalAuthError">
+    Sorry but there was an issue with the external login process. Please <a class="link-primary" routerLink="/about">contact an administrator</a>.
+  </my-alert>
+
   <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
 
     <my-alert type="primary">
@@ -23,10 +27,6 @@
           Find yours among multiple platforms at: <a class="link-primary" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
         </p>
       }
-    </my-alert>
-
-    <my-alert type="danger" i18n *ngIf="externalAuthError">
-      Sorry but there was an issue with the external login process. Please <a class="link-primary" routerLink="/about">contact an administrator</a>.
     </my-alert>
 
     <my-alert *ngIf="error" type="danger">
