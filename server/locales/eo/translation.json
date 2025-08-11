@@ -1,5 +1,5 @@
 {
-    "New message on abuse report": "New message on abuse report",
+    "New message on abuse report": "Nova raporto pri mistrakta konduto",
     "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>": "A new message by {messageAccountName} was posted on <a href=\"{abuseUrl}\">abuse report #{abuseId}</a>",
     "Abuse report state changed": "Abuse report state changed",
     "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.": "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.",
