@@ -410,7 +410,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
       waitTranscodingControl.disable()
       if (!isInitialPatch) waitTranscodingControl.setValue(false)
-    } else {
+    } else if (waitTranscodingControl.disabled) {
       scheduleControl.clearValidators()
       waitTranscodingControl.enable()
 
