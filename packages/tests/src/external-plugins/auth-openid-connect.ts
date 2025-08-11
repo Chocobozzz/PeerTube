@@ -258,6 +258,7 @@ async function sendBackKeycloakCode (options: {
     fields: {
       code: extractInputValue(kcText, 'code'),
       iss: extractInputValue(kcText, 'iss'),
+      state: extractInputValue(kcText, 'state'),
       session_state: extractInputValue(kcText, 'session_state')
     },
     expectedStatus
