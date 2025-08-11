@@ -29,6 +29,9 @@ const CONFIG = {
   SECRETS: {
     PEERTUBE: config.get<string>('secrets.peertube')
   },
+  HTTP_TIMEOUTS: {
+    REQUEST: parseDurationToMs(config.get<number>('http_timeouts.request'))
+  },
   DATABASE: {
     DBNAME: config.has('database.name') ? config.get<string>('database.name') : 'peertube' + config.get<string>('database.suffix'),
     HOSTNAME: config.get<string>('database.hostname'),

@@ -13,6 +13,10 @@ secrets:
   # Generate one using `openssl rand -hex 32`
   peertube: ''
 
+# How long PeerTube should wait to receive the entire request
+http_timeouts:
+  request: '5 minutes'
+
 rates_limit:
   api:
     # 50 attempts in 10 seconds
@@ -58,7 +62,6 @@ rates_limit:
     # 5 attempts in 5 seconds
     window: 5 seconds
     max: 5
-
 
 oauth2:
   token_lifetime:
