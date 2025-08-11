@@ -29,6 +29,7 @@ Run docker containers needed by some test files:
 ```bash
 sudo docker run -p 9444:9000 chocobozzz/s3-ninja
 sudo docker run -p 10389:10389 chocobozzz/docker-test-openldap
+sudo docker run -p 8082:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin chocobozzz/peertube-tests-keycloak
 ```
 
 Ensure you also have these commands:
