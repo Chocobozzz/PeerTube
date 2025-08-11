@@ -29,22 +29,37 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
 
       logger.info(
         'Creating video import jobs for "%s" sync with external channel "%s"',
-        channel.Actor.preferredUsername, sync.externalChannelUrl
+        channel.Actor.preferredUsername,
+        sync.externalChannelUrl
       )
 
-      const onlyAfter = sync.lastSyncAt || sync.createdAt
+      // We can't rely on publication date for playlist elements
+      // For example, an old video may have been added to a playlist since the last sync
+      const skipPublishedBefore = this.isPlaylistUrl(sync.externalChannelUrl)
+        ? undefined
+        : sync.lastSyncAt || sync.createdAt
 
       await synchronizeChannel({
         channel,
         externalChannelUrl: sync.externalChannelUrl,
         videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
         channelSync: sync,
-        onlyAfter
+        skipPublishedBefore
       })
     }
   }
 
   static get Instance () {
     return this.instance || (this.instance = new this())
+  }
+
+  private isPlaylistUrl (url: string): boolean {
+    const parsed = new URL(url)
+    const pathname = parsed.pathname.toLowerCase()
+
+    return pathname.startsWith('/playlist/') || // Dailymotion playlist
+      pathname.startsWith('/showcase/') || // Vimeo playlist
+      pathname.startsWith('/playlist?') || // YouTube playlist
+      pathname.startsWith('/w/p/') // PeerTube playlist
   }
 }
